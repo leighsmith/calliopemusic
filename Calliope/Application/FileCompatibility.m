@@ -1,6 +1,5 @@
-#import "compatibility.h"
-
 /*
+ * $Id$
  * This file is for compatibility with reading old draw/Calliope files.
  */
 

@@ -1,3 +1,4 @@
+/* $Id$ */
 #import "TimeSig.h"
 #import "TimeInspector.h"
 #import "Staff.h"
@@ -306,7 +307,7 @@ static float fontsize[3] = { 16, 12, 8};
       x2 = [f widthOfString:[NSString stringWithCString:denom]];
       w = (x1 > x2) ? x1 : x2;
       x1 = x + 0.5 * w + 2;
-      cChar(x1, cy + 0.5 * charFGH(ft, 0264), 0264, ft, m);
+      drawCharacterInFont(x1, cy + 0.5 * charFGH(ft, 0264), 0264, ft, m);
       x2 = x1 + charFGW(ft, 0264) + 2;
       CAcString(x2, cy, reduc, f, m);
       punct = 0;

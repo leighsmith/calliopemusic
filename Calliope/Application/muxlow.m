@@ -1,3 +1,4 @@
+/* $Id$ */
 #import "mux.h"
 #import "muxlow.h"
 #import <Foundation/NSArray.h>
@@ -1286,19 +1287,19 @@ void drawstem(float x, float y, int body, float sl, int sz, int btype, int stype
       {
         ny = mflagoff[sz][body];
 	if (!stemup) ny = -ny;
-        cChar(x + fdx, dy + ny, mflag[(!stemup)][body], musicFont[0][sz], dflag);
+        drawCharacterInFont(x + fdx, dy + ny, mflag[(!stemup)][body], musicFont[0][sz], dflag);
       }
       break;
     case 1:
       nx = x + stemdx[sz][btype][stype][body][stemup];
       ny = y + stemdy[sz][btype][stype][body][stemup];
       cline(nx, ny, nx, dy, ostemthicks[sz], dflag);
-      if (hasflag[body]) cChar(x, dy, oflag[(!stemup)][body], musicFont[0][sz], dflag);
+      if (hasflag[body]) drawCharacterInFont(x, dy, oflag[(!stemup)][body], musicFont[0][sz], dflag);
       break;
     case 2:
     case 3:
       cline(x, y, x, dy, ostemthicks[sz], dflag);
-      cChar(x, dy, bodies[stype][body], musicFont[0][sz], dflag);
+      drawCharacterInFont(x, dy, bodies[stype][body], musicFont[0][sz], dflag);
       break;
   }
 }
@@ -1367,13 +1368,13 @@ void drawnotedot(int sz, float x, float y, float dy, float sp, int btype, int do
   di = 2.0 * charFGW(df, ch);
   if (dot == 3)
   {
-    cChar(x, y + (dy * sp), ch, df, mode);
-    cChar(x, y + ((dy + 2) * sp), ch, df, mode);
+    drawCharacterInFont(x, y + (dy * sp), ch, df, mode);
+    drawCharacterInFont(x, y + ((dy + 2) * sp), ch, df, mode);
   }
   else
   {
     y += (dy * sp);
-    for (i = 0; i < dot; i++) cChar(x + (di * i), y, ch, df, mode);
+    for (i = 0; i < dot; i++) drawCharacterInFont(x + (di * i), y, ch, df, mode);
   }
 }
 
@@ -1404,10 +1405,10 @@ void restdot(int sz, float dx, float x, float y, float dy, int dot, int code, in
   di = 2.0 * dw;
   if (dot == 3)
   {
-    cChar(x, y, ch, f, mode);
-    cChar(x, y + dy, ch, f, mode);
+    drawCharacterInFont(x, y, ch, f, mode);
+    drawCharacterInFont(x, y + dy, ch, f, mode);
   }
-  else for (i = 0; i < dot; i++) cChar(x + (di * i), y, ch, f, mode);
+  else for (i = 0; i < dot; i++) drawCharacterInFont(x + (di * i), y, ch, f, mode);
 }
 
 
@@ -1421,13 +1422,13 @@ int modeinvis[5] = {0, 2, 2, 2, 4};
 
 void drawhead(float x, float y, int bt, int body, int sid, int su, int sz, int m)
 {
-  if (bt == 6) cChar(x, y, shapeheads[sid][body][!su], musicFont[shapefont[sid]][sz], m);
+  if (bt == 6) drawCharacterInFont(x, y, shapeheads[sid][body][!su], musicFont[shapefont[sid]][sz], m);
   else if (bt == 4)
   {
     if (m != 0) return;
-    cChar(x, y, headchars[0][body], musicFont[headfont[0][body]][sz], 0);
+    drawCharacterInFont(x, y, headchars[0][body], musicFont[headfont[0][body]][sz], 0);
   }
-  else cChar(x, y, headchars[bt][body], musicFont[headfont[bt][body]][sz], m);
+  else drawCharacterInFont(x, y, headchars[bt][body], musicFont[headfont[bt][body]][sz], m);
 }
 
 
@@ -1441,9 +1442,9 @@ void drawnote(int sz, float hw, float x, float y, int body, int btype, int stype
   {
     quick = YES;
     if (fullbody[0][body] && TOLFLOATEQ(sl, -stemlens[0][sz], 0.5))
-      cChar(nx, y, fullbody[0][body], musicFont[1][sz], dflag);
+      drawCharacterInFont(nx, y, fullbody[0][body], musicFont[1][sz], dflag);
     else if (fullbody[1][body] && TOLFLOATEQ(sl, stemlens[0][sz], 0.5))
-      cChar(nx, y, fullbody[1][body], musicFont[1][sz], dflag);
+      drawCharacterInFont(nx, y, fullbody[1][body], musicFont[1][sz], dflag);
     else quick = NO;
   }
   if (quick)

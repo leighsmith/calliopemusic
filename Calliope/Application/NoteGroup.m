@@ -1,3 +1,4 @@
+/* $Id$ */
 #import "NoteGroup.h"
 #import "NoteGroupInspector.h"
 #import "mux.h"
@@ -497,7 +498,7 @@ float fontsize[3] = { 12, 8, 6};
         case 0:
 	case 1:
           f = musicFont[1][sz];
-          cChar(px, (above ? py : qy), 96, f, m);
+          drawCharacterInFont(px, (above ? py : qy), 96, f, m);
           cbrack(6, flags.position, px + charFWX(f, 96), py, qx, qy, 0, 0, sz, m);
 	  break;
 	case 2:

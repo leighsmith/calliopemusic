@@ -1,4 +1,5 @@
 /*
+  $Id$
   Various lowlevel drawing routines
   The mode passed to routines is
   	0 for BB
@@ -415,7 +416,7 @@ void unionStringBB(NSRect *b, float x, float y, unsigned char *s, NSFont *f, int
 
 /* draw a character in font f. */
 
-void cChar(float x, float y, int ch, NSFont *f, int mode)
+void drawCharacterInFont(float x, float y, int ch, NSFont *f, int mode)
 {
   char s[2];
   if (NOPRINT(mode)) return;
@@ -437,7 +438,7 @@ void cChar(float x, float y, int ch, NSFont *f, int mode)
 void centChar(float x, float y, int ch, NSFont *f, int mode)
 {
   if (NOPRINT(mode)) return;
-  cChar(x - charFCW(f, ch), y + charFCH(f, ch), ch, f, mode);
+  drawCharacterInFont(x - charFCW(f, ch), y + charFCH(f, ch), ch, f, mode);
 }
 
 /* draw a character centred on x only */
@@ -445,7 +446,7 @@ void centChar(float x, float y, int ch, NSFont *f, int mode)
 void centxChar(float x, float y, int ch, NSFont *f, int mode)
 {
   if (NOPRINT(mode)) return;
-  cChar(x - charFCW(f, ch), y, ch, f, mode);
+  drawCharacterInFont(x - charFCW(f, ch), y, ch, f, mode);
 }
 
 /* draw a string, inserting baseline ties where needed.  NOT extern, please */
@@ -972,7 +973,7 @@ static void cwavev(float x, float y0, float y1, int sz, int m)
   if (n < 1) n = 1;
   while (n--)
   {
-    cChar(x, y1, 103, f, m);
+    drawCharacterInFont(x, y1, 103, f, m);
     y1 -= ch;
   }
 }

@@ -1,3 +1,4 @@
+/* $Id$ */
 #import "KeySig.h"
 #import "KeyInspector.h"
 #import "GraphicView.h"
@@ -431,12 +432,12 @@ int whichfont[4] = {1, 0, 0, 1};
             if (ip < 0) ip += (bp - 1);
             if (ip > bp) ip -= (bp - 1);
           }
-          cChar(cx, GETYSP(sy, ss, ip), symch, f, m);
+          drawCharacterInFont(cx, GETYSP(sy, ss, ip), symch, f, m);
           if (TYPEOF(sp) == STAFF) drawledge(cx + hw, sy, hw, sz, ip, sp->flags.nlines, ss, m);
           if (keystr[j] & 4)
           {
             if (ip < (bp / 2)) ip += (bp - 1); else ip -= (bp - 1);
-            cChar(cx, GETYSP(sy, ss, ip), symch, f, m);
+            drawCharacterInFont(cx, GETYSP(sy, ss, ip), symch, f, m);
             if (TYPEOF(sp) == STAFF) drawledge(cx + hw, sy, hw, sz, ip, sp->flags.nlines, ss, m);
           }
           cx += charFGW(f, symch) + 0.7;
