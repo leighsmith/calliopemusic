@@ -15,8 +15,7 @@
 */
 
 #import "mux.h"
-#import <AppKit/NSFont.h>
-#import <AppKit/NSPrintOperation.h>
+#import <AppKit/AppKit.h>
 
 #import "DrawApp.h"
 
