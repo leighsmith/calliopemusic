@@ -197,6 +197,9 @@ static void jamFont(int nid, NSString *name, float s, NSString *fv)
 
   if (f != nil)
   {
+/*  the afmDictionary method is no longer implemented so we cannot check the
+    font version.
+
     if (fv)
     {
         v = [[f afmDictionary] objectForKey:NSAFMVersion];
@@ -206,6 +209,7 @@ static void jamFont(int nid, NSString *name, float s, NSString *fv)
         e = 1;
       }
     }
+*/
   }
   else
   {
