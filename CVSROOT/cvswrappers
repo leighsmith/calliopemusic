@@ -72,8 +72,9 @@
 # MacOSX icon files
 *.icns			-k 'b'  -m 'COPY'
 
-# Glyphix, a MacOS-X structured diagram editor
-*.glyphix    		-k 'b'  -m 'COPY'
+# Calliope's original file format, being a binary typed stream
+# encoding objects.
+*.opus    		-k 'b'  -m 'COPY'
 
 # MusicKit stuff
 *.midi                  -k 'b'  -m 'COPY'
