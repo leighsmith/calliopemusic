@@ -105,12 +105,12 @@
 			buildSettings = {
 				INSTALL_PATH = /Local/Developer/Palettes;
 				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
+				OTHER_LDFLAGS = "-bundle";
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = CalliopeThreeStateButton;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
-				WRAPPER_EXTENSION = bundle;
+				WRAPPER_EXTENSION = palette;
 			};
 			dependencies = (
 			);
