@@ -17,6 +17,60 @@
 			settings = {
 			};
 		};
+		D88C84B705053B7C001855C1 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = "NSColor+PropertyListCoding.h";
+			refType = 4;
+		};
+		D88C84B805053B7C001855C1 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = "NSColor+PropertyListCoding.m";
+			refType = 4;
+		};
+		D88C84B905053B7C001855C1 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = "NSFont+PropertyListCoding.h";
+			refType = 4;
+		};
+		D88C84BA05053B7C001855C1 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = "NSFont+PropertyListCoding.m";
+			refType = 4;
+		};
+		D88C84BB05053B7C001855C1 = {
+			fileRef = D88C84B705053B7C001855C1;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D88C84BC05053B7C001855C1 = {
+			fileRef = D88C84B805053B7C001855C1;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D88C84BD05053B7C001855C1 = {
+			fileRef = D88C84B905053B7C001855C1;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D88C84BE05053B7C001855C1 = {
+			fileRef = D88C84BA05053B7C001855C1;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D88C84C205056A92001855C1 = {
+			fileRef = D8FD970D0483CDC800A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		D8A8F52A0483D77000A80164 = {
 			isa = PBXFileReference;
 			name = sharp.tiff;
@@ -3642,8 +3696,6 @@
 				D8FD93DD0483CDC800A80164,
 				D8FD93DF0483CDC800A80164,
 				D8FD93E10483CDC800A80164,
-				D8FD93E30483CDC800A80164,
-				D8FD93E50483CDC800A80164,
 				D8FD93E70483CDC800A80164,
 			);
 			isa = PBXHeadersBuildPhase;
@@ -4092,8 +4144,6 @@
 				D8FD92FA0483CDC800A80164,
 				D8FD92FC0483CDC800A80164,
 				D8FD92FE0483CDC800A80164,
-				D8FD93000483CDC800A80164,
-				D8FD93020483CDC800A80164,
 				D8FD93040483CDC800A80164,
 				D8FD93EA0483CDC800A80164,
 				D8FD93EC0483CDC800A80164,
@@ -4136,7 +4186,10 @@
 				D8FD97010483CDC800A80164,
 			);
 			buildSettings = {
+				CC = "/usr/bin/gcc-3.3";
+				CPLUSPLUS = "/usr/bin/g++-3.3";
 				FRAMEWORK_SEARCH_PATHS = "/Disk/AppsMostRecent/Calliope/Source/Calliope.app/Resources \"$(LOCAL_LIBRARY_DIR)/Frameworks\" /Local/Users/leigh/Sources/Music/Calliope/Source/CalliopePropertyListCoders /Local/Users/leigh/Sources/Music/Calliope/Source/CalliopePropertyListCoders.fproj /Local/Library/Frameworks";
+				GCC_VERSION = 3.x;
 				HEADER_SEARCH_PATHS = "\"$(LOCAL_LIBRARY_DIR)/Frameworks\" \"~/Sources/Music/Calliope/Source\" /Local/Users/leigh/Sources/Music/Calliope/Source \"~/Sources/Music/Calliope/Source/CalliopePropertyListCoders.fproj\"";
 				INSTALL_PATH = /tmp/new;
 				LIBRARY_SEARCH_PATHS = /Apps/Calliope/CalliopeThreeStateButton;
@@ -4323,8 +4376,6 @@
 				D8FD92F30483CDC800A80164,
 				D8FD92F50483CDC800A80164,
 				D8FD92F70483CDC800A80164,
-				D8FD92FF0483CDC800A80164,
-				D8FD93010483CDC800A80164,
 				D8FD93030483CDC800A80164,
 			);
 			isa = PBXGroup;
@@ -4502,8 +4553,9 @@
 		D8FD92470483CDC700A80164 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = CalliopeThreeStateButton.m;
-			refType = 4;
+			name = CalliopeThreeStateButton.m;
+			path = ../Palettes/CalliopeThreeStateButton/CalliopeThreeStateButton.subproj/CalliopeThreeStateButton.m;
+			refType = 2;
 		};
 		D8FD92480483CDC700A80164 = {
 			fileRef = D8FD92470483CDC700A80164;
@@ -4516,8 +4568,9 @@
 		D8FD92490483CDC700A80164 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = CalliopeThreeStateButtonCell.m;
-			refType = 4;
+			name = CalliopeThreeStateButtonCell.m;
+			path = ../Palettes/CalliopeThreeStateButton/CalliopeThreeStateButton.subproj/CalliopeThreeStateButtonCell.m;
+			refType = 2;
 		};
 		D8FD924A0483CDC700A80164 = {
 			fileRef = D8FD92490483CDC700A80164;
@@ -5787,34 +5840,6 @@
 				);
 			};
 		};
-		D8FD92FF0483CDC800A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = "NSColor+PropertyListCoding.m";
-			refType = 4;
-		};
-		D8FD93000483CDC800A80164 = {
-			fileRef = D8FD92FF0483CDC800A80164;
-			isa = PBXBuildFile;
-			settings = {
-				ATTRIBUTES = (
-				);
-			};
-		};
-		D8FD93010483CDC800A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = "NSFont+PropertyListCoding.m";
-			refType = 4;
-		};
-		D8FD93020483CDC800A80164 = {
-			fileRef = D8FD93010483CDC800A80164;
-			isa = PBXBuildFile;
-			settings = {
-				ATTRIBUTES = (
-				);
-			};
-		};
 		D8FD93030483CDC800A80164 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -5941,8 +5966,6 @@
 				D8FD93DC0483CDC800A80164,
 				D8FD93DE0483CDC800A80164,
 				D8FD93E00483CDC800A80164,
-				D8FD93E20483CDC800A80164,
-				D8FD93E40483CDC800A80164,
 				D8FD93E60483CDC800A80164,
 			);
 			isa = PBXGroup;
@@ -7269,30 +7292,6 @@
 			settings = {
 			};
 		};
-		D8FD93E20483CDC800A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = "NSColor+PropertyListCoding.h";
-			refType = 4;
-		};
-		D8FD93E30483CDC800A80164 = {
-			fileRef = D8FD93E20483CDC800A80164;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		D8FD93E40483CDC800A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = "NSFont+PropertyListCoding.h";
-			refType = 4;
-		};
-		D8FD93E50483CDC800A80164 = {
-			fileRef = D8FD93E40483CDC800A80164;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		D8FD93E60483CDC800A80164 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -8523,11 +8522,9 @@
 			children = (
 				D8FD96BC0483CDC800A80164,
 				D8FD96D50483CDC800A80164,
-				D8FD96F20483CDC800A80164,
 			);
 			isa = PBXGroup;
-			name = CalliopePropertyListCoders;
-			path = CalliopePropertyListCoders.fproj;
+			path = CalliopePropertyListCoders;
 			refType = 4;
 		};
 		D8FD96B40483CDC800A80164 = {
@@ -8547,6 +8544,8 @@
 				D8FD96ED0483CDC800A80164,
 				D8FD96EF0483CDC800A80164,
 				D8FD96F10483CDC800A80164,
+				D88C84BB05053B7C001855C1,
+				D88C84BD05053B7C001855C1,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -8573,6 +8572,8 @@
 				D8FD96D00483CDC800A80164,
 				D8FD96D20483CDC800A80164,
 				D8FD96D40483CDC800A80164,
+				D88C84BC05053B7C001855C1,
+				D88C84BE05053B7C001855C1,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -8581,6 +8582,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8FD97160483CDC800A80164,
+				D88C84C205056A92001855C1,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -8601,10 +8603,13 @@
 				D8FD96B80483CDC800A80164,
 			);
 			buildSettings = {
+				CC = "/usr/bin/gcc-3.3";
+				CPLUSPLUS = "/usr/bin/g++-3.3";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_SEARCH_PATHS = /Local/Users/leigh/Sources/Music/Calliope/Source/CalliopePropertyListCoders;
 				FRAMEWORK_VERSION = A;
+				GCC_VERSION = 3.x;
 				HEADER_SEARCH_PATHS = "\"$(LOCAL_LIBRARY_DIR)/Frameworks\" \"~/Sources/Music/Calliope/Source\" /Local/Users/leigh/Sources/Music/Calliope/Source \"~/Sources/Music/Calliope/Source/CalliopePropertyListCoders.fproj\"";
 				INSTALL_PATH = /tmp/new;
 				LIBRARY_SEARCH_PATHS = /Apps/Calliope/CalliopeThreeStateButton;
@@ -8667,17 +8672,33 @@
 		D8FD96BC0483CDC800A80164 = {
 			children = (
 				D8FD96BD0483CDC800A80164,
+				D8FD96D60483CDC800A80164,
 				D8FD96BF0483CDC800A80164,
+				D8FD96D80483CDC800A80164,
 				D8FD96C10483CDC800A80164,
+				D8FD96DA0483CDC800A80164,
 				D8FD96C30483CDC800A80164,
+				D8FD96DC0483CDC800A80164,
 				D8FD96C50483CDC800A80164,
+				D8FD96DE0483CDC800A80164,
 				D8FD96C70483CDC800A80164,
+				D8FD96E00483CDC800A80164,
 				D8FD96C90483CDC800A80164,
+				D8FD96E20483CDC800A80164,
 				D8FD96CB0483CDC800A80164,
+				D8FD96E40483CDC800A80164,
 				D8FD96CD0483CDC800A80164,
+				D8FD96E60483CDC800A80164,
 				D8FD96CF0483CDC800A80164,
+				D8FD96E80483CDC800A80164,
 				D8FD96D10483CDC800A80164,
+				D8FD96EA0483CDC800A80164,
 				D8FD96D30483CDC800A80164,
+				D8FD96EC0483CDC800A80164,
+				D88C84B705053B7C001855C1,
+				D88C84B805053B7C001855C1,
+				D88C84B905053B7C001855C1,
+				D88C84BA05053B7C001855C1,
 			);
 			isa = PBXGroup;
 			name = Classes;
@@ -8853,18 +8874,6 @@
 		};
 		D8FD96D50483CDC800A80164 = {
 			children = (
-				D8FD96D60483CDC800A80164,
-				D8FD96D80483CDC800A80164,
-				D8FD96DA0483CDC800A80164,
-				D8FD96DC0483CDC800A80164,
-				D8FD96DE0483CDC800A80164,
-				D8FD96E00483CDC800A80164,
-				D8FD96E20483CDC800A80164,
-				D8FD96E40483CDC800A80164,
-				D8FD96E60483CDC800A80164,
-				D8FD96E80483CDC800A80164,
-				D8FD96EA0483CDC800A80164,
-				D8FD96EC0483CDC800A80164,
 				D8FD96EE0483CDC800A80164,
 				D8FD96F00483CDC800A80164,
 			);
@@ -9039,44 +9048,6 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
-		};
-		D8FD96F20483CDC800A80164 = {
-			children = (
-				D8FD96F30483CDC800A80164,
-				D8FD96F40483CDC800A80164,
-				D8FD96F50483CDC800A80164,
-				D8FD96F60483CDC800A80164,
-				D8FD96F70483CDC800A80164,
-			);
-			isa = PBXGroup;
-			name = "Supporting Files";
-			refType = 4;
-		};
-		D8FD96F30483CDC800A80164 = {
-			isa = PBXFileReference;
-			path = Makefile.preamble;
-			refType = 4;
-		};
-		D8FD96F40483CDC800A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = Makefile;
-			refType = 4;
-		};
-		D8FD96F50483CDC800A80164 = {
-			isa = PBXFileReference;
-			path = Makefile.postamble;
-			refType = 4;
-		};
-		D8FD96F60483CDC800A80164 = {
-			isa = PBXFileReference;
-			path = m.template;
-			refType = 4;
-		};
-		D8FD96F70483CDC800A80164 = {
-			isa = PBXFileReference;
-			path = h.template;
-			refType = 4;
 		};
 		D8FD97010483CDC800A80164 = {
 			buildActionMask = 2147483647;
