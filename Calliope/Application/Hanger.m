@@ -1,3 +1,4 @@
+/* $Id$ */
 #import "Hanger.h"
 #import "TimedObj.h"
 #import "System.h"
@@ -394,7 +395,8 @@ extern void msg();
   client = [[aDecoder decodeObject] retain];
   if (v == 0)
   {
-      if (!listclass) listclass = [List class];
+    // TODO LMS commented out to get things compiling, this is needed to support the legacy file format
+    //  if (!listclass) listclass = [List class];
     if ([client class] == listclass) client = [[NSMutableArray allocWithZone:[self zone]] initFromList:client];
     UID = 0;
     hFlags.split = 0;
@@ -402,7 +404,8 @@ extern void msg();
   }
   else if (v == 1)
   {
-      if (!listclass) listclass = [List class];
+    // TODO LMS commented out to get things compiling, this is needed to support the legacy file format
+    //  if (!listclass) listclass = [List class];
     if ([client class] == listclass) client = [[NSMutableArray allocWithZone:[self zone]] initFromList:client];
     [aDecoder decodeValuesOfObjCTypes:"icc", &UID, &b0, &b1];
     hFlags.split = b0;

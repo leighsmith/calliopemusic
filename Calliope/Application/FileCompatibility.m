@@ -2,6 +2,7 @@
  * $Id$
  * This file is for compatibility with reading old draw/Calliope files.
  */
+#import <Foundation/Foundation.h>
 
 /*
  * This is just a convenience method for reading old Calliope files that
@@ -16,16 +17,22 @@
 - (id)initFromList:(id)aList
 {
     int i, count;
-
+    // TODO LMS commented out to get things compiling, this is needed to support the legacy file format
+#if 0
     if ([aList isKindOf:[List class]]) {
         count = [aList count];
         [self initWithCapacity:count];
         for (i = 0; i < count; i++) {
             [self addObject:[aList objectAt:i]];
         }
-    } else if ([aList isKindOf:[NSArray class]]) {
+    }
+#else
+    if(0) ;
+#endif
+    else if ([aList isKindOf:[NSArray class]]) {
         return [self initWithArray:aList];
-    } else {
+    }
+    else {
         /* should probably raise */
     }
 

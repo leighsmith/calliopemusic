@@ -611,7 +611,8 @@ float fontsize[3] = { 12, 8, 6};
   if (v == 0)
   {
       static id listclass = nil;
-      if (!listclass) listclass = [List class];
+    // TODO LMS commented out to get things compiling, this is needed to support the legacy file format
+     // if (!listclass) listclass = [List class];
     [aDecoder decodeValuesOfObjCTypes:"@ccffff", &client, &b1, &b2, &x1, &y1, &x2, &y2];
       if ([client class] == listclass) client = [[NSMutableArray allocWithZone:[self zone]] initFromList:client];
     flags.fixed = b1;
