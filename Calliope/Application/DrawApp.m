@@ -260,7 +260,7 @@ extern colorInit(int i, NSColor * c);
 + (NSApplication *)sharedApplication
 {
   NSAutoreleasePool *pool =[[NSAutoreleasePool alloc] init];
-  DrawApp *a = [[DrawApp alloc] init]; // LMS this only exists for the duration of this method.
+  // DrawApp *a = [[DrawApp alloc] init]; // LMS this only exists for the duration of this method.
   [NSApplication sharedApplication];   // we ensure we are talking to the window server.
   PSInit();
   colorInit(0, [NSColor lightGrayColor]);
@@ -270,13 +270,13 @@ extern colorInit(int i, NSColor * c);
   colorInit(4, [NSColor darkGrayColor]);
   colorInit(5, [NSColor darkGrayColor]);
   colorInit(6, [NSColor lightGrayColor]);
-  a->inspector = nil;
-  a->insplist = [[NSMutableArray alloc] init];
+  // a->inspector = nil;
+  // a->insplist = [[NSMutableArray alloc] init];
   initFonts();
   muxlowInit();
   // LMS this makes no sense, a is only initialised within this method so this is a pointless exercise.
 //  if (!(a->appdefaults))  [NSBundle loadNibNamed:@"AppDefaults.nib" owner:a];
-  [a->appdefaults checkOpenFromFile];
+  // [a->appdefaults checkOpenFromFile];
   [pool release];
   return self;
 }
