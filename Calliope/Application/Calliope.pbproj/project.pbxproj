@@ -5,6 +5,28 @@
 	};
 	objectVersion = 38;
 	objects = {
+		3BCD9D3F053E20ED00AF08A5 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = draw.c;
+			refType = 4;
+		};
+		3BCD9D40053E20ED00AF08A5 = {
+			fileRef = 3BCD9D3F053E20ED00AF08A5;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//3B0
+//3B1
+//3B2
+//3B3
+//3B4
+//D80
+//D81
+//D82
+//D83
+//D84
 		D828320B0483E0C000A80164 = {
 			isa = PBXFileReference;
 			name = tick.aiff;
@@ -4151,12 +4173,12 @@
 				D8FD92FC0483CDC800A80164,
 				D8FD92FE0483CDC800A80164,
 				D8FD93040483CDC800A80164,
-				D8FD93EA0483CDC800A80164,
 				D8FD93EC0483CDC800A80164,
 				D8FD93EE0483CDC800A80164,
 				D8FD93F00483CDC800A80164,
 				D8FD93F20483CDC800A80164,
 				D8FD93F40483CDC800A80164,
+				3BCD9D40053E20ED00AF08A5,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4194,7 +4216,8 @@
 			buildSettings = {
 				CC = "/usr/bin/gcc-3.3";
 				CPLUSPLUS = "/usr/bin/g++-3.3";
-				FRAMEWORK_SEARCH_PATHS = "\"$(LOCAL_LIBRARY_DIR)/Frameworks\" \"~/Sources/Music/Calliope/Source/CalliopePropertyListCoders\"";
+				FRAMEWORK_SEARCH_PATHS = "\"$(LOCAL_LIBRARY_DIR)/Frameworks\" /Library/Frameworks \"~/Sources/Music/Calliope/Source/CalliopePropertyListCoders\"";
+				GCC_VERSION = 3.3;
 				HEADER_SEARCH_PATHS = "\"$(LOCAL_LIBRARY_DIR)/Frameworks\" \"~/Sources/Music/Calliope/Source\" /Local/Users/leigh/Sources/Music/Calliope/Source \"~/Sources/Music/Calliope/Source/CalliopePropertyListCoders\"";
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = "";
@@ -7311,7 +7334,7 @@
 		};
 		D8FD93E80483CDC800A80164 = {
 			children = (
-				D8FD93E90483CDC800A80164,
+				3BCD9D3F053E20ED00AF08A5,
 				D8FD93EB0483CDC800A80164,
 				D8FD93ED0483CDC800A80164,
 				D8FD93EF0483CDC800A80164,
@@ -7321,19 +7344,6 @@
 			isa = PBXGroup;
 			name = "Other Sources";
 			refType = 4;
-		};
-		D8FD93E90483CDC800A80164 = {
-			isa = PBXFileReference;
-			path = draw.psw;
-			refType = 4;
-		};
-		D8FD93EA0483CDC800A80164 = {
-			fileRef = D8FD93E90483CDC800A80164;
-			isa = PBXBuildFile;
-			settings = {
-				ATTRIBUTES = (
-				);
-			};
 		};
 		D8FD93EB0483CDC800A80164 = {
 			fileEncoding = 30;
@@ -8614,9 +8624,9 @@
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_SEARCH_PATHS = /Local/Users/leigh/Sources/Music/Calliope/Source/CalliopePropertyListCoders;
 				FRAMEWORK_VERSION = A;
-				GCC_VERSION = 3.x;
+				GCC_VERSION = 3.3;
 				HEADER_SEARCH_PATHS = "\"$(LOCAL_LIBRARY_DIR)/Frameworks\" \"~/Sources/Music/Calliope/Source\" /Local/Users/leigh/Sources/Music/Calliope/Source \"~/Sources/Music/Calliope/Source/CalliopePropertyListCoders.fproj\"";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				INSTALL_PATH = /Local/Library/Frameworks;
 				LIBRARY_SEARCH_PATHS = /Apps/Calliope/CalliopeThreeStateButton;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
@@ -8632,7 +8642,7 @@
 			);
 			isa = PBXFrameworkTarget;
 			name = "CalliopePropertyListCoders (Framework)";
-			productInstallPath = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+			productInstallPath = /Local/Library/Frameworks;
 			productName = "CalliopePropertyListCoders (Framework)";
 			productReference = D8FD96BA0483CDC800A80164;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
@@ -9145,7 +9155,7 @@
 		D8FD97120483CDC800A80164 = {
 			isa = PBXFrameworkReference;
 			name = MusicKit.framework;
-			path = /Local/Library/Frameworks/MusicKit.framework;
+			path = /Library/Frameworks/MusicKit.framework;
 			refType = 0;
 		};
 		D8FD97130483CDC800A80164 = {
@@ -9193,7 +9203,7 @@
 		D8FD971A0483CDC800A80164 = {
 			isa = PBXFrameworkReference;
 			name = MKDSP.framework;
-			path = /Local/Library/Frameworks/MKDSP.framework;
+			path = /Library/Frameworks/MKDSP.framework;
 			refType = 0;
 		};
 		D8FD971B0483CDC800A80164 = {
