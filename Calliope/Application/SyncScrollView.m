@@ -10,7 +10,6 @@
 #import <AppKit/NSMenuItem.h>
 #import <AppKit/NSClipView.h>
 #import <AppKit/NSText.h>
-#import <AppKit/psops.h>
 
 
 /*
@@ -208,13 +207,6 @@ extern NSSize paperSize;
     return self;
 }
 
-- setRulerWidths:(float)horizontal :(float)vertical
-{
-    horizontalRulerWidth = horizontal;
-    verticalRulerWidth = vertical;
-    return self;
-}
-
 - (BOOL)bothRulersAreVisible
 {
     return verticalRulerIsVisible && horizontalRulerIsVisible;
@@ -243,83 +235,103 @@ extern NSSize paperSize;
  
 - makeRulers
 {
-    id ruler;
-    NSRect aRect, bRect;
     GraphicView *v = [[[self contentView] documentView] viewWithTag:1];
 
 //    if (!rulerClass || (!horizontalRulerWidth && !verticalRulerWidth)) return nil;
     [self setHasHorizontalRuler:YES];
     [self setHasVerticalRuler:YES];
-    hClipRuler = [self horizontalRulerView];
-    vClipRuler = [self verticalRulerView];
-    [hClipRuler setClientView:v];
-    [vClipRuler setClientView:v];
-    [self setRulersVisible:YES];
+    hRuler = [self horizontalRulerView];
+    [hRuler setReservedThicknessForMarkers:0.0];
+    vRuler = [self verticalRulerView];
+    [hRuler setClientView:v];
+    [vRuler setClientView:v];
+//    [self setRulersVisible:YES];
 
-#if 0
-    if (horizontalRulerWidth) {
-	aRect = [v frame];
-	NSDivideRect(aRect , &bRect , &aRect , horizontalRulerWidth, NSMinYEdge);
-	hClipRuler = [[NSClipView allocWithZone:[self zone]] init];
-	ruler = [[rulerClass allocWithZone:[self zone]] initWithFrame:bRect];
-	[hClipRuler setDocumentView:ruler];
-    }
-    if (verticalRulerWidth) {
-	aRect = [v frame];
-	NSDivideRect(aRect , &bRect , &aRect , verticalRulerWidth, NSMinXEdge);
-	vClipRuler = [[NSClipView allocWithZone:[self zone]] init];
-	ruler = [[rulerClass allocWithZone:[self zone]] initWithFrame:bRect];
-	[vClipRuler setDocumentView:ruler];
-    }
-#endif
     rulersMade = YES;
 
     return self;
 }
 
+- (void)drawRulerlinesWithRect:(NSRect)aRect
+{
+    NSRect convRect;
+    id gv = [[self documentView] viewWithTag:1];
+    if (hRuler) {
+        convRect = [gv convertRect:aRect toView:hRuler];
+
+        [hRuler moveRulerlineFromLocation:-1.0
+                toLocation:NSMinX(convRect)];
+        [hRuler moveRulerlineFromLocation:-1.0
+                toLocation:NSMaxX(convRect)];
+    }
+    if (vRuler) {
+        convRect = [gv convertRect:aRect toView:vRuler];
+
+        [vRuler moveRulerlineFromLocation:-1.0
+                toLocation:NSMinY(convRect)];
+        [vRuler moveRulerlineFromLocation:-1.0
+                toLocation:NSMaxY(convRect)];
+    }
+}
+
+- (void)updateRulerlinesWithOldRect:(NSRect)oldRect newRect:(NSRect)newRect
+{
+    NSRect convOldRect, convNewRect;
+    id gv = [[self documentView] viewWithTag:1];
+    if (hRuler) {
+        convOldRect = [gv convertRect:oldRect toView:hRuler];
+        convNewRect = [gv convertRect:newRect toView:hRuler];
+        [hRuler moveRulerlineFromLocation:NSMinX(convOldRect)
+                toLocation:NSMinX(convNewRect)];
+        [hRuler moveRulerlineFromLocation:NSMaxX(convOldRect)
+                toLocation:NSMaxX(convNewRect)];
+    }
+    if (vRuler) {
+        convOldRect = [gv convertRect:oldRect toView:vRuler];
+        convNewRect = [gv convertRect:newRect toView:vRuler];
+        [vRuler moveRulerlineFromLocation:NSMinY(convOldRect)
+                toLocation:NSMinY(convNewRect)];
+        [vRuler moveRulerlineFromLocation:NSMaxY(convOldRect)
+                toLocation:NSMaxY(convNewRect)];
+    }
+}
+
+- (void)eraseRulerlines
+{
+    if (hRuler) {
+        [hRuler setNeedsDisplay:YES]; /* gets rid of instance drawing (highlighting of Rulerlines) */
+    }
+    if (vRuler) {
+        [vRuler setNeedsDisplay:YES];
+    }
+    return;
+}
 
 - updateRulers:(const NSRect *)rect
 {
-    printf("update rulers\n");
+//    printf("update rulers\n");
+    if ([self rulersVisible]) {
     if (!rect)
       {
-        if (verticalRulerIsVisible) [[vClipRuler documentView] hidePosition];
-        if (horizontalRulerIsVisible) [[hClipRuler documentView] hidePosition];
+        if (rulerlineRect.origin.x != -1) {
+            [self eraseRulerlines];
+            rulerlineRect.origin.x = rulerlineRect.origin.y = -1;
+        }
       }
     else
       {
-        /* this should flip and scale the point: */
-        id gv = [[self documentView] viewWithTag:1];
-        float maxY = NSMaxY([gv bounds]);
-        float scaler = [gv rulerScale];
-        if (verticalRulerIsVisible)
-            [[vClipRuler documentView] showPosition:(maxY - (rect->origin.y + rect->size.height))/scaler
-                                                   :(maxY - rect->origin.y)/scaler];
-        if (horizontalRulerIsVisible)
-            [[hClipRuler documentView] showPosition:rect->origin.x/scaler
-                                                   :(rect->origin.x + rect->size.width) /scaler];
+        if (rulerlineRect.origin.x == -1)
+            [self drawRulerlinesWithRect:(NSRect)*rect];
+        else [self updateRulerlinesWithOldRect:(NSRect)rulerlineRect newRect:(NSRect)*rect];
+        rulerlineRect = *rect;
       }
+    }
     return self;
 }
 
 - (void)updateRuler
 {
-    NSRect aRect, bRect;
     printf("update ruler\n");
-    if (horizontalRulerIsVisible) {
-        aRect = [[[self documentView] viewWithTag:1] frame];
-	NSDivideRect(aRect , &bRect , &aRect , horizontalRulerWidth, NSMinYEdge);
-	bRect.size.width += verticalRulerWidth;
-	[[hClipRuler documentView] setFrame:bRect];
-        [hClipRuler setNeedsDisplay:YES];
-    }
-    if (verticalRulerIsVisible) {
-        aRect = [[[self documentView] viewWithTag:1] frame];
-	NSDivideRect(aRect , &bRect , &aRect , verticalRulerWidth, NSMinXEdge);
-	[[vClipRuler documentView] setFrame:bRect];
-        [vClipRuler setNeedsDisplay:YES];
-    }
-
     return;
 }
 
@@ -331,36 +343,7 @@ extern NSSize paperSize;
  
 - (BOOL)showRuler:(BOOL)showIt isHorizontal:(BOOL)isHorizontal
 {
-    id ruler;
-    BOOL isVisible;
-    NSRect cRect, rRect;
-
-    isVisible = isHorizontal ? horizontalRulerIsVisible : verticalRulerIsVisible;
-    if ((showIt && isVisible) || (!showIt && !isVisible)) return NO;
     if (showIt && !rulersMade && ![self makeRulers]) return NO;
-    ruler = isHorizontal ? hClipRuler : vClipRuler;
-
-    if (!showIt && isVisible) {
-	[ruler removeFromSuperview];
-	if (isHorizontal) {
-	    horizontalRulerIsVisible = NO;
-	} else {
-	    verticalRulerIsVisible = NO;
-	}
-    } else if (showIt && !isVisible && ruler) {
-	[self addSubview:ruler];
-        cRect = [[self contentView] bounds];
-	rRect = [hClipRuler bounds];
-	[hClipRuler setBoundsOrigin:NSMakePoint(cRect.origin.x, rRect.origin.y)];
-	rRect = [vClipRuler bounds];
-	[vClipRuler setBoundsOrigin:NSMakePoint(rRect.origin.x, cRect.origin.y)];
-	if (isHorizontal) {
-	    horizontalRulerIsVisible = YES;
-	} else {
-	    verticalRulerIsVisible = YES;
-	}
-    }
-
     return YES;
 }
 
@@ -383,19 +366,6 @@ extern NSSize paperSize;
     return self;
 }
 
-
-- (void)showHorizontalRuler:(BOOL)flag
-{
-    if ([self showRuler:flag isHorizontal:YES]) [self adjustSizes];
-}
-
-
-- (void)showVerticalRuler:(BOOL)flag
-{
-    if ([self showRuler:flag isHorizontal:NO]) [self adjustSizes];
-}
-
-
 /*
  * If both rulers are visible, they are both hidden.
  * Otherwise, both rulers are made visible.
@@ -403,29 +373,13 @@ extern NSSize paperSize;
 
 - (void)showHideRulers:sender
 {
-    BOOL resize = NO;
+    if (!rulersMade) [self makeRulers];
+    [self setRulersVisible:![self rulersVisible]];
 
-    if (verticalRulerIsVisible && horizontalRulerIsVisible) {
-	resize = [self showRuler:NO isHorizontal:YES];
-	resize = [self showRuler:NO isHorizontal:NO] || resize;
-    } else {
-	if (!horizontalRulerIsVisible) resize = [self showRuler:YES isHorizontal:YES];
-	if (!verticalRulerIsVisible) resize = [self showRuler:YES isHorizontal:NO] || resize;
-    }
-    if (resize) [self adjustSizes];
 }
-
 
 
 /* ScrollView-specific stuff */
-
-
-- (void)dealloc
-{
-    if (!horizontalRulerIsVisible) [hClipRuler release];
-    if (!verticalRulerIsVisible) [vClipRuler release];
-    { [super dealloc]; return; };    
-}
 
 
 /*
@@ -434,7 +388,7 @@ extern NSSize paperSize;
 
 - (void)reflectScrolledClipView:(NSClipView *)cView
 {
-    if (cView != hClipRuler && cView != vClipRuler) [super reflectScrolledClipView:cView];
+    if (cView != hRuler && cView != vRuler) [super reflectScrolledClipView:cView];
 }
 
 
@@ -448,10 +402,10 @@ extern NSSize paperSize;
 
 - (void)tile
 {
-    NSRect aRect, bRect, cRect;
+    NSRect aRect, cRect;
     float zoom_width, page_label_width, page_cell_width;
     float y;
-    printf("tile\n");
+//    printf("tile\n");
     [super tile];
 	/* take the zoom popup list & page display into account on the horizontal scroller */
 	aRect = [[self horizontalScroller] frame];
@@ -490,24 +444,26 @@ extern NSSize paperSize;
 	[pageUpButton setFrameOrigin:NSMakePoint(1.0, y + GADGET_HEIGHT + 1.0)];
 	[pageDownButton setFrameOrigin:NSMakePoint(1.0, y + (2.0 * GADGET_HEIGHT) + 2.0)];
 	[pageLastButton setFrameOrigin:NSMakePoint(1.0, y + (3.0 * GADGET_HEIGHT) + 3.0)];
-  if (horizontalRulerIsVisible || verticalRulerIsVisible)
+#if 0
+        if (horizontalRulerIsVisible || verticalRulerIsVisible)
   {
       aRect = [[self contentView] frame];
       cRect = [[[self documentView] viewWithTag:1] frame];
-    if (horizontalRulerIsVisible && hClipRuler)
+      if (horizontalRulerIsVisible && hRuler)
     {
       NSDivideRect(aRect , &bRect , &aRect , horizontalRulerWidth, NSMinYEdge);
-      [hClipRuler setFrame:bRect];
-      [[hClipRuler documentView] setFrameSize:NSMakeSize(cRect.size.width+verticalRulerWidth, bRect.size.height)];
+          [hRuler setFrame:bRect];
+          [[hRuler documentView] setFrameSize:NSMakeSize(cRect.size.width+verticalRulerWidth, bRect.size.height)];
     }
-    if (verticalRulerIsVisible && vClipRuler)
+    if (verticalRulerIsVisible && vRuler)
     {
       NSDivideRect(aRect , &bRect , &aRect , verticalRulerWidth, NSMinXEdge);
-      [vClipRuler setFrame:bRect];
-      [[vClipRuler documentView] setFrameSize:NSMakeSize(bRect.size.width, cRect.size.height)];
+        [vRuler setFrame:bRect];
+        [[vRuler documentView] setFrameSize:NSMakeSize(bRect.size.width, cRect.size.height)];
     }
     [[self contentView] setFrame:aRect];
   }
+#endif
 }
 
 
@@ -519,28 +475,31 @@ extern NSSize paperSize;
 - (void)scrollClipView:(NSClipView *)aClipView toPoint:(NSPoint)aPoint
 {
     id fr;
-    NSRect rRect;
     id window = [self window];
-#ifdef DEBUG
+#ifdef DEBUGno
     printf("scroll to vertical?: %g\n",aPoint.y);
 #endif
     if (aClipView != [self contentView]) return;
-#ifdef DEBUG
+#ifdef DEBUGno
     printf("scroll to vertical OK: %g\n",aPoint.y);
 #endif
     [window disableFlushWindow];
-    if (horizontalRulerIsVisible && hClipRuler)
+#if 0
+
+    if (horizontalRulerIsVisible && hRuler)
       {
-        rRect = [hClipRuler bounds];
+        rRect = [hRuler bounds];
         rRect.origin.x = aPoint.x;
-        [hClipRuler scrollToPoint:(rRect.origin)];
+        [hRuler scrollToPoint:(rRect.origin)];
       }
-    if (verticalRulerIsVisible && vClipRuler)
+    if (verticalRulerIsVisible && vRuler)
       {
-        rRect = [vClipRuler bounds];
+        rRect = [vRuler bounds];
         rRect.origin.y = aPoint.y;
-        [vClipRuler scrollToPoint:(rRect.origin)];
+        [vRuler scrollToPoint:(rRect.origin)];
       }
+#endif
+    
     [aClipView scrollToPoint:aPoint];
 
     fr = [[self window] firstResponder];
@@ -570,13 +529,13 @@ extern NSSize paperSize;
         if (horizontalRulerIsVisible || verticalRulerIsVisible) {
             aRect = [[self contentView] frame];
             cRect = [[[self documentView] viewWithTag:1] frame];
-            if (horizontalRulerIsVisible && hClipRuler) {
+            if (horizontalRulerIsVisible && hRuler) {
                 NSDivideRect(aRect , &bRect , &aRect , horizontalRulerWidth, NSMinYEdge);
-                [[hClipRuler documentView] setFrameSize:NSMakeSize(cRect.size.width+verticalRulerWidth, bRect.size.height)];
+                [[hRuler documentView] setFrameSize:NSMakeSize(cRect.size.width+verticalRulerWidth, bRect.size.height)];
                 }
-            if (verticalRulerIsVisible && vClipRuler) {
+            if (verticalRulerIsVisible && vRuler) {
                 NSDivideRect(aRect , &bRect , &aRect , verticalRulerWidth, NSMinXEdge);
-                [[vClipRuler documentView] setFrameSize:NSMakeSize(bRect.size.width, cRect.size.height)];
+                [[vRuler documentView] setFrameSize:NSMakeSize(bRect.size.width, cRect.size.height)];
                 }
         }
     }

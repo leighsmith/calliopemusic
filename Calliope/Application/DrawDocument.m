@@ -5,7 +5,6 @@
 #import "GVSelection.h"
 #import "GVCommands.h"
 #import "SyncScrollView.h"
-#import "Ruler.h"
 #import "Page.h"
 #import "System.h"
 #import "PrefBlock.h"
@@ -13,11 +12,10 @@
 #import "mux.h"
 #import <AppKit/AppKit.h>
 #import <Foundation/NSArray.h>
-#import <libc.h>
+#import <CalliopePropertyListCoders/OAPropertyListCoders.h>
+
 #import <objc/List.h>
-
-#define Notify(title, msg) NSRunAlertPanel(title, msg, @"OK", nil, nil)
-
+#import "CalliopeWindow.h"
 
 extern NSColor * backShade;
 
@@ -111,7 +109,6 @@ static id createWindowFor(GraphicView* view, NSRect *r, NSString *fS)
     id sV;
     NSWindow *w;
     NSRect dr;
-    NSView *bogusSuperView = [[NSView allocWithZone:[view zone]] init]; //sb
   if (!r)
   {
     r = &dr;
@@ -128,35 +125,24 @@ static id createWindowFor(GraphicView* view, NSRect *r, NSString *fS)
     r->origin.x = screenSize.width - 85.0 - r->size.width;
     r->origin.y = floor((screenSize.height - r->size.height) / 2.0);
   }
-  [bogusSuperView setFrame:[view frame]];
-  [bogusSuperView setAutoresizesSubviews:NO];
-  [bogusSuperView addSubview:view];
   
-  w = [[NSWindow allocWithZone:[view zone]]
+  w = [[CalliopeWindow allocWithZone:[view zone]]
 	initWithContentRect:*r
            styleMask:NSResizableWindowMask|(NSClosableWindowMask | NSMiniaturizableWindowMask)
-             backing:(InMsgPrint ? NSBackingStoreNonretained : NSBackingStoreBuffered)
-               defer:NO];//sb: defer was (InMsgPrint ? NO : YES) but was causing probs.
+             backing:NSBackingStoreBuffered
+               defer:NO];
   if (fS) [w setFrameFromString:fS];
   sV = [[SyncScrollView allocWithZone:[view zone]] initWithFrame:*r];
-//  [sV setRulerClass: [Ruler class]];
-  [sV setRulerWidths: [Ruler width] : [Ruler width]];
   [sV setHasVerticalScroller:YES];
   [sV setHasHorizontalScroller:YES];
   [sV setBorderType:SCROLLVIEW_BORDER];
-  [sV setDocumentView:bogusSuperView];//sb: was just 'view' but I have changed it (see above)
+  [sV setDocumentView:view];//sb: was just 'view' but I have changed it (see above)
 
-      [w setContentView:sV];
+  [w setContentView:sV];
   [w setBackgroundColor:backShade];
-  {
-      NSPoint apoint = [bogusSuperView convertPoint:NSZeroPoint fromView:view];
-      apoint.y -= [sV contentSize].height;
-//      printf("apoint x:%g y:%g bsv x:%g y:%g\n",apoint.x,apoint.y,[view frame].size.width,[view frame].size.height);
-      [[sV contentView] setBoundsOrigin:apoint];//was scrollToPoint
-  }
+  
   [sV reflectScrolledClipView:[sV contentView]];
   [view setNeedsDisplay:YES];
-  [view recacheWhenRedraw:NSZeroRect];
 
   [w makeFirstResponder:view];
   [w setMiniwindowImage:[NSImage imageNamed:@"CallDocIcon"]];
@@ -168,7 +154,7 @@ static id createWindowFor(GraphicView* view, NSRect *r, NSString *fS)
 {
   if (self == [DrawDocument class])
   {
-      (void)[DrawDocument setVersion: 2];	/* class version, see read: */
+      (void)[DrawDocument setVersion: DOC_VERSION];	/* class version, see read: */
   }
   return;
 }
@@ -209,8 +195,17 @@ static id createWindowFor(GraphicView* view, NSRect *r, NSString *fS)
       }
       else if (version == 2)
       {
-        printInfo = [[ts decodeObject] retain];
+      NSSize checkSize;
+      printInfo = [[ts decodeObject] retain];
         prefInfo= [[ts decodeObject] retain];
+        printf("%g %g\n",[NSPrintInfo sizeForPaperName:[printInfo paperName]].width,[NSPrintInfo sizeForPaperName:[printInfo paperName]].height);
+        checkSize = [printInfo paperSize];
+        if (NSEqualSizes(checkSize,NSZeroSize)) {
+        checkSize = [NSPrintInfo sizeForPaperName:[printInfo paperName]];
+        [printInfo setPaperSize:checkSize];
+        checkSize = [printInfo paperSize];
+        printf("%g %g\n",checkSize.width, checkSize.height);
+        }
         [ts decodeValueOfObjCType:"*" at:&s];
         if (frameString) *frameString = [[NSString stringWithCString:s] retain];//sb: was strcpy(frameString, s);
         free(s);
@@ -218,12 +213,12 @@ static id createWindowFor(GraphicView* view, NSRect *r, NSString *fS)
       }
       else if (version == DOC_VERSION)
       {
-        printInfo = [[ts decodeObject] retain];
-        prefInfo = [[ts decodeObject] retain];
-        [ts decodeValueOfObjCType:"*" at:&s];
-        if (frameString) *frameString = [[NSString stringWithCString:s] retain];//sb: was strcpy(frameString, s);
-        free(s);
-        view = [[ts decodeObject] retain];
+          NSString *newS;
+          printInfo = [[ts decodeObject] retain];
+          prefInfo = [[ts decodeObject] retain];
+          newS = [ts decodeObject];
+          if (frameString) *frameString = [newS retain];//sb: was strcpy(frameString, s);
+          view = [[ts decodeObject] retain];
       }
       else retval = NO;
     }
@@ -372,9 +367,8 @@ static List *zoneList = nil;
   [(NSWindow *)doc->window setDelegate:doc];
   [doc zeroScale];
   [doc setName: nil andDirectory: nil];
-  [NSApp newWindowInCreation:doc->window];
+  [NSApp setCurrentWindow:doc->window];
   [doc->view firstPage:doc];
-  [NSApp newWindowInCreation:nil];
 
   [(NSWindow *)doc->window makeKeyAndOrderFront:doc];
   return doc;
@@ -402,9 +396,8 @@ static List *zoneList = nil;
         doc->window = createWindowFor(doc->view, &contFrame, frameString);
         [(NSWindow *)doc->window setDelegate:doc];
 
-        [NSApp newWindowInCreation:doc->window];
+        [NSApp setCurrentWindow:doc->window];
         [doc->view firstPage:doc];
-        [NSApp newWindowInCreation:nil];
 
         [doc resetScrollers];
         if (![doc->prefInfo checkStyleFromFile: doc->view]) Notify(@"Preferences", @"Cannot Read Shared Style Sheet.");
@@ -427,9 +420,8 @@ static List *zoneList = nil;
     doc->window = createWindowFor(doc->view, &contFrame, nil);
       [(NSWindow *)doc->window setDelegate:doc];
 
-      [NSApp newWindowInCreation:doc->window];
+      [NSApp setCurrentWindow:doc->window];
       [doc->view firstPage:doc];
-      [NSApp newWindowInCreation:nil];
 
       [doc resetScrollers];
     doc->haveSavedDocument = YES;
@@ -471,10 +463,9 @@ extern int needUpgrade;
     if (doc)
     {
         [doc setName:file];
-        [NSApp newWindowInCreation:doc->window];
+        [NSApp setCurrentWindow:doc->window];
         [doc->window disableFlushWindow];
         if (d) [doc->window makeKeyAndOrderFront:doc];
-        [NSApp newWindowInCreation:nil];
 
         [doc->window enableFlushWindow];
    
@@ -544,9 +535,8 @@ extern int needUpgrade;
   doc->window = createWindowFor(v, NULL, nil);
   [(NSWindow *)doc->window setDelegate:doc];
 
-  [NSApp newWindowInCreation:doc->window];
+  [NSApp setCurrentWindow:doc->window];
   [doc->view firstPage:doc];
-  [NSApp newWindowInCreation:nil];
 
   [doc setName: nil andDirectory: nil];
   doc->haveSavedDocument = NO;
@@ -778,15 +768,11 @@ extern int needUpgrade;
     conRect = [[window class] contentRectForFrameRect:winFrame styleMask:[window styleMask]];
     scrollView = [window contentView];
     getContentSizeForView(view, &conSize);
-    if ([scrollView horizontalRulerIsVisible])
+    if ([scrollView rulersVisible])
     {
-      conSize.height += [Ruler width];
-      doRuler = YES;
-    }
-    if ([scrollView verticalRulerIsVisible])
-    {
-      conSize.width += [Ruler width];
-      doRuler = YES;
+        conSize.height += [scrollView frame].size.height;
+        conSize.width += [scrollView frame].size.width;
+        doRuler = YES;
     }
     if (conRect.size.width >= conSize.width || conRect.size.height >= conSize.height)
     {
@@ -804,7 +790,7 @@ extern int needUpgrade;
 
 /* Returns the GraphicView associated with this document. */
 
-- view
+- gview
 {
   return view;
 }
@@ -846,7 +832,6 @@ extern int needUpgrade;
   [view setBoundsSize:NSMakeSize(w * m, h * m)];
   ((GraphicView *)view)->currentScale = 1.0;
   [self resetScrollers];
-  [view recacheWhenRedraw:NSZeroRect];
   [view setNeedsDisplay:YES];
 	[window enableFlushWindow];
 //  [window flushWindow];
@@ -866,7 +851,6 @@ extern int needUpgrade;
   [view setFrameSize:NSMakeSize(w * vs, h * vs)];
   [view setBoundsSize:NSMakeSize(w * ss, h * ss)];
   [self resetScrollers];
-  [view recacheWhenRedraw:NSZeroRect];
   [view setNeedsDisplay:YES];
 	[window enableFlushWindow];
 //  [window flushWindow];
@@ -890,10 +874,8 @@ extern int needUpgrade;
     [self resetScrollers];
     initialRect = [theClipView bounds];
     initialPoint = [theClipView convertPoint:origin fromView:view];
-    initialPoint.y -= initialRect.size.height;
     if (initialPoint.y < 0) initialPoint.y = 0;
     [theClipView setBoundsOrigin:initialPoint];
-    [view recacheWhenRedraw:NSZeroRect];
     [view setNeedsDisplay:YES];
     [window enableFlushWindow];
     return self;
@@ -909,16 +891,29 @@ extern int needUpgrade;
  
 - changeLayout:sender
 {
-  float w, h, ss, vs;
-  NSSize opr = [self paperSize];
-  CallPageLayout *pl;
-  BOOL p;
-  pl = [NSApp pageLayout];
-
+    float w, h, ss, vs;
+    NSSize opr = [self paperSize];
+    CallPageLayout * pl;
+    BOOL p;
+#ifndef WIN32
+    //this forces the page layout panel to use the units that we have defined in Calliope app preferences
+    NSString * tempUnit = [[[NSUserDefaults standardUserDefaults] stringForKey:@"NSMeasurementUnit"] retain];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"NSMeasurementUnit"];
+    [[NSUserDefaults standardUserDefaults] setObject:[NSApp unitString]
+                                              forKey:@"NSMeasurementUnit"];
+    pl = [NSApp newPageLayout];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"NSMeasurementUnit"];
+    if (tempUnit)
+        [[NSUserDefaults standardUserDefaults] setObject:tempUnit
+                                                  forKey:@"NSMeasurementUnit"];
+#else
+    pl = [NSApp pageLayout];
+#endif
   if ([pl runModalWithPrintInfo:printInfo] == NSOKButton)
     {
       paperSize = [self paperSize];
       p = (opr.width != paperSize.width || opr.height != paperSize.height);
+      printf("%p\n",pl);
       if (p)
         {
           w = paperSize.width;
@@ -931,6 +926,7 @@ extern int needUpgrade;
           [view recalcAllSys];
           [view paginate: self];
         }
+      [view dirty];
     }
   [NSApp inspectPreferences: NO];
   return self;
@@ -955,7 +951,7 @@ extern int needUpgrade;
   id savepanel;
   if (!haveSavedDocument)
   {
-    savepanel = [NSApp savePanel: @"opus"];
+      savepanel = [NSApp savePanel: FILE_EXT];
     if ([savepanel runModalForDirectory:@"" file:@""])
     {
       [self setName:[savepanel filename]];
@@ -998,7 +994,6 @@ extern int needUpgrade;
 {
     NSData *stream;
     NSString *frameString=nil;
-    NSView *bogusSuperView = [[NSView allocWithZone:(NSZone *)[(NSObject *)view zone]] init]; //sb
     if (haveSavedDocument && [view isDirty])
     {
       if (NSRunAlertPanel(@"Revert", @"%@ has been edited.  Are you sure you want to undo changes?", @"Revert", @"Cancel", nil, name) != NSAlertDefaultReturn)
@@ -1011,12 +1006,9 @@ extern int needUpgrade;
     stream = [NSData dataWithContentsOfMappedFile:[self filename]];
     if (stream && [self loadDocument: stream frameSize: NULL frameString: &frameString])
     {
-        [bogusSuperView setFrame:[view frame]];
-        [bogusSuperView setAutoresizesSubviews:NO];
-        [bogusSuperView addSubview:view];
         [[[[window contentView] documentView] viewWithTag:1] autorelease];
         [[[window contentView] documentView] autorelease];
-        [[window contentView] setDocumentView:bogusSuperView];
+        [[window contentView] setDocumentView:view];
 //      [self paperRect: &frame];
         paperSize = [self paperSize];
         [self useViewScale];
@@ -1043,9 +1035,9 @@ extern int needUpgrade;
 - showTextRuler: sender
 {
   SyncScrollView *scrollView = [window contentView];
-  if ([scrollView verticalRulerIsVisible] && [scrollView horizontalRulerIsVisible])
+    if ([scrollView rulersVisible])
   {
-    [scrollView showHorizontalRuler:NO];
+//    [scrollView showHorizontalRuler:NO];
     [sender toggleRuler:sender];
   }
   return self;
@@ -1053,52 +1045,40 @@ extern int needUpgrade;
 
 
 /*
- * If sender is nil, we assume the sender wants the
+ *sb: this can either be received from the menucell, or from someone else via
+ * firstResponder. eg the fe.
+ 
+ * If sender is nil, (eg fe) we assume the sender wants the
  * ruler hidden, otherwise, we toggle the ruler.
  * If sender is the field editor itself, we do nothing
  * (this allows the field editor to demand that the
  * ruler stay up).
- * This doesn't currently work properly when editing text
- * due to an AppKit bug.
  */
  
 - hideRuler:sender
 {
-  id scrollView = [window contentView];
-  id fe = [window fieldEditor:NO forObject:NSApp];
-  if (!sender && [scrollView verticalRulerIsVisible])
-  {
-    [fe toggleRuler:sender];
-    [scrollView toggleRuler:nil];
-    if ([scrollView verticalRulerIsVisible]) [scrollView showHorizontalRuler:YES];
-    [scrollView resizeSubviewsWithOldSize:NSZeroSize];
-    [scrollView setNeedsDisplay:YES];//sb
-  }
-  else if (sender)
-  {
-    [fe toggleRuler:sender];
-    if ([scrollView verticalRulerIsVisible])
-    {
-      [scrollView showVerticalRuler:NO];
-      [scrollView showHorizontalRuler:NO];
-      if (![fe window]) [scrollView toggleRuler:nil];
-    }
-    else
-    {
-      [scrollView showVerticalRuler:YES];
-      if ([fe window])
+    id scrollView = [window contentView];
+    id fe = [window fieldEditor:NO forObject:NSApp];
+    if (!sender && [scrollView rulersVisible])
       {
-	[scrollView showHorizontalRuler:NO];
+        [fe toggleRuler:sender];
+//        [scrollView toggleRuler:nil];//huh?
+//    if ([scrollView verticalRulerIsVisible]) [scrollView showHorizontalRuler:YES];
+        [scrollView resizeSubviewsWithOldSize:NSZeroSize];
+        [scrollView setNeedsDisplay:YES];//sb
       }
-      else
+    else if (sender)
       {
-        [scrollView toggleRuler:nil];
-	[scrollView showHorizontalRuler:YES];
+        [fe toggleRuler:sender];
+        [scrollView showHideRulers:self];
+        if ([scrollView rulersVisible]) {
+            if (![fe window]) [scrollView toggleRuler:nil];//huh?
+        }
+        else
+            [scrollView toggleRuler:nil];//huh?
       }
-    }
-  }
 //  [NSObject cancelPreviousPerformRequestsWithTarget:NSApp selector:@selector(updateWindows) object:nil], [NSApp performSelector:@selector(updateWindows) withObject:nil afterDelay:(1) / 1000.0];
-  return self;
+    return self;
 }
 
 
@@ -1177,46 +1157,71 @@ extern int needUpgrade;
 */
 
 #define DEMOVERSION 0
++(BOOL)fileManager:(NSFileManager *)manager
+      shouldProceedAfterError:(NSDictionary *)errorDict
+{
+   int result;
+   result = NSRunAlertPanel(@"Calliope", @"File operation error:\n%@ with file: %@",
+                            @"Proceed", @"Stop", NULL,
+                            [errorDict objectForKey:@"Error"],
+                            [errorDict objectForKey:@"Path"]);
+
+   if (result == NSAlertDefaultReturn)
+      return YES;
+    else
+       return NO;
+}
 
 - save
 {
-  const char *s;
+  NSString *s;
   int version = DOC_VERSION;
   NSArchiver *ts;
-  const char *saveFile = [[self filename] cString];
-  char buffer[MAXPATHLEN+1];
-  if (DEMOVERSION)
-  {
-    NSRunAlertPanel(@"Demo", @"You are not allowed to save files", @"OK", nil, nil, NULL);
-    return self;
-  }
+  OAPropertyListArchiver *tsO;
+  
+  NSString *filename = [self filename];
+  NSFileManager *fileManager = [NSFileManager defaultManager];
+  NSString *backupFilename = [[filename stringByDeletingPathExtension] stringByAppendingPathExtension:BACKUP_EXT];
+
   if ([view isDirty])
-  {
-    strcpy(buffer, saveFile);
-    strcat(buffer, "~");
-    unlink(buffer); //zap backup
-    link(saveFile, buffer);//rename current as backup
-    unlink(saveFile);
-    ts = [[NSArchiver alloc] initForWritingWithMutableData:[NSMutableData data]];
-    if (ts)
     {
+      if (([fileManager fileExistsAtPath:backupFilename] && ![fileManager removeFileAtPath:backupFilename handler:[self class]]) ||
+          ([fileManager fileExistsAtPath:filename] && ![fileManager movePath:filename toPath:backupFilename handler:[self class]])) {
+          NSRunAlertPanel(@"Calliope", @"CANT_CREATE_BACKUP", nil, nil, nil);
+      }
+
+      ts = [[NSArchiver alloc] initForWritingWithMutableData:[NSMutableData data]];
+      if (ts && [fileManager isWritableFileAtPath:[filename stringByDeletingLastPathComponent]])
+        {
       NS_DURING
         [window makeFirstResponder:view];
         [(GraphicView *)view deselectAll: self];
         [ts encodeValueOfObjCType:"i" at:&version];
         [ts encodeRootObject:printInfo];
         [ts encodeRootObject:prefInfo];
-        s = [[window stringWithSavedFrame] cString];
-        [ts encodeValueOfObjCType:"*" at:&s];
+        s = [window stringWithSavedFrame];
+        [ts encodeObject:s];
         [ts encodeRootObject:view];
-        [[ts archiverData] writeToFile:[NSString stringWithCString:saveFile] atomically:YES];
+
+/* PROPERTY LIST ENCODING */
+        tsO = [OAPropertyListArchiver propertyListWithRootObject:view];
+        [[tsO description] writeToFile:[filename stringByAppendingPathExtension:@"ppl"] atomically:YES];
+/* END PROPERTY LIST CODING */
+        //printf("Description: %s\n",[[tsO description] cString]);
+        
+        if (![[ts archiverData] writeToFile:filename atomically:YES]) {
+            Notify(@"Save", @"Error writing file. Check disk space at save location, or save to a different location.");
+            haveSavedDocument = NO;
+        }
+        else haveSavedDocument = YES;
+
         [ts release];
-        haveSavedDocument = YES;
         [prefInfo backup];
       NS_HANDLER
+          Notify(@"Save", @"Unknown error writing file.");
       NS_ENDHANDLER
-    }
-    else Notify(@"Save", @"Can't create file.");
+        }
+    else Notify(@"Save", @"Cannot write file to this location. Check permissions on the directory you were trying to save to.");
   }
 //    [NSObject cancelPreviousPerformRequestsWithTarget:NSApp selector:@selector(updateWindows) object:nil];
 //    [NSApp performSelector:@selector(updateWindows) withObject:nil afterDelay:(1) / 1000.0];
@@ -1266,6 +1271,7 @@ extern int needUpgrade;
       }
     }
   }
+  if ([NSApp currentWindow] == window) [NSApp setCurrentWindow:nil];
   window = nil;
   view = nil;
   [NSApp inspectApp];
@@ -1300,7 +1306,7 @@ extern int partlistflag;
     /*sb: now I need to fool NSApp into thinking that we are the main window. It doesn't think
     * so yet, unfortunately.
     */
-    [NSApp newWindowInCreation:theWindow];
+    [NSApp setCurrentWindow:theWindow];
 /*sb: following line not necessary, as the printing system will grab our printInfo when it needs
  * it. See above too...
  */
@@ -1309,7 +1315,6 @@ extern int partlistflag;
     [NSApp presetPrefsPanel];
     [NSApp inspectApp];
     ++partlistflag;
-    [NSApp newWindowInCreation:nil];
 }
 
 - (NSSize)windowWillResize:(NSWindow *)sender toSize:(NSSize)size
@@ -1321,8 +1326,10 @@ extern int partlistflag;
     NSRect fRect, cRect;
     getContentSizeForView(view, &cRect.size);
     fRect = [[window class] frameRectForContentRect:cRect styleMask:[window styleMask]];
-    if ([[window contentView] horizontalRulerIsVisible]) fRect.size.height += [Ruler width];
-    if ([[window contentView] verticalRulerIsVisible]) fRect.size.width += [Ruler width];
+    if ([[window contentView] rulersVisible]) {
+        fRect.size.height += [[[window contentView] horizontalRulerView] frame].size.height;
+        fRect.size.width += [[[window contentView] verticalRulerView] frame].size.width;
+    }
     size.width = MIN(fRect.size.width, size.width);
     size.height = MIN(fRect.size.height, size.height);
     size.width = MAX(MIN_WINDOW_WIDTH, size.width);
@@ -1371,7 +1378,7 @@ extern int partlistflag;
     switch (tag)
   {
         default:
-            return YES;
+            break;
         case 39:
             return [view isDirty];
         case 40:
@@ -1381,16 +1388,11 @@ extern int partlistflag;
         case 44:
             return ([view isDirty] && haveSavedDocument);
         case 46:
-            if ([[window contentView] eitherRulerIsVisible] && [[menuCell title] compare:@"Hide Ruler"])
-      {
+            if ([[window contentView] rulersVisible] )
                 [menuCell setTitle:@"Hide Ruler"];
-                [menuCell setEnabled:NO];
-      }
-            else if (![[window contentView] eitherRulerIsVisible] && [[menuCell title] compare:@"Show Ruler"])
-      {
+            else
                 [menuCell setTitle:@"Show Ruler"];
-                [menuCell setEnabled:NO];
-      }
+            [menuCell setEnabled:NO];
             break;
         case 47:
             return [[window fieldEditor:NO forObject:NSApp] superview] ? YES : NO;

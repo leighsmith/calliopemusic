@@ -41,6 +41,7 @@
 #import <AppKit/AppKit.h>
 #import <AppKit/psopsNeXT.h>
 #import "FlippedView.h"
+#import <CalliopePropertyListCoders/OAPropertyListCoders.h>
 
 extern NSString * DrawPasteType(NSArray *types);
 extern NSSize paperSize;
@@ -50,7 +51,6 @@ extern int numPastes;
 //sb: following was const char *
 NSString *DrawPboardType = @"Calliope Graphic List Type";
 
-BOOL InMsgPrint = NO;		/* whether we are in msgPrint: */
 BOOL dragflag;			/* whether we are dragging */
 BOOL moveFlag;			/* whether any staffobjs in selection */
 BOOL marginFlag = NO;
@@ -130,8 +130,6 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
   static BOOL registered = NO;
   NSArray *sendTypes,*returnTypes;
   NSArray *dragTypes;
-
-  recacheRect = NSZeroRect;
   
   if (!KeyMotionDeltaDefault)
   {
@@ -166,26 +164,10 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
       stylelist = [scrstylelist retain];
       initScrStylelist();
   }
-  [self initCaches];
+  scrolling = NO;
   return self;
 }
 
--(void)initCaches
-{
-    NSSize intFrameSize;
-    if (cacheView) [cacheView release];
-    if (bogusCacheView) [bogusCacheView release];
-    if (cacheImage) [cacheImage release];
-    intFrameSize = [self frame].size;
-    cacheImage = [[NSImage allocWithZone:[self zone]] initWithSize:intFrameSize];
-    [cacheImage lockFocus];
-    [cacheImage unlockFocus];/*sb: force image representation to be made */
-    bogusCacheView = [[NSView allocWithZone:[self zone]] initWithFrame:[self frame]];
-    cacheView = [[FlippedView allocWithZone:[self zone]] initWithFrame:[self frame]];
-    [[[[cacheImage representations] objectAtIndex:0] window] setContentView:bogusCacheView];
-    [bogusCacheView addSubview:cacheView];
-    [cacheView setBounds:[self bounds]];
-}
 
 /*
   Initializes the view's instance variables.
@@ -216,7 +198,6 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
 
 - setBackground: sender
 {
-    [self recacheWhenRedraw:NSZeroRect];
     [self setNeedsDisplay:YES];
   return self;
 }
@@ -232,8 +213,7 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
     if (newSize.width != frame.size.width || newSize.height != frame.size.height) {
         [super setFrameSize:newSize];
 //        [self setNeedsDisplay:NO];
-        [[self superview] setFrameSize:newSize];
-        [self initCaches];
+//        [[self superview] setFrameSize:newSize];
     }
 }
 
@@ -244,7 +224,6 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
     if (newSize.width != bounds.size.width || newSize.height != bounds.size.height) {
         [super setBoundsSize:newSize];
         bounds = [self bounds];
-        [cacheView setBoundsSize:newSize];
         [self cache:bounds];
     }
 }
@@ -255,7 +234,6 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
 
     if (newRect.size.width != bounds.size.width || newRect.size.height != bounds.size.height) {
         [super setBounds:newRect];
-        [cacheView setBounds:newRect];
         [self cache:newRect];
     }
 }
@@ -264,8 +242,6 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
 {
     [slist autorelease];
     [cacheImage autorelease];
-    [cacheView autorelease];
-    [bogusCacheView autorelease];
     [pagelist removeAllObjects];
     [pagelist autorelease];
     [syslist removeAllObjects];
@@ -377,28 +353,43 @@ static void noteAndHangBB(NSMutableArray *l, NSRect *bbox)
 {
   int i, k;
   id p;
-  NSRect bb;
-  /*sb: removed instance drawing. Will need to blat back from cache to remove instances */
-//  PSsetinstance(YES);
-//  PSnewinstance();
+  NSRect mybb;
+  BOOL first = YES;
+  id window = [self window];
+  NSRect selectionBlat = NSZeroRect;
+  NSRect cachedRect;
   PSWait();
-  if (!NSEqualRects(selectionBlat, NSZeroRect))
-      [self drawGV: selectionBlat : 1]; //sb: this should blat the selection OFF the screen
-  selectionBlat = NSZeroRect;
+  if (cached) [window restoreCachedImage];
   k = [slist count];
-  for (i = 0; i < k; i++)
+  for (i = 0; i < k; i++) /*first pass -- find the bb */
   {
     p = [slist objectAtIndex:i];
-    [p draw: NSZeroRect : 0];
-    graphicBBox(&bb,p);
-    selectionBlat = NSUnionRect(selectionBlat,bb);
+    graphicBBox(&mybb,p);
+    if (first) {
+        selectionBlat = mybb;
+        first = NO;
+    }
+    else selectionBlat = NSUnionRect(selectionBlat,mybb);
   }
-  selectionBlat = NSInsetRect(selectionBlat,-1.0,-1.0);
+//  printf("selectionblat %g %g %g %g\n",selectionBlat.origin.x,selectionBlat.origin.y,selectionBlat.size.width,selectionBlat.size.height);
+
+  cachedRect = NSInsetRect([self convertRect:selectionBlat toView:nil],-2,-2);
+  cachedRect.origin.x = (int)cachedRect.origin.x;
+  cachedRect.origin.y = (int)cachedRect.origin.y;
+  cachedRect.size.width = ceil(cachedRect.size.width);
+  cachedRect.size.height = ceil(cachedRect.size.height);
+
+  [window cacheImageInRect:cachedRect];
+
+  cached = YES;
+  for (i = 0; i < k; i++)/*second pass -- draw the objects */
+  {
+      [[slist objectAtIndex:i] draw: NSZeroRect : 0];
+  }
   for (i = 0; i < k; i++)
       [[slist objectAtIndex:i] drawHangers: NSZeroRect : 0];
-      
-//  PSsetinstance(NO);
-  [[self window] flushWindow];
+
+  [window flushWindow];
   return self;
 }
 
@@ -540,6 +531,11 @@ extern char *typename[NUMTYPES];
 
 #define MOVE_MASK NSLeftMouseUpMask|NSLeftMouseDraggedMask
 
+- (BOOL)isWithinBounds:(NSRect) rect
+{
+    NSRect bounds = [self bounds];
+    return (NSMinX(rect) >= 0 && NSMinY(rect) >= 0 && NSMaxX(rect) <= NSMaxX(bounds) && NSMaxY(rect) <= NSMaxY(bounds));
+}
 
 /*
  * Moves the selection.
@@ -549,7 +545,7 @@ extern char *typename[NUMTYPES];
 {
   float dx, dy;
   NSPoint p, last;
-  NSRect sbounds, bb, visrect;
+  NSRect sbounds, mybb, visrect,cachedRect;
   NSEvent *peek = nil;
   BOOL timer = FALSE;
   BOOL tracking = YES, alternate, m, first, canscroll;
@@ -570,15 +566,20 @@ extern char *typename[NUMTYPES];
   event = [window nextEventMatchingMask:MOVE_MASK];
   dragflag = YES;
   [self lockFocus];
-  cacheing = YES; //sb
-  [self drawGV: sbounds : 1]; /*sb: I figure this should zap selection in cache, so cache can be used 
-					to blat back empty selection & clear away cruft. */
-  cacheing = NO;
+
   [self drawGV: sbounds : 1]; //sb: this should blat the selection OFF the screen
-  selectionBlat = NSZeroRect;
+  cachedRect = NSInsetRect([self convertRect:sbounds toView:nil],-4,-4);
+  cachedRect.origin.x = (int)cachedRect.origin.x;
+  cachedRect.origin.y = (int)cachedRect.origin.y;
+  cachedRect.size.width = ceil(cachedRect.size.width);
+  cachedRect.size.height = ceil(cachedRect.size.height);
+
+  [window cacheImageInRect:cachedRect];
+  /* store away "empty" image */
+  cached = YES;
   [self drawSelectionInstance];
-  bb = NSZeroRect;
-  [self affectedBBox: &bb];
+  mybb = NSZeroRect;
+  [self affectedBBox: &mybb];
   first = YES;
   while (tracking)
   {
@@ -606,29 +607,31 @@ extern char *typename[NUMTYPES];
     if (tracking)
     {
       [self selectionHandBBox: &sbounds];
-      [self affectedBBox: &bb];
-      sbounds  = NSUnionRect(bb , sbounds);
+      [self affectedBBox: &mybb];
+      sbounds  = NSUnionRect(mybb , sbounds);
       [window disableFlushWindow];
-      if (canscroll && !NSContainsRect(visrect , sbounds))
-      {
-//          printf("no containrect\n");
-/* the following added by sbrandon to remove selection instance BEFORE scrolling */
-          if (!NSEqualRects(selectionBlat, NSZeroRect)) {
-              [self drawGV: selectionBlat : 1]; //sb: this should blat the selection OFF the screen
-              selectionBlat = NSZeroRect;
-          }
-/* end addition */
-          [self drawSelectionInstance];
 
+      /****** do we need to scroll? ******/
+      if (canscroll && !NSContainsRect(visrect , sbounds) && [self isWithinBounds:sbounds])
+      {
+          if (cached) [window restoreCachedImage];//sb: this should blat the selection OFF the screen
+          else
+              printf("huh?\n");
+          cached = NO; /* so restoreCachedImage doesn't try to restore image after scroll */
+          scrolling = YES;
           [self scrollPointToVisible: p];
+          scrolling = NO;
           [self drawSelectionInstance];
           if (!timer) { [NSEvent startPeriodicEventsAfterDelay:0.1 withPeriod:0.1]; timer = TRUE; }
       }
+      /****** end of scrolling code ******/
+      
       visrect = [self visibleRect];
       [window enableFlushWindow];
       [window flushWindow];
 //      [self drawSelectionInstance];
       p = [event locationInWindow];
+
       if (!(peek = [NSApp nextEventMatchingMask:MOVE_MASK untilDate:[NSDate date] inMode:NSEventTrackingRunLoopMode dequeue:NO])) {
           event = [window nextEventMatchingMask:MOVE_MASK|NSPeriodicMask];
       }
@@ -638,15 +641,15 @@ extern char *typename[NUMTYPES];
       if ([event type] == NSPeriodic) event = periodicEventWithLocationSetToPoint(event, p);
     }
   }
+  
+  /******* move has ended. Now clean up. *******/
   if (canscroll && timer != FALSE) [NSEvent stopPeriodicEvents];
   timer = FALSE;
   [self terminateMove];
-//  PSsetinstance(YES);
-//  PSnewinstance();
-//  PSsetinstance(NO);
+
   [self selectionHandBBox: &sbounds];
-  [self affectedBBox: &bb];
-  sbounds  = NSUnionRect(bb , sbounds);
+  [self affectedBBox: &mybb];
+  sbounds  = NSUnionRect(mybb , sbounds);
 //  [self drawRect:sbounds];
   [self cache:sbounds];
   [self tryToPerform:@selector(updateRulers:) with:nil];
@@ -682,9 +685,9 @@ extern char *typename[NUMTYPES];
 
 - cache:(NSRect)rect
 {
-    cacheing = YES;
-    [self drawRect:rect];
-    cacheing = NO;
+//    cacheing = YES;
+//    [self drawRect:rect];
+//    cacheing = NO;
     
   if ([self canDraw])
   {
@@ -695,32 +698,6 @@ extern char *typename[NUMTYPES];
   return self;
 }
 
-- cacheAll:sender
-{
-//    [self cache:[self bounds]];
-//sb: don't composite at this point -- that is done automatically later. Just put in cache.
-    cacheing = YES;
-    [self drawRect:[self bounds]];
-    cacheing = NO;
-    {
-        id clipview = [[self superview] superview];
-        id scrollview = [clipview superview];
-        [scrollview reflectScrolledClipView:clipview];
-    }
-    return self;
-}
-
-/*sb: use this method from any other part of the app that invalidates parts of the view.
- * Sending a NULL NSRect causes the entire view to be recached
- */
-- (void)recacheWhenRedraw:(NSRect)redrawRect
-{
-    if (NSEqualRects(redrawRect,NSZeroRect)) recacheRect = [self bounds];
-    else {
-        if (NSEqualRects(recacheRect,NSZeroRect)) recacheRect = redrawRect;
-        else recacheRect = NSUnionRect(recacheRect,redrawRect);
-    }
-}
 /* redraw an object (used in some unusual cases) */
 
 - reDraw: g
@@ -792,7 +769,7 @@ extern char *typename[NUMTYPES];
   NSMutableArray *l = [[NSMutableArray alloc] init];
   int i, k, theCount;
   id q, r;
-  float d, dmin;
+  float d, dmin=0.0;
   d = MAXFLOAT;
   i = ((Page *) currentPage)->topsys;
   theCount = [syslist count];
@@ -902,10 +879,11 @@ extern char *typename[NUMTYPES];
 - dragSelect:(NSEvent *)event 
 {
   NSPoint p, last, start;
-  BOOL alt, shift, hasregion, canscroll, oldRegionSet;
-  NSRect region,oldRegion;
+    BOOL alt, shift, hasregion, canscroll,wcache=NO,didMove = NO;
+  NSRect region;
   id window = [self window];
-
+  NSRect cachedRect;
+  
   BOOL timer = FALSE;
   p = start = [event locationInWindow];
   start = [self convertPoint:start fromView:nil];
@@ -916,48 +894,61 @@ extern char *typename[NUMTYPES];
   event = [window nextEventMatchingMask:DRAG_MASK];
   hasregion = NO;
   region = [self visibleRect];
-  [selShade set];//sb: moved these two lines from inside loop
+  [selShade set];
   PSsetlinewidth(0.0);
+  
   canscroll = !NSEqualRects(region , [self bounds]);
   if (canscroll && !timer) { [NSEvent startPeriodicEventsAfterDelay:0.1 withPeriod:0.1]; timer = TRUE; }
   while ([event type] != NSLeftMouseUp)
   {
       if ([event type] == NSPeriodic) event = periodicEventWithLocationSetToPoint(event, p);
       p = [event locationInWindow];
-    p = [self convertPoint:p fromView:nil];
-    if (p.x != last.x || p.y != last.y)
-    {
-      getRegion(&region, &p, &start);
-      hasregion = YES;
-      if (oldRegionSet) {
-          oldRegion = NSInsetRect(oldRegion, -1.0, -1.0);
-          [self drawRect:oldRegion];
-      }
+      p = [self convertPoint:p fromView:nil];
+      if (p.x != last.x || p.y != last.y)
+        {
+          didMove = YES;
+          getRegion(&region, &p, &start);
+          /* ensure that it encloses some area, so NSIntersectionRect will not get confused */
+          if (region.size.width == 0) region.size.width = 0.01;
+          if (region.size.height == 0) region.size.height = 0.01;
+          hasregion = YES;
 
-      [window disableFlushWindow];
-      if (canscroll)
-      {
-        [self scrollRectToVisible:region];
-        [self scrollPointToVisible: p];
-      }
-//      PSsetinstance(YES);
-//      PSnewinstance();
-      PSrectstroke(region.origin.x, region.origin.y, region.size.width, region.size.height);
-      [self tryToPerform: @selector(updateRulers:) with: (void *) &region];
-      [window enableFlushWindow];
-      [window flushWindow];
-      oldRegion = region; oldRegionSet = YES;
-      last = p;
-      PSWait();
-    }
-    p = [event locationInWindow];
-    event = [window nextEventMatchingMask:DRAG_MASK];
+          if (wcache) {
+              [window restoreCachedImage];
+//              [window discardCachedImage];
+          }
+
+          [window disableFlushWindow];
+          if (canscroll)
+            {
+//              [self scrollRectToVisible:region];
+              if ([self scrollPointToVisible: p]) {
+                  [selShade set]; /* in case these are reset by the drawing code above */
+                  PSsetlinewidth(0.0);
+                  [window displayIfNeeded];
+              }
+            }
+          [window enableFlushWindow];
+          
+          cachedRect = NSInsetRect([self convertRect:NSIntersectionRect(region,[self visibleRect]) toView:nil],-2,-2);
+          cachedRect.origin.x = (int)cachedRect.origin.x;
+          cachedRect.origin.y = (int)cachedRect.origin.y;
+          cachedRect.size.width = ceil(cachedRect.size.width);
+          cachedRect.size.height = ceil(cachedRect.size.height);
+          [window cacheImageInRect:cachedRect];
+          wcache = YES;
+
+          PSrectstroke(region.origin.x, region.origin.y, region.size.width, region.size.height);
+          [self tryToPerform: @selector(updateRulers:) with: (void *) &region];
+          [window flushWindow];
+          last = p;
+          PSWait();
+        }
+      else didMove = NO;
+      p = [event locationInWindow];
+      event = [window nextEventMatchingMask:DRAG_MASK];
   }
-//  PSsetinstance(NO);
-  if (oldRegionSet) {
-      oldRegion = NSInsetRect(oldRegion, -1.0, -1.0);
-      [self drawRect:oldRegion];
-  }
+  if (wcache) [window restoreCachedImage];
 
   if (canscroll && timer) [NSEvent stopPeriodicEvents];
   timer = FALSE;
@@ -969,14 +960,10 @@ extern char *typename[NUMTYPES];
       [self saveRect: &region : grabflag];
       grabflag = 0;
       [[window contentView] setDocumentCursor:[NSCursor arrowCursor]];
-//      PSnewinstance();
-//      PSsetinstance(NO);
     }
     else
     {
       [self checkAll: alt : &region];
-//      PSnewinstance();
-//      PSsetinstance(NO);
       [self drawSelectionWith: NULL];
     }
   }
@@ -1262,7 +1249,7 @@ extern struct toolData toolCodes[NUMTOOLS];
       i = g->gFlags.selend;
       if ([g isResizable] && i == 7)
       {
-          selectionBlat = NSZeroRect; /* to wipe current selection from screen */
+          cached = NO; /* to wipe current selection from screen */
         [g resize: event in: self];
 	trymove = nil;
       }
@@ -1289,60 +1276,21 @@ extern struct toolData toolCodes[NUMTOOLS];
 {
     int i;
     Page *pg = currentPage;
-    id superview = [self superview];
-    NSRect visibleRect;
-    NSRect frame = [self frame];
-//  NSWindow *window = [self window];
     if (&rect == NULL) return self;
     if (currentPage == nil) return self;
 //  [window disableFlushWindow];
-      
-/**********/
-    if (cacheing || ![[NSDPSContext currentContext] isDrawingToScreen]) { /* caching, or printing to printer */
-        if ([[NSDPSContext currentContext] isDrawingToScreen]) { /* only if drawing to screen...*/
-            [cacheView lockFocus];
-            NSRectClip(rect);
-            [backShade set];
-            NSRectFill(rect);
-        }
-        [pg draw: rect : nso];
-#ifdef DEBUGno
-        printf("caching: %g %g %g %g\n", rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
-#endif
-        for (i = pg->topsys; i <= pg->botsys; i++) [[syslist objectAtIndex:i] draw: rect : nso];
-        for (i = pg->topsys; i <= pg->botsys; i++) [[syslist objectAtIndex:i] drawHangers: rect : nso];
-        if ([[NSDPSContext currentContext] isDrawingToScreen]) {
-            [cacheView unlockFocus];
-        }
-    }
-    if (!cacheing && [[NSDPSContext currentContext] isDrawingToScreen]) { /* direct to screen */
-        visibleRect = [self visibleRect];
-        if (!NSEqualRects(rect, visibleRect)) {
-            rect = NSIntersectionRect(visibleRect, rect);
-        }
-        if (!NSIsEmptyRect(rect)) {
-            NSPoint lowLeft;
-            NSRect flippedRect;
 
-            frame = [cacheView frame];
-            flippedRect = [cacheView convertRect:rect toView:nil];
-            [superview lockFocus];
-            lowLeft = flippedRect.origin;
-#ifdef DEBUGno
-            printf("RECT %g %g %g %g  newRect: %g %g %g %g\n", rect.origin.x, rect.origin.y, rect.size.width, rect.size.height, flippedRect.origin.x, flippedRect.origin.y, flippedRect.size.width, flippedRect.size.height);
-#endif
-            if (flippedRect.origin.y + flippedRect.size.height > frame.size.height) {
-                flippedRect.size.height = frame.size.height - flippedRect.origin.y - 0.01;
-            }                
-            [cacheImage compositeToPoint:lowLeft fromRect:flippedRect operation:NSCompositeCopy];
-            [superview unlockFocus];
-//            i = [glist count]; // pick up uncached graphics (used in resize:, etc.)
-//            while (i--) {
-//                Graphic *g = [glist objectAtIndex:i];
-//                if (![g isCached]) [g draw:rect];
-//            }
-        }
-    }
+//sb: cache-free society!
+//    NSRectClip(rect);
+    [backShade set];
+    NSRectFill(rect);
+    [pg draw: rect : nso];
+    for (i = pg->topsys; i <= pg->botsys; i++) [[syslist objectAtIndex:i] draw: rect : nso];
+    for (i = pg->topsys; i <= pg->botsys; i++) [[syslist objectAtIndex:i] drawHangers: rect : nso];
+    return self;
+
+
+#if 0    
 
 /******************/
 //  if ([[NSDPSContext currentContext] isDrawingToScreen])
@@ -1359,6 +1307,7 @@ extern struct toolData toolCodes[NUMTOOLS];
 //  [window enableFlushWindow];
 //  [window flushWindowIfNeeded];
   return self;
+#endif
 }
 
 
@@ -1368,17 +1317,9 @@ extern struct toolData toolCodes[NUMTOOLS];
 
 - (void)drawRect:(NSRect)rect
 {
-    if (!(NSEqualRects(recacheRect,NSZeroRect))){
-#ifdef DEBUG
-        if (cacheing == YES) printf("was already caching\n");
-#endif
-        cacheing = YES;
-        [self drawGV:recacheRect :0];
-        cacheing = NO;
-        recacheRect = NSZeroRect;
-    }
-  [self drawGV: rect : 0];
-  return;
+    if (scrolling) [self drawGV:rect :1];
+    else [self drawGV: rect : 0];
+    return;
 }
 
 
@@ -1523,7 +1464,7 @@ extern struct toolData toolCodes[NUMTOOLS];
 //#warning EventConversion: the '.data.key.charSet' field of NXEvent does not have an exact translation to an NSEvent method.  Possibly use [[event characters] canBeConvertedToEncoding:...]
 //  int cs = event.data.key.charSet;
   int cf = [event modifierFlags];
-  int cst;
+  int cst=0;
   int t;
   NSRect b;
   id f;
@@ -1714,21 +1655,21 @@ static char *typeExts[3] = {NULL, "eps", "tiff"};
 
 - (void)delete:(id)sender
 {
-  NSRect sb, bb;
+  NSRect sb, mybb;
   Graphic *p;
   int k;
   BOOL runs = NO, marg = NO;
-  bb = NSZeroRect;
-  [self affectedBBox: &bb];
+  mybb = NSZeroRect;
+  [self affectedBBox: &mybb];
   [self selectionHandBBox: &sb];
-  sb  = NSUnionRect(bb , sb);
+  sb  = NSUnionRect(mybb , sb);
   k = [slist count];
   while (k--)
   {
     p = [slist objectAtIndex:k];
     if (TYPEOF(p) == RUNNER)
     {
-      (p->bounds)  = NSUnionRect(bb , (p->bounds));
+      (p->bounds)  = NSUnionRect(mybb , (p->bounds));
       runs = YES;
     }
     else if (TYPEOF(p) == MARGIN)
@@ -1738,7 +1679,7 @@ static char *typeExts[3] = {NULL, "eps", "tiff"};
           NSBeep();
           return;
         }
-        p->bounds = NSUnionRect(bb , (p->bounds));
+        p->bounds = NSUnionRect(mybb , (p->bounds));
         marg = YES;
     }
   }
@@ -1786,27 +1727,31 @@ static char *typeExts[3] = {NULL, "eps", "tiff"};
 
 - deselectAll:sender
 {
-  int i, k, f;
-  Graphic *p;
-  NSRect sb;
-  k = [slist count];
-  f = 0;
-  if (k)
-  {
-    [self selectionHandBBox: &sb];
-    for (i = 0; i < k; i++)
+    int i, k, f;
+    Graphic *p;
+    NSRect sb;
+    k = [slist count];
+    f = 0;
+    if (k)
     {
-      p = [slist objectAtIndex:i];
-      p->gFlags.selected = 0;
-      p->gFlags.seldrag = 0;
-      [p selectHangers: 0];
+        [self selectionHandBBox: &sb];
+//    for (i = 0; i < k; i++) 
+//sb: I don't step through any more, as removing hangers
+//alters the composition of slist.
+        while ((i = [slist count]))
+        {
+            p = [slist objectAtIndex:i-1];
+            p->gFlags.selected = 0;
+            p->gFlags.seldrag = 0;
+            [slist removeObjectAtIndex:i-1];
+            [p selectHangers:slist : 0];
+        }
+        [self cache: sb];
+        [self emptySlist];
+    //    [NSObject cancelPreviousPerformRequestsWithTarget:NSApp selector:@selector(updateWindows) object:nil], [NSApp performSelector:@selector(updateWindows) withObject:nil afterDelay:(1) / 1000.0];
+        if (sender != self) [[self window] flushWindow];
     }
-    [self cache: sb];
-    [self emptySlist];
-//    [NSObject cancelPreviousPerformRequestsWithTarget:NSApp selector:@selector(updateWindows) object:nil], [NSApp performSelector:@selector(updateWindows) withObject:nil afterDelay:(1) / 1000.0];
-    if (sender != self) [[self window] flushWindow];
-  }
-  return self;
+    return self;
 }
 
 
@@ -1819,9 +1764,9 @@ static char *typeExts[3] = {NULL, "eps", "tiff"};
     float h = s / currentScale;
     id clView = [[self enclosingScrollView] contentView];
     NSRect initialRect = [clView bounds];
-    NSPoint thePoint = [clView convertPoint:(NSPoint){NSMinX(initialRect),NSMaxY(initialRect)} toView:self];
+    NSPoint thePoint = [clView convertPoint:(NSPoint){NSMinX(initialRect),NSMinY(initialRect)} toView:self];
     [self scaleUnitSquareToSize:NSMakeSize(w, h)];
-//  [cacheView scaleUnitSquareToSize:NSMakeSize(w, h)];
+
     currentScale = s;
     return [[NSApp currentDocument] changeSize: ceil([self frame].size.width * w)
                                               : ceil([self frame].size.height * h)
@@ -1916,8 +1861,13 @@ static char *typeExts[3] = {NULL, "eps", "tiff"};
 
 - (void)beginSetup
 {
+    int n;
     [super beginSetup];
     PSInit();
+    [self deselectAll: self];
+    n = [pagelist indexOfObject:currentPage];
+    [Page initPage];
+    [self gotoPage: n : 1];
 }
 
 
@@ -2013,7 +1963,6 @@ static char *typeExts[3] = {NULL, "eps", "tiff"};
               p = [sender draggingLocation];
               p = [self convertPoint:p fromView:nil];
               [[Graphic allocInit: IMAGE] protoFromPasteboard: pboard : self : p];
-              [self recacheWhenRedraw:NSZeroRect];
               [self setNeedsDisplay:YES];
             }
       }
@@ -2059,6 +2008,7 @@ static char *typeExts[3] = {NULL, "eps", "tiff"};
   Page *p;
   BOOL f = NO;
   n = [syslist indexOfObject:s];
+  if (n == NSNotFound) return nil;
   k = [pagelist count];
   for (i = 0; (i < k && !f); i++)
   {
@@ -2156,13 +2106,13 @@ extern int needUpgrade;
       s = [syslist objectAtIndex:k];
       if (s->view == 0)
       {
-        [NSApp log: @"NOTICE: fixed nil view found in unarchived system=" : k];
+        [NSApp log: @"NOTICE: corrected nil view found in unarchived system=" : k];
         s->view = self;
       }
       if (s->page == 0) s->page = [self myPage: s];
       if (s->gFlags.type == 0)
       {
-        [NSApp log: @"NOTICE: fixed nil type found in unarchived system=" : k];
+        [NSApp log: @"NOTICE: corrected nil type found in unarchived system=" : k];
         s->gFlags.type = SYSTEM;
       }
     }
@@ -2187,6 +2137,15 @@ extern int needUpgrade;
   dirtyflag = NO;
   [[self window] setDocumentEdited:NO];
   [aCoder encodeValuesOfObjCTypes:"@@@@@f", &syslist, &pagelist, &partlist, &chanlist, &stylelist, &currentScale];
+}
+- (void)encodeWithPropertyListCoder:(OAPropertyListCoder *)aCoder
+{
+    [aCoder setObject:syslist forKey:@"syslist"];
+    [aCoder setObject:pagelist forKey:@"pagelist"];
+    [aCoder setObject:partlist forKey:@"partlist"];
+    [aCoder setObject:chanlist forKey:@"chanlist"];
+    [aCoder setObject:stylelist forKey:@"stylelist"];
+    [aCoder setFloat:currentScale forKey:@"CurrentScale"];
 }
 
 - (void)lockFocus
