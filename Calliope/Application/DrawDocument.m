@@ -1,3 +1,4 @@
+/* $Id$ */
 #import "DrawDocument.h"
 #import "DrawApp.h"
 #import "GraphicView.h"
@@ -1430,7 +1431,7 @@ NSEvent *anEvent;
   anEvent = [NSEvent keyEventWithType:NSKeyDown location:NSZeroPoint modifierFlags:0
                             timestamp:(NSTimeInterval)0.0
                          windowNumber:[[NSApp keyWindow] windowNumber]
-                              context:(NSDPSContext *)[NSApp context]
+                              context:[NSApp context]
                            characters:theString charactersIgnoringModifiers:theString
                             isARepeat:NO keyCode:1]; /*sb: keyCode is bogus */
 //  anEvent.data.key.charCode = c;
