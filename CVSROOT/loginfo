@@ -24,3 +24,23 @@
 #DEFAULT (echo ""; id; echo %s; date; cat) >> $CVSROOT/CVSROOT/commitlog
 # or
 #DEFAULT (echo ""; id; echo %{sVv}; date; cat) >> $CVSROOT/CVSROOT/commitlog
+
+#
+# Changes to CVSROOT go to the Admins
+#
+CVSROOT (echo ""; id; echo %{sv}; date; cat) | mail -s "updates to Calliope CVSROOT" leighsmith@users.sourceforge.net
+
+# The syncmail way of doing things.
+#CVSROOT $CVSROOT/CVSROOT/syncmail %{sv} leighsmith@users.sourceforge.net
+
+#
+# Changes to Calliope are mailled to the calliopemusic-developers list
+# This is how I have done things traditionally without syncmail
+#
+Calliope (echo ""; id; echo %{sv}; date; cat) | mail -s "updates to Calliope" calliopemusic-developer@lists.sourceforge.net
+
+#
+# This is the syncmail way of doing things
+#
+#Calliope $CVSROOT/CVSROOT/syncmail %{sv} calliopemusic-developers@lists.sourceforge.net
+
