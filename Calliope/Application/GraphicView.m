@@ -40,7 +40,6 @@
 #import "CallPart.h"
 #import "Channel.h"
 #import <AppKit/AppKit.h>
-#import <AppKit/psopsNeXT.h>
 #import "FlippedView.h"
 #import <CalliopePropertyListCoders/OAPropertyListCoders.h>
 

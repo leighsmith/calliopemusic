@@ -36,8 +36,6 @@
 #import <AppKit/NSCursor.h>
 #import <AppKit/NSWindow.h>
 #import <AppKit/NSGraphics.h>
-#import <AppKit/psopsOpenStep.h>
-#import <AppKit/psopsNeXT.h>
 #import "mux.h"
 #import "muxlow.h"
 
