@@ -1,0 +1,26 @@
+{
+    IBClasses = (
+        {
+            CLASS = DrawApp; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {inspector = id; }; 
+            SUPERCLASS = NSApplication; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {preset = id; set = id; setProto = id; }; 
+            CLASS = NeumeInspector; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                accmatrix = id; 
+                bodymatrix = id; 
+                dotmatrix = id; 
+                halfSizeSwitch = id; 
+                incmatrix = id; 
+                typematrix = id; 
+            }; 
+            SUPERCLASS = NSPanel; 
+        }
+    ); 
+    IBVersion = 1; 
+}

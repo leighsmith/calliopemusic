@@ -1,0 +1,19 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {set = id; setProto = id; }; 
+            CLASS = BarInspector; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {buttonmatrix = id; numbermatrix = id; typematrix = id; }; 
+            SUPERCLASS = NSPanel; 
+        }, 
+        {
+            CLASS = DrawApp; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {inspector = id; }; 
+            SUPERCLASS = NSApplication; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
+    ); 
+    IBVersion = 1; 
+}

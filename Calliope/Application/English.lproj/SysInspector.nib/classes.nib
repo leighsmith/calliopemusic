@@ -1,0 +1,145 @@
+{
+    IBClasses = (
+        {
+            CLASS = DrawApp; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {inspector = id; }; 
+            SUPERCLASS = NSApplication; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {changeBox = id; dataChanged = id; revert = id; }; 
+            CLASS = MultiBoxManager; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                mainPopup = id; 
+                noSelectionBox = id; 
+                panel = id; 
+                revertButton = id; 
+                setButton = id; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = MultiView; LANGUAGE = ObjC; SUPERCLASS = NSView; }, 
+        {
+            ACTIONS = {
+                hitPart = id; 
+                pickstaff = id; 
+                preset = id; 
+                set = id; 
+                setall = id; 
+                setnstaves = id; 
+            }; 
+            CLASS = SysInspectObj; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                barbase = id; 
+                equidistbutton = id; 
+                expansionform = id; 
+                fixswitch = id; 
+                hidebutton = id; 
+                indentleft = id; 
+                indentright = id; 
+                margintop = id; 
+                newbarbutton = id; 
+                newform = id; 
+                newpagebutton = id; 
+                newsysbutton = id; 
+                notationmatrix = id; 
+                nstavestext = id; 
+                pagematrix = id; 
+                partbutton = id; 
+                polymatrix = id; 
+                prefacebutton = id; 
+                prefaceforms = id; 
+                sizematrix = id; 
+                staffforms = id; 
+                staffmatrix = id; 
+                staffnumbutton = id; 
+                verseoffform = id; 
+            }; 
+            SUPERCLASS = MultiBoxManager; 
+        }, 
+        {
+            ACTIONS = {
+                changeBox = id; 
+                changeStaffView = id; 
+                dataChanged = id; 
+                hitBrowser = id; 
+                hitConstyle = id; 
+                hitDefstyle = id; 
+                hitDelstyle = id; 
+                hitExtract = id; 
+                hitFinstyle = id; 
+                hitNewstyle = id; 
+                hitOrder = id; 
+                hitPart = id; 
+                hitRenstyle = id; 
+                pickstaff = id; 
+                preset = id; 
+                revert = id; 
+                set = id; 
+                setall = id; 
+                setnstaves = id; 
+            }; 
+            CLASS = SysInspector; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                barbase = id; 
+                barnumswitch = id; 
+                constybutton = id; 
+                defstybutton = id; 
+                delstybutton = id; 
+                equidistbutton = id; 
+                expansionform = id; 
+                finstybutton = id; 
+                fixswitch = id; 
+                hidebutton = id; 
+                indentleft = id; 
+                indentright = id; 
+                indentview = id; 
+                keepview = id; 
+                layoutview = id; 
+                mainPopup = id; 
+                margintop = id; 
+                multiview = id; 
+                newbarbutton = id; 
+                newform = id; 
+                newpagebutton = id; 
+                newstybutton = id; 
+                newsysbutton = id; 
+                nodocview = id; 
+                notationmatrix = id; 
+                nstavestext = id; 
+                numberview = id; 
+                pagematrix = id; 
+                partbutton = id; 
+                polymatrix = id; 
+                polyview = id; 
+                prefacebutton = id; 
+                prefaceforms = id; 
+                prefview = id; 
+                renstybutton = id; 
+                reorderButton = id; 
+                revertButton = id; 
+                setButton = id; 
+                sizematrix = id; 
+                staffforms = id; 
+                staffmatrix = id; 
+                staffnumbutton = id; 
+                staffscroll = id; 
+                staffview = id; 
+                standview = id; 
+                stybrowser = id; 
+                styleview = id; 
+                stytext = id; 
+                syssepmatrix = id; 
+                syssepview = id; 
+                verseoffform = id; 
+                vertview = id; 
+            }; 
+            SUPERCLASS = NSPanel; 
+        }
+    ); 
+    IBVersion = 1; 
+}
