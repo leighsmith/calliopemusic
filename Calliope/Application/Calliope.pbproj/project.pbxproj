@@ -45,6 +45,9 @@
 			fileRef = D88C84B705053B7C001855C1;
 			isa = PBXBuildFile;
 			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
 			};
 		};
 		D88C84BC05053B7C001855C1 = {
@@ -57,6 +60,9 @@
 			fileRef = D88C84B905053B7C001855C1;
 			isa = PBXBuildFile;
 			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
 			};
 		};
 		D88C84BE05053B7C001855C1 = {
@@ -4188,11 +4194,10 @@
 			buildSettings = {
 				CC = "/usr/bin/gcc-3.3";
 				CPLUSPLUS = "/usr/bin/g++-3.3";
-				FRAMEWORK_SEARCH_PATHS = "/Disk/AppsMostRecent/Calliope/Source/Calliope.app/Resources \"$(LOCAL_LIBRARY_DIR)/Frameworks\" /Local/Users/leigh/Sources/Music/Calliope/Source/CalliopePropertyListCoders /Local/Users/leigh/Sources/Music/Calliope/Source/CalliopePropertyListCoders.fproj /Local/Library/Frameworks";
-				GCC_VERSION = 3.x;
-				HEADER_SEARCH_PATHS = "\"$(LOCAL_LIBRARY_DIR)/Frameworks\" \"~/Sources/Music/Calliope/Source\" /Local/Users/leigh/Sources/Music/Calliope/Source \"~/Sources/Music/Calliope/Source/CalliopePropertyListCoders.fproj\"";
-				INSTALL_PATH = /tmp/new;
-				LIBRARY_SEARCH_PATHS = /Apps/Calliope/CalliopeThreeStateButton;
+				FRAMEWORK_SEARCH_PATHS = "\"$(LOCAL_LIBRARY_DIR)/Frameworks\" \"~/Sources/Music/Calliope/Source/CalliopePropertyListCoders\"";
+				HEADER_SEARCH_PATHS = "\"$(LOCAL_LIBRARY_DIR)/Frameworks\" \"~/Sources/Music/Calliope/Source\" /Local/Users/leigh/Sources/Music/Calliope/Source \"~/Sources/Music/Calliope/Source/CalliopePropertyListCoders\"";
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -4206,7 +4211,7 @@
 			);
 			isa = PBXApplicationTarget;
 			name = "Calliope (Application)";
-			productInstallPath = /tmp/new;
+			productInstallPath = "$(HOME)/Applications";
 			productName = "Calliope (Application)";
 			productReference = D8FD922B0483CDC700A80164;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
@@ -8611,7 +8616,7 @@
 				FRAMEWORK_VERSION = A;
 				GCC_VERSION = 3.x;
 				HEADER_SEARCH_PATHS = "\"$(LOCAL_LIBRARY_DIR)/Frameworks\" \"~/Sources/Music/Calliope/Source\" /Local/Users/leigh/Sources/Music/Calliope/Source \"~/Sources/Music/Calliope/Source/CalliopePropertyListCoders.fproj\"";
-				INSTALL_PATH = /tmp/new;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LIBRARY_SEARCH_PATHS = /Apps/Calliope/CalliopeThreeStateButton;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
@@ -8627,7 +8632,7 @@
 			);
 			isa = PBXFrameworkTarget;
 			name = "CalliopePropertyListCoders (Framework)";
-			productInstallPath = /tmp/new;
+			productInstallPath = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 			productName = "CalliopePropertyListCoders (Framework)";
 			productReference = D8FD96BA0483CDC800A80164;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
@@ -8891,6 +8896,9 @@
 			fileRef = D8FD96D60483CDC800A80164;
 			isa = PBXBuildFile;
 			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
 			};
 		};
 		D8FD96D80483CDC800A80164 = {
@@ -8903,6 +8911,9 @@
 			fileRef = D8FD96D80483CDC800A80164;
 			isa = PBXBuildFile;
 			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
 			};
 		};
 		D8FD96DA0483CDC800A80164 = {
@@ -8915,6 +8926,9 @@
 			fileRef = D8FD96DA0483CDC800A80164;
 			isa = PBXBuildFile;
 			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
 			};
 		};
 		D8FD96DC0483CDC800A80164 = {
@@ -8927,6 +8941,9 @@
 			fileRef = D8FD96DC0483CDC800A80164;
 			isa = PBXBuildFile;
 			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
 			};
 		};
 		D8FD96DE0483CDC800A80164 = {
@@ -8939,6 +8956,9 @@
 			fileRef = D8FD96DE0483CDC800A80164;
 			isa = PBXBuildFile;
 			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
 			};
 		};
 		D8FD96E00483CDC800A80164 = {
@@ -8951,6 +8971,9 @@
 			fileRef = D8FD96E00483CDC800A80164;
 			isa = PBXBuildFile;
 			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
 			};
 		};
 		D8FD96E20483CDC800A80164 = {
@@ -8963,6 +8986,9 @@
 			fileRef = D8FD96E20483CDC800A80164;
 			isa = PBXBuildFile;
 			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
 			};
 		};
 		D8FD96E40483CDC800A80164 = {
@@ -8975,6 +9001,9 @@
 			fileRef = D8FD96E40483CDC800A80164;
 			isa = PBXBuildFile;
 			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
 			};
 		};
 		D8FD96E60483CDC800A80164 = {
@@ -8987,6 +9016,9 @@
 			fileRef = D8FD96E60483CDC800A80164;
 			isa = PBXBuildFile;
 			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
 			};
 		};
 		D8FD96E80483CDC800A80164 = {
@@ -8999,6 +9031,9 @@
 			fileRef = D8FD96E80483CDC800A80164;
 			isa = PBXBuildFile;
 			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
 			};
 		};
 		D8FD96EA0483CDC800A80164 = {
@@ -9011,6 +9046,9 @@
 			fileRef = D8FD96EA0483CDC800A80164;
 			isa = PBXBuildFile;
 			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
 			};
 		};
 		D8FD96EC0483CDC800A80164 = {
@@ -9023,6 +9061,9 @@
 			fileRef = D8FD96EC0483CDC800A80164;
 			isa = PBXBuildFile;
 			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
 			};
 		};
 		D8FD96EE0483CDC800A80164 = {
@@ -9035,6 +9076,9 @@
 			fileRef = D8FD96EE0483CDC800A80164;
 			isa = PBXBuildFile;
 			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
 			};
 		};
 		D8FD96F00483CDC800A80164 = {
@@ -9047,6 +9091,9 @@
 			fileRef = D8FD96F00483CDC800A80164;
 			isa = PBXBuildFile;
 			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
 			};
 		};
 		D8FD97010483CDC800A80164 = {
