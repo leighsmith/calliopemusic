@@ -21,7 +21,7 @@
 #import "DrawApp.h"
 
 #define BRANGLE   (30.0)  /* bracket tilt = BRANGLE * aspect ratio */
-#define NOPRINT(m) (![[NSDPSContext currentContext] isDrawingToScreen] && noprint[m])
+#define NOPRINT(m) (![[NSGraphicsContext currentContext] isDrawingToScreen] && noprint[m])
 
 extern NSColor * backShade;
 extern NSColor * selShade;
@@ -513,7 +513,7 @@ void justString(float x, float y, char *s, NSFont *f, int j, int mode)
 void cmakeline(float x1, float y1, float x2, float y2, int mode)
 {
   if (NOPRINT(mode)) return;
-    if ((![[NSDPSContext currentContext] isDrawingToScreen] && ![[NSPrintOperation currentOperation] isEPSOperation])) {
+    if ((![[NSGraphicsContext currentContext] isDrawingToScreen] && ![[NSPrintOperation currentOperation] isEPSOperation])) {
         PSCmakelinePrint(x1, y1, x2, y2);
     }
     else {
@@ -551,7 +551,7 @@ void cstrokeline(float width, int mode)
 void cline(float x1, float y1, float x2, float y2, float width, int mode)
 {
   if (NOPRINT(mode)) return;
-    if ((![[NSDPSContext currentContext] isDrawingToScreen] && ![[NSPrintOperation currentOperation] isEPSOperation])) {
+    if ((![[NSGraphicsContext currentContext] isDrawingToScreen] && ![[NSPrintOperation currentOperation] isEPSOperation])) {
         PSCmakelinePrint(x1, y1, x2, y2);
     }
     else {
