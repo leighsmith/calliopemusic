@@ -1,3 +1,4 @@
+/* $Id$ */
 #import "TextGraphic.h"
 #import "TextInspector.h"
 #import "GraphicView.h"
@@ -9,9 +10,6 @@
 #import "DrawDocument.h"
 #import "Page.h"
 #import "mux.h"
-#import <AppKit/NSText.h>
-#import <AppKit/NSCursor.h>
-#import <AppKit/psopsOpenStep.h>
 
 int justcode[4] = {NSLeftTextAlignment, NSCenterTextAlignment, NSRightTextAlignment, NSJustifiedTextAlignment};
 
@@ -26,7 +24,7 @@ int justformats[9] =
 #define BOXSIZE 16.0
 #define TEXTOFFSET 3
 
-static const NSSize maxSize={ 2000, 2000 };
+static const NSSize TGMaxSize={ 2000, 2000 };
 static const NSSize minSize={ 12, 12 };
 static NSTextView *drawText = nil;
 
@@ -39,7 +37,7 @@ static NSTextView *drawText = nil;
     [drawText setEditable:NO];
     [drawText setSelectable:NO];
 
-    [drawText setMaxSize:maxSize];
+    [drawText setMaxSize:TGMaxSize];
     [drawText setMinSize:minSize];
     //sb: these from new Draw example:
 //    [[drawText textContainer] setWidthTracksTextView:YES];
@@ -810,7 +808,8 @@ struct oldflags /* for old version */
   } else {/* sb: the old way (v3 and older) */
       char *newdata;
       static id listclass = nil;
-      if (!listclass) listclass = [List class];
+      // TODO LMS commented out to get things compiling, this is needed to support the legacy file format
+      //if (!listclass) listclass = [List class];
       newdata = malloc(length+1);
       [aDecoder decodeArrayOfObjCType:"c" count:length at:newdata];
       richTextData = [[NSData dataWithBytes:newdata length:length] retain];
