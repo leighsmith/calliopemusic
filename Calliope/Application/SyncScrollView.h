@@ -1,5 +1,6 @@
+/* $Id$ */
 #import "winheaders.h"
-#import <AppKit/NSScrollView.h>
+#import <AppKit/AppKit.h>
 
 @interface SyncScrollView : NSScrollView
 {

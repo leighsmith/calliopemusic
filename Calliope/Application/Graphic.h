@@ -1,8 +1,6 @@
 #import "winheaders.h"
-#import <Foundation/NSObject.h>
-#import <Foundation/NSArray.h>
-#import <AppKit/NSGraphics.h>
-#import <AppKit/NSEvent.h>
+#import <Foundation/Foundation.h>
+#import <AppKit/AppKit.h>
 
 #define LEFTBOUND(p) (p->bounds.origin.x)
 #define LEFTBEARING(p) (p->x - LEFTBOUND(p))
