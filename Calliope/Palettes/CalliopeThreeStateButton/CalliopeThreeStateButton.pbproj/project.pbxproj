@@ -1,0 +1,557 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 38;
+	objects = {
+		D828323E0483E92A00A80164 = {
+			children = (
+				D828324A0483E92A00A80164,
+				D828324F0483E92A00A80164,
+				D82832540483E92A00A80164,
+				D828325B0483E92A00A80164,
+				D828325E0483E92A00A80164,
+				D82832650483E92A00A80164,
+				D82832820483E92A00A80164,
+				D82832490483E92A00A80164,
+			);
+			isa = PBXGroup;
+			name = CalliopeThreeStateButton;
+			refType = 4;
+		};
+		D82832400483E92A00A80164 = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			isa = PBXBuildStyle;
+			name = Development;
+		};
+		D82832410483E92A00A80164 = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+			};
+			isa = PBXBuildStyle;
+			name = Deployment;
+		};
+		D82832420483E92A00A80164 = {
+			buildActionMask = 2147483647;
+			files = (
+				D82832510483E92A00A80164,
+				D82832530483E92A00A80164,
+				D828326E0483E92A00A80164,
+				D82832700483E92A00A80164,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D82832430483E92A00A80164 = {
+			buildActionMask = 2147483647;
+			files = (
+				D82832560483E92A00A80164,
+				D82832590483E92A00A80164,
+				D828325D0483E92A00A80164,
+				D82832600483E92A00A80164,
+				D82832730483E92A00A80164,
+				D82832750483E92A00A80164,
+				D82832770483E92A00A80164,
+				D82832790483E92A00A80164,
+				D828327B0483E92A00A80164,
+				D828327D0483E92A00A80164,
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D82832440483E92A00A80164 = {
+			buildActionMask = 2147483647;
+			files = (
+				D828324C0483E92A00A80164,
+				D828324E0483E92A00A80164,
+				D82832690483E92A00A80164,
+				D828326B0483E92A00A80164,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D82832450483E92A00A80164 = {
+			buildActionMask = 2147483647;
+			files = (
+				D82832840483E92A00A80164,
+				D82832860483E92A00A80164,
+				D82832880483E92A00A80164,
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D82832460483E92A00A80164 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D82832470483E92A00A80164 = {
+			buildPhases = (
+				D82832420483E92A00A80164,
+				D82832430483E92A00A80164,
+				D82832440483E92A00A80164,
+				D82832450483E92A00A80164,
+				D82832460483E92A00A80164,
+			);
+			buildSettings = {
+				INSTALL_PATH = /Local/Developer/Palettes;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = CalliopeThreeStateButton;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = bundle;
+			};
+			dependencies = (
+			);
+			isa = PBXBundleTarget;
+			name = "CalliopeThreeStateButton (Bundle)";
+			productInstallPath = /Local/Developer/Palettes;
+			productName = "CalliopeThreeStateButton (Bundle)";
+			productReference = D82832480483E92A00A80164;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>CalliopeThreeStateButton</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string></string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>CalliopeThreeStateButton</string>
+	<key>CFBundlePackageType</key>
+	<string>BNDL</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>0.0.1d1</string>
+	<key>NSExtensions</key>
+	<dict/>
+	<key>NSMainNibFile</key>
+	<string>TriStateButton</string>
+</dict>
+</plist>
+";
+		};
+		D82832480483E92A00A80164 = {
+			isa = PBXBundleReference;
+			path = CalliopeThreeStateButton.bundle;
+			refType = 3;
+		};
+		D82832490483E92A00A80164 = {
+			children = (
+				D82832480483E92A00A80164,
+			);
+			isa = PBXGroup;
+			name = Products;
+			refType = 4;
+		};
+		D828324A0483E92A00A80164 = {
+			children = (
+				D828324B0483E92A00A80164,
+				D828324D0483E92A00A80164,
+			);
+			isa = PBXGroup;
+			name = Classes;
+			refType = 4;
+		};
+		D828324B0483E92A00A80164 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = CalliopeTriStateButton.m;
+			refType = 4;
+		};
+		D828324C0483E92A00A80164 = {
+			fileRef = D828324B0483E92A00A80164;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+				);
+			};
+		};
+		D828324D0483E92A00A80164 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = CalliopeTriStateInspector.m;
+			refType = 4;
+		};
+		D828324E0483E92A00A80164 = {
+			fileRef = D828324D0483E92A00A80164;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+				);
+			};
+		};
+		D828324F0483E92A00A80164 = {
+			children = (
+				D82832500483E92A00A80164,
+				D82832520483E92A00A80164,
+			);
+			isa = PBXGroup;
+			name = Headers;
+			refType = 4;
+		};
+		D82832500483E92A00A80164 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = CalliopeTriStateButton.h;
+			refType = 4;
+		};
+		D82832510483E92A00A80164 = {
+			fileRef = D82832500483E92A00A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D82832520483E92A00A80164 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = CalliopeTriStateInspector.h;
+			refType = 4;
+		};
+		D82832530483E92A00A80164 = {
+			fileRef = D82832520483E92A00A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D82832540483E92A00A80164 = {
+			children = (
+				D82832550483E92A00A80164,
+				D82832580483E92A00A80164,
+			);
+			isa = PBXGroup;
+			name = Interfaces;
+			refType = 4;
+		};
+		D82832550483E92A00A80164 = {
+			children = (
+				D82832570483E92A00A80164,
+			);
+			isa = PBXVariantGroup;
+			name = TriStateInspector.nib;
+			refType = 4;
+		};
+		D82832560483E92A00A80164 = {
+			fileRef = D82832550483E92A00A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D82832570483E92A00A80164 = {
+			isa = PBXFileReference;
+			name = English;
+			path = English.lproj/TriStateInspector.nib;
+			refType = 4;
+		};
+		D82832580483E92A00A80164 = {
+			children = (
+				D828325A0483E92A00A80164,
+			);
+			isa = PBXVariantGroup;
+			name = TriStateButton.nib;
+			refType = 4;
+		};
+		D82832590483E92A00A80164 = {
+			fileRef = D82832580483E92A00A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D828325A0483E92A00A80164 = {
+			isa = PBXFileReference;
+			name = English;
+			path = English.lproj/TriStateButton.nib;
+			refType = 4;
+		};
+		D828325B0483E92A00A80164 = {
+			children = (
+				D828325C0483E92A00A80164,
+			);
+			isa = PBXGroup;
+			name = Images;
+			refType = 4;
+		};
+		D828325C0483E92A00A80164 = {
+			isa = PBXFileReference;
+			path = MiscThreeStateButton.tiff;
+			refType = 4;
+		};
+		D828325D0483E92A00A80164 = {
+			fileRef = D828325C0483E92A00A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D828325E0483E92A00A80164 = {
+			children = (
+				D828325F0483E92A00A80164,
+			);
+			isa = PBXGroup;
+			name = Resources;
+			refType = 4;
+		};
+		D828325F0483E92A00A80164 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = palette.table;
+			refType = 4;
+		};
+		D82832600483E92A00A80164 = {
+			fileRef = D828325F0483E92A00A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D82832650483E92A00A80164 = {
+			children = (
+				D82832660483E92A00A80164,
+			);
+			isa = PBXGroup;
+			name = Subprojects;
+			refType = 4;
+		};
+		D82832660483E92A00A80164 = {
+			children = (
+				D82832670483E92A00A80164,
+				D828326C0483E92A00A80164,
+				D82832710483E92A00A80164,
+			);
+			isa = PBXGroup;
+			name = CalliopeThreeStateButton;
+			path = CalliopeThreeStateButton.subproj;
+			refType = 4;
+		};
+		D82832670483E92A00A80164 = {
+			children = (
+				D82832680483E92A00A80164,
+				D828326A0483E92A00A80164,
+			);
+			isa = PBXGroup;
+			name = Classes;
+			refType = 4;
+		};
+		D82832680483E92A00A80164 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = CalliopeThreeStateButton.m;
+			refType = 4;
+		};
+		D82832690483E92A00A80164 = {
+			fileRef = D82832680483E92A00A80164;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+				);
+			};
+		};
+		D828326A0483E92A00A80164 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = CalliopeThreeStateButtonCell.m;
+			refType = 4;
+		};
+		D828326B0483E92A00A80164 = {
+			fileRef = D828326A0483E92A00A80164;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+				);
+			};
+		};
+		D828326C0483E92A00A80164 = {
+			children = (
+				D828326D0483E92A00A80164,
+				D828326F0483E92A00A80164,
+			);
+			isa = PBXGroup;
+			name = Headers;
+			refType = 4;
+		};
+		D828326D0483E92A00A80164 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = CalliopeThreeStateButton.h;
+			refType = 4;
+		};
+		D828326E0483E92A00A80164 = {
+			fileRef = D828326D0483E92A00A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D828326F0483E92A00A80164 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = CalliopeThreeStateButtonCell.h;
+			refType = 4;
+		};
+		D82832700483E92A00A80164 = {
+			fileRef = D828326F0483E92A00A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D82832710483E92A00A80164 = {
+			children = (
+				D82832720483E92A00A80164,
+				D82832740483E92A00A80164,
+				D82832760483E92A00A80164,
+				D82832780483E92A00A80164,
+				D828327A0483E92A00A80164,
+				D828327C0483E92A00A80164,
+			);
+			isa = PBXGroup;
+			name = Images;
+			refType = 4;
+		};
+		D82832720483E92A00A80164 = {
+			isa = PBXFileReference;
+			path = mustHave.tiff;
+			refType = 4;
+		};
+		D82832730483E92A00A80164 = {
+			fileRef = D82832720483E92A00A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D82832740483E92A00A80164 = {
+			isa = PBXFileReference;
+			path = off.tiff;
+			refType = 4;
+		};
+		D82832750483E92A00A80164 = {
+			fileRef = D82832740483E92A00A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D82832760483E92A00A80164 = {
+			isa = PBXFileReference;
+			path = DontCare.tiff;
+			refType = 4;
+		};
+		D82832770483E92A00A80164 = {
+			fileRef = D82832760483E92A00A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D82832780483E92A00A80164 = {
+			isa = PBXFileReference;
+			path = mustNotHave.tiff;
+			refType = 4;
+		};
+		D82832790483E92A00A80164 = {
+			fileRef = D82832780483E92A00A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D828327A0483E92A00A80164 = {
+			isa = PBXFileReference;
+			path = Plus.tiff;
+			refType = 4;
+		};
+		D828327B0483E92A00A80164 = {
+			fileRef = D828327A0483E92A00A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D828327C0483E92A00A80164 = {
+			isa = PBXFileReference;
+			path = check.tiff;
+			refType = 4;
+		};
+		D828327D0483E92A00A80164 = {
+			fileRef = D828327C0483E92A00A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D82832820483E92A00A80164 = {
+			children = (
+				D82832830483E92A00A80164,
+				D82832850483E92A00A80164,
+				D82832870483E92A00A80164,
+			);
+			isa = PBXGroup;
+			name = "External Frameworks and Libraries";
+			refType = 4;
+		};
+		D82832830483E92A00A80164 = {
+			isa = PBXFrameworkReference;
+			name = AppKit.framework;
+			path = /System/Library/Frameworks/AppKit.framework;
+			refType = 0;
+		};
+		D82832840483E92A00A80164 = {
+			fileRef = D82832830483E92A00A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D82832850483E92A00A80164 = {
+			isa = PBXFrameworkReference;
+			name = InterfaceBuilder.framework;
+			path = /System/Library/Frameworks/InterfaceBuilder.framework;
+			refType = 0;
+		};
+		D82832860483E92A00A80164 = {
+			fileRef = D82832850483E92A00A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D82832870483E92A00A80164 = {
+			isa = PBXFrameworkReference;
+			name = Foundation.framework;
+			path = /System/Library/Frameworks/Foundation.framework;
+			refType = 0;
+		};
+		D82832880483E92A00A80164 = {
+			fileRef = D82832870483E92A00A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D828328A0483E92A00A80164 = {
+			buildStyles = (
+				D82832400483E92A00A80164,
+				D82832410483E92A00A80164,
+			);
+			hasScannedForEncodings = 1;
+			isa = PBXProject;
+			mainGroup = D828323E0483E92A00A80164;
+			productRefGroup = D82832490483E92A00A80164;
+			projectDirPath = "";
+			targets = (
+				D82832470483E92A00A80164,
+			);
+		};
+	};
+	rootObject = D828328A0483E92A00A80164;
+}

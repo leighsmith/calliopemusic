@@ -1,0 +1,31 @@
+{
+    IBClasses = (
+        {CLASS = CalliopeThreeStateButton; LANGUAGE = ObjC; SUPERCLASS = NSButton; }, 
+        {
+            CLASS = CalliopeThreeStateButtonCell; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSButtonCell; 
+        }, 
+        {
+            CLASS = CalliopeTriStateButton; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                button1 = id; 
+                button2 = id; 
+                button3 = id; 
+                button4 = id; 
+                button5 = id; 
+                button6 = id; 
+            }; 
+            SUPERCLASS = IBPalette; 
+        }, 
+        {
+            CLASS = CalliopeTriStateInspector; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {cyclic = id; thirdIcon = id; thirdTitle = id; }; 
+            SUPERCLASS = IBInspector; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
+    ); 
+    IBVersion = 1; 
+}

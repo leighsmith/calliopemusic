@@ -1,0 +1,6 @@
+Class = CalliopeTriStateButton;			/* (a subclass of IBPalette) */
+NibFile = TriStateButton;			/* (a nib file name) */
+Icon = MiscThreeStateButton;		/* (a tiff/eps file name) */
+ExportClasses = (CalliopeThreeStateButtonCell, CalliopeThreeStateButton);			/* (a list of class names) */
+ExportImages = (Plus, check, DontCare);			/* (a list of icon names) */
+/* ExportSounds = ();			(a list of sound names) */
