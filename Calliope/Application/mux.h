@@ -1,0 +1,265 @@
+/*
+  Various constants ported from mux
+*/
+  
+#ifndef MUX_H
+#define MUX_H 
+
+#import "winheaders.h"
+#import "draw.h"
+#import "sonata.h"
+#import "musfont.h"
+
+#import <AppKit/NSView.h>
+#import <AppKit/NSFont.h>
+#import <AppKit/NSMatrix.h>
+#import <AppKit/NSGraphics.h>
+
+#import <AppKit/psopsOpenStep.h>
+
+#import "compatibility.h" /*sb: put it in here because most objects import this, and I need it */
+
+#define NS_VERSION 3
+
+/* various constants */
+
+/* the "built-in" fonts known to reside at fontdata[index] */
+
+#define NUMCALFONTS 20
+#define FONTTEXT 1		/* our id for text font */
+#define FONTSTMR  3		/* our id for figures font */
+#define FONTSON 17		/* our if for Sonata */
+#define FONTSSON 18		/* our id for small Sonata */
+#define FONTHSON 19		/* our id for half-sized Sonata */
+#define FONTMUS  0		/* our ID for musical symbols font */
+#define FONTSMUS 15		/* our id for small music font */
+#define FONTHMUS 16		/* our id for half-sized music font */
+
+/* gFlags.type */
+
+#define NUMTYPES 31
+
+#define VERSE 0
+#define BRACKET 1
+#define BARLINE 2
+#define TIMESIG 3
+#define NOTE 4
+#define REST 5
+#define CLEF 6
+#define KEY 7
+#define RANGE 8
+#define TABLATURE 9
+#define TEXTBOX 10
+#define BLOCK 11
+#define BEAM 12
+#define TIE 13
+#define METRO 14
+#define ACCENT 15
+#define TUPLE 16
+#define NEUME 17
+#define STAFF 18
+#define SYSTEM 19
+#define RUNNER 20
+#define VOLTA 21
+#define GROUP 22
+#define ENCLOSURE 23
+#define SQUARENOTE 24
+#define CHORDGROUP 25
+#define TIENEW 26
+#define LIGATURE 27
+#define NEUMENEW 28
+#define MARGIN 29
+#define IMAGE 30
+
+/* type codes index array of short bitcodes */
+
+#define TYPEOF(p) (((Graphic *)(p))->gFlags.type)
+#define SUBTYPEOF(p) (((Graphic *)(p))->gFlags.subtype)
+#define ISINVIS(p)  (((Graphic *) (p))->gFlags.invis == 1)
+#define TC_HANGER   1
+#define TC_STAFFOBJ 2
+#define TC_TIMEDOBJ 4
+#define TC_SIG 8
+#define TC_BLOCKSYM 16
+#define TC_SOUNDS 32
+#define TC_SIGBLOCK 64
+#define TC_VOICED 128
+#define TC_TWIN 256
+
+#define ISAHANGER(p) (typecode[TYPEOF(p)] & TC_HANGER)
+#define ISASTAFFOBJ(p) (typecode[TYPEOF(p)] & TC_STAFFOBJ)
+#define ISATIMEDOBJ(p) (typecode[TYPEOF(p)] & TC_TIMEDOBJ)
+#define ISASIG(p) (typecode[TYPEOF(p)] & TC_SIG)
+#define ISABLOCKSYM(p) (typecode[TYPEOF(p)] & TC_BLOCKSYM)
+#define ISASIGBLOCK(p) (typecode[TYPEOF(p)] & TC_SIGBLOCK)
+#define ISAVOCAL(p) (typecode[TYPEOF(p)] & TC_SOUNDS)
+#define HASAVOICE(p) (typecode[TYPEOF(p)] & TC_VOICED)
+#define ISATWIN(p) (typecode[TYPEOF(p)] & TC_TWIN)
+
+
+/*
+  Head styles: 0=none, 1=modern, 2=oldbook, 3=harmonic, 4=speech, 5=oldbook coloured, 6=shapenote
+  Stem styles: 0=modern, 1=oldbook, 2=tabstraight, 3=tabcurve
+  Accidentals: unused, flat, sharp, natural, d-flat, d-sharp, 3q-flat, 1q-flat, 3q-sharp, 1q-sharp
+*/
+
+
+#define NUMHEADS 7
+#define NUMSTEMS 4
+#define NUMACCS 10
+#define CROTCHET 5		/* body designation */
+#define QUAVER 4
+
+/* bitmasks for charclasses */
+
+#define CHPUNCT 1
+#define CHVOWEL 2
+#define CHEDBRA 4
+#define CHOPBRA 8
+#define CHACCID 16
+#define CHDIGIT 32
+#define CHTABLE 64
+#define CHALFAB 128
+#define CHACOUT 256		/* an out-of-staff accent */
+#define CHFIGURE 512
+
+#define ispunctuation(c) (charclass[(int)c & 0xFF] & CHPUNCT)
+#define isvowel(c) (charclass[(int)c & 0xFF] & CHVOWEL)
+#define isedbrack(c) (charclass[(int)c & 0xFF] & CHEDBRA)
+#define isopenbrack(c) (charclass[(int)c & 0xFF] & CHOPBRA)
+#define isaccident(c) (charclass[(int)c & 0xFF] & CHACCID)
+#define isdigitchar(c) (charclass[(int)c & 0xFF] & CHDIGIT)
+#define istabchar(c) (charclass[(int)c & 0xFF] & CHTABLE)
+#define isalfabeto(c) (charclass[(int)c & 0xFF] & CHALFAB)
+#define figurechar(c) (charclass[(int)c & 0xFF] & CHFIGURE)
+#define ISOUTACCENT(c) (charclass[(int)c & 0xFF] & CHACOUT)
+
+/* text justification */
+
+#define JLEFT 0
+#define JCENTRE 1
+#define JRIGHT 2
+
+
+
+/* soft limit number of staves and voices on a system */
+
+#define NUMSTAVES 32
+#define NUMVOICES 256
+
+/* used by inspectors */
+
+#define NUMATTR 32
+#define ALLSAME(i, num)  (acount[i] == num)
+#define ALLVAL(i) (aval[i])
+#define ALLSAMEFLOAT(i, num)  (facount[i] == num)
+#define ALLVALFLOAT(i) (faval[i])
+#define ALLSAMEATOM(i, num)  (aacount[i] == num)
+#define ALLVALATOM(i) (aaval[i])
+
+/* various useful constants functions */
+
+#define HYPHCHAR (45)		/* the one thing NeXTEncoding got right */
+#define UPARROW 173
+#define DOWNARROW 175
+#define LEFTARROW 172
+#define RIGHTARROW 174
+#define TIECHAR (198)		/* use as baseline tie char */
+#define PTPMM 2.834646		/* points per mm */
+#define DEGpRAD (180.0 / 3.1415926) /* degrees per radian */
+#define TOLFLOATEQ(f1, f2, t) (ABS((f1)-(f2)) <= t)
+#define GETYSP(y, ss, pos) ((y) + ((ss) * (pos)))
+//#warning SB: the bounding rect for font may be giving rel vals where abs are required
+//#define fontAscent(f) ([f pointSize] * [f metrics]->fontBBox[3])
+//#define fontAscent(f) ([f pointSize] * ([f boundingRectForFont].size.height - [f boundingRectForFont].origin.y))
+#define fontAscent(f) ([f boundingRectForFont].size.height + [f boundingRectForFont].origin.y)
+//#warning SB: the bounding rect for font may be giving rel vals where abs are required
+//#define fontDescent(f) ([f pointSize] * [f metrics]->fontBBox[1])
+//#define fontDescent(f) ([f pointSize] * [f boundingRectForFont].origin.y)
+#define fontDescent(f) ([f boundingRectForFont].origin.y)
+#define HANDSIZE 4		/* handle half-width */
+
+
+/* various globals */
+
+extern BOOL dragflag;
+
+extern int currentTool;
+
+extern int drawmode[2][4];	/* drawmode[selected][invis] */
+extern int markmode[2];		/* markmode[selected] */
+
+extern NSFont *musicFont[2][3];
+extern NSFont *fontdata[NUMCALFONTS];
+extern float charFWX(NSFont *f, int ch);
+extern float charFWX(NSFont *f, int ch);
+extern float charFLLY(NSFont *f, int ch);
+extern float charFURY(NSFont *f, int ch);
+extern float charFLLX(NSFont *f, int ch);
+extern float charFURX(NSFont *f, int ch);
+extern float charFGH(NSFont *f, int ch);
+extern float charFGW(NSFont *f, int ch);
+extern float charFCW(NSFont *f, int ch);
+extern float charFCH(NSFont *f, int ch);
+extern float charhalfFGW(NSFont *f, int ch);
+
+
+extern void msg();		/* write to stderr */
+extern short typecode[NUMTYPES];
+extern char nature[3];
+extern float pronature[3];
+extern char smallersz[3];
+extern char largersz[3];
+extern unsigned char bodies[4][10];
+extern unsigned char bodyfont[4][10];
+extern char edbrackets[];
+extern float stemthicks[3];
+extern float linethicks[3];
+extern float barwidth[3][3]; 
+extern char stemlens[2][3];
+extern float staffthick[3][3];
+extern unsigned short charclass[256];
+
+
+/* character metric globals */
+
+
+/* for inspectors */
+
+extern int acount[NUMATTR];
+extern int aval[NUMATTR];
+extern int facount[NUMATTR];
+extern float faval[NUMATTR];
+extern int aacount[NUMATTR];
+extern NSString *aaval[NUMATTR];
+extern void initassay();
+extern void assay(int i, int val);
+extern void assayAsFloat(int i, float val);
+extern void assayAsAtom(int i, NSString *val);
+extern void clearMatrix(NSMatrix *p);
+
+/* global routines */
+
+float convertFrom(int u, float x, int r);
+float convertTo(int u, float x, int r);
+extern void PSInit();
+extern void bbinit();
+extern NSRect getbb();
+extern void cChar(float x, float y, int ch, NSFont *f, int mode);
+//sb: changed the following from cString to CAcString to avoid confusion.
+extern void CAcString(float x, float y, char *s, NSFont *f, int mode);
+extern void centString(float x, float y, char *s, NSFont *f, int mode);
+extern void justString(float x, float y, char *s, NSFont *f, int j, int mode);
+extern void centChar(float x, float y, int ch, NSFont *f, int mode);
+extern void centxChar(float x, float y, int ch, NSFont *f, int mode);
+extern void cstrokeline(float width, int mode);
+extern void cline(float x1, float y1, float x2, float y2, float width, int mode);
+extern void cmakeline(float x1, float y1, float x2, float y2, int mode);
+extern void coutrect(float x, float y, float w, float h, float lw, int mode);
+extern void chandle(float x, float y, int mode);
+extern void crect(float x, float y, float w, float h, int mode);
+extern void ccircle(float x, float y, float r, float a1, float a2, float w, int mode);
+extern void cellipse(float cx, float cy, float rx, float ry, float a1, float a2, float w, int mode);
+extern void cslant(float x1, float y1, float x2, float y2, float dy, int mode);
+extern void coutslant(float x1, float y1, float x2, float y2, float dy, float lw, int mode);
+#endif MUX_H

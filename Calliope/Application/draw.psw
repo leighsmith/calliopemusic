@@ -1,0 +1,154 @@
+#import <string.h>
+
+/* PSWrapsInit() sets up various definitions used by the main wraps */
+
+defineps PSWrapsInit()
+
+% x1' y1' TP x1 y1
+
+/TP {transform round exch round exch itransform} bind def
+
+% x2 y2 x1 y1 LI
+
+/LI {moveto lineto} bind def
+
+% gray width ST
+
+/ST {setlinewidth setgray stroke} bind def
+
+% g x y MG
+
+/MG {moveto setgray} bind def
+
+% width height dy x y slant
+
+/slant
+{
+    moveto
+    2 index 1 index rlineto
+    0 2 index rlineto
+    2 index neg 1 index neg rlineto closepath
+    pop pop pop
+} bind def
+
+
+% ratio halfwidth minheight tie
+
+/tie
+{
+  scale
+  newpath
+  0 0 1 10 170 arc
+  1 exch scale
+  0 0 1 170 10 arcn
+} bind def
+
+%Gap MaxHight/MinHeight HalfWidth MinHeight Gap/2 Drop tietext
+
+/tietext
+{
+  gsave
+    currentpoint
+    3 -1 roll add exch 3 -1 roll add exch
+    newpath
+    gsave
+      translate
+      scale
+      0 0 1 5 175 arc
+      1.0 exch scale
+      0 0 1 175 5 arcn
+      fill
+    grestore
+  grestore
+  0 rmoveto
+} bind def
+
+endps
+
+
+/* These are what are called from main program */
+
+defineps PSmovegray(float x, y, g)
+  g x y MG
+endps
+
+
+defineps PSCmakelineDisplay(float x1, y1, x2, y2)
+    x2 y2 x1 y1 LI
+endps
+
+
+defineps PSCmakelinePrint(float x1, y1, x2, y2)
+    x2 y2 TP x1 y1 TP LI
+endps
+
+
+defineps PSCstrokeline(float gray, width)
+    gray width ST
+endps
+
+
+defineps PSslant(float w, h, dy, x, y)
+  w h dy x y slant
+endps
+
+defineps PStie(float cx, cy, dy, rh, hw, mh, ln, a)
+  matrix currentmatrix
+  cx cy moveto
+  currentpoint translate
+  a rotate
+  0 dy rmoveto
+  currentpoint translate
+  hw 1 ln add div mh scale
+  newpath
+  ln 0 1 10 90 arc
+  ln neg 0 1 90 170 arc
+  1 rh scale
+  ln neg 0 1 170 90 arcn
+  ln 0 1 90 10 arcn
+  setmatrix
+endps
+
+
+defineps PStiedash(float cx, cy, dy, hw, mh, ln, a)
+  matrix currentmatrix
+  cx cy moveto
+  currentpoint translate
+  a rotate
+  0 dy rmoveto
+  currentpoint translate
+  hw 1 ln add div mh scale
+  newpath
+  ln 0 1 10 90 arc
+  ln neg 0 1 90 170 arc
+  setmatrix
+endps
+
+
+defineps PStietext(float w, rh, hw, mh, g, dr)
+  w rh hw mh g dr tietext
+endps
+
+
+defineps PSellipse(float cx, cy, rx, ry, a1, a2)
+  matrix currentmatrix
+  cx cy moveto
+  currentpoint translate
+  rx ry scale
+  newpath
+  0 0 1 a1 a2 arc
+  setmatrix
+endps
+
+
+defineps PSsetorigin(float cx, cy, a)
+  matrix currentmatrix
+  cx cy moveto
+  currentpoint translate
+  a rotate
+endps
+
+
+defineps PSresetorigin()
+  setmatrix
+endps
