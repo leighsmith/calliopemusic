@@ -1,0 +1,28 @@
+{
+    IBClasses = (
+        {
+            CLASS = DrawApp; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {inspector = id; }; 
+            SUPERCLASS = NSApplication; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {preset = id; set = id; }; 
+            CLASS = MarginInspector; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                alignmatrix = id; 
+                formatbutton = id; 
+                lbindform = id; 
+                lmargcell = id; 
+                rbindform = id; 
+                rmargcell = id; 
+                unitcell = id; 
+                vertmargform = id; 
+            }; 
+            SUPERCLASS = NSPanel; 
+        }
+    ); 
+    IBVersion = 1; 
+}

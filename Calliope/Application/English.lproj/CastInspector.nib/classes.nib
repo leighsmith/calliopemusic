@@ -1,0 +1,34 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {
+                browserHit = id; 
+                hitExtract = id; 
+                hitRemove = id; 
+                setAdd = id; 
+                setModify = id; 
+                setSelection = id; 
+            }; 
+            CLASS = CastInspector; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                addbutton = id; 
+                delbutton = id; 
+                instbrowser = id; 
+                modbutton = id; 
+                partbrowser = id; 
+                partform = id; 
+                parttext = id; 
+            }; 
+            SUPERCLASS = NSPanel; 
+        }, 
+        {
+            CLASS = DrawApp; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {castInspector = id; }; 
+            SUPERCLASS = NSApplication; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
+    ); 
+    IBVersion = 1; 
+}

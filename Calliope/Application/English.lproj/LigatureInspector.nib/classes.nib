@@ -1,0 +1,25 @@
+{
+    IBClasses = (
+        {
+            CLASS = DrawApp; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {inspector = id; }; 
+            SUPERCLASS = NSApplication; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {preset = id; set = id; setProto = id; }; 
+            CLASS = LigatureInspector; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                dashbutton = id; 
+                edbutton = id; 
+                fixmatrix = id; 
+                placematrix = id; 
+                stylematrix = id; 
+            }; 
+            SUPERCLASS = NSPanel; 
+        }
+    ); 
+    IBVersion = 1; 
+}

@@ -1,0 +1,26 @@
+{
+    IBClasses = (
+        {
+            CLASS = DrawApp; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {inspector = id; }; 
+            SUPERCLASS = NSApplication; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {set = id; setProto = id; }; 
+            CLASS = SquareNoteInspector; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                colourmatrix = id; 
+                desmatrix = id; 
+                dotmatrix = id; 
+                shapematrix = id; 
+                stemmatrix = id; 
+                timematrix = id; 
+            }; 
+            SUPERCLASS = NSPanel; 
+        }
+    ); 
+    IBVersion = 1; 
+}

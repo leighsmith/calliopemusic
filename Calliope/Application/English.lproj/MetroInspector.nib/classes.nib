@@ -1,0 +1,27 @@
+{
+    IBClasses = (
+        {
+            CLASS = DrawApp; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {inspector = id; }; 
+            SUPERCLASS = NSApplication; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {hitNote2 = id; preset = id; set = id; setChoice = id; setProto = id; }; 
+            CLASS = MetroInspector; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                dot1matrix = id; 
+                dot2matrix = id; 
+                note1matrix = id; 
+                note2matrix = id; 
+                setButton = id; 
+                tempoform = id; 
+                typematrix = id; 
+            }; 
+            SUPERCLASS = NSPanel; 
+        }
+    ); 
+    IBVersion = 1; 
+}

@@ -1,0 +1,40 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {
+                nextPage = id; 
+                pageTo = id; 
+                prevPage = id; 
+                scaleLarge = id; 
+                scaleMedium = id; 
+                scaleSmall = id; 
+            }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {
+                firstPage = id; 
+                lastPage = id; 
+                nextPage = id; 
+                pageTo = id; 
+                prevPage = id; 
+                setScale = id; 
+            }; 
+            CLASS = SyncScrollView; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                pageDownButton = id; 
+                pageFirstButton = id; 
+                pageForm = id; 
+                pageLabel = id; 
+                pageLastButton = id; 
+                pageUpButton = id; 
+                zoomPopUpList = id; 
+            }; 
+            SUPERCLASS = NSScrollView; 
+        }
+    ); 
+    IBVersion = 1; 
+}

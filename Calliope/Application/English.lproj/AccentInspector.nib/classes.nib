@@ -1,0 +1,19 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {preset = id; set = id; setProto = id; setdefault = id; setnumber = id; }; 
+            CLASS = AccentInspector; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {accswitch = id; nummatrix = id; placematrix = id; typematrix = id; }; 
+            SUPERCLASS = NSPanel; 
+        }, 
+        {
+            CLASS = DrawApp; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {inspector = id; }; 
+            SUPERCLASS = NSApplication; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
+    ); 
+    IBVersion = 1; 
+}

@@ -1,0 +1,25 @@
+{
+    IBClasses = (
+        {
+            CLASS = DrawApp; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {inspector = id; }; 
+            SUPERCLASS = NSApplication; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {align = id; insertVar = id; set = id; }; 
+            CLASS = RunInspector; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                alignmatrix = id; 
+                headfootmatrix = id; 
+                placematrix = id; 
+                scroller = id; 
+                typematrix = id; 
+            }; 
+            SUPERCLASS = NSWindow; 
+        }
+    ); 
+    IBVersion = 1; 
+}

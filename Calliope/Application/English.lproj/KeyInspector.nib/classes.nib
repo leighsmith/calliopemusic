@@ -1,0 +1,27 @@
+{
+    IBClasses = (
+        {
+            CLASS = DrawApp; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {inspector = id; }; 
+            SUPERCLASS = NSApplication; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {set = id; setConvChoice = id; setCustChoice = id; setProto = id; }; 
+            CLASS = KeyInspector; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                cancelswitch = id; 
+                nummatrix = id; 
+                octavebutton = id; 
+                octavematrix = id; 
+                signmatrix = id; 
+                styleswitch = id; 
+                transswitch = id; 
+            }; 
+            SUPERCLASS = NSPanel; 
+        }
+    ); 
+    IBVersion = 1; 
+}

@@ -1,0 +1,28 @@
+{
+    IBClasses = (
+        {
+            CLASS = DrawApp; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {inspector = id; }; 
+            SUPERCLASS = NSApplication; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {dataChanged = id; hitAbbrev = id; hitName = id; preset = id; set = id; }; 
+            CLASS = TextInspector; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                abbrevbutton = id; 
+                marginform = id; 
+                marginunits = id; 
+                namebutton = id; 
+                setButton = id; 
+                staffform = id; 
+                titplacematrix = id; 
+                typematrix = id; 
+            }; 
+            SUPERCLASS = NSPanel; 
+        }
+    ); 
+    IBVersion = 1; 
+}

@@ -1,0 +1,53 @@
+{
+    IBClasses = (
+        {
+            CLASS = DrawApp; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {tabTuner = id; }; 
+            SUPERCLASS = NSApplication; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = MultiView; LANGUAGE = ObjC; SUPERCLASS = NSView; }, 
+        {
+            ACTIONS = {
+                addCourse = id; 
+                browserHit = id; 
+                hitRemove = id; 
+                open = id; 
+                removeCourse = id; 
+                revert = id; 
+                save = id; 
+                setAdd = id; 
+                setChannel = id; 
+                setChoice = id; 
+                setInst = id; 
+                setRename = id; 
+                setSelection = id; 
+            }; 
+            CLASS = TabTuner; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                addbutton = id; 
+                delbutton = id; 
+                instform = id; 
+                instpopup = id; 
+                modbutton = id; 
+                newbutton = id; 
+                noteview = id; 
+                renamebutton = id; 
+                tabbrowser = id; 
+                tabswitch = id; 
+                tabtext = id; 
+            }; 
+            SUPERCLASS = NSPanel; 
+        }, 
+        {
+            ACTIONS = {addCourse = id; hitAcc = id; removeCourse = id; }; 
+            CLASS = TuningView; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {accmatrix = id; addbutton = id; removebutton = id; }; 
+            SUPERCLASS = NSView; 
+        }
+    ); 
+    IBVersion = 1; 
+}

@@ -1,0 +1,19 @@
+{
+    IBClasses = (
+        {
+            CLASS = DrawApp; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {newpanel = id; }; 
+            SUPERCLASS = NSApplication; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {new = id; setChoice = id; }; 
+            CLASS = NewPanel; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {choicematrix = id; inspbutton = id; numstavestext = id; }; 
+            SUPERCLASS = NSPanel; 
+        }
+    ); 
+    IBVersion = 1; 
+}

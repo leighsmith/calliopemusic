@@ -1,0 +1,19 @@
+{
+    IBClasses = (
+        {
+            CLASS = DrawApp; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {inspector = id; }; 
+            SUPERCLASS = NSApplication; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {set = id; setChoice = id; setProto = id; }; 
+            CLASS = NoteGroupInspector; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {freematrix = id; hdtlmatrix = id; typematrix = id; }; 
+            SUPERCLASS = NSPanel; 
+        }
+    ); 
+    IBVersion = 1; 
+}
