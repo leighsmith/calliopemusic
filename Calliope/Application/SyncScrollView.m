@@ -551,7 +551,7 @@ extern NSSize paperSize;
 #ifdef DEBUG
 //    printf("SyncScrollView drawRect\n");
 #endif
-    PSsetgray(NSLightGray);
+    [[NSColor lightGrayColor] set];
     NSRectFill(vertScrollerArea);
     NSRectFill(horzScrollerArea);
     [super drawRect:rect];

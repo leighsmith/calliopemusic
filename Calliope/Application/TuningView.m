@@ -1,4 +1,4 @@
-
+/* $Id$ */
 #import "TuningView.h"
 #import "Course.h"
 #import "mux.h"
@@ -54,6 +54,7 @@ static unsigned char accidents[6] =
   float dy, my, lw, nx;
   unsigned char ch, buf[2];
   NSFont *f = musicFont[1][1];
+  
   my = 0.5 * [self bounds].size.height;
   lw = charFGW(f, 'w') + 2 * LOFF;
   if (p == 0) dy = 0.0;
@@ -63,18 +64,20 @@ static unsigned char accidents[6] =
   PSmoveto(nx, my + dy);
   PSshow("w");
   /* then ledger lines */
-  if (p == 0) PSrectfill(nx - LOFF, my + dy, lw, 0.5);
-  else if (p >= 12)
-  {
+  if (p == 0) {
+      // PSrectfill(nx - LOFF, my + dy, lw, 0.5);
+      NSRect ledgerRect = {nx - LOFF, my + dy, lw, 0.5};
+      
+      NSRectFill(ledgerRect);
+  }
+  else if (p >= 12) {
     for (j = 12; j <= p; j += 2) PSrectfill(nx - LOFF, my + (j * NAT + GAP), lw, 0.5);
   }
-  else if (p <= -12)
-  {
+  else if (p <= -12) {
     for (j = -12; j >= p; j -= 2) PSrectfill(nx - LOFF, my + (j * NAT - GAP), lw, 0.5);
   }
   /* then accidental */
-  if (a)
-  {
+  if (a) {
     ch = accidents[a];
     buf[0] = ch;
     buf[1] = '\0';
@@ -248,10 +251,10 @@ static char accalter[3] = {0, -1, 1};
   NSFont *f = musicFont[1][1];
   float x = [self bounds].origin.x, y = [self bounds].origin.y, w = [self bounds].size.width, h = [self bounds].size.height;
   float my = 0.5 * h, sd;
-  PSsetgray(1.0);
+  [[NSColor whiteColor] set];
   PSrectfill(x, y, w, h);
   PSgsave();
-  PSsetgray(0.0);
+  [[NSColor blackColor] set];
   PSnewpath();
   /* staff lines */
   for (i = 1; i <= 5; i++)
