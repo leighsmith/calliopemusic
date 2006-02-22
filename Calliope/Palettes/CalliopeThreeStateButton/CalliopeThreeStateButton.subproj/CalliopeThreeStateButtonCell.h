@@ -23,11 +23,11 @@
 -(int) incState;
 -(int) decState;
 
--(id)   firstImage;
+-(NSImage *)   firstImage;
 -(void) setFirstImage:(NSImage *) newValue;
--(id)   secondImage;
+-(NSImage *)   secondImage;
 -(void) setSecondImage:(NSImage *) newValue;
--(id)   thirdImage;
+-(NSImage *)   thirdImage;
 -(void) setThirdImage:(NSImage *) newValue;
 
 -(void) _setImage;

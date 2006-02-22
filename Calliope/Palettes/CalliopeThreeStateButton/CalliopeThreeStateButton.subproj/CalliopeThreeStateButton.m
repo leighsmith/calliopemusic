@@ -32,7 +32,7 @@ static id threeStateCellClass = nil;
 
 - (void)setTitle:(NSString *)aString { return [[self cell] setTitle:aString]; }
 
-- (void)setImage:image { [[self cell] setImage:image]; return; }
+- (void)setImage: (NSImage *) image { [[self cell] setImage:image]; return; }
 - (void)setButtonType:(NSButtonType)aType { [[self cell] setButtonType:aType]; return; }
 - (int)state { return [[self cell] intValue]; }
 - (void)setState:(int)value { [[self cell] setIntValue:value]; return; }
