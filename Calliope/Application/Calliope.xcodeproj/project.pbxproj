@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		D87D0FDA09AE6EA900784ACC /* draw.c in Sources */ = {isa = PBXBuildFile; fileRef = D87D0FD909AE6EA900784ACC /* draw.c */; };
 		D87D0FDC09AE6ED200784ACC /* muxCollide.h in Headers */ = {isa = PBXBuildFile; fileRef = D87D0FDB09AE6ED200784ACC /* muxCollide.h */; };
+		D87D0FDE09AE751300784ACC /* OAPropertyListArchiver.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD96CF0483CDC800A80164 /* OAPropertyListArchiver.m */; };
+		D87D0FE809AE7AE500784ACC /* OAPropertyListCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD96D30483CDC800A80164 /* OAPropertyListCoder.m */; };
+		D87D0FE909AE7AE800784ACC /* OAPropertyListCoder.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD96EC0483CDC800A80164 /* OAPropertyListCoder.h */; };
+		D87D0FEA09AE7AF100784ACC /* OAPropertyListArchiver.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD96E80483CDC800A80164 /* OAPropertyListArchiver.h */; };
 		D8F2478909AD280C00B96D0D /* NSObject+ErrorHandling.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD96D60483CDC800A80164 /* NSObject+ErrorHandling.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8F2478A09AD280C00B96D0D /* NSMutableString+PropertyListCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD96D80483CDC800A80164 /* NSMutableString+PropertyListCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8F2478B09AD280C00B96D0D /* NSString+PropertyListCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD96DA0483CDC800A80164 /* NSString+PropertyListCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -2132,6 +2136,8 @@
 				D8F2483009AD3F8C00B96D0D /* winheaders.h in Headers */,
 				D8F2483109AD3F8C00B96D0D /* OAPLAExtensions.h in Headers */,
 				D87D0FDC09AE6ED200784ACC /* muxCollide.h in Headers */,
+				D87D0FE909AE7AE800784ACC /* OAPropertyListCoder.h in Headers */,
+				D87D0FEA09AE7AF100784ACC /* OAPropertyListArchiver.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2762,6 +2768,8 @@
 				D8F249EA09AD3F8D00B96D0D /* muxlow.m in Sources */,
 				D8F252AB09AE669800B96D0D /* Bracket.m in Sources */,
 				D87D0FDA09AE6EA900784ACC /* draw.c in Sources */,
+				D87D0FDE09AE751300784ACC /* OAPropertyListArchiver.m in Sources */,
+				D87D0FE809AE7AE500784ACC /* OAPropertyListCoder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3203,7 +3211,7 @@
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
-					"~/Sources/Music/Calliope/Source/CalliopePropertyListCoders",
+					"~/Sources/Music/Calliope/Application/CalliopePropertyListCoders",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -3212,9 +3220,8 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				HEADER_SEARCH_PATHS = (
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
-					"~/Sources/Music/Calliope/Source",
-					/Local/Users/leigh/Sources/Music/Calliope/Source,
-					"~/Sources/Music/Calliope/Source/CalliopePropertyListCoders",
+					"~/Sources/Music/Calliope/Application",
+					"~/Sources/Music/Calliope/Application/CalliopePropertyListCoders",
 				);
 				INFOPLIST_FILE = "Info-Calliope.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
@@ -3238,14 +3245,13 @@
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
-					"~/Sources/Music/Calliope/Source/CalliopePropertyListCoders",
+					"~/Sources/Music/Calliope/Application/CalliopePropertyListCoders",
 				);
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
-					"~/Sources/Music/Calliope/Source",
-					/Local/Users/leigh/Sources/Music/Calliope/Source,
-					"~/Sources/Music/Calliope/Source/CalliopePropertyListCoders",
+					"~/Sources/Music/Calliope/Application",
+					"~/Sources/Music/Calliope/Application/CalliopePropertyListCoders",
 				);
 				INFOPLIST_FILE = "Info-Calliope.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
@@ -3271,13 +3277,12 @@
 				CPLUSPLUS = "/usr/bin/g++-3.3";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
-					"~/Sources/Music/Calliope/Source/CalliopePropertyListCoders",
+					"~/Sources/Music/Calliope/Application/CalliopePropertyListCoders",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
-					"~/Sources/Music/Calliope/Source",
-					/Local/Users/leigh/Sources/Music/Calliope/Source,
-					"~/Sources/Music/Calliope/Source/CalliopePropertyListCoders",
+					"~/Sources/Music/Calliope/Application",
+					"~/Sources/Music/Calliope/Application/CalliopePropertyListCoders",
 				);
 				INFOPLIST_FILE = "Info-Calliope.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
