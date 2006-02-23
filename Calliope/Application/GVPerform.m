@@ -602,7 +602,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
         [MKConductor setClocked: YES];
         [MKConductor setThreadPriority: 1.0];
         [anOrch run];
-        [NSAutoreleasePool enableDoubleReleaseCheck:YES];
+        // [NSAutoreleasePool enableDoubleReleaseCheck:YES];
         [MKConductor startPerformance];
     //        [NSAutoreleasePool showPools];
         break;

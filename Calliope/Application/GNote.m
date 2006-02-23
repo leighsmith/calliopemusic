@@ -944,7 +944,7 @@ extern int modeinvis[5];
   struct timeinfo *t;
   NSMutableArray *nl;
   NoteHead *h=nil, *q;
-  int k, nlk, body, bt=0, sb, sz, st, b, sid;
+  int k, nlk, body, bt=0, sb, sz, st, b, sid = 0;
   int ksym, knum, midc;
   float nx, dy, hw=0.0;
   BOOL stemup,gotsinfo = NO;

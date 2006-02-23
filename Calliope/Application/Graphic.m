@@ -856,7 +856,7 @@ extern int selMode;
 
 - resize:(NSEvent *)event in: view
 {
-  NSPoint p, last;
+    NSPoint p, last = {	0, 0 };
   id window = [view window];
   BOOL canScroll;
   BOOL timer = FALSE;

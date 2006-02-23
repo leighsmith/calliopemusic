@@ -184,7 +184,7 @@ NSArray *TypesDrawExports(void)
 
 - writePSToData:(NSMutableData *)stream
 {
-  const NSRect bb;
+  NSRect bb;
   if (stream)
   {
     graphicListBBox(&bb, slist);
