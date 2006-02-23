@@ -5,6 +5,7 @@
 #import <AppKit/NSPageLayout.h>
 #import <AppKit/NSMenuItem.h>
 //#import <Foundation/NSCompatibility.h>
+#import "PrefBlock.h"
 
 /* Preferences Codes */
 
@@ -64,7 +65,7 @@
 /* Target/Action methods */
 
 - changeLayout:sender;
-- save:sender;
+- (id) save:sender;
 - saveAs:sender;
 - revertToSaved:sender;
 - showTextRuler:sender;
@@ -85,7 +86,7 @@
 - (NSFont *) getPreferenceAsFont: (int) i;
 - setPreferenceAsInt: (int) v at: (int) i;
 - prefInfo;
-- installPrefInfo: p;
+- installPrefInfo: (PrefBlock *) p;
 - (NSSize)paperSize;
 - zeroScale;
 - useViewScale;

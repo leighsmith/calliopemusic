@@ -1,5 +1,6 @@
 #import "winheaders.h"
 #import "Hanger.h"
+#import "Staff.h"
 
 
 @interface Beam:Hanger
@@ -24,10 +25,10 @@
 + myPrototype;
 
 - init;
-- proto: v : (NSPoint) pt : sp : sys : (Graphic *) g : (int) i;
+- proto: (GraphicView *) v : (NSPoint) pt : (Staff *) sp : (System *) sys : (Graphic *) g : (int) i;
 - (void)dealloc;
 - (float) modifyTick: (float) t;
-- (BOOL) isClosed: l;
+- (BOOL) isClosed: (NSMutableArray *) l;
 - setHanger;
 - setHanger: (BOOL) f1 : (BOOL) f2;
 - (void)removeObj;
@@ -36,7 +37,7 @@
 - setBeamDir: (int) i;
 - (BOOL) hit: (NSPoint) p;
 - (BOOL) move: (float) dx : (float) dy : (NSPoint) p : sys : (int) alt;
-- moveFinished: v;
+- moveFinished: (GraphicView *) v;
 - drawMode: (int) m;
 - (id)initWithCoder:(NSCoder *)aDecoder;
 - (void)encodeWithCoder:(NSCoder *)aCoder;

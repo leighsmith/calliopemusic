@@ -34,7 +34,7 @@
 - init;
 - (void)dealloc;
 - setHanger;
-- (BOOL) isClosed: l;
+- (BOOL) isClosed: (NSMutableArray *) l;
 - (void)removeObj;
 - (float) modifyTick: (float) t;
 - (int) ligaDir: (int) i;

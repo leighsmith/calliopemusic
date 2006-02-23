@@ -1,6 +1,6 @@
 #import "winheaders.h"
 #import "Graphic.h"
-#import "TimedObj.h"
+//#import "TimedObj.h"
 #import <CalliopePropertyListCoders/OAPropertyListCoders.h>
 
 @interface Hanger:Graphic
@@ -25,18 +25,18 @@
 - haveSplit: a : b;
 - (BOOL) isDangler;
 - (BOOL) needSplit: (float) s0 : (float) s1;
-- willSplit;
+- (NSMutableArray *) willSplit;
 - (BOOL) needSplitList: (float) s0 : (float) s1;
-- splitMe: (float) s0 : (float) s1 : (int) d;
-- mergeMe: h;
-- closeClients: l;
+- (NSMutableArray *) splitMe: (float) s0 : (float) s1 : (int) d;
+- mergeMe: (Hanger *) h;
+- closeClients: (NSMutableArray *) l;
 - sysInvalid;
 - sysInvalidList;
 - setHanger;
 - setHanger: (BOOL) a : (BOOL) b;
 - (void)removeObj;
 - removeGroup;
-- sortNotes: l; 		/* a general service for some hangers */
+- sortNotes: (NSMutableArray *) l; 		/* a general service for some hangers */
 - (BOOL) move: (float) dx : (float) dy : (NSPoint) p : sys : (int) alt;
 - (void)encodeWithCoder:(NSCoder *)aCoder;
 - (id)initWithCoder:(NSCoder *)aDecoder;

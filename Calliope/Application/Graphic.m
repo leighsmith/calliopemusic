@@ -1,8 +1,8 @@
 #import "Graphic.h"
-#import "GraphicView.h"
 #import "GVSelection.h"
 #import "System.h"
 #import "Staff.h"
+#import "Enclosure.h"
 #import "Barline.h"
 #import "Bracket.h"
 #import "TimeSig.h"
@@ -27,7 +27,6 @@
 #import "Runner.h"
 #import "Tuple.h"
 #import "NoteGroup.h"
-#import "Enclosure.h"
 #import "SquareNote.h"
 #import "ChordGroup.h"
 #import "Ligature.h"
@@ -180,7 +179,7 @@ id CrossCursor = nil;	/* global since subclassers may need it */
   Create and link in a new Graphic of type t at (converted) location p
 */
 
-+ createMember: (GraphicView *) v : (int) t : (NSPoint) pt : (System *) sys : (int) arg1 : (int) arg2;
++ createMember: (GraphicView *) v : (int) t : (NSPoint) pt : (System *) sys : (int) arg1 : (int) arg2
 {
   Graphic *g = nil;
   Staff *sp = [sys findOnlyStaff: pt.y];

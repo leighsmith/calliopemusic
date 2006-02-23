@@ -1,6 +1,9 @@
 #import "winheaders.h"
 #import <Foundation/NSObject.h>
 #import <AppKit/NSGraphics.h>
+#import "System.h"
+
+@class GraphicView;
 
 @interface Page:NSObject
 {
@@ -18,7 +21,7 @@
 + initPage;
 - init: (int) n : (int) s0 : (int) s1;
 - (void)dealloc;
-- prevTable: p;
+- prevTable: (Page *) p;
 - (float) headerBase;
 - (float) footerBase;
 - (float) leftMargin;
@@ -29,5 +32,5 @@
 - (id)initWithCoder:(NSCoder *)aDecoder;
 - (void)encodeWithCoder:(NSCoder *)aCoder;
 - draw: (NSRect) r : (BOOL) nso;
-- drawSysSep: (NSRect) r : s : v;
+- drawSysSep: (NSRect) r : (System *) s : (GraphicView *) v;
 @end

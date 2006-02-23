@@ -1,6 +1,8 @@
 #import "winheaders.h"
 #import "GraphicView.h"
 
+@class StaffObj; // TODO perhaps we can just import the header?
+
 @interface GraphicView(NSPasteboard)
 
 #define NUM_TYPES_DRAW_EXPORTS 3
@@ -24,14 +26,14 @@ extern NSString *MatchTypes(NSArray *typesToMatch, NSArray *orderedTypes);
 - copySelectionAsTIFFToStream:(NSMutableData *)stream;
 - copySelectionToStream:(NSMutableData *)stream;
 
-- closeList: l;
-- copyToPasteboard: l;
+- closeList: (NSMutableArray *) l;
+- copyToPasteboard: (NSMutableArray *) l;
 - copyToPasteboard;
 - (void)cut:(id)sender;
 - (void)copy:(id)sender;
 - (void)paste:(id)sender;
 - pasteFromPasteboard:pboard;
 - pasteFromPasteboard;
-- (BOOL) pasteTool: (NSPoint *) pt : g;
+- (BOOL) pasteTool: (NSPoint *) pt : (StaffObj *) g;
 
 @end

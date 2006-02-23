@@ -2,7 +2,6 @@
 #import "Preferences.h"
 #import "DrawApp.h"
 #import "DrawDocument.h"
-#import "GraphicView.h"
 #import "GVCommands.h"
 #import "PrefBlock.h"
 #import "MultiView.h"

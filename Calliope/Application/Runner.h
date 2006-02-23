@@ -1,5 +1,6 @@
 #import "winheaders.h"
 #import "Graphic.h"
+#import "Page.h"
 
 @interface Runner:Graphic
 {
@@ -24,9 +25,9 @@
 - init;
 - (void)dealloc;
 - (void)removeObj;
-- newFrom;
-- setPageTable: p;
-- renderMe: (NSRect) r : (NSAttributedString *) s : (NSSize) ps : pg;
+- (Runner *) newFrom;
+- setPageTable: (Page *) p;
+- renderMe: (NSRect) r : (NSAttributedString *) stream : (NSSize) ps : (Page *) pg;
 - (BOOL) move: (float) dx : (float) dy : (NSPoint) p : sys : (int) alt;
 - drawMode: (int) m;
 - draw;

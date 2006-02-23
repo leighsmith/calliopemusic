@@ -8,12 +8,10 @@
 #import "Clef.h"
 #import "DrawApp.h"
 #import "DrawDocument.h"
-#import "GraphicView.h"
 #import "GVSelection.h"
 #import "GVFormat.h"
 #import "Verse.h"
 #import "Metro.h"
-#import "NoteGroup.h"
 #import "CallPart.h"
 #import "CallInst.h"
 #import "TextGraphic.h"
@@ -1258,6 +1256,7 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
   int k;
   Hanger *h;
   Verse *v;
+  
   [super markHangersExcept: q];
   k = [hangers count];
   while (k--)
@@ -1273,7 +1272,7 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
   while (k--)
   {
     v = [verses objectAtIndex:k];
-    if (v != q)
+    if (v != q) // LMS TODO very troubling! Verse != Hanger?
     {
       [v markHangersExcept: q];
       v->gFlags.morphed = 1;
@@ -1533,7 +1532,7 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
   else if (v == 5)
   {
     [aDecoder decodeValuesOfObjCTypes:"cccccc", &p, &selver, &isGraced, &voice, &versepos, &c1];
-    part = c1;
+    part = [NSString stringWithFormat: @"%d", c1];
     [aDecoder decodeValuesOfObjCTypes:"@@", &hangers, &verses];
     [aDecoder decodeValuesOfObjCTypes:"ff", &x, &y];
   }

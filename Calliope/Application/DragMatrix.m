@@ -155,7 +155,7 @@
        * the scrolling smooth
        */
 	if (scrolled) {
-	    PSWait();
+	    // PSWait();
 	    scrolled = NO;
 	}
 	

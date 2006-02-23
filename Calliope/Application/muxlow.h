@@ -26,7 +26,7 @@ extern float halfwidth[3][NUMHEADS][10];
 
 extern float beamthick[3];
 extern float beamsep[3];
-extern void selectPopFor(NSPopUpButton *p, id b, int n);
+extern void selectPopFor(NSPopUpButton *p, NSButton *b, int n);
 extern int popSelectionFor(NSPopUpButton *popup);
 extern NSString *popSelectionName(NSPopUpButton *b);
 extern NSString *popSelectionNameFor(NSPopUpButton *popup);
@@ -41,7 +41,7 @@ extern BOOL findEndpoints(NSMutableArray *l, id *n0, id *n1);
 extern float figHeight(unsigned char *s, float n);
 
 extern void getRegion(NSRect *region, const NSPoint *p1, const NSPoint *p2);
-extern void graphicBBox(NSRect *bbox, StaffObj *g);
+extern void graphicBBox(NSRect *bbox, Graphic *g);
 extern void listBBox(NSRect *bbox, NSMutableArray *list);
 extern void graphicListBBox(NSRect *b, NSMutableArray *l);
 extern void graphicHandListBBox(NSRect *b, NSMutableArray *l);

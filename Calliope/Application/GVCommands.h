@@ -1,5 +1,6 @@
 #import "winheaders.h"
 #import "GraphicView.h"
+#import "System.h"
 
 @interface GraphicView(GVCommands)
 
@@ -11,7 +12,7 @@
 - shuffleAllMarginsByScale: (float) oss : (float) nss;
 - recalcAllSys;
 - (int) gotoPage: (int) n;
-- nextSystem: s : (int *) r;
+- (System *) nextSystem: (System *) s : (int *) r;
 - hideSystemVerse: sender;
 - hideStaffVerse: sender;
 - wantVerse: sender;

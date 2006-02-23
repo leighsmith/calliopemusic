@@ -6,8 +6,6 @@
 #import "DrawDocument.h"
 #import "GraphicView.h"
 #import "Graphic.h"
-#import "System.h"
-#import "Staff.h"
 #import "Bracket.h"
 #import "BrackInspector.h"
 #import "mux.h"
@@ -262,7 +260,9 @@ extern void cbrace(float x0, float y0, float xn, float yn, float size, int mode)
     y1 = s2->y;
     y2 = [s1 yOfBottom];
   }
-  sz = MAX(s1->gFlags.size, s2->gFlags.size);
+  // gcc 4.0 doesn't like typeof bit fields so we use the long hand version
+  // sz = MAX(s1->gFlags.size, s2->gFlags.size);
+  sz = s1->gFlags.size < s2->gFlags.size ? s2->gFlags.size : s1->gFlags.size;
   sys = s1->mysys;
   x = [sys getBracketX: self : sz];
   switch(gFlags.subtype)

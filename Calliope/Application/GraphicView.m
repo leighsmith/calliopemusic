@@ -358,8 +358,9 @@ static void noteAndHangBB(NSMutableArray *l, NSRect *bbox)
   id window = [self window];
   NSRect selectionBlat = NSZeroRect;
   NSRect cachedRect;
-  PSWait();
-  if (cached) [window restoreCachedImage];
+  // PSWait();
+  if (cached)
+      [window restoreCachedImage];
   k = [slist count];
   for (i = 0; i < k; i++) /*first pass -- find the bb */
   {
@@ -942,7 +943,7 @@ extern char *typename[NUMTYPES];
           [self tryToPerform: @selector(updateRulers:) with: (void *) &region];
           [window flushWindow];
           last = p;
-          PSWait();
+          // PSWait();
         }
       else didMove = NO;
       p = [event locationInWindow];
@@ -1853,7 +1854,7 @@ static char *typeExts[3] = {NULL, "eps", "tiff"};
 
 - (void)beginPrologueBBox:(NSRect)bb creationDate:(NSString *)dateCreated createdBy:(NSString *)app fonts:(NSString *)fontNames forWhom:(NSString *)user pages:(int )numPages title:(NSString *)aTitle
 {
-    [super beginPrologueBBox:bb creationDate:dateCreated createdBy:@"Calliope" fonts:fontNames forWhom:user pages:numPages title:[[[self window] title] lastPathComponent]];
+    // [super beginPrologueBBox:bb creationDate:dateCreated createdBy:@"Calliope" fonts:fontNames forWhom:user pages:numPages title:[[[self window] title] lastPathComponent]];
 }
 
 
@@ -1862,7 +1863,7 @@ static char *typeExts[3] = {NULL, "eps", "tiff"};
 - (void)beginSetup
 {
     int n;
-    [super beginSetup];
+    // [super beginSetup];
     PSInit();
     [self deselectAll: self];
     n = [pagelist indexOfObject:currentPage];

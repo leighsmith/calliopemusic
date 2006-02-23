@@ -1,7 +1,9 @@
 #import "winheaders.h"
-#import "GraphicView.h"
 #import <AppKit/NSFont.h>
 #import <Foundation/NSArray.h>
+#import "GraphicView.h"
+
+@class Hanger;
 
 @interface GraphicView(GVSelection)
 
@@ -17,16 +19,16 @@
 - selectObj: p;
 - selectObj: p : (int) b;
 - deselectObj: g;
-- splitSelect: h : hl;
+- splitSelect: (Hanger *) h : (NSMutableArray *) hl;
 - isSelType: (int) type;
 - isSelTypeCode: (int) tc : (int *) num;
-- isListLeftmost: l;
+- isListLeftmost: (NSMutableArray *) l;
 - isSelLeftmost;
 - isSelRightmost;
 - changeSelFont: (NSFont *) f : (BOOL) all;
-- getVFont: (int *) num;
+- (NSFont *) getVFont: (int *) num;
 - setFontSelection: (int) ff : (int) sw;
-- getInsertionX: (float *) x : (id *) rsp : (id *) rp : (int *) tb : (int *) td;
-- getBlinkX: (float *) x : (id *) rsp;
+- getInsertionX: (float *) x : (Staff **) rsp : (StaffObj **) rp : (int *) tb : (int *) td;
+- getBlinkX: (float *) x : (Staff **) rsp;
 
 @end

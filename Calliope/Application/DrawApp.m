@@ -1,6 +1,5 @@
 /* $Id$ */
 #import "DrawApp.h"
-#import "DrawDocument.h"
 #import "GraphicView.h"
 #import "GVFormat.h"
 #import "GVSelection.h"
@@ -255,7 +254,7 @@ if (self == [DrawApp class])
  */
 
 
-extern colorInit(int i, NSColor * c);
+extern void colorInit(int i, NSColor * c);
 
 + (NSApplication *)sharedApplication
 {

@@ -1,5 +1,7 @@
 #import "winheaders.h"
 #import "GNote.h"
+#import "Staff.h"
+#import "NoteHead.h"
 
 @interface GNote(GNChord)
 
@@ -8,9 +10,9 @@
 - normaliseChord;
 - resetChord;
 - reshapeChord;
-- (BOOL) newHead: (float) y : sp : (int) acc;
+- (BOOL) newHead: (float) y : (Staff *) sp : (int) acc;
 - deleteHead: (int) i;
-- (BOOL) insertHead: h;
+- (BOOL) insertHead: (NoteHead *) h;
 - relinkHead: (int) i;
 - reverseHeads;
 - resetSides;

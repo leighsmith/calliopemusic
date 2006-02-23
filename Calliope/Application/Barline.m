@@ -185,7 +185,7 @@ static float dpattern[1];
 
 static BOOL canbridge[16] = {1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1};
 
-static invismode[8] = {0, 4, 4, 4, 4, 4, 4, 7};
+static int invismode[8] = {0, 4, 4, 4, 4, 4, 4, 7};
 
 /* various inconsistencies are detected, and a suitable bar printed */
 

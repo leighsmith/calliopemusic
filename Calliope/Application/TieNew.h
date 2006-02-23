@@ -44,7 +44,7 @@
 - (BOOL) getHandleBBox: (NSRect *) r;
 - setDefault: (int) t;
 - setHanger;
-- (BOOL) isClosed: l;
+- (BOOL) isClosed: (NSMutableArray *) l;
 - (void)removeObj;
 - (BOOL) hit: (NSPoint) p;
 - (float) hitDistance: (NSPoint ) p;

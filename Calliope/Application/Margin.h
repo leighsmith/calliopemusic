@@ -1,5 +1,6 @@
 #import "winheaders.h"
 #import "Graphic.h"
+#import "Page.h"
 
 #define NUMMARGINS 10
 
@@ -21,7 +22,7 @@
 - init;
 - newFrom;
 - (void)removeObj;
-- setPageTable: p;
+- setPageTable: (Page *) p;
 - (float) leftMargin;
 - (float) rightMargin;
 - (float) headerBase;

@@ -35,11 +35,11 @@
 - getKeyString: (int) mc : (char *) ks;
 - (int) getPatch;
 - (int) midPosOff;
-- tiedWith;
+- (NSMutableArray *) tiedWith;
 - (int) accAtPos: (int) pos;
-- (BOOL)selectMember: sl : (int) d :(int)active;
+- (BOOL)selectMember: (NSMutableArray *) sl : (int) d :(int)active;
 - myChordGroup;
-- (BOOL) move: (float) dx : (float) dy : (NSPoint) p : sys : (int) alt;
+- (BOOL) move: (float) dx : (float) dy : (NSPoint) p : (System *) sys : (int) alt;
 - (BOOL) hit: (NSPoint) p;
 - (BOOL) hitBeamAt: (float *) px : (float *) py;
 - drawStem: (int) m;

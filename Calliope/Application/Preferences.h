@@ -1,5 +1,6 @@
 #import "winheaders.h"
 #import <AppKit/AppKit.h>
+#import "GraphicView.h"
 
 #define STYLE_VERSION 0
 
@@ -40,7 +41,7 @@
     id heightrelative;
 }
 
-- (BOOL) getStyleFromFile: (NSString *) fn : v;
+- (BOOL) getStyleFromFile: (NSString *) fn : (GraphicView *) v;
 - reflectSelection;
 - changeRastral:sender;
 - dataChanged:sender;

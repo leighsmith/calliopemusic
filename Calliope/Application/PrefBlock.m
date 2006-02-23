@@ -1,7 +1,6 @@
 #import "DrawApp.h"
 #import "DrawDocument.h"
 #import "PrefBlock.h"
-#import "GraphicView.h"
 #import "GVPerform.h"
 #import "Preferences.h"
 #import "mux.h"

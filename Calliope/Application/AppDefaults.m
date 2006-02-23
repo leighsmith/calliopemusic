@@ -1,3 +1,4 @@
+/* $Id$ */
 #import "AppDefaults.h"
 #import "MultiView.h"
 #import "DrawApp.h"

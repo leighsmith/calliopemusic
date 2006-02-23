@@ -1,10 +1,14 @@
 #import "winheaders.h"
-#import "Graphic.h"
-#import "Verse.h"
 #import <AppKit/NSFont.h>
 #import <AppKit/AppKit.h>
 #import <Foundation/Foundation.h>
 #import <Foundation/NSArray.h>
+#import "Graphic.h"
+#import "GraphicView.h"
+#import "Verse.h"
+#import "Hanger.h"
+#import "NoteGroup.h"
+
 
 /*
   even though only timed and voiced objects know about parts, voices and stamps,
@@ -41,7 +45,7 @@
 - (void)moveBy:(float)x :(float)y;
 - (BOOL) reCache: (float) y : (int) ss;
 - (int) barCount;
-- proto: v : (NSPoint) pt : sp : sys : g : (int) i;
+- proto: (GraphicView *) v : (NSPoint) pt : (Staff *) sp : (System *) sys : (Graphic *) g : (int) i;
 - (float) noteEval: (BOOL) f;
 - (int) getSpacing;
 - (int) getLines;
@@ -70,12 +74,12 @@
 - (float) xOfStaffEnd: (BOOL) e;
 - verseWidths: (float *) tb : (float *) ta;
 - (void)removeObj;
-- (BOOL) linkPaste: v;
+- (BOOL) linkPaste: (GraphicView *) v;
 - linkhanger: q;
 - unlinkhanger: q;
 - unlinkverse: q;
 - markHangers;
-- markHangersExcept: p;
+- markHangersExcept: (Hanger *) p;
 - setHangers;
 - setHangersExcept: (int) t;
 - setHangersOnly: (int) t;
@@ -85,9 +89,9 @@
 - (BOOL) hasHanger: h;
 - (int) hasHangers;
 - (BOOL)selectHangers:(id)sl : (int) b;
-- closeHangers: l;
+- closeHangers: (NSMutableArray *) l;
 - findMetro;
-- (BOOL) hasVoltaBesides: p;
+- (BOOL) hasVoltaBesides: (NoteGroup *) p;
 - (BOOL) hasCrossingBeam;
 - (int) hangerAcc;
 - (BOOL) hangerAccSticks;
@@ -102,16 +106,16 @@
 - (BOOL) hasVerseText: (int) i;
 - (BOOL) continuesLine: (int) i;
 - (int) verseHyphenOf: (int) i;
-- copyVerseFrom: p;
-- (int) verseNeighbour: g;
+- copyVerseFrom: (StaffObj *) p;
+- (int) verseNeighbour: (StaffObj *) g;
 - (BOOL) stopsVerse;
 - (NSFont *) getVFont;
 - (BOOL) changeVFont: (NSFont *) f : (BOOL) all;
 - (int) maxGroupLevel;
 - markGroups;
 - renumberGroups: (int) lev;
-- (BOOL) move: (float) dx : (float) dy : (NSPoint) p : sys : (int) alt;
-- moveFinished: v;
+- (BOOL) move: (float) dx : (float) dy : (NSPoint) p : (System *) sys : (int) alt;
+- moveFinished: (GraphicView *) v;
 - (BOOL) performKey: (int) c;
 - (int)keyDownString:(NSString *)cc;
 - (float)verseOrigin; /* sb: inherited but only used by NeumeNew */

@@ -1,8 +1,6 @@
 #import "Page.h"
 #import "Runner.h"
 #import "Margin.h"
-#import "System.h"
-#import "GraphicView.h"
 #import "GVFormat.h"
 #import "mux.h"
 #import "muxlow.h"

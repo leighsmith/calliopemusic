@@ -13,7 +13,6 @@
 #import "Runner.h"
 #import "ChordGroup.h"
 #import "Bracket.h"
-#import "System.h"
 #import "TimedObj.h"
 #import "GNote.h"
 #import "NoteHead.h"

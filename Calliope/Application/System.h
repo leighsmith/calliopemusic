@@ -1,7 +1,9 @@
 #import "winheaders.h"
-#import "Graphic.h"
 #import <Foundation/NSArray.h>
+#import "Graphic.h"
 
+@class StaffObj;
+@class Bracket;
 
 @interface System : Graphic
 {
@@ -42,11 +44,11 @@
 - sysInvalid;
 - (int) myIndex;
 - (BOOL) lastSystem;
-- init: (int) n : v;
+- init: (int) n : (GraphicView *) v;
 - initsys;
 - mark;
 - newFrom;
-- newExtraction: v : (int) sn;
+- newExtraction: (GraphicView *) v : (int) sn;
 - measureSys: (NSRect *) r;
 - resetSys;
 - closeSystem;
@@ -60,20 +62,20 @@
 - (float) leftIndent;
 - (float) leftWhitespace;
 - (float) rightIndent;
-- makeNames: (BOOL) full : v;
+- makeNames: (BOOL) full : (GraphicView *) v;
 - checkMargin;
 - recalc;
 - recalcHangers;
 - setHangers;
 - reShape;
 - installLink;
-- copyStyleTo: s;
+- copyStyleTo: (System *) sys;
 - (BOOL) hasTitles;
 - (BOOL) hasLinkage;		/* system has a staff linkage bar */
-- (BOOL) hasBracket: sp;
-- (BOOL) spanningBracket: sp1 : sp2;
+- (BOOL) hasBracket: (Staff *) sp;
+- (BOOL) spanningBracket: (Staff *) sp1 : (Staff *) sp2;
 - (float) leftPlace;		/* x of first free space to left of system */
-- (float) getBracketX: b : (int) sz;
+- (float) getBracketX: (Bracket *) b : (int) sz;
 - linkobject: p;		/* put arg on objs list */
 - unlinkobject: p;		/* remove p from objs list */
 - newStaff: (float) y;		/* put a new staff near y */
@@ -81,13 +83,13 @@
 - getVisStaff: (int) n;		/* same, but nil if hidden */
 - lastStaff;
 - (unsigned int)indexOfObject:s;	/* return index of given staff */
-- (int) whereIs: sp;		/* code for location of staff */
-- (BOOL) relinknote: p;		/* relink note to sensible destination */
+- (int) whereIs: (Staff *) sp;		/* code for location of staff */
+- (BOOL) relinknote : (StaffObj *) p;		/* relink note to sensible destination */
 - firststaff;			/* return first visible staff */
 - nextstaff: s;			/* return next visible staff after s */
-- findOnlyStaff: (float) y; 	 /* find staff closest to y */
-- sameStaff: sp;
-- (int) whichMarker: p;
+- (Staff *) findOnlyStaff: (float) y; 	 /* find staff closest to y */
+- sameStaff: (Staff *) sp;
+- (int) whichMarker: (Graphic *) p;
 - (void)searchFor: (NSPoint) p :(NSMutableArray *)arr;	/* look for a hit in the system */
 - (void)dealloc;
 - draw: (NSRect) r : (BOOL) nso;

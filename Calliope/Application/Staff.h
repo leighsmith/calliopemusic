@@ -1,8 +1,14 @@
+/* 
+  $Id$ 
+
+  See COPYING for license usage.
+ */
 #import "winheaders.h"
-#import "Graphic.h"
-#import "StaffObj.h"
 #import <Foundation/NSArray.h>
 #import <CalliopePropertyListCoders/OAPropertyListCoders.h>
+#import "Graphic.h"
+#import "StaffObj.h"
+#import "TextGraphic.h"
 
 #define MAXTEXT 16
 #define MINPAD 4 /* = nature[0] */
@@ -48,22 +54,22 @@
 - measureStaff;
 - resetStaff: (float) y;
 - (void)dealloc;
-- newFrom;
+- (Staff *) newFrom;
 - (void)moveBy:(float)x :(float)y;
 - setHangers;
 - recalcHangers;
-- linknote: p;			/* link object p into self */
+- linknote: (StaffObj *) p;			/* link object p into self */
 - staffRelink: p;		/* lazy relink if already there */
 - unlinknote: p;
 - (int) brackLevel;
 - (BOOL) atTopOf: (int) bt;
 - getNote: (int) i;
 - nextNote: q;
-- makeName: (BOOL) full;
+- (TextGraphic *) makeName: (BOOL) full;
 - prevNote: p;
 - skipObjs: (float) x;
 - (int) skipSigIx: (int) i;
-- skipSig: p : (float) xi : (float *) x;
+- skipSig: (StaffObj *) p : (float) xi : (float *) x;
 - (int) indexOfNoteAfter: (float) x;
 - (float) staffHeight;
 - (float) yOfCentre;
@@ -79,17 +85,17 @@
 - (NSString *) getInstrument;
 - (NSString *) getPart;
 - (int) getChannel;
-- (BOOL) hasAnyPart: l;
+- (BOOL) hasAnyPart: (NSMutableArray *) l;
 - (int) findPos: (float) y;
-- searchType: (int) t :  q;
+- searchType: (int) t :  (StaffObj *) q;
 - findClef: k;
 - (int) getKeyThru: (StaffObj *) p : (char *) ks;
-- (float) firstTimedBefore:  p;
-- (BOOL) textedBefore : p : (int) i;	
-- (BOOL) vocalBefore : p : (int) i;	
-- nextVersed: p : (int) vn;
-- prevVersed: p : (int) vn;
-- (float) endMelisma: p : (int) vn;
+- (float) firstTimedBefore:  (StaffObj *) p;
+- (BOOL) textedBefore: (StaffObj *) p : (int) i;	
+- (BOOL) vocalBefore: (StaffObj *) p : (int) i;	
+- nextVersed: (StaffObj *) p : (int) vn;
+- prevVersed: (StaffObj *) p : (int) vn;
+- (float) endMelisma: (StaffObj *) p : (int) vn;
 - (int) lastHyphen: (int) n : (int) v;
 - hideVerse: (int) n;
 - (int) firstClefCentre;

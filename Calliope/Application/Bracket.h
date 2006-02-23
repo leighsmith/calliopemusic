@@ -1,5 +1,7 @@
 #import "winheaders.h"
 #import "Graphic.h"
+#import "Staff.h"
+#import "System.h"
 
 /* BRACKET gFlags.subtype */
 
@@ -20,12 +22,12 @@
 + myPrototype;
 
 - init;
-- newFrom: sys;
+- newFrom: (System *) sys;
 - (void)dealloc;
 - (void)removeObj;
 - mySystem;
-- (BOOL) atBottom: s;
-- (BOOL) atTop: s;
+- (BOOL) atBottom: (Staff *) s;
+- (BOOL) atTop: (Staff *) s;
 - (BOOL) move: (float) dx : (float) dy : (NSPoint) p : sys : (int) alt;
 - drawMode: (int) m;
 - (id)initWithCoder:(NSCoder *)aDecoder;

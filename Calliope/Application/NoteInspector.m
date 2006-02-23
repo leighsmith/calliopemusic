@@ -21,9 +21,9 @@ extern id lastHit;
 extern NSString *GeneralMidiSounds[128];
 
 static NSPopUpButton *midipopup;
-static whichlist = -1;
-static wheretuning = -1;
-static mypartlist = -1;
+static int whichlist = -1;
+static int wheretuning = -1;
+static int mypartlist = -1;
 
 
 - (void)awakeFromNib

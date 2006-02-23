@@ -45,7 +45,7 @@
 - (float) noteEval: (BOOL) f;
 - (BOOL) getPos: (int) i : (int *) p : (int *) d : (int *) m : (float *) q;
 - (BOOL) hit: (NSPoint) p;
-- (BOOL) move: (float) dx : (float) dy : (NSPoint) p : sys : (int) alt;
+- (BOOL) move: (float) dx : (float) dy : (NSPoint) p : (System *) sys : (int) alt;
 - drawMode: (int) m;
 - (id)initWithCoder:(NSCoder *)aDecoder;
 - (void)encodeWithCoder:(NSCoder *)aCoder;

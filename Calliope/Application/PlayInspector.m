@@ -231,7 +231,7 @@ static void blinkOff(GraphicView *v)
 - unsetPauseButton
 {
   if ([pausebutton state]) [pausebutton setState:0];
-  PSWait();
+  // PSWait();
   return self;
 }
 
@@ -239,7 +239,7 @@ static void blinkOff(GraphicView *v)
 - unsetStopButton
 {
   if ([stopbutton state]) [stopbutton setState:0];
-  PSWait();
+  // PSWait();
   return self;
 }
 
@@ -247,7 +247,7 @@ static void blinkOff(GraphicView *v)
 - clickStopButton
 {
   [stopbutton performClick:self];
-  PSWait();
+  // PSWait();
   return self;
 }
 
@@ -271,7 +271,7 @@ static void blinkOff(GraphicView *v)
     [recordbutton setEnabled:YES];
     [recordbutton setState:0];
     [stopbutton setState:0];
-    PSWait();
+    // PSWait();
     if (status != MK_inactive)
     {
         [MKConductor lockPerformance];
@@ -345,7 +345,7 @@ static void blinkOff(GraphicView *v)
   j = [endlist indexOfItemWithTitle:[endlist title]];
   status = MK_active;
   if (![playbutton state]) [playbutton setState:1];
-  PSWait();
+  // PSWait();
   [MKConductor lockPerformance];
   [MKConductor finishPerformance];
   [MKConductor unlockPerformance];
@@ -365,7 +365,7 @@ static void blinkOff(GraphicView *v)
   // MKSetErrorProc(handleMKError); /* Intercept Music Kit errors. */
   status = MK_active;
   if (![recordbutton state]) [recordbutton setState:1];
-  PSWait();
+  // PSWait();
   midi = [MKMidi midiOnDevice: midiDev[playmode]];
   [midi setUseInputTimeStamps:YES]; 
   [midi open];

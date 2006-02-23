@@ -1,6 +1,7 @@
 #import "winheaders.h"
 #import <Foundation/NSObject.h>
 #import <AppKit/NSFont.h>
+#import "GraphicView.h"
 
 @interface PrefBlock:NSObject
 {
@@ -39,7 +40,7 @@
 - setIntValue:(int)v at:(int)i;
 - backup;
 - revert;
-- (BOOL) checkStyleFromFile: v;
+- (BOOL) checkStyleFromFile: (GraphicView *) v;
 - (id)initWithCoder:(NSCoder *)aDecoder;
 - (void)encodeWithCoder:(NSCoder *)aCoder;
 

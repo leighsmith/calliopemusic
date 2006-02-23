@@ -1,7 +1,10 @@
 #import "winheaders.h"
-#import "Graphic.h"
 #import <AppKit/NSFont.h>
 #import <AppKit/NSGraphics.h>
+#import "Graphic.h"
+// #import "StaffObj.h"
+
+@class StaffObj;
 
 /*
   The gFlags.invis bit is used for invisible verses.
@@ -52,7 +55,7 @@
 - (BOOL) isFigure;
 - reShape;
 - alignVerse;
-- (float) textLeft: p;
+- (float) textLeft: (StaffObj *) p;
 - (int)keyDownString:(NSString *)cc;
 - (BOOL) hit: (NSPoint) p;
 - drawMode: (int) m;

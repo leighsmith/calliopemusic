@@ -9,7 +9,6 @@
 #import "DrawApp.h"
 #import "DrawDocument.h"
 #import "System.h"
-#import "Staff.h"
 #import <AppKit/NSFont.h>
 #import <Foundation/NSArray.h>
 

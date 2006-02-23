@@ -1,5 +1,8 @@
 #import "winheaders.h"
 #import "StaffObj.h"
+#import "GraphicView.h"
+#import "Staff.h"
+#import "System.h"
 
 /* BARLINE gFlags.subtype, used by Barline, Volta*/
 
@@ -46,7 +49,7 @@
 - init;
 - (void)dealloc;
 - (int) barCount;
-- proto: v : (NSPoint) pt : sp : sys : g : (int) i;
+- proto: (GraphicView *) v : (NSPoint) pt : (Staff *) sp : (System *) sys : (Graphic *) g : (int) i;
 - (int) posAboveBelow: (int) a;
 - (float) yAboveBelow: (int) a;
 - (BOOL) stopsVerse;

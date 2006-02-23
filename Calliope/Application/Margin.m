@@ -4,7 +4,6 @@
 #import "MarginInspector.h"
 #import "System.h"
 #import "Staff.h"
-#import "Page.h"
 #import "GVFormat.h"
 #import "mux.h"
 #import <AppKit/NSText.h>

@@ -23,7 +23,7 @@
 - init;
 - (void)dealloc;
 - (BOOL) getPos: (int) i : (int *) pos : (int *) d : (int *) m : (float *) t;
-- (BOOL) move: (float) dx : (float) dy : (NSPoint) pt : sys : (int) alt;
+- (BOOL) move: (float) dx : (float) dy : (NSPoint) pt : (System *) sys : (int) alt;
 - drawMode: (int) m;
 - (id)initWithCoder:(NSCoder *)aDecoder;
 - (void)encodeWithCoder:(NSCoder *)aCoder;

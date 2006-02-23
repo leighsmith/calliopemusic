@@ -56,7 +56,7 @@ static char rcsid[] = "Copyright 1997 by M. Onyschuk and Associates Inc. All Rig
   const unsigned char		*bytes = [self bytes];
 
   NSString			*hexString = nil;
-  unsigned char		*hexBytes = NSZoneMalloc(z, sizeof(unsigned char) * (length*2+1));
+  char		*hexBytes = NSZoneMalloc(z, sizeof(unsigned char) * (length*2+1));
   
   [aCoder setInteger:length forKey:@"length"];
 

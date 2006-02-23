@@ -14,7 +14,7 @@
 
 - init;
 - (void)dealloc;
-- proto: v : (NSPoint) pt : sp : sys : g : (int) i;
+- proto: (GraphicView *) v : (NSPoint) pt : (Staff *) sp : (System *) sys : (Graphic *) g : (int) i;
 - (BOOL) move: (float) dx : (float) dy : (NSPoint) pt : sys : (int) alt;
 - drawMode: (int) m;
 - (id)initWithCoder:(NSCoder *)aDecoder;

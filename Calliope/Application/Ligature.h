@@ -33,7 +33,7 @@
 - (void)dealloc;
 - setHanger;
 - sysInvalid;
-- (BOOL) isClosed: l;
+- (BOOL) isClosed: (NSMutableArray *) l;
 - (void)removeObj;
 - (BOOL) getHandleBBox: (NSRect *) r;
 - (BOOL) hit: (NSPoint) p;

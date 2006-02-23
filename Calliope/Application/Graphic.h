@@ -2,6 +2,11 @@
 #import <Foundation/Foundation.h>
 #import <AppKit/AppKit.h>
 
+@class GraphicView;
+@class System;
+@class Staff;
+@class Enclosure;
+
 #define LEFTBOUND(p) (p->bounds.origin.x)
 #define LEFTBEARING(p) (p->x - LEFTBOUND(p))
 #define RIGHTBOUND(p) (LEFTBOUND(p) + p->bounds.size.width)
@@ -37,21 +42,21 @@ extern id CrossCursor;
 + allocInit: (int) t;
 + cursor;
 + getInspector: (int) t;
-+ createMember:  v : (int) t : (NSPoint) pt :  sys : (int) arg1 : (int) arg2;
-+ (BOOL) createMember: (int) t : v : (int) arg;
++ createMember: (GraphicView *) v : (int) t : (NSPoint) pt : (System *) sys : (int) arg1 : (int) arg2;
++ (BOOL) createMember: (int) t : (GraphicView *) v : (int) arg;
 + myInspector;
 - myInspector;
 - printMe;
 - init;
 - mark;
-- proto: v : (NSPoint) pt : sp : sys : g : (int) i;
+- proto: (GraphicView *) v : (NSPoint) pt : (Staff *) sp : (System *) sys : (Graphic *) g : (int) i;
 - recalc;
 - reShape;
 - (BOOL) canSplit;
-- willSplit;
+- (NSMutableArray *) willSplit;
 - (void)removeObj;
-- (BOOL) linkPaste: v;
-- (BOOL) linkPaste: v : sl;
+- (BOOL) linkPaste: (GraphicView *) v;
+- (BOOL) linkPaste: (GraphicView *) v : (NSMutableArray *) sl;
 - (NSRect)bounds;
 - setBounds:(const NSRect)aRect;
 - (BOOL) getHandleBBox: (NSRect *) r;
@@ -59,12 +64,12 @@ extern id CrossCursor;
 - verseWidths: (float *) tb : (float *) ta;
 - (BOOL) performKey: (int) c;
 - (int)keyDownString:(NSString *)cc;
-- (BOOL) changeVFont: f : (BOOL) all;
+- (BOOL) changeVFont: (NSFont *) f : (BOOL) all;
 - (BOOL) getXY: (float *) x : (float *) y;
 - (float) headY: (int) n;
-- (BOOL)selectMe: l : (int) drag :(int)active;
+- (BOOL)selectMe: (NSMutableArray *) l : (int) drag :(int)active;
 - (BOOL) move: (float) dx : (float) dy : (NSPoint) p : sys : (int) alt;
-- moveFinished: v;
+- moveFinished: (GraphicView *) v;
 - resize:(NSEvent *)event in: view;
 - traceBounds;
 - draw:(NSRect)rect : (BOOL) nso;
@@ -94,10 +99,10 @@ extern id CrossCursor;
 - (BOOL) changeVFont: (int) fid;
 - (int) noteCode: (int) a;
 - (BOOL) hasEnclosures;
-- linkEnclosure: e;
-- unlinkEnclosure: e;
+- linkEnclosure: (Enclosure *) e;
+- unlinkEnclosure: (Enclosure *) e;
 - markHangers;
-- markHangersExcept: p;
+- markHangersExcept: (Graphic *) p;
 - setHangersExcept: (int) t;
 - setHangersOnly: (int) t;
 - setHangers;
@@ -106,7 +111,7 @@ extern id CrossCursor;
 - resizeHangers: (int) ds;
 - (int) hasHangers;
 - (BOOL)selectHangers:(id)sl : (int) b;
-- closeHangers: l;
+- closeHangers: (NSMutableArray *) l;
 - setPageTable: p;
 - draw;
 - drawMode: (int) m;

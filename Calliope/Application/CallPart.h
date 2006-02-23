@@ -3,18 +3,6 @@
 #import <Foundation/NSArray.h>
 #import <CalliopePropertyListCoders/OAPropertyListCoders.h>
 
-@interface NSMutableArray(PartCell)
-
-- (NSString *) partNameForInt: (int) i;
-- partNamed: (NSString *) p;
-- (NSString *) instrumentForPart: (NSString *) p;
-- (int) channelForPart: (NSString *) p;
-- (int) indexOfPartName: (NSString *) p;
-- sortPartlist;
-
-@end
-
-
 @interface CallPart : NSObject
 {
 @public
@@ -27,8 +15,21 @@
 + (void)initialize;
 - init: (NSString *) n : (NSString *) a : (int) ch : (NSString *) i;
 - update: (NSString *) n : (NSString *) a : (int) ch : (NSString *) i;
-- newFrom;
+- (CallPart *) newFrom;
 - (id)initWithCoder:(NSCoder *)aDecoder;
 - (void)encodeWithCoder:(NSCoder *)aCoder;
 
 @end
+
+@interface NSMutableArray(PartCell)
+
+- (NSString *) partNameForInt: (int) i;
+- (CallPart *) partNamed: (NSString *) p;
+- (NSString *) instrumentForPart: (NSString *) p;
+- (int) channelForPart: (NSString *) p;
+- (int) indexOfPartName: (NSString *) p;
+- sortPartlist;
+
+@end
+
+

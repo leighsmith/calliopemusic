@@ -4,15 +4,12 @@
 #import "ChordGroup.h"
 #import "mux.h"
 #import "muxlow.h"
-#import "GNote.h"
 #import "GNChord.h"
 #import "NoteHead.h"
 #import "GraphicView.h"
 #import "GVSelection.h"
 #import "DrawApp.h"
 #import "DrawDocument.h"
-#import "System.h"
-#import "Staff.h"
 #import <AppKit/NSApplication.h>
 #import <AppKit/NSGraphics.h>
 #import <Foundation/NSArray.h>

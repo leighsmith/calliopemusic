@@ -30,7 +30,7 @@
 - (BOOL) hitBeamAt: (float *) px : (float *) py;
 - resetStemlen;
 - defaultStem: (BOOL) up;
-- (BOOL) move: (float) dx : (float) dy : (NSPoint) pt : sys : (int) alt;
+- (BOOL) move: (float) dx : (float) dy : (NSPoint) pt : (System *) sys : (int) alt;
 - drawMode: (int) m;
 - (id)initWithCoder:(NSCoder *)aDecoder;
 - (void)encodeWithCoder:(NSCoder *)aCoder;

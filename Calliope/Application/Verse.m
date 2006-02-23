@@ -1,6 +1,5 @@
 /* $Id$ */
 #import "Verse.h"
-#import "Staff.h"
 #import "GNote.h"
 #import "System.h"
 #import "GraphicView.h"

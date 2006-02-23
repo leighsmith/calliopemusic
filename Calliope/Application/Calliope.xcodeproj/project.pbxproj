@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D87D0FDA09AE6EA900784ACC /* draw.c in Sources */ = {isa = PBXBuildFile; fileRef = D87D0FD909AE6EA900784ACC /* draw.c */; };
+		D87D0FDC09AE6ED200784ACC /* muxCollide.h in Headers */ = {isa = PBXBuildFile; fileRef = D87D0FDB09AE6ED200784ACC /* muxCollide.h */; };
 		D8F2478909AD280C00B96D0D /* NSObject+ErrorHandling.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD96D60483CDC800A80164 /* NSObject+ErrorHandling.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8F2478A09AD280C00B96D0D /* NSMutableString+PropertyListCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD96D80483CDC800A80164 /* NSMutableString+PropertyListCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8F2478B09AD280C00B96D0D /* NSString+PropertyListCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD96DA0483CDC800A80164 /* NSString+PropertyListCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -663,6 +665,8 @@
 
 /* Begin PBXFileReference section */
 		D828320B0483E0C000A80164 /* tick.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = tick.aiff; path = Sounds/tick.aiff; sourceTree = "<group>"; };
+		D87D0FD909AE6EA900784ACC /* draw.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = draw.c; sourceTree = "<group>"; };
+		D87D0FDB09AE6ED200784ACC /* muxCollide.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = muxCollide.h; sourceTree = "<group>"; };
 		D88C84B705053B7C001855C1 /* NSColor+PropertyListCoding.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = "NSColor+PropertyListCoding.h"; sourceTree = "<group>"; };
 		D88C84B805053B7C001855C1 /* NSColor+PropertyListCoding.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = "NSColor+PropertyListCoding.m"; sourceTree = "<group>"; };
 		D88C84B905053B7C001855C1 /* NSFont+PropertyListCoding.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = "NSFont+PropertyListCoding.h"; sourceTree = "<group>"; };
@@ -957,9 +961,9 @@
 		D8A8F7C40483DD1B00A80164 /* template4.opus */ = {isa = PBXFileReference; lastKnownFileType = file; name = template4.opus; path = Templates/template4.opus; sourceTree = "<group>"; };
 		D8A8F7C50483DD1B00A80164 /* template5.opus */ = {isa = PBXFileReference; lastKnownFileType = file; name = template5.opus; path = Templates/template5.opus; sourceTree = "<group>"; };
 		D8F2453709AD260300B96D0D /* MKPerformSndMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MKPerformSndMIDI.framework; path = /Library/Frameworks/MKPerformSndMIDI.framework; sourceTree = "<absolute>"; };
-		D8F247B109AD280C00B96D0D /* Info-CalliopePropertyListCoders__Framework___Upgraded_.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Info-CalliopePropertyListCoders__Framework___Upgraded_.plist"; sourceTree = "<group>"; };
+		D8F247B109AD280C00B96D0D /* Info-CalliopePropertyListCoders.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Info-CalliopePropertyListCoders.plist"; sourceTree = "<group>"; };
 		D8F247B509AD280C00B96D0D /* CalliopePropertyListCoders.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CalliopePropertyListCoders.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		D8F249FA09AD3F8D00B96D0D /* Info-Calliope__Application___Upgraded_.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Info-Calliope__Application___Upgraded_.plist"; sourceTree = "<group>"; };
+		D8F249FA09AD3F8D00B96D0D /* Info-Calliope.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Info-Calliope.plist"; sourceTree = "<group>"; };
 		D8F249FB09AD3F8D00B96D0D /* Calliope.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Calliope.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8FD922F0483CDC700A80164 /* Accent.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Accent.m; sourceTree = "<group>"; };
 		D8FD92310483CDC700A80164 /* AccentInspector.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = AccentInspector.m; sourceTree = "<group>"; };
@@ -1303,8 +1307,8 @@
 				D8FD96B20483CDC800A80164 /* Subprojects */,
 				D8FD970C0483CDC800A80164 /* External Frameworks and Libraries */,
 				D8FD922C0483CDC700A80164 /* Products */,
-				D8F247B109AD280C00B96D0D /* Info-CalliopePropertyListCoders__Framework___Upgraded_.plist */,
-				D8F249FA09AD3F8D00B96D0D /* Info-Calliope__Application___Upgraded_.plist */,
+				D8F247B109AD280C00B96D0D /* Info-CalliopePropertyListCoders.plist */,
+				D8F249FA09AD3F8D00B96D0D /* Info-Calliope.plist */,
 			);
 			name = Calliope;
 			sourceTree = "<group>";
@@ -1433,6 +1437,7 @@
 		D8FD93050483CDC800A80164 /* Headers */ = {
 			isa = PBXGroup;
 			children = (
+				D87D0FDB09AE6ED200784ACC /* muxCollide.h */,
 				D8FD93060483CDC800A80164 /* Accent.h */,
 				D8FD93080483CDC800A80164 /* AccentInspector.h */,
 				D8FD930A0483CDC800A80164 /* AppDefaults.h */,
@@ -1551,6 +1556,7 @@
 		D8FD93E80483CDC800A80164 /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				D87D0FD909AE6EA900784ACC /* draw.c */,
 				D8FD93EB0483CDC800A80164 /* Calliope_main.m */,
 				D8FD93ED0483CDC800A80164 /* mux.m */,
 				D8FD93EF0483CDC800A80164 /* muxchar.m */,
@@ -2125,6 +2131,7 @@
 				D8F2482F09AD3F8C00B96D0D /* CalliopeWindow.h in Headers */,
 				D8F2483009AD3F8C00B96D0D /* winheaders.h in Headers */,
 				D8F2483109AD3F8C00B96D0D /* OAPLAExtensions.h in Headers */,
+				D87D0FDC09AE6ED200784ACC /* muxCollide.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2754,6 +2761,7 @@
 				D8F249E909AD3F8D00B96D0D /* muxCollide.m in Sources */,
 				D8F249EA09AD3F8D00B96D0D /* muxlow.m in Sources */,
 				D8F252AB09AE669800B96D0D /* Bracket.m in Sources */,
+				D87D0FDA09AE6EA900784ACC /* draw.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3102,7 +3110,7 @@
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 					"~/Sources/Music/Calliope/Application/CalliopePropertyListCoders",
 				);
-				INFOPLIST_FILE = "Info-CalliopePropertyListCoders__Framework___Upgraded_.plist";
+				INFOPLIST_FILE = "Info-CalliopePropertyListCoders.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
@@ -3135,7 +3143,7 @@
 					/Local/Users/leigh/Sources/Music/Calliope/Source,
 					"~/Sources/Music/Calliope/Source/CalliopePropertyListCoders.fproj",
 				);
-				INFOPLIST_FILE = "Info-CalliopePropertyListCoders__Framework___Upgraded_.plist";
+				INFOPLIST_FILE = "Info-CalliopePropertyListCoders.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LIBRARY_SEARCH_PATHS = /Apps/Calliope/CalliopeThreeStateButton;
 				OTHER_CFLAGS = "";
@@ -3170,7 +3178,7 @@
 					/Local/Users/leigh/Sources/Music/Calliope/Source,
 					"~/Sources/Music/Calliope/Source/CalliopePropertyListCoders.fproj",
 				);
-				INFOPLIST_FILE = "Info-CalliopePropertyListCoders__Framework___Upgraded_.plist";
+				INFOPLIST_FILE = "Info-CalliopePropertyListCoders.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LIBRARY_SEARCH_PATHS = /Apps/Calliope/CalliopeThreeStateButton;
 				OTHER_CFLAGS = "";
@@ -3208,7 +3216,7 @@
 					/Local/Users/leigh/Sources/Music/Calliope/Source,
 					"~/Sources/Music/Calliope/Source/CalliopePropertyListCoders",
 				);
-				INFOPLIST_FILE = "Info-Calliope__Application___Upgraded_.plist";
+				INFOPLIST_FILE = "Info-Calliope.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
@@ -3239,7 +3247,7 @@
 					/Local/Users/leigh/Sources/Music/Calliope/Source,
 					"~/Sources/Music/Calliope/Source/CalliopePropertyListCoders",
 				);
-				INFOPLIST_FILE = "Info-Calliope__Application___Upgraded_.plist";
+				INFOPLIST_FILE = "Info-Calliope.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = "";
@@ -3271,7 +3279,7 @@
 					/Local/Users/leigh/Sources/Music/Calliope/Source,
 					"~/Sources/Music/Calliope/Source/CalliopePropertyListCoders",
 				);
-				INFOPLIST_FILE = "Info-Calliope__Application___Upgraded_.plist";
+				INFOPLIST_FILE = "Info-Calliope.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = "";

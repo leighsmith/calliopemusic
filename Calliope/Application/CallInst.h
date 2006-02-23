@@ -4,19 +4,6 @@
 //#import <OAPropertyListCoders/OAPropertyListCoders.h>
 #import <CalliopePropertyListCoders/OAPropertyListCoders.h>
 
-@interface NSMutableArray(InstCell)
-
-- instNamed: (NSString *) inst;
-- (int) indexOfInstName: (NSString *) i;
-- (int) indexOfInstString: (NSString *) i;
-- (int) soundForInstrument: (NSString *) i;
-- (NSMutableArray *) tuningForInstrument: (NSString *) i;
-- (NSString *) instNameForInt: (int) i;  /* ForInt are temporary */
-- (int) transForInstrument: (NSString *) inst;
-- sortInstlist;
-
-@end
-
 
 @interface CallInst : NSObject
 {
@@ -37,3 +24,17 @@
 - (void)encodeWithCoder:(NSCoder *)aCoder;
 
 @end
+
+@interface NSMutableArray(InstCell)
+
+- (CallInst *) instNamed: (NSString *) inst;
+- (int) indexOfInstName: (NSString *) i;
+- (int) indexOfInstString: (NSString *) i;
+- (int) soundForInstrument: (NSString *) i;
+- (NSMutableArray *) tuningForInstrument: (NSString *) i;
+- (NSString *) instNameForInt: (int) i;  /* ForInt are temporary */
+- (int) transForInstrument: (NSString *) inst;
+- sortInstlist;
+
+@end
+

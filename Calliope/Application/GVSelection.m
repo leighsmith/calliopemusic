@@ -1,3 +1,6 @@
+#import <Foundation/NSArray.h>
+#import <AppKit/NSFont.h>
+#import <AppKit/NSFontManager.h>
 #import "GraphicView.h"
 #import "GVSelection.h"
 #import "GVFormat.h"
@@ -9,12 +12,10 @@
 #import "SysCommands.h"
 #import "SysInspector.h"
 #import "StaffObj.h"
+#import "TimedObj.h"
 #import "Tie.h"
 #import "muxlow.h"
 #import "mux.h"
-#import <Foundation/NSArray.h>
-#import <AppKit/NSFont.h>
-#import <AppKit/NSFontManager.h>
 
 extern int fontflag;
 

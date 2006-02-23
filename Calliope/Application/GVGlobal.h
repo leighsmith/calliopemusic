@@ -5,8 +5,8 @@
 
 - (BOOL) sysSameShape;
 - extractStaves: (int) n : (char *) wantstaff;
-- extractParts: pl;
+- extractParts: (NSMutableArray *) pl;
 - orderAllStaves: (char *) order;
-- orderCurrStaves: s : (char *) order;
+- orderCurrStaves: (System *) sys : (char *) order;
 
 @end

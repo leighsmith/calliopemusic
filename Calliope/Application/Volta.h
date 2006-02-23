@@ -14,7 +14,7 @@
 - init;
 - (BOOL) getXY: (float *) x : (float *) y;
 - (void)dealloc;
-- (BOOL) isClosed: l;
+- (BOOL) isClosed: (NSMutableArray *) l;
 - (void)removeObj;
 - (int)keyDownString:(NSString *)cc;
 - (BOOL) move: (float) dx : (float) dy : (NSPoint) p : sys : (int) alt;

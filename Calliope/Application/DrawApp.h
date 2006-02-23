@@ -6,6 +6,7 @@
 #import <AppKit/NSSavePanel.h>
 #import "CallPageLayout.h"
 #import <CalliopePropertyListCoders/OAPropertyListCoders.h>
+#import "DrawDocument.h"
 
 @interface DrawApp : NSApplication
 {
@@ -76,9 +77,9 @@ extern int partlistflag;
 - (NSSavePanel *)mySavePanel;
 - launchIt: p;
 - orderCastInspector: sender;
-- getPartlist;
-- getChanlist;
-- getStylelist;
+- (NSMutableArray *) getPartlist;
+- (NSMutableArray *) getChanlist;
+- (NSMutableArray *) getStylelist;
 - thePlayView;
 - thePlayView: v;
 - orderPlayInspector: sender;
@@ -100,7 +101,7 @@ extern int partlistflag;
 - setProgressRatio: (float) f;
 - takeDownProgress: sender;
 
-- openCopyOf: (NSString *) s reDirect: (NSString *) d;
+- (DrawDocument *) openCopyOf: (NSString *) fname reDirect: (NSString *) dir;
 - setCurrentTool:sender;
 - help:sender;
 - info:sender;

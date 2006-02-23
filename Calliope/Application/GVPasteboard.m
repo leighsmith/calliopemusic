@@ -202,7 +202,7 @@ NSArray *TypesDrawExports(void)
  * the glist for the list you provide temporarily).
  */
 
-- writePSToData: (NSMutableData *)stream usingList: ul
+- writePSToData: (NSMutableData *)stream usingList: (NSMutableArray *) ul
 {
     NSMutableArray *sl = slist;
     slist = ul;
@@ -236,7 +236,7 @@ NSArray *TypesDrawExports(void)
  * the glist for the list you provide temporarily).
  */
 
-- writeTIFFToData:(NSMutableData *)stream usingList: ul
+- writeTIFFToData:(NSMutableData *)stream usingList: (NSMutableArray *)ul
 {
     NSMutableArray *sl = slist;
     slist = ul;

@@ -8,7 +8,6 @@
 #import "SyncScrollView.h"
 #import "Page.h"
 #import "System.h"
-#import "PrefBlock.h"
 #import "CallPageLayout.h"
 #import "mux.h"
 #import <AppKit/AppKit.h>
@@ -947,7 +946,7 @@ extern int needUpgrade;
  * then a SavePanel is put up to ask for the file name.
  */
 
-- save:sender
+- (id) save:sender
 {
   id savepanel;
   if (!haveSavedDocument)
