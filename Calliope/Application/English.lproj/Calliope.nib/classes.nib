@@ -9,32 +9,18 @@
         {CLASS = Clef; LANGUAGE = ObjC; SUPERCLASS = StaffObj; }, 
         {
             ACTIONS = {
-                delBogusSystems = id; 
                 help = id; 
                 info = id; 
-                new = id; 
                 open = id; 
-                openCopy = id; 
-                openMux = id; 
-                orderAppDefPanel = id; 
                 orderCastInspector = id; 
-                orderFontPanel = id; 
-                orderLog = id; 
-                orderNewPanel = id; 
                 orderPlayInspector = id; 
                 orderPreferencePanel = id; 
                 orderProgressPanel = id; 
-                orderRunInspector = id; 
-                orderSysInspector = id; 
                 orderTabTuner = id; 
-                orderToneTools = id; 
                 orderVoiceInspector = id; 
-                pressCharacter = id; 
                 print = id; 
                 setCurrentTool = id; 
-                setToolByMenu = id; 
                 takeDownProgress = id; 
-                terminate = id; 
             }; 
             CLASS = DrawApp; 
             LANGUAGE = ObjC; 
@@ -51,7 +37,6 @@
                 insplist = id; 
                 laybarInspector = id; 
                 laybarform = id; 
-                newWindowInCreation = id; 
                 newpanel = id; 
                 perfInspector = id; 
                 preferences = id; 
@@ -66,7 +51,7 @@
                 version = id; 
                 voiceInspector = id; 
             }; 
-            SUPERCLASS = NSApplication; 
+            SUPERCLASS = NSObject; 
         }, 
         {CLASS = DrawDocument; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
