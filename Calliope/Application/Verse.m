@@ -211,7 +211,7 @@ static void sigwidthpix(unsigned char *s, NSFont *f, float *sw, float *w)
 //  if (cs == NX_ASCIISET)
   if ([cc canBeConvertedToEncoding:NSASCIIStringEncoding])
   {
-/* fprintf(stderr, "cc = %x\n", cc); */
+/* NSLog(@"cc = %x\n", cc); */
       if (cst == 0x80) cst = TIECHAR;
     if (data == NULL) sl = -1; else sl = strlen(data);
     if (cst == 32 && sl <= 0)
@@ -542,7 +542,7 @@ struct oldflags		/* for old versions */
   char b1, b2, b3;
   int v = [aDecoder versionForClassName:@"Verse"];
   [super initWithCoder:aDecoder];
-  /* fprintf(stderr, "reading Verse v%d\n", v); */
+  /* NSLog(@"reading Verse v%d\n", v); */
   if (v == 0)
   {
     [aDecoder decodeValuesOfObjCTypes:"sssccff", &ff, &len, &flen, &offset, &align, &fs, &pixlen];

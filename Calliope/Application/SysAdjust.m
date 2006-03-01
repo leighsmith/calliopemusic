@@ -153,7 +153,7 @@ static float widthSigsIx(int b, int k, NSMutableArray *nl)
     else p = [nl objectAtIndex:i];
     if (ISASIGBLOCK(p)) w += p->bounds.size.width + MINPAD;
   }
-// fprintf(stderr, "sigs %d-%d width=%f\n", b, k, w);
+// NSLog(@"sigs %d-%d width=%f\n", b, k, w);
   return w;
 }
 
@@ -163,7 +163,7 @@ static void setSigsIx(int b, int k, NSMutableArray *nl, float x)
   int i;
   StaffObj *p;
   int theCount = [nl count];
-// fprintf(stderr, "sigs %d-%d set back from %f\n", b, k, x);
+// NSLog(@"sigs %d-%d set back from %f\n", b, k, x);
   for (i = k; i >= b; i--)
   {
       if (i > theCount -1) p = nil;
@@ -591,15 +591,15 @@ static void insertEvent(StaffObj *p, NSMutableArray *el)
       }
     }
 #if 0
-fprintf(stderr, "s%d:", i);
+NSLog(@"s%d:", i);
 for (j = 0; j < k; j++)
 {
   p = [nl objectAtIndex:j];
-  if (TYPEOF(p) == BARLINE) fprintf(stderr, " |");
-  else if (ISATIMEDOBJ(p)) fprintf(stderr, "  (%d,%3.0f)", p->voice, p->stamp);
-  else fprintf(stderr, " @");
+  if (TYPEOF(p) == BARLINE) NSLog(@" |");
+  else if (ISATIMEDOBJ(p)) NSLog(@"  (%d,%3.0f)", p->voice, p->stamp);
+  else NSLog(@" @");
 }
-fprintf(stderr, "\n");
+NSLog(@"\n");
 #endif
   }
   return self;
@@ -741,7 +741,7 @@ static void adjust(NSMutableArray *staves, int n, float lmx)
       }
     } while (todo);
 /*
-fprintf(stderr, "Frontier (mintick = %f):\n", mintick);
+NSLog(@"Frontier (mintick = %f):\n", mintick);
 for (i = 0; i < ns; i++) fprintf(stderr,"s%d (%f) mk%d:  sig(%d,%d) gra(%d,%d) sim(%d,%d) bar(%d)\n", i, curstamp[i], fmark[i], sigstart[i], sigend[i], grastart[i], graend[i], simstart[i], simend[i], barstart[i]);
 */
     fin = 0;
@@ -775,7 +775,7 @@ for (i = 0; i < ns; i++) fprintf(stderr,"s%d (%f) mk%d:  sig(%d,%d) gra(%d,%d) s
       }
       /* set each bar */
       dx = 0.0;
-// fprintf(stderr, " (| %3.0f %4.0f)", mintick, mbx);
+// NSLog(@" (| %3.0f %4.0f)", mintick, mbx);
       for (i = 0; i < ns; i++) if (onbar[i])
       {
           if (barstart[i] >= nk[i]) p = nil;
@@ -901,9 +901,9 @@ static float stretch(BOOL adj, NSMutableArray *staves, int n, float lmx, float r
     if (i >= [nl count]) p = nil;
       else {
           p = [nl objectAtIndex:i];
-// if (p == nil) fprintf(stderr, "staff %d: note at %d is nil\n", k, i);
+// if (p == nil) NSLog(@"staff %d: note at %d is nil\n", k, i);
           t = p->x;
-// fprintf(stderr, "staff %d: note at %d has x = %f\n", k, i, t);
+// NSLog(@"staff %d: note at %d has x = %f\n", k, i, t);
           if (sigmargin <= t && t <= zero) zero = t;
       }
     j = nlk[k] = [nl count];
@@ -959,7 +959,7 @@ static float stretch(BOOL adj, NSMutableArray *staves, int n, float lmx, float r
   /* now find left margin */
   if (lx == 0) t = 1.0;
   else t = (rmx - dx - zero) / (lx - zero);
-// fprintf(stderr, "sigmarg=%f, zero=%f, maxt=%f, lx=%f, dx=%f, rmx=%f, t=%f\n", sigmargin, zero, maxt, lx, dx, rmx, t);
+// NSLog(@"sigmarg=%f, zero=%f, maxt=%f, lx=%f, dx=%f, rmx=%f, t=%f\n", sigmargin, zero, maxt, lx, dx, rmx, t);
   if (adj)
   {
     a = rmx - dx - lx;
@@ -1176,7 +1176,7 @@ static float separate(NSMutableArray *staves, int n, float lmx)
     else
     {
       /* find the beatline */
-// for (i = 0; i < ns; i++) if (sigstart[i] >= 0) fprintf(stderr, "staff %d: sig=%d, sim=%d, stamp=%f, mintick=%f\n", i, sigstart[i], simstart[i], curstamp[i], mintick);
+// for (i = 0; i < ns; i++) if (sigstart[i] >= 0) NSLog(@"staff %d: sig=%d, sim=%d, stamp=%f, mintick=%f\n", i, sigstart[i], simstart[i], curstamp[i], mintick);
       for (i = 0; i < ns; i++) if (fmark[i] != 3 && simstart[i] >= 0 && TOLFLOATEQ(curstamp[i], mintick, TICKTOL))
       {
         onbeat[i] = 1;
@@ -1424,13 +1424,13 @@ static void tidyends(NSMutableArray *staves, int n, int ul, float lmx, int ur, f
   widthfactor = charFGW(musicFont[1][0], SF_qnote);
   [self myHeight];  /* simply to reset if necessary */
   [self doStamp: n : lmx];
-// fprintf(stderr, "[sys%d userAdjust: %d]:\n", [self myIndex], s);
+// NSLog(@"[sys%d userAdjust: %d]:\n", [self myIndex], s);
   if (s) err = [self optAdjust];
   else
   {
-// fprintf(stderr, "adjust:\n");
+// NSLog(@"adjust:\n");
     adjust(staves, n, lmx);
-// fprintf(stderr, "separate:\n");
+// NSLog(@"separate:\n");
     separate(staves, n, lmx);
     if (!flags.disjoint) tidyends(staves, n, 1, lmx, 0, lmx + width);
   }
@@ -1455,10 +1455,10 @@ static void tidyends(NSMutableArray *staves, int n, int ul, float lmx, int ur, f
   widthfactor = charFGW(musicFont[1][0], SF_qnote);
   [self myHeight];  /* simply to reset if necessary */
   [self doStamp: n : lmx];
-  fprintf(stderr, "adjust:\n");
+  NSLog(@"adjust:\n");
   adjust(staves, n, lmx);
   [self recalcHangers];
-  if (err > 1) fprintf(stderr, "System is crowded by amount %f\n", err);
+  if (err > 1) NSLog(@"System is crowded by amount %f\n", err);
   return self;
 }
 
@@ -1471,10 +1471,10 @@ static void tidyends(NSMutableArray *staves, int n, int ul, float lmx, int ur, f
   widthfactor = charFGW(musicFont[1][0], SF_qnote);
   [self myHeight];  /* simply to reset if necessary */
   [self doStamp: n : lmx];
-  fprintf(stderr, "separate:\n");
+  NSLog(@"separate:\n");
   separate(staves, n, lmx);
   [self recalcHangers];
-  if (err > 1) fprintf(stderr, "System is crowded by amount %f\n", err);
+  if (err > 1) NSLog(@"System is crowded by amount %f\n", err);
   return self;
 }
 

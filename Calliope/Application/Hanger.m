@@ -38,7 +38,7 @@ extern void msg();
 
 - newFrom
 {
-  fprintf(stderr, "Calliope Warning: newFrom reached Hanger\n");
+  NSLog(@"Calliope Warning: newFrom reached Hanger\n");
   return self;
 }
 
@@ -345,7 +345,7 @@ extern void msg();
   float x, y;
   for (i = j; i <= k; i++)
   {
-    [(Graphic *)self getHandle: i : &x : &y];
+    [(Graphic *)self coordsForHandle: i  asX: &x  andY: &y];
     if (TOLFLOATEQ(p.x, x, HANDSIZE) && TOLFLOATEQ(p.y, y, HANDSIZE))
     {
       gFlags.selend = i;
@@ -362,7 +362,7 @@ extern void msg();
   float x, y;
   for (i = j; i <= k; i++)
   {
-      [(Graphic *)self getHandle: i : &x : &y];
+      [(Graphic *)self coordsForHandle: i  asX: &x  andY: &y];
     if (TOLFLOATEQ(p.x, x, HANDSIZE) && TOLFLOATEQ(p.y, y, HANDSIZE))
     {
       return hypot(p.x - x, p.y - y);

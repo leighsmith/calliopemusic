@@ -278,7 +278,7 @@ char corner[2][4] =
 };
 
 
-- getHandle: (int) i : (float *) x : (float *) y
+- coordsForHandle: (int) i  asX: (float *) x  andY: (float *) y
 {
   Graphic *p, *q;
   switch(corner[i][flags.position])
@@ -314,9 +314,9 @@ char corner[2][4] =
 {
   float x, y;
   NSRect b;
-  [self getHandle: 0 : &x : &y];
+  [self coordsForHandle: 0  asX: &x  andY: &y];
   *r = NSMakeRect(x - HANDSIZE, y - HANDSIZE, 2 * HANDSIZE, 2 * HANDSIZE);
-  [self getHandle: 1 : &x : &y];
+  [self coordsForHandle: 1  asX: &x  andY: &y];
   b = NSMakeRect(x - HANDSIZE, y - HANDSIZE, 2 * HANDSIZE, 2 * HANDSIZE);
   *r  = NSUnionRect(b , *r);
   return YES;
@@ -425,9 +425,9 @@ float fontsize[3] = { 12, 8, 6};
   q = [client lastObject];
   if (gFlags.selected && !gFlags.seldrag)
   {
-    [self getHandle: 0 : &px : &py];
+    [self coordsForHandle: 0  asX: &px  andY: &py];
     chandle(px, py, m);
-    [self getHandle: 1 : &px : &py];
+    [self coordsForHandle: 1  asX: &px  andY: &py];
     chandle(px, py, m);
   }
   px = p->bounds.origin.x + x1;

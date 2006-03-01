@@ -83,13 +83,13 @@ static void putPos(Staff *sp, int pn, int u)
 {
   NoteHead *h;
   int i, k = [headlist count];
-  fprintf(stderr, "( ");
+  NSLog(@"( ");
   for (i = 0; i < k; i++)
   {
     h = [headlist objectAtIndex:i];
-    fprintf(stderr, "(%d-%f) ", h->pos, h->myY);
+    NSLog(@"(%d-%f) ", h->pos, h->myY);
   }
-  fprintf(stderr, ")\n");
+  NSLog(@")\n");
   return self;
 }
 
@@ -419,7 +419,7 @@ void lineupAccs(NoteHead *ah[], int an, NoteHead *nh[], GNote *note[], int hn)
       if (w > ncw) ncw = w;
       h->accidoff = (curx - w) - p->x;
 /*
-fprintf(stderr, "curx %f: pos[%d] set to: %f\n", curx, h->pos, h->accidoff);
+NSLog(@"curx %f: pos[%d] set to: %f\n", curx, h->pos, h->accidoff);
 */
       lpos = h->pos;
       lsp = [h myStaff];

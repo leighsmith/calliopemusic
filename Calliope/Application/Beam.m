@@ -352,7 +352,7 @@ static int signof(float f)
       }
     }
   }
-// fprintf(stderr, "uperr = %f, dnerr = %f\n", uer, der);
+// NSLog(@"uperr = %f, dnerr = %f\n", uer, der);
   k = n;
   while (k--)
   {
@@ -383,7 +383,7 @@ static int signof(float f)
     r = [client objectAtIndex:k];
     x = r->x + [r stemXoff: 0];
     y = [r myStemBase] + minStemLen(p, r);
-// fprintf(stderr, "note %d minstem %f\n", k, minStemLen(p, r));
+// NSLog(@"note %d minstem %f\n", k, minStemLen(p, r));
     if (r->time.stemup)
     {
       if (y < y1)
@@ -532,7 +532,7 @@ static int signof(float f)
       }
       break;
   }
-//  fprintf(stderr, "Case %d: y1=%f, y2=%f, m=%f\n", f, y1, y2, m);
+//  NSLog(@"Case %d: y1=%f, y2=%f, m=%f\n", f, y1, y2, m);
   [self setStems: m : x1 : y1 : p : kn];
   return self;
 }
@@ -744,7 +744,7 @@ static int signof(float f)
 }
 
 
-- (BOOL) getHandle: (int) h : (float *) x : (float *) y
+- (BOOL) coordsForHandle: (int) h  asX: (float *) x  andY: (float *) y
 {
   TimedObj *p;
   if (h == 0)
@@ -767,7 +767,7 @@ static int signof(float f)
   float x, y;
   NSRect b;
   k = 0;
-  for (h = 0; h <= 1; h++) if ([self getHandle: h : &x : &y])
+  for (h = 0; h <= 1; h++) if ([self coordsForHandle: h  asX: &x  andY: &y])
   {
     if (k == 0) *r = NSMakeRect(x - HANDSIZE, y - HANDSIZE, 2 * HANDSIZE, 2 * HANDSIZE);
     else
@@ -1300,8 +1300,8 @@ static void drawTremolo(int n, TimedObj *a, TimedObj *b, float ytrem, int sz, in
   sz = gFlags.size;
   if (gFlags.selected && !gFlags.seldrag)
   {
-    if ([self getHandle: 0 : &x : &y]) chandle(x, y, m);
-    if ([self getHandle: 1 : &x : &y]) chandle(x, y, m);
+    if ([self coordsForHandle: 0  asX: &x  andY: &y]) chandle(x, y, m);
+    if ([self coordsForHandle: 1  asX: &x  andY: &y]) chandle(x, y, m);
   }
   if (!client) printf("will die: client nil (in Beam.m)\n");
   p = [client objectAtIndex:0];

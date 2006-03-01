@@ -173,7 +173,7 @@ static float kern0(GNote *p, GNote *q)
 
 static float kern1(GNote *p, GNote *q)
 {
-// fprintf(stderr, "used kern1 (%d, %d)\n", p->time.body, q->time.body);
+// NSLog(@"used kern1 (%d, %d)\n", p->time.body, q->time.body);
   return 0.7 * halfwidth[p->gFlags.size][0][p->time.body]
     + 0.7 * halfwidth[q->gFlags.size][0][q->time.body];
 }
@@ -186,7 +186,7 @@ static float kern2(GNote *p, GNote *q)
   float pw = halfwidth[p->gFlags.size][0][p->time.body];
   float qw = halfwidth[q->gFlags.size][0][q->time.body];
   float e = pw - qw;
-// fprintf(stderr, "used kern2 (%d, %d)\n", p->time.body, q->time.body);
+// NSLog(@"used kern2 (%d, %d)\n", p->time.body, q->time.body);
   return e + 0.7 * qw;
 }
 
@@ -240,7 +240,7 @@ static int chordClearance(GNote *p, GNote *q)
     else if (qh + 1 == pl) r = -1;
     if (r == 2 && !(clearPair(q, p))) r = 0;
   }
-// fprintf(stderr, "chordClearance(%d [%d-%d], %d [%d-%d]) = %d\n", p->time.body, pl, ph, q->time.body, ql, qh, r);
+// NSLog(@"chordClearance(%d [%d-%d], %d [%d-%d]) = %d\n", p->time.body, pl, ph, q->time.body, ql, qh, r);
   return r;
 }
 
@@ -366,23 +366,23 @@ static int kernPairCode(GNote *a, GNote *b, int dp)
   {
     case 0:  /* neither stemmed */
       c = nstmcode[ad][(dp == 1)];
-// fprintf(stderr, "kernPairCode(b%d, b%d) nst[%d][%d] = %d\n", a->time.body, b->time.body, ad, (dp == 1), c);
+// NSLog(@"kernPairCode(b%d, b%d) nst[%d][%d] = %d\n", a->time.body, b->time.body, ad, (dp == 1), c);
       break;
     case 1:  /* only b stemmed */
       bs = b->time.stemup;
       c = bstmcode[(ad << 1) | bd][(bs << 2) | dp];
-// fprintf(stderr, "kernPairCode(b%d, b%d) bst[%d][%d] = %d\n", a->time.body, b->time.body, (ad << 1) | bd, (bs << 2) | dp, c);
+// NSLog(@"kernPairCode(b%d, b%d) bst[%d][%d] = %d\n", a->time.body, b->time.body, (ad << 1) | bd, (bs << 2) | dp, c);
       break;
     case 2:  /* only a stemmed */
       as = a->time.stemup;
       c = astmcode[(ad << 1) | bd][(as << 2) | dp];
-// fprintf(stderr, "kernPairCode(b%d, b%d) ast[%d][%d] = %d\n", a->time.body, b->time.body, (ad << 1) | bd, (as << 2) | dp, c);
+// NSLog(@"kernPairCode(b%d, b%d) ast[%d][%d] = %d\n", a->time.body, b->time.body, (ad << 1) | bd, (as << 2) | dp, c);
       break;
     case 3:  /* both stemmed */
       as = a->time.stemup;
       bs = b->time.stemup;
       c = paircode[(ad << 1) | bd][(as << 3) | (bs << 2) | dp];
-// fprintf(stderr, "kernPairCode(b%d, b%d) pc[%d][%d] = %d\n", a->time.body, b->time.body, (ad << 1) | bd, (as << 3) | (bs << 2) | dp, c);
+// NSLog(@"kernPairCode(b%d, b%d) pc[%d][%d] = %d\n", a->time.body, b->time.body, (ad << 1) | bd, (as << 3) | (bs << 2) | dp, c);
   }
   return c;
 }

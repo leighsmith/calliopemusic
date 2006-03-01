@@ -1075,9 +1075,9 @@ char ch[8] = ".@#!.FSN";
   {
     sys = [syslist objectAtIndex:k];
     ns = [sys->staves count];
-    if (ns != sys->flags.nstaves) fprintf(stderr, "System %d: count=%d, nstaves=%d\n", k, ns, sys->flags.nstaves);
+    if (ns != sys->flags.nstaves) NSLog(@"System %d: count=%d, nstaves=%d\n", k, ns, sys->flags.nstaves);
   }
-  fprintf(stderr, "checking finished\n");
+  NSLog(@"checking finished\n");
 #endif
 
 - testPoint1: sender
@@ -1124,7 +1124,7 @@ extern char *typename[NUMTYPES];
   while (k < nsys)
   {
     sys = [syslist objectAtIndex:k];
-    fprintf(stderr, "System %d [page %d]:\n", k + 1, sys->pagenum);
+    NSLog(@"System %d [page %d]:\n", k + 1, sys->pagenum);
     ++k;
     //[NXApp log: buf];
     sl = sys->staves;
@@ -1132,14 +1132,14 @@ extern char *typename[NUMTYPES];
     for (i = 0; i < ns; i++)
     {
       sp = [sl objectAtIndex:i];
-      fprintf(stderr, "  Staff %d [part=%s, y=%f]:\n", i+1, [sp->part cString], sp->y);
+      NSLog(@"  Staff %d [part=%s, y=%f]:\n", i+1, [sp->part cString], sp->y);
       //[NXApp log: buf];
       nl = sp->notes;
       nn = [nl count];
       for (j = 0;j < nn; j++)
       {
         p = [nl objectAtIndex:j];
-        fprintf(stderr, "    %d [%s]: %s x=%f, y=%f, stamp=%f, duration=%f\n", j, [p->part cString], typename[TYPEOF(p)], p->x, p->y, p->stamp, p->duration);
+        NSLog(@"    %d [%s]: %s x=%f, y=%f, stamp=%f, duration=%f\n", j, [p->part cString], typename[TYPEOF(p)], p->x, p->y, p->stamp, p->duration);
         //[NXApp log: buf];
       }
     }
@@ -1199,12 +1199,12 @@ extern char *typename[NUMTYPES];
       p = [nl objectAtIndex:nk];
       if (p->x != p->x)
       {
-        fprintf(stderr, "deleting NaN-x object of type %d at y = %f, %dth obj on sys %d staff %d (org1)\n", TYPEOF(p), p->y, nk, s + 1, i + 1);
+        NSLog(@"deleting NaN-x object of type %d at y = %f, %dth obj on sys %d staff %d (org1)\n", TYPEOF(p), p->y, nk, s + 1, i + 1);
 	[p removeObj];
       }
       else if (p->x < lox || p->x > hix)
       {
-        fprintf(stderr, "deleting off screen object of type %d at x = %f, y = %f, %dth obj on sys %d staff %d (org1)\n", TYPEOF(p), p->x, p->y, nk, s + 1, i + 1);
+        NSLog(@"deleting off screen object of type %d at x = %f, y = %f, %dth obj on sys %d staff %d (org1)\n", TYPEOF(p), p->x, p->y, nk, s + 1, i + 1);
 	[p removeObj];
       }
     }
@@ -1253,7 +1253,7 @@ extern char *typename[NUMTYPES];
     if (b)
     {
       [syslist removeObjectAtIndex:k];
-      fprintf(stderr, "system (org 0) %d removed\n", k);
+      NSLog(@"system (org 0) %d removed\n", k);
     }
     else
     {
@@ -1536,7 +1536,7 @@ extern char *typename[NUMTYPES];
       if (sp->y != sp->y)  /* check for NaN */
       {
         sp->y = 500;
-	fprintf(stderr, "  staff %d has NaN y\n", sn+1);
+	NSLog(@"  staff %d has NaN y\n", sn+1);
 	[sp recalc];
       }
     }

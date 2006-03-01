@@ -410,7 +410,7 @@ static float braoffy[2][2] =
 }
 
 
-- getHandle: (int) h : (float *) x : (float *) y
+- coordsForHandle: (int) h  asX: (float *) x  andY: (float *) y
 {
   StaffObj *p;
   if (h == 0)
@@ -433,9 +433,9 @@ static float braoffy[2][2] =
 {
   float x, y;
   NSRect b;
-  [self getHandle: 0 : &x : &y];
+  [self coordsForHandle: 0  asX: &x  andY: &y];
   *r = NSMakeRect(x - HANDSIZE, y - HANDSIZE, 2 * HANDSIZE, 2 * HANDSIZE);
-  [self getHandle: 1 : &x : &y];
+  [self coordsForHandle: 1  asX: &x  andY: &y];
   b = NSMakeRect(x - HANDSIZE, y - HANDSIZE, 2 * HANDSIZE, 2 * HANDSIZE);
   *r  = NSUnionRect(b , *r);
   return YES;
@@ -552,10 +552,10 @@ static float centreTime(NSMutableArray *nl)
 - drawMode: (int) m
 {
   StaffObj *p, *q;
-    GraphicView *gv;
+    GraphicView *gv = nil;
   int sz;
-  float dx, dy, v, th, w, x, y, ty=0.0, charh, px, py, qx, qy; //sb: initted ty
-  unsigned char tuple[16];
+  float dx, dy, v, th, w, x, y, ty = 0.0, charh, px, py, qx, qy; //sb: initted ty
+  char tuple[16];
   char brack;
   /* assume client sorted by the time we arrive here */
   sz = gFlags.size;

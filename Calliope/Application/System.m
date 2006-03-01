@@ -180,7 +180,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
     y = y + s->vhighb;
   }
   height = y - yi;
-// fprintf(stderr, "Height of sys %d = %f\n", [self myIndex], height);
+// NSLog(@"Height of sys %d = %f\n", [self myIndex], height);
   return height;
 }
 

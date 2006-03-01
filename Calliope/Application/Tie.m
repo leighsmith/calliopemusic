@@ -134,7 +134,7 @@ static void orderXY(float *x, float *y)
 }
 
 
-- getHandle: (int) h : (float *) x : (float *) y
+- coordsForHandle: (int) h  asX: (float *) x  andY: (float *) y
 {
   Tie *t;
   StaffObj *p = client;
@@ -166,10 +166,10 @@ static void orderXY(float *x, float *y)
 {
   float x, y;
   NSRect b;
-  [self getHandle: 0 : &x : &y];
+  [self coordsForHandle: 0  asX: &x  andY: &y];
   *r = NSMakeRect(x - HANDSIZE, y - HANDSIZE, 2 * HANDSIZE, 2 * HANDSIZE);
   if (partner == nil) return YES;
-  [self getHandle: 1 : &x : &y];
+  [self coordsForHandle: 1  asX: &x  andY: &y];
   b = NSMakeRect(x - HANDSIZE, y - HANDSIZE, 2 * HANDSIZE, 2 * HANDSIZE);
   *r  = NSUnionRect(b , *r);
   return YES;
@@ -295,7 +295,7 @@ extern void ctie(float cx, float cy, float d, float h, float th, float a, float 
   y[0] = [p headY: headnum] + offset.y;
 if (t == nil)
 {
-  fprintf(stderr, "Unpartnered connector of type %d at %f, %f\n", style, x[0], y[0]);
+  NSLog(@"Unpartnered connector of type %d at %f, %f\n", style, x[0], y[0]);
   cline(x[0] - 32, y[0] - 32, x[0] + 32, y[0] + 32, 0, m);
   cline(x[0] - 32, y[0] + 32, x[0] + 32, y[0] - 32, 0, m);
   return self;
@@ -347,7 +347,7 @@ if (t == nil)
       cx = x[0] + 0.5 * dx;
       cy = y[0] + 0.5 * dy;
       if (b) h = getdepth(dx); else h = depth;
-//fprintf(stderr, "cx=%f, cy=%f, d=%f, h=%f, th=%f, a=%f, cth=%f, fl=%f\n", cx, cy, d, h, th, a, cth, flatness);
+//NSLog(@"cx=%f, cy=%f, d=%f, h=%f, th=%f, a=%f, cth=%f, fl=%f\n", cx, cy, d, h, th, a, cth, flatness);
       ctie(cx, cy, d, h, th, a, flatness, flags.dashed, m);
       if (flags.ed)
       {

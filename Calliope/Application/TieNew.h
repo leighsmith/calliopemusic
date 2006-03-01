@@ -39,7 +39,7 @@
 - (BOOL) needSplit: (float) s0 : (float) s1;
 - (void)dealloc;
 - (int) whichEnd: (StaffObj *) p;
-- getHandle: (int) h : (float *) x : (float *) y;
+- coordsForHandle: (int) h  asX: (float *) x  andY: (float *) y;
 - proto: (GraphicView *) v : (StaffObj *) p : (StaffObj *) q : (int) i;
 - (BOOL) getHandleBBox: (NSRect *) r;
 - setDefault: (int) t;

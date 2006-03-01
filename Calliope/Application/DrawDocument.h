@@ -29,7 +29,7 @@
 
 #define Notify(title, msg) NSRunAlertPanel(title, msg, @"OK", nil, nil)
 
-@interface DrawDocument : NSObject
+@interface DrawDocument : NSDocument
 {
 @public
     id view;			/* the document's GraphicView */

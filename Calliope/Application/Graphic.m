@@ -140,7 +140,7 @@ id CrossCursor = nil;	/* global since subclassers may need it */
 + allocInit: (int) t
 {
   id obj = [self classFor: t];
-  if (obj == nil) fprintf(stderr, "missing case in [Graphic allocInit(%d)]", t);
+  if (obj == nil) NSLog(@"missing case in [Graphic allocInit(%d)]", t);
   else obj = [[obj alloc] init];
   return obj;
 }
@@ -351,7 +351,7 @@ id CrossCursor = nil;	/* global since subclassers may need it */
 
 - printMe
 {
-  fprintf(stderr, "   type=%d, subtype=%d\n", gFlags.type, gFlags.subtype);
+  NSLog(@"   type=%d, subtype=%d\n", gFlags.type, gFlags.subtype);
   return self;
 }
 

@@ -198,7 +198,7 @@ float qxoff[7] = {2.0, 0.0, 3.0, 0.0, 2.0, 2.0, 2.0};
 }
 
 
-- getHandle: (int) h : (float *) x : (float *) y
+- coordsForHandle: (int) h  asX: (float *) x  andY: (float *) y
 {
   StaffObj *p;
   if (h == 0)
@@ -221,9 +221,9 @@ float qxoff[7] = {2.0, 0.0, 3.0, 0.0, 2.0, 2.0, 2.0};
 {
   float x, y;
   NSRect b;
-  [self getHandle: 0 : &x : &y];
+  [self coordsForHandle: 0  asX: &x  andY: &y];
   *r = NSMakeRect(x - HANDSIZE, y - HANDSIZE, 2 * HANDSIZE, 2 * HANDSIZE);
-  [self getHandle: 1 : &x : &y];
+  [self coordsForHandle: 1  asX: &x  andY: &y];
   b = NSMakeRect(x - HANDSIZE, y - HANDSIZE, 2 * HANDSIZE, 2 * HANDSIZE);
   *r  = NSUnionRect(b , *r);
   return YES;
@@ -238,7 +238,7 @@ float qxoff[7] = {2.0, 0.0, 3.0, 0.0, 2.0, 2.0, 2.0};
   float x, y;
   for (i = 0; i <= 1; i++)
   {
-    [self getHandle: i : &x : &y];
+    [self coordsForHandle: i  asX: &x  andY: &y];
     if (TOLFLOATEQ(p.x, x, HANDSIZE) && TOLFLOATEQ(p.y, y, HANDSIZE))
     {
       gFlags.selend = i;
@@ -254,7 +254,7 @@ float qxoff[7] = {2.0, 0.0, 3.0, 0.0, 2.0, 2.0, 2.0};
   float x, y;
   for (i = 0; i <= 1; i++)
   {
-    [self getHandle: i : &x : &y];
+    [self coordsForHandle: i  asX: &x  andY: &y];
     if (TOLFLOATEQ(p.x, x, HANDSIZE) && TOLFLOATEQ(p.y, y, HANDSIZE))
     {
       return hypot(p.x - x, p.y - y);

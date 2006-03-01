@@ -568,7 +568,7 @@ BOOL isClearForm(NSForm *f, int i)
 {
   int i, ds = 0, up = 0;
   Staff *sp = [sys getstaff: n];
-//fprintf(stderr, "enters loadstaff: %d\n", n);
+//NSLog(@"enters loadstaff: %d\n", n);
   switch([staffnumbutton indexOfSelectedItem])
   {
     case 0:
@@ -828,7 +828,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
   }
   [v saveSysLeftMargin];
   i = [self setSystem: sys];
-//  fprintf(stderr, "1. page number is %d\n", sys->pagenum);
+//  NSLog(@"1. page number is %d\n", sys->pagenum);
   n = [[staffmatrix cells] count];
   for (j = 0; j < n; j++) if ([[staffmatrix cellAtRow:j column:0] isHighlighted])
   {
@@ -836,7 +836,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
   }
   busyFlag = YES;
   [sys recalc];
-//  fprintf(stderr, "2. page number is %d\n", sys->pagenum);
+//  NSLog(@"2. page number is %d\n", sys->pagenum);
   if (i & (2+4+8))
   {
     /* does a paginate, but uses previous saveSysLeftMargin */
@@ -856,7 +856,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
     [v renumSystems];
     [v renumPages];
   }
-//  fprintf(stderr, "3. page number is %d\n", sys->pagenum);
+//  NSLog(@"3. page number is %d\n", sys->pagenum);
   if (i <= 1) [v balancePage: self];
   [self inspSys: sys];  /* do because paginate etc may have updated some sys values */
   busyFlag = NO;

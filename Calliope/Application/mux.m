@@ -29,6 +29,7 @@ extern NSColor * inkShade;
 
 int linein = 0;
 
+// TODO should be hidden in a class & access controlled to it with labels.
 NSFont *fontdata[NUMCALFONTS];  /* known locations for needed fonts */
 NSFont *musicFont[2][3];		/* known locations for [which][size] */
 
@@ -289,7 +290,7 @@ void unionpath()
   NSRect r;
   float llx, lly, urx, ury;
   PSpathbbox(&llx, &lly, &urx, &ury);
-  /* fprintf(stderr, "unionpath BB = %f %f %f %f\n", llx, lly, urx - llx, ury - lly); */
+  /* NSLog(@"unionpath BB = %f %f %f %f\n", llx, lly, urx - llx, ury - lly); */
   PSnewpath();
   /*  --llx; ++urx; --lly; ++ury; */
   r = NSMakeRect(llx, lly, urx - llx, ury - lly);
@@ -360,16 +361,17 @@ void unionCharBB(NSRect *b, float x, float y, int ch, NSFont *f)
 }
 
 
-void unionStringBB(NSRect *b, float x, float y, unsigned char *s, NSFont *f, int j)
+void unionStringBB(NSRect *b, float x, float y, char *s, NSFont *f, int j)
 {
   NSRect r;
 //  NXFontMetrics *fm = [f metrics];
 //  float ps = [f pointSize];
 //  NXCharMetrics *cm;
   NSRect cm;
-  unsigned char ch;
-  if (j == JCENTRE) x -= 0.5 * [f widthOfString:[NSString stringWithCString:s]];
-  else if (j == JRIGHT) x -= [f widthOfString:[NSString stringWithCString:s]];
+  char ch;
+  
+  if (j == JCENTRE) x -= 0.5 * [f widthOfString: [NSString stringWithCString: s]];
+  else if (j == JRIGHT) x -= [f widthOfString: [NSString stringWithCString: s]];
   while (ch = *s++)
   {
     if (ch == ' ')
@@ -425,7 +427,7 @@ void drawCharacterInFont(float x, float y, int ch, NSFont *f, int mode)
     [f set];
     PSmoveto(x, y);
     [modegray[mode] set];
-//fprintf(stderr, "show('%s', %f, %f)\n", s, x, y);
+//NSLog(@"show('%s', %f, %f)\n", s, x, y);
     PSshow(s);
   }
   else unionCharBB(&bb, x, y, ch, f);
@@ -487,10 +489,10 @@ void CAcString(float x, float y, char *s, NSFont *f, int mode)
     PSmoveto(x, y);
     [modegray[mode] set];
     [f set];
-// fprintf(stderr, "show(%s, %f, %f)\n", s, x, y);
+// NSLog(@"show(%s, %f, %f)\n", s, x, y);
     cShow(s, f, mode);
   }
-  else unionStringBB(&bb, x, y, (unsigned char *) s, f, 0);
+  else unionStringBB(&bb, x, y, s, f, 0);
 }
 
 
@@ -540,7 +542,7 @@ void cstrokeline(float width, int mode)
   {
     PSsetlinewidth(width);
     PSstrokepath();
-// fprintf(stderr, "strokeline(%f,%d)\n", width, mode);
+// NSLog(@"strokeline(%f,%d)\n", width, mode);
     unionpath();
   }
   linein = 0;
@@ -637,7 +639,7 @@ void cslant(float x1, float y1, float x2, float y2, float dy, int mode)
     PSslant(x2 - x1, dy, y2 - y1, x1, y1);
     PSsetlinewidth(0);
     PSstrokepath();
-// fprintf(stderr, "cslant(%f,...,%d)\n", x1, mode);
+// NSLog(@"cslant(%f,...,%d)\n", x1, mode);
     unionpath();
   }
 }
@@ -660,7 +662,7 @@ void coutslant(float x1, float y1, float x2, float y2, float dy, float lw, int m
     PSslant(x2 - x1, dy, y2 - y1, x1, y1);
     PSsetlinewidth(lw);
     PSstrokepath();
-// fprintf(stderr, "coutslant(%f,...,%d)\n", x1, mode);
+// NSLog(@"coutslant(%f,...,%d)\n", x1, mode);
     unionpath();
   }
 }
@@ -771,7 +773,7 @@ void cbrace(float x0, float y0, float xn, float yn, float th, int mode)
   else
   {
     PSflattenpath();
-// fprintf(stderr, "cbrace(%f,...,%d)\n", x0, mode);
+// NSLog(@"cbrace(%f,...,%d)\n", x0, mode);
     unionpath();
   }
 }
@@ -793,7 +795,7 @@ void ccurve(float x0, float y0, float x3, float y3, float x1, float y1, float x2
     else
     {
       PSflattenpath();
-// fprintf(stderr, "ccurve(dash)(%f,...,%d)\n", x0, mode);
+// NSLog(@"ccurve(dash)(%f,...,%d)\n", x0, mode);
       unionpath();
     }
     return;
@@ -808,7 +810,7 @@ void ccurve(float x0, float y0, float x3, float y3, float x1, float y1, float x2
   else
   {
     PSflattenpath();
-// fprintf(stderr, "ccurve(nodash)(%f,...,%d)\n", x0, mode);
+// NSLog(@"ccurve(nodash)(%f,...,%d)\n", x0, mode);
     unionpath();
   }
 }
@@ -854,7 +856,7 @@ void cflat(float x0, float y0, float x1, float y1, float c1x, float c1y, float c
     else
     {
       PSflattenpath();
-// fprintf(stderr, "cflat(dash)(%f,...,%d)\n", x0, mode);
+// NSLog(@"cflat(dash)(%f,...,%d)\n", x0, mode);
       unionpath();
     }
     return;
@@ -888,7 +890,7 @@ void cflat(float x0, float y0, float x1, float y1, float c1x, float c1y, float c
   else
   {
     PSflattenpath();
-// fprintf(stderr, "cflat(nodash)(%f,...,%d)\n", x0, mode);
+// NSLog(@"cflat(nodash)(%f,...,%d)\n", x0, mode);
     unionpath();
   }
 }

@@ -193,7 +193,7 @@ float textoff[2], baselines[2][MAXTEXT];
     texta[i][j] = textd[i][j] = 0.0;
     textau[i][j] = textdu[i][j] = NO;
   }
-// fprintf(stderr, "measureStaff: %d\n", [self myIndex]);
+// NSLog(@"measureStaff: %d\n", [self myIndex]);
   for (i = 0; i < k; i++)
   {
     p = [notes objectAtIndex:i];
@@ -206,7 +206,7 @@ float textoff[2], baselines[2][MAXTEXT];
         if (py > maxy)
 	{
 	  maxy = py;
-//	  fprintf(stderr, "  obj %d increases maxy to %f\n",  i, maxy);
+//	  NSLog(@"  obj %d increases maxy to %f\n",  i, maxy);
 	}
       }
       if ([p validAboveBelow: 1])
@@ -215,7 +215,7 @@ float textoff[2], baselines[2][MAXTEXT];
         if (py < miny)
 	{
 	  miny = py;
-//	  fprintf(stderr, "  obj %d reduces miny to %f\n", i, miny);
+//	  NSLog(@"  obj %d reduces miny to %f\n", i, miny);
 	}
       }
     }
@@ -1311,7 +1311,7 @@ float textoff[2], baselines[2][MAXTEXT];
 
 /* display bar numbers */
 
-extern void unionStringBB(NSRect *bb, float x, float y, unsigned char *s, NSFont *f, int j);
+extern void unionStringBB(NSRect *bb, float x, float y, char *s, NSFont *f, int j);
 extern void cenclosure(int i, float px, float py, float qx, float qy, float th, int sz, int m);
 
 
@@ -1479,7 +1479,7 @@ extern int needUpgrade;
 {
    if (!part)
    {
-     fprintf(stderr, "Staff: found part = 0\n");
+     NSLog(@"Staff: found part = 0\n");
      return nullPart;
    }
    return part;
@@ -1493,7 +1493,7 @@ extern int needUpgrade;
   float textbl[8];
   int v = [aDecoder versionForClassName:@"Staff"];
   [super initWithCoder:aDecoder];
-/* fprintf(stderr, "reading Staff v%d\n", v); */
+/* NSLog(@"reading Staff v%d\n", v); */
   barbase = 0;
   flags.hasnums = 0;
   if (v == 0)

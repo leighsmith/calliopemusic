@@ -393,7 +393,7 @@ static char usesm[6] = {1, 1, 1, 1, 0, 0}; /* whether to use small size as norma
 {
   float cy, lh;
   int k, dig, pos, ledge = 0;
-  unsigned char *s;
+  char *s;
   NSFont *outf;
   dig = flags.cipher;
   if (flags.typeface == 0)
@@ -474,7 +474,7 @@ static char usesm[6] = {1, 1, 1, 1, 0, 0}; /* whether to use small size as norma
   DrawDocument *doc;
   int b, n, ss, sz, dsz, i, pos, c, dh, df;
   float cy;
-  unsigned char *s;
+  char *s;
   sz = gFlags.size;
   sp = mystaff;
   if (TYPEOF(sp) != STAFF)

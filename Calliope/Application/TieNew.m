@@ -125,7 +125,7 @@ static void orderXY(float *x, float *y)
 
 - printMe
 {
-  fprintf(stderr, "TIE type %d, head1=%d, head2=%d, clients=%d\n", gFlags.subtype, head1, head2, [client count]);
+  NSLog(@"TIE type %d, head1=%d, head2=%d, clients=%d\n", gFlags.subtype, head1, head2, [client count]);
   return self;
 }
 
@@ -209,7 +209,7 @@ static void orderXY(float *x, float *y)
   4 = left thick control, 5 = right thick control.
 */
 
-- getHandle: (int) h : (float *) x : (float *) y
+- coordsForHandle: (int) h  asX: (float *) x  andY: (float *) y
 {
   float dx, dy, x0, y0, x1, y1, th, t, d;
   StaffObj *p;
@@ -248,16 +248,16 @@ static void orderXY(float *x, float *y)
       }
       break;
     case 2:
-      [self getHandle: 0 : &x0 : &y0];
-      [self getHandle: 1 : &x1 : &y1];
+      [self coordsForHandle: 0  asX: &x0  andY: &y0];
+      [self coordsForHandle: 1  asX: &x1  andY: &y1];
       dx = x1 - x0;
       dy = y1 - y0;
       *x = x0 + con1.x * dx - con1.y * dy;
       *y = y0 + con1.x * dy + con1.y * dx;
       break;
     case 3:
-      [self getHandle: 0 : &x0 : &y0];
-      [self getHandle: 1 : &x1 : &y1];
+      [self coordsForHandle: 0  asX: &x0  andY: &y0];
+      [self coordsForHandle: 1  asX: &x1  andY: &y1];
       dx = x1 - x0;
       dy = y1 - y0;
       *x = x0 + con2.x * dx - con2.y * dy;
@@ -265,8 +265,8 @@ static void orderXY(float *x, float *y)
       break;
     case 4:
       th = nature[gFlags.size] * 0.5;
-      [self getHandle: 0 : &x0 : &y0];
-      [self getHandle: 1 : &x1 : &y1];
+      [self coordsForHandle: 0  asX: &x0  andY: &y0];
+      [self coordsForHandle: 1  asX: &x1  andY: &y1];
       dx = x1 - x0;
       dy = y1 - y0;
       d = hypot(dx, dy);
@@ -276,8 +276,8 @@ static void orderXY(float *x, float *y)
       break;
     case 5:
       th = nature[gFlags.size] * 0.5;
-      [self getHandle: 0 : &x0 : &y0];
-      [self getHandle: 1 : &x1 : &y1];
+      [self coordsForHandle: 0  asX: &x0  andY: &y0];
+      [self coordsForHandle: 1  asX: &x1  andY: &y1];
       dx = x1 - x0;
       dy = y1 - y0;
       d = hypot(dx, dy);
@@ -295,11 +295,11 @@ static void orderXY(float *x, float *y)
   int i;
   float x, y;
   NSRect b;
-  [self getHandle: 0 : &x : &y];
+  [self coordsForHandle: 0  asX: &x  andY: &y];
   *r = NSMakeRect(x - HANDSIZE, y - HANDSIZE, 2 * HANDSIZE, 2 * HANDSIZE);
   for (i = 1; i < 4; i++)
   {
-    [self getHandle: i : &x : &y];
+    [self coordsForHandle: i  asX: &x  andY: &y];
     b = NSMakeRect(x - HANDSIZE, y - HANDSIZE, 2 * HANDSIZE, 2 * HANDSIZE);
     *r  = NSUnionRect(b , *r);
   }
@@ -364,8 +364,8 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
 - (float) depthParam
 {
   float x0, y0, x1, y1, d, t;
-  [self getHandle: 0 : &x0 : &y0];
-  [self getHandle: 1 : &x1 : &y1];
+  [self coordsForHandle: 0  asX: &x0  andY: &y0];
+  [self coordsForHandle: 1  asX: &x1  andY: &y1];
   d = hypot(x1 - x0, y1 - y0);
   if (d < 5) return d;
   t = d * 0.25;
@@ -710,8 +710,8 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
 - (BOOL) solveParam: (float) x : (float) y : (float *) u : (float *) v
 {
   float x0, y0, x1, y1, dx, dy, ds, wx, wy, t;
-  [self getHandle: 0 : &x0 : &y0];
-  [self getHandle: 1 : &x1 : &y1];
+  [self coordsForHandle: 0  asX: &x0  andY: &y0];
+  [self coordsForHandle: 1  asX: &x1  andY: &y1];
   dx = x1 - x0;
   dy = y1 - y0;
   ds = (dx * dx) + (dy * dy);
@@ -831,7 +831,7 @@ extern void cflat(float x0, float y0, float x1, float y1, float c1x, float c1y, 
   int i, sz = gFlags.size;
   for (i = 0; i < 6; i++)
   {
-    [self getHandle: i : &(x[i]) : &(y[i])];
+    [self coordsForHandle: i  asX: &(x[i])  andY: &(y[i])];
     if (i < 4 && gFlags.selected && !gFlags.seldrag) chandle(x[i], y[i], m);
   }
   if (flags.dashed)

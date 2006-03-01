@@ -138,7 +138,7 @@ static Rest *proto;
 
 - (float) myDuration
 {
-//fprintf(stderr, "style = %d duration = %f numbars = %d\n", style, duration, numbars);
+//NSLog(@"style = %d duration = %f numbars = %d\n", style, duration, numbars);
     return (timesw[(int)style] ? duration : duration * numbars);
 }
 

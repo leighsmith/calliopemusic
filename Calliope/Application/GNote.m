@@ -124,7 +124,7 @@ unsigned char accifont[NUMHEADS][NUMACCS] =
 
 - printMe
 {
-  fprintf(stderr, "NOTE: x = %f, y = %f ", x, y);
+  NSLog(@"NOTE: x = %f, y = %f ", x, y);
   [self printHeads];
   return self;
 }

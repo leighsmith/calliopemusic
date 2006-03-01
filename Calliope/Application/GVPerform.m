@@ -225,7 +225,7 @@ void setInst(MKNote *n, int i)
 static MKNote *newNote(float tn, float f, float dur)
 {
     MKNote *p;
-// fprintf(stderr, "added note freq %f at %f lasting %f\n", f, tn, dur);
+// NSLog(@"added note freq %f at %f lasting %f\n", f, tn, dur);
     p = [[MKNote alloc] initWithTimeTag: (double) tn];
   [p setNoteType: MK_noteDur];
   [p setPar: MK_freq toDouble: (double) f];
@@ -353,7 +353,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
     numParts = 1;
     player[0].part = [[MKPart alloc] init];  /* the user interface part */
     /* Add the notes */
-    /* fprintf(stderr, "add notes:\n"); */
+    /* NSLog(@"add notes:\n"); */
     pn = ((Page *)currentPage)->num;
     fine = 0.1;  /* allow time to insert channel control changes */
     for (si = sj; si <= sk; si++)
@@ -560,7 +560,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
             }
         }
     }
-    // fprintf(stderr, "numParts = %d\n", numParts);
+    // NSLog(@"numParts = %d\n", numParts);
     switch(playmode) {
         case 0: /* start orchestra */
         if (!anOrch) anOrch = [MKOrchestra new];
@@ -820,11 +820,11 @@ char *ntypename[5] = {"dur", "on", "off", "update", "mute"};
   void *s = MKInitParameterIteration(n);
   int par;
   NSString *str;
-  fprintf(stderr, "tag:%d, type:%s, time:%f, dur:%f", [n noteTag], ntypename[[n noteType] - 257], [n timeTag], [n dur]);
+  NSLog(@"tag:%d, type:%s, time:%f, dur:%f", [n noteTag], ntypename[[n noteType] - 257], [n timeTag], [n dur]);
   while ((par = MKNextParameter(n, s)) != MK_noPar)
   {
     str = [n parAsString: par];
-      fprintf(stderr, "  [%s:  %s]", [[MKNote parNameForTag: par] cString], [str cString]);
+      NSLog(@"  [%s:  %s]", [[MKNote parNameForTag: par] cString], [str cString]);
   }
   return self;
 }
@@ -873,26 +873,26 @@ char *ntypename[5] = {"dur", "on", "off", "update", "mute"};
         hasGlobalPart = [MKGetObjectName([parts objectAtIndex:0]) isEqualToString:@"allParts"];
       else hasGlobalPart = NO;
   }
-  fprintf(stderr, "level %d MIDI file\n", level);
-  fprintf(stderr, "info note:");
+  NSLog(@"level %d MIDI file\n", level);
+  NSLog(@"info note:");
   [self dumpNote: [newScore infoNote]];
-  fprintf(stderr, "\n");
+  NSLog(@"\n");
   count = [parts count];
   for (i = 0; i < count; i++)
   {
     NSMutableArray *notes; int nk;
     part = [parts objectAtIndex:i];
     nk = [part noteCount];
-    fprintf(stderr, "  part %d has %d notes. info:\n", i, nk);
+    NSLog(@"  part %d has %d notes. info:\n", i, nk);
     [self dumpNote: [part infoNote]];
-    fprintf(stderr, "\n");
+    NSLog(@"\n");
     notes = [part notes];
     for (j = 0; j < nk; j++)
     {
       note = [notes objectAtIndex:j];
-      fprintf(stderr, "    note %d:", j);
+      NSLog(@"    note %d:", j);
       [self dumpNote: note];
-      fprintf(stderr, "\n");
+      NSLog(@"\n");
     }
     [notes autorelease]; //sb: List is freed, not released. Careful here when working with MK...
   }

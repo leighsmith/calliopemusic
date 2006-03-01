@@ -455,7 +455,7 @@ extern char *typename[NUMTYPES];
   System *s;
   BOOL m = NO;
   k = [slist count];
-// if (k > 1) fprintf(stderr, "move sel to pt: %f %f\n", p.x, p.y);
+// if (k > 1) NSLog(@"move sel to pt: %f %f\n", p.x, p.y);
   for (i = 0; i < k; i++)
   {
     o = [slist objectAtIndex:i];

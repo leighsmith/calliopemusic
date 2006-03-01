@@ -1506,7 +1506,7 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
   char c1;
   int v = [aDecoder versionForClassName:@"StaffObj"];
   [super initWithCoder:aDecoder];
-  /* fprintf(stderr, "reading StaffObj v%d\n", v); */
+  /* NSLog(@"reading StaffObj v%d\n", v); */
   part = nil;
   mystaff = [[aDecoder decodeObject] retain];
   if (v < 2)
