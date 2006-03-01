@@ -1290,6 +1290,41 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D8184A0709B4E12D00F1A7DF /* Inspectors */ = {
+			isa = PBXGroup;
+			children = (
+				D8FD944D0483CDC800A80164 /* LigatureInspector.nib */,
+				D8FD94560483CDC800A80164 /* AccentInspector.nib */,
+				D8FD94590483CDC800A80164 /* NoteGroupInspector.nib */,
+				D8FD945C0483CDC800A80164 /* BrackInspector.nib */,
+				D8FD945F0483CDC800A80164 /* BeamInspector.nib */,
+				D8FD94620483CDC800A80164 /* SquareNoteInspector.nib */,
+				D8FD93F60483CDC800A80164 /* NeumeInspector.nib */,
+				D8FD93F90483CDC800A80164 /* EnclosureInspector.nib */,
+				D8FD93FC0483CDC800A80164 /* BarInspector.nib */,
+				D8FD93FF0483CDC800A80164 /* ClefInspector.nib */,
+				D8FD94020483CDC800A80164 /* TabInspector.nib */,
+				D8FD94050483CDC800A80164 /* BlockInspector.nib */,
+				D8FD94080483CDC800A80164 /* MarginInspector.nib */,
+				D8FD940B0483CDC800A80164 /* SysInspector.nib */,
+				D8FD940E0483CDC800A80164 /* RestInspector.nib */,
+				D8FD94170483CDC800A80164 /* TieInspector.nib */,
+				D8FD941A0483CDC800A80164 /* VoiceInspector.nib */,
+				D8FD941D0483CDC800A80164 /* CastInspector.nib */,
+				D8FD94200483CDC800A80164 /* KeyInspector.nib */,
+				D8FD94260483CDC800A80164 /* TimeInspector.nib */,
+				D8FD942C0483CDC800A80164 /* NoteInspector.nib */,
+				D8FD942F0483CDC800A80164 /* PlayInspector.nib */,
+				D8FD94320483CDC800A80164 /* MetroInspector.nib */,
+				D8FD94350483CDC800A80164 /* RunInspector.nib */,
+				D8FD94380483CDC800A80164 /* LayBarInspector.nib */,
+				D8FD943B0483CDC800A80164 /* TupleInspector.nib */,
+				D8FD94410483CDC800A80164 /* RangeInspector.nib */,
+				D8FD94470483CDC800A80164 /* TextInspector.nib */,
+			);
+			name = Inspectors;
+			sourceTree = "<group>";
+		};
 		D8A8F7CB0483DDB900A80164 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
@@ -1573,43 +1608,16 @@
 		D8FD93F50483CDC800A80164 /* Interfaces */ = {
 			isa = PBXGroup;
 			children = (
-				D8FD93F60483CDC800A80164 /* NeumeInspector.nib */,
-				D8FD93F90483CDC800A80164 /* EnclosureInspector.nib */,
-				D8FD93FC0483CDC800A80164 /* BarInspector.nib */,
-				D8FD93FF0483CDC800A80164 /* ClefInspector.nib */,
-				D8FD94020483CDC800A80164 /* TabInspector.nib */,
-				D8FD94050483CDC800A80164 /* BlockInspector.nib */,
-				D8FD94080483CDC800A80164 /* MarginInspector.nib */,
-				D8FD940B0483CDC800A80164 /* SysInspector.nib */,
-				D8FD940E0483CDC800A80164 /* RestInspector.nib */,
+				D8FD94290483CDC800A80164 /* Calliope.nib */,
 				D8FD94110483CDC800A80164 /* NewPanel.nib */,
 				D8FD94140483CDC800A80164 /* AppDefaults.nib */,
-				D8FD94170483CDC800A80164 /* TieInspector.nib */,
-				D8FD941A0483CDC800A80164 /* VoiceInspector.nib */,
-				D8FD941D0483CDC800A80164 /* CastInspector.nib */,
-				D8FD94200483CDC800A80164 /* KeyInspector.nib */,
 				D8FD94230483CDC800A80164 /* TabTuner.nib */,
-				D8FD94260483CDC800A80164 /* TimeInspector.nib */,
-				D8FD94290483CDC800A80164 /* Calliope.nib */,
-				D8FD942C0483CDC800A80164 /* NoteInspector.nib */,
-				D8FD942F0483CDC800A80164 /* PlayInspector.nib */,
-				D8FD94320483CDC800A80164 /* MetroInspector.nib */,
-				D8FD94350483CDC800A80164 /* RunInspector.nib */,
-				D8FD94380483CDC800A80164 /* LayBarInspector.nib */,
-				D8FD943B0483CDC800A80164 /* TupleInspector.nib */,
 				D8FD943E0483CDC800A80164 /* Preferences.nib */,
-				D8FD94410483CDC800A80164 /* RangeInspector.nib */,
 				D8FD94440483CDC800A80164 /* ProgressPanel.nib */,
-				D8FD94470483CDC800A80164 /* TextInspector.nib */,
 				D8FD944A0483CDC800A80164 /* InfoPanel.nib */,
-				D8FD944D0483CDC800A80164 /* LigatureInspector.nib */,
 				D8FD94500483CDC800A80164 /* ScrollerGadgets.nib */,
 				D8FD94530483CDC800A80164 /* ProcessLog.nib */,
-				D8FD94560483CDC800A80164 /* AccentInspector.nib */,
-				D8FD94590483CDC800A80164 /* NoteGroupInspector.nib */,
-				D8FD945C0483CDC800A80164 /* BrackInspector.nib */,
-				D8FD945F0483CDC800A80164 /* BeamInspector.nib */,
-				D8FD94620483CDC800A80164 /* SquareNoteInspector.nib */,
+				D8184A0709B4E12D00F1A7DF /* Inspectors */,
 			);
 			name = Interfaces;
 			sourceTree = "<group>";
