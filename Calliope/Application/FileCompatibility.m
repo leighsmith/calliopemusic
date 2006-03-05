@@ -2,7 +2,7 @@
  * $Id$
  * This file is for compatibility with reading old draw/Calliope files.
  */
-#import <Foundation/Foundation.h>
+#import <FileCompatibility.h>
 
 /*
  * This is just a convenience method for reading old Calliope files that
@@ -38,5 +38,48 @@
 
     return self;
 }
+
+@end
+
+@implementation PrintInfo
+
+@end
+
+@implementation Font
+
+- initWithCoder: (NSCoder *) aDecoder
+{
+    float floatParam;
+    char stringParam1[80], stringParam2[80];
+    unsigned char dataParam[80];
+    
+    // [super initWithCoder:aDecoder];
+    [aDecoder decodeValuesOfObjCTypes:"%fss", &dataParam, &floatParam, &stringParam1, &stringParam2];
+    return self;
+}
+
+@end
+
+@implementation View
+
+- initWithCoder: (NSCoder *) aDecoder
+{
+    NSLog(@"in View initWithDecoder before super message\n");
+    [super initWithCoder: aDecoder];
+    return self;
+}
+
+@end
+
+@implementation Responder
+
+/*
+- initWithCoder: (NSCoder *) aDecoder
+{
+    float floatParam;
+    //[aDecoder decodeValuesOfObjCTypes:"f", &floatParam];
+    return self;
+}
+*/
 
 @end

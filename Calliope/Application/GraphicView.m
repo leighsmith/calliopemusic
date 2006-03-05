@@ -1,4 +1,6 @@
 /* $Id$ */
+#import <AppKit/AppKit.h>
+#import <CalliopePropertyListCoders/OAPropertyListCoders.h>
 #import "GraphicView.h"
 #import "GVFormat.h"
 #import "GVPerform.h"
@@ -39,9 +41,8 @@
 #import "Runner.h"
 #import "CallPart.h"
 #import "Channel.h"
-#import <AppKit/AppKit.h>
 #import "FlippedView.h"
-#import <CalliopePropertyListCoders/OAPropertyListCoders.h>
+#import "FileCompatibility.h"
 
 extern NSString * DrawPasteType(NSArray *types);
 extern NSSize paperSize;
