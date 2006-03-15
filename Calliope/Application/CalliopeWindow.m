@@ -123,7 +123,6 @@
     }
 
     [self flushWindowIfNeeded];
-    [[NSApp context] flush];
 }
 
 

@@ -1,4 +1,4 @@
-
+/* $Id:$ */
 #import "MultiView.h"
 
 @implementation MultiView
@@ -24,11 +24,11 @@
     return self;
 }
 
-- (void)drawRect:(NSRect)rect
+- (void) drawRect: (NSRect) rect
 {
     NSEraseRect(rect);
     
-    PSsetgray(NSLightGray);
+    [[NSColor lightGrayColor] set];
     NSRectFill([self bounds]);
 }
 

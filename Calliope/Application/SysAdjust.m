@@ -1416,7 +1416,6 @@ static void tidyends(NSMutableArray *staves, int n, int ul, float lmx, int ur, f
 
 - userAdjust: (BOOL) s
 {
-    NSString *buf;
     int n = flags.nstaves;
   float err = 0.0;
   float lmx = [self leftWhitespace];
@@ -1438,8 +1437,7 @@ static void tidyends(NSMutableArray *staves, int n, int ul, float lmx, int ur, f
   [self recalcHangers];
   if (err > 1)
   {
-      buf = [NSString stringWithFormat:@"Page %d: system beginning with bar %d is crowded by amount %f\n", pagenum, barnum, err];
-    [NSApp log: buf];
+    NSLog(@"Page %d: system beginning with bar %d is crowded by amount %f\n", pagenum, barnum, err);
   }
   return self;
 }

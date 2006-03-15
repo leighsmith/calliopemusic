@@ -1,4 +1,6 @@
 /* $Id$ */
+#import <AppKit/AppKit.h>
+#import <Foundation/Foundation.h>
 #import "Tuple.h"
 #import "TupleInspector.h"
 #import "NoteGroupInspector.h"
@@ -12,15 +14,11 @@
 #import "DrawDocument.h"
 #import "System.h"
 #import "Staff.h"
-#import <AppKit/NSApplication.h>
-#import <AppKit/NSGraphics.h>
-#import <Foundation/NSArray.h>
+#import "FileCompatibility.h"
 
-@implementation Tuple:Hanger
-
+@implementation Tuple
 
 static Tuple *proto;
-
 
 + (void)initialize
 {

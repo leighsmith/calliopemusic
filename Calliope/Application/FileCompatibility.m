@@ -16,9 +16,10 @@
 
 - (id)initFromList:(id)aList
 {
-    int i, count;
     // TODO LMS commented out to get things compiling, this is needed to support the legacy file format
 #if 0
+    int i, count;
+
     if ([aList isKindOf:[List class]]) {
         count = [aList count];
         [self initWithCapacity:count];

@@ -116,7 +116,7 @@ static Bracket *proto;
     i = [s->staves indexOfObject:client1];
     j = [s->staves indexOfObject:client2];
     if (i == NSNotFound || j == NSNotFound) {
-        [NSApp log: @"Bracket: can't find clients!\n"];
+        NSLog(@"Bracket: can't find clients!\n");
         q->client1 = nil;
         q->client2 = nil;
         return q;

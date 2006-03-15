@@ -13,6 +13,9 @@
 		D87D0FE809AE7AE500784ACC /* OAPropertyListCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD96D30483CDC800A80164 /* OAPropertyListCoder.m */; };
 		D87D0FE909AE7AE800784ACC /* OAPropertyListCoder.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD96EC0483CDC800A80164 /* OAPropertyListCoder.h */; };
 		D87D0FEA09AE7AF100784ACC /* OAPropertyListArchiver.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD96E80483CDC800A80164 /* OAPropertyListArchiver.h */; };
+		D8B2119109BB5333002825FC /* CallAppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = D8B2118F09BB5333002825FC /* CallAppIcon.icns */; };
+		D8B2119209BB5333002825FC /* CallDocIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = D8B2119009BB5333002825FC /* CallDocIcon.icns */; };
+		D8EC241509B9F8B500942A37 /* MusicNotationDocument.nib in Resources */ = {isa = PBXBuildFile; fileRef = D8EC241309B9F8B500942A37 /* MusicNotationDocument.nib */; };
 		D8F2478909AD280C00B96D0D /* NSObject+ErrorHandling.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD96D60483CDC800A80164 /* NSObject+ErrorHandling.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8F2478A09AD280C00B96D0D /* NSMutableString+PropertyListCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD96D80483CDC800A80164 /* NSMutableString+PropertyListCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8F2478B09AD280C00B96D0D /* NSString+PropertyListCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD96DA0483CDC800A80164 /* NSString+PropertyListCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -273,8 +276,6 @@
 		D8F248A509AD3F8D00B96D0D /* buttUpH.tiff in Resources */ = {isa = PBXBuildFile; fileRef = D8A8F5850483D9D200A80164 /* buttUpH.tiff */; };
 		D8F248A609AD3F8D00B96D0D /* buttz.tiff in Resources */ = {isa = PBXBuildFile; fileRef = D8A8F5860483D9D200A80164 /* buttz.tiff */; };
 		D8F248A709AD3F8D00B96D0D /* C.tiff in Resources */ = {isa = PBXBuildFile; fileRef = D8A8F5870483D9D200A80164 /* C.tiff */; };
-		D8F248A809AD3F8D00B96D0D /* CallAppIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = D8A8F5880483D9D200A80164 /* CallAppIcon.tiff */; };
-		D8F248A909AD3F8D00B96D0D /* CallDocIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = D8A8F5890483D9D200A80164 /* CallDocIcon.tiff */; };
 		D8F248AA09AD3F8D00B96D0D /* centeralign_nib.tiff in Resources */ = {isa = PBXBuildFile; fileRef = D8A8F58A0483D9D200A80164 /* centeralign_nib.tiff */; };
 		D8F248AB09AD3F8D00B96D0D /* centeralignH_nib.tiff in Resources */ = {isa = PBXBuildFile; fileRef = D8A8F58B0483D9D200A80164 /* centeralignH_nib.tiff */; };
 		D8F248AC09AD3F8D00B96D0D /* cepha.tiff in Resources */ = {isa = PBXBuildFile; fileRef = D8A8F58C0483D9D200A80164 /* cepha.tiff */; };
@@ -753,8 +754,6 @@
 		D8A8F5850483D9D200A80164 /* buttUpH.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = buttUpH.tiff; path = Images/buttUpH.tiff; sourceTree = "<group>"; };
 		D8A8F5860483D9D200A80164 /* buttz.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = buttz.tiff; path = Images/buttz.tiff; sourceTree = "<group>"; };
 		D8A8F5870483D9D200A80164 /* C.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = C.tiff; path = Images/C.tiff; sourceTree = "<group>"; };
-		D8A8F5880483D9D200A80164 /* CallAppIcon.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = CallAppIcon.tiff; path = Images/CallAppIcon.tiff; sourceTree = "<group>"; };
-		D8A8F5890483D9D200A80164 /* CallDocIcon.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = CallDocIcon.tiff; path = Images/CallDocIcon.tiff; sourceTree = "<group>"; };
 		D8A8F58A0483D9D200A80164 /* centeralign_nib.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = centeralign_nib.tiff; path = Images/centeralign_nib.tiff; sourceTree = "<group>"; };
 		D8A8F58B0483D9D200A80164 /* centeralignH_nib.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = centeralignH_nib.tiff; path = Images/centeralignH_nib.tiff; sourceTree = "<group>"; };
 		D8A8F58C0483D9D200A80164 /* cepha.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = cepha.tiff; path = Images/cepha.tiff; sourceTree = "<group>"; };
@@ -964,6 +963,9 @@
 		D8A8F7C30483DD1B00A80164 /* template3.opus */ = {isa = PBXFileReference; lastKnownFileType = file; name = template3.opus; path = Templates/template3.opus; sourceTree = "<group>"; };
 		D8A8F7C40483DD1B00A80164 /* template4.opus */ = {isa = PBXFileReference; lastKnownFileType = file; name = template4.opus; path = Templates/template4.opus; sourceTree = "<group>"; };
 		D8A8F7C50483DD1B00A80164 /* template5.opus */ = {isa = PBXFileReference; lastKnownFileType = file; name = template5.opus; path = Templates/template5.opus; sourceTree = "<group>"; };
+		D8B2118F09BB5333002825FC /* CallAppIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CallAppIcon.icns; path = Images/CallAppIcon.icns; sourceTree = "<group>"; };
+		D8B2119009BB5333002825FC /* CallDocIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CallDocIcon.icns; path = Images/CallDocIcon.icns; sourceTree = "<group>"; };
+		D8EC241409B9F8B500942A37 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MusicNotationDocument.nib; sourceTree = "<group>"; };
 		D8F2453709AD260300B96D0D /* MKPerformSndMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MKPerformSndMIDI.framework; path = /Library/Frameworks/MKPerformSndMIDI.framework; sourceTree = "<absolute>"; };
 		D8F247B109AD280C00B96D0D /* Info-CalliopePropertyListCoders.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Info-CalliopePropertyListCoders.plist"; sourceTree = "<group>"; };
 		D8F247B509AD280C00B96D0D /* CalliopePropertyListCoders.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CalliopePropertyListCoders.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1333,11 +1335,20 @@
 			name = Sounds;
 			sourceTree = "<group>";
 		};
+		D8B2118709BB52AE002825FC /* File Icons */ = {
+			isa = PBXGroup;
+			children = (
+				D8B2118F09BB5333002825FC /* CallAppIcon.icns */,
+				D8B2119009BB5333002825FC /* CallDocIcon.icns */,
+			);
+			name = "File Icons";
+			sourceTree = "<group>";
+		};
 		D8FD92210483CDC700A80164 /* Calliope */ = {
 			isa = PBXGroup;
 			children = (
-				D8FD922E0483CDC700A80164 /* Classes */,
 				D8FD93050483CDC800A80164 /* Headers */,
+				D8FD922E0483CDC700A80164 /* Classes */,
 				D8FD93E80483CDC800A80164 /* Other Sources */,
 				D8FD93F50483CDC800A80164 /* Interfaces */,
 				D8A8F7CB0483DDB900A80164 /* Sounds */,
@@ -1347,7 +1358,6 @@
 				D8FD970C0483CDC800A80164 /* External Frameworks and Libraries */,
 				D8FD922C0483CDC700A80164 /* Products */,
 				D8F247B109AD280C00B96D0D /* Info-CalliopePropertyListCoders.plist */,
-				D8F249FA09AD3F8D00B96D0D /* Info-Calliope.plist */,
 			);
 			name = Calliope;
 			sourceTree = "<group>";
@@ -1617,6 +1627,7 @@
 				D8FD944A0483CDC800A80164 /* InfoPanel.nib */,
 				D8FD94500483CDC800A80164 /* ScrollerGadgets.nib */,
 				D8FD94530483CDC800A80164 /* ProcessLog.nib */,
+				D8EC241309B9F8B500942A37 /* MusicNotationDocument.nib */,
 				D8184A0709B4E12D00F1A7DF /* Inspectors */,
 			);
 			name = Interfaces;
@@ -1625,6 +1636,7 @@
 		D8FD94650483CDC800A80164 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				D8B2118709BB52AE002825FC /* File Icons */,
 				D8A8F54A0483D9D200A80164 /* 1qflat.tiff */,
 				D8A8F54B0483D9D200A80164 /* 1qsharp.tiff */,
 				D8A8F54C0483D9D200A80164 /* 3qflat.tiff */,
@@ -1689,8 +1701,6 @@
 				D8A8F5850483D9D200A80164 /* buttUpH.tiff */,
 				D8A8F5860483D9D200A80164 /* buttz.tiff */,
 				D8A8F5870483D9D200A80164 /* C.tiff */,
-				D8A8F5880483D9D200A80164 /* CallAppIcon.tiff */,
-				D8A8F5890483D9D200A80164 /* CallDocIcon.tiff */,
 				D8A8F58A0483D9D200A80164 /* centeralign_nib.tiff */,
 				D8A8F58B0483D9D200A80164 /* centeralignH_nib.tiff */,
 				D8A8F58C0483D9D200A80164 /* cepha.tiff */,
@@ -1917,6 +1927,7 @@
 		D8FD96980483CDC800A80164 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D8F249FA09AD3F8D00B96D0D /* Info-Calliope.plist */,
 				D8A8F7C10483DD1B00A80164 /* template1.opus */,
 				D8A8F7C20483DD1B00A80164 /* template2.opus */,
 				D8A8F7C30483DD1B00A80164 /* template3.opus */,
@@ -2405,8 +2416,6 @@
 				D8F248A509AD3F8D00B96D0D /* buttUpH.tiff in Resources */,
 				D8F248A609AD3F8D00B96D0D /* buttz.tiff in Resources */,
 				D8F248A709AD3F8D00B96D0D /* C.tiff in Resources */,
-				D8F248A809AD3F8D00B96D0D /* CallAppIcon.tiff in Resources */,
-				D8F248A909AD3F8D00B96D0D /* CallDocIcon.tiff in Resources */,
 				D8F248AA09AD3F8D00B96D0D /* centeralign_nib.tiff in Resources */,
 				D8F248AB09AD3F8D00B96D0D /* centeralignH_nib.tiff in Resources */,
 				D8F248AC09AD3F8D00B96D0D /* cepha.tiff in Resources */,
@@ -2617,6 +2626,9 @@
 				D8F2497909AD3F8D00B96D0D /* template4.opus in Resources */,
 				D8F2497A09AD3F8D00B96D0D /* template5.opus in Resources */,
 				D8F2497B09AD3F8D00B96D0D /* tick.aiff in Resources */,
+				D8EC241509B9F8B500942A37 /* MusicNotationDocument.nib in Resources */,
+				D8B2119109BB5333002825FC /* CallAppIcon.icns in Resources */,
+				D8B2119209BB5333002825FC /* CallDocIcon.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2784,6 +2796,14 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		D8EC241309B9F8B500942A37 /* MusicNotationDocument.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D8EC241409B9F8B500942A37 /* English */,
+			);
+			name = MusicNotationDocument.nib;
+			sourceTree = "<group>";
+		};
 		D8FD93F60483CDC800A80164 /* NeumeInspector.nib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -3281,8 +3301,6 @@
 		D8F249F909AD3F8D00B96D0D /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CC = "/usr/bin/gcc-3.3";
-				CPLUSPLUS = "/usr/bin/g++-3.3";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 					"~/Sources/Music/Calliope/Application/CalliopePropertyListCoders",
@@ -3297,7 +3315,6 @@
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
-				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = Calliope;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (

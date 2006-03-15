@@ -1,0 +1,50 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {
+                changeLayout = id; 
+                hideRuler = id; 
+                revertToSaved = id; 
+                saveAs = id; 
+                showTextRuler = id; 
+            }; 
+            CLASS = DrawDocument; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {scrollView = SyncScrollView; view = GraphicView; }; 
+            SUPERCLASS = NSDocument; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {
+                concludeDragOperation = id; 
+                delete = id; 
+                deselectAll = id; 
+                draggingExited = id; 
+                saveEPS = id; 
+                saveTIFF = id; 
+            }; 
+            CLASS = GraphicView; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSView; 
+        }, 
+        {
+            ACTIONS = {pageTo = id; showHideRulers = id; }; 
+            CLASS = SyncScrollView; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                hRuler = id; 
+                pageDownButton = id; 
+                pageFirstButton = id; 
+                pageForm = id; 
+                pageLabel = id; 
+                pageLastButton = id; 
+                pageUpButton = id; 
+                rulerClass = id; 
+                vRuler = id; 
+                zoomPopUpList = id; 
+            }; 
+            SUPERCLASS = NSScrollView; 
+        }
+    ); 
+    IBVersion = 1; 
+}

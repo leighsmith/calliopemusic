@@ -17,7 +17,7 @@ static int unitAsInt(float f)
 {
   int i;
   for (i = 0; i < 4; i++)  if (fabs(f - unitfactor[i]) < 0.0001) return i;
-  [NSApp log: @"Unknown unit selected: inform developer.\n"];
+  NSLog(@"Unknown unit selected: inform developer.\n");
   return 0;
 }
 

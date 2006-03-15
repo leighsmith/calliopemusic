@@ -1,11 +1,9 @@
+/* $Id:$ */
 #import "winheaders.h"
-#import <AppKit/NSResponder.h>
-#import <AppKit/NSFont.h>
-#import <AppKit/NSGraphics.h>
-#import <AppKit/NSPageLayout.h>
-#import <AppKit/NSMenuItem.h>
+#import <AppKit/AppKit.h>
 //#import <Foundation/NSCompatibility.h>
 #import "PrefBlock.h"
+#import "SyncScrollView.h"
 
 /* Preferences Codes */
 
@@ -29,28 +27,55 @@
 
 #define Notify(title, msg) NSRunAlertPanel(title, msg, @"OK", nil, nil)
 
+// TODO rename to MusicNotationDocument
 @interface DrawDocument : NSDocument
 {
 @public
-    id view;			/* the document's GraphicView */
-    id window;			/* the window the GraphicView is in */
-    id printInfo;
-    id prefInfo;		/* the prefBlock */
-    NSString *name;			/* the name of the document */ //sb: FIXME need to check archiving of name and directory
-    NSString *directory;		/* the directory it is in */
-    BOOL haveSavedDocument;	/* whether document has associated disk file */
+    /*! @var the window the GraphicView is in. TODO: we should be able to remove this as we separate out the document from window controlling */
+    NSWindow *documentWindow;
+    /*! @var  the document's GraphicView */
+    IBOutlet GraphicView *view;	
+    /*! @var  The view managing the scroll bars */
+    IBOutlet SyncScrollView *scrollView;
+    /*! @var  TODO: I don't know why this has to be held, it's probably already inherited from NSDocument nowadays */
+    NSPrintInfo *printInfo;
+    /*! @var  the prefBlock */
+    PrefBlock *prefInfo;
+    /*! @var  the name of the document */ //sb: FIXME need to check archiving of name and directory
+    NSString *name;
+    /*! @var  the directory it is in */
+    NSString *directory;
+    /*! @var  whether document has associated disk file */
+    BOOL haveSavedDocument;
+    /*! @var  string naming the document frame */
+    NSString *frameString;
+    /*! @var  dimensions of the frame */
+    NSRect frameSize;
 }
 
-/* Very private instance method needed by factory methods */
-
-- (BOOL)loadDocument:(NSData *)stream frameSize:(NSRect *)frame frameString: (NSString**) frameString;
+/*!
+  @method loadDataRepresentation:ofType: 
+  @discussion Loads a file of the type given by aType from the NSData instance data.
+  @result Returns YES if it is able to load a Calliope data file of type aType.
+ */
+- (BOOL) loadDataRepresentation: (NSData *) data ofType: (NSString *) aType;
 
 /* Factory methods */
 
 + (void)initialize;
-+ new;
+//+ new;
 + newFromStream:(NSData *)stream;
 + newFromFile:(NSString *)file andDisplay: (BOOL) d;
+
+
+/*!
+  @method dataRepresentationOfType:
+  @abstract Generates a NSData representation of the type given by docType.
+  @param docType The document type.
+  @result Returns an NSData instance containing an XML encoded property list.
+ */
+- (NSData *) dataRepresentationOfType: (NSString *) docType;
+
 
 /* Public methods */
 
@@ -65,15 +90,17 @@
 /* Target/Action methods */
 
 - changeLayout:sender;
+#if 0
 - (id) save:sender;
 - saveAs:sender;
 - revertToSaved:sender;
+#endif
 - showTextRuler:sender;
 - hideRuler:sender;
 
 /* Document name and file handling methods */
 
-- (NSString *) askForFile: (NSString *) ext;
+// - (NSString *) askForFile: (NSString *) ext;
 - (NSString *)filename;
 - (NSString *)directory;
 - (NSString *)name;
@@ -88,7 +115,7 @@
 - prefInfo;
 - installPrefInfo: (PrefBlock *) p;
 - (NSSize)paperSize;
-- zeroScale;
+- (void) zeroScale;
 - useViewScale;
 - (float) viewScale;
 - (float) staffScale;
@@ -100,13 +127,14 @@
 - writeSelectionToPasteboard:pboard types:(NSArray *)types;
 
 /* Window delegate methods */
-
+#if 0
 - windowWillClose:sender action:(NSString *)action;
 
 - (BOOL)windowShouldClose:(id)sender;
 
 - (void)windowDidBecomeMain:(NSNotification *)notification;
 - (NSSize)windowWillResize:(NSWindow *)sender toSize:(NSSize)size;
+#endif
 
 /* Menu command validation method */
 
@@ -116,6 +144,9 @@
 
 - resetCursor;
 - sendCharacter: (int) c;
+
+- (NSString *) frameString;
+- (NSRect) frameSize;
 
 @end
 

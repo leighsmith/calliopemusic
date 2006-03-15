@@ -680,7 +680,7 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
   sys = [syslist objectAtIndex:0];
   if (![sys checkMargin])
   {
-    [NSApp log: @"Cannot paginate: first system has no margins\n"];
+    NSLog(@"Cannot paginate: first system has no margins\n");
     return nil;
   }
   ns = s0 = 0;
@@ -717,7 +717,7 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
     }
     else if (sys->flags.pgcontrol == 0 && ns > 0 && sh + h + ((ns - 1) * sheight) > him)
     {
-      if (ns == 1 && h > him) [NSApp log: @"System overflows page " : sys->pagenum];
+      if (ns == 1 && h > him) NSLog(@"System overflows page %f", sys->pagenum);
       [self doPage: p : s0 : ns : sh : him : topm : botm : k];
       sh = h;
       s0 = i;
@@ -732,7 +732,7 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
   }
   if (ns > 0)
   {
-    if (ns == 1 && h > him) [NSApp log: @"System overflows page " : sys->pagenum];
+    if (ns == 1 && h > him) NSLog(@"System overflows page %f", sys->pagenum);
     [self doPage: p : s0: ns : sh : him : topm : botm : k];
   }
   return self;
@@ -835,7 +835,6 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
   Staff *sp;
   StaffObj *p;
   BOOL flag[NUMSTAVES];
-  NSString *buf;
   for (i = 0; i < NUMSTAVES; i++)
   {
     r[i] = nil;
@@ -872,8 +871,7 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
 	  pos = p->p;
 	  if (pos < -8 || pos > pb + 8)
 	  {
-              buf = [NSString stringWithFormat:@"note %d of staff %d, sys %d has pos %d\n", k, j, i, pos];
-	    [NSApp log: buf];
+	    NSLog(@"note %d of staff %d, sys %d has pos %d\n", k, j, i, pos);
 	  }
 	  if (!ISINVIS(p))
 	  {

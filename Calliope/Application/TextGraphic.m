@@ -10,6 +10,7 @@
 #import "DrawDocument.h"
 #import "Page.h"
 #import "mux.h"
+#import "FileCompatibility.h"
 
 int justcode[4] = {NSLeftTextAlignment, NSCenterTextAlignment, NSRightTextAlignment, NSJustifiedTextAlignment};
 

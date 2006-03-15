@@ -75,22 +75,22 @@ static void orderXY(float *x, float *y)
   if (head1 < 0)
   {
     head1 = 0;
-      [NSApp log: @"head1 has index < 0. Fixed.\n"];
+      NSLog(@"head1 has index < 0. Fixed.\n");
   }
   else if (TYPEOF(p) == NOTE)
   {
     n = [((GNote *)p)->headlist count];
-      if (n == 0) [NSApp log: @"head1 has no notehead!\n"];
+      if (n == 0) NSLog(@"head1 has no notehead!\n");
     else if (head1 >= n)
     {
       head1 = n - 1;
-      [NSApp log: @"head1 has index > noteheadcount. Fixed.\n"];
+      NSLog(@"head1 has index > noteheadcount. Fixed.\n");
     }
   }
   else if (head1 > 0)
   {
     head1 = 0;
-      [NSApp log: @"head1 has index > 0. Fixed.\n"];
+      NSLog(@"head1 has index > 0. Fixed.\n");
   }
   return self;
 }
@@ -102,22 +102,22 @@ static void orderXY(float *x, float *y)
   if (head2 < 0)
   {
     head2 = 0;
-      [NSApp log: @"head2 has index < 0. Fixed.\n"];
+      NSLog(@"head2 has index < 0. Fixed.\n");
   }
   else if (TYPEOF(p) == NOTE)
   {
     n = [((GNote *)p)->headlist count];
-      if (n == 0) [NSApp log: @"head2 has no notehead!\n"];
+      if (n == 0) NSLog(@"head2 has no notehead!\n");
     else if (head2 >= n)
     {
       head2 = n - 1;
-        [NSApp log: @"head2 has index > noteheadcount. Fixed.\n"];
+        NSLog(@"head2 has index > noteheadcount. Fixed.\n");
     }
   }
   else if (head2 > 0)
   {
     head2 = 0;
-      [NSApp log: @"head2 has index > 0. Fixed.\n"];
+      NSLog(@"head2 has index > 0. Fixed.\n");
   }
   return self;
 }

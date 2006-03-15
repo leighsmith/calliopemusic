@@ -1,3 +1,5 @@
+/* $Id:$ */
+#import <Foundation/Foundation.h>
 #import "StaffObj.h"
 #import "Staff.h"
 #import "System.h"
@@ -17,8 +19,8 @@
 #import "TextGraphic.h"
 #import "mux.h"
 #import "muxlow.h"
+#import "FileCompatibility.h"
 
-#import <Foundation/NSArray.h>
 
 int protoVox;
 
@@ -1058,7 +1060,7 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
   int k, r;
   Verse *v = nil;
   Staff *sp;
-  unsigned char *s;
+  char *s;
 //  if (cs == NX_SYMBOLSET)
 //  if ([cc canBeConvertedToEncoding:NSSymbolStringEncoding])
       if (![cc canBeConvertedToEncoding:NSNEXTSTEPStringEncoding])

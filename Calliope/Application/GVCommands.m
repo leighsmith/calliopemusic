@@ -425,7 +425,6 @@ static NSString *stylescratch;
   Staff *sp;
   StaffObj *p;
   NSMutableArray *nl, *sl;
-  NSString *msgbuff;
   nsys = [syslist count];
   for (i = 0; i < NUMSTAVES; i++)
   {
@@ -473,8 +472,7 @@ static NSString *stylescratch;
 	  for (m = 0; m < nsig[j]; m++) if (!sc) sc |= [tsig[j][m] isConsistent: t];
 	  if (!sc)
 	  {
-              msgbuff = [NSString stringWithFormat:@"Inconsistent bar length in page %d, bar %d, staff %d\n", sys->pagenum, bn, j + 1];
-	    [NSApp log: msgbuff];
+	    NSLog(@"Inconsistent bar length in page %d, bar %d, staff %d\n", sys->pagenum, bn, j + 1);
 	    allOK = NO;
 	  }
 	  bt = p->stamp;
@@ -1103,7 +1101,7 @@ char ch[8] = ".@#!.FSN";
   {
     p = [nl objectAtIndex:k];
       buf = [NSString stringWithFormat:@"  %s\n", typename[TYPEOF(p)]];
-    [NSApp log: buf];
+    NSLog(buf];
   }
   return self;
 #endif
@@ -1468,7 +1466,7 @@ extern char *typename[NUMTYPES];
   {
       unsigned ix = [syslist indexOfObject:s];
       if (ix == NSNotFound) {
-          [NSApp log:@"System not in syslist? Should not happen.\n"];
+          NSLog(@"System not in syslist? Should not happen.\n");
           if ([syslist count]) ix = 0; else return nil;
       }
       sys = [syslist objectAtIndex:ix + 1];

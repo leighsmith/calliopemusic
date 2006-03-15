@@ -22,7 +22,7 @@
     id tools;			/* the vertical Tool Palette matrix */
     id toolsH;			/* the horizontal Tool Palette matrix */
     id infoPanel;		/* the Info... panel */
-    id version;			/* the version field in the Info... panel */
+    IBOutlet id version;			/* the version field in the Info... panel */
     id preferences;		/* the Preferences Panel */
     id fontAccessory;
     id fontAccMatrix;
@@ -82,27 +82,33 @@ extern int partlistflag;
 - savePanel : (NSString*) ext;
 - (NSSavePanel *)mySavePanel;
 - launchIt: p;
-- orderCastInspector: sender;
 - (NSMutableArray *) getPartlist;
 - (NSMutableArray *) getChanlist;
 - (NSMutableArray *) getStylelist;
 - thePlayView;
 - thePlayView: v;
+
+// action methods.
+- orderCastInspector: sender;
 - orderPlayInspector: sender;
 - orderVoiceInspector: sender;
 - orderTabTuner: sender;
+- orderProgressPanel: sender;
+- orderLog: sender;
+- orderAppDefPanel: sender;
+- orderPreferencePanel: sender;
+
 - thePlayInspector;
 - (int) getLayBarNumber;
 - presetPrefsPanel;
 - inspectPreferences: (BOOL) b;
 - thePreferences;
-- orderPreferencePanel: sender;
 - (float)pointToCurrentUnitFactor;/* sb: added to get rid of convertOldFactor:newFactor: calls */
 - (NSString *)unitString;
 - (int)unitNum;
-- log: (NSString *) s;
-- log: (NSString *) s : (float) f;
-- orderProgressPanel: sender;
+//- log: (NSString *) s;
+//- log: (NSString *) s : (float) f;
+
 - setProgressTitle: (NSString *) s;
 - setProgressRatio: (float) f;
 - takeDownProgress: sender;
@@ -120,11 +126,12 @@ extern int partlistflag;
 
 /* Global cursor setting methods */
 
-- cursor;
++ cursor;
 
 /* Menu updating method */
 
 - (BOOL)validateMenuItem:(NSMenuItem *)aMenuItem;
+
 
 @end
 

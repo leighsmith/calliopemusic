@@ -1,4 +1,7 @@
 /* $Id$ */
+#import <AppKit/NSApplication.h>
+#import <AppKit/NSGraphics.h>
+#import <Foundation/NSArray.h>
 #import "NoteGroup.h"
 #import "NoteGroupInspector.h"
 #import "mux.h"
@@ -10,18 +13,15 @@
 #import "DrawDocument.h"
 #import "System.h"
 #import "Staff.h"
-#import <AppKit/NSApplication.h>
-#import <AppKit/NSGraphics.h>
-#import <Foundation/NSArray.h>
 /*sb: grabbed this from mid-file */
 #import "Tie.h"
 /*sb: grabbed this from mid-file */
 #import "Volta.h"
+#import "FileCompatibility.h"
 
 /* note groups can have >= 1 staff objects in the group */
 
-
-@implementation NoteGroup:Hanger
+@implementation NoteGroup
 
 static NoteGroup *proto;
 

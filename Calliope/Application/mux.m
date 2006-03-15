@@ -126,7 +126,7 @@ NSRect bb;	/* to accumulate the bounding box */
 
 void msg(NSString *s)
 {
-  [NSApp log: s];
+  NSLog(s);
 }
 
 

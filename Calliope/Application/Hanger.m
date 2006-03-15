@@ -1,9 +1,10 @@
 /* $Id$ */
+#import <Foundation/Foundation.h>
 #import "Hanger.h"
 #import "TimedObj.h"
 #import "System.h"
 #import "mux.h"
-#import <Foundation/NSArray.h>
+#import "FileCompatibility.h"
 
 @implementation Hanger
 

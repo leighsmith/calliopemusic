@@ -63,15 +63,7 @@ NSColor * inkShade;
 
 int selMode = 7;		/* this is a display mode, not a shade */
 
-@implementation GraphicView : NSView
-
-/*
- * The GraphicView class is the core of a DrawDocument.
- * It overrides the View methods related to drawing and event handling
- * and allows manipulation of Graphic objects.
- * Moving is accomplished using instance drawing.
- *
-  */
+@implementation GraphicView
 
 static float KeyMotionDeltaDefault = 0.0;
 
@@ -178,18 +170,19 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
  
 - initWithFrame:(NSRect)frameRect
 {
-  [super initWithFrame:frameRect];
-  [self allocateGState];
-  slist = [[NSMutableArray allocWithZone:[self zone]] init];
-  currentSystem = nil;
-  currentPage = nil;
-  currentScale = 1.0;
-  syslist = [[NSMutableArray allocWithZone:[self zone]] init];
-  partlist = nil;
-  chanlist = nil;
-  PSInit();
-  [self initClassVars];
-  return self;
+    self = [super initWithFrame: frameRect];
+    if(self != nil) {
+	[self allocateGState];
+	slist = [[NSMutableArray allocWithZone: [self zone]] init];
+	currentSystem = nil;
+	currentPage = nil;
+	currentScale = 1.0;  // no zoom.
+	syslist = [[NSMutableArray allocWithZone: [self zone]] init];
+	partlist = nil;
+	chanlist = nil;
+	[self initClassVars];	
+    }
+    return self;
 }
 
 - (BOOL)isFlipped /*sb: added this to replace [self setFlipped:YES], above */
@@ -569,7 +562,7 @@ extern char *typename[NUMTYPES];
   dragflag = YES;
   [self lockFocus];
 
-  [self drawGV: sbounds : 1]; //sb: this should blat the selection OFF the screen
+  [self drawRect: sbounds nonSelectedOnly: YES]; //sb: this should blat the selection OFF the screen
   cachedRect = NSInsetRect([self convertRect:sbounds toView:nil],-4,-4);
   cachedRect.origin.x = (int)cachedRect.origin.x;
   cachedRect.origin.y = (int)cachedRect.origin.y;
@@ -663,7 +656,7 @@ extern char *typename[NUMTYPES];
 
 
 /* Public interface methods. */
-
+// These should be moved into DrawDocument.
 - dirty
 {
   if (!dirtyflag)
@@ -769,18 +762,18 @@ extern char *typename[NUMTYPES];
 {
   System *sys;
   NSMutableArray *l = [[NSMutableArray alloc] init];
-  int i, k, theCount;
+  int systemIndex, k, theCount;
   id q, r;
   float d, dmin=0.0;
   d = MAXFLOAT;
-  i = ((Page *) currentPage)->topsys;
+  systemIndex = ((Page *) currentPage)->topsys;
   theCount = [syslist count];
-  while (i <= ((Page *) currentPage)->botsys && (i <= theCount))
+  while (systemIndex <= ((Page *) currentPage)->botsys && (systemIndex <= theCount))
   {
-      sys = [syslist objectAtIndex:i];
+      sys = [syslist objectAtIndex:systemIndex];
       [sys searchFor: p :l];
       if ([l count] > 0) break;
-    ++i;
+    ++systemIndex;
   }
   if ([l count] == 1) r = [l objectAtIndex: 0];
   else
@@ -826,12 +819,12 @@ extern char *typename[NUMTYPES];
   NSMutableArray *nl, *hl;
   StaffObj *q;
   Hanger *h;
-  int i, k, j, n, theCount;
-  i = ((Page *) currentPage)->topsys;
+  int systemIndex, k, j, n, theCount;
+  systemIndex = ((Page *) currentPage)->topsys;
   theCount = [syslist count];
-  while (i <= ((Page *) currentPage)->botsys && i <= theCount)
+  while (systemIndex <= ((Page *) currentPage)->botsys && systemIndex <= theCount)
   {
-    sys = [syslist objectAtIndex:i];
+    sys = [syslist objectAtIndex:systemIndex];
     n = sys->flags.nstaves;
     while (n--)
     {
@@ -872,7 +865,7 @@ extern char *typename[NUMTYPES];
       q = [nl objectAtIndex:j];
       if (!(q->gFlags.selected) && CHECKBOX(q)) [self selectObj: q];
     }
-    ++i;
+    ++systemIndex;
   }
   return self;
 }
@@ -897,7 +890,7 @@ extern char *typename[NUMTYPES];
   hasregion = NO;
   region = [self visibleRect];
   [selShade set];
-  PSsetlinewidth(0.0);
+  // PSsetlinewidth(0.0);
   
   canscroll = !NSEqualRects(region , [self bounds]);
   if (canscroll && !timer) { [NSEvent startPeriodicEventsAfterDelay:0.1 withPeriod:0.1]; timer = TRUE; }
@@ -926,7 +919,7 @@ extern char *typename[NUMTYPES];
 //              [self scrollRectToVisible:region];
               if ([self scrollPointToVisible: p]) {
                   [selShade set]; /* in case these are reset by the drawing code above */
-                  PSsetlinewidth(0.0);
+                  // PSsetlinewidth(0.0);
                   [window displayIfNeeded];
               }
             }
@@ -959,9 +952,9 @@ extern char *typename[NUMTYPES];
   {
     if (grabflag)
     {
-      [self saveRect: &region : grabflag];
+      [self saveRect: region ofType: grabflag];
       grabflag = 0;
-      [[window contentView] setDocumentCursor:[NSCursor arrowCursor]];
+      [[window contentView] setDocumentCursor: [NSCursor arrowCursor]];
     }
     else
     {
@@ -1272,56 +1265,31 @@ extern struct toolData toolCodes[NUMTOOLS];
 /*
  * Draws the GraphicView.
  */
-
-
-- drawGV:(NSRect)rect : (BOOL) nso
+- drawRect: (NSRect) rect nonSelectedOnly: (BOOL) nso
 {
-    int i;
-    Page *pg = currentPage;
-    if (&rect == NULL) return self;
-    if (currentPage == nil) return self;
-//  [window disableFlushWindow];
+    int systemIndex;
+    Page *pageToDraw = currentPage;
+    
+    if (pageToDraw == nil) 
+	return self;
 
-//sb: cache-free society!
-//    NSRectClip(rect);
     [backShade set];
     NSRectFill(rect);
-    [pg draw: rect : nso];
-    for (i = pg->topsys; i <= pg->botsys; i++) [[syslist objectAtIndex:i] draw: rect : nso];
-    for (i = pg->topsys; i <= pg->botsys; i++) [[syslist objectAtIndex:i] drawHangers: rect : nso];
+    [pageToDraw draw: rect : nso];
+    for (systemIndex = pageToDraw->topsys; systemIndex <= pageToDraw->botsys; systemIndex++) 
+	[[syslist objectAtIndex: systemIndex] draw: rect : nso];
+    for (systemIndex = pageToDraw->topsys; systemIndex <= pageToDraw->botsys; systemIndex++) 
+	[[syslist objectAtIndex: systemIndex] drawHangers: rect : nso];
     return self;
-
-
-#if 0    
-
-/******************/
-//  if ([[NSDPSContext currentContext] isDrawingToScreen])
-//  {
-//    [backShade set];
-//    NSRectFill(rect);
-//  }
-//  [pg draw: rect : nso];
-
-  /* NXRectClip(&rects[j]); */
-//  for (i = pg->topsys; i <= pg->botsys; i++) [[syslist objectAtIndex:i] draw: rect : nso];
-//  for (i = pg->topsys; i <= pg->botsys; i++) [[syslist objectAtIndex:i] drawHangers: rect : nso];
-
-//  [window enableFlushWindow];
-//  [window flushWindowIfNeeded];
-  return self;
-#endif
 }
 
 
 /*
-  The official DrawSelf has to include selected objects
+  The official drawRect: has to include selected objects
 */
-
-- (void)drawRect:(NSRect)rect
+- (void) drawRect: (NSRect) rect
 {
-    if (scrolling) [self drawGV:rect :1];
-    else [self drawGV: rect : 0];
-    return;
+    [self drawRect: rect nonSelectedOnly: scrolling];
 }
 
 
@@ -1556,63 +1524,51 @@ extern struct toolData toolCodes[NUMTOOLS];
 
 static char *typeExts[3] = {NULL, "eps", "tiff"};
 
-- saveRect: (NSRect *) region : (int) type
+// TODO should be able to remove pasteboard saving into the NSDocument saving.
+- (NSData *) saveRect: (NSRect) region ofType: (int) type
 {
-  NSString *file;
-//  const char *types[4];
-//  int length, maxlen;
-  NSPasteboard *pb = [NSPasteboard generalPasteboard];
-//  char *data;
-//  NXStream *s;
-  NSData *s;
-  NSBitmapImageRep *bm;
-  switch(type)
-  {
-    case 0:
-      return self;
-    case 1:
-        file = [[NSApp currentDocument] askForFile: [NSString stringWithCString:typeExts[type]]];
-      if (file)
-      {
-          s = [self dataWithEPSInsideRect:*region];
-          [s writeToFile:file atomically:YES];
-      }
-      break;
-    case 2:
-        file = [[NSApp currentDocument] askForFile: [NSString stringWithCString:typeExts[type]]];
-      if (file)
-      {
-          [self lockFocus];
-	  bm = [[NSBitmapImageRep alloc] initWithFocusedViewRect:*region];
-	  [self unlockFocus];
-	  s = [bm TIFFRepresentationUsingCompression:NSTIFFCompressionLZW factor:TIFF_COMPRESSION_FACTOR];
-	  [bm release];
-          [s writeToFile:file atomically:YES];
-      }
-      break;
-    case 3:
-        [pb declareTypes:[NSArray arrayWithObject:NSPostScriptPboardType] owner:[self class]];
-      s = [self dataWithEPSInsideRect:*region]; ;
-      [pb setData:s forType:NSPostScriptPboardType];
-      numPastes = 0;
-      break;
-    case 4:
-        [pb declareTypes:[NSArray arrayWithObject:NSTIFFPboardType] owner:[self class]];
-      [self lockFocus];
-      bm = [[NSBitmapImageRep alloc] initWithFocusedViewRect:*region];
-      [self unlockFocus];
-        s = [bm TIFFRepresentationUsingCompression:NSTIFFCompressionLZW factor:TIFF_COMPRESSION_FACTOR];
-      [bm release];
-      [pb setData:s forType:NSTIFFPboardType];
-      numPastes = 0;
-      break;
-  }
-  return self;
+    NSPasteboard *pb = [NSPasteboard generalPasteboard];
+    NSData *s;
+    NSBitmapImageRep *bm;
+    
+    switch(type)
+    {
+	case 0:
+	    return nil;
+	case 1:
+	    s = [self dataWithEPSInsideRect: region];
+	    break;
+	case 2:
+	    [self lockFocus];
+	    bm = [[NSBitmapImageRep alloc] initWithFocusedViewRect: region];
+	    [self unlockFocus];
+	    s = [bm TIFFRepresentationUsingCompression: NSTIFFCompressionLZW factor: TIFF_COMPRESSION_FACTOR];
+	    [bm release];
+	    break;
+	case 3:
+	    [pb declareTypes: [NSArray arrayWithObject: NSPostScriptPboardType] owner: [self class]];
+	    s = [self dataWithEPSInsideRect: region];
+	    [pb setData: s forType: NSPostScriptPboardType];
+	    numPastes = 0;
+	    break;
+	case 4:
+	    [pb declareTypes: [NSArray arrayWithObject: NSTIFFPboardType] owner: [self class]];
+	    [self lockFocus];
+	    bm = [[NSBitmapImageRep alloc] initWithFocusedViewRect: region];
+	    [self unlockFocus];
+	    s = [bm TIFFRepresentationUsingCompression: NSTIFFCompressionLZW factor: TIFF_COMPRESSION_FACTOR];
+	    [bm release];
+	    [pb setData: s forType: NSTIFFPboardType];
+	    numPastes = 0;
+	    break;
+    }
+    return s;
 }
 
 
 /*
  * Target/Action methods.
+ // TODO all of these should be moved to the DrawDocument
  */
 
 - saveEPS: sender
@@ -1781,11 +1737,20 @@ static char *typeExts[3] = {NULL, "eps", "tiff"};
     return (int) (100 * currentScale);//sb: removed the + 0.5
 }
 
+- (float) getScaleFactor
+{
+    return currentScale;
+}
+
+- (void) setScaleFactor: (float) newScaleFactor
+{
+    currentScale = newScaleFactor;
+}
 
 - (int) getPageNum
 {
   if (currentPage == nil) return 0;
-  return ((Page *)currentPage)->num;
+  return currentPage->num;
 }
 
 
@@ -1830,8 +1795,8 @@ static char *typeExts[3] = {NULL, "eps", "tiff"};
 - (void)addToPageSetup
 {
   float s = 1.0 / currentScale;
-  [super addToPageSetup];
-  PSscale(s, s);
+  // [super addToPageSetup];
+  // PSscale(s, s);
 }
 
 - (void)print:(id)sender
@@ -1865,7 +1830,6 @@ static char *typeExts[3] = {NULL, "eps", "tiff"};
 {
     int n;
     // [super beginSetup];
-    PSInit();
     [self deselectAll: self];
     n = [pagelist indexOfObject:currentPage];
     [Page initPage];
@@ -2108,13 +2072,13 @@ extern int needUpgrade;
       s = [syslist objectAtIndex:k];
       if (s->view == 0)
       {
-        [NSApp log: @"NOTICE: corrected nil view found in unarchived system=" : k];
+        NSLog(@"NOTICE: corrected nil view found in unarchived system = %d\n", k);
         s->view = self;
       }
       if (s->page == 0) s->page = [self myPage: s];
       if (s->gFlags.type == 0)
       {
-        [NSApp log: @"NOTICE: corrected nil type found in unarchived system=" : k];
+        NSLog(@"NOTICE: corrected nil type found in unarchived system = %d", k);
         s->gFlags.type = SYSTEM;
       }
     }
