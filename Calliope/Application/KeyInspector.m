@@ -67,7 +67,7 @@ NSImage *keyimages[4];
   int i, j, k;
   NSRect b, tb;
   KeySig *p;
-  id sl, v = [[NSApp currentDocument] gview];
+  id sl, v = [[NSApp currentDocument] graphicView];
   int sk, okn=0;
   BOOL dotrans;
   if ([v startInspection: KEY : &b : &sl])
@@ -134,7 +134,7 @@ NSImage *keyimages[4];
 - preset
 {
   int n;
-  GraphicView *v = [[NSApp currentDocument] gview];
+  GraphicView *v = [[NSApp currentDocument] graphicView];
   KeySig *p = [v canInspect: KEY : &n];
   if (n == 0) return nil;
   [self updatePanel: p];

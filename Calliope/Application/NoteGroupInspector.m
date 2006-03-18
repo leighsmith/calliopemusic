@@ -75,7 +75,7 @@ char typeEnabled[NUMNOTEGROUPS][4] =
 {
   NSRect b;
   NSMutableArray *sl;
-  GraphicView *v = [[NSApp currentDocument] gview];
+  GraphicView *v = [[NSApp currentDocument] graphicView];
   NoteGroup *p;
   int k;
   if ([v startInspection: GROUP : &b : &sl])
@@ -123,7 +123,7 @@ char typeEnabled[NUMNOTEGROUPS][4] =
 
 - preset
 {
-    NoteGroup *p = [(GraphicView *)[[NSApp currentDocument] gview] canInspect: GROUP];
+    NoteGroup *p = [(GraphicView *)[[NSApp currentDocument] graphicView] canInspect: GROUP];
   if (p == nil) return self;
   return [self updatePanel: p];
 }

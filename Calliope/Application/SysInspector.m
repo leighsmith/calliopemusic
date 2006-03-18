@@ -319,7 +319,7 @@ static BOOL busyFlag = 0;  /* so that inspector is not inspected because of a ca
 
 - setSystemPart
 {
-  GraphicView *v = [[NSApp currentDocument] gview];
+  GraphicView *v = [[NSApp currentDocument] graphicView];
   System *sys = [v currentSystem];
   Staff *sp;
   if (sys == nil) return self;
@@ -849,7 +849,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
     [v shuffleIfNeeded];
     [v balancePages];
     [NSApp takeDownProgress: v];
-    [v gotoPage: 0 : 4];
+    [v gotoPage: 0 usingIndexMethod: 4];
   }
   else if (i & 1)
   {
@@ -1012,7 +1012,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
 {
   int i, k = 0, n;
   char wantstaff[NUMSTAVES];
-  GraphicView *v = [[NSApp currentDocument] gview];
+  GraphicView *v = [[NSApp currentDocument] graphicView];
   if (![v sysSameShape])
   {
     NSRunAlertPanel(@"Extraction", @"Systems not same size", @"OK", nil, nil, NULL);
@@ -1042,7 +1042,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
   int a, i, n;
   System *sys = [NSApp currentSystem];
   char order[NUMSTAVES];
-  GraphicView *v = [[NSApp currentDocument] gview];
+  GraphicView *v = [[NSApp currentDocument] graphicView];
   a = NSRunAlertPanel(@"Order Staves", @"Which systems to modify?", @"Current", @"All", @"Cancel");
   if (a == NSAlertOtherReturn) return self;
   busyFlag = YES;
@@ -1119,7 +1119,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
     [stybrowser loadColumnZero];
     [stybrowser setPath:s];
     [self styleButtons: s];
-    [(GraphicView *)[[NSApp currentDocument] gview] dirty];
+    [(GraphicView *)[[NSApp currentDocument] graphicView] dirty];
   }
   return self;
 }
@@ -1161,9 +1161,9 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
   if (NSRunAlertPanel(@"Calliope", buf, @"YES", @"NO", nil) != NSAlertDefaultReturn) return self;
   [sys copyStyleTo: st];
   busyFlag = YES;
-  [(GraphicView *)[[NSApp currentDocument] gview] flushStyle: st];
+  [(GraphicView *)[[NSApp currentDocument] graphicView] flushStyle: st];
   busyFlag = NO;
-  [(GraphicView *)[[NSApp currentDocument] gview] dirty];
+  [(GraphicView *)[[NSApp currentDocument] graphicView] dirty];
   return self;
 }
 
@@ -1204,7 +1204,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
       }
     }
     a = n;
-    [(GraphicView *)[[NSApp currentDocument] gview] renameStyle: st->style : [a retain]];
+    [(GraphicView *)[[NSApp currentDocument] graphicView] renameStyle: st->style : [a retain]];
     [st->style autorelease];
     st->style = [a retain];
     [[NSApp getStylelist] sortStylelist];
@@ -1212,7 +1212,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
     [stybrowser setPath:[a retain]];
     [self styleButtons: nil];
   }
-  [(GraphicView *)[[NSApp currentDocument] gview] dirty];
+  [(GraphicView *)[[NSApp currentDocument] graphicView] dirty];
   return self;
 }
 
@@ -1221,7 +1221,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
 {
   System *st;
   int i;
-  GraphicView *v = [[NSApp currentDocument] gview];
+  GraphicView *v = [[NSApp currentDocument] graphicView];
   if (v == nil)
   {
     NSBeep();
@@ -1251,7 +1251,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
 {
   int i;
   float ss, lm;
-  GraphicView *v = [[NSApp currentDocument] gview];
+  GraphicView *v = [[NSApp currentDocument] graphicView];
   System *st, *sys = [v currentSystem];
   if (sys == nil)
   {
@@ -1310,7 +1310,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
   [stybrowser loadColumnZero];
   [stybrowser setPath:@""];
   [self styleButtons: @""];
-  [(GraphicView *)[[NSApp currentDocument] gview] dirty];
+  [(GraphicView *)[[NSApp currentDocument] graphicView] dirty];
   return self;
 }
 

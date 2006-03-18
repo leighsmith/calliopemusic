@@ -24,14 +24,14 @@
     NSMutableArray *syslist;				/*! @var syslist the NSArray of System */
     NSMutableArray *stylelist;				/*! @var stylelist NSArray of System (templates for styles) */
     NSMutableArray *chanlist;				/*! @var chanlist the NSArray of Channel */
-    NSMutableArray *partlist;				/*! @var partlist the NSArray of Part */
 @private
+    NSMutableArray *partlist;				/*! @var partlist the NSArray of Parts */
     NSMutableArray *pagelist;				/*! @var pagelist the NSArray of Page */
     Page *currentPage;			    /*! @var currentPage The current page to be drawn */
     System *currentSystem;                   /*! @var currentSystem System at top of page of view */
     NSFont *currentFont;                /*! @var currentFont Used to display what? Musical font at any moment, for a particular task? */
     float currentScale;		      /*! @var currentScale The scaling factor: 1.0 = no scaling. */
-    BOOL serviceActsOnSelection;        /*! @var  whether a service has arguments */
+    BOOL serviceActsOnSelection;        /*! @var serviceActsOnSelection whether a service has arguments */
     BOOL dirtyflag;
     NSImage *cacheImage;		/*! @var  the cache of drawn graphics */
     NSRect *dragRect;			/*! @var  last rectangle we dragged out to select */
@@ -48,12 +48,12 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
 + (void) initialize;
 
 - initWithFrame: (NSRect) frameRect;
-- (BOOL)isFlipped;
-- (void)dealloc;
-- (BOOL)isWithinBounds:(NSRect) rect;
-- (BOOL)move:(NSEvent *)event : (id) obj : (int) alt;
-- dragSelect:(NSEvent *)event;
-/*! This is called by Graphic! Should become private... */
+- (BOOL) isFlipped;
+- (void) dealloc;
+- (BOOL) isWithinBounds: (NSRect) rect;
+- (BOOL) move: (NSEvent *) event : (id) obj : (int) alt;
+- dragSelect: (NSEvent *) event;
+/* TODO This is called by Graphic! Should become private... */
 - drawRect: (NSRect) b nonSelectedOnly: (BOOL) nonselonly;
 - drawSelectionInstance;
 - drawSelectionWith: (NSRect *) b;
@@ -61,8 +61,11 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
 - selectionHandBBox: (NSRect *) b;
 - emptySlist;
 - currentSystem;
+
+// These should be removed, a document can be "dirty" i.e. modified, not a view.
 - dirty;
-- (BOOL)isDirty;
+- (BOOL) isDirty;
+
 - (BOOL) isEmpty;
 - reDraw: p;
 - reShapeAndRedraw: g;

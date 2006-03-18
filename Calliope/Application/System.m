@@ -379,7 +379,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   [view linkSystem: cursys : self];
   [view thisSystem: self];
   [view setFontSelection: 1 : 0];
-  [NSApp inspectClass: [SysInspector class]: NO];
+  [NSApp inspectClass: [SysInspector class] loadInspector: NO];
   return self;
 }
 

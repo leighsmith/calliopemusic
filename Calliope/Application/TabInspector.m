@@ -160,7 +160,7 @@ int tuneIndex(int n)
 {
   NSRect b;
   Tablature *p;
-  id sl, v = [[NSApp currentDocument] gview];
+  id sl, v = [[NSApp currentDocument] graphicView];
   int s, i, j, k, num, t;
   if ([v startInspection: TABLATURE : &b : &sl : &num])
   {
@@ -251,7 +251,7 @@ void setMatrix(int a, int num, int rv, int cv, NSMatrix *m)
 - updatePanel
 {
   int b, num;
-  GraphicView *v = [[NSApp currentDocument] gview];
+  GraphicView *v = [[NSApp currentDocument] graphicView];
   [self assayList: v->slist : &num];
   if (num == 0) return nil;
   if (ALLSAME(0, num)) /* strum */
@@ -405,7 +405,7 @@ NSString *partNameHavingInst(NSString *i)
 {
   int num, w;
   NSMutableArray *pl;
-  GraphicView *v = [[NSApp currentDocument] gview];
+  GraphicView *v = [[NSApp currentDocument] graphicView];
   [self constructTuning];
   if (v == nil) return self;
   w = [definebutton indexOfSelectedItem] - 1;

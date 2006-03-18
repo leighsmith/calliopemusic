@@ -51,7 +51,7 @@ static Staff *staffmap[NUMSTAVES]; /* indexed by old staff, points to new staff 
   int k;
   id f;
   StaffObj *p;
-  opl = [NSApp getPartlist];
+  opl = [self partList];
   f = [self copyToPasteboard: nl];
   enl = [self pasteFromPasteboard: [NSPasteboard generalPasteboard]];
   [self closeList: enl];
@@ -190,6 +190,7 @@ static void addBarsRest(Staff *sp, System *sys, int n)
   DrawDocument *doc;
   GraphicView *v;
   BOOL hassys, wantstaff[NUMSTAVES];
+  
   [self deselectAll: self];
   epl = [[NSMutableArray alloc] init];
   [epl addObject: [[CallPart alloc] init: nullPart : nil : 1 : nullInstrument]];
@@ -266,6 +267,10 @@ static void addBarsRest(Staff *sp, System *sys, int n)
   return self;
 }
 
+- (NSArray *) partList
+{
+    return [NSArray arrayWithArray: partlist];
+}
 
 /*
   Extract parts in which desired staves are designated

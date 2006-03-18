@@ -22,7 +22,7 @@ int subfor[4] = {2, 3, 2, 3};
   System *sys;
   float conv;
   NSMutableArray *sl;
-  GraphicView *v = [[NSApp currentDocument] gview];
+  GraphicView *v = [[NSApp currentDocument] graphicView];
   int k, num, sn;
   conv = [NSApp pointToCurrentUnitFactor];
 //  [[NSApp pageLayout] convertOldFactor:&conv newFactor:&anon];
@@ -74,7 +74,7 @@ int subfor[4] = {2, 3, 2, 3};
 
 - insertVar: sender
 {
-  GraphicView *v = [[NSApp currentDocument] gview];
+  GraphicView *v = [[NSApp currentDocument] graphicView];
   NSRect b;
   TextGraphic *p;
   NSMutableArray *sl;
@@ -124,7 +124,7 @@ int rownum[4] = {0, 0, 0, 1};
   int num;
   float conv;
   TextGraphic *p;
-  GraphicView *v = [[NSApp currentDocument] gview];
+  GraphicView *v = [[NSApp currentDocument] graphicView];
   [self assayList: v->slist : &num];
   if (num == 0) return nil;
   if (ALLSAME(0, num)) [typematrix selectCellAtRow:rownum[ALLVAL(0)] column:0];

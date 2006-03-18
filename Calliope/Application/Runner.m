@@ -98,7 +98,7 @@ int runnerStatus = 0;
     /* sb: I want to check here whether the inspector, if it exists, is
      * pointing at me, and if it is, order it off screen.
      */
-    p = [NSApp getInspector: [RunInspector class] : 0];
+    p = [NSApp getInspectorForClass: [RunInspector class] loadInspector: 0];
     if (p) {
         id r = [p runner];
         if (self == r) {
@@ -199,7 +199,7 @@ extern int selMode;
 //  coutrect(fb.origin.x, fb.origin.y, fb.size.width, fb.size.height, 0.0, 5);
   if (NSIsEmptyRect(r) || !NSIsEmptyRect(NSIntersectionRect(r , fb)))
   {
-      id graphicView = [[NSApp currentDocument] gview];
+      id graphicView = [[NSApp currentDocument] graphicView];
       [[graphicView window] setAutodisplay:NO]; // don't let addSubview: cause redisplay
     [myText setFrame:fb];
 

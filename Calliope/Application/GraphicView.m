@@ -974,15 +974,17 @@ extern char *typename[NUMTYPES];
 
 - pressTool: (int) t : (int) arg
 {
-  NSRect b0, b1;
-  [self selectionHandBBox: &b0];
-  if (![Graphic createMember: (int) t : self : arg]) NSBeep();
-  [self selectionHandBBox: &b1];
-  b0  = NSUnionRect(b1 , b0);
-  [self cache: b0];
-  [[self window] flushWindow];
-  [self dirty];
-  return self;
+    NSRect b0, b1;
+    
+    [self selectionHandBBox: &b0];
+    if (![Graphic createMember: (int) t : self : arg])
+	NSLog(@"pressTool: Could not create member");
+    [self selectionHandBBox: &b1];
+    b0  = NSUnionRect(b1 , b0);
+    [self cache: b0];
+    [[self window] flushWindow];
+    [self dirty];
+    return self;
 }
 
 
@@ -993,13 +995,14 @@ extern char *typename[NUMTYPES];
   Staff *sp;
   System *sys;
   NSRect b;
+  
   sys = [self findSys: y];
   sp = [sys findOnlyStaff: y];
   if (sp != p->mystaff && [p myChordGroup] != nil) return self;
   [self selectionHandBBox: &b];
   if (![p newHead: y : p->mystaff : 0])
   {
-    NSBeep();
+    NSLog(@"noteheadTool: newHead: returned nil");
     return self;
   }
   [self dirty];
@@ -1020,7 +1023,7 @@ extern char *typename[NUMTYPES];
     [self reDraw: g]; /* g's marker */
     [self reDraw: s]; /* old marker */
   }
-  [NSApp inspectClass: [SysInspector class] : command];
+  [NSApp inspectClass: [SysInspector class] loadInspector: command];
   return self;
 }
 
@@ -1086,15 +1089,18 @@ extern char *typename[NUMTYPES];
 
 extern struct toolData toolCodes[NUMTOOLS];
 
-- (void)mouseDown:(NSEvent *)event
-    {
+- (void) mouseDown: (NSEvent *) event
+{
     NSPoint p;
     int /*oldMask,*/ i, tool, fontseltype = -1;
     Graphic *g = nil, *trymove = nil;
     System *sys;
     BOOL shift, control, command, alternate, autoalt = NO;
     if ([[self window] firstResponder] != self) [[self window] makeFirstResponder:self];
-    if (currentSystem == nil) {NSBeep(); return;}
+    if (currentSystem == nil) {
+	NSLog(@"mouseDown: currentSystem is nil");
+	return;
+    }
     shift = ([event modifierFlags] & NSShiftKeyMask) ? YES : NO;
     control = ([event modifierFlags] & NSControlKeyMask) ? YES : NO;
     command = ([event modifierFlags] & NSCommandKeyMask) ? YES : NO;
@@ -1103,8 +1109,8 @@ extern struct toolData toolCodes[NUMTOOLS];
     tool = toolCodes[currentTool].type;
     if (tool && (control || command || alternate))
     {
-      [NSApp resetTool];
-      return;
+	[NSApp resetTool];
+	return;
     }
     p = [event locationInWindow];
     p = [self convertPoint:p fromView:nil];
@@ -1112,148 +1118,148 @@ extern struct toolData toolCodes[NUMTOOLS];
 //    oldMask = [window addToEventMask:NSLeftMouseDraggedMask|NSLeftMouseUpMask];
     if (grabflag)
     {
-      [self dragSelect: event];
-      grabflag = NO;
-      [[self window] flushWindow];
+	[self dragSelect: event];
+	grabflag = NO;
+	[[self window] flushWindow];
 //#error EventConversion: setEventMask:oldMask: is obsolete; you no longer need to use the eventMask methods; for mouse moved events, see 'setAcceptsMouseMovedEvents:'
 //      [window setEventMask:oldMask];
-      return;
+	return;
     }
     if (tool == 101)
     {
-      /* the 'add notehead' tool */
-      g = [self isSelType: NOTE];
-      if (g != nil && TOLFLOATEQ(p.x, ((GNote *)g)-> x, 8.0))
-      {
-          [self noteheadTool: (GNote *)g : p.y];
-	trymove = g;
-	autoalt = YES;
-      }
-      else
-      {
-        NSBeep();
-        tool = 0;
-	g = nil;
-      }
+	/* the 'add notehead' tool */
+	g = [self isSelType: NOTE];
+	if (g != nil && TOLFLOATEQ(p.x, ((GNote *)g)-> x, 8.0))
+	{
+	    [self noteheadTool: (GNote *)g : p.y];
+	    trymove = g;
+	    autoalt = YES;
+	}
+	else
+	{
+	    NSLog(@"mouseDown: g == nil || not within tolerance");
+	    tool = 0;
+	    g = nil;
+	}
     }
     if (tool == 100)
     {
-      /* the 'copy pasteboard' tool: might have clicked a staffobj too */
-      g = [self isSelTypeCode: TC_STAFFOBJ : &i];
-      if ([g hit: p]) [self pasteTool: &p : g]; else [self pasteTool: &p : nil];
-      trymove = [self isSelLeftmost];
-      if (trymove == nil)
-      {
-        NSBeep();
-	return;
-      }
-      [self setuplist: (StaffObj *)trymove : &p];
-      [self moveSelection: p : 0];
-      [self drawSelectionWith: NULL];
+	/* the 'copy pasteboard' tool: might have clicked a staffobj too */
+	g = [self isSelTypeCode: TC_STAFFOBJ : &i];
+	if ([g hit: p]) [self pasteTool: &p : g]; else [self pasteTool: &p : nil];
+	trymove = [self isSelLeftmost];
+	if (trymove == nil)
+	{
+	    NSLog(@"trymove == nil");
+	    return;
+	}
+	[self setuplist: (StaffObj *)trymove : &p];
+	[self moveSelection: p : 0];
+	[self drawSelectionWith: NULL];
     }
     else if (tool == 101)
     {
-      /* (add notehead) take this to ignore remainder */
+	/* (add notehead) take this to ignore remainder */
     }
     else if (tool == 102)
     {
-      /* new staff */
-      [self deselectAll: self];
-      [[self findSys: p.y] newStaff: p.y];
-      [self balanceOrAsk: currentPage : 0 : 0];
-      [NSApp resetTool];
-      [NSApp inspectClass: [SysInspector class] : NO];
-      trymove = nil;
+	/* new staff */
+	[self deselectAll: self];
+	[[self findSys: p.y] newStaff: p.y];
+	[self balanceOrAsk: currentPage : 0 : 0];
+	[NSApp resetTool];
+	[NSApp inspectClass: [SysInspector class] loadInspector: NO];
+	trymove = nil;
     }
     else if (tool) 
     {
-      g = [Graphic createMember: self : tool : p : [self findSys: p.y] : toolCodes[currentTool].arg1 : toolCodes[currentTool].arg2];
-      if (g == nil) return;
-      [self dirty];
-      if (!shift) [self deselectAll: self];
-      [self selectObj: g];
-      lastHit = g;
-      [self drawSelectionWith: NULL];
-      fontseltype = 0;
-      if (!shift) trymove = g;
+	g = [Graphic createMember: self : tool : p : [self findSys: p.y] : toolCodes[currentTool].arg1 : toolCodes[currentTool].arg2];
+	if (g == nil) return;
+	[self dirty];
+	if (!shift) [self deselectAll: self];
+	[self selectObj: g];
+	lastHit = g;
+	[self drawSelectionWith: NULL];
+	fontseltype = 0;
+	if (!shift) trymove = g;
     }
     else
     {
-      g = [self searchFor: p];
-      if (g != nil)
-      {
-        if (cvFlag)
-        {
-	  [self copyVerseFrom: g];
-	  [[[self window] contentView] setDocumentCursor:[NSCursor arrowCursor]];
-          cvFlag = NO;
+	g = [self searchFor: p];
+	if (g != nil)
+	{
+	    if (cvFlag)
+	    {
+		[self copyVerseFrom: g];
+		[[[self window] contentView] setDocumentCursor:[NSCursor arrowCursor]];
+		cvFlag = NO;
 //#error EventConversion: setEventMask:oldMask: is obsolete; you no longer need to use the eventMask methods; for mouse moved events, see 'setAcceptsMouseMovedEvents:'
 //          [window setEventMask:oldMask];
-	  return;
-        }
-        if (TYPEOF(g) == SYSTEM)
-        {
-	  /* special treatment for System: fire and forget */
-	  [self selectCurSys: (System *)g : command];
-          [self setFontSelection: 3 : 0];
-	  g = nil;
-	  trymove = nil;
+		return;
+	    }
+	    if (TYPEOF(g) == SYSTEM)
+	    {
+		/* special treatment for System: fire and forget */
+		[self selectCurSys: (System *)g : command];
+		[self setFontSelection: 3 : 0];
+		g = nil;
+		trymove = nil;
+	    }
+	    else if (g->gFlags.selected)
+	    {
+		if (g->gFlags.selbit)
+		{
+		    g->gFlags.selbit = 0;
+		    [self tallyAndRedraw: g];
+		}
+		if (shift) [self deselectObj: g];
+		else
+		{
+		    trymove = g;
+		}
+		fontseltype = 0;
+	    }
+	    else /* was not already selected */
+	    {
+		if (!shift) [self deselectAll: self];
+		[self selectObj: g];
+		if (g->gFlags.selbit)
+		{
+		    g->gFlags.selbit = 0;
+		    [self tallyAndRedraw: g];
+		}
+		else [self drawSelectionWith: NULL];
+		if (!shift) trymove = g;
+		fontseltype = 0;
+	    }
 	}
-        else if (g->gFlags.selected)
+	else /* nothing hit */
 	{
-	  if (g->gFlags.selbit)
-	  {
-	    g->gFlags.selbit = 0;
-	    [self tallyAndRedraw: g];
-	  }
-	  if (shift) [self deselectObj: g];
-	  else
-	  {
-	    trymove = g;
-	  }
-	  fontseltype = 0;
+	    if (!shift && [slist count]) [self deselectAll: self];
+	    [self dragSelect: event];
 	}
-	else /* was not already selected */
-	{
-	  if (!shift) [self deselectAll: self];
-	  [self selectObj: g];
-	  if (g->gFlags.selbit)
-	  {
-	    g->gFlags.selbit = 0;
-	    [self tallyAndRedraw: g];
-	  }
-	  else [self drawSelectionWith: NULL];
-	  if (!shift) trymove = g;
-	  fontseltype = 0;
-	}
-      }
-      else /* nothing hit */
-      {
-        if (!shift && [slist count]) [self deselectAll: self];
-	[self dragSelect: event];
-      }
     }
     if (g != nil)
     {
-      if (ISASTAFFOBJ(g))
-      {
-        sys = [(StaffObj *)g mySystem];
-        if (sys != currentSystem) [self selectCurSys: sys : NO];
-      }
-      [NSApp inspectAppWithMe: g : command : fontseltype];
-      i = g->gFlags.selend;
-      if ([g isResizable] && i == 7)
-      {
-          cached = NO; /* to wipe current selection from screen */
-        [g resize: event in: self];
-	trymove = nil;
-      }
-      else if ([g isEditable] && !alternate && (i != 7 && i != 4))
-      {
-        [NSApp resetTool];
-        [(TextGraphic *)g edit: event in: self];
-	trymove = nil;
-      }
+	if (ISASTAFFOBJ(g))
+	{
+	    sys = [(StaffObj *)g mySystem];
+	    if (sys != currentSystem) [self selectCurSys: sys : NO];
+	}
+	[NSApp inspectAppWithMe: g loadInspector: command : fontseltype];
+	i = g->gFlags.selend;
+	if ([g isResizable] && i == 7)
+	{
+	    cached = NO; /* to wipe current selection from screen */
+	    [g resize: event in: self];
+	    trymove = nil;
+	}
+	else if ([g isEditable] && !alternate && (i != 7 && i != 4))
+	{
+	    [NSApp resetTool];
+	    [(TextGraphic *)g edit: event in: self];
+	    trymove = nil;
+	}
     }
 //    [NSObject cancelPreviousPerformRequestsWithTarget:NSApp selector:@selector(updateWindows) object:nil];
 //    [NSApp performSelector:@selector(updateWindows) withObject:nil afterDelay:(1) / 1000.0];
@@ -1270,11 +1276,12 @@ extern struct toolData toolCodes[NUMTOOLS];
     int systemIndex;
     Page *pageToDraw = currentPage;
     
+    [backShade set];
+    NSRectFill(rect);
+
     if (pageToDraw == nil) 
 	return self;
 
-    [backShade set];
-    NSRectFill(rect);
     [pageToDraw draw: rect : nso];
     for (systemIndex = pageToDraw->topsys; systemIndex <= pageToDraw->botsys; systemIndex++) 
 	[[syslist objectAtIndex: systemIndex] draw: rect : nso];
@@ -1353,12 +1360,12 @@ extern struct toolData toolCodes[NUMTOOLS];
     g->selver = [p verseNeighbour: g];
     [self deselectAll: self];
     dp = [self findPageOff: g];
-    if (dp) [self gotoPage: dp : 0];
+    if (dp) [self gotoPage: dp usingIndexMethod: 0];
     graphicBBox(&b, g);
     [self scrollRectToVisible:b];
     [self selectObj: g];
     [self drawSelectionWith: NULL];
-    if (!ISAVOCAL(g)) NSBeep();
+    if (!ISAVOCAL(g)) NSLog(@"handleTab: is not a vocal");
     [NSApp inspectApp];
     return YES;
   }
@@ -1497,7 +1504,7 @@ extern struct toolData toolCodes[NUMTOOLS];
     {
       [self dirty];
       [self drawSelectionWith: &b];
-      [NSApp inspectAppWithMe: p : NO : 0];
+      [NSApp inspectAppWithMe: p loadInspector: NO : 0];
     }
     else if (act < 0) [super keyDown:event];
   }
@@ -1522,7 +1529,7 @@ extern struct toolData toolCodes[NUMTOOLS];
  * Writes out the EPS or TIFF of the given rect.
 */
 
-static char *typeExts[3] = {NULL, "eps", "tiff"};
+// static char *typeExts[3] = {NULL, "eps", "tiff"};
 
 // TODO should be able to remove pasteboard saving into the NSDocument saving.
 - (NSData *) saveRect: (NSRect) region ofType: (int) type
@@ -1634,7 +1641,7 @@ static char *typeExts[3] = {NULL, "eps", "tiff"};
     {
         if (((Margin *)p)->client == [syslist objectAtIndex: 0])
         {
-          NSBeep();
+          NSLog(@"delete: client == first system");
           return;
         }
         p->bounds = NSUnionRect(mybb , (p->bounds));
@@ -1788,13 +1795,14 @@ static char *typeExts[3] = {NULL, "eps", "tiff"};
 
 - (NSRect)rectForPage:(int)pn
 {
-      return [self findPage: pn : 2] ? [self bounds]: NSZeroRect;
+      return [self findPage: pn usingIndexMethod: 2] ? [self bounds]: NSZeroRect;
 }
 
 
 - (void)addToPageSetup
 {
-  float s = 1.0 / currentScale;
+    // TODO
+//  float s = 1.0 / currentScale;
   // [super addToPageSetup];
   // PSscale(s, s);
 }
@@ -1806,7 +1814,7 @@ static char *typeExts[3] = {NULL, "eps", "tiff"};
   n = [pagelist indexOfObject:currentPage];
   [Page initPage];
   [super print:sender];
-  [self gotoPage: n : 1];
+  [self gotoPage: n usingIndexMethod: 1];
 }
 
 
@@ -1833,7 +1841,7 @@ static char *typeExts[3] = {NULL, "eps", "tiff"};
     [self deselectAll: self];
     n = [pagelist indexOfObject:currentPage];
     [Page initPage];
-    [self gotoPage: n : 1];
+    [self gotoPage: n usingIndexMethod: 1];
 }
 
 

@@ -66,8 +66,7 @@ static unsigned char accidents[6] =
   /* then ledger lines */
   if (p == 0) {
       // PSrectfill(nx - LOFF, my + dy, lw, 0.5);
-      NSRect ledgerRect = {nx - LOFF, my + dy, lw, 0.5};
-      
+      NSRect ledgerRect = {{ nx - LOFF, my + dy }, { lw, 0.5 }};
       NSRectFill(ledgerRect);
   }
   else if (p >= 12) {

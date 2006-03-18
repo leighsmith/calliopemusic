@@ -32,7 +32,7 @@
 {
   NSRect b, tb;
   Clef *p;
-  id sl, v = [[NSApp currentDocument] gview];
+  id sl, v = [[NSApp currentDocument] graphicView];
   int i, k, mc=0, off;
   BOOL dotrans;
   if ([v startInspection: CLEF : &b : &sl])
@@ -77,7 +77,7 @@
 - preset
 {
   int n;
-  GraphicView *v = [[NSApp currentDocument] gview];
+  GraphicView *v = [[NSApp currentDocument] graphicView];
   Clef *p = [v canInspect: CLEF : &n];
   if (n == 0) return nil;
   [keymatrix selectCellAtRow:p->keycentre column:p->gFlags.subtype];

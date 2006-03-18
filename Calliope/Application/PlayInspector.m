@@ -85,7 +85,7 @@ static void blinkOff(GraphicView *v)
 {
     GraphicView *v;
     if (blinkstate < 0) return;
-    v = [[NSApp currentDocument] gview];
+    v = [[NSApp currentDocument] graphicView];
     if ([[NSApp keyWindow] firstResponder] != v) return;
     switch (blinkstate)
     {
@@ -187,7 +187,7 @@ static void blinkOff(GraphicView *v)
       ch->vibrato = f;
       break;
   }
-  [[[NSApp currentDocument] gview] dirty];
+  [[[NSApp currentDocument] graphicView] dirty];
   return self;
 }
 
@@ -210,7 +210,7 @@ static void blinkOff(GraphicView *v)
     status = MK_paused;
       [MKConductor lockPerformance];
       [MKConductor pausePerformance];
-    [[[NSApp currentDocument] gview] pausePlayers];
+    [[[NSApp currentDocument] graphicView] pausePlayers];
     if (![pausebutton state]) [pausebutton setState:1];
     [MKConductor unlockPerformance];
   }
@@ -220,7 +220,7 @@ static void blinkOff(GraphicView *v)
     status = MK_active;
     [MKConductor sendMsgToApplicationThreadSel: @selector(unsetPauseButton) to: self argCount: 0];
     [MKConductor lockPerformance];
-    [[[NSApp currentDocument] gview] resumePlayers];
+    [[[NSApp currentDocument] graphicView] resumePlayers];
     [MKConductor resumePerformance];
     [MKConductor unlockPerformance];
   }
@@ -262,7 +262,7 @@ static void blinkOff(GraphicView *v)
     blinkstate = 2;
     if (![stopbutton state]) [stopbutton setState:1];
     [MKConductor lockPerformance];
-    [[[NSApp currentDocument] gview] deactivatePlayers];
+    [[[NSApp currentDocument] graphicView] deactivatePlayers];
     [MKConductor unlockPerformance];
     [playbutton setState:0];
     [playbutton setEnabled:YES];
@@ -351,7 +351,7 @@ static void blinkOff(GraphicView *v)
   [MKConductor unlockPerformance];
   playmode = [[outputmatrix selectedCell] tag];
   [playbutton setEnabled:NO];
-  [[[NSApp currentDocument] gview] playChoice: i : j : [selectswitch state] : [progchbutton state]];
+  [[[NSApp currentDocument] graphicView] playChoice: i : j : [selectswitch state] : [progchbutton state]];
   return self;
 }
 

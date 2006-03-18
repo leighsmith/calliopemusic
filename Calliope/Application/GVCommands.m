@@ -197,7 +197,7 @@ static NSString *stylescratch;
   [sys copyStyleTo: currentSystem];
   [currentSystem recalc];
   [self paginate: self];
-  [NSApp inspectClass: [SysInspector class] : NO];
+  [NSApp inspectClass: [SysInspector class] loadInspector: NO];
   [self dirty];
   return self;
 }
@@ -642,7 +642,7 @@ extern char *typename[NUMTYPES];
   [self deselectAll: self];
   [currentSystem recalcObjs];
   [self selectObj: p];
-  [NSApp inspectMe: p : YES];
+  [NSApp inspectMe: p loadInspector: YES];
   return self;
 }
 
@@ -683,7 +683,7 @@ extern char *typename[NUMTYPES];
   [self deselectAll: self];
   [currentSystem recalcObjs];
   [self selectObj: p];
-  [NSApp inspectMe: p : YES];
+  [NSApp inspectMe: p loadInspector: YES];
   return self;
 }
 
@@ -697,7 +697,7 @@ extern char *typename[NUMTYPES];
   }
   else
   {
-    [NSApp inspectClass: [SysInspector class] : YES];
+    [NSApp inspectClass: [SysInspector class] loadInspector: YES];
     [self setFontSelection: 3 : 0];
   }
   return self;
@@ -1365,7 +1365,8 @@ extern char *typename[NUMTYPES];
 - (int) gotoPage: (int) n
 {
   if (currentPage == nil) return 0;
-  if ([self gotoPage: n : 2] == nil) return  ((Page *) currentPage)->num;
+  if ([self gotoPage: n usingIndexMethod: 2] == nil) 
+      return currentPage->num;
   return -1;
 }
 
@@ -1384,7 +1385,7 @@ extern char *typename[NUMTYPES];
   [self setRanges];
   [self dirty];
   [NSApp takeDownProgress: self];
-  [self gotoPage: 0 : 4];
+  [self gotoPage: 0 usingIndexMethod: 4];
   return self;
 }
 
@@ -1676,7 +1677,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
   BOOL r = NO, m = NO;
   int theLocation;
   i = (sys == [syslist lastObject]) ? -1 : 1;
-  [self thisSystem: [self getSystem: sys : i]];
+  [self thisSystem: [self getSystem: sys offsetBy: i]];
   m = ([sys checkMargin] != nil);
   if (m) [self saveSysLeftMargin];
   theLocation = [syslist indexOfObject:sys];
@@ -1895,7 +1896,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
     NSBeep();
     return self;
   }
-  nsys = [self getSystem: currentSystem : 1];
+  nsys = [self getSystem: currentSystem offsetBy: 1];
   if (nsys == nil)
   {
     NSBeep();

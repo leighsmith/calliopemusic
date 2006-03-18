@@ -61,20 +61,20 @@ extern int partlistflag;
 
 /* Public methods */
 
-- (NSWindow *)currentWindow;
-- (void)setCurrentWindow:(id)w;//sb
+- (NSWindow *) currentWindow;
+- (void)setCurrentWindow: (id) w; //sb
 - selectFontSelection: (int) i;
 - currentDocument;
 - document;
 - currentView;
 - currentSystem;
-- (NSString *)currentDirectory;
+- (NSString *) currentDirectory;
 - print:sender; /* brought to app level by sb; originally only in graphicView.m */
-- getInspector: c : (BOOL) cmd;
+- getInspectorForClass: (Class) c loadInspector: (BOOL) cmd;
 - inspectApp;
-- inspectAppWithMe: g : (BOOL) launch : (int) fontseltype;
-- inspectMe: g : (BOOL) b;
-- inspectClass: c : (BOOL) b;
+- inspectAppWithMe: g loadInspector: (BOOL) launch : (int) fontseltype;
+- inspectMe: g loadInspector: (BOOL) b;
+- inspectClass: (Class) c loadInspector: (BOOL) cmd;
 - resetTool;
 - resetToolTo: (int) t;
 - newPageLayout;

@@ -1,4 +1,4 @@
-/* $Id:$ */
+/* $Id$ */
 #import "winheaders.h"
 #import <AppKit/AppKit.h>
 //#import <Foundation/NSCompatibility.h>
@@ -84,7 +84,7 @@
 - initCopy: (NSString *) name andDirectory: (NSString *) dir;
 - printInfo;
 - resetScrollers;
-- gview;
+- (GraphicView *) graphicView;
 - changeSize: (float) width : (float) height : (NSPoint)origin;
 
 /* Target/Action methods */

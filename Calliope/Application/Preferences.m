@@ -472,7 +472,7 @@ NSFontManager *fm = [NSFontManager sharedFontManager];
 - set:sender
 {
   DrawDocument *d = [NSApp currentDocument];
-  GraphicView *v = [d gview];
+  GraphicView *v = [d graphicView];
   PrefBlock *p = [d prefInfo];
   float oss, nss, w, h;
   NSSize pr;

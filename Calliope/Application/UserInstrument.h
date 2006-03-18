@@ -1,10 +1,12 @@
-/*** UserInstrument.h ***/
-
+/* $Id:$ */
 
 #import "winheaders.h"
-#import <MusicKit/MKInstrument.h>
+#import <MusicKit/MusicKit.h>
 
 
-@interface UserInstrument:MKInstrument
+@interface UserInstrument: MKInstrument
 {}
+
+- realizeNote: (MKNote *) n fromNoteReceiver: (MKNoteReceiver *) nr;
+
 @end

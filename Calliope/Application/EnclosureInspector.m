@@ -25,7 +25,7 @@
 {
   NSRect b;
   Enclosure *p;
-  id sl, v = [[NSApp currentDocument] gview];
+  id sl, v = [[NSApp currentDocument] graphicView];
   int k;
   if ([v startInspection: ENCLOSURE : &b : &sl])
   {
@@ -45,7 +45,7 @@
 - preset
 {
   int n;
-  GraphicView *v = [[NSApp currentDocument] gview];
+  GraphicView *v = [[NSApp currentDocument] graphicView];
   Enclosure *p = [v canInspect: ENCLOSURE : &n];
   if (n)
   {

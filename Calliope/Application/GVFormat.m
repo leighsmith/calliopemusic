@@ -1,5 +1,5 @@
-
 /* 
+  $Id:$
   Routines for handling the systemlist, pagelist, and formatting
 */
 
@@ -213,8 +213,8 @@ extern NSSize paperSize;
   System *sys, *minsys = nil;
   Staff *sp;
   float dy, miny = MAXFLOAT;
-  i = ((Page *) currentPage)->topsys;
-  j = ((Page *) currentPage)->botsys;
+  i = currentPage->topsys;
+  j = currentPage->botsys;
   for (k = i; k <= j; k++)
   {
     sys = [syslist objectAtIndex:k];
@@ -302,7 +302,7 @@ extern NSSize paperSize;
   Sets currentSystem to top of page except off = 3,4.
 */
 
-- (BOOL) findPage: (int) n : (int) off
+- (BOOL) findPage: (int) n usingIndexMethod: (int) off
 {
   int i, k;
   Page *p=nil;
@@ -349,9 +349,9 @@ extern NSSize paperSize;
 }
 
 
-- gotoPage: (int) n : (int) off
+- gotoPage: (int) n usingIndexMethod: (int) off
 {
-    if ([self findPage: n : off])
+    if ([self findPage: n usingIndexMethod: off])
       {
         [[self window] endEditingFor:self];
         [self setNeedsDisplay:YES];
@@ -366,29 +366,29 @@ extern NSSize paperSize;
 
 - prevPage: sender
 {
-  return [self gotoPage: -1 : 0];
+  return [self gotoPage: -1 usingIndexMethod: 0];
 }
 
 
 - nextPage: sender
 {
-  return [self gotoPage: 1 : 0];
+  return [self gotoPage: 1 usingIndexMethod: 0];
 }
 
 
 - firstPage: sender
 {
-  return [self gotoPage: 0 : 1];
+  return [self gotoPage: 0 usingIndexMethod: 1];
 }
 
 
 - lastPage: sender
 {
-  return [self gotoPage: (int)[pagelist count] - 1 : 1];
+  return [self gotoPage: (int)[pagelist count] - 1 usingIndexMethod: 1];
 }
 
 
-- getSystem: sys : (int) off
+- getSystem: sys offsetBy: (int) off
 {
   return [syslist objectAtIndex:[syslist indexOfObject:sys] + off];
 }
@@ -405,7 +405,7 @@ extern NSSize paperSize;
     st = [syslist objectAtIndex:j];
       if ([st->style isEqualToString: a])
     {
-      [self gotoPage: j : 3];
+      [self gotoPage: j usingIndexMethod: 3];
       return self;
     }
   }

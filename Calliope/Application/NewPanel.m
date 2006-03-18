@@ -88,7 +88,7 @@
     if (!doc) NSRunAlertPanel(@"Calliope", @"Cannot find template document", @"OK", nil, nil);
   }
   [self close];
-  if ([inspbutton state]) [NSApp inspectClass: [SysInspector class] : YES];
+  if ([inspbutton state]) [NSApp inspectClass: [SysInspector class] loadInspector: YES];
   return self;
 }
 

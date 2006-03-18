@@ -198,7 +198,7 @@ extern void setkeysig(KeySig *p, char *key);
   Staff *sp;
   DrawDocument *doc = [NSApp currentDocument];
   PlayInspector *player = [NSApp thePlayInspector];
-  if (doc) v = [doc gview]; else return self;
+  if (doc) v = [doc graphicView]; else return self;
   i = [n noteTag] & 127;
   if (i < 0 || i > 127) return self;
   if (![player getFeedback]) [[self noteSender] sendNote: n];

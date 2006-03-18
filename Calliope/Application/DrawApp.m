@@ -4,6 +4,7 @@
 #import "DrawApp.h"
 #import "GraphicView.h"
 #import "GVFormat.h"
+#import "GVGlobal.h"
 #import "GVSelection.h"
 #import "Graphic.h"
 #import "TextGraphic.h"
@@ -264,7 +265,7 @@ static DrawDocument *openDocument(NSString *document, BOOL display)
 
 - currentView
 {
-    return [[self currentDocument] gview];
+    return [[self currentDocument] graphicView];
 }
 
 
@@ -283,9 +284,9 @@ static DrawDocument *openDocument(NSString *document, BOOL display)
 {
     BOOL printSuccess;
     id doc = [self document];
-    if (doc && ![[doc gview] isEmpty])
+    if (doc && ![[doc graphicView] isEmpty])
     {
-        printSuccess = [[NSPrintOperation printOperationWithView:[doc gview]
+        printSuccess = [[NSPrintOperation printOperationWithView:[doc graphicView]
 						       printInfo:[doc printInfo]] runOperation];
     }
     return self;
@@ -307,7 +308,7 @@ static DrawDocument *openDocument(NSString *document, BOOL display)
     GraphicView *v = [self currentView];
     if (v == nil)
     {
-	NSBeep();
+	NSLog(@"orderFontPanel: currentView is nil");
 	return self;
     }
     if ([NSApp keyWindow] == [v window])
@@ -377,7 +378,6 @@ static DrawDocument *openDocument(NSString *document, BOOL display)
 	
 	if (![NSBundle loadNibNamed:@"InfoPanel.nib" owner:self])  {
 	    NSLog(@"Failed to load InfoPanel.nib");
-	    NSBeep();
 	    return nil;
 	}
 	[version setStringValue: applicationVersion];
@@ -551,13 +551,13 @@ float unitFactor[4] =
 /* tries to inspect whatever is open */
 
 
-- inspectAppWithMe: g : (BOOL) launch : (int) fontseltype
+- inspectAppWithMe: g loadInspector: (BOOL) launch : (int) fontseltype
 {
     GraphicView *v;
     if (castInspector) [castInspector reflectSelection];
     if (perfInspector) [perfInspector reflectSelection];
     if (preferences) [preferences reflectSelection];
-    [self inspectClass: [SysInspector class] : NO];
+    [self inspectClass: [SysInspector class] loadInspector: NO];
     v = [self currentView];
     if (v != nil)
     {
@@ -578,7 +578,7 @@ float unitFactor[4] =
 
 - inspectApp
 {
-    return [self inspectAppWithMe: nil : NO : 0];
+    return [self inspectAppWithMe: nil loadInspector: NO : 0];
 }
 
 
@@ -615,11 +615,9 @@ float unitFactor[4] =
 /*
  Given a Class, look for its inspector.
  Throw up the inspector for the given object (return nil if none)
- Load .nib file if necessary.  (Use NXBundles in future).
+ Load .nib file if necessary.
  */
-
-
-- getInspector: c : (BOOL) cmd
+- getInspectorForClass: (Class) c loadInspector: (BOOL) cmd
 {
     NSString *buff;
     id p = nil;
@@ -648,9 +646,9 @@ float unitFactor[4] =
 
 /* if cmd, then force it to launch if it is not already visible */
 
-- inspectClass: c : (BOOL) cmd
+- inspectClass: (Class) c loadInspector: (BOOL) cmd
 {
-    id p = [self getInspector: c : cmd];
+    id p = [self getInspectorForClass: c loadInspector: cmd];
     if (cmd)
     {
 	if (p) [self launchIt: p];
@@ -661,11 +659,11 @@ float unitFactor[4] =
 }
 
 
-- inspectMe: g : (BOOL) cmd
+- inspectMe: g loadInspector: (BOOL) cmd
 {
     id p;
     if ([g myInspector] == nil) return g;
-    p = [self getInspector: [g myInspector] : cmd];
+    p = [self getInspectorForClass: [g myInspector] loadInspector: cmd];
     if (cmd)
     {
 	if (p) [self launchIt: p];
@@ -689,8 +687,8 @@ float unitFactor[4] =
 {
     DrawDocument *d = [self currentDocument];
     if (d == nil) return scratchlist;
-    if ([d gview] == nil) return scratchlist;
-    return ((GraphicView *)[d gview])->partlist;
+    if ([d graphicView] == nil) return scratchlist;
+    return [[d graphicView] partList];
 }
 
 
@@ -698,8 +696,8 @@ float unitFactor[4] =
 {
     DrawDocument *d = [self currentDocument];
     if (d == nil) return nil;
-    if ([d gview] == nil) return nil;
-    return ((GraphicView *)[d gview])->chanlist;
+    if ([d graphicView] == nil) return nil;
+    return ((GraphicView *)[d graphicView])->chanlist;
 }
 
 
@@ -707,8 +705,8 @@ float unitFactor[4] =
 {
     DrawDocument *d = [self currentDocument];
     if (d == nil) return scrstylelist;
-    if ([d gview] == nil) return nil;
-    return ((GraphicView *)[d gview])->stylelist;
+    if ([d graphicView] == nil) return nil;
+    return ((GraphicView *)[d graphicView])->stylelist;
 }
 
 #if 0
@@ -1096,10 +1094,10 @@ struct toolData toolCodes[NUMTOOLS] =
     if (flags & NSCommandKeyMask)
     {
 	insp = [Graphic getInspector: toolCodes[currentTool].type];
-	if (insp == nil) NSBeep();
+	if (insp == nil) NSLog(@"setCurrentTool: inspector is nil");
 	else
 	{
-	    p = [self getInspector: insp : YES];
+	    p = [self getInspectorForClass: insp loadInspector: YES];
 	    if (p)
 	    {
 		[p makeKeyAndOrderFront:self];
@@ -1114,7 +1112,7 @@ struct toolData toolCodes[NUMTOOLS] =
 	if (toolCodes[currentTool].press != 1) [currdoc resetCursor];
 	else
 	{
-	    [[currdoc gview] pressTool: toolCodes[currentTool].type : toolCodes[currentTool].arg1];
+	    [[currdoc graphicView] pressTool: toolCodes[currentTool].type : toolCodes[currentTool].arg1];
 	    [self resetTool];
 	}
     }
@@ -1131,7 +1129,7 @@ struct toolData toolCodes[NUMTOOLS] =
     if (toolCodes[currentTool].press != 1) [currdoc resetCursor];
     else
     {
-	[[currdoc gview] pressTool: toolCodes[currentTool].type : toolCodes[currentTool].arg1];
+	[[currdoc graphicView] pressTool: toolCodes[currentTool].type : toolCodes[currentTool].arg1];
 	[self resetTool];
     }
     return self;
@@ -1159,8 +1157,8 @@ struct toolData toolCodes[NUMTOOLS] =
 // TODO should become +currentSystem?
 - currentSystem
 {
-    return [[documentInWindow([NSApp mainWindow]) gview] currentSystem];
-    // TODO should become: [[[[NSDocumentController sharedDocumentController] currentDocument] gview] currentSystem]
+    return [[documentInWindow([NSApp mainWindow]) graphicView] currentSystem];
+    // TODO should become: [[[[NSDocumentController sharedDocumentController] currentDocument] graphicView] currentSystem]
 }
 
 

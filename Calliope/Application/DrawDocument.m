@@ -534,8 +534,8 @@ extern int needUpgrade;
 - newFrom
 {
     NSZone *zone;
-    NSRect frameRect = NSZeroRect;
-    NSSize frameSize;
+//    NSRect frameRect = NSZeroRect;
+//    NSSize frameSize;
     DrawDocument *doc;
     GraphicView *v;
     zone = [DrawDocument newZone];
@@ -823,8 +823,9 @@ return nil;
 
 /* Returns the GraphicView associated with this document. */
 
-- gview
+- (GraphicView *) graphicView
 {
+    // return [[view retain] autorelease];
     return view;
 }
 

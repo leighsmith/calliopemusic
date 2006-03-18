@@ -89,7 +89,7 @@
     [delbutton setEnabled:1];
     [modbutton setEnabled:1];
     [parttext setStringValue:s];
-    [(GraphicView *)[[NSApp currentDocument] gview] dirty];
+    [(GraphicView *)[[NSApp currentDocument] graphicView] dirty];
   }
   return self;
 }
@@ -116,7 +116,7 @@
     [[NSApp getPartlist] sortPartlist];
     [partbrowser reloadColumn:0];
     [partbrowser setPath:s];
-    [(GraphicView *)[[NSApp currentDocument] gview] dirty];
+    [(GraphicView *)[[NSApp currentDocument] graphicView] dirty];
   }
   return self;
 }
@@ -136,7 +136,7 @@
   [partbrowser reloadColumn:0];
   [partbrowser setPath:@""];
   [self enableButtons: 0 : 0 : 0];
-  [(GraphicView *)[[NSApp currentDocument] gview] dirty];
+  [(GraphicView *)[[NSApp currentDocument] graphicView] dirty];
   [parttext setStringValue:@""];
   return self;
 }
@@ -194,7 +194,7 @@
   [instbrowser loadColumnZero];
   d = [NSApp currentDocument];
   if (d == nil) return self;
-  v = [d gview];
+  v = [d graphicView];
   if (v == nil) return self;
   sl = v->slist;
   pl = [NSApp getPartlist];
@@ -240,7 +240,7 @@
 {
   int j, n;
   CallPart *cp;
-  GraphicView *v = [[NSApp currentDocument] gview];
+  GraphicView *v = [[NSApp currentDocument] graphicView];
   NSMutableArray *pl, *xl;
   NSMatrix *m;
   NSCell *c;

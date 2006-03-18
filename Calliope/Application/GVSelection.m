@@ -114,7 +114,7 @@ extern int fontflag;
   while (t--) flag[t] = NO;
   if (g != nil)
   {
-    [NSApp inspectMe: g : launch];
+    [NSApp inspectMe: g loadInspector: launch];
     flag[TYPEOF(g)] = YES;
   }
   i = [slist count];
@@ -125,7 +125,7 @@ extern int fontflag;
     if (!flag[t])
     {
       flag[t] = YES;
-      [NSApp inspectMe: p : launch];
+      [NSApp inspectMe: p loadInspector: launch];
     }
   }
   return self;
@@ -134,7 +134,7 @@ extern int fontflag;
 
 - inspectSel: (BOOL) launch
 {
-  return [NSApp inspectAppWithMe: nil : (BOOL) launch : 0];
+  return [NSApp inspectAppWithMe: nil loadInspector: (BOOL) launch : 0];
 }
 
 

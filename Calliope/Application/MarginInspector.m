@@ -25,7 +25,7 @@ NSString *unitname[4] =
 {
   int n;
   float conv;
-  GraphicView *v = [[NSApp currentDocument] gview];
+  GraphicView *v = [[NSApp currentDocument] graphicView];
   Margin *p = [v canInspect: MARGIN : &n];
   if (n == 0) return nil;
   conv = [NSApp pointToCurrentUnitFactor];
@@ -54,7 +54,7 @@ NSString *unitname[4] =
   float f, conv;
   BOOL b = NO;
   System *sys;
-  GraphicView *v = [[NSApp currentDocument] gview];
+  GraphicView *v = [[NSApp currentDocument] graphicView];
   Margin *p = [v canInspect: MARGIN : &n];
   if (n == 0)
   {

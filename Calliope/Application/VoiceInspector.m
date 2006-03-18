@@ -19,7 +19,7 @@
   int n, i, nk, j;
   Staff *sp;
   StaffObj *q;
-  GraphicView *v = [[NSApp currentDocument] gview];
+  GraphicView *v = [[NSApp currentDocument] graphicView];
   System *sys = [NSApp currentSystem];
   NSMutableArray *sl, *nl;
   if (sys == nil) return self;
@@ -49,7 +49,7 @@
   int n, i, nk, j, vox;
   Staff *sp;
   StaffObj *q;
-  GraphicView *v = [[NSApp currentDocument] gview];
+  GraphicView *v = [[NSApp currentDocument] graphicView];
   System *sys = [NSApp currentSystem];
   NSMutableArray *sl, *nl;
   if (sys == nil) return self;
@@ -79,7 +79,7 @@
 {
   StaffObj *p;
   int k, vox;
-  GraphicView *v = [[NSApp currentDocument] gview];
+  GraphicView *v = [[NSApp currentDocument] graphicView];
   NSMutableArray *sl = v->slist;
   vox = [[selectForm cellAtIndex:0] intValue];
   k = [sl count];
@@ -95,7 +95,7 @@
 - preset
 {
   int num;
-  StaffObj *p = [[[NSApp currentDocument] gview] canInspectTypeCode: TC_TIMEDOBJ : &num];
+  StaffObj *p = [[[NSApp currentDocument] graphicView] canInspectTypeCode: TC_TIMEDOBJ : &num];
   if (num == 1)
   {
     [[selectForm cellAtIndex:0] setIntValue:p->voice];
