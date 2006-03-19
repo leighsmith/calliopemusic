@@ -31,7 +31,8 @@ extern int fontflag;
 - canInspect: (int) type
 {
   id p = [self isSelType: type];
-  if (p == nil) NSBeep();
+  if (p == nil) 
+      NSLog(@"canInspect: p == nil");
   return p;
 }
 
@@ -40,7 +41,8 @@ extern int fontflag;
 {
   int n;
   id p = [self isSelTypeCode: tc : &n];
-  if (n == 0) NSBeep();
+  if (n == 0)
+      NSLog(@"canInspectTypeCode: n == 0");
   *num = n;
   return p;
 }
@@ -59,7 +61,8 @@ extern int fontflag;
       if (n == 1) q = p;
     }
   }
-  if (n == 0) NSBeep();
+  if (n == 0)
+      NSLog(@"canInspectTypeCode: n == 0");
   *num = n;
   return q;
 }
@@ -383,10 +386,11 @@ extern float ctimex(float d);
   return self;
 }
 
+// Font methods
 
 /* get the majority verse font in the selection */
 
-- (NSFont *) getVFont: (int *) num
+- (NSFont *) mostCommonOutOfTotalVerseFonts: (int *) num
 {
   int k;
   StaffObj *p;
@@ -403,17 +407,18 @@ extern float ctimex(float d);
 }
 
 
-- changeSelFont: (NSFont *) f : (BOOL) all
+- changeSelectedFontsTo: (NSFont *) selectedFont forAllGraphics: (BOOL) all
 {
   NSRect b;
   Graphic *p;
+  
   int k = [slist count];
   if (k == 0) return self;
   [self selectionHandBBox: &b];
   while (k--)
   {
     p = [slist objectAtIndex:k];
-    if ([p changeVFont: f : all]) [p reShape];
+    if ([p changeVFont: selectedFont : all]) [p reShape];
   }
   [self dirty];
   [self drawSelectionWith: &b];
@@ -428,62 +433,64 @@ extern float ctimex(float d);
 
 - setFontSelection: (int) ff : (int) sw
 {
-  StaffObj *p;
-  System *sys;
-  int num, fs=0;
-  NSFont *f;
-  NSFontManager *fm = [NSFontManager sharedFontManager];
-  switch(sw)
-  {
-    case 0:
-      if (fontflag != ff)
-      {
-        [NSApp selectFontSelection: ff];
-        fontflag = ff;
-      }
-      fs = ff;
-      break;
-    case 1:
-      fs = ff;
-      break;
-    case 2:
-      fs = fontflag;
-      break;
-  }
-  switch (fs)
-  {
-    case 0:
-    case 1:
-      f = [self getVFont: &num];
-      if (f == nil) f = [[NSApp currentDocument] getPreferenceAsFont: TEXFONT];
-      [fm setSelectedFont:f isMultiple:(num > 0)];
-      break;
-    case 3:
-      if (currentSystem)
-      {
-        f = [currentSystem getVFont : -1 : &num];
-        if (f == nil) f = [[NSApp currentDocument] getPreferenceAsFont: TEXFONT];
-	[fm setSelectedFont:f isMultiple:(num > 0)];
-      }
-      break;
-    case 2:
-      p = [self canInspectTypeCode: TC_STAFFOBJ : &num];
-      if (p != nil)
-      {
-        if (num == 1)
-	{
-	  sys = [p mySystem];
-	  if (TYPEOF(sys) == SYSTEM)
-	  {
-            f = [sys getVFont : p->selver : &num];
-            if (f == nil) f = [[NSApp currentDocument] getPreferenceAsFont: TEXFONT];
-	    [fm setSelectedFont:f isMultiple:(num > 0)];
-	  }
-	}
-      }
-      break;
-  }
-  return self;
+    StaffObj *p;
+    System *sys;
+    int numberOfVerseFonts, fs=0;
+    NSFont *selectedFont;
+    NSFontManager *sharedFontManager = [NSFontManager sharedFontManager];
+    
+    switch(sw)
+    {
+	case 0:
+	    if (fontflag != ff)
+	    {
+		// TODO LMS should be replaced, removing DrawApp
+		// [NSApp selectFontSelection: ff];
+		fontflag = ff;
+	    }
+	    fs = ff;
+	    break;
+	case 1:
+	    fs = ff;
+	    break;
+	case 2:
+	    fs = fontflag;
+	    break;
+    }
+    switch (fs)
+    {
+	case 0:
+	case 1:
+	    selectedFont = [self mostCommonOutOfTotalVerseFonts: &numberOfVerseFonts];
+	    if (selectedFont == nil) selectedFont = [[DrawApp currentDocument] getPreferenceAsFont: TEXFONT];
+		[sharedFontManager setSelectedFont:selectedFont isMultiple:(numberOfVerseFonts > 0)];
+	    break;
+	case 3:
+	    if (currentSystem)
+	    {
+		selectedFont = [currentSystem getVFont : -1 : &numberOfVerseFonts];
+		if (selectedFont == nil) selectedFont = [[DrawApp currentDocument] getPreferenceAsFont: TEXFONT];
+		[sharedFontManager setSelectedFont:selectedFont isMultiple:(numberOfVerseFonts > 0)];
+	    }
+	    break;
+	case 2:
+	    p = [self canInspectTypeCode: TC_STAFFOBJ : &numberOfVerseFonts];
+	    if (p != nil)
+	    {
+		if (numberOfVerseFonts == 1)
+		{
+		    sys = [p mySystem];
+		    if (TYPEOF(sys) == SYSTEM)
+		    {
+			selectedFont = [sys getVFont : p->selver : &numberOfVerseFonts];
+			if (selectedFont == nil) selectedFont = [[DrawApp currentDocument] getPreferenceAsFont: TEXFONT];
+			[sharedFontManager setSelectedFont:selectedFont isMultiple:(numberOfVerseFonts > 0)];
+		    }
+		}
+	    }
+	    break;
+    }
+    return self;
 }
 
 

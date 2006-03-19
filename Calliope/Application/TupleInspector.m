@@ -82,7 +82,7 @@
 {
   NSRect b;
   NSMutableArray *sl;
-  GraphicView *v = [[NSApp currentDocument] graphicView];
+  GraphicView *v = [[DrawApp currentDocument] graphicView];
   Tuple *p;
   int k;
   if ([v startInspection: TUPLE : &b : &sl])
@@ -164,7 +164,7 @@ static char enabled[3][4] =
 - setChoice: sender
 {
     int c;
-    Tuple *p = [(GraphicView *)[[NSApp currentDocument] graphicView] canInspect: TUPLE];
+    Tuple *p = [(GraphicView *)[[DrawApp currentDocument] graphicView] canInspect: TUPLE];
   if (p == nil) return self;
   c = [uneqmatrix selectedRow];
   [self setEnabledFor: c];
@@ -184,7 +184,7 @@ static char enabled[3][4] =
 
 - preset
 {
-    Tuple *p = [(GraphicView *)[[NSApp currentDocument] graphicView] canInspect: TUPLE];
+    Tuple *p = [(GraphicView *)[[DrawApp currentDocument] graphicView] canInspect: TUPLE];
   if (p == nil || p->style != 0) return self;
   [self setEnabledFor: p->gFlags.subtype - 1];
   [self updatePanel: p];

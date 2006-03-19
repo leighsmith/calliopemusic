@@ -196,7 +196,7 @@ extern void setkeysig(KeySig *p, char *key);
   GNote *q;
   NSPoint pt;
   Staff *sp;
-  DrawDocument *doc = [NSApp currentDocument];
+  DrawDocument *doc = [DrawApp currentDocument];
   PlayInspector *player = [NSApp thePlayInspector];
   if (doc) v = [doc graphicView]; else return self;
   i = [n noteTag] & 127;

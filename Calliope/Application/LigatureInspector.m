@@ -40,7 +40,7 @@
 {
   NSRect b;
   Ligature *p;
-  id sl, v = [[NSApp currentDocument] graphicView];
+  id sl, v = [[DrawApp currentDocument] graphicView];
   int k;
   if ([v startInspection: LIGATURE : &b : &sl])
   {
@@ -60,7 +60,7 @@
 
 - preset
 {
-    Ligature *p = [(GraphicView *)[[NSApp currentDocument] graphicView] canInspect: LIGATURE];
+    Ligature *p = [(GraphicView *)[[DrawApp currentDocument] graphicView] canInspect: LIGATURE];
   if (p == nil) return self;
   [stylematrix selectCellWithTag:p->gFlags.subtype];
   [edbutton setState:p->flags.ed];

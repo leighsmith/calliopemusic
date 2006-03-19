@@ -29,7 +29,7 @@
 {
   NSRect b;
   Range *p;
-  id sl, v = [[NSApp currentDocument] graphicView];
+  id sl, v = [[DrawApp currentDocument] graphicView];
   int k;
   if ([v startInspection: RANGE : &b : &sl])
   {
@@ -56,7 +56,7 @@
 - preset
 {
   int n;
-  GraphicView *v = [[NSApp currentDocument] graphicView];
+  GraphicView *v = [[DrawApp currentDocument] graphicView];
   Range *p = [v canInspect: RANGE : &n];
   if (n == 0) return nil;
   [self updatePanel: p];

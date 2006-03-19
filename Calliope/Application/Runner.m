@@ -162,7 +162,7 @@ extern int selMode;
   [[myText textContainer] setContainerSize:(vb.size)];
   ms.width = ms.height = 0.0;
   [myText setMinSize:ms];
-  f = [[NSApp currentDocument] staffScale];
+  f = [[DrawApp currentDocument] staffScale];
   runnerStatus = 1;
   [[myText textStorage] beginEditing];
   [[myText textStorage] replaceCharactersInRange:NSMakeRange(0, [[myText string] length]) withAttributedString:stream];
@@ -199,7 +199,7 @@ extern int selMode;
 //  coutrect(fb.origin.x, fb.origin.y, fb.size.width, fb.size.height, 0.0, 5);
   if (NSIsEmptyRect(r) || !NSIsEmptyRect(NSIntersectionRect(r , fb)))
   {
-      id graphicView = [[NSApp currentDocument] graphicView];
+      id graphicView = [[DrawApp currentDocument] graphicView];
       [[graphicView window] setAutodisplay:NO]; // don't let addSubview: cause redisplay
     [myText setFrame:fb];
 

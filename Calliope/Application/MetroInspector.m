@@ -35,7 +35,7 @@
 {
   NSRect b;
   Metro *p;
-  id sl, v = [[NSApp currentDocument] graphicView];
+  id sl, v = [[DrawApp currentDocument] graphicView];
   int k;
   if ([v startInspection: METRO : &b : &sl])
   {
@@ -71,7 +71,7 @@
 
 - hitNote2:sender
 {
-    Metro *p = [(GraphicView *)[[NSApp currentDocument] graphicView] canInspect: METRO];
+    Metro *p = [(GraphicView *)[[DrawApp currentDocument] graphicView] canInspect: METRO];
     if (p)
       {
         if ([typematrix selectedRow]) {
@@ -85,7 +85,7 @@
 
 - preset
 {
-    Metro *p = [(GraphicView *)[[NSApp currentDocument] graphicView] canInspect: METRO];
+    Metro *p = [(GraphicView *)[[DrawApp currentDocument] graphicView] canInspect: METRO];
   if (p)
   {
     [note1matrix selectCellAtRow:0 column:p->body[0]];
@@ -108,7 +108,7 @@
 
 - setChoice: sender
 {
-    Metro *p = [(GraphicView *)[[NSApp currentDocument] graphicView] canInspect: METRO];
+    Metro *p = [(GraphicView *)[[DrawApp currentDocument] graphicView] canInspect: METRO];
   if (p) [self updatePanel: p];
   return self;
 }

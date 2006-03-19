@@ -41,7 +41,7 @@
 {
   NSRect b;
   TieNew *p;
-  id sl, v = [[NSApp currentDocument] graphicView];
+  id sl, v = [[DrawApp currentDocument] graphicView];
   int k;
   if ([v startInspection: TIENEW : &b : &sl])
   {
@@ -89,7 +89,7 @@
 
 - preset
 {
-    TieNew *p = [(GraphicView *)[[NSApp currentDocument] graphicView] canInspect: TIENEW];
+    TieNew *p = [(GraphicView *)[[DrawApp currentDocument] graphicView] canInspect: TIENEW];
   if (p != nil) [self preset: p];
   return self;
 }
@@ -108,7 +108,7 @@
 
 - setImageFrameStyle:sender
 {
-    TieNew *p = [(GraphicView *)[[NSApp currentDocument] graphicView] canInspect: TIENEW];
+    TieNew *p = [(GraphicView *)[[DrawApp currentDocument] graphicView] canInspect: TIENEW];
   if (p == nil) return self;
   [p setDefault: [[stylematrix selectedCell] tag]];
   [fixmatrix selectCellAtRow:0 column:p->flags.fixed];

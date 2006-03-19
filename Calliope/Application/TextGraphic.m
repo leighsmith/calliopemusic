@@ -143,7 +143,7 @@ static NSTextView *drawText = nil;
 {
   float h = -(offset.y);
   if (h < 0) h = 0;
-  if (gFlags.subtype == TITLE && baseline) h += baseline / [[NSApp currentDocument] staffScale];
+  if (gFlags.subtype == TITLE && baseline) h += baseline / [[DrawApp currentDocument] staffScale];
   return h;
 }
 

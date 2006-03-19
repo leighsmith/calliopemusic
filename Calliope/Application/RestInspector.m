@@ -35,7 +35,7 @@ static char istimed[6] = {1, 1, 0, 0, 0, 1};
 {
   NSRect b;
   Rest *p;
-  id sl, v = [[NSApp currentDocument] graphicView];
+  id sl, v = [[DrawApp currentDocument] graphicView];
   int i, k, selstyle, seltime, seldot, nb = 0, setdef;
   if ([choicematrix selectedRow] == 0)
   {
@@ -121,7 +121,7 @@ static char istimed[6] = {1, 1, 0, 0, 0, 1};
 - updatePanel
 {
   int a, c, num;
-  GraphicView *v = [[NSApp currentDocument] graphicView];
+  GraphicView *v = [[DrawApp currentDocument] graphicView];
   [self assayList: v->slist : &num];
   if (num == 0) return nil;
   for (a = 0; a < 3; a++)

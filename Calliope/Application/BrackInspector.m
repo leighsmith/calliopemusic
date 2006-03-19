@@ -40,7 +40,7 @@
   NSRect b;
   Bracket *p;
   System *s;
-  id sl, v = [[NSApp currentDocument] graphicView];
+  id sl, v = [[DrawApp currentDocument] graphicView];
   int k, t;
   BOOL ok;
   if ([v startInspection: BRACKET : &b : &sl])
@@ -84,7 +84,7 @@
 
 - preset
 {
-  Bracket *p = [[[NSApp currentDocument] graphicView] canInspect: BRACKET];
+  Bracket *p = [[[DrawApp currentDocument] graphicView] canInspect: BRACKET];
   if (p != nil)
   {
     [typematrix selectCellAtRow:0 column:2 - p->gFlags.subtype];

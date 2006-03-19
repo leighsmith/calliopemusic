@@ -325,62 +325,68 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 
 - init
 {
-  return [super init];
+    NSLog(@"System -init called, initialising with very little info");
+    return [self initWithStaveCount: 0 onGraphicView: nil];
 }
 
 
-- init: (int) n : (GraphicView *) v
+- initWithStaveCount: (int) n onGraphicView: (GraphicView *) v
 {
-    Staff *aStaff;
-  [self init];
-  gFlags.type = SYSTEM;
-  view = v; /*backpointer -- no retain */
-  flags.nstaves = n;
-  pagenum = barnum = 0;
-  flags.newbar = 0;
-  flags.newpage = 0;
-  flags.pgcontrol = 0;
-  flags.equidist = 0;
-  flags.disjoint = 0;
-  lindent = rindent = 0.0;
-  expansion = 1.0;
-  groupsep = 0.0;
-  height = 0;
-  page =  nil;/*backpointer -- no retain */
-  style = nullPart;
-  objs = [[NSMutableArray alloc] init];
-  staves = [[NSMutableArray arrayWithCapacity:n] retain];
-  while (n--) {
-      aStaff = [[Staff alloc] initstaff: self];
-      [staves addObject: aStaff];
-      [aStaff release];/*sb: the array will hold the single retain */
-  }
-  return self;
+    self = [super init];
+    if(self != nil) {
+	gFlags.type = SYSTEM;
+	view = v; /*backpointer -- no retain */
+	flags.nstaves = n;
+	pagenum = barnum = 0;
+	flags.newbar = 0;
+	flags.newpage = 0;
+	flags.pgcontrol = 0;
+	flags.equidist = 0;
+	flags.disjoint = 0;
+	lindent = rindent = 0.0;
+	expansion = 1.0;
+	groupsep = 0.0;
+	height = 0;
+	page =  nil; /*backpointer -- no retain */
+	style = nullPart;
+	objs = [[NSMutableArray alloc] init];
+	staves = [[NSMutableArray arrayWithCapacity: n] retain];
+	while (n--) {
+	    Staff *aStaff = [[Staff alloc] initstaff: self];
+	    
+	    [staves addObject: aStaff];
+	    [aStaff release];   /*sb: the array will hold the single retain */
+	}
+    }
+    return self;
 }
 
 
 /*
-  Initialise system details and link in now that staff details are known
+  Initialise system details and link in now that staff details are known.
+  This should be factored into initWithStaveCount: and staff setting methods.
 */
 
 - initsys
 {
-  System *cursys = [view currentSystem];
-  Margin *p;
-  if (cursys == nil)
-  {
-    p = [Graphic allocInit: MARGIN];
-    p->client = self;
-    [self linkobject: p];
-    page = nil;
-  }
-  else page = cursys->page;
-  [self recalc];
-  [view linkSystem: cursys : self];
-  [view thisSystem: self];
-  [view setFontSelection: 1 : 0];
-  [NSApp inspectClass: [SysInspector class] loadInspector: NO];
-  return self;
+    System *cursys = [view currentSystem];
+    Margin *margin;
+    
+    if (cursys == nil)
+    {
+	margin = [Graphic allocInit: MARGIN];
+	margin->client = self;
+	[self linkobject: margin];
+	page = nil;
+    }
+    else 
+	page = cursys->page;
+    [self recalc];
+    [view linkSystem: cursys : self];
+    [view thisSystem: self];
+    [view setFontSelection: 1 : 0];
+    // [NSApp inspectClass: [SysInspector class] loadInspector: NO];
+    return self;
 }
 
 
@@ -395,7 +401,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   System *sys;
   id p;
   [self init];
-  sys = [[System alloc] init: flags.nstaves : nil];
+  sys = [[System alloc] initWithStaveCount: flags.nstaves onGraphicView: nil];
   sys->view = view;
   sys->page = page;
   sys->lindent = 0.0;
@@ -556,7 +562,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   if (page) return [page leftMargin];
   m = [self checkMargin];
   if (m) return [m leftMargin];
-  return 36.0 / [[NSApp currentDocument] staffScale];
+  return 36.0 / [[DrawApp currentDocument] staffScale];
 }
 
 
@@ -566,7 +572,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   if (page) return [page rightMargin];
   m = [self checkMargin];
   if (m) return [m rightMargin];
-  return 36.0 / [[NSApp currentDocument] staffScale];
+  return 36.0 / [[DrawApp currentDocument] staffScale];
 }
 
 
@@ -576,7 +582,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   if (page) return [page headerBase];
   m = [self checkMargin];
   if (m) return [m headerBase];
-  return 18.0 / [[NSApp currentDocument] staffScale];
+  return 18.0 / [[DrawApp currentDocument] staffScale];
 }
 
 
@@ -586,28 +592,28 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   if (page) return [page footerBase];
   m = [self checkMargin];
   if (m) return [m footerBase];
-  return 18.0 / [[NSApp currentDocument] staffScale];
+  return 18.0 / [[DrawApp currentDocument] staffScale];
 }
 
 
 - (float) leftIndent
 {
   if (lindent == 0.0) return 0.0;  /* common shortcut */
-  return lindent / [[NSApp currentDocument] staffScale];
+  return lindent / [[DrawApp currentDocument] staffScale];
 }
 
 
 - (float) leftWhitespace
 {
   if (lindent == 0.0) return [self leftMargin];  /* common shortcut */
-  return [self leftMargin] + (lindent / [[NSApp currentDocument] staffScale]);
+  return [self leftMargin] + (lindent / [[DrawApp currentDocument] staffScale]);
 }
 
 
 - (float) rightIndent
 {
   if (rindent == 0.0) return 0.0;  /* common shortcut */
-  return rindent / [[NSApp currentDocument] staffScale];
+  return rindent / [[DrawApp currentDocument] staffScale];
 }
 
 
@@ -619,7 +625,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 
 - recalc
 {
-  DrawDocument *doc = [NSApp currentDocument];
+  DrawDocument *doc = [DrawApp currentDocument];
   width = ((paperSize.width - lindent - rindent) / [doc staffScale]) - ([self leftMargin] + [self rightMargin]);
   return [self resetSys];
 }
@@ -1392,6 +1398,23 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
     [aCoder setString:style forKey:@"style"];
     [aCoder setObject:view forKey:@"view"]; /* should be conditional? */
     [aCoder setObject:view forKey:@"page"]; /* should be conditional? */
+}
+
+- (float) headroom
+{
+    return headroom;
+}
+
+- (int) pageNumber
+{
+    // TODO should become return [page pageNumber];
+    return pagenum;
+}
+
+- (void) setPageNumber: (int) newPageNumber
+{
+    // Should become [page setPageNumber: newPageNumber];
+    pagenum = newPageNumber;
 }
 
 @end

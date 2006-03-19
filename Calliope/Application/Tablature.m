@@ -72,7 +72,7 @@ static Tablature *proto;
 
 - (BOOL) isBeamable
 {
-  return (time.body - [[NSApp currentDocument] getPreferenceAsInt: TABCROTCHET] <= 5);
+  return (time.body - [[DrawApp currentDocument] getPreferenceAsInt: TABCROTCHET] <= 5);
 }
 
 
@@ -522,7 +522,7 @@ static char usesm[6] = {1, 1, 1, 1, 0, 0}; /* whether to use small size as norma
     pos = -1;
     if (flags.online) pos += 1;
   }
-  doc = [NSApp currentDocument];
+  doc = [DrawApp currentDocument];
   f = (flags.typeface) ? musicFont[0][sz] : [doc getPreferenceAsFont: TABFONT];
   for (i = 0; i < n; i++)
   {

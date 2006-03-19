@@ -33,7 +33,7 @@
 {
   NSRect b;
   Accent *p;
-  id sl, v = [[NSApp currentDocument] graphicView];
+  id sl, v = [[DrawApp currentDocument] graphicView];
   int k, n, s;
   if ([v startInspection: ACCENT : &b : &sl])
   {
@@ -76,7 +76,7 @@
 
 - preset
 {
-  Accent *p = [(GraphicView *)[[NSApp currentDocument] graphicView] canInspect: ACCENT];
+  Accent *p = [(GraphicView *)[[DrawApp currentDocument] graphicView] canInspect: ACCENT];
   if (p != nil) [self updatePanel: p];
   return self;
 }
@@ -92,7 +92,7 @@
 {
   NSRect b;
   Accent *p;
-  id sl, v = [[NSApp currentDocument] graphicView];
+  id sl, v = [[DrawApp currentDocument] graphicView];
   int k;
   if ([v startInspection: ACCENT : &b : &sl])
   {
@@ -114,7 +114,7 @@
 
 - setnumber:sender
 {
-  Accent *p = [(GraphicView *)[[NSApp currentDocument] graphicView] canInspect: ACCENT];
+  Accent *p = [(GraphicView *)[[DrawApp currentDocument] graphicView] canInspect: ACCENT];
   if (p != nil)
   {
     [typematrix selectCellWithTag:p->sign[[nummatrix selectedColumn]]];

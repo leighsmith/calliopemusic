@@ -15,6 +15,8 @@
 		D87D0FEA09AE7AF100784ACC /* OAPropertyListArchiver.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD96E80483CDC800A80164 /* OAPropertyListArchiver.h */; };
 		D8B2119109BB5333002825FC /* CallAppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = D8B2118F09BB5333002825FC /* CallAppIcon.icns */; };
 		D8B2119209BB5333002825FC /* CallDocIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = D8B2119009BB5333002825FC /* CallDocIcon.icns */; };
+		D8C84F8009CDAAEF00376965 /* Inspector.h in Headers */ = {isa = PBXBuildFile; fileRef = D8C84F7E09CDAAEF00376965 /* Inspector.h */; };
+		D8C84F8109CDAAEF00376965 /* Inspector.m in Sources */ = {isa = PBXBuildFile; fileRef = D8C84F7F09CDAAEF00376965 /* Inspector.m */; };
 		D8EC241509B9F8B500942A37 /* MusicNotationDocument.nib in Resources */ = {isa = PBXBuildFile; fileRef = D8EC241309B9F8B500942A37 /* MusicNotationDocument.nib */; };
 		D8F2478909AD280C00B96D0D /* NSObject+ErrorHandling.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD96D60483CDC800A80164 /* NSObject+ErrorHandling.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8F2478A09AD280C00B96D0D /* NSMutableString+PropertyListCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD96D80483CDC800A80164 /* NSMutableString+PropertyListCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -112,8 +114,7 @@
 		D8F2480009AD3F8C00B96D0D /* PlayInspector.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD93800483CDC800A80164 /* PlayInspector.h */; };
 		D8F2480109AD3F8C00B96D0D /* PrefBlock.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD93820483CDC800A80164 /* PrefBlock.h */; };
 		D8F2480209AD3F8C00B96D0D /* Preferences.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD93840483CDC800A80164 /* Preferences.h */; };
-		D8F2480309AD3F8C00B96D0D /* ProgressPanel.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD93860483CDC800A80164 /* ProgressPanel.h */; };
-		D8F2480409AD3F8C00B96D0D /* ProgressView.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD93880483CDC800A80164 /* ProgressView.h */; };
+		D8F2480309AD3F8C00B96D0D /* ProgressDisplay.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD93860483CDC800A80164 /* ProgressDisplay.h */; };
 		D8F2480509AD3F8C00B96D0D /* Range.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD938A0483CDC800A80164 /* Range.h */; };
 		D8F2480609AD3F8C00B96D0D /* RangeInspector.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD938C0483CDC800A80164 /* RangeInspector.h */; };
 		D8F2480709AD3F8C00B96D0D /* Rest.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD938E0483CDC800A80164 /* Rest.h */; };
@@ -548,8 +549,7 @@
 		D8F249B909AD3F8D00B96D0D /* PlayInspector.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD92A70483CDC700A80164 /* PlayInspector.m */; settings = {ATTRIBUTES = (); }; };
 		D8F249BA09AD3F8D00B96D0D /* PrefBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD92A90483CDC700A80164 /* PrefBlock.m */; settings = {ATTRIBUTES = (); }; };
 		D8F249BB09AD3F8D00B96D0D /* Preferences.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD92AB0483CDC700A80164 /* Preferences.m */; settings = {ATTRIBUTES = (); }; };
-		D8F249BC09AD3F8D00B96D0D /* ProgressPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD92AD0483CDC700A80164 /* ProgressPanel.m */; settings = {ATTRIBUTES = (); }; };
-		D8F249BD09AD3F8D00B96D0D /* ProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD92AF0483CDC700A80164 /* ProgressView.m */; settings = {ATTRIBUTES = (); }; };
+		D8F249BC09AD3F8D00B96D0D /* ProgressDisplay.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD92AD0483CDC700A80164 /* ProgressDisplay.m */; settings = {ATTRIBUTES = (); }; };
 		D8F249BE09AD3F8D00B96D0D /* Range.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD92B10483CDC700A80164 /* Range.m */; settings = {ATTRIBUTES = (); }; };
 		D8F249BF09AD3F8D00B96D0D /* RangeInspector.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD92B30483CDC700A80164 /* RangeInspector.m */; settings = {ATTRIBUTES = (); }; };
 		D8F249C009AD3F8D00B96D0D /* Rest.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD92B50483CDC700A80164 /* Rest.m */; settings = {ATTRIBUTES = (); }; };
@@ -965,6 +965,8 @@
 		D8A8F7C50483DD1B00A80164 /* template5.opus */ = {isa = PBXFileReference; lastKnownFileType = file; name = template5.opus; path = Templates/template5.opus; sourceTree = "<group>"; };
 		D8B2118F09BB5333002825FC /* CallAppIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CallAppIcon.icns; path = Images/CallAppIcon.icns; sourceTree = "<group>"; };
 		D8B2119009BB5333002825FC /* CallDocIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CallDocIcon.icns; path = Images/CallDocIcon.icns; sourceTree = "<group>"; };
+		D8C84F7E09CDAAEF00376965 /* Inspector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Inspector.h; sourceTree = "<group>"; };
+		D8C84F7F09CDAAEF00376965 /* Inspector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Inspector.m; sourceTree = "<group>"; };
 		D8EC241409B9F8B500942A37 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MusicNotationDocument.nib; sourceTree = "<group>"; };
 		D8F2453709AD260300B96D0D /* MKPerformSndMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MKPerformSndMIDI.framework; path = /Library/Frameworks/MKPerformSndMIDI.framework; sourceTree = "<absolute>"; };
 		D8F247B109AD280C00B96D0D /* Info-CalliopePropertyListCoders.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Info-CalliopePropertyListCoders.plist"; sourceTree = "<group>"; };
@@ -1034,7 +1036,7 @@
 		D8FD92A70483CDC700A80164 /* PlayInspector.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PlayInspector.m; sourceTree = "<group>"; };
 		D8FD92A90483CDC700A80164 /* PrefBlock.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PrefBlock.m; sourceTree = "<group>"; };
 		D8FD92AB0483CDC700A80164 /* Preferences.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Preferences.m; sourceTree = "<group>"; };
-		D8FD92AD0483CDC700A80164 /* ProgressPanel.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ProgressPanel.m; sourceTree = "<group>"; };
+		D8FD92AD0483CDC700A80164 /* ProgressDisplay.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.objc; fileEncoding = 30; path = ProgressDisplay.m; sourceTree = "<group>"; };
 		D8FD92AF0483CDC700A80164 /* ProgressView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ProgressView.m; sourceTree = "<group>"; };
 		D8FD92B10483CDC700A80164 /* Range.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Range.m; sourceTree = "<group>"; };
 		D8FD92B30483CDC700A80164 /* RangeInspector.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = RangeInspector.m; sourceTree = "<group>"; };
@@ -1140,7 +1142,7 @@
 		D8FD93800483CDC800A80164 /* PlayInspector.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PlayInspector.h; sourceTree = "<group>"; };
 		D8FD93820483CDC800A80164 /* PrefBlock.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PrefBlock.h; sourceTree = "<group>"; };
 		D8FD93840483CDC800A80164 /* Preferences.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Preferences.h; sourceTree = "<group>"; };
-		D8FD93860483CDC800A80164 /* ProgressPanel.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ProgressPanel.h; sourceTree = "<group>"; };
+		D8FD93860483CDC800A80164 /* ProgressDisplay.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; path = ProgressDisplay.h; sourceTree = "<group>"; };
 		D8FD93880483CDC800A80164 /* ProgressView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ProgressView.h; sourceTree = "<group>"; };
 		D8FD938A0483CDC800A80164 /* Range.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Range.h; sourceTree = "<group>"; };
 		D8FD938C0483CDC800A80164 /* RangeInspector.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = RangeInspector.h; sourceTree = "<group>"; };
@@ -1374,6 +1376,8 @@
 		D8FD922E0483CDC700A80164 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				D8C84F7E09CDAAEF00376965 /* Inspector.h */,
+				D8C84F7F09CDAAEF00376965 /* Inspector.m */,
 				D8FD922F0483CDC700A80164 /* Accent.m */,
 				D8FD92310483CDC700A80164 /* AccentInspector.m */,
 				D8FD92330483CDC700A80164 /* AppDefaults.m */,
@@ -1440,7 +1444,8 @@
 				D8FD92A70483CDC700A80164 /* PlayInspector.m */,
 				D8FD92A90483CDC700A80164 /* PrefBlock.m */,
 				D8FD92AB0483CDC700A80164 /* Preferences.m */,
-				D8FD92AD0483CDC700A80164 /* ProgressPanel.m */,
+				D8FD93860483CDC800A80164 /* ProgressDisplay.h */,
+				D8FD92AD0483CDC700A80164 /* ProgressDisplay.m */,
 				D8FD92AF0483CDC700A80164 /* ProgressView.m */,
 				D8FD92B10483CDC700A80164 /* Range.m */,
 				D8FD92B30483CDC700A80164 /* RangeInspector.m */,
@@ -1553,7 +1558,6 @@
 				D8FD93800483CDC800A80164 /* PlayInspector.h */,
 				D8FD93820483CDC800A80164 /* PrefBlock.h */,
 				D8FD93840483CDC800A80164 /* Preferences.h */,
-				D8FD93860483CDC800A80164 /* ProgressPanel.h */,
 				D8FD93880483CDC800A80164 /* ProgressView.h */,
 				D8FD938A0483CDC800A80164 /* Range.h */,
 				D8FD938C0483CDC800A80164 /* RangeInspector.h */,
@@ -2107,8 +2111,7 @@
 				D8F2480009AD3F8C00B96D0D /* PlayInspector.h in Headers */,
 				D8F2480109AD3F8C00B96D0D /* PrefBlock.h in Headers */,
 				D8F2480209AD3F8C00B96D0D /* Preferences.h in Headers */,
-				D8F2480309AD3F8C00B96D0D /* ProgressPanel.h in Headers */,
-				D8F2480409AD3F8C00B96D0D /* ProgressView.h in Headers */,
+				D8F2480309AD3F8C00B96D0D /* ProgressDisplay.h in Headers */,
 				D8F2480509AD3F8C00B96D0D /* Range.h in Headers */,
 				D8F2480609AD3F8C00B96D0D /* RangeInspector.h in Headers */,
 				D8F2480709AD3F8C00B96D0D /* Rest.h in Headers */,
@@ -2157,6 +2160,7 @@
 				D87D0FDC09AE6ED200784ACC /* muxCollide.h in Headers */,
 				D87D0FE909AE7AE800784ACC /* OAPropertyListCoder.h in Headers */,
 				D87D0FEA09AE7AF100784ACC /* OAPropertyListArchiver.h in Headers */,
+				D8C84F8009CDAAEF00376965 /* Inspector.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2742,8 +2746,7 @@
 				D8F249B909AD3F8D00B96D0D /* PlayInspector.m in Sources */,
 				D8F249BA09AD3F8D00B96D0D /* PrefBlock.m in Sources */,
 				D8F249BB09AD3F8D00B96D0D /* Preferences.m in Sources */,
-				D8F249BC09AD3F8D00B96D0D /* ProgressPanel.m in Sources */,
-				D8F249BD09AD3F8D00B96D0D /* ProgressView.m in Sources */,
+				D8F249BC09AD3F8D00B96D0D /* ProgressDisplay.m in Sources */,
 				D8F249BE09AD3F8D00B96D0D /* Range.m in Sources */,
 				D8F249BF09AD3F8D00B96D0D /* RangeInspector.m in Sources */,
 				D8F249C009AD3F8D00B96D0D /* Rest.m in Sources */,
@@ -2790,6 +2793,7 @@
 				D87D0FDA09AE6EA900784ACC /* draw.c in Sources */,
 				D87D0FDE09AE751300784ACC /* OAPropertyListArchiver.m in Sources */,
 				D87D0FE809AE7AE500784ACC /* OAPropertyListCoder.m in Sources */,
+				D8C84F8109CDAAEF00376965 /* Inspector.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

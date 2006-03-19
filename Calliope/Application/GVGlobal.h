@@ -6,8 +6,12 @@
 - (BOOL) sysSameShape;
 - extractStaves: (int) n : (char *) wantstaff;
 - extractParts: (NSMutableArray *) pl;
-/*! Returns the current list of parts being displayed. */
-- (NSArray *) partList;
+/*! 
+    @brief Returns the current list of parts being displayed.
+
+    TODO should be returning NSArray.
+ */
+- (NSMutableArray *) partList;
 
 - orderAllStaves: (char *) order;
 - orderCurrStaves: (System *) sys : (char *) order;

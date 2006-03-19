@@ -59,7 +59,7 @@
 {
   NSRect b;
   Barline *p;
-  id sl, v = [[NSApp currentDocument] graphicView];
+  id sl, v = [[DrawApp currentDocument] graphicView];
   int k;
   int r = 0;
   if ([v startInspection: BARLINE : &b : &sl])
@@ -110,7 +110,7 @@
 - preset
 {
   int num, a;
-  GraphicView *v = [[NSApp currentDocument] graphicView];
+  GraphicView *v = [[DrawApp currentDocument] graphicView];
   [self assayList: v->slist : &num];
   if (num == 0) return self;
   for (a = 0; a <= 4; a++)

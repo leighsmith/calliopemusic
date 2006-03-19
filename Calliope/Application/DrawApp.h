@@ -42,6 +42,7 @@
     id processLog;		/* a Text Object */
     id charmatrix;		/* the Characters panel matrix */
     id progressPanel;		/* the progress panel */
+    
     BOOL haveOpenedDoc;		/* whether we have opened a document */
     id currentWindow;
     CallPageLayout *cpl;
@@ -64,8 +65,8 @@ extern int partlistflag;
 - (NSWindow *) currentWindow;
 - (void)setCurrentWindow: (id) w; //sb
 - selectFontSelection: (int) i;
-- currentDocument;
-- document;
++ (DrawDocument *) currentDocument;
+//- document;
 - currentView;
 - currentSystem;
 - (NSString *) currentDirectory;
@@ -93,7 +94,6 @@ extern int partlistflag;
 - orderPlayInspector: sender;
 - orderVoiceInspector: sender;
 - orderTabTuner: sender;
-- orderProgressPanel: sender;
 - orderLog: sender;
 - orderAppDefPanel: sender;
 - orderPreferencePanel: sender;
@@ -106,12 +106,6 @@ extern int partlistflag;
 - (float)pointToCurrentUnitFactor;/* sb: added to get rid of convertOldFactor:newFactor: calls */
 - (NSString *)unitString;
 - (int)unitNum;
-//- log: (NSString *) s;
-//- log: (NSString *) s : (float) f;
-
-- setProgressTitle: (NSString *) s;
-- setProgressRatio: (float) f;
-- takeDownProgress: sender;
 
 - (DrawDocument *) openCopyOf: (NSString *) fname reDirect: (NSString *) dir;
 - setCurrentTool:sender;
@@ -122,7 +116,7 @@ extern int partlistflag;
 /* Application delegate methods */
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification;
-- (int)application:sender openFile:(NSString *)path;
+//- (int)application:sender openFile:(NSString *)path;
 
 /* Global cursor setting methods */
 

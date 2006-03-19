@@ -1316,7 +1316,7 @@ static void drawTremolo(int n, TimedObj *a, TimedObj *b, float ytrem, int sz, in
   if (TOLFLOATEQ(p->x, q->x, 2.0)) return self;
   if (TYPEOF(p) == TABLATURE)
   {
-    return [self drawTabBeams: CROTCHET + 1 + [[NSApp currentDocument] getPreferenceAsInt: TABCROTCHET] : p : q : sz : m];
+    return [self drawTabBeams: CROTCHET + 1 + [[DrawApp currentDocument] getPreferenceAsInt: TABCROTCHET] : p : q : sz : m];
   }
   else if (p->time.body < CROTCHET)
   {

@@ -1,4 +1,4 @@
-/* $Id:$ */
+/* $Id$ */
 #import <Foundation/Foundation.h>
 #import "StaffObj.h"
 #import "Staff.h"
@@ -491,7 +491,7 @@ int protoVox;
   if (sp->y < ty) ty = sp->y;
   t->offset.y = (ty - 10) - y;
   [self linkhanger: t];
-  [t initFromString: s : [[NSApp currentDocument] getPreferenceAsFont: TEXFONT]];
+  [t initFromString: s : [[DrawApp currentDocument] getPreferenceAsFont: TEXFONT]];
   t->offset.x = -(t->bounds.size.width + 8);
   t->offset.y -= (t->bounds.size.height);
   return t;
@@ -1104,9 +1104,9 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
   k = [verses count];
   if (*[cc cString] == 127)
   {
-    if (verses == nil) { NSBeep(); return 0; }
+    if (verses == nil) { NSLog(@"keyDownString: verses = nil"); return 0; }
       if (selver >= 0 && (selver < k))  v = [verses objectAtIndex:selver];
-    if (v == nil) { NSBeep(); return 0; }
+    if (v == nil) { NSLog(@"keyDownString: v = nil"); return 0; }
     s = v->data;
     if (s == NULL || strlen(s) == 0)
     {
@@ -1136,7 +1136,7 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
   if (v == nil || *[cc cString] == '\n' || *[cc cString] == '\r')
   {
     k = [verses count];
-    if (k + 1 >= MAXTEXT) { NSBeep(); return 0; }
+    if (k + 1 >= MAXTEXT) { NSLog(@"k + 1 >= MAXTEXT"); return 0; }
     v = [[Verse alloc] init];
     [verses addObject: v];
     v->note = self;
@@ -1165,7 +1165,7 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
         if ([verses count] > selver && selver >= 0) v = [verses objectAtIndex:selver];
     }
     if (v != nil) r = v->font;
-    else r = [[NSApp currentDocument] getPreferenceAsFont: TEXFONT];
+    else r = [[DrawApp currentDocument] getPreferenceAsFont: TEXFONT];
     return r;
 }
 

@@ -1733,7 +1733,7 @@ extern struct toolData toolCodes[NUMTOOLS];
     [self scaleUnitSquareToSize:NSMakeSize(w, h)];
 
     currentScale = s;
-    return [[NSApp currentDocument] changeSize: ceil([self frame].size.width * w)
+    return [[DrawApp currentDocument] changeSize: ceil([self frame].size.width * w)
                                               : ceil([self frame].size.height * h)
                                               : (NSPoint)thePoint];
 }

@@ -31,25 +31,26 @@
 @interface DrawDocument : NSDocument
 {
 @public
-    /*! @var the window the GraphicView is in. TODO: we should be able to remove this as we separate out the document from window controlling */
+    /*! @var documentWindow the window the GraphicView is in. TODO: we should be able to remove this as we separate out the document from window controlling */
     NSWindow *documentWindow;
-    /*! @var  the document's GraphicView */
+    /*! @var view the document's GraphicView */
     IBOutlet GraphicView *view;	
-    /*! @var  The view managing the scroll bars */
+    /*! @var scrollView The view managing the scroll bars */
     IBOutlet SyncScrollView *scrollView;
-    /*! @var  TODO: I don't know why this has to be held, it's probably already inherited from NSDocument nowadays */
+@private
+    /*! @var printInfo TODO: I don't know why this has to be held, it's probably already inherited from NSDocument nowadays */
     NSPrintInfo *printInfo;
-    /*! @var  the prefBlock */
+    /*! @var prefInfo the prefBlock */
     PrefBlock *prefInfo;
-    /*! @var  the name of the document */ //sb: FIXME need to check archiving of name and directory
+    /*! @var name the name of the document */ //sb: FIXME need to check archiving of name and directory
     NSString *name;
-    /*! @var  the directory it is in */
+    /*! @var directory the directory it is in */
     NSString *directory;
-    /*! @var  whether document has associated disk file */
+    /*! @var haveSavedDocument whether document has associated disk file */
     BOOL haveSavedDocument;
-    /*! @var  string naming the document frame */
+    /*! @var frameString string naming the document frame */
     NSString *frameString;
-    /*! @var  dimensions of the frame */
+    /*! @var frameSize dimensions of the frame */
     NSRect frameSize;
 }
 
@@ -104,16 +105,21 @@
 - (NSString *)filename;
 - (NSString *)directory;
 - (NSString *)name;
-- setName:(NSString *)name andDirectory:(NSString *)directory;
-- setName:(NSString *)name;
+- setName: (NSString *) name andDirectory:(NSString *)directory;
+- setName: (NSString *) name;
 - save;
-- (BOOL)needsSaving;
+// - (BOOL)needsSaving;
 - (int) getPreferenceAsInt: (int) i;
 - (float) getPreferenceAsFloat: (int) i;
 - (NSFont *) getPreferenceAsFont: (int) i;
 - setPreferenceAsInt: (int) v at: (int) i;
 - prefInfo;
 - installPrefInfo: (PrefBlock *) p;
+
+/*!
+  @brief Assigns the number of staves in the document 
+ */
+- (void) setNumberOfStaves: (int) numOfStaves;
 - (NSSize)paperSize;
 - (void) zeroScale;
 - useViewScale;

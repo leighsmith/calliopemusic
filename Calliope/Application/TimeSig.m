@@ -302,7 +302,7 @@ static float fontsize[3] = { 16, 12, 8};
     case 6:
       centString(x, cy + charFLLY(f, numer[0]) - 1, numer, f, m);
       centString(x, cy + charFURY(f, numer[0]) + 2, denom, f, m);
-        ft = [NSFont fontWithName: @"Symbol" size: fontsize[sz] / [[NSApp currentDocument] staffScale]];
+        ft = [NSFont fontWithName: @"Symbol" size: fontsize[sz] / [[DrawApp currentDocument] staffScale]];
       x1 = [f widthOfString:[NSString stringWithCString:numer]];
       x2 = [f widthOfString:[NSString stringWithCString:denom]];
       w = (x1 > x2) ? x1 : x2;

@@ -25,8 +25,8 @@
 - isListLeftmost: (NSMutableArray *) l;
 - isSelLeftmost;
 - isSelRightmost;
-- changeSelFont: (NSFont *) f : (BOOL) all;
-- (NSFont *) getVFont: (int *) num;
+- changeSelectedFontsTo: (NSFont *) f forAllGraphics: (BOOL) all;
+- (NSFont *) mostCommonOutOfTotalVerseFonts: (int *) num;
 - setFontSelection: (int) ff : (int) sw;
 - getInsertionX: (float *) x : (Staff **) rsp : (StaffObj **) rp : (int *) tb : (int *) td;
 - getBlinkX: (float *) x : (Staff **) rsp;

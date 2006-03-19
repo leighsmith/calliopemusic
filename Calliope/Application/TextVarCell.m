@@ -51,7 +51,7 @@
 
     printf("font found at %d, %p\n",i,theFont);
     if (theFont) return theFont;
-  return [[NSApp currentDocument] getPreferenceAsFont: RUNFONT];
+  return [[DrawApp currentDocument] getPreferenceAsFont: RUNFONT];
 }
 
 
@@ -114,7 +114,7 @@ NSString *imfiles[NUMVARTYPES] =
 - (NSString *) getVarString
 {
     if (type == 6) return NSUserName();
-  else if (type == 7) return [[NSApp currentDocument] filename];
+  else if (type == 7) return [[DrawApp currentDocument] filename];
   return (NSString *)curvartext[(int)type];
 }
 

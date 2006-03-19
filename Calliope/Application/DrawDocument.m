@@ -307,6 +307,7 @@ static id createWindowFor(GraphicView* view, NSRect *r, NSString *fS)
 
 /* Factory methods */
 
+#if 0
 /*
  * We reuse zones since it doesn't cost us anything to have a
  * zone lying around (e.g. if we open ten documents at the start
@@ -344,6 +345,7 @@ static List *zoneList = nil;
     [zoneList addObject:(id)aZone];
     NSSetZoneName(aZone, @"Unused");
 }
+#endif
 
 
 // Override returning the nib file name of the document
@@ -373,49 +375,6 @@ static List *zoneList = nil;
     return self;
 }
 
-#if 0
-/*
- * Creates a new, empty, document.
- *
- * create a view of default papersize, creates a window for that view;
- sets self
- * as the window's delegate; orders the window front; registers the window
- * with the Workspace Manager
- */
-
-+ new
-{
-    NSZone *zone;
-    NSRect frameRect = NSZeroRect;
-    NSSize frameSize;
-    
-#if 0
-    DrawDocument *doc = [[DrawDocument alloc] init];
-#endif
-    
-    DrawDocument *doc;
-    zone = [self newZone];
-    doc = [super allocWithZone:zone];
-    [doc registerForServicesMenu];
-    doc->printInfo = [[NSPrintInfo alloc] init];
-    doc->prefInfo = [[PrefBlock alloc] init];
-    [doc setDefaultFormat];
-//  [doc paperRect: &frameRect];
-    frameSize = [doc paperSize];
-    frameRect.size = frameSize;
-    doc->view = [[GraphicView allocWithZone:zone] initWithFrame:frameRect];
-//#error ViewConversion: 'setClipping:' is obsolete. Views always clip to their bounds. Use PSinitclip instead.
-//  [doc->view setClipping:NO];			/* since it is in a ClipView */
-    doc->documentWindow = createWindowFor(doc->view, NULL, nil);
-    [(NSWindow *)doc->documentWindow setDelegate:doc];
-    [doc zeroScale];
-    [doc setName: nil andDirectory: nil];
-    [doc->view firstPage:doc];
-    
-    [(NSWindow *)doc->documentWindow makeKeyAndOrderFront:doc];
-    return doc;
-}
-#endif
 
 /*
  * Creates a new document from what is in the passed stream.
@@ -423,11 +382,11 @@ static List *zoneList = nil;
 
 + newFromStream:(NSData *)stream
 {
-    NSZone *zone;
+//    NSZone *zone;
     NSRect contFrame = NSZeroRect;
     DrawDocument *doc;
-    zone = [self newZone];
-    doc = [super allocWithZone:zone];
+//    zone = [self newZone];
+    doc = [[[self class] alloc] init];
     [doc registerForServicesMenu];
     if (stream && [doc loadDocument: stream]) {
 	NSString *frameString = [doc frameString];
@@ -449,10 +408,10 @@ static List *zoneList = nil;
 
 + newOldFromStream:(NSData *)stream
 {
-    NSZone *zone;
+//    NSZone *zone;
     DrawDocument *doc;
-    zone = [self newZone];
-    doc = [super allocWithZone:zone];
+//    zone = [self newZone];
+    doc = [[[self class] alloc] init];
     [doc registerForServicesMenu];
     if (stream && [doc loadOldDocument: stream])
     {
@@ -533,13 +492,13 @@ extern int needUpgrade;
 // TODO should become copyWithZone: 
 - newFrom
 {
-    NSZone *zone;
+//    NSZone *zone;
 //    NSRect frameRect = NSZeroRect;
 //    NSSize frameSize;
     DrawDocument *doc;
     GraphicView *v;
-    zone = [DrawDocument newZone];
-    doc = [DrawDocument allocWithZone:zone];
+    // zone = [DrawDocument newZone];
+    doc = [[[self class] alloc] init];
     [doc registerForServicesMenu];
     doc->printInfo = [[NSPrintInfo alloc] init];
     
@@ -580,7 +539,7 @@ extern int needUpgrade;
     [documentWindow release];
     if (name) [name autorelease];
     if (directory) [directory autorelease];
-    [[self class] reuseZone:(NSZone *)[self zone]];
+//    [[self class] reuseZone:(NSZone *)[self zone]];
     [super dealloc];
 //  return [NSObject cancelPreviousPerformRequestsWithTarget:NSApp selector:@selector(updateWindows) object:nil], [NSApp performSelector:@selector(updateWindows) withObject:nil afterDelay:(100) / 1000.0];
 }
@@ -791,7 +750,6 @@ return nil;
 
 - resetScrollers
 {
-//  id scrollView;
     NSSize conSize;
     NSRect conRect, winFrame;
     BOOL doRuler = NO;
@@ -799,7 +757,6 @@ return nil;
     {
 	winFrame = [documentWindow frame];
 	conRect = [[documentWindow class] contentRectForFrameRect:winFrame styleMask:[documentWindow styleMask]];
-// scrollView = [documentWindow contentView];
 	getContentSizeForView(view, &conSize);
 	if ([scrollView rulersVisible])
 	{
@@ -973,6 +930,22 @@ return nil;
     return self;
 }
 
+- (void) setNumberOfStaves: (int) numOfStaves
+{
+    System *newSystem = [[System alloc] initWithStaveCount: numOfStaves onGraphicView: view];
+
+    [newSystem initsys];
+    if (numOfStaves > 1) 
+	[newSystem installLink];
+    [view renumSystems];
+    [view doPaginate];
+    [view renumPages];
+    [view setRunnerTables];
+    [view balancePages];
+    [view firstPage: self]; // This was originally newPanel?
+    [view setNeedsDisplay: YES];
+}
+
 #if 0
 - close:sender
 {
@@ -1082,7 +1055,7 @@ return nil;
 	case 0:
 	    return self;
 	case 1:
-	    file = [[NSApp currentDocument] askForFile: [NSString stringWithCString:typeExts[type]]];
+	    file = [[DrawApp currentDocument] askForFile: [NSString stringWithCString:typeExts[type]]];
 	    if (file)
 	    {
 		s = [self dataWithEPSInsideRect:*region];
@@ -1090,7 +1063,7 @@ return nil;
 	    }
 		break;
 	case 2:
-	    file = [[NSApp currentDocument] askForFile: [NSString stringWithCString:typeExts[type]]];
+	    file = [[DrawApp currentDocument] askForFile: [NSString stringWithCString:typeExts[type]]];
 	    if (file)
 	    {
 		[self lockFocus];
@@ -1272,6 +1245,7 @@ return nil;
 	return NO;
 }
 
+// TODO put the inner data writing routines in dataRepresentationOfTYpe: but we should be writing out MusicXML instead.
 - save
 {
     NSString *s;
@@ -1337,12 +1311,12 @@ return nil;
     return nil;
 }
 
-
+#if 0
 - (BOOL) needsSaving
 {
     return ([view isDirty] && (haveSavedDocument || ![view isEmpty]));
 }
-
+#endif
 
 
 /* Window delegate methods. */
@@ -1355,6 +1329,8 @@ return nil;
     [documentWindow setDelegate: self]; // Hmm
     [view firstPage: self];
     [self zeroScale];
+    // TODO kludged in here for now, it will eventually be created by a "new document sheet".
+    [self setNumberOfStaves: 1];
 }
 
 #if 0
@@ -1419,7 +1395,7 @@ return nil;
  Set the cursor appropriately depending on which tool is currently selected.
  */
 
-extern int partlistflag;
+//extern int partlistflag;
 
 - (void)windowDidBecomeMain:(NSNotification *)notification
 {
@@ -1434,7 +1410,7 @@ extern int partlistflag;
     [self resetCursor];
     // [NSApp presetPrefsPanel]; // TODO should be [DrawApp presetPrefsPanel]; eventually DrawApp should just become a preferences controller.
     // [NSApp inspectApp]; // TODO must rewrite.
-    ++partlistflag;
+    //++partlistflag;
 }
 
 #if 0

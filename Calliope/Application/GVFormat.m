@@ -1,8 +1,10 @@
 /* 
-  $Id:$
+  $Id$
   Routines for handling the systemlist, pagelist, and formatting
 */
 
+#import <AppKit/AppKit.h>
+#import <Foundation/Foundation.h>
 #import "GVFormat.h"
 #import "GVCommands.h"
 #import "GVSelection.h"
@@ -27,12 +29,7 @@
 #import "Range.h"
 #import "TimeSig.h"
 #import "mux.h"
-#import <AppKit/NSPrintInfo.h>
-#import <AppKit/NSForm.h>
-#import <AppKit/NSPanel.h>
-#import <AppKit/NSPasteboard.h>
-#import <AppKit/NSGraphics.h>
-#import <Foundation/NSArray.h>
+#import "ProgressDisplay.h"
 
 extern NSSize paperSize;
 
@@ -352,14 +349,15 @@ extern NSSize paperSize;
 - gotoPage: (int) n usingIndexMethod: (int) off
 {
     if ([self findPage: n usingIndexMethod: off])
-      {
+    {
         [[self window] endEditingFor:self];
         [self setNeedsDisplay:YES];
         [self resetPageFields];
         [NSApp inspectApp];
         return self;
-      }
-    else NSBeep();
+    }
+    else
+	NSLog(@"Unable to find page %d using index method %d", n, off);
     return nil;
 }
 
@@ -394,23 +392,24 @@ extern NSSize paperSize;
 }
 
 
-- findSysOfStyle: (NSString *) a
+- findSysOfStyle: (NSString *) styleToFind
 {
-  System *st, *sys = currentSystem;
-  int k = [syslist count];
-  int i = [syslist indexOfObject:sys] + 1;
-  int j;
-  for (j = i; j < k; j++)
-  {
-    st = [syslist objectAtIndex:j];
-      if ([st->style isEqualToString: a])
+    System *st, *sys = currentSystem;
+    int k = [syslist count];
+    int i = [syslist indexOfObject:sys] + 1;
+    int pageIndex;
+    
+    for (pageIndex = i; pageIndex < k; pageIndex++)
     {
-      [self gotoPage: j usingIndexMethod: 3];
-      return self;
+	st = [syslist objectAtIndex: pageIndex];
+	if ([st->style isEqualToString: styleToFind])
+	{
+	    [self gotoPage: pageIndex usingIndexMethod: 3];
+	    return self;
+	}
     }
-  }
-  NSBeep();
-  return self;
+    NSLog(@"Could not find system of style %@", styleToFind);
+    return self;
 }
 
 
@@ -441,12 +440,12 @@ extern NSSize paperSize;
   if (p->alignment & 1)
   {
     s = [syslist objectAtIndex:p->topsys];
-    if (![s hasTitles]) sy += s->headroom;
+    if (![s hasTitles]) sy += [s headroom];
   }
   if (p->alignment & 2)
   {
     s = [syslist objectAtIndex:p->botsys];
-    sy += [s myHeight] - ([[s lastStaff] yOfBottom] - (((Staff *)[s firststaff])->y - s->headroom));
+    sy += [s myHeight] - ([[s lastStaff] yOfBottom] - (((Staff *)[s firststaff])->y - [s headroom]));
   }
   return sy;
 }
@@ -460,7 +459,7 @@ extern NSSize paperSize;
 - (float) startTop: (System *) s : (Page *) p
 {
   float y = [p topMargin];
-  if ((p->alignment & 1) && ![s hasTitles]) y -= s->headroom;
+  if ((p->alignment & 1) && ![s hasTitles]) y -= [s headroom];
   return y;
 }
 
@@ -493,7 +492,7 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
   System *s;
   int i, pc, nsys;
   BOOL lastp, firstp;
-  defsep = [[NSApp currentDocument] getPreferenceAsFloat: MAXBALGAP];
+  defsep = [[DrawApp currentDocument] getPreferenceAsFloat: MAXBALGAP];
   sumheights = 0.0;
   for (i = p->topsys; i <= p->botsys; i++) sumheights += [[syslist objectAtIndex:i] myHeight];
   sumheights -= [self alignShave: p];
@@ -582,23 +581,21 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
   return self;
 }
 
-
 - shuffleIfNeeded
 {
   System *sys;
-  int i, k = [syslist count];
-  [NSApp orderProgressPanel: self];
-  [NSApp setProgressTitle: @"Laying Out Margins"];
-  for (i = 0; i < k; i++)
+  int i, systemIndex = [syslist count];
+  ProgressDisplay *shuffleProgress = [ProgressDisplay progressDisplayWithTitle: @"Laying Out Margins"];
+  
+  for (i = 0; i < systemIndex; i++)
   {
     sys = [syslist objectAtIndex:i];
     if (sys->oldleft != [sys leftMargin]) [sys shuffleNotes: sys->oldleft : [sys leftMargin]];
-    [NSApp setProgressRatio: ((float) i) / k];
+    [shuffleProgress setProgressRatio: ((float) i) / systemIndex];
   }
-  [NSApp takeDownProgress: self];
+  [shuffleProgress closeProgressDisplay];
   return self;
 }
-
 
 /*
   reset all the runner tables (caches) inside all the Pages.
@@ -647,7 +644,7 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
     sys->page = pg;
   }
   [pagelist addObject: pg];
-  [NSApp setProgressRatio: 1.0 * j / numsys];
+  // [pageProgress setProgressRatio: 1.0 * j / numsys];
   return self;
 }
 
@@ -686,14 +683,14 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
   ns = s0 = 0;
   p = 1;
   pheight = [self bounds].size.height;
-  sheight = [[NSApp currentDocument] getPreferenceAsFloat: MINSYSGAP];
+  sheight = [[DrawApp currentDocument] getPreferenceAsFloat: MINSYSGAP];
   sh = 0.0;
   if (pagelist != nil) [pagelist autorelease]; //sb: List is freed rather than released
   pagelist = [[NSMutableArray allocWithZone:[self zone]] init];
   for (i = 0; i < k; i++)
   {
     sys = [syslist objectAtIndex:i];
-    if (sys->flags.newpage) p = sys->pagenum;
+    if (sys->flags.newpage) p = [sys pageNumber];
     h = [sys myHeight];
     newm = [sys checkMargin];
     if (newm)
@@ -717,7 +714,7 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
     }
     else if (sys->flags.pgcontrol == 0 && ns > 0 && sh + h + ((ns - 1) * sheight) > him)
     {
-      if (ns == 1 && h > him) NSLog(@"System overflows page %f", sys->pagenum);
+      if (ns == 1 && h > him) NSLog(@"System overflows page %f", [sys pageNumber]);
       [self doPage: p : s0 : ns : sh : him : topm : botm : k];
       sh = h;
       s0 = i;
@@ -732,7 +729,7 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
   }
   if (ns > 0)
   {
-    if (ns == 1 && h > him) NSLog(@"System overflows page %f", sys->pagenum);
+    if (ns == 1 && h > him) NSLog(@"System overflows page %f", [sys pageNumber]);
     [self doPage: p : s0: ns : sh : him : topm : botm : k];
   }
   return self;
@@ -742,13 +739,14 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
 - balancePages
 {
   int i, k;
-  [NSApp setProgressTitle: @"Balance Pages"];
+  ProgressDisplay *balanceProgress = [ProgressDisplay progressDisplayWithTitle: @"Balance Pages"];
   k = [pagelist count];
   for (i = 0; i < k; i++)
   {
-    [NSApp setProgressRatio: 1.0 * i / k];
+    [balanceProgress setProgressRatio: 1.0 * i / k];
     [self balanceSystems: [pagelist objectAtIndex:i]];
   }
+  [balanceProgress closeProgressDisplay];
   return self;
 }
 
@@ -803,24 +801,27 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
 
 - renumPages
 {
-  int i, j, k, r;
-  Page *pg;
-  System *sys;
-  k = [pagelist count];
-  j = 1;
-  for (i = 0; i < k; i++)
-  {
-    pg = [pagelist objectAtIndex:i];
-    for (r = pg->topsys; r <= pg->botsys; r++)
+    int i, j, k, r;
+    Page *pg;
+    System *sys;
+    k = [pagelist count];
+    j = 1;
+    for (i = 0; i < k; i++)
     {
-      sys = [syslist objectAtIndex:r];
-      if (sys->flags.newpage) j = sys->pagenum; else sys->pagenum = j;
+	pg = [pagelist objectAtIndex:i];
+	for (r = pg->topsys; r <= pg->botsys; r++)
+	{
+	    sys = [syslist objectAtIndex:r];
+	    if (sys->flags.newpage) 
+		j = [sys pageNumber];
+	    else 
+		[sys setPageNumber: j];
+	}
+	pg->num = j;
+	++j;
     }
-    pg->num = j;
-    ++j;
-  }
-  [self resetPageFields];
-  return self;
+    [self resetPageFields];
+    return self;
 }
 
 

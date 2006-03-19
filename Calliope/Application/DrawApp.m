@@ -10,7 +10,6 @@
 #import "TextGraphic.h"
 #import "CastInspector.h"
 #import "PlayInspector.h"
-#import "ProgressPanel.h"
 #import "SysInspector.h"
 #import "TextVarCell.h"
 #import "AppDefaults.h"
@@ -245,8 +244,10 @@ static DrawDocument *openDocument(NSString *document, BOOL display)
 
 /* General application status and information querying/modifying methods. */
 
-- currentDocument
+// TODO Probably become a DrawDocument class method?
++ (DrawDocument *) currentDocument
 {
+#if 0
     /* every time a window becomes main, it should register itself as "currentWindow" here.
     * It's safer to do this like this, because it will remain "main" even when app is hidden.
     * this helps prevent PostScript problems caused by drawing images that rely on currentDocument
@@ -254,24 +255,19 @@ static DrawDocument *openDocument(NSString *document, BOOL display)
     */
     if (currentWindow) return documentInWindow(currentWindow);
     return documentInWindow([NSApp mainWindow]); /* last resort */
+#endif
+    return [[NSDocumentController sharedDocumentController] currentDocument];
 }
-
-- document
-{
-    if (currentWindow) return documentInWindow(currentWindow);
-    return documentInWindow([NSApp mainWindow]);
-}
-
 
 - currentView
 {
-    return [[self currentDocument] graphicView];
+    return [[[self class] currentDocument] graphicView];
 }
 
 
 - (NSString *)currentDirectory
 {
-    NSString *retval = [(DrawDocument *)[self currentDocument] directory];
+    NSString *retval = [[[self class] currentDocument] directory];
     
 //    if (!retval || !*retval) retval = [[[NSOpenPanel openPanel] directory] cString];
 //sb: changed the following to retrieve current directory from application rather than openpanel, which is no longer shared.
@@ -283,7 +279,8 @@ static DrawDocument *openDocument(NSString *document, BOOL display)
 - print:sender
 {
     BOOL printSuccess;
-    id doc = [self document];
+    DrawDocument *doc = [[self class] currentDocument];
+    
     if (doc && ![[doc graphicView] isEmpty])
     {
         printSuccess = [[NSPrintOperation printOperationWithView:[doc graphicView]
@@ -584,32 +581,6 @@ float unitFactor[4] =
 
 /* the progress panel */
 
-- orderProgressPanel: sender
-{
-    if (!progressPanel)  [NSBundle loadNibNamed:@"ProgressPanel.nib" owner:self];
-    [progressPanel setFloatingPanel:YES];
-    if (progressPanel) [progressPanel preset];
-    [progressPanel makeKeyAndOrderFront:self];
-    return self;
-}
-
-- setProgressTitle: (NSString *) s
-{
-    [progressPanel setTitle:s];
-    return progressPanel;
-}
-
-
-- setProgressRatio: (float) f
-{
-    return [progressPanel setRatio: f];
-}
-
-- takeDownProgress: sender
-{
-    [progressPanel orderOut:self];
-    return self;
-}
 
 
 /*
@@ -685,7 +656,7 @@ float unitFactor[4] =
 
 - (NSMutableArray *) getPartlist
 {
-    DrawDocument *d = [self currentDocument];
+    DrawDocument *d = [[self class] currentDocument];
     if (d == nil) return scratchlist;
     if ([d graphicView] == nil) return scratchlist;
     return [[d graphicView] partList];
@@ -694,7 +665,7 @@ float unitFactor[4] =
 
 - (NSMutableArray *) getChanlist
 {
-    DrawDocument *d = [self currentDocument];
+    DrawDocument *d = [[self class] currentDocument];
     if (d == nil) return nil;
     if ([d graphicView] == nil) return nil;
     return ((GraphicView *)[d graphicView])->chanlist;
@@ -703,7 +674,7 @@ float unitFactor[4] =
 
 - (NSMutableArray *) getStylelist
 {
-    DrawDocument *d = [self currentDocument];
+    DrawDocument *d = [[self class] currentDocument];
     if (d == nil) return scrstylelist;
     if ([d graphicView] == nil) return nil;
     return ((GraphicView *)[d graphicView])->stylelist;
@@ -778,7 +749,7 @@ float unitFactor[4] =
     
     NSOpenPanel* openpanel = [NSOpenPanel openPanel];
     [openpanel setAllowsMultipleSelection:YES];
-    directory = [(DrawDocument *)[self currentDocument] directory];
+    directory = [[[self class] currentDocument] directory];
     if (directory && [directory isAbsolutePath]) [openpanel setDirectory:directory];
     else [openpanel setDirectory:[appdefaults getDefaultOpenPath]];
     
@@ -811,7 +782,7 @@ float unitFactor[4] =
     
     id openpanel = [NSOpenPanel openPanel];
     [openpanel setAllowsMultipleSelection:YES];
-    directory = [(DrawDocument *)[self currentDocument] directory];
+    directory = [[[self class] currentDocument] directory];
     if (directory) {
         if ([directory isAbsolutePath]) {
             [openpanel setDirectory:directory];
@@ -830,68 +801,6 @@ float unitFactor[4] =
     return;
 }
 
-
-#if 0
-- saveAll:sender
-    /*
-     * Saves all the documents.
-     */
-{
-    int count;
-    NSWindow *window;
-    
-    count = [[NSApp windows] count];
-    while (count--) {
-	window = [[NSApp windows] objectAtIndex:count];
-	[documentInWindow(window) save:self];
-    }
-//    [NSObject cancelPreviousPerformRequestsWithTarget:NSApp selector:@selector(updateWindows) object:nil], [NSApp performSelector:@selector(updateWindows) withObject:nil afterDelay:(1) / 1000.0];
-    return nil;
-}
-
-// XXX_PCB:  this should be handled by AppKit automatically, when using NSDocument!
-- (void)terminate:(id)sender
-    /*
-     * Overridden to be sure all documents get an opportunity to be saved
-     * before exiting the program.
-     */
-{
-    int count, choice;
-    id window, document;
-    
-    count = [[self windows] count];
-    while (count--) {
-	window = [[self windows] objectAtIndex:count];
- 	document = [window delegate];
-	if ([document respondsToSelector:@selector(needsSaving)] && [document needsSaving]) {
-	    choice = NSRunAlertPanel(@"Quit", @"You have unsaved documents.", @"Review Unsaved", @"Quit Anyway", @"Cancel");
-	    if (choice == NSAlertOtherReturn)  {
-		return;
-	    } else if (choice == NSAlertDefaultReturn) {
-		count = [[self windows] count];
-		while (count--) {
-		    window = [[self windows] objectAtIndex:count];
-		    document = [window delegate];
-		    if ([document respondsToSelector:@selector(windowWillClose:action:)]) {
-			if ([document windowWillClose:window action:@"Quit"]) {
-			    [(NSWindow *)window close];
-			} else {
-			    return;
-			}
-		    }
-		}
-	    }
-	    break;
-	}
-    }
-    if (!appdefaults)  [NSBundle loadNibNamed:@"AppDefaults.nib" owner:self];
-    [appdefaults checkSaveToFile];
-    
-    [super terminate:sender];
-    
-    return;
-}
-#endif
 
 /*
  * Application object delegate methods.
@@ -973,14 +882,15 @@ else {
 //  [[[NSFontManager sharedFontManager] fontPanel:YES] setAccessoryView:fontAccessory];
     [[NSFontPanel sharedFontPanel] setAccessoryView:fontAccessory];
     
-    for (i = 1; i < [[[NSProcessInfo processInfo] arguments] count]; i++) haveOpenedDoc = openDocument([[[NSProcessInfo processInfo] arguments] objectAtIndex:i], YES) || haveOpenedDoc;
+    for (i = 1; i < [[[NSProcessInfo processInfo] arguments] count]; i++)
+	haveOpenedDoc = openDocument([[[NSProcessInfo processInfo] arguments] objectAtIndex:i], YES) || haveOpenedDoc;
 #ifdef WIN32
     [MenuBar setMenu:[NSApp mainMenu]];
     [MenuBar orderFront];
 #endif
 }
 
-
+#if 0
 /* when a user double clicks on an opus document */
 
 - (int)application:sender openFile:(NSString *)path
@@ -998,6 +908,7 @@ else {
     }
     return NO;
 }
+#endif
 
 /* Automatic update methods */
 

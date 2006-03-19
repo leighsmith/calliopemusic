@@ -196,7 +196,7 @@ static void addBarsRest(Staff *sp, System *sys, int n)
   [epl addObject: [[CallPart alloc] init: nullPart : nil : 1 : nullInstrument]];
   for (i = 0; i < NUMSTAVES; i++) barsrest[i] = 0;
   nsys = [syslist count];
-  doc = [[NSApp currentDocument] newFrom];
+  doc = [[DrawApp currentDocument] newFrom];
   v = doc->view;
   [[v window] disableFlushWindow];
   for (i = 0; i < nsys; i++)
@@ -267,9 +267,10 @@ static void addBarsRest(Staff *sp, System *sys, int n)
   return self;
 }
 
-- (NSArray *) partList
+- (NSMutableArray *) partList
 {
-    return [NSArray arrayWithArray: partlist];
+//    return [NSArray arrayWithArray: partlist];
+    return [[partlist retain] autorelease];
 }
 
 /*
@@ -290,7 +291,7 @@ static void addBarsRest(Staff *sp, System *sys, int n)
   [self deselectAll: self];
   for (i = 0; i < NUMSTAVES; i++) barsrest[i] = 0;
   nsys = [syslist count];
-  doc = [[NSApp currentDocument] newFrom];
+  doc = [[DrawApp currentDocument] newFrom];
   v = doc->view;
   [[v window] disableFlushWindow];
   for (i = 0; i < nsys; i++)

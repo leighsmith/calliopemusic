@@ -4,10 +4,16 @@
 
 @class StaffObj;
 @class Bracket;
+@class GraphicView;
+@class Page;
 
 @interface System : Graphic
 {
 @public
+    NSMutableArray *objs;			/* List of random objects on this system */
+    NSMutableArray *staves;			/* List of staves */
+    GraphicView *view;			/* backreference to our GraphicView */
+    Page *page;			/* backreference to our Page */
   struct
   {
     unsigned int nstaves : 7;	/* number of staves */
@@ -19,21 +25,18 @@
     unsigned int newbar : 1;	/* bar number changes sequence */
     unsigned int newpage : 1;   /* page number changes sequence */
   } flags;
-  short pagenum;		/* system (actually page) number */
+  float width;			/* width within margins and indent*/
   short barnum;			/* number of first measure on this staff */
-  float barbase;		/* bar number baseline offset */
+  NSString *style;
   float lindent, rindent;	/* left and right indents */
   float oldleft;		/* left margin changes while pagination (not cache: copy/paste) */
-  float width;			/* width within margins and indent*/
-  float height;			/* the height used in page balancing */
-  float headroom;		/* included in height */
   float groupsep;		/* extra group separation */
   float expansion;		/* expansion factor (default 1.0) */
-  NSString *style;
-  NSMutableArray *objs;			/* List of random objects on this system */
-  NSMutableArray *staves;			/* List of staves */
-  id view;			/* backreference to our GraphicView */
-  id page;			/* backreference to our Page */
+@private
+  short pagenum;		/* system (actually page) number */
+  float barbase;		/* bar number baseline offset */
+  float height;			/* the height used in page balancing */
+  float headroom;		/* included in height */
 }
 
 
@@ -44,7 +47,7 @@
 - sysInvalid;
 - (int) myIndex;
 - (BOOL) lastSystem;
-- init: (int) n : (GraphicView *) v;
+- initWithStaveCount: (int) n onGraphicView: (GraphicView *) v;
 - initsys;
 - mark;
 - newFrom;
@@ -54,7 +57,7 @@
 - closeSystem;
 - (float) myHeight;
 - moveTo: (float) y;
-- (void)moveBy:(float)x :(float)y;
+- (void) moveBy: (float) x : (float) y;
 - (float) headerBase;
 - (float) footerBase;
 - (float) leftMargin;
@@ -99,5 +102,19 @@
 - (void)encodeWithCoder:(NSCoder *)aCoder;
 - recalcObjs;
 
+/*!
+  @brief Returns the headroom on this system.
+ */
+- (float) headroom;
+
+/*!
+  @brief Returns the page number this System is on.
+ */
+- (int) pageNumber;
+
+/*!
+  @brief Assigns the page number this System is on.
+ */
+- (void) setPageNumber: (int) newPageNumber;
 
 @end

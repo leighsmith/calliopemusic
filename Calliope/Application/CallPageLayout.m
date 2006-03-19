@@ -28,7 +28,7 @@ static int unitAsInt(float f)
     int newunit; 
     [self convertOldFactor:&old newFactor:&new];
     newunit = unitAsInt(new);
-    [[NSApp document] setPreferenceAsInt:newunit at: UNITS];/* obselete, really */
+    // [[DrawApp currentDocument] setPreferenceAsInt:newunit at: UNITS];/* obselete, really */
     [[NSUserDefaults standardUserDefaults] setObject:unitname[newunit] forKey:@"Units"];
     [super pickedUnits:sender];
 }

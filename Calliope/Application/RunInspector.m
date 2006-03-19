@@ -46,7 +46,7 @@ extern int justcode[4];
 {
     [[scroller documentView] setRichText:YES];
 //    [[scroller documentView] setUsesFontPanel:YES]; //should be unnecessary
-    [[scroller documentView] setFont:[[NSApp currentDocument] getPreferenceAsFont: RUNFONT]];
+    [[scroller documentView] setFont:[[DrawApp currentDocument] getPreferenceAsFont: RUNFONT]];
     [[[scroller documentView] textStorage] setDelegate:self];
     [(NSText *)[scroller documentView] setDelegate:self];
     [(NSPanel *)self setDelegate:self];
@@ -110,7 +110,7 @@ extern int justcode[4];
     int i,n;
   System *sys;
   BOOL b = NO;
-  GraphicView *v = [[NSApp currentDocument] graphicView];
+  GraphicView *v = [[DrawApp currentDocument] graphicView];
   Runner *p = [v canInspect: RUNNER : &n];
   if (n == 0)
   {
@@ -151,7 +151,7 @@ extern int justcode[4];
 {
   NSTextView *tv;
     int n;
-    GraphicView *v = [[NSApp currentDocument] graphicView];
+    GraphicView *v = [[DrawApp currentDocument] graphicView];
     Runner *p = [v canInspect: RUNNER : &n];
     if (n == 0) return nil;
   [headfootmatrix selectCellAtRow:p->flags.vertpos column:0];
@@ -165,7 +165,7 @@ extern int justcode[4];
   if (!(p->data))
   {
     [tv setString:@""];
-    [tv setFont:[[NSApp currentDocument] getPreferenceAsFont: RUNFONT]];
+    [tv setFont:[[DrawApp currentDocument] getPreferenceAsFont: RUNFONT]];
   }
   else
   {
@@ -183,7 +183,7 @@ extern int justcode[4];
 - runner
 {
     int n;
-    GraphicView *v = [[NSApp currentDocument] graphicView];
+    GraphicView *v = [[DrawApp currentDocument] graphicView];
     Runner *p = [v canInspect: RUNNER : &n];
     if (!n) return nil;
     return p;

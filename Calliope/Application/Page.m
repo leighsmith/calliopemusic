@@ -98,7 +98,7 @@ NSString *curvartext[8];
 {
   float m = margin[0];
   m += (num & 1) ? margin[8] : margin[6];
-  return m / [[NSApp currentDocument] staffScale];
+  return m / [[DrawApp currentDocument] staffScale];
 }
 
 
@@ -106,7 +106,7 @@ NSString *curvartext[8];
 {
   float m = margin[1];
   m += (num & 1) ? margin[9] : margin[7];
-  return m / [[NSApp currentDocument] staffScale];
+  return m / [[DrawApp currentDocument] staffScale];
 }
 
 
@@ -114,7 +114,7 @@ NSString *curvartext[8];
 {
   float m;
   m = (num & 1) ? margin[8] : margin[6];
-  return m / [[NSApp currentDocument] staffScale];
+  return m / [[DrawApp currentDocument] staffScale];
 }
 
 
@@ -122,30 +122,30 @@ NSString *curvartext[8];
 {
   float m;
   m = (num & 1) ? margin[9] : margin[7];
-  return m / [[NSApp currentDocument] staffScale];
+  return m / [[DrawApp currentDocument] staffScale];
 }
 
 
 - (float) topMargin
 {
-  return margin[4] / [[NSApp currentDocument] staffScale];
+  return margin[4] / [[DrawApp currentDocument] staffScale];
 }
 
 
 - (float) bottomMargin
 {
-  return margin[5] / [[NSApp currentDocument] staffScale];
+  return margin[5] / [[DrawApp currentDocument] staffScale];
 }
 
 - (float) headerBase
 {
-  return margin[2] / [[NSApp currentDocument] staffScale];
+  return margin[2] / [[DrawApp currentDocument] staffScale];
 }
 
 
 - (float) footerBase
 {
-  return margin[3] / [[NSApp currentDocument] staffScale];
+  return margin[3] / [[DrawApp currentDocument] staffScale];
 }
 
 

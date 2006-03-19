@@ -46,17 +46,6 @@
 
 - fillDocument: (DrawDocument *) doc : (int) sn
 {
-  GraphicView *v = doc->view;
-  System *sys = [[System alloc] init: sn : v];
-  [sys initsys];
-  if (sn > 1) [sys installLink];
-  [v renumSystems];
-  [v doPaginate];
-  [v renumPages];
-  [v setRunnerTables];
-  [v balancePages];
-  [v firstPage: self];
-  [v setNeedsDisplay:YES];
   return self;
 }
 
@@ -73,7 +62,7 @@
     n = [numstavestext intValue];
     if (n < 1 || n > NUMSTAVES)
     {
-      NSBeep();
+      NSLog(@"n < 1 or > NUMSTAVES");
       return self;
     }
     [self fillDocument: [DrawDocument new] : n];

@@ -1,3 +1,5 @@
+/* $Id:$ */
+#import <AppKit/AppKit.h>
 #import "GraphicView.h"
 #import "GVCommands.h"
 #import "GVSelection.h"
@@ -40,7 +42,7 @@
 #import "Enclosure.h"
 #import "mux.h"
 #import "muxlow.h"
-#import <AppKit/AppKit.h>
+#import "ProgressDisplay.h"
 
 @implementation GraphicView(GVCommands)
 
@@ -190,7 +192,7 @@ static NSString *stylescratch;
   }
   if (sys->lindent != currentSystem->lindent)
   {
-    ss = [[NSApp currentDocument] staffScale];
+    ss = [[DrawApp currentDocument] staffScale];
     lm = [currentSystem leftMargin];
     [currentSystem shuffleNotes: lm + (currentSystem->lindent / ss) : lm + (sys->lindent / ss)];
   }
@@ -220,7 +222,7 @@ static NSString *stylescratch;
       b = YES;
       if (sys->lindent != st->lindent)
       {
-        ss = [[NSApp currentDocument] staffScale];
+        ss = [[DrawApp currentDocument] staffScale];
         lm = [sys leftMargin];
         [sys shuffleNotes: lm + (sys->lindent / ss) : lm + (st->lindent / ss)];
       }
@@ -246,7 +248,7 @@ static NSString *stylescratch;
   for (i = j; i < k; i++)
   {
     sys = [syslist objectAtIndex:i];
-      sys->pagenum = 0;
+      [sys setPageNumber: 0];
       sys->barnum = 0;
       sys->flags.newbar = 0;
       sys->flags.newpage = 0;
@@ -472,7 +474,7 @@ static NSString *stylescratch;
 	  for (m = 0; m < nsig[j]; m++) if (!sc) sc |= [tsig[j][m] isConsistent: t];
 	  if (!sc)
 	  {
-	    NSLog(@"Inconsistent bar length in page %d, bar %d, staff %d\n", sys->pagenum, bn, j + 1);
+	    NSLog(@"Inconsistent bar length in page %d, bar %d, staff %d\n", [sys pageNumber], bn, j + 1);
 	    allOK = NO;
 	  }
 	  bt = p->stamp;
@@ -876,7 +878,7 @@ static BOOL doToObject(Graphic *p, int c, int a)
     case 1:
       if ([slist count] > 0)
       {
-        [self changeSelFont: f : fontflag];
+        [self changeSelectedFontsTo: f forAllGraphics: fontflag];
 	err = NO;
       }
       break;
@@ -1122,7 +1124,7 @@ extern char *typename[NUMTYPES];
   while (k < nsys)
   {
     sys = [syslist objectAtIndex:k];
-    NSLog(@"System %d [page %d]:\n", k + 1, sys->pagenum);
+    NSLog(@"System %d [page %d]:\n", k + 1, [sys pageNumber]);
     ++k;
     //[NXApp log: buf];
     sl = sys->staves;
@@ -1182,10 +1184,10 @@ extern char *typename[NUMTYPES];
  * [[PageLayout new] printInfo]. */
 /* sb: I think this is ok (1999). I'll leave it to the currentDocument to decide
  * where to get the info from (shared or not */
-  r = (NSSize)[[NSApp currentDocument] paperSize];
+  r = (NSSize)[[DrawApp currentDocument] paperSize];
   sys = [syslist objectAtIndex:s];
   lox = 0;
-  hix = r.width / [[NSApp currentDocument] staffScale];
+  hix = r.width / [[DrawApp currentDocument] staffScale];
   k = [sys->staves count];
   for (i = 0; i < k; i++)
   {
@@ -1373,20 +1375,20 @@ extern char *typename[NUMTYPES];
 
 - paginate: sender
 {
-  [NSApp orderProgressPanel: self];
-  [NSApp setProgressTitle: @"Paginating"];
-  [self saveSysLeftMargin];
-  [self renumSystems];
-  [self doPaginate];
-  [self renumPages];
-  [self setRunnerTables];
-  [self shuffleIfNeeded];
-  [self balancePages];
-  [self setRanges];
-  [self dirty];
-  [NSApp takeDownProgress: self];
-  [self gotoPage: 0 usingIndexMethod: 4];
-  return self;
+    ProgressDisplay *paginateProgress = [ProgressDisplay progressDisplayWithTitle: @"Paginating"];
+    
+    [self saveSysLeftMargin];
+    [self renumSystems];
+    [self doPaginate];
+    [self renumPages];
+    [self setRunnerTables];
+    [self shuffleIfNeeded];
+    [self balancePages];
+    [self setRanges];
+    [self dirty];
+    [paginateProgress closeProgressDisplay];
+    [self gotoPage: 0 usingIndexMethod: 4];
+    return self;
 }
 
 
@@ -1399,26 +1401,27 @@ extern char *typename[NUMTYPES];
 
 - formatAll: sender
 {
-  int i, k = [syslist count];
-  [self flowTimeSig: NULL];
-  [NSApp orderProgressPanel: self];
-  [NSApp setProgressTitle: @"Adjusting all systems"];
-  for (i = 0; i < k; i++)
-  {
-    [NSApp setProgressRatio: 1.0 * i / k];
-    [[syslist objectAtIndex:i] userAdjust: YES];
-  }
-  [self paginate: sender];
-  return [self dirty];
+    int systemIndex, systemCount = [syslist count];
+    ProgressDisplay *formatProgress = [ProgressDisplay progressDisplayWithTitle: @"Adjusting all systems"];
+    
+    [self flowTimeSig: NULL];
+    for (systemIndex = 0; systemIndex < systemCount; systemIndex++)
+    {
+	[formatProgress setProgressRatio: 1.0 * systemIndex / systemCount];
+	[[syslist objectAtIndex: systemIndex] userAdjust: YES];
+    }
+    [self paginate: sender];
+    [formatProgress closeProgressDisplay];
+    return [self dirty];
 }
 
 
 - formatPage: sender
 {
-  int i;
+  int systemIndex;
   Page *p = currentPage;
   [self flowTimeSig: [syslist objectAtIndex:p->botsys]];
-  for (i = p->topsys; i <= p->botsys; i++) [[syslist objectAtIndex:i] userAdjust: YES];
+  for (systemIndex = p->topsys; systemIndex <= p->botsys; systemIndex++) [[syslist objectAtIndex:systemIndex] userAdjust: YES];
   [self resetPage: currentPage];
   return [self dirty];
 }
@@ -1502,31 +1505,31 @@ extern char *typename[NUMTYPES];
 
 - recalcAllSys
 {
-  int i, k = [syslist count];
-  [NSApp orderProgressPanel: self];
-  [NSApp setProgressTitle: @"Resetting system layout"];
-  for (i = 0; i < k; i++)
+  int systemIndex, systemCount = [syslist count];
+  ProgressDisplay *recalcProgress = [ProgressDisplay progressDisplayWithTitle: @"Resetting system layout"];
+
+  for (systemIndex = 0; systemIndex < systemCount; systemIndex++)
   {
-    [NSApp setProgressRatio: 1.0 * i / k];
-    [[syslist objectAtIndex:i] recalc];
+    [recalcProgress setProgressRatio: 1.0 * systemIndex / systemCount];
+    [[syslist objectAtIndex: systemIndex] recalc];
   }
-  [NSApp takeDownProgress: self];
+  [recalcProgress closeProgressDisplay];
   return self;
 }
 
 
 - reShapeAllSys: sender
 {
-  int i, sn, k = [syslist count];
+  int systemIndex, sn, systemCount = [syslist count];
   System *s;
   Staff *sp;
   NSMutableArray *sl;
-  [NSApp orderProgressPanel: self];
-  [NSApp setProgressTitle: @"Reshaping system layout"];
-  for (i = 0; i < k; i++)
+  ProgressDisplay *reshapeProgress = [ProgressDisplay progressDisplayWithTitle: @"Reshaping system layout"];
+
+  for (systemIndex = 0; systemIndex < systemCount; systemIndex++)
   {
-    [NSApp setProgressRatio: 1.0 * i / k];
-    s = [syslist objectAtIndex:i];
+    [reshapeProgress setProgressRatio: 1.0 * systemIndex / systemCount];
+    s = [syslist objectAtIndex:systemIndex];
     sl = s->staves;
     sn = [sl count];
     while (sn--)
@@ -1541,7 +1544,7 @@ extern char *typename[NUMTYPES];
     }
     [s reShape];
   }
-  [NSApp takeDownProgress: self];
+  [reshapeProgress closeProgressDisplay];
   [self dirty];
   [self setNeedsDisplay:YES];
   return self;
@@ -1550,20 +1553,20 @@ extern char *typename[NUMTYPES];
 
 - shuffleAllMarginsByScale: (float) oss : (float) nss
 {
-  int i, nsys;
+  int systemIndex, nsys;
   System *sys;
   float lm;
-  [NSApp orderProgressPanel: self];
-  [NSApp setProgressTitle: @"Recalculating Margins"];
+  ProgressDisplay *shuffleProgress = [ProgressDisplay progressDisplayWithTitle: @"Recalculating Margins"];
+
   nsys = [syslist count];
-  for (i = 0; i < nsys; i++)
+  for (systemIndex = 0; systemIndex < nsys; systemIndex++)
   {
-    sys = [syslist objectAtIndex:i];
+    sys = [syslist objectAtIndex:systemIndex];
     lm = [sys leftWhitespace] * nss;  /* convert to raw points */
-    [NSApp setProgressRatio: 1.0 * i / nsys];
+    [shuffleProgress setProgressRatio: 1.0 * systemIndex / nsys];
     [sys shuffleNotes: lm / oss : lm / nss];
   }
-  [NSApp takeDownProgress: self];
+  [shuffleProgress closeProgressDisplay];
   return self;
 }
 

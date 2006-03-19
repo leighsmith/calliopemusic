@@ -235,7 +235,7 @@ static void setBodyTypes(GNote *p, int t)
 {
   NSRect b;
   GNote *p;
-  id sl, v = [[NSApp currentDocument] graphicView];
+  id sl, v = [[DrawApp currentDocument] graphicView];
   int i, k, num, seltime, seldot, selstyl, selacc, selstem, selgra, nostem, seled;
   BOOL doReset = NO;
   if ([v startInspection: NOTE : &b : &sl : &num])
@@ -339,7 +339,7 @@ static void setBodyTypes(GNote *p, int t)
 - updatePanel
 {
   int a, num;
-  GraphicView *v = [[NSApp currentDocument] graphicView];
+  GraphicView *v = [[DrawApp currentDocument] graphicView];
   [self assayList: v->slist : &num];
   if (num == 0) return nil;
   for (a = 0; a <= 1; a++)
@@ -450,7 +450,7 @@ NSString *partNameHavingPatch(int i)
 - hitDefine: sender
 {
   int num, w;
-  GraphicView *v = [[NSApp currentDocument] graphicView];
+  GraphicView *v = [[DrawApp currentDocument] graphicView];
   [self constructTuning: nil];
   if (v == nil) return self;
   w = [definebutton indexOfSelectedItem] - 1;

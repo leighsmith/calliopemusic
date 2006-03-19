@@ -435,7 +435,7 @@ float textoff[2], baselines[2][MAXTEXT];
   t->just = 0;
   t->horizpos = 7;
   t->client = self;
-  [t initFromString: s : [[NSApp currentDocument] getPreferenceAsFont: TEXFONT]];
+  [t initFromString: s : [[DrawApp currentDocument] getPreferenceAsFont: TEXFONT]];
   return t;
 }
 
@@ -1342,7 +1342,7 @@ static void drawbarnum(int n, float x, float y, NSFont *f, int j, int eb, int mo
   Barline *p;
   DrawDocument *doc;
   /* if (gFlags.type == 2) return self; */
-  doc = [NSApp currentDocument];
+  doc = [DrawApp currentDocument];
   s = mysys;
   if ([s myIndex] == 0 && ![doc getPreferenceAsInt: BARNUMFIRST]) return self;
   if ([s lastSystem] && ![doc getPreferenceAsInt: BARNUMLAST]) return self;
@@ -1450,7 +1450,7 @@ static void drawbarnum(int n, float x, float y, NSFont *f, int j, int eb, int mo
   sprintf(num, "%d", [s->staves indexOfObject:self] + 1);
   CAcString(bx + s->width + 8, [self yOfBottom], num, fontdata[FONTSTMR], markmode[0]);
   /* draw bar numbers */
-  if ([s firststaff] == self || (flags.hasnums && [[NSApp currentDocument] getPreferenceAsInt: BARNUMPLACE] == 2)) [self drawBarnumbers: m];
+  if ([s firststaff] == self || (flags.hasnums && [[DrawApp currentDocument] getPreferenceAsInt: BARNUMPLACE] == 2)) [self drawBarnumbers: m];
   /* diagnostic
     dy = y - vhigha;
     cline(bx, dy, bx+s->width, dy, 0.0, 2);

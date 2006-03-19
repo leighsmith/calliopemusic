@@ -254,8 +254,8 @@ static void sigwidthpix(unsigned char *s, NSFont *f, float *sw, float *w)
       }
       if (sl <= 0)
       {
-        if ([self isFigure]) font = [[NSApp currentDocument] getPreferenceAsFont: FIGFONT];
-	else font = [[NSApp currentDocument] getPreferenceAsFont: TEXFONT];
+        if ([self isFigure]) font = [[DrawApp currentDocument] getPreferenceAsFont: FIGFONT];
+	else font = [[DrawApp currentDocument] getPreferenceAsFont: TEXFONT];
       }
       if (cst == CONTHYPH) vFlags.hyphen = 1;
         else if (cst == CONTLINE) vFlags.hyphen = 2;

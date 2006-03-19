@@ -360,11 +360,11 @@ static void addNote(int v, int k, int ch, MKNote *n)
     {
         t = fine;
         sys = [syslist objectAtIndex:si];
-        spn = sys->pagenum;
+        spn = [sys pageNumber];
         if (spn < 0) spn = -spn;
         if (spn != pn)  /* take 1 second to turn the page */
         {
-            pn = sys->pagenum;
+            pn = [sys pageNumber];
             if (pn < 0) pn = -pn;
             an = [[MKNote alloc] initWithTimeTag: (double) t - 1.0];
             [an setNoteType: MK_mute];
@@ -623,7 +623,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
             [an setPar: MK_tempo toDouble: [pi getTempo]];
             [as setInfoNote: an];
             [an release];
-            fname = [[NSApp currentDocument] filename];
+            fname = [[DrawApp currentDocument] filename];
             if ([[fname pathExtension] length])
                 fname = [[fname stringByDeletingPathExtension] stringByAppendingPathExtension:@"score"];
             oldname = [fname stringByAppendingString:@"~"];
@@ -687,7 +687,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
             [an setPar: MK_tempo toDouble: [pi getTempo]];
             [as setInfoNote: an];
             [an release];
-            fname = [[NSApp currentDocument] filename];
+            fname = [[DrawApp currentDocument] filename];
             if ([[fname pathExtension] length])
                 fname = [[fname stringByDeletingPathExtension] stringByAppendingPathExtension:@"midi"];
             oldname = [fname stringByAppendingString:@"~"];

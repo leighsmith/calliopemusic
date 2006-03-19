@@ -54,7 +54,7 @@
 {
   NSRect bb;
   NeumeNew *p;
-  id sl, v = [[NSApp currentDocument] graphicView];
+  id sl, v = [[DrawApp currentDocument] graphicView];
   int a, b, j, k, n = 0, seltype;
   if ([v startInspection: NEUMENEW : &bb : &sl])
   {
@@ -140,7 +140,7 @@
 - updatePanel
 {
   int a, i, j, num, v;
-  GraphicView *gv = [[NSApp currentDocument] graphicView];
+  GraphicView *gv = [[DrawApp currentDocument] graphicView];
   [self assayList: gv->slist : &num];
   if (num == 0) return nil;
   for (i = 0; i <= 4; i++) for (j = 0; j <= 4; j++)

@@ -83,37 +83,37 @@ static float defmarg[NUMMARGINS] = {36.0, 36.0, 36.0, 36.0, 72.0, 72.0, 0.0, 0.0
 
 - (float) leftMargin
 {
-  return margin[0] / [[NSApp currentDocument] staffScale];
+  return margin[0] / [[DrawApp currentDocument] staffScale];
 }
 
 
 - (float) rightMargin
 {
-  return margin[1] / [[NSApp currentDocument] staffScale];
+  return margin[1] / [[DrawApp currentDocument] staffScale];
 }
 
 
 - (float) headerBase
 {
-  return margin[2] / [[NSApp currentDocument] staffScale];
+  return margin[2] / [[DrawApp currentDocument] staffScale];
 }
 
 
 - (float) footerBase
 {
-  return margin[3] / [[NSApp currentDocument] staffScale];
+  return margin[3] / [[DrawApp currentDocument] staffScale];
 }
 
 
 - (float) topMargin
 {
-  return margin[4] / [[NSApp currentDocument] staffScale];
+  return margin[4] / [[DrawApp currentDocument] staffScale];
 }
 
 
 - (float) bottomMargin
 {
-  return margin[5] / [[NSApp currentDocument] staffScale];
+  return margin[5] / [[DrawApp currentDocument] staffScale];
 }
 
 
