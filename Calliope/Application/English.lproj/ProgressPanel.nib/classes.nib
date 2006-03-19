@@ -8,6 +8,16 @@
         }, 
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
+            CLASS = ProgressDisplay; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                progressIndicator = NSProgressIndicator; 
+                progressPanel = NSPanel; 
+                titleTextField = NSTextField; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
             CLASS = ProgressPanel; 
             LANGUAGE = ObjC; 
             OUTLETS = {progview = id; titletext = id; }; 
