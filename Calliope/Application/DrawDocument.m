@@ -474,9 +474,9 @@ extern int needUpgrade;
 	    }
 	    if (needUpgrade & 4) {
 		NSRunAlertPanel(@"Open", @"File contains old document format. Must upgrade to new format", @"OK", nil, nil);
-		[(GraphicView *)doc->view paginate: self];
-		[(GraphicView *)doc->view firstPage: self];
-		[(GraphicView *)doc->view formatAll: self];
+		[doc->view paginate: self];
+		[doc->view firstPage: self];
+		[doc->view formatAll: self];
 	    }
 	}
 	else {
@@ -1326,11 +1326,12 @@ return nil;
     [super windowControllerDidLoadNib: primaryWindowController];
     documentWindow = [[primaryWindowController window] retain];
     // Add any code here that needs to be executed once the windowController has loaded the document's window.
-    [documentWindow setDelegate: self]; // Hmm
-    [view firstPage: self];
+    [documentWindow setDelegate: self]; // TODO Hmm shouldn't be necessary eventually.
+    [view setDelegate: self];
     [self zeroScale];
     // TODO kludged in here for now, it will eventually be created by a "new document sheet".
     [self setNumberOfStaves: 1];
+    // [view firstPage: self];
 }
 
 #if 0
@@ -1452,12 +1453,22 @@ return nil;
     [counterpart setMiniwindowTitle:[[self name] stringByDeletingPathExtension]];
 }
 
-- (void)windowDidMiniaturize:(NSNotification *)notification
+- (void) windowDidMiniaturize:(NSNotification *)notification
 {
 //    NSWindow *theWindow = [notification object];
 //    [NSObject cancelPreviousPerformRequestsWithTarget:NSApp selector:@selector(updateWindows) object:nil];
 //    [NSApp performSelector:@selector(updateWindows) withObject:nil afterDelay:(1) / 1000.0];
     return;
+}
+
+- (void) setMessage: (NSString *) message
+{
+    [scrollView setMessage: message];
+}
+
+- (void) setPageNum: (int) pageNumber
+{
+    [scrollView setPageNum: pageNumber];
 }
 
 

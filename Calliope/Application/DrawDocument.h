@@ -27,7 +27,7 @@
 
 #define Notify(title, msg) NSRunAlertPanel(title, msg, @"OK", nil, nil)
 
-// TODO rename to MusicNotationDocument
+// TODO rename to OpusDocument
 @interface DrawDocument : NSDocument
 {
 @public
@@ -150,6 +150,10 @@
 
 - resetCursor;
 - sendCharacter: (int) c;
+
+/* Receive GraphicView delegate methods */
+- (void) setMessage: (NSString *) message;
+- (void) setPageNum: (int) pageNumber;
 
 - (NSString *) frameString;
 - (NSRect) frameSize;
