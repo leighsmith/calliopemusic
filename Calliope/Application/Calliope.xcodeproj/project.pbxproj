@@ -1037,7 +1037,6 @@
 		D8FD92A90483CDC700A80164 /* PrefBlock.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PrefBlock.m; sourceTree = "<group>"; };
 		D8FD92AB0483CDC700A80164 /* Preferences.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Preferences.m; sourceTree = "<group>"; };
 		D8FD92AD0483CDC700A80164 /* ProgressDisplay.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.objc; fileEncoding = 30; path = ProgressDisplay.m; sourceTree = "<group>"; };
-		D8FD92AF0483CDC700A80164 /* ProgressView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ProgressView.m; sourceTree = "<group>"; };
 		D8FD92B10483CDC700A80164 /* Range.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Range.m; sourceTree = "<group>"; };
 		D8FD92B30483CDC700A80164 /* RangeInspector.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = RangeInspector.m; sourceTree = "<group>"; };
 		D8FD92B50483CDC700A80164 /* Rest.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Rest.m; sourceTree = "<group>"; };
@@ -1143,7 +1142,6 @@
 		D8FD93820483CDC800A80164 /* PrefBlock.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PrefBlock.h; sourceTree = "<group>"; };
 		D8FD93840483CDC800A80164 /* Preferences.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Preferences.h; sourceTree = "<group>"; };
 		D8FD93860483CDC800A80164 /* ProgressDisplay.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; path = ProgressDisplay.h; sourceTree = "<group>"; };
-		D8FD93880483CDC800A80164 /* ProgressView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ProgressView.h; sourceTree = "<group>"; };
 		D8FD938A0483CDC800A80164 /* Range.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Range.h; sourceTree = "<group>"; };
 		D8FD938C0483CDC800A80164 /* RangeInspector.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = RangeInspector.h; sourceTree = "<group>"; };
 		D8FD938E0483CDC800A80164 /* Rest.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Rest.h; sourceTree = "<group>"; };
@@ -1446,7 +1444,6 @@
 				D8FD92AB0483CDC700A80164 /* Preferences.m */,
 				D8FD93860483CDC800A80164 /* ProgressDisplay.h */,
 				D8FD92AD0483CDC700A80164 /* ProgressDisplay.m */,
-				D8FD92AF0483CDC700A80164 /* ProgressView.m */,
 				D8FD92B10483CDC700A80164 /* Range.m */,
 				D8FD92B30483CDC700A80164 /* RangeInspector.m */,
 				D8FD92B50483CDC700A80164 /* Rest.m */,
@@ -1558,7 +1555,6 @@
 				D8FD93800483CDC800A80164 /* PlayInspector.h */,
 				D8FD93820483CDC800A80164 /* PrefBlock.h */,
 				D8FD93840483CDC800A80164 /* Preferences.h */,
-				D8FD93880483CDC800A80164 /* ProgressView.h */,
 				D8FD938A0483CDC800A80164 /* Range.h */,
 				D8FD938C0483CDC800A80164 /* RangeInspector.h */,
 				D8FD938E0483CDC800A80164 /* Rest.h */,
