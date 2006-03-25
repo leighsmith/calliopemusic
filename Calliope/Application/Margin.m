@@ -1,3 +1,5 @@
+#import <AppKit/NSText.h>
+#import "Page.h"
 #import "Margin.h"
 #import "DrawApp.h"
 #import "DrawDocument.h"
@@ -6,7 +8,6 @@
 #import "Staff.h"
 #import "GVFormat.h"
 #import "mux.h"
-#import <AppKit/NSText.h>
 
 /*
   Margins are drawn as markers.
@@ -32,11 +33,11 @@
 }
 
 
-static float defmarg[NUMMARGINS] = {36.0, 36.0, 36.0, 36.0, 72.0, 72.0, 0.0, 0.0, 0.0, 0.0};
+static float defmarg[MaximumMarginTypes] = {36.0, 36.0, 36.0, 36.0, 72.0, 72.0, 0.0, 0.0, 0.0, 0.0};
 
 - init
 {
-  int i = NUMMARGINS;
+  int i = MaximumMarginTypes;
   [super init];
   gFlags.type = MARGIN;
   while (i--) margin[i] = defmarg[i];
@@ -48,7 +49,7 @@ static float defmarg[NUMMARGINS] = {36.0, 36.0, 36.0, 36.0, 72.0, 72.0, 0.0, 0.0
 
 - newFrom
 {
-  int i = NUMMARGINS;
+  int i = MaximumMarginTypes;
   Margin *n = [[Margin alloc] init];
   while (i--) n->margin[i] = margin[i];
   n->format = format;
@@ -73,11 +74,12 @@ static float defmarg[NUMMARGINS] = {36.0, 36.0, 36.0, 36.0, 72.0, 72.0, 0.0, 0.0
 
 - setPageTable: (Page *) p
 {
-  int i = NUMMARGINS;
-  while (i--) p->margin[i] = margin[i];
-  p->format = format;
-  p->alignment = alignment;
-  return self;
+    MarginType i = MaximumMarginTypes;
+    while (i--) 
+	[p setMarginType: i toSize: margin[i]];
+    [p setFormat: format];
+    [p setAlignment: alignment];
+    return self;
 }
 
 
@@ -152,18 +154,18 @@ static float defmarg[NUMMARGINS] = {36.0, 36.0, 36.0, 36.0, 72.0, 72.0, 0.0, 0.0
   if (v == 2)
   {
     [aDecoder decodeValuesOfObjCTypes:"@cc",  &client, &format, &alignment];
-    [aDecoder decodeArrayOfObjCType:"f" count:NUMMARGINS at:margin];
+    [aDecoder decodeArrayOfObjCType:"f" count:MaximumMarginTypes at:margin];
   }
   else if (v == 1)
   {
     [aDecoder decodeValuesOfObjCTypes:"@c",  &client, &format];
-    [aDecoder decodeArrayOfObjCType:"f" count:NUMMARGINS at:margin];
+    [aDecoder decodeArrayOfObjCType:"f" count:MaximumMarginTypes at:margin];
     alignment = 0;
   }
   else if (v == 0)
   {
     [aDecoder decodeValuesOfObjCTypes:"@",  &client];
-    [aDecoder decodeArrayOfObjCType:"f" count:NUMMARGINS at:margin];
+    [aDecoder decodeArrayOfObjCType:"f" count:MaximumMarginTypes at:margin];
     format = 0;
     alignment = 0;
   }
@@ -175,7 +177,7 @@ static float defmarg[NUMMARGINS] = {36.0, 36.0, 36.0, 36.0, 72.0, 72.0, 0.0, 0.0
 {
   [super encodeWithCoder:aCoder];
   [aCoder encodeValuesOfObjCTypes:"@cc",  &client, &format, &alignment];
-  [aCoder encodeArrayOfObjCType:"f" count:NUMMARGINS at:margin];
+  [aCoder encodeArrayOfObjCType:"f" count:MaximumMarginTypes at:margin];
 }
 
 - (void)encodeWithPropertyListCoder:(OAPropertyListCoder *)aCoder
@@ -185,8 +187,8 @@ static float defmarg[NUMMARGINS] = {36.0, 36.0, 36.0, 36.0, 72.0, 72.0, 0.0, 0.0
     [aCoder setObject:client forKey:@"client"];
     [aCoder setInteger:format forKey:@"format"];
     [aCoder setInteger:alignment forKey:@"alignment"];
-    [aCoder setInteger:NUMMARGINS forKey:@"NUMMARGINS"];
-    for (i = 0; i < NUMMARGINS; i++) [aCoder setFloat:margin[i] forKey:[NSString stringWithFormat:@"margin%d",i]];
+    [aCoder setInteger:MaximumMarginTypes forKey:@"MaximumMarginTypes"];
+    for (i = 0; i < MaximumMarginTypes; i++) [aCoder setFloat:margin[i] forKey:[NSString stringWithFormat:@"margin%d",i]];
 }
 
 @end

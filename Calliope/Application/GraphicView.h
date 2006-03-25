@@ -1,40 +1,46 @@
 /* $Id$ */
 
-/*
- * The GraphicView class is the visual representation of a single page of a DrawDocument (which holds several pages).
- * It overrides the NSView methods related to drawing and event handling
- * and allows manipulation of Graphic objects.
- * Moving is accomplished using instance drawing.
+/*!
+  @class GraphicView
+  @brief The GraphicView class is the visual representation of a single page of a DrawDocument (which holds several pages).
+
+  It overrides the NSView methods related to drawing and event handling
+  and allows manipulation of Graphic objects.
+  Moving is accomplished using instance drawing.
  */
 
 #import "winheaders.h"
 #import <AppKit/AppKit.h>
 #import "System.h"
 #import "Page.h"
+
 /*sb: the following added 14/8/98 to alter the default compression factor for tiff images
  * written to pasteboard, saved etc.
  */
 #define TIFF_COMPRESSION_FACTOR NSTIFFCompressionJPEG
 
+// TODO should become MusicalScoreView? or ScorePageView
 @interface GraphicView : NSView
 {
 @public
     unsigned int cacheing;	/*! @var  whether cacheing or drawing */
-    NSMutableArray *slist;				/*! @var slist the NSArray of selected Graphic */
-    NSMutableArray *syslist;				/*! @var syslist the NSArray of System */
-    NSMutableArray *stylelist;				/*! @var stylelist NSArray of System (templates for styles) */
-    NSMutableArray *chanlist;				/*! @var chanlist the NSArray of Channel */
+    NSMutableArray *slist;				/*! @var slist The NSArray of selected Graphics */
+    NSMutableArray *syslist;				/*! @var syslist The NSArray of Systems */
+    NSMutableArray *stylelist;				/*! @var stylelist NSArray of Systems (templates for styles) */
+    NSMutableArray *chanlist;				/*! @var chanlist The NSArray of Channels */
 @private
-    NSMutableArray *partlist;				/*! @var partlist the NSArray of Parts */
-    NSMutableArray *pagelist;				/*! @var pagelist the NSArray of Page */
+    /*! @var delegate The object informed when page numbers have changed. */
+    id delegate;
+    NSMutableArray *partlist;				/*! @var partlist The NSArray of Parts */
+    NSMutableArray *pagelist;				/*! @var pagelist The NSArray of Pages */
     Page *currentPage;			    /*! @var currentPage The current page to be drawn */
     System *currentSystem;                   /*! @var currentSystem System at top of page of view */
-    NSFont *currentFont;                /*! @var currentFont Used to display what? Musical font at any moment, for a particular task? */
+    NSFont *currentFont;                /*! @var currentFont TODO Used to display what? Musical font at any moment, for a particular task? */
     float currentScale;		      /*! @var currentScale The scaling factor: 1.0 = no scaling. */
-    BOOL serviceActsOnSelection;        /*! @var serviceActsOnSelection whether a service has arguments */
+    BOOL serviceActsOnSelection;        /*! @var serviceActsOnSelection Whether a service has arguments */
     BOOL dirtyflag;
-    NSImage *cacheImage;		/*! @var  the cache of drawn graphics */
-    NSRect *dragRect;			/*! @var  last rectangle we dragged out to select */
+    NSImage *cacheImage;		/*! @var cacheImage the cache of drawn graphics */
+    NSRect *dragRect;			/*! @var dragRect last rectangle we dragged out to select */
     BOOL cached;
     BOOL scrolling;
 }
@@ -88,6 +94,7 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
 - (BOOL) performKeyEquivalent: (NSEvent *) theEvent;
 
 /* Target/Action methods */
+// TODO should just become pasteboard operations and the saving moved into the DrawDocument.
 - saveEPS: sender;
 - saveTIFF: sender;
 - (void) delete: (id) sender;
@@ -132,5 +139,17 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
 /* Useful scrolling methods */
 - scrollGraphicToVisible: graphic;
 - (BOOL) scrollPointToVisible: (NSPoint) point;
+
+/*!
+  @method setDelegate:
+  @param newDelegate The new object to receive notification messages.
+ */
+- (void) setDelegate: (id) newDelegate;
+
+/*!
+  @method delegate
+  @result Returns the object that receives notification messages.
+ */
+- (id) delegate;
 
 @end

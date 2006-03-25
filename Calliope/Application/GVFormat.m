@@ -60,10 +60,11 @@ extern NSSize paperSize;
 
 - thisSystem: (System *) s
 {
-  if (currentSystem != nil) ((Graphic *)currentSystem)->gFlags.selected = 0;
-  currentSystem = s;
-  s->gFlags.selected = 1;
-  return s;
+    if (currentSystem != nil) 
+	currentSystem->gFlags.selected = 0;
+    currentSystem = s;
+    s->gFlags.selected = 1;
+    return s;
 }
 
 
@@ -250,7 +251,7 @@ extern NSSize paperSize;
   int i = [syslist indexOfObject:sys];
   Page *p = sys->page;
   *sn = i - p->topsys + 1;
-  *pn = p->num;
+  *pn = [p pageNumber];
   return self;
 }
 
@@ -273,91 +274,94 @@ extern NSSize paperSize;
   Page *pg = currentPage;
   if (pg == nil)
   {
-    [[[self window] contentView] setMessage: @""];
+    [delegate setMessage: @""];
     return self;
   }
-  [[[self window] contentView] setPageNum: pg->num];
+  [delegate setPageNum: [pg pageNumber]];
   pk = [pagelist count];
   if (pk > 0)
   {
     pg = [pagelist objectAtIndex:0];
-    pi = pg->num;
+    pi = [pg pageNumber];
     pg = [pagelist lastObject];
-    pk = pg->num;
+    pk = [pg pageNumber];
     buf = [NSString stringWithFormat:@"(%d-%d)", pi, pk];
   }
   else buf = @"";
-  [[[self window] contentView] setMessage: buf];
+  [delegate setMessage: buf];
   return self;
 }
 
 
 /*
-  find page by off = 0: offset from current page, 1: by page index,
+  find page by indexMethod = 0: offset from current page, 1: by page index,
   2: by printed page number, 3: by system index,
   4: by index relative to currentsystem.
-  Sets currentSystem to top of page except off = 3,4.
+  Sets currentSystem to top of page except indexMethod = 3,4.
 */
 
-- (BOOL) findPage: (int) n usingIndexMethod: (int) off
+- (BOOL) findPage: (int) n usingIndexMethod: (GraphicViewIndexMethod) indexMethod
 {
-  int i, k;
-  Page *p=nil;
-  BOOL f = NO;
-  k = [pagelist count];
-  switch(off)
-  {
-    case 0:
-      n += [pagelist indexOfObject:currentPage];
-      break;
-    case 1:
-      break;
-    case 2:
-      for (i = 0; (i < k && !f); i++)
-      {
-        p = [pagelist objectAtIndex:i];
-        if (p->num == n) { f = YES; break; }
-      }
-      if (f == NO) return NO;
-      n = i;
-      break;
-    case 4:
-      if (currentSystem == nil) return NO;
-      n += [syslist indexOfObject:currentSystem];
-      /* drop through */
-    case 3:
-      for (i = 0; (i < k && !f); i++)
-      {
-        p = [pagelist objectAtIndex:i];
-        if (p->topsys <= n && n <= p->botsys)  { f = YES; break; };
-      }
-      if (f == NO) return NO;
-        if (currentPage) [currentPage autorelease];
-      currentPage = [p retain];
-      [self thisSystem: [syslist objectAtIndex:n]];
-      return YES;
-      break;
-  }
-  if (n < 0 || n >= k) return NO;
-  if (currentPage) [currentPage autorelease];
-  currentPage = [[pagelist objectAtIndex:n] retain];
-  [self thisSystem: [syslist objectAtIndex:((Page *) currentPage)->topsys]];
-  return YES;
+    int i;
+    Page *p = nil;
+    BOOL f = NO;
+    int pageCount = [pagelist count];
+    
+    switch(indexMethod)
+    {
+	case 0:
+	    n += [pagelist indexOfObject:currentPage];
+	    break;
+	case 1:
+	    break;
+	case 2:
+	    for (i = 0; (i < pageCount && !f); i++)
+	    {
+		p = [pagelist objectAtIndex:i];
+		if ([p pageNumber] == n) { f = YES; break; }
+	    }
+	    if (f == NO) return NO;
+	    n = i;
+	    break;
+	case 4:
+	    if (currentSystem == nil) return NO;
+	    n += [syslist indexOfObject:currentSystem];
+	    /* drop through */
+	case 3:
+	    for (i = 0; (i < pageCount && !f); i++)
+	    {
+		p = [pagelist objectAtIndex:i];
+		if (p->topsys <= n && n <= p->botsys)  { f = YES; break; };
+	    }
+	    if (f == NO) return NO;
+	    if (currentPage) [currentPage autorelease];
+		currentPage = [p retain];
+	    [self thisSystem: [syslist objectAtIndex: n]];
+	    return YES;
+	    break;
+    }
+    if (n < 0 || n >= pageCount) 
+	return NO;
+    if (currentPage) 
+	[currentPage autorelease];
+    currentPage = [[pagelist objectAtIndex: n] retain];
+    [self thisSystem: [syslist objectAtIndex: currentPage->topsys]];
+    return YES;
 }
 
 
-- gotoPage: (int) n usingIndexMethod: (int) off
+- gotoPage: (int) pageNumber usingIndexMethod: (GraphicViewIndexMethod) indexMethod
 {
-    if ([self findPage: n usingIndexMethod: off])
+    if ([self findPage: pageNumber usingIndexMethod: indexMethod])
     {
-        [[self window] endEditingFor:self];
-        [self setNeedsDisplay:YES];
+        [[self window] endEditingFor: self];
+        [self setNeedsDisplay: YES];
         [self resetPageFields];
-        [NSApp inspectApp];
+        // [NSApp inspectApp]; // TODO LMS disabled to get things running.
         return self;
     }
     else
-	NSLog(@"Unable to find page %d using index method %d", n, off);
+	NSLog(@"Unable to find page %d using index method %d", pageNumber, indexMethod);
     return nil;
 }
 
@@ -388,7 +392,7 @@ extern NSSize paperSize;
 
 - getSystem: sys offsetBy: (int) off
 {
-  return [syslist objectAtIndex:[syslist indexOfObject:sys] + off];
+  return [syslist objectAtIndex: [syslist indexOfObject: sys] + off];
 }
 
 
@@ -437,12 +441,12 @@ extern NSSize paperSize;
 {
   float sy = 0.0;
   System *s;
-  if (p->alignment & 1)
+  if ([p alignToTopSystem])
   {
     s = [syslist objectAtIndex:p->topsys];
     if (![s hasTitles]) sy += [s headroom];
   }
-  if (p->alignment & 2)
+  if ([p alignToBottomSystem])
   {
     s = [syslist objectAtIndex:p->botsys];
     sy += [s myHeight] - ([[s lastStaff] yOfBottom] - (((Staff *)[s firststaff])->y - [s headroom]));
@@ -458,23 +462,12 @@ extern NSSize paperSize;
 
 - (float) startTop: (System *) s : (Page *) p
 {
-  float y = [p topMargin];
-  if ((p->alignment & 1) && ![s hasTitles]) y -= [s headroom];
-  return y;
+    float y = [p topMargin];
+    if ([p alignToTopSystem] && ![s hasTitles])
+	y -= [s headroom];
+    return y;
 }
 
-
-/* ways pages can be formatted */
-
-#define PGAUTO 0	/* default */
-#define PGTOP  1	/* top justified */
-#define PGBOTTOM 2	/* bottom justified */
-#define PGSPREAD 3	/* top and bottom justified */
-#define PGBALANCE 4	/* balanced */
-#define PGCENTRE 5	/* centred */
-#define PGEXPAND 6	/* expanded */
-#define PGPACKTOP 7	/* pack from top */
-#define PGPACKBOT 8	/* pack from bottom */
 
 
 /* choice when first|last page */
@@ -490,17 +483,19 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
 {
   float y, dy=0.0, white, sep, defsep, sumheights;
   System *s;
-  int i, pc, nsys;
+  int i, nsys;
+  PageFormat pc;
   BOOL lastp, firstp;
+  
   defsep = [[DrawApp currentDocument] getPreferenceAsFloat: MAXBALGAP];
   sumheights = 0.0;
   for (i = p->topsys; i <= p->botsys; i++) sumheights += [[syslist objectAtIndex:i] myHeight];
   sumheights -= [self alignShave: p];
-  white = p->fillheight - sumheights;
+  white = [p fillHeight] - sumheights;
   lastp = ((p == [pagelist lastObject]) && white > 0);
   firstp = (p == [pagelist objectAtIndex:0]);
   nsys = p->botsys - p->topsys + 1;
-  pc = p->format;
+  pc = [p format];
   if (pc == PGAUTO) pc = autochoice[(firstp << 1) | lastp];
   y = [self startTop: [syslist objectAtIndex:p->topsys] : p];
   switch(pc)
@@ -563,7 +558,7 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
     [s moveTo: y];
     y += [s myHeight] + dy;
   }
-  return (sumheights / p->fillheight);
+  return (sumheights / [p fillHeight]);
 }
 
 
@@ -631,21 +626,21 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
 
 - doPage: (int) p : (int) s0 : (int) ns : (float) sh : (float) him : (float) topm : (float) botm : (int) numsys
 {
-  Page *pg;
-  System *sys;
-  int i, j = s0 + ns - 1;
-  pg = [[Page alloc] init: p : s0 : j];
-  pg->margin[4] = topm;
-  pg->margin[5] = botm;
-  pg->fillheight = him;
-  for (i = s0; i <= j; i++)
-  {
-    sys = [syslist objectAtIndex:i];
-    sys->page = pg;
-  }
-  [pagelist addObject: pg];
-  // [pageProgress setProgressRatio: 1.0 * j / numsys];
-  return self;
+    System *sys;
+    int i, j = s0 + ns - 1;
+    Page *pg = [[Page alloc] initWithPageNumber: p topSystemNumber: s0 bottomSystemNumber: j];
+    
+    [pg setMarginType: MarginTop toSize: topm];
+    [pg setMarginType: MarginBottom toSize: botm];
+    [pg setFillHeight: him];
+    for (i = s0; i <= j; i++)
+    {
+	sys = [syslist objectAtIndex: i];
+	sys->page = pg;
+    }
+    [pagelist addObject: pg];
+    // [pageProgress setProgressRatio: 1.0 * j / numsys];
+    return self;
 }
 
 
@@ -817,7 +812,7 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
 	    else 
 		[sys setPageNumber: j];
 	}
-	pg->num = j;
+	[pg setPageNumber: j];
 	++j;
     }
     [self resetPageFields];

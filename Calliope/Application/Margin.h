@@ -1,15 +1,28 @@
 #import "winheaders.h"
 #import "Graphic.h"
-#import "Page.h"
 
-#define NUMMARGINS 10
+@class Page;
 
 /*
   0=lmarg, 1=rmarg, 2=hmarg, 3=fmarg, 4=tmarg, 5=bmarg;
   6=lebind, 7=rebind, 8=lobind, 9=robind;
 */
 
-@interface Margin:Graphic
+typedef enum {
+    MarginLeft = 0,
+    MarginRight = 1,
+    MarginHeader = 2,
+    MarginFooter = 3,
+    MarginTop = 4,
+    MarginBottom = 5,
+    lebind = 6,
+    rebind = 7,
+    lobind = 8,
+    robind = 9,
+    MaximumMarginTypes
+} MarginType;
+
+@interface Margin: Graphic
 {
 @public
   float margin[10];

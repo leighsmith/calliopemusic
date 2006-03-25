@@ -1,4 +1,4 @@
-/* $Id:$ */
+/* $Id$ */
 #import <AppKit/AppKit.h>
 #import "GraphicView.h"
 #import "GVCommands.h"
@@ -1366,10 +1366,11 @@ extern char *typename[NUMTYPES];
 
 - (int) gotoPage: (int) n
 {
-  if (currentPage == nil) return 0;
-  if ([self gotoPage: n usingIndexMethod: 2] == nil) 
-      return currentPage->num;
-  return -1;
+    if (currentPage == nil) 
+	return 0;
+    if ([self gotoPage: n usingIndexMethod: 2] == nil) 
+	return [currentPage pageNumber];
+    return -1;
 }
 
 

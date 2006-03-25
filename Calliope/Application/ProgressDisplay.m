@@ -19,6 +19,7 @@
 {
     self = [super init];
     if(self != nil) {
+	// TODO Check [[NSUserDefaults standardUserDefaults] boolWithKey: @"DisplayProgressPanels"] whether to display these.
 	if (!progressPanel)
 	    [NSBundle loadNibNamed: @"ProgressPanel.nib" owner: self];
 	[self setProgressTitle: titleOfProgressingActivity];

@@ -122,169 +122,166 @@ static char stickpts[NUMENV] = {2, 2, 3, 3, 4};
 void initPlayTables()
 {
     MKEnvelope *e;
-  int i, r;
-  r = 0;
-  for (i = 0; i < NUMENV; i++)
-  {
-      e = [[MKEnvelope alloc] init];
-    [e setPointCount: envelpts[i] xArray: envxys[r] yArray: envxys[r+1]];
-    r += 2;
-    [e setStickPoint: stickpts[i]];
-    envelopes[i] = e;
-  }
-  for (i = 0; i < NUMPARTPERFORM; i++)
-  {
-    player[i].part = nil;
-    player[i].performer = nil;
-  }
+    int i, r;
+    r = 0;
+    for (i = 0; i < NUMENV; i++)
+    {
+	e = [[MKEnvelope alloc] init];
+	[e setPointCount: envelpts[i] xArray: envxys[r] yArray: envxys[r + 1]];
+	r += 2;
+	[e setStickPoint: stickpts[i]];
+	envelopes[i] = e;
+    }
+    for (i = 0; i < NUMPARTPERFORM; i++)
+    {
+	player[i].part = nil;
+	player[i].performer = nil;
+    }
 }
 
 
 /* given middle-C pos and acctable and note details, return frequency */
-
 extern void getNumOct(int pos, int mc, int *num, int *oct);
 
 static float transpose(float f, int s)
 {
-  int i;
-  if (s < 0)
-  {
-    s = -s;
-    for (i = 0; i < s; i++) f *= chromalter[1];
-  }
-  else if (s > 0)
-  {
-    for (i = 0; i < s; i++) f *= chromalter[2];
-  }
-  return f;
+    int i;
+    
+    if (s < 0)
+    {
+	s = -s;
+	for (i = 0; i < s; i++) f *= chromalter[1];
+    }
+    else if (s > 0)
+    {
+	for (i = 0; i < s; i++) f *= chromalter[2];
+    }
+    return f;
 }
 
 /* account for accidental, sticking hanger accidental, nonsticking, ottava */
-
 static float getNoteFreq(id p, int pos, int acc, int mc, char *acctable, int trn)
 {
-  int num, oct;
-  float f;
-  getNumOct(pos, mc, &num, &oct);
-  f = notefreq[num] * power2[oct];
-  if (acc)
-  {
-    f *= chromalter[acc];
-    acctable[num] = acc;
-  }
-  else if (acc = [p hangerAcc])
-  {
-    f *= chromalter[acc];
-    if ([p hangerAccSticks]) acctable[num] = acc;
-  }
+    int num, oct;
+    float f;
+    getNumOct(pos, mc, &num, &oct);
+    f = notefreq[num] * power2[oct];
+    if (acc)
+    {
+	f *= chromalter[acc];
+	acctable[num] = acc;
+    }
+    else if (acc = [p hangerAcc])
+    {
+	f *= chromalter[acc];
+	if ([p hangerAccSticks]) acctable[num] = acc;
+    }
     else f *= chromalter[(int)acctable[num]];
-  if (acc = [p hangerOtt]) f *= chromalter[acc];
-  if (trn) f = transpose(f, trn);
-  return f;
+    if (acc = [p hangerOtt]) f *= chromalter[acc];
+    if (trn) f = transpose(f, trn);
+    return f;
 }
 
 
 /* return frequency for tablature note for instrument i on course c, fret f */
-
 static float getTabFreq(Tablature *p, NSString *n, int c, int fret)
 {
-  Course *cp;
-  float f;
-  cp = [[instlist tuningForInstrument: n] objectAtIndex:c];
-  if (cp == nil) return 0.0;
-  f = notefreq[(int)cp->pitch] * power2[(int)cp->oct] * chromalter[(int)cp->acc];
-  if (fret) f = transpose(f, fret);
-  return f;
+    Course *cp;
+    float f;
+    cp = [[instlist tuningForInstrument: n] objectAtIndex:c];
+    if (cp == nil) return 0.0;
+    f = notefreq[(int)cp->pitch] * power2[(int)cp->oct] * chromalter[(int)cp->acc];
+    if (fret) f = transpose(f, fret);
+    return f;
 }
 
 
 void setInst(MKNote *n, int i)
 {
-  int mi;
-  switch(playmode)
-  {
-    case 0:
-    case 1:
-      mi = myinst[i];
-        [n setPar: MK_ampEnv toEnvelope: envelopes[(int)instruments[mi].envelope]];
-        [n setPar: MK_waveform toString: instruments[mi].waveform];
-      [n setPar: MK_svibFreq toDouble: instruments[mi].svibFreq];
-      [n setPar: MK_svibAmp toDouble: instruments[mi].svibAmp];
-      [n setPar: MK_amp toDouble: instruments[mi].amp];
-      if (instruments[mi].bright > 0) [n setPar: MK_bright toDouble: instruments[mi].bright];
-      break;
-    case 2:
-    case 3:
-    case 4:
-      [n setPar: MK_programChange toInt: i];
-      break;
-  }
+    int mi;
+    switch(playmode)
+    {
+	case 0:
+	case 1:
+	    mi = myinst[i];
+	    [n setPar: MK_ampEnv toEnvelope: envelopes[(int)instruments[mi].envelope]];
+	    [n setPar: MK_waveform toString: instruments[mi].waveform];
+	    [n setPar: MK_svibFreq toDouble: instruments[mi].svibFreq];
+	    [n setPar: MK_svibAmp toDouble: instruments[mi].svibAmp];
+	    [n setPar: MK_amp toDouble: instruments[mi].amp];
+	    if (instruments[mi].bright > 0) 
+		[n setPar: MK_bright toDouble: instruments[mi].bright];
+	    break;
+	case 2:
+	case 3:
+	case 4:
+	    [n setPar: MK_programChange toInt: i];
+	    break;
+    }
 }
 
 
 static MKNote *newNote(float tn, float f, float dur)
 {
-    MKNote *p;
-// NSLog(@"added note freq %f at %f lasting %f\n", f, tn, dur);
-    p = [[MKNote alloc] initWithTimeTag: (double) tn];
-  [p setNoteType: MK_noteDur];
-  [p setPar: MK_freq toDouble: (double) f];
-  [p setDur: (double) dur];
-  return p;
+    MKNote *p = [[MKNote alloc] initWithTimeTag: (double) tn];
+    
+    // NSLog(@"added note freq %f at %f lasting %f\n", f, tn, dur);
+    [p setNoteType: MK_noteDur];
+    [p setPar: MK_freq toDouble: (double) f];
+    [p setDur: (double) dur];
+    return p;
 }
 
 
 /*
-  add a note to the part determined by <voice, notehead, channel>, creating
-  a new part if necessary.  Reserve player[0] for the user interface.
-*/
-
+ add a note to the part determined by <voice, notehead, channel>, creating
+ a new part if necessary.  Reserve player[0] for the user interface.
+ */
 static void addNote(int v, int k, int ch, MKNote *n)
 {
-  struct performer *p;
-  int i, j = numParts;
-  for (i = 1; i < j; i++)
-  {
-    p = &(player[i]);
-    if (p->thread == v && p->notehead == k && p->channel == ch)
+    struct performer *p;
+    int i, j = numParts;
+    for (i = 1; i < j; i++)
     {
-      [p->part addNote: n];
-      return;
+	p = &(player[i]);
+	if (p->thread == v && p->notehead == k && p->channel == ch)
+	{
+	    [p->part addNote: n];
+	    return;
+	}
     }
-  }
-  p = &(player[numParts]);
-  p->thread = v;
-  p->notehead = k;
-  p->channel = ch;
-  p->part = [[MKPart alloc] init];
-  [p->part addNote: n];
-  numParts++;
-  return;
+    p = &(player[numParts]);
+    p->thread = v;
+    p->notehead = k;
+    p->channel = ch;
+    p->part = [[MKPart alloc] init];
+    [p->part addNote: n];
+    numParts++;
 }
 
 
 - deactivatePlayers
 {
-  int i;
-  for (i = 0; i < numParts; i++)
-    if ([player[i].performer status] != MK_inactive) [player[i].performer deactivate];
-  return self;
+    int i;
+    for (i = 0; i < numParts; i++)
+	if ([player[i].performer status] != MK_inactive) [player[i].performer deactivate];
+    return self;
 }
 
 
 - pausePlayers
 {
-  int i;
-  for (i = 0; i < numParts; i++) [player[i].performer pause];
-  return self;
+    int i;
+    for (i = 0; i < numParts; i++) [player[i].performer pause];
+    return self;
 }
 
 
 - resumePlayers
 {
-  int i;
-  for (i = 0; i < numParts; i++) [player[i].performer resume];
-  return self;
+    int i;
+    for (i = 0; i < numParts; i++) [player[i].performer resume];
+    return self;
 }
 
 
@@ -303,10 +300,12 @@ static void addNote(int v, int k, int ch, MKNote *n)
     NSString *fname,*oldname;
     MKScore *as;
     MKSynthInstrument *synth;
+    MKPartPerformer *partPerformer;
     PlayInspector *pi = [NSApp thePlayInspector];
     struct performer *perf;
-    id p, pp, an;
+    id p, an;
     char curracc[7], keysig[7], keytmp[7];
+    
     tl = [[NSMutableArray alloc] init];
     /* Find all the parts in the chords and voices */
     minstamp = MAXFLOAT;
@@ -354,7 +353,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
     player[0].part = [[MKPart alloc] init];  /* the user interface part */
     /* Add the notes */
     /* NSLog(@"add notes:\n"); */
-    pn = ((Page *)currentPage)->num;
+    pn = [currentPage pageNumber];
     fine = 0.1;  /* allow time to insert channel control changes */
     for (si = sj; si <= sk; si++)
     {
@@ -572,7 +571,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
         /* [MKOrchestra setHeadroom: -0.5]; */
         [MKOrchestra setSamplingRate: 44100.0];
         [MKOrchestra setTimed: MK_TIMED];
-        [MKPartPerformer setFastActivation:YES];
+        [MKPartPerformer setFastActivation: YES];
         for (i = 0; i < numParts; i++)
         {
             an = [[MKNote alloc] init];
@@ -581,16 +580,16 @@ static void addNote(int v, int k, int ch, MKNote *n)
             if (numParts <= 10) [an setPar: MK_synthPatchCount toInt: 1];
             [player[i].part setInfoNote: an];
             [an release];
-            pp = player[i].performer = [[MKPartPerformer alloc] init];
-            [pp setPart: player[i].part];
-            [((MKPartPerformer *)pp) activate];
-            if (i == 0) [[pp noteSender] connect: [[[UserInstrument alloc] init] noteReceiver]];
+            partPerformer = player[i].performer = [[MKPartPerformer alloc] init];
+            [partPerformer setPart: player[i].part];
+            [partPerformer activate];
+            if (i == 0) [[partPerformer noteSender] connect: [[[UserInstrument alloc] init] noteReceiver]];
             else
             {
                 synth = [[MKSynthInstrument alloc] init];
                 [synth setSynthPatchClass: NSClassFromString(instruments[1].patch)];
                 if (numParts <= 10) [synth setSynthPatchCount: 1];
-                [[pp noteSender] connect: [synth noteReceiver]];
+                [[partPerformer noteSender] connect: [synth noteReceiver]];
             }
         }
         [[MKConductor defaultConductor] setTempo: [pi getTempo]];
@@ -701,7 +700,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
             break;
         case 2:
         case 3:
-            [MKPartPerformer setFastActivation:YES];
+            [MKPartPerformer setFastActivation: YES];
             midi = [MKMidi midiOnDevice: ((playmode == 2) ? @"midi0" : @"midi1")];
             [midi openOutputOnly];         /* No need for Midi input. */
                 [midi setConductor: [MKConductor defaultConductor]];
@@ -741,11 +740,11 @@ static void addNote(int v, int k, int ch, MKNote *n)
                 [an setPar: MK_controlVal toInt: (int) (127 * chan->vibrato)];
                 [player[i].part addNote: [an copy]];
                 }
-                pp = player[i].performer = [[MKPartPerformer alloc] init];
-                [pp setPart: player[i].part];
-                [((MKPartPerformer *) pp) activate];
-                if (i == 0) [[pp noteSender] connect: [[[UserInstrument alloc] init] noteReceiver]];
-                else [[pp noteSender] connect: [midi channelNoteReceiver: ch]];
+                partPerformer = player[i].performer = [[MKPartPerformer alloc] init];
+                [partPerformer setPart: player[i].part];
+                [partPerformer activate];
+                if (i == 0) [[partPerformer noteSender] connect: [[[UserInstrument alloc] init] noteReceiver]];
+                else [[partPerformer noteSender] connect: [midi channelNoteReceiver: ch]];
             }
             [an release];
             [[MKConductor defaultConductor] setTempo: [pi getTempo]];
@@ -763,51 +762,48 @@ static void addNote(int v, int k, int ch, MKNote *n)
     return self;
 }
 
-
-
 /* i=start,j=end: 0=system, 1=page, 2=doc */
-
 - playChoice: (int) i : (int) j : (int) selonly : (int) noprogch
 {
-  Page *p = currentPage;
-  switch(i)
-  {
-    case 0:
-      i = [syslist indexOfObject:currentSystem];
-      break;
-    case 1:
-      i = p->topsys;
-      break;
-    case 2:
-      i = 0;
-      break;
-  }
-  switch(j)
-  {
-    case 0:
-      j = [syslist indexOfObject:currentSystem];
-      break;
-    case 1:
-      j = p->botsys;
-      break;
-    case 2:
-      j = [syslist count] - 1;
-      break;
-  }
-  if (i == NSNotFound || j == NSNotFound) {
-      return self;
-  }
-  [self flowTimeSig: [syslist objectAtIndex:j]];
-  [NSApp thePlayView: self];
-  [self play: i : j : selonly : noprogch];
-  return self;
+    Page *p = currentPage;
+    switch(i)
+    {
+	case 0:
+	    i = [syslist indexOfObject:currentSystem];
+	    break;
+	case 1:
+	    i = p->topsys;
+	    break;
+	case 2:
+	    i = 0;
+	    break;
+    }
+    switch(j)
+    {
+	case 0:
+	    j = [syslist indexOfObject:currentSystem];
+	    break;
+	case 1:
+	    j = p->botsys;
+	    break;
+	case 2:
+	    j = [syslist count] - 1;
+	    break;
+    }
+    if (i == NSNotFound || j == NSNotFound) {
+	return self;
+    }
+    [self flowTimeSig: [syslist objectAtIndex:j]];
+    [NSApp thePlayView: self];
+    [self play: i : j : selonly : noprogch];
+    return self;
 }
 
 
 - clickStop
 {
     [MKConductor sendMsgToApplicationThreadSel: @selector(clickStopButton) to: [NSApp thePlayInspector] argCount: 0];
-  return self;
+    return self;
 }
 
 
@@ -817,88 +813,91 @@ char *ntypename[5] = {"dur", "on", "off", "update", "mute"};
 
 - dumpNote: (MKNote *) n
 {
-  void *s = MKInitParameterIteration(n);
-  int par;
-  NSString *str;
-  NSLog(@"tag:%d, type:%s, time:%f, dur:%f", [n noteTag], ntypename[[n noteType] - 257], [n timeTag], [n dur]);
-  while ((par = MKNextParameter(n, s)) != MK_noPar)
-  {
-    str = [n parAsString: par];
-      NSLog(@"  [%s:  %s]", [[MKNote parNameForTag: par] cString], [str cString]);
-  }
-  return self;
+    void *s = MKInitParameterIteration(n);
+    int par;
+    NSString *str;
+    NSLog(@"tag:%d, type:%s, time:%f, dur:%f", [n noteTag], ntypename[[n noteType] - 257], [n timeTag], [n dur]);
+    while ((par = MKNextParameter(n, s)) != MK_noPar)
+    {
+	str = [n parAsString: par];
+	NSLog(@"  [%s:  %s]", [[MKNote parNameForTag: par] cString], [str cString]);
+    }
+    return self;
 }
 
 
 - (BOOL) getScoreFile: (NSString *) path
 {
-  int i, j, count, level = 0, fileTempo = MAXINT;
-  id parts, /*info,*/ note;
-  MKPart *part;
-  MKScore *newScore = [[MKScore alloc] init];
-  BOOL isMIDIFile = NO;
-  BOOL hasGlobalPart = NO;
-  if ([[path pathExtension] isEqualToString:@"midi"])
-  {
-    level = 1;
-      if (![newScore readMidifile: path])
+    int i, j, count, level = 0, fileTempo = MAXINT;
+    id parts, /*info,*/ note;
+    MKPart *part;
+    MKScore *newScore = [[MKScore alloc] init];
+    BOOL isMIDIFile = NO;
+    BOOL hasGlobalPart = NO;
+    if ([[path pathExtension] isEqualToString:@"midi"])
     {
-      [newScore release];
-      return NO;
+	level = 1;
+	if (![newScore readMidifile: path])
+	{
+	    [newScore release];
+	    return NO;
+	}
+	isMIDIFile = YES;
+	count = [newScore partCount];
+	if (count > 0)
+	{
+	    /* Get info of last part. */
+	    MKNote *partInfo = [(MKPart *)[[newScore parts] objectAtIndex:count - 1] infoNote];
+	    
+	    if (partInfo) level = MKIsNoteParPresent(partInfo, MK_track) ? 1 :
+		(MKIsNoteParPresent(partInfo, MK_sequence) ? 2 : 0);
+	}
+	if ([[newScore infoNote] isParPresent:MK_tempo])
+	    fileTempo = MKGetNoteParAsInt([newScore infoNote], MK_tempo);
+	parts = [newScore parts];
     }
-    isMIDIFile = YES;
-    count = [newScore partCount];
-    if (count > 0)
+    else
     {
-      /* Get info of last part. */
-        id partInfo = [(MKPart *)[[newScore parts] objectAtIndex:count - 1] infoNote];
-        if (partInfo) level = MKIsNoteParPresent(partInfo, MK_track) ? 1 :
-            (MKIsNoteParPresent(partInfo, MK_sequence) ? 2 : 0);
+	/* Must be a scorefile */
+	if (![newScore readScorefile:path])
+	{
+	    [newScore release];
+	    return NO;
+	}
+	if ([[newScore infoNote] isParPresent:MK_tempo]) fileTempo = MKGetNoteParAsInt([newScore infoNote], MK_tempo);
+	parts = [newScore parts];
+	if ([parts count])
+	    hasGlobalPart = [MKGetObjectName([parts objectAtIndex:0]) isEqualToString:@"allParts"];
+	else hasGlobalPart = NO;
     }
-    if ([[newScore infoNote] isParPresent:MK_tempo])
-        fileTempo = MKGetNoteParAsInt([newScore infoNote], MK_tempo);
-    parts = [newScore parts];
-  }
-  else
-  {
-    /* Must be a scorefile */
-      if (![newScore readScorefile:path])
-    {
-      [newScore release];
-      return NO;
-    }
-      if ([[newScore infoNote] isParPresent:MK_tempo]) fileTempo = MKGetNoteParAsInt([newScore infoNote], MK_tempo);
-    parts = [newScore parts];
-    if ([parts count])
-        hasGlobalPart = [MKGetObjectName([parts objectAtIndex:0]) isEqualToString:@"allParts"];
-      else hasGlobalPart = NO;
-  }
-  NSLog(@"level %d MIDI file\n", level);
-  NSLog(@"info note:");
-  [self dumpNote: [newScore infoNote]];
-  NSLog(@"\n");
-  count = [parts count];
-  for (i = 0; i < count; i++)
-  {
-    NSMutableArray *notes; int nk;
-    part = [parts objectAtIndex:i];
-    nk = [part noteCount];
-    NSLog(@"  part %d has %d notes. info:\n", i, nk);
-    [self dumpNote: [part infoNote]];
+    NSLog(@"level %d MIDI file\n", level);
+    NSLog(@"info note:");
+    [self dumpNote: [newScore infoNote]];
     NSLog(@"\n");
-    notes = [part notes];
-    for (j = 0; j < nk; j++)
+    count = [parts count];
+    for (i = 0; i < count; i++)
     {
-      note = [notes objectAtIndex:j];
-      NSLog(@"    note %d:", j);
-      [self dumpNote: note];
-      NSLog(@"\n");
+	NSArray *notes;
+	int noteCount;
+	
+	part = [parts objectAtIndex:i];
+	noteCount = [part noteCount];
+	NSLog(@"  part %d has %d notes. info:\n", i, noteCount);
+	[self dumpNote: [part infoNote]];
+	NSLog(@"\n");
+	notes = [part notes];
+	for (j = 0; j < noteCount; j++)
+	{
+	    note = [notes objectAtIndex:j];
+	    NSLog(@"    note %d:", j);
+	    [self dumpNote: note];
+	    NSLog(@"\n");
+	}
+	[notes autorelease]; //sb: List is freed, not released. Careful here when working with MK...
     }
-    [notes autorelease]; //sb: List is freed, not released. Careful here when working with MK...
-  }
-  [parts release];
-  [newScore release];
-  return YES;
+    [parts release];
+    [newScore release];
+    return YES;
 }
 
 
@@ -907,17 +906,17 @@ char *ntypename[5] = {"dur", "on", "off", "update", "mute"};
 - openScoreFile: sender
 {
     NSString *file;
-  BOOL p = NO;
-  NSArray* ext = [NSArray arrayWithObjects:@"midi",@"score",nil];
-  
-  id openpanel = [NSOpenPanel openPanel]; [openpanel setAllowsMultipleSelection:NO];
-  if ([openpanel runModalForTypes:ext] == NSOKButton)
-  {
-      file = [openpanel filename];
-      if (file) p = [self getScoreFile: file];
-  }
-  if (!p) NSRunAlertPanel(@"Score/MIDI File", @"Cannot Open.", @"OK", nil, nil);
-  return self;
+    BOOL p = NO;
+    NSArray* ext = [NSArray arrayWithObjects:@"midi",@"score",nil];
+    
+    id openpanel = [NSOpenPanel openPanel]; [openpanel setAllowsMultipleSelection:NO];
+    if ([openpanel runModalForTypes:ext] == NSOKButton)
+    {
+	file = [openpanel filename];
+	if (file) p = [self getScoreFile: file];
+    }
+    if (!p) NSRunAlertPanel(@"Score/MIDI File", @"Cannot Open.", @"OK", nil, nil);
+    return self;
 }
 
 

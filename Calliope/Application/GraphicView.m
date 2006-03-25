@@ -1282,7 +1282,7 @@ extern struct toolData toolCodes[NUMTOOLS];
     if (pageToDraw == nil) 
 	return self;
 
-    [pageToDraw draw: rect : nso];
+    [pageToDraw drawRect: rect];
     for (systemIndex = pageToDraw->topsys; systemIndex <= pageToDraw->botsys; systemIndex++) 
 	[[syslist objectAtIndex: systemIndex] draw: rect : nso];
     for (systemIndex = pageToDraw->topsys; systemIndex <= pageToDraw->botsys; systemIndex++) 
@@ -1757,7 +1757,7 @@ extern struct toolData toolCodes[NUMTOOLS];
 - (int) getPageNum
 {
   if (currentPage == nil) return 0;
-  return currentPage->num;
+  return [currentPage pageNumber];
 }
 
 
@@ -1783,11 +1783,11 @@ extern struct toolData toolCodes[NUMTOOLS];
 {
   Page *p;
   p = [pagelist objectAtIndex:0];
-  if (p->num != 1)
+  if ([p pageNumber] != 1)
   {
-    *p0 = p->num;
+    *p0 = [p pageNumber];
     p = [pagelist lastObject];
-    *p1 = p->num;
+    *p1 = [p pageNumber];
   }
   return YES;
 }
@@ -2126,9 +2126,22 @@ extern int needUpgrade;
 {
     [super lockFocus];
 }
+
 - (void)unlockFocus
 {
     [super unlockFocus];
 }
+
+- (void) setDelegate: (id) newDelegate
+{
+    // We create only a weak reference to our delegate since this will be our parent (e.g DrawDocument).
+    delegate = newDelegate;
+}
+
+- (id) delegate
+{
+    return delegate;
+}
+
 @end
 

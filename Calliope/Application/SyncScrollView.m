@@ -167,10 +167,9 @@ extern NSSize paperSize;
 }
 
 
-- setPageNum: (int) p
+- (void) setPageNum: (int) p
 {
-    [[pageForm cellAtIndex:0] setIntValue:p];
-    return [pageForm cellAtIndex:0];
+    [[pageForm cellAtIndex: 0] setIntValue: p];
 }
 
 
@@ -194,10 +193,9 @@ extern NSSize paperSize;
 }
 
 
-- setMessage: (NSString *) s
+- (void) setMessage: (NSString *) s
 {
-    [pageLabel setStringValue:s];
-    return pageLabel;
+    [pageLabel setStringValue: s];
 }
 
 

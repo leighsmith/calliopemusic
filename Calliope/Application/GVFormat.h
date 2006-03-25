@@ -1,4 +1,4 @@
-/* $Id:$ */
+/* $Id$ */
 
 /*! @class 
   Responsible for the formatting methods of GraphicView class.
@@ -8,6 +8,13 @@
 #import "winheaders.h"
 #import "GraphicView.h"
 
+typedef enum {
+    GV_OFFSET_FROM_CURRENT_PAGE = 0,
+    GV_PAGE_INDEX = 1,
+    GV_PRINTED_PAGE_NUMBER = 2,
+    GV_SYSTEM_INDEX = 3,
+    GV_OFFSET_FROM_CURRENT_SYSTEM = 4
+} GraphicViewIndexMethod;
 
 @interface GraphicView(GVFormat)
 
@@ -24,14 +31,15 @@
 - (int) findPageOff: (StaffObj *) p;
 
 /*!
- find page by: off = 0: offset from current page, 1: by page index,
+ @brief find page by: off = 0: offset from current page, 1: by page index,
  2: by printed page number, 3: by system index,
  4: by index relative to currentsystem.
  Sets currentSystem to top of page except off = 3,4.
+ @return YES if able to find the numbered page, NO if indexed outside the legal range of page numbers.
  */
-- (BOOL) findPage: (int) n usingIndexMethod: (int) indexMethod;
+- (BOOL) findPage: (int) pageNumber usingIndexMethod: (GraphicViewIndexMethod) indexMethod;
 
-- gotoPage: (int) n usingIndexMethod: (int) off;
+- gotoPage: (int) pageNumber usingIndexMethod: (GraphicViewIndexMethod) indexMethod;
 - getSystem: sys offsetBy: (int) off;
 - findSysOfStyle: (NSString *) a;
 - (BOOL) balanceOrAsk: (Page *) p : (int) i : (int) f;

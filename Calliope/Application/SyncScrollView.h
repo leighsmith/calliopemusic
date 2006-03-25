@@ -31,9 +31,9 @@
 - (void)updateRuler;
 - setRulerClass:factoryId;
 
-- setPageNum: (int) p;
+- (void) setPageNum: (int) p;
 - setScaleNum: (int) i;
-- setMessage: (NSString *) s;
+- (void) setMessage: (NSString *) s;
 
 /* Comes up the responder chain to us */
 - pageTo: sender;
