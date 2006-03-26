@@ -15,6 +15,7 @@
 #import <AppKit/NSGraphics.h>
 #import "System.h"
 #import "Margin.h"
+#import "Runner.h"
 
 @class GraphicView;
 
@@ -37,9 +38,9 @@ typedef enum {
 @public;
   short topsys;
   short botsys;
+@private
   id headfoot[12];
   char hfinfo[12];
-@private
   int num;			/*! @var num The displayed paged number. */
   float fillheight;		/* sums to page height (as screened) */
   float margin[10];
@@ -113,6 +114,11 @@ typedef enum {
  @brief Assigns the page number
  */
 - (void) setPageNumber: (int) newPageNumber;
+
+/*!
+  @brief Assigns the page runners.
+ */
+- (void) setRunner: (Runner *) newRunner;
 
 
 - (id) initWithCoder: (NSCoder *) aDecoder;

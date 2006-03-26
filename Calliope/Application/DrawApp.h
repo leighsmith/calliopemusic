@@ -65,9 +65,10 @@ extern int partlistflag;
 - (NSWindow *) currentWindow;
 - (void)setCurrentWindow: (id) w; //sb
 - selectFontSelection: (int) i;
+
 + (OpusDocument *) currentDocument;
-//- document;
-- currentView;
++ (GraphicView *) currentView;
+
 - currentSystem;
 - (NSString *) currentDirectory;
 - print:sender; /* brought to app level by sb; originally only in graphicView.m */

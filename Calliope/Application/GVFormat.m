@@ -599,34 +599,36 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
 
 - setRunnerTables
 {
-  int i, j, k, s0, s1, ok;
-  Page *pg, *lp;
-  System *sys;
-  NSMutableArray *ol;
-  k = [pagelist count];
-  lp = nil;
-  for (i = 0; i < k; i++)
-  {
-    pg = [pagelist objectAtIndex:i];
-    [pg prevTable: lp];
-    s0 = pg->topsys;
-    s1 = pg->botsys;
-    for (j = s0; j <= s1; j++)
+    int i, j, pageCount, s0, s1, ok;
+    Page *pg, *lp;
+    NSMutableArray *ol;
+    
+    pageCount = [pagelist count];
+    lp = nil;
+    for (i = 0; i < pageCount; i++)
     {
-      sys = [syslist objectAtIndex:j];
-      ol = sys->objs;
-      ok = [ol count];
-      while (ok--) [[ol objectAtIndex:ok] setPageTable: pg];
+	pg = [pagelist objectAtIndex: i];
+	[pg prevTable: lp];
+	s0 = pg->topsys;
+	s1 = pg->botsys;
+	for (j = s0; j <= s1; j++)
+	{
+	    System *sys = [syslist objectAtIndex: j];
+	    ol = sys->objs;
+	    ok = [ol count];
+	    while (ok--) {
+		// Since Runners do not hold the back pointer to Page, all this does is assign Runners to Page.
+		[pg setRunner: [ol objectAtIndex: ok]];
+	    }
+	}
+	lp = pg;
     }
-    lp = pg;
-  }
-  return self;
+    return self;
 }
 
 
 - doPage: (int) p : (int) s0 : (int) ns : (float) sh : (float) him : (float) topm : (float) botm : (int) numsys
 {
-    System *sys;
     int i, j = s0 + ns - 1;
     Page *pg = [[Page alloc] initWithPageNumber: p topSystemNumber: s0 bottomSystemNumber: j];
     
@@ -635,7 +637,7 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
     [pg setFillHeight: him];
     for (i = s0; i <= j; i++)
     {
-	sys = [syslist objectAtIndex: i];
+	System *sys = [syslist objectAtIndex: i];
 	sys->page = pg;
     }
     [pagelist addObject: pg];

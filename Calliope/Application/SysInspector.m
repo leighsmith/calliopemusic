@@ -808,7 +808,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
 
 - set: sender
 {
-  GraphicView *v = [NSApp currentView];
+  GraphicView *v = [DrawApp currentView];
   System *sys;
   int i, j, n;
   if (v == nil)

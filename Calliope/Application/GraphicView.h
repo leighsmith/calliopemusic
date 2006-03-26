@@ -4,6 +4,10 @@
   @class GraphicView
   @brief The GraphicView class is the visual representation of a single page of a OpusDocument (which holds several pages).
 
+ TODO should become MusicalScoreView? or ScorePageView
+ Probably there should be a MusicalScore which should hold the array of systems and Graphics as the model,
+ and ScorePageView which should be displaying a single Page (which should be renamed ScorePage).
+ 
   It overrides the NSView methods related to drawing and event handling
   and allows manipulation of Graphic objects.
   Moving is accomplished using instance drawing.
@@ -19,7 +23,6 @@
  */
 #define TIFF_COMPRESSION_FACTOR NSTIFFCompressionJPEG
 
-// TODO should become MusicalScoreView? or ScorePageView
 @interface GraphicView : NSView
 {
 @public

@@ -640,13 +640,13 @@ BOOL writeStyleFile(NSString *f)
       if (![setButton isEnabled]) [setButton setEnabled:YES];
     }
   }
-  if (![self getStyleFromFile:file  : [NSApp currentView]])
+  if (![self getStyleFromFile:file  : [DrawApp currentView]])
   {
     NSRunAlertPanel(@"Preferences", @"Cannot Open Style Sheet", @"OK", nil, nil);
   }
   else
   {
-    [[NSApp currentView] dirty];
+    [[DrawApp currentView] dirty];
   }
   return self;
 }
@@ -682,7 +682,7 @@ BOOL writeStyleFile(NSString *f)
   }
   else
   {
-    [[NSApp currentView] dirty];
+    [[DrawApp currentView] dirty];
   }
   return self;
 }

@@ -247,19 +247,10 @@ static OpusDocument *openDocument(NSString *document, BOOL display)
 // TODO Probably become a OpusDocument class method?
 + (OpusDocument *) currentDocument
 {
-#if 0
-    /* every time a window becomes main, it should register itself as "currentWindow" here.
-    * It's safer to do this like this, because it will remain "main" even when app is hidden.
-    * this helps prevent PostScript problems caused by drawing images that rely on currentDocument
-    * to request it for margins, for example.
-    */
-    if (currentWindow) return documentInWindow(currentWindow);
-    return documentInWindow([NSApp mainWindow]); /* last resort */
-#endif
     return [[NSDocumentController sharedDocumentController] currentDocument];
 }
 
-- currentView
++ (GraphicView *) currentView
 {
     return [[[self class] currentDocument] graphicView];
 }
@@ -302,7 +293,7 @@ static OpusDocument *openDocument(NSString *document, BOOL display)
 
 - orderFontPanel: sender
 {
-    GraphicView *v = [self currentView];
+    GraphicView *v = [[self class] currentView];
     if (v == nil)
     {
 	NSLog(@"orderFontPanel: currentView is nil");
@@ -555,7 +546,7 @@ float unitFactor[4] =
     if (perfInspector) [perfInspector reflectSelection];
     if (preferences) [preferences reflectSelection];
     [self inspectClass: [SysInspector class] loadInspector: NO];
-    v = [self currentView];
+    v = [[self class] currentView];
     if (v != nil)
     {
 	if ([v->slist count] > 0)
@@ -568,7 +559,6 @@ float unitFactor[4] =
 	    [v setFontSelection: 3 : 0];
 	}
     }
-//  [NSObject cancelPreviousPerformRequestsWithTarget:NSApp selector:@selector(updateWindows) object:nil], [NSApp performSelector:@selector(updateWindows) withObject:nil afterDelay:(1) / 1000.0];
     return self;
 }
 

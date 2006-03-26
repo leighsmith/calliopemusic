@@ -177,7 +177,7 @@ extern void colorInit(int i, NSColor * c);
         colorInit(4, [invwell color]);
         colorInit(5, [t1well color]);
         colorInit(6, [t2well color]);
-        [[NSApp currentView] setNeedsDisplay:YES];
+        [[DrawApp currentView] setNeedsDisplay:YES];
         [newDefaults setObject:colorString(0, [backwell color]) forKey:@"BackgroundColor"];
         [newDefaults setObject:colorString(1, [inkwell color]) forKey:@"InkColor"];
         [newDefaults setObject:colorString(2, [markwell color]) forKey:@"MarkerColor"];

@@ -1,3 +1,5 @@
+/* $Id:$ */
+#import <AppKit/NSTextView.h>
 #import "Runner.h"
 #import "DrawApp.h"
 #import "OpusDocument.h"
@@ -8,7 +10,6 @@
 #import "GVFormat.h"
 #import "FlippedView.h"
 #import "mux.h"
-#import <AppKit/NSTextView.h>
 #import "TextVarCell.h"
 
 /*
@@ -29,30 +30,30 @@ int runnerStatus = 0;
 
 + (void)initialize
 {
-  if (self == [Runner class])
-  {
-      (void)[Runner setVersion: 2];		/* class version, see read: */
-    if (!myText)
+    if (self == [Runner class])
     {
-      myText = [[NSTextView alloc] init];
-      [myText setRichText:YES];
-      [myText setEditable:NO];
-      [myText setSelectable:YES];
+	(void)[Runner setVersion: 2];		/* class version, see read: */
+	if (!myText)
+	{
+	    myText = [[NSTextView alloc] init];
+	    [myText setRichText:YES];
+	    [myText setEditable:NO];
+	    [myText setSelectable:YES];
 //      [myText setSelColor:[NSColor whiteColor]];
-      [myText setTextColor:[NSColor blackColor]];
-      [myText setBackgroundColor:backShade];
-
-      [myText setVerticallyResizable:YES];
-      [myText setHorizontallyResizable:YES];
-
-      [myText setDrawsBackground:YES];
-      [myText setUsesFontPanel:YES];
-      [[myText textContainer] setWidthTracksTextView:NO];
-      [[myText textContainer] setHeightTracksTextView:NO];
-
+	    [myText setTextColor:[NSColor blackColor]];
+	    [myText setBackgroundColor:backShade];
+	    
+	    [myText setVerticallyResizable:YES];
+	    [myText setHorizontallyResizable:YES];
+	    
+	    [myText setDrawsBackground:YES];
+	    [myText setUsesFontPanel:YES];
+	    [[myText textContainer] setWidthTracksTextView:NO];
+	    [[myText textContainer] setHeightTracksTextView:NO];
+	    
+	}
     }
-  }
-  return;
+    return;
 }
 
 
@@ -63,18 +64,20 @@ int runnerStatus = 0;
 
 - init
 {
-  [super init];
-  gFlags.type = RUNNER;
-  flags.onceonly = 0;
-  flags.nextpage = 0;
-  flags.horizpos = 0;
-  flags.evenpage = 0;
-  flags.oddpage = 0;
-  flags.vertpos = 0;
-  flags.just = 0;
-  length = 0;
-  data = nil;
-  return self;
+    self = [super init];
+    if(self != nil) {
+	gFlags.type = RUNNER;
+	flags.onceonly = 0;
+	flags.nextpage = 0;
+	flags.horizpos = 0;
+	flags.evenpage = 0;
+	flags.oddpage = 0;
+	flags.vertpos = 0;
+	flags.just = 0;
+	length = 0;
+	data = nil;	
+    }
+    return self;
 }
 
 
@@ -110,33 +113,13 @@ int runnerStatus = 0;
 
 - (Runner *) newFrom
 {
-  Runner *p = [[Runner alloc] init];
-  p->gFlags = gFlags;
-  p->bounds = bounds;
-  p->flags = flags;
-  p->data = [data copy];
-  p->length = length;
-  return p;
-}
-
-
-- setPageTable: (Page *) p
-{
-  int j;
-  j = flags.horizpos;
-  if (flags.vertpos) j += 3;
-  if (flags.evenpage)
-  {
-    p->headfoot[j] = self;
-    p->hfinfo[j] = 1;
-  }
-  if (flags.oddpage)
-  {
-    j += 6;
-    p->headfoot[j] = self;
-    p->hfinfo[j] = 1;
-  }
-  return self;
+  Runner *newRunner = [[Runner alloc] init];
+  newRunner->gFlags = gFlags;
+  newRunner->bounds = bounds;
+  newRunner->flags = flags;
+  newRunner->data = [data copy];
+  newRunner->length = length;
+  return newRunner;
 }
 
 

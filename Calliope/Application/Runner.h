@@ -1,8 +1,11 @@
+/* $Id:$ */
+
 #import "winheaders.h"
 #import "Graphic.h"
-#import "Page.h"
 
-@interface Runner:Graphic
+@class Page;
+
+@interface Runner: Graphic
 {
 @public
   struct
@@ -26,7 +29,6 @@
 - (void)dealloc;
 - (void)removeObj;
 - (Runner *) newFrom;
-- setPageTable: (Page *) p;
 - renderMe: (NSRect) r : (NSAttributedString *) stream : (NSSize) ps : (Page *) pg;
 - (BOOL) move: (float) dx : (float) dy : (NSPoint) p : sys : (int) alt;
 - drawMode: (int) m;

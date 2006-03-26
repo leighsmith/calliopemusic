@@ -190,6 +190,23 @@ extern NSSize paperSize;
     margin[marginType] = newMarginValue;
 }
 
+- (void) setRunner: (Runner *) newRunner
+{
+    int j = newRunner->flags.horizpos;
+    
+    if (newRunner->flags.vertpos)
+	j += 3;
+    if (newRunner->flags.evenpage) {
+	headfoot[j] = newRunner;
+	hfinfo[j] = 1;
+    }
+    if (newRunner->flags.oddpage) {
+	j += 6;
+	headfoot[j] = newRunner;
+	hfinfo[j] = 1;
+    }
+}
+
 static void drawSlants(float x, float y, float hw, float th)
 {
     float xa, xb, ya, yb;

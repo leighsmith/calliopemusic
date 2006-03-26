@@ -117,7 +117,7 @@ NSString *imfiles[NUMVARTYPES] =
 
     switch (type) {
     case 0:
-	return [NSString stringWithFormat: @"%d", [[[DrawApp currentDocument] currentPage] pageNumber]];
+	return [NSString stringWithFormat: @"%d", [[[DrawApp currentView] currentPage] pageNumber]];
     case 1:
 	return [now descriptionWithCalendarFormat:@"%d"];
     case 2:
