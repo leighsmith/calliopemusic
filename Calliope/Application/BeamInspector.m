@@ -1,7 +1,7 @@
 #import "BeamInspector.h"
 #import "Beam.h"
 #import "DrawApp.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "GraphicView.h"
 #import "MultiView.h"
 #import "GVSelection.h"

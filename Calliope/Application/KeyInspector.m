@@ -2,7 +2,7 @@
 #import "KeySig.h"
 #import "DrawApp.h"
 #import "StaffTrans.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "GraphicView.h"
 #import "GVSelection.h"
 #import <AppKit/AppKit.h>

@@ -3,7 +3,7 @@
 #import "GVFormat.h"
 #import "System.h"
 #import "SysInspector.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "DrawApp.h"
 #import "mux.h"
 #import <AppKit/AppKit.h>
@@ -44,7 +44,7 @@
 }
 
 
-- fillDocument: (DrawDocument *) doc : (int) sn
+- fillDocument: (OpusDocument *) doc : (int) sn
 {
   return self;
 }
@@ -52,7 +52,7 @@
 
 - new: sender
 {
-  DrawDocument *doc = nil;
+  OpusDocument *doc = nil;
   NSString *path;
   NSString *fname;
   int i, n;
@@ -65,7 +65,7 @@
       NSLog(@"n < 1 or > NUMSTAVES");
       return self;
     }
-    [self fillDocument: [DrawDocument new] : n];
+    [self fillDocument: [OpusDocument new] : n];
   }
   else
   {

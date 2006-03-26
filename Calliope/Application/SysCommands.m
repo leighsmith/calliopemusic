@@ -7,7 +7,7 @@
 #import "System.h"
 #import "mux.h"
 #import "DrawApp.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "muxCollide.h"
 #import "Staff.h"
 #import "Neume.h"

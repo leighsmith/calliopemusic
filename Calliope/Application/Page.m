@@ -1,4 +1,4 @@
-/* $Id:$ */
+/* $Id$ */
 #import <Foundation/Foundation.h>
 #import <AppKit/AppKit.h>
 #import "Page.h"
@@ -8,47 +8,26 @@
 #import "mux.h"
 #import "muxlow.h"
 #import "DrawApp.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 
 @implementation Page
 
-// TODO These are totally bogus and have to be removed.
+// TODO This is totally bogus and has to be removed.
 extern NSSize paperSize;
-extern BOOL marginFlag;
-
-NSString *curvartext[8];
 
 + (void) initialize
 {
-    int i;
-    for (i=0;i<7;i++) curvartext[i]=nil;
-    if (self == [Page class])
-    {
-	(void)[Page setVersion: 2];	/* class version, see read: */
+    if (self == [Page class]) {
+	[Page setVersion: 2];	/* class version, see read: */
     }
-    return;
 }
 
-+ initPage
-{
-    NSCalendarDate *now = [NSCalendarDate calendarDate];
-    int i;
-    for (i=0;i<7;i++) if (curvartext[i]) {[curvartext[i] release];curvartext[i]=nil;}
-	curvartext[0] = [[now descriptionWithCalendarFormat:@"%d"] retain];
-    curvartext[1] = [[now descriptionWithCalendarFormat:@"%d"] retain];
-    curvartext[2] = [[now descriptionWithCalendarFormat:@"%m"] retain];
-    curvartext[3] = [[now descriptionWithCalendarFormat:@"%y"] retain];
-    curvartext[4] = [[now descriptionWithCalendarFormat:@"%H"] retain];
-    curvartext[5] = [[now descriptionWithCalendarFormat:@"%M"] retain];
-    return self;
-}
-
-
+#if 0
 - (void) dealloc
 {
     [super dealloc];
 }
-
+#endif
 
 - initWithPageNumber: (int) n topSystemNumber: (int) s0 bottomSystemNumber: (int) s1
 {
@@ -74,6 +53,7 @@ NSString *curvartext[8];
 }
 
 /* copy page table info from previous page.  p is nil if no previous page */
+// TODO should become copyWithZone:
 - prevTable: (Page *) p
 {
     int i = 12;
@@ -85,7 +65,8 @@ NSString *curvartext[8];
 	    hfinfo[i] = 0;
 	}
 	i = MaximumMarginTypes;
-	while (i--) margin[i] = 0;
+	while (i--) 
+	    margin[i] = 0;
 	alignment = format = 0;
     }
     else
@@ -96,7 +77,8 @@ NSString *curvartext[8];
 	    hfinfo[i] = 0;
 	}
 	i = MaximumMarginTypes;
-	while (i--) margin[i] = p->margin[i];
+	while (i--) 
+	    margin[i] = p->margin[i];
 	alignment = p->alignment;
 	format = p->format;
     }
@@ -104,7 +86,6 @@ NSString *curvartext[8];
 }
 
 /* margin = margin + binding margin */
-
 - (float) leftMargin
 {
     float m = margin[0];
@@ -199,8 +180,11 @@ NSString *curvartext[8];
     return alignment & 2;
 }
 
-// 4 = top
-// 5 = bottom
+- (void) setAlignment: (int) newAlignment
+{
+    alignment = newAlignment;
+}
+
 - (void) setMarginType: (MarginType) marginType toSize: (float) newMarginValue
 {
     margin[marginType] = newMarginValue;
@@ -239,59 +223,9 @@ static void drawSlants(float x, float y, float hw, float th)
 }
 
 
-static void drawVert(float x, float y, float h, NSRect r)
-{
-    NSRect line;
-    
-    line.origin.x = x;
-    line.origin.y = y;
-    line.size.width = 1.0;
-    line.size.height = h;
-    
-    if (!NSIsEmptyRect(line = NSIntersectionRect(r, line)))
-	cline(x, y, x, y + h, 0.0, markmode[0]);
-}
 
-
-static void drawHorz(float x, float y, float w, NSRect r)
+- (void) drawRect: (NSRect) r
 {
-    NSRect line;
-    
-    line.origin.x = x;
-    line.origin.y = y;
-    line.size.width = w;
-    line.size.height = 1.0;
-    if (!NSIsEmptyRect(line = NSIntersectionRect(r, line)))
-	cline(x, y, x + w, y, 0.0, markmode[0]);
-}
-
-- drawRect: (NSRect) r
-{
-    
-    //if (curvartext[0]) 
-	//[curvartext[0] autorelease];
-    //curvartext[0] = [[NSString stringWithFormat: @"%d", [self pageNumber]] retain];
-    if (marginFlag)
-    {
-	NSRect viewBounds = [[NSApp currentView] bounds];	
-	float x = [self leftMargin];
-	float y = [self topMargin];
-	float w = viewBounds.size.width - x - [self rightMargin];
-	float h = viewBounds.size.height - y - [self bottomMargin];
-	
-	drawHorz(x, y, w, r);
-	drawVert(x, y, h, r);
-	drawHorz(x, y + h, w, r);
-	drawVert(x + w, y, h, r);
-	drawHorz(x, [self headerBase], w, r);
-	drawHorz(x, viewBounds.size.height - [self footerBase], w, r);
-	x = [self leftBinding];
-	if (x > 0.001) 
-	    drawVert(x, viewBounds.origin.y, viewBounds.size.height, r);
-	x = [self rightBinding];
-	if (x > 0.001)
-	    drawVert(viewBounds.origin.x + viewBounds.size.width - x, viewBounds.origin.y, viewBounds.size.height, r);
-    }
     {
 	int i, a, b;
 	
@@ -311,7 +245,6 @@ static void drawHorz(float x, float y, float w, NSRect r)
 	    [p renderMe: r : p->data : paperSize : self];
 	}	
     }
-    return self;
 }
 
 //extern int needUpgrade;
@@ -378,6 +311,5 @@ static void drawHorz(float x, float y, float w, NSRect r)
     [aCoder setInteger:MaximumMarginTypes forKey:@"nummargins"];
     for (i = 0; i < MaximumMarginTypes; i++) [aCoder setFloat:margin[i] forKey:[NSString stringWithFormat:@"margin%d",i]];
 }
-
 
 @end

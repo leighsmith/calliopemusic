@@ -1,7 +1,7 @@
 
 #import "Preferences.h"
 #import "DrawApp.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "GVCommands.h"
 #import "PrefBlock.h"
 #import "MultiView.h"
@@ -471,7 +471,7 @@ NSFontManager *fm = [NSFontManager sharedFontManager];
 
 - set:sender
 {
-  DrawDocument *d = [DrawApp currentDocument];
+  OpusDocument *d = [DrawApp currentDocument];
   GraphicView *v = [d graphicView];
   PrefBlock *p = [d prefInfo];
   float oss, nss, w, h;
@@ -516,7 +516,7 @@ NSFontManager *fm = [NSFontManager sharedFontManager];
 - preset
 {
   int i;
-  DrawDocument *d = [DrawApp currentDocument];
+  OpusDocument *d = [DrawApp currentDocument];
   PrefBlock *p = [d prefInfo];
   if (!p)
   {
@@ -533,7 +533,7 @@ NSFontManager *fm = [NSFontManager sharedFontManager];
 - reflectSelection
 {
   int i;
-  DrawDocument *d = [DrawApp currentDocument];
+  OpusDocument *d = [DrawApp currentDocument];
   PrefBlock *p = [d prefInfo];
   if (p)
   {
@@ -594,7 +594,7 @@ BOOL writeStyleFile(NSString *f)
 {
   int version;
   NSArchiver *ts;
-  DrawDocument *doc;
+  OpusDocument *doc;
   GraphicView *v;
   if (![f length]) return NO;
   doc = [DrawApp currentDocument];

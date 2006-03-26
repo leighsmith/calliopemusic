@@ -7,7 +7,7 @@
 #import "Staff.h"
 #import "StaffObj.h"
 #import "DrawApp.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "Page.h"
 #import "mux.h"
 #import "FileCompatibility.h"

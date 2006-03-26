@@ -2,7 +2,7 @@
 #import "Block.h"
 #import "GraphicView.h"
 #import "GVSelection.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "DrawApp.h"
 #import <AppKit/NSMatrix.h>
 #import <AppKit/NSForm.h>

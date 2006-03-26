@@ -14,7 +14,7 @@
 #import <AppKit/NSSavePanel.h>
 #import "CallPageLayout.h"
 #import <CalliopePropertyListCoders/OAPropertyListCoders.h>
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 
 // TODO This should be renamed AppController
 @interface DrawApp : NSObject
@@ -65,7 +65,7 @@ extern int partlistflag;
 - (NSWindow *) currentWindow;
 - (void)setCurrentWindow: (id) w; //sb
 - selectFontSelection: (int) i;
-+ (DrawDocument *) currentDocument;
++ (OpusDocument *) currentDocument;
 //- document;
 - currentView;
 - currentSystem;
@@ -107,7 +107,7 @@ extern int partlistflag;
 - (NSString *)unitString;
 - (int)unitNum;
 
-- (DrawDocument *) openCopyOf: (NSString *) fname reDirect: (NSString *) dir;
+- (OpusDocument *) openCopyOf: (NSString *) fname reDirect: (NSString *) dir;
 - setCurrentTool:sender;
 - help:sender;
 - info:sender;

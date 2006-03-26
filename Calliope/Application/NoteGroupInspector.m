@@ -1,7 +1,7 @@
 #import "NoteGroupInspector.h"
 #import "NoteGroup.h"
 #import "DrawApp.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "GraphicView.h"
 #import "GVSelection.h"
 #import "mux.h"

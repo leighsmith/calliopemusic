@@ -6,7 +6,7 @@
 
 #import "KeyboardFilter.h"
 #import "DrawApp.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "GraphicView.h"
 #import "GVPerform.h"
 #import "GVSelection.h"
@@ -196,7 +196,7 @@ extern void setkeysig(KeySig *p, char *key);
   GNote *q;
   NSPoint pt;
   Staff *sp;
-  DrawDocument *doc = [DrawApp currentDocument];
+  OpusDocument *doc = [DrawApp currentDocument];
   PlayInspector *player = [NSApp thePlayInspector];
   if (doc) v = [doc graphicView]; else return self;
   i = [n noteTag] & 127;

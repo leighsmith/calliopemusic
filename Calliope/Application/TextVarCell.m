@@ -1,7 +1,7 @@
 #import "GraphicView.h"
 #import "TextVarCell.h"
 #import "DrawApp.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import <AppKit/NSTextView.h>
 #import <AppKit/NSFont.h>
 #import "mux.h"
@@ -80,7 +80,7 @@
 
 extern NSTextView *myText;
 extern int runnerStatus;
-extern NSString *curvartext[NUMVARTYPES];
+//extern NSString *curvartext[NUMVARTYPES];
 
 
 NSImage *images[NUMVARTYPES];
@@ -113,9 +113,29 @@ NSString *imfiles[NUMVARTYPES] =
 
 - (NSString *) getVarString
 {
-    if (type == 6) return NSUserName();
-  else if (type == 7) return [[DrawApp currentDocument] filename];
-  return (NSString *)curvartext[(int)type];
+    NSCalendarDate *now = [NSCalendarDate calendarDate];
+
+    switch (type) {
+    case 0:
+	return [NSString stringWithFormat: @"%d", [[[DrawApp currentDocument] currentPage] pageNumber]];
+    case 1:
+	return [now descriptionWithCalendarFormat:@"%d"];
+    case 2:
+	return [now descriptionWithCalendarFormat:@"%m"];
+    case 3:
+	return [now descriptionWithCalendarFormat:@"%y"];
+    case 4:
+	return [now descriptionWithCalendarFormat:@"%H"];
+    case 5:
+	return [now descriptionWithCalendarFormat:@"%M"];
+    case 6:
+	return NSUserName();
+    case 7:
+	return [[DrawApp currentDocument] filename];
+    default:
+	NSLog(@"TextVarCell getVarString type < 0, > 7?\n");
+	return @"";
+    }  
 }
 
 

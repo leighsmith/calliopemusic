@@ -7,7 +7,7 @@
 #import "MarginInspector.h"
 #import "System.h"
 #import "DrawApp.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "mux.h"
 #import "muxlow.h"
 

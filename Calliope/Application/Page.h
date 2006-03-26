@@ -1,4 +1,4 @@
-/* $Id:$ */
+/* $Id$ */
 /*!
   @class Page
  
@@ -47,20 +47,22 @@ typedef enum {
   int alignment;
 }
 
-+ initPage;
 - initWithPageNumber: (int) n topSystemNumber: (int) s0 bottomSystemNumber: (int) s1;
-- (void) dealloc;
 
 /*!
   @brief copy page table info from previous page.  p is nil if no previous page 
  */
 - prevTable: (Page *) p;
+
 - (float) headerBase;
 - (float) footerBase;
 - (float) leftMargin;
 - (float) rightMargin;
 - (float) topMargin;
 - (float) bottomMargin;
+- (float) leftBinding;
+- (float) rightBinding;
+
 
 /*!
   @brief Assigns the given margin.
@@ -88,6 +90,11 @@ typedef enum {
 - (BOOL) alignToBottomSystem;
 
 /*!
+  @brief Assigns the alignment.
+ */
+- (void) setAlignment: (int) newAlignment;
+
+/*!
   @brief Returns the current page format behaviour.
  */
 - (PageFormat) format;
@@ -112,7 +119,7 @@ typedef enum {
 - (void) encodeWithCoder: (NSCoder *) aCoder;
 
 // Drawing routines which should be factored.
-- drawRect: (NSRect) r;
+- (void) drawRect: (NSRect) r;
 - drawSysSep: (NSRect) r : (System *) s : (GraphicView *) v;
 
 @end

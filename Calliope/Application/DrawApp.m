@@ -150,23 +150,23 @@ extern void colorInit(int i, NSColor * c);
 
 
 /*
- * Checks to see if the passed window's delegate is a DrawDocument.
+ * Checks to see if the passed window's delegate is a OpusDocument.
  * If it is, it returns that document, otherwise it returns nil.
  */
 
-static DrawDocument *documentInWindow(id window)
+static OpusDocument *documentInWindow(id window)
 {
     id document;
     if (!window) {
         return nil;
     }
     document = [window delegate];
-    return [document isKindOfClass:[DrawDocument class]] ? document : nil;
+    return [document isKindOfClass:[OpusDocument class]] ? document : nil;
 }
 
 
 /*
- * Searches the window list looking for a DrawDocument with the specified name.
+ * Searches the window list looking for a OpusDocument with the specified name.
  * Returns the window containing the document if found.
  * If name == NULL then the first document found is returned.
  */
@@ -193,7 +193,7 @@ static id findDocument(NSString *name)
  * Returns the document if successful, nil otherwise.
  */
 
-static DrawDocument *openFile(NSString *theDirectory, NSString *theName, BOOL display)
+static OpusDocument *openFile(NSString *theDirectory, NSString *theName, BOOL display)
 {
     id window;
     NSString *directory,*path;
@@ -220,7 +220,7 @@ static DrawDocument *openFile(NSString *theDirectory, NSString *theName, BOOL di
 	    }
 	    else
 	    {
-		return [DrawDocument newFromFile: path andDisplay: display];
+		return [OpusDocument newFromFile: path andDisplay: display];
 	    }
 	}
 	else
@@ -232,7 +232,7 @@ static DrawDocument *openFile(NSString *theDirectory, NSString *theName, BOOL di
 }
 
 
-static DrawDocument *openDocument(NSString *document, BOOL display)
+static OpusDocument *openDocument(NSString *document, BOOL display)
 {
     if ([[document pathExtension] isEqualToString:FILE_EXT])
         return openFile([document stringByDeletingLastPathComponent],[document lastPathComponent], display);
@@ -244,8 +244,8 @@ static DrawDocument *openDocument(NSString *document, BOOL display)
 
 /* General application status and information querying/modifying methods. */
 
-// TODO Probably become a DrawDocument class method?
-+ (DrawDocument *) currentDocument
+// TODO Probably become a OpusDocument class method?
++ (OpusDocument *) currentDocument
 {
 #if 0
     /* every time a window becomes main, it should register itself as "currentWindow" here.
@@ -279,7 +279,7 @@ static DrawDocument *openDocument(NSString *document, BOOL display)
 - print:sender
 {
     BOOL printSuccess;
-    DrawDocument *doc = [[self class] currentDocument];
+    OpusDocument *doc = [[self class] currentDocument];
     
     if (doc && ![[doc graphicView] isEmpty])
     {
@@ -656,7 +656,7 @@ float unitFactor[4] =
 
 - (NSMutableArray *) getPartlist
 {
-    DrawDocument *d = [[self class] currentDocument];
+    OpusDocument *d = [[self class] currentDocument];
     if (d == nil) return scratchlist;
     if ([d graphicView] == nil) return scratchlist;
     return [[d graphicView] partList];
@@ -665,7 +665,7 @@ float unitFactor[4] =
 
 - (NSMutableArray *) getChanlist
 {
-    DrawDocument *d = [[self class] currentDocument];
+    OpusDocument *d = [[self class] currentDocument];
     if (d == nil) return nil;
     if ([d graphicView] == nil) return nil;
     return ((GraphicView *)[d graphicView])->chanlist;
@@ -674,7 +674,7 @@ float unitFactor[4] =
 
 - (NSMutableArray *) getStylelist
 {
-    DrawDocument *d = [[self class] currentDocument];
+    OpusDocument *d = [[self class] currentDocument];
     if (d == nil) return scrstylelist;
     if ([d graphicView] == nil) return nil;
     return ((GraphicView *)[d graphicView])->stylelist;
@@ -727,10 +727,10 @@ float unitFactor[4] =
 
 /* called by openCopy and the New panel */
 
-- (DrawDocument *) openCopyOf: (NSString *) fname reDirect: (NSString *) dir
+- (OpusDocument *) openCopyOf: (NSString *) fname reDirect: (NSString *) dir
 {
-    DrawDocument *doc = nil;
-    doc = [DrawDocument newFromFile: fname andDisplay: YES];
+    OpusDocument *doc = nil;
+    doc = [OpusDocument newFromFile: fname andDisplay: YES];
     if (doc == nil) return nil;
     [doc initCopy: @"UNTITLED" andDirectory: dir];
 //  [NSObject cancelPreviousPerformRequestsWithTarget:NSApp selector:@selector(updateWindows) object:nil], [NSApp performSelector:@selector(updateWindows) withObject:nil afterDelay:(1) / 1000.0];
@@ -997,7 +997,7 @@ struct toolData toolCodes[NUMTOOLS] =
 
 - setCurrentTool: sender
 {
-    DrawDocument *currdoc = documentInWindow([NSApp mainWindow]);
+    OpusDocument *currdoc = documentInWindow([NSApp mainWindow]);
     id sel = [sender selectedCell];
     int flags = [sel mouseDownFlags];
     id insp, p;
@@ -1035,7 +1035,7 @@ struct toolData toolCodes[NUMTOOLS] =
 
 - setToolByMenu: sender
 {
-    DrawDocument *currdoc = documentInWindow([NSApp mainWindow]);
+    OpusDocument *currdoc = documentInWindow([NSApp mainWindow]);
     currentTool = [[sender selectedCell] tag];
     if (toolCodes[currentTool].press != 1) [currdoc resetCursor];
     else

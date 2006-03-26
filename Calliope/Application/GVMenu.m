@@ -1,13 +1,13 @@
-#import "GVMenu.h"
-#import "GraphicView.h"
-#import "GNote.h"
 #import <AppKit/AppKit.h>
+#import "GraphicView.h"
+#import "GVMenu.h"
+#import "GVCommands.h"
+#import "GNote.h"
 #import "mux.h"
 #import "muxlow.h"
 
 @implementation GraphicView(NSMenu)
 
-extern BOOL marginFlag;
 extern NSString * DrawPasteType(NSArray *types);
 
 /*
@@ -150,12 +150,12 @@ extern NSString * DrawPasteType(NSArray *types);
 	}
 	return hasType;
       case 48:
-        if (marginFlag && ![[menuCell title] isEqualToString:@"Hide Margins"])
+        if ([self showMargins] && ![[menuCell title] isEqualToString:@"Hide Margins"])
 	{
 	  [menuCell setTitle:@"Hide Margins"];
 	  [menuCell setEnabled:NO];
 	}
-          else if (!marginFlag && ![[menuCell title] isEqualToString:@"Show Margins"])
+          else if (![self showMargins] && ![[menuCell title] isEqualToString:@"Show Margins"])
 	{
 	  [menuCell setTitle:@"Show Margins"];
 	  [menuCell setEnabled:NO];

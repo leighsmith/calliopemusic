@@ -3,7 +3,7 @@
 */
 
 #import "DrawApp.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "GraphicView.h"
 #import "GVFormat.h"
 #import "GVPerform.h"

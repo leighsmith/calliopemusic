@@ -3,11 +3,7 @@
 
 @class Page;
 
-/*
-  0=lmarg, 1=rmarg, 2=hmarg, 3=fmarg, 4=tmarg, 5=bmarg;
-  6=lebind, 7=rebind, 8=lobind, 9=robind;
-*/
-
+// Differnt types of margins.
 typedef enum {
     MarginLeft = 0,
     MarginRight = 1,
@@ -15,10 +11,10 @@ typedef enum {
     MarginFooter = 3,
     MarginTop = 4,
     MarginBottom = 5,
-    lebind = 6,
-    rebind = 7,
-    lobind = 8,
-    robind = 9,
+    MarginLeftEvenBinding = 6,
+    MarginRightEvenBinding = 7,
+    MarginLeftOddBinding = 8,
+    MarginRightOddBinding = 9,
     MaximumMarginTypes
 } MarginType;
 

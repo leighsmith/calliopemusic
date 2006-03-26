@@ -1,6 +1,6 @@
 #import "Runner.h"
 #import "DrawApp.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "RunInspector.h"
 #import "System.h"
 #import "Staff.h"

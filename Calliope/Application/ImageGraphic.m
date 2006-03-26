@@ -5,7 +5,7 @@
 #import "Staff.h"
 #import "System.h"
 #import "DrawApp.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "mux.h"
 #import <AppKit/AppKit.h>
 
@@ -282,7 +282,7 @@ extern NSColor * backShade;
   NSSize s, t;
   NSPoint p;
   float f;
-  DrawDocument *doc;
+  OpusDocument *doc;
   if (bounds.size.width < 1.0 || bounds.size.height < 1.0) return self;
   if (image)
   {

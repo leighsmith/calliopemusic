@@ -9,7 +9,7 @@
 #import "KeySig.h"
 #import "Clef.h"
 #import "DrawApp.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "GVSelection.h"
 #import "GVFormat.h"
 #import "Verse.h"

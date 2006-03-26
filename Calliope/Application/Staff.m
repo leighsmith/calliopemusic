@@ -12,7 +12,7 @@
 #import "Tablature.h"
 #import "Bracket.h"
 #import "DrawApp.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "GVFormat.h"
 #import "Page.h"
 #import "CallPart.h"
@@ -1340,7 +1340,7 @@ static void drawbarnum(int n, float x, float y, NSFont *f, int j, int eb, int mo
   System *s;
   NSFont *f;
   Barline *p;
-  DrawDocument *doc;
+  OpusDocument *doc;
   /* if (gFlags.type == 2) return self; */
   doc = [DrawApp currentDocument];
   s = mysys;

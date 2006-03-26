@@ -1,5 +1,5 @@
 #import "TimeInspector.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "DrawApp.h"
 #import "GraphicView.h"
 #import "GVSelection.h"

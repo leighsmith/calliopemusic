@@ -2,7 +2,7 @@
 #import "GVFormat.h"
 #import "GVCommands.h"
 #import "GVGlobal.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "DrawApp.h"
 #import "GVPasteboard.h"
 #import "System.h"
@@ -187,7 +187,7 @@ static void addBarsRest(Staff *sp, System *sys, int n)
   Staff *sp, *esp;
   System *sys, *esys=nil;
   NSMutableArray *sl, *epl;
-  DrawDocument *doc;
+  OpusDocument *doc;
   GraphicView *v;
   BOOL hassys, wantstaff[NUMSTAVES];
   
@@ -283,7 +283,7 @@ static void addBarsRest(Staff *sp, System *sys, int n)
   Staff *sp, *esp;
   System *sys, *esys=nil;
   NSMutableArray *sl, *epl;
-  DrawDocument *doc;
+  OpusDocument *doc;
   GraphicView *v;
   BOOL hassys;
   epl = [[NSMutableArray alloc] init];

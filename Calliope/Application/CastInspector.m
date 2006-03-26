@@ -4,7 +4,7 @@
 #import "CastInspector.h"
 #import "GraphicView.h"
 #import "DrawApp.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "GraphicView.h"
 #import "GVSelection.h"
 #import "GVGlobal.h"
@@ -185,7 +185,7 @@
 - reflectSelection
 {
   int mult, k;
-  DrawDocument *d;
+  OpusDocument *d;
   GraphicView *v;
   NSMutableArray *sl, *pl;
   StaffObj *p;

@@ -1,7 +1,7 @@
 #import "TabInspector.h"
 #import "Tablature.h"
 #import "DrawApp.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "GraphicView.h"
 #import "GVSelection.h"
 #import "GVPerform.h"

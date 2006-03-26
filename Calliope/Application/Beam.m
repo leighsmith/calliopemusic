@@ -7,7 +7,7 @@
 #import "GraphicView.h"
 #import "GVSelection.h"
 #import "DrawApp.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "System.h"
 #import <AppKit/NSFont.h>
 #import <Foundation/NSArray.h>

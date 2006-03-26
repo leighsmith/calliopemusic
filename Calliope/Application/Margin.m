@@ -2,7 +2,7 @@
 #import "Page.h"
 #import "Margin.h"
 #import "DrawApp.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "MarginInspector.h"
 #import "System.h"
 #import "Staff.h"

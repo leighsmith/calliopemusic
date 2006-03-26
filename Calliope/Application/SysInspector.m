@@ -1,4 +1,4 @@
-/* $Id:$ */
+/* $Id$ */
 #import <AppKit/AppKit.h>
 #import "SysInspector.h"
 #import "SysAdjust.h"
@@ -7,7 +7,7 @@
 #import "GVFormat.h"
 #import "GVCommands.h"
 #import "GVGlobal.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "DrawApp.h"
 #import "Staff.h"
 #import "System.h"
@@ -919,12 +919,12 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
 {
   int sn;
   System *sys;
-  DrawDocument *doc = [DrawApp currentDocument];
+  OpusDocument *doc = [DrawApp currentDocument];
   GraphicView *v;
   sn = [nstavestext intValue];
   if (doc == nil)
   {
-    doc = [DrawDocument new];
+    doc = [OpusDocument new];
     v = doc->view;
   }
   else v = doc->view;

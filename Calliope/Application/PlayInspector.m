@@ -1,7 +1,7 @@
 #import "PlayInspector.h"
 #import "KeyboardFilter.h"
 #import "DrawApp.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "GraphicView.h"
 #import "GVPerform.h"
 #import "GVSelection.h"

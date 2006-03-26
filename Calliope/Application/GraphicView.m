@@ -14,7 +14,7 @@
 #import "SysInspector.h"
 #import "SysAdjust.h"
 #import "DrawApp.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "ImageGraphic.h"
 #import "TextGraphic.h"
 #import "Hanger.h"
@@ -54,7 +54,6 @@ NSString *DrawPboardType = @"Calliope Graphic List Type";
 
 BOOL dragflag;			/* whether we are dragging */
 BOOL moveFlag;			/* whether any staffobjs in selection */
-BOOL marginFlag = NO;
 
 NSColor * backShade;
 NSColor * selShade;
@@ -143,7 +142,6 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
   /*sb: not quite sure what purpose of previous line is. If the printinfo object is archived individually,
       * there's no need to grab it from the archived graphicview like this.
       */
-  [Page initPage];
   if (slist) [slist autorelease];//sb: added cos might be done twice */
   slist = [[NSMutableArray allocWithZone:[self zone]] init];
   if (chanlist == nil) chanlist = [[self makeChanlist] retain];
@@ -180,6 +178,8 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
 	syslist = [[NSMutableArray allocWithZone: [self zone]] init];
 	partlist = nil;
 	chanlist = nil;
+	showMargins = NO;
+
 	[self initClassVars];	
     }
     return self;
@@ -562,7 +562,7 @@ extern char *typename[NUMTYPES];
   dragflag = YES;
   [self lockFocus];
 
-  [self drawRect: sbounds nonSelectedOnly: YES]; //sb: this should blat the selection OFF the screen
+  // [self drawRect: sbounds nonSelectedOnly: YES]; //sb: this should blat the selection OFF the screen
   cachedRect = NSInsetRect([self convertRect:sbounds toView:nil],-4,-4);
   cachedRect.origin.x = (int)cachedRect.origin.x;
   cachedRect.origin.y = (int)cachedRect.origin.y;
@@ -656,7 +656,7 @@ extern char *typename[NUMTYPES];
 
 
 /* Public interface methods. */
-// These should be moved into DrawDocument.
+// These should be moved into OpusDocument.
 - dirty
 {
   if (!dirtyflag)
@@ -1146,7 +1146,10 @@ extern struct toolData toolCodes[NUMTOOLS];
     {
 	/* the 'copy pasteboard' tool: might have clicked a staffobj too */
 	g = [self isSelTypeCode: TC_STAFFOBJ : &i];
-	if ([g hit: p]) [self pasteTool: &p : g]; else [self pasteTool: &p : nil];
+	if ([g hit: p])
+	    [self pasteTool: &p : g];
+	else
+	    [self pasteTool: &p : nil];
 	trymove = [self isSelLeftmost];
 	if (trymove == nil)
 	{
@@ -1267,36 +1270,73 @@ extern struct toolData toolCodes[NUMTOOLS];
     [[self window] flushWindow];
 }
 
+static void drawVert(float x, float y, float h, NSRect r)
+{
+    NSRect line;
+    
+    line.origin.x = x;
+    line.origin.y = y;
+    line.size.width = 1.0;
+    line.size.height = h;
+    
+    if (!NSIsEmptyRect(NSIntersectionRect(r, line)))
+	cline(x, y, x, y + h, 0.0, markmode[0]);
+}
+
+static void drawHorz(float x, float y, float w, NSRect r)
+{
+    NSRect line;
+    
+    line.origin.x = x;
+    line.origin.y = y;
+    line.size.width = w;
+    line.size.height = 1.0;
+    
+    if (!NSIsEmptyRect(NSIntersectionRect(r, line)))
+	cline(x, y, x + w, y, 0.0, markmode[0]);
+}
 
 /*
- * Draws the GraphicView.
+ * Draws the GraphicView. The official drawRect: has to include selected objects.
  */
-- drawRect: (NSRect) rect nonSelectedOnly: (BOOL) nso
+- (void) drawRect: (NSRect) rectToDrawWithin
 {
     int systemIndex;
     Page *pageToDraw = currentPage;
     
     [backShade set];
-    NSRectFill(rect);
-
+    NSRectFill(rectToDrawWithin);
+    
     if (pageToDraw == nil) 
-	return self;
-
-    [pageToDraw drawRect: rect];
+	return;
+    
+    if ([self showMargins]) {
+	NSRect viewBounds = [self bounds];	
+	float x = [pageToDraw leftMargin];
+	float y = [pageToDraw topMargin];
+	float w = viewBounds.size.width - x - [pageToDraw rightMargin];
+	float h = viewBounds.size.height - y - [pageToDraw bottomMargin];
+	
+	drawHorz(x, y, w, rectToDrawWithin);
+	drawVert(x, y, h, rectToDrawWithin);
+	drawHorz(x, y + h, w, rectToDrawWithin);
+	drawVert(x + w, y, h, rectToDrawWithin);
+	drawHorz(x, [pageToDraw headerBase], w, rectToDrawWithin);
+	drawHorz(x, viewBounds.size.height - [pageToDraw footerBase], w, rectToDrawWithin);
+	x = [pageToDraw leftBinding];
+	if (x > 0.001) 
+	    drawVert(x, viewBounds.origin.y, viewBounds.size.height, rectToDrawWithin);
+	x = [pageToDraw rightBinding];
+	if (x > 0.001)
+	    drawVert(viewBounds.origin.x + viewBounds.size.width - x, viewBounds.origin.y, viewBounds.size.height, rectToDrawWithin);
+    }
+    
+    [pageToDraw drawRect: rectToDrawWithin];
+    
     for (systemIndex = pageToDraw->topsys; systemIndex <= pageToDraw->botsys; systemIndex++) 
-	[[syslist objectAtIndex: systemIndex] draw: rect : nso];
+	[[syslist objectAtIndex: systemIndex] draw: rectToDrawWithin : scrolling];
     for (systemIndex = pageToDraw->topsys; systemIndex <= pageToDraw->botsys; systemIndex++) 
-	[[syslist objectAtIndex: systemIndex] drawHangers: rect : nso];
-    return self;
-}
-
-
-/*
-  The official drawRect: has to include selected objects
-*/
-- (void) drawRect: (NSRect) rect
-{
-    [self drawRect: rect nonSelectedOnly: scrolling];
+	[[syslist objectAtIndex: systemIndex] drawHangers: rectToDrawWithin : scrolling];    
 }
 
 
@@ -1575,7 +1615,7 @@ extern struct toolData toolCodes[NUMTOOLS];
 
 /*
  * Target/Action methods.
- // TODO all of these should be moved to the DrawDocument
+ // TODO all of these should be moved to the OpusDocument
  */
 
 - saveEPS: sender
@@ -1812,7 +1852,6 @@ extern struct toolData toolCodes[NUMTOOLS];
   int n;
   [self deselectAll: self];
   n = [pagelist indexOfObject:currentPage];
-  [Page initPage];
   [super print:sender];
   [self gotoPage: n usingIndexMethod: 1];
 }
@@ -1840,7 +1879,6 @@ extern struct toolData toolCodes[NUMTOOLS];
     // [super beginSetup];
     [self deselectAll: self];
     n = [pagelist indexOfObject:currentPage];
-    [Page initPage];
     [self gotoPage: n usingIndexMethod: 1];
 }
 
@@ -2134,7 +2172,7 @@ extern int needUpgrade;
 
 - (void) setDelegate: (id) newDelegate
 {
-    // We create only a weak reference to our delegate since this will be our parent (e.g DrawDocument).
+    // We create only a weak reference to our delegate since this will be our parent (e.g OpusDocument).
     delegate = newDelegate;
 }
 

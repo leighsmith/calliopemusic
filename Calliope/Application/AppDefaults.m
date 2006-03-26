@@ -2,7 +2,7 @@
 #import "AppDefaults.h"
 #import "MultiView.h"
 #import "DrawApp.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "GraphicView.h"
 #import "mux.h"
 #import "muxlow.h"

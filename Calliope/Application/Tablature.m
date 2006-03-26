@@ -1,7 +1,7 @@
 #import "Tablature.h"
 #import "TabInspector.h"
 #import "DrawApp.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "GVPerform.h"
 #import "mux.h"
 #import "muxlow.h"
@@ -471,7 +471,7 @@ static char usesm[6] = {1, 1, 1, 1, 0, 0}; /* whether to use small size as norma
 {
   Staff *sp;
   NSFont *f;
-  DrawDocument *doc;
+  OpusDocument *doc;
   int b, n, ss, sz, dsz, i, pos, c, dh, df;
   float cy;
   char *s;

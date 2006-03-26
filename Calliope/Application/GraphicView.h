@@ -2,7 +2,7 @@
 
 /*!
   @class GraphicView
-  @brief The GraphicView class is the visual representation of a single page of a DrawDocument (which holds several pages).
+  @brief The GraphicView class is the visual representation of a single page of a OpusDocument (which holds several pages).
 
   It overrides the NSView methods related to drawing and event handling
   and allows manipulation of Graphic objects.
@@ -39,10 +39,11 @@
     float currentScale;		      /*! @var currentScale The scaling factor: 1.0 = no scaling. */
     BOOL serviceActsOnSelection;        /*! @var serviceActsOnSelection Whether a service has arguments */
     BOOL dirtyflag;
-    NSImage *cacheImage;		/*! @var cacheImage the cache of drawn graphics */
-    NSRect *dragRect;			/*! @var dragRect last rectangle we dragged out to select */
+    NSImage *cacheImage;		/*! @var cacheImage The cache of drawn graphics */
+    NSRect *dragRect;			/*! @var dragRect Last rectangle we dragged out to select */
     BOOL cached;
     BOOL scrolling;
+    BOOL showMargins;			/*! @var showMargins YES to display margins on the page. */
 }
 
 typedef enum { Normal, Resizing } DrawStatusType;
@@ -60,7 +61,7 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
 - (BOOL) move: (NSEvent *) event : (id) obj : (int) alt;
 - dragSelect: (NSEvent *) event;
 /* TODO This is called by Graphic! Should become private... */
-- drawRect: (NSRect) b nonSelectedOnly: (BOOL) nonselonly;
+- (void) drawRect: (NSRect) b;
 - drawSelectionInstance;
 - drawSelectionWith: (NSRect *) b;
 - selectionBBox:(NSRect *) b;
@@ -89,12 +90,11 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
 
 /* Methods overridden from superclass */
 - (void) mouseDown: (NSEvent *) event;
-- (void) drawRect: (NSRect) rect;
 - (void) keyDown: (NSEvent *) event;
 - (BOOL) performKeyEquivalent: (NSEvent *) theEvent;
 
 /* Target/Action methods */
-// TODO should just become pasteboard operations and the saving moved into the DrawDocument.
+// TODO should just become pasteboard operations and the saving moved into the OpusDocument.
 - saveEPS: sender;
 - saveTIFF: sender;
 - (void) delete: (id) sender;

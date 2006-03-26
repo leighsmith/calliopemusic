@@ -1,7 +1,7 @@
 #import "TabTuner.h"
 #import "PrefBlock.h"
 #import "DrawApp.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "GVPerform.h"
 #import "MultiView.h"
 #import "TuningView.h"

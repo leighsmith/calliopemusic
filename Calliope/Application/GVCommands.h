@@ -12,6 +12,7 @@
 - shuffleAllMarginsByScale: (float) oss : (float) nss;
 - recalcAllSys;
 - (int) gotoPage: (int) n;
+- (BOOL) showMargins;
 - (System *) nextSystem: (System *) s : (int *) r;
 - hideSystemVerse: sender;
 - hideStaffVerse: sender;

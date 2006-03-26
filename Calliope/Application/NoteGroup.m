@@ -10,7 +10,7 @@
 #import "GraphicView.h"
 #import "GVSelection.h"
 #import "DrawApp.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "System.h"
 #import "Staff.h"
 /*sb: grabbed this from mid-file */

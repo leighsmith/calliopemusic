@@ -8,7 +8,7 @@
 #import "GVFormat.h"
 #import "GVSelection.h"
 #import "SysCommands.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "DrawApp.h"
 #import "Staff.h"
 #import "StaffObj.h"
@@ -625,7 +625,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 
 - recalc
 {
-  DrawDocument *doc = [DrawApp currentDocument];
+  OpusDocument *doc = [DrawApp currentDocument];
   width = ((paperSize.width - lindent - rindent) / [doc staffScale]) - ([self leftMargin] + [self rightMargin]);
   return [self resetSys];
 }

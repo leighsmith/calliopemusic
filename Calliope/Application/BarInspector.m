@@ -3,7 +3,7 @@
 #import "GraphicView.h"
 #import "GVSelection.h"
 #import "GVCommands.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "DrawApp.h"
 #import "Staff.h"
 #import "System.h"

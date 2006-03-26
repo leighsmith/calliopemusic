@@ -6,7 +6,7 @@
 #import "GVFormat.h"
 #import "GVPasteboard.h"
 #import "GVSelection.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "SysCommands.h"
 #import "StaffObj.h"
 #import "Staff.h"
@@ -50,7 +50,6 @@
 #define VOICEID(v, s) (v ? NUMSTAVES + v : s)
 
 extern NSSize paperSize;
-extern BOOL marginFlag;
 
 int staffFlag;
 BOOL cvFlag;	/* whether in copyverse mode */
@@ -67,13 +66,15 @@ static NSString *stylescratch;
 
 - hideMargins: sender
 {
-  marginFlag ^= 1;
-//    [NSObject cancelPreviousPerformRequestsWithTarget:NSApp selector:@selector(updateWindows) object:nil], [NSApp performSelector:@selector(updateWindows) withObject:nil afterDelay:(1) / 1000.0];
-    [self setNeedsDisplay:YES];
-  return self;
+    showMargins = NO;
+    [self setNeedsDisplay: YES];
+    return self;
 }
 
-
+- (BOOL) showMargins
+{
+    return showMargins;
+}
 
 - labelObjs: (int) t
 {

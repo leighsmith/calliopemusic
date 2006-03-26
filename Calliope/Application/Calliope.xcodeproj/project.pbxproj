@@ -74,7 +74,7 @@
 		D8F247D809AD3F8C00B96D0D /* Course.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD93300483CDC800A80164 /* Course.h */; };
 		D8F247D909AD3F8C00B96D0D /* DragMatrix.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD93320483CDC800A80164 /* DragMatrix.h */; };
 		D8F247DA09AD3F8C00B96D0D /* DrawApp.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD93340483CDC800A80164 /* DrawApp.h */; };
-		D8F247DB09AD3F8C00B96D0D /* DrawDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD93360483CDC800A80164 /* DrawDocument.h */; };
+		D8F247DB09AD3F8C00B96D0D /* OpusDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD93360483CDC800A80164 /* OpusDocument.h */; };
 		D8F247DC09AD3F8C00B96D0D /* Enclosure.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD93380483CDC800A80164 /* Enclosure.h */; };
 		D8F247DD09AD3F8C00B96D0D /* EnclosureInspector.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD933A0483CDC800A80164 /* EnclosureInspector.h */; };
 		D8F247DE09AD3F8C00B96D0D /* GNChord.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD933C0483CDC800A80164 /* GNChord.h */; };
@@ -510,7 +510,7 @@
 		D8F2499209AD3F8D00B96D0D /* Course.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD92590483CDC700A80164 /* Course.m */; settings = {ATTRIBUTES = (); }; };
 		D8F2499309AD3F8D00B96D0D /* DragMatrix.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD925B0483CDC700A80164 /* DragMatrix.m */; settings = {ATTRIBUTES = (); }; };
 		D8F2499409AD3F8D00B96D0D /* DrawApp.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD925D0483CDC700A80164 /* DrawApp.m */; settings = {ATTRIBUTES = (); }; };
-		D8F2499509AD3F8D00B96D0D /* DrawDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD925F0483CDC700A80164 /* DrawDocument.m */; settings = {ATTRIBUTES = (); }; };
+		D8F2499509AD3F8D00B96D0D /* OpusDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD925F0483CDC700A80164 /* OpusDocument.m */; settings = {ATTRIBUTES = (); }; };
 		D8F2499609AD3F8D00B96D0D /* Enclosure.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD92610483CDC700A80164 /* Enclosure.m */; settings = {ATTRIBUTES = (); }; };
 		D8F2499709AD3F8D00B96D0D /* EnclosureInspector.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD92630483CDC700A80164 /* EnclosureInspector.m */; settings = {ATTRIBUTES = (); }; };
 		D8F2499809AD3F8D00B96D0D /* GNChord.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD92650483CDC700A80164 /* GNChord.m */; settings = {ATTRIBUTES = (); }; };
@@ -997,7 +997,7 @@
 		D8FD92590483CDC700A80164 /* Course.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Course.m; sourceTree = "<group>"; };
 		D8FD925B0483CDC700A80164 /* DragMatrix.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = DragMatrix.m; sourceTree = "<group>"; };
 		D8FD925D0483CDC700A80164 /* DrawApp.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = DrawApp.m; sourceTree = "<group>"; };
-		D8FD925F0483CDC700A80164 /* DrawDocument.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = DrawDocument.m; sourceTree = "<group>"; };
+		D8FD925F0483CDC700A80164 /* OpusDocument.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.objc; fileEncoding = 30; path = OpusDocument.m; sourceTree = "<group>"; };
 		D8FD92610483CDC700A80164 /* Enclosure.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Enclosure.m; sourceTree = "<group>"; };
 		D8FD92630483CDC700A80164 /* EnclosureInspector.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = EnclosureInspector.m; sourceTree = "<group>"; };
 		D8FD92650483CDC700A80164 /* GNChord.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = GNChord.m; sourceTree = "<group>"; };
@@ -1101,7 +1101,7 @@
 		D8FD93300483CDC800A80164 /* Course.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Course.h; sourceTree = "<group>"; };
 		D8FD93320483CDC800A80164 /* DragMatrix.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DragMatrix.h; sourceTree = "<group>"; };
 		D8FD93340483CDC800A80164 /* DrawApp.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DrawApp.h; sourceTree = "<group>"; };
-		D8FD93360483CDC800A80164 /* DrawDocument.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DrawDocument.h; sourceTree = "<group>"; };
+		D8FD93360483CDC800A80164 /* OpusDocument.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = file; path = OpusDocument.h; sourceTree = "<group>"; };
 		D8FD93380483CDC800A80164 /* Enclosure.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Enclosure.h; sourceTree = "<group>"; };
 		D8FD933A0483CDC800A80164 /* EnclosureInspector.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = EnclosureInspector.h; sourceTree = "<group>"; };
 		D8FD933C0483CDC800A80164 /* GNChord.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = GNChord.h; sourceTree = "<group>"; };
@@ -1401,7 +1401,6 @@
 				D8FD92590483CDC700A80164 /* Course.m */,
 				D8FD925B0483CDC700A80164 /* DragMatrix.m */,
 				D8FD925D0483CDC700A80164 /* DrawApp.m */,
-				D8FD925F0483CDC700A80164 /* DrawDocument.m */,
 				D8FD92610483CDC700A80164 /* Enclosure.m */,
 				D8FD92630483CDC700A80164 /* EnclosureInspector.m */,
 				D8FD92F90483CDC800A80164 /* FileCompatibility.m */,
@@ -1438,6 +1437,8 @@
 				D8FD929F0483CDC700A80164 /* NoteGroupInspector.m */,
 				D8FD92A10483CDC700A80164 /* NoteHead.m */,
 				D8FD92A30483CDC700A80164 /* NoteInspector.m */,
+				D8FD93360483CDC800A80164 /* OpusDocument.h */,
+				D8FD925F0483CDC700A80164 /* OpusDocument.m */,
 				D8FD92A50483CDC700A80164 /* Page.m */,
 				D8FD92A70483CDC700A80164 /* PlayInspector.m */,
 				D8FD92A90483CDC700A80164 /* PrefBlock.m */,
@@ -1513,7 +1514,6 @@
 				D8FD93300483CDC800A80164 /* Course.h */,
 				D8FD93320483CDC800A80164 /* DragMatrix.h */,
 				D8FD93340483CDC800A80164 /* DrawApp.h */,
-				D8FD93360483CDC800A80164 /* DrawDocument.h */,
 				D8FD93380483CDC800A80164 /* Enclosure.h */,
 				D8FD933A0483CDC800A80164 /* EnclosureInspector.h */,
 				D8FD93D60483CDC800A80164 /* FileCompatibility.h */,
@@ -2067,7 +2067,7 @@
 				D8F247D809AD3F8C00B96D0D /* Course.h in Headers */,
 				D8F247D909AD3F8C00B96D0D /* DragMatrix.h in Headers */,
 				D8F247DA09AD3F8C00B96D0D /* DrawApp.h in Headers */,
-				D8F247DB09AD3F8C00B96D0D /* DrawDocument.h in Headers */,
+				D8F247DB09AD3F8C00B96D0D /* OpusDocument.h in Headers */,
 				D8F247DC09AD3F8C00B96D0D /* Enclosure.h in Headers */,
 				D8F247DD09AD3F8C00B96D0D /* EnclosureInspector.h in Headers */,
 				D8F247DE09AD3F8C00B96D0D /* GNChord.h in Headers */,
@@ -2705,7 +2705,7 @@
 				D8F2499209AD3F8D00B96D0D /* Course.m in Sources */,
 				D8F2499309AD3F8D00B96D0D /* DragMatrix.m in Sources */,
 				D8F2499409AD3F8D00B96D0D /* DrawApp.m in Sources */,
-				D8F2499509AD3F8D00B96D0D /* DrawDocument.m in Sources */,
+				D8F2499509AD3F8D00B96D0D /* OpusDocument.m in Sources */,
 				D8F2499609AD3F8D00B96D0D /* Enclosure.m in Sources */,
 				D8F2499709AD3F8D00B96D0D /* EnclosureInspector.m in Sources */,
 				D8F2499809AD3F8D00B96D0D /* GNChord.m in Sources */,

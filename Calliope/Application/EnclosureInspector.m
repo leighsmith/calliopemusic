@@ -3,7 +3,7 @@
 #import "Enclosure.h"
 #import "GraphicView.h"
 #import "GVSelection.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "DrawApp.h"
 #import <AppKit/NSMatrix.h>
 #import <Foundation/NSArray.h>

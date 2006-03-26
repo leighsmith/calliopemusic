@@ -477,49 +477,51 @@ NSArray *TypesDrawExports(void)
 
 extern char *typename[NUMTYPES];
 
-- (void)paste:(id)sender
+- (void) paste: (id) sender
 {
-  StaffObj *g;
-  NSMutableArray *pblist, *slcopy;
-  int i, k, sk;
-  BOOL didstob = NO, didhang = NO;
-  NSRect bbox;
-  slcopy = [slist mutableCopy];
-  sk = [slist count];
-  graphicListBBox(&bbox, slist);
-  pblist = [self pasteFromPasteboard];
-  [self closeList: pblist];
-  if (pblist == nil) return;
-  i = k = [pblist count];
-  while (i--)
-  {
-    g = [pblist objectAtIndex:i];
-    if (ISASTAFFOBJ(g))
+    StaffObj *g;
+    NSMutableArray *pblist, *slcopy;
+    int i, k, sk;
+    BOOL didstob = NO, didhang = NO;
+    NSRect bbox;
+    
+    slcopy = [slist mutableCopy];
+    sk = [slist count];
+    graphicListBBox(&bbox, slist);
+    pblist = [self pasteFromPasteboard];
+    [self closeList: pblist];
+    if (pblist == nil) return;
+    i = k = [pblist count];
+    while (i--)
     {
-      g->x += 10 * (numPastes + 1);
-      [g linkPaste: self];
-      [self selectObj: g];
-      didstob = YES;
+	g = [pblist objectAtIndex: i];
+	if (ISASTAFFOBJ(g))
+	{
+	    g->x += 10 * (numPastes + 1);
+	    [g linkPaste: self];
+	    [self selectObj: g];
+	    didstob = YES;
+	}
+	else if (ISAHANGER(g) || TYPEOF(g) == TEXTBOX || TYPEOF(g) == ENCLOSURE)
+	{
+	    if (k == 1 && sk > 0) didhang |= [g linkPaste: self : slcopy];
+	}
     }
-    else if (ISAHANGER(g) || TYPEOF(g) == TEXTBOX || TYPEOF(g) == ENCLOSURE)
+    if (didstob)
     {
-      if (k == 1 && sk > 0) didhang |= [g linkPaste: self : slcopy];
+	[self terminateMove];
+	[self drawSelectionWith: NULL];
+	++numPastes;
     }
-  }
-  if (didstob)
-  {
-    [self terminateMove];
-    [self drawSelectionWith: NULL];
-    ++numPastes;
-  }
-  else if (didhang)
-  {
-    [self drawSelectionWith: &bbox];
-    numPastes = 0;
-  }
-  else NSBeep();
-  [pblist autorelease]; //sb: List is freed, not released
-  [slcopy autorelease];
+    else if (didhang)
+    {
+	[self drawSelectionWith: &bbox];
+	numPastes = 0;
+    }
+    else 
+	NSLog(@"GVPasteboard -paste: !didstob && !didhang");
+    [pblist autorelease]; //sb: List is freed, not released
+    [slcopy autorelease];
 }
 
 

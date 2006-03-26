@@ -1,4 +1,11 @@
 /* $Id$ */
+
+/*!
+  @class OpusDocument
+
+  This class is used to keep track of an Opus (Calliope) notation document.
+ */
+
 #import "winheaders.h"
 #import <AppKit/AppKit.h>
 //#import <Foundation/NSCompatibility.h>
@@ -27,8 +34,7 @@
 
 #define Notify(title, msg) NSRunAlertPanel(title, msg, @"OK", nil, nil)
 
-// TODO rename to OpusDocument
-@interface DrawDocument : NSDocument
+@interface OpusDocument : NSDocument
 {
 @public
     /*! @var documentWindow the window the GraphicView is in. TODO: we should be able to remove this as we separate out the document from window controlling */

@@ -6,7 +6,7 @@
 #import "GVFormat.h"
 #import "GVCommands.h"
 #import "DrawApp.h"
-#import "DrawDocument.h"
+#import "OpusDocument.h"
 #import "System.h"
 #import "SysAdjust.h"
 #import "SysCommands.h"
