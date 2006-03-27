@@ -146,13 +146,13 @@ extern NSString *nullProgChange;
   int i=0;
   if (s == nil) i=1;
     else if (![s length]) i=1;
-    if (i) NSBeep();
+    if (i) NSLog(@"TabTuner -setRename: i != 0");
   else
   {
     inst = [[tabbrowser matrixInColumn: 0] selectedRow];
     if (inst == -1)
     {
-      NSBeep();
+      NSLog(@"TabTuner -setRename: inst == -1");
       return self;
     }
     p = [instlist objectAtIndex:inst];
@@ -174,7 +174,7 @@ extern NSString *nullProgChange;
   inst = [[tabbrowser matrixInColumn: 0] selectedRow];
   if (inst < 0 || inst >= [instlist count])
   {
-    NSBeep();
+    NSLog(@"TabTuner -hitRemove: inst outside bounds");
     return self;
   }
   [instlist removeObjectAtIndex:inst];

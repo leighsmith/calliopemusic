@@ -479,14 +479,14 @@ NSFontManager *fm = [NSFontManager sharedFontManager];
   int i;
   if (!p)
   {
-    NSBeep();
+    NSLog(@"Preferences -set: p == nil");
     return self;
   }
   oss = [d staffScale];
   i = [mainPopup indexOfSelectedItem];
   if (![self panelValid: i])
   {
-    NSBeep();
+    NSLog(@"Preferences -set: panel not valid");
     return self;
   }
   [self setPrefInfo: i : p];

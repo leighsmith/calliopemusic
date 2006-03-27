@@ -239,7 +239,7 @@ extern void setkeysig(KeySig *p, char *key);
           [v drawSelectionWith: NULL];
 	}
       }
-      else NSBeep();
+      else NSLog(@"realizeNote: v empty");
       break;
     case MK_noteOff:
       q = pencil[i];

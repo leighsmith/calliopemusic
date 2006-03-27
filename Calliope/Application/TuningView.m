@@ -333,7 +333,7 @@ static char accalter[3] = {0, -1, 1};
   NSMutableArray *l;
   if (![myTuner isTablature])
   {
-    NSBeep();
+    NSLog(@"TuningView -addCourse: myTuner is not tablature");
     return self;
   }
   l = [myTuner selectedList];
@@ -349,13 +349,13 @@ static char accalter[3] = {0, -1, 1};
   NSMutableArray *l;
   if (![myTuner isTablature] || lastsel == -1)
   {
-    NSBeep();
+    NSLog(@"TuningView -removeCourse: myTuner is not tablature");
     return self;
   }
   l = [myTuner selectedList];
   if (lastsel >= [l count])
   {
-    NSBeep();
+    NSLog(@"TuningView -removeCourse: lastsel >= selected count");
     return self;
   }
   [l removeObjectAtIndex:lastsel];

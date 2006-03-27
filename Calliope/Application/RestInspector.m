@@ -42,7 +42,7 @@ static char istimed[6] = {1, 1, 0, 0, 0, 1};
     nb = [[numbarsform cellAtIndex:0] intValue];
     if (nb < 1 || nb > 1000 || [stylematrix selectedColumn] < 2)
     {
-      NSBeep();
+      NSLog(@"RestInspector -set: number of bars outside bounds");
       return self;
     }
   }

@@ -453,7 +453,7 @@ NSArray *TypesDrawExports(void)
   }
   else
   {
-    NSBeep();
+    NSLog(@"GVPasteboard cut: slist count <= 0");
   }
 }
 

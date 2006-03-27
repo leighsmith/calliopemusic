@@ -58,7 +58,7 @@ NSString *unitname[4] =
   Margin *p = [v canInspect: MARGIN : &n];
   if (n == 0)
   {
-    NSBeep();
+    NSLog(@"MarginInspector -set: n == 0");
     return nil;
   }
   [v saveSysLeftMargin];

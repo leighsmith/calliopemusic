@@ -102,8 +102,8 @@
   NSString *s = [parttext stringValue];
   NSMutableArray *pl = [NSApp getPartlist];
   int i, part;
-  if (s == nil) NSBeep();
-  else if (![s length]) NSBeep();
+  if (s == nil) NSLog(@"CastInspector setModify s == nil");
+  else if (![s length]) NSLog(@"CastInspector setModify s empty");
   else
   {
     part = [[partbrowser matrixInColumn: 0] selectedRow];
@@ -128,7 +128,7 @@
   part = [[partbrowser matrixInColumn: 0] selectedRow];
   if (part < 0)
   {
-    NSBeep();
+    NSLog(@"CastInspector hitRemove part < 0");
     return self;
   }
   [[NSApp getPartlist] removeObjectAtIndex:part];

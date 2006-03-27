@@ -311,12 +311,12 @@ static char tabpos[2][15] =
       else if (flags.cipher == 1 && isdigitchar(cst)) i = cst - '0';
     else
     {
-      NSBeep();
+      NSLog(@"Tablature -keyDownString: fell through the checks");
       return 0;
     }
     if (i == -1 && flags.prevtime && [self tabCount] == 1)
     {
-      NSBeep();
+      NSLog(@"Tablature -keyDownString: i == -1 etc");
       return 0;
     }
     if (gFlags.selend == 6)
@@ -340,7 +340,7 @@ static char tabpos[2][15] =
         if (TYPEOF(mystaff) == STAFF) nl = ((Staff *)mystaff)->flags.nlines;
         else
         {
-          NSBeep();
+	    NSLog(@"Tablature -keyDownString: mystaff != STAFF");
 	  return 0;
         }
         n = nl - 1 - n;

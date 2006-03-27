@@ -64,7 +64,7 @@
 	  p->client2 = nil;
 	}
       }
-      if (!ok) NSBeep();
+      if (!ok) NSLog(@"BrackInspector not ok");
       else
       {
         p->gFlags.subtype = 2 - [typematrix selectedColumn];

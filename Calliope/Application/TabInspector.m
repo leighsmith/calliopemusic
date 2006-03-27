@@ -175,7 +175,7 @@ int tuneIndex(int n)
       {
 	if (s == 0 && [p tabCount] == 0)
 	{
-	  NSBeep();
+	  NSLog(@"TabInspector -set: s or tabCount == 0");
 	  continue;
 	}
         p->flags.prevtime = !s;

@@ -216,14 +216,14 @@ static void sigwidthpix(unsigned char *s, NSFont *f, float *sw, float *w)
     if (data == NULL) sl = -1; else sl = strlen(data);
     if (cst == 32 && sl <= 0)
     {
-      NSBeep();
+      NSLog(@"Verse -keyDownString: cst == 32 && sl <= 0");
       return 0;
     }
     if (cst == 127)
     {
       if (sl <= 0)
       {
-        NSBeep();
+        NSLog(@"Verse -keyDownString: sl <= 0");
         return 0;
       }
       data[sl - 1] = '\0';

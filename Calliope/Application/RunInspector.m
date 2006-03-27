@@ -114,11 +114,11 @@ extern int justcode[4];
   Runner *p = [v canInspect: RUNNER : &n];
   if (n == 0)
   {
-    NSBeep();
+    NSLog(@"RunInspector -set: n == 0");
     return nil;
   }
   sys = p->client;
-  if (p == nil) NSBeep();
+  if (p == nil) NSLog(@"RunInspector -set: p == nil");
   else
   {
     p->flags.just = [alignmatrix selectedColumn];

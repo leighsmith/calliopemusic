@@ -87,7 +87,7 @@
   int k;
   if ([v startInspection: TUPLE : &b : &sl])
   {
-    if (![self panelConsistent]) NSBeep();
+    if (![self panelConsistent]) NSLog(@"TupleInspector panel not consistent");
     else
     {
       k = [sl count];

@@ -148,7 +148,7 @@ Beam *p = [(GraphicView *)[[DrawApp currentDocument] graphicView] canInspect: BE
   int k;
   if ([v startInspection: BEAM : &b : &sl])
   {
-    if (![self panelConsistent]) NSBeep();
+    if (![self panelConsistent]) NSLog(@"BeamInspector panel not consistent");
     else
     {
       k = [sl count];
