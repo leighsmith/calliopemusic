@@ -599,7 +599,7 @@ BOOL writeStyleFile(NSString *f)
   if (![f length]) return NO;
   doc = [DrawApp currentDocument];
   if (doc == nil) return NO;
-  v = doc->view;
+  v = [doc graphicView];
   if (v == nil) return NO;
   ts = [[NSArchiver alloc] initForWritingWithMutableData:[NSMutableData data]];
   if (ts)

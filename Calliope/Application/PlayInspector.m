@@ -85,7 +85,7 @@ static void blinkOff(GraphicView *v)
 {
     GraphicView *v;
     if (blinkstate < 0) return;
-    v = [[DrawApp currentDocument] graphicView];
+    v = [DrawApp currentView];
     if ([[NSApp keyWindow] firstResponder] != v) return;
     switch (blinkstate)
     {
@@ -112,7 +112,7 @@ static void blinkOff(GraphicView *v)
       [multiview replaceView: outputview];
       break;
     case 1:
-      if ([NSApp getChanlist] == nil) [multiview replaceView: nodocview];
+      if ([[DrawApp sharedApplicationController] getChanlist] == nil) [multiview replaceView: nodocview];
       else [multiview replaceView: channelview];
       break;
     case 2:
@@ -147,7 +147,7 @@ static void blinkOff(GraphicView *v)
 {
   int c = [[channelmatrix selectedCell] tag];
   Channel *ch;
-  NSMutableArray *cl = [NSApp getChanlist];
+  NSMutableArray *cl = [[DrawApp sharedApplicationController] getChanlist];
   if (cl == nil) return self;
   ch = [cl objectAtIndex:c];
   [[slidermatrix cellAtRow:0 column:0] setFloatValue:ch->level];
@@ -166,7 +166,7 @@ static void blinkOff(GraphicView *v)
   int c = [[channelmatrix selectedCell] tag];
   float f = [sender floatValue];
   Channel *ch;
-  NSMutableArray *cl = [NSApp getChanlist];
+  NSMutableArray *cl = [[DrawApp sharedApplicationController] getChanlist];
   if (cl == nil) return self;
   ch = [cl objectAtIndex:c];
   switch(s)
@@ -187,7 +187,7 @@ static void blinkOff(GraphicView *v)
       ch->vibrato = f;
       break;
   }
-  [[[DrawApp currentDocument] graphicView] dirty];
+  [[DrawApp currentView] dirty];
   return self;
 }
 
@@ -210,7 +210,7 @@ static void blinkOff(GraphicView *v)
     status = MK_paused;
       [MKConductor lockPerformance];
       [MKConductor pausePerformance];
-    [[[DrawApp currentDocument] graphicView] pausePlayers];
+    [[DrawApp currentView] pausePlayers];
     if (![pausebutton state]) [pausebutton setState:1];
     [MKConductor unlockPerformance];
   }
@@ -220,7 +220,7 @@ static void blinkOff(GraphicView *v)
     status = MK_active;
     [MKConductor sendMsgToApplicationThreadSel: @selector(unsetPauseButton) to: self argCount: 0];
     [MKConductor lockPerformance];
-    [[[DrawApp currentDocument] graphicView] resumePlayers];
+    [[DrawApp currentView] resumePlayers];
     [MKConductor resumePerformance];
     [MKConductor unlockPerformance];
   }
@@ -262,7 +262,7 @@ static void blinkOff(GraphicView *v)
     blinkstate = 2;
     if (![stopbutton state]) [stopbutton setState:1];
     [MKConductor lockPerformance];
-    [[[DrawApp currentDocument] graphicView] deactivatePlayers];
+    [[DrawApp currentView] deactivatePlayers];
     [MKConductor unlockPerformance];
     [playbutton setState:0];
     [playbutton setEnabled:YES];
@@ -351,7 +351,7 @@ static void blinkOff(GraphicView *v)
   [MKConductor unlockPerformance];
   playmode = [[outputmatrix selectedCell] tag];
   [playbutton setEnabled:NO];
-  [[[DrawApp currentDocument] graphicView] playChoice: i : j : [selectswitch state] : [progchbutton state]];
+  [[DrawApp currentView] playChoice: i : j : [selectswitch state] : [progchbutton state]];
   return self;
 }
 

@@ -357,7 +357,7 @@ extern NSSize paperSize;
         [[self window] endEditingFor: self];
         [self setNeedsDisplay: YES];
         [self resetPageFields];
-        // [NSApp inspectApp]; // TODO LMS disabled to get things running.
+        // [[DrawApp sharedApplicationController] inspectApp]; // TODO LMS disabled to get things running.
         return self;
     }
     else
@@ -599,19 +599,24 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
 
 - setRunnerTables
 {
-    int i, j, pageCount, s0, s1, ok;
+    int pageIndex, j, pageCount, firstSystem, s1, ok;
     Page *pg, *lp;
     NSMutableArray *ol;
     
     pageCount = [pagelist count];
     lp = nil;
-    for (i = 0; i < pageCount; i++)
+    for (pageIndex = 0; pageIndex < pageCount; pageIndex++)
     {
-	pg = [pagelist objectAtIndex: i];
-	[pg prevTable: lp];
-	s0 = pg->topsys;
+	pg = [pagelist objectAtIndex: pageIndex];
+	if(lp == nil)
+	    pg = [[Page alloc] initWithPageNumber: 0 topSystemNumber: 0 bottomSystemNumber: 0];
+	else {
+	    // otherwise what is wanted is assigning parameters from the previous to current. */
+	    pg = [lp copy];
+	}
+	firstSystem = pg->topsys;
 	s1 = pg->botsys;
-	for (j = s0; j <= s1; j++)
+	for (j = firstSystem; j <= s1; j++)
 	{
 	    System *sys = [syslist objectAtIndex: j];
 	    ol = sys->objs;
@@ -626,22 +631,28 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
     return self;
 }
 
-
-- doPage: (int) p : (int) s0 : (int) ns : (float) sh : (float) him : (float) topm : (float) botm : (int) numsys
+// what is "done" when we doPage? Actually we assign systems to pages.
+// Should be in the model.
+- (id) doPage: (int) p 
+  fromFirstSystem: (int) firstSystem
+       forSystems: (int) numberOfSystemsOnPage 
+		 : (float) sh 
+		 : (float) him 
+      usingMargin: (Margin *) newMargin 
+outOfTotalSystems: (int) numsys
 {
-    int i, j = s0 + ns - 1;
-    Page *pg = [[Page alloc] initWithPageNumber: p topSystemNumber: s0 bottomSystemNumber: j];
+    int systemIndex, lastSystem = firstSystem + numberOfSystemsOnPage - 1;
+    Page *pg = [[Page alloc] initWithPageNumber: p topSystemNumber: firstSystem bottomSystemNumber: lastSystem];
     
-    [pg setMarginType: MarginTop toSize: topm];
-    [pg setMarginType: MarginBottom toSize: botm];
+    [pg setMargin: newMargin];
     [pg setFillHeight: him];
-    for (i = s0; i <= j; i++)
+    for (systemIndex = firstSystem; systemIndex <= lastSystem; systemIndex++)
     {
-	System *sys = [syslist objectAtIndex: i];
+	System *sys = [syslist objectAtIndex: systemIndex];
 	sys->page = pg;
     }
     [pagelist addObject: pg];
-    // [pageProgress setProgressRatio: 1.0 * j / numsys];
+    // [pageProgress setProgressRatio: 1.0 * lastSystem / numsys];
     return self;
 }
 
@@ -665,71 +676,92 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
 
 - doPaginate
 {
-  int i, k, p, ns, s0;
-  float h=0.0, sh, him=0.0, topm=0.0, botm=0.0, pheight, sheight;
-  Margin *newm = nil;
-  System *sys;
-  k = [syslist count];
-  if (k < 1) return nil;
-  sys = [syslist objectAtIndex:0];
-  if (![sys checkMargin])
-  {
-    NSLog(@"Cannot paginate: first system has no margins\n");
-    return nil;
-  }
-  ns = s0 = 0;
-  p = 1;
-  pheight = [self bounds].size.height;
-  sheight = [[DrawApp currentDocument] getPreferenceAsFloat: MINSYSGAP];
-  sh = 0.0;
-  if (pagelist != nil) [pagelist autorelease]; //sb: List is freed rather than released
-  pagelist = [[NSMutableArray allocWithZone:[self zone]] init];
-  for (i = 0; i < k; i++)
-  {
-    sys = [syslist objectAtIndex:i];
-    if (sys->flags.newpage) p = [sys pageNumber];
-    h = [sys myHeight];
-    newm = [sys checkMargin];
-    if (newm)
+    int i, systemCount, p, numberOfSystemsOnPage, firstSystem;
+    float h=0.0, sh, him = 0.0, pheight, sheight;
+    Margin *newMargin = nil;
+    System *sys;
+    
+    systemCount = [syslist count];
+    if (systemCount < 1)
+	return nil;
+    sys = [syslist objectAtIndex:0];
+    if (![sys checkMargin])
     {
-      if (ns > 0)
-      {
-        [self doPage: p : s0 : ns : sh : him : topm : botm : k];
-        sh = h;
-        s0 = i;
-        ns = 1;
-        ++p;
-      }
-      else
-      {
-        sh += h;
-        ++ns;
-      }
-      topm = [newm topMargin];
-      botm = [newm bottomMargin];
-      him = pheight - (topm + botm);
+	NSLog(@"Cannot paginate: first system has no margins\n");
+	return nil;
     }
-    else if (sys->flags.pgcontrol == 0 && ns > 0 && sh + h + ((ns - 1) * sheight) > him)
+    numberOfSystemsOnPage = firstSystem = 0;
+    p = 1;
+    pheight = [self bounds].size.height;
+    sheight = [[DrawApp currentDocument] getPreferenceAsFloat: MINSYSGAP];
+    sh = 0.0;
+    if (pagelist != nil) 
+	[pagelist autorelease]; //sb: List is freed rather than released
+    pagelist = [[NSMutableArray allocWithZone:[self zone]] init];
+    for (i = 0; i < systemCount; i++)
     {
-      if (ns == 1 && h > him) NSLog(@"System overflows page %f", [sys pageNumber]);
-      [self doPage: p : s0 : ns : sh : him : topm : botm : k];
-      sh = h;
-      s0 = i;
-      ns = 1;
-      ++p;
+	sys = [syslist objectAtIndex:i];
+	if (sys->flags.newpage) p = [sys pageNumber];
+	h = [sys myHeight];
+	newMargin = [sys checkMargin];
+	if (newMargin)
+	{
+	    if (numberOfSystemsOnPage > 0)
+	    {
+		[self doPage: p 
+	     fromFirstSystem: firstSystem 
+		  forSystems: numberOfSystemsOnPage 
+			    : sh 
+			    : him 
+		 usingMargin: newMargin 
+	   outOfTotalSystems: systemCount];
+		sh = h;
+		firstSystem = i;
+		numberOfSystemsOnPage = 1;
+		++p;
+	    }
+	    else
+	    {
+		sh += h;
+		++numberOfSystemsOnPage;
+	    }
+	    him = pheight - ([newMargin topMargin] + [newMargin bottomMargin]);
+	}
+	else if (sys->flags.pgcontrol == 0 && numberOfSystemsOnPage > 0 && sh + h + ((numberOfSystemsOnPage - 1) * sheight) > him)
+	{
+	    if (numberOfSystemsOnPage == 1 && h > him) 
+		NSLog(@"System overflows page %d", [sys pageNumber]);
+	    [self doPage: p 
+	 fromFirstSystem: firstSystem 
+	      forSystems: numberOfSystemsOnPage 
+			: sh 
+			: him 
+	     usingMargin: newMargin 
+       outOfTotalSystems: systemCount];
+	    sh = h;
+	    firstSystem = i;
+	    numberOfSystemsOnPage = 1;
+	    ++p;
+	}
+	else
+	{
+	    sh += h;
+	    ++numberOfSystemsOnPage;
+	}
     }
-    else
+    if (numberOfSystemsOnPage > 0)
     {
-      sh += h;
-      ++ns;
+	if (numberOfSystemsOnPage == 1 && h > him) 
+	    NSLog(@"System overflows page %d", [sys pageNumber]);
+	[self doPage: p 
+     fromFirstSystem: firstSystem 
+	  forSystems: numberOfSystemsOnPage 
+		    : sh 
+		    : him 
+	 usingMargin: newMargin 
+   outOfTotalSystems: systemCount];
     }
-  }
-  if (ns > 0)
-  {
-    if (ns == 1 && h > him) NSLog(@"System overflows page %f", [sys pageNumber]);
-    [self doPage: p : s0: ns : sh : him : topm : botm : k];
-  }
-  return self;
+    return self;
 }
 
 

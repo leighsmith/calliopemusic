@@ -25,7 +25,7 @@ NSString *unitname[4] =
 {
   int n;
   float conv;
-  GraphicView *v = [[DrawApp currentDocument] graphicView];
+  GraphicView *v = [DrawApp currentView];
   Margin *p = [v canInspect: MARGIN : &n];
   if (n == 0) return nil;
   conv = [NSApp pointToCurrentUnitFactor];
@@ -54,7 +54,7 @@ NSString *unitname[4] =
   float f, conv;
   BOOL b = NO;
   System *sys;
-  GraphicView *v = [[DrawApp currentDocument] graphicView];
+  GraphicView *v = [DrawApp currentView];
   Margin *p = [v canInspect: MARGIN : &n];
   if (n == 0)
   {
@@ -88,7 +88,7 @@ NSString *unitname[4] =
   UPDATE(p->margin[5], f);
   f = [[vertmargform cellAtIndex:3] floatValue] / conv;    
   UPDATE(p->margin[3], f);
-  sys = p->client;
+  sys = [p client];
   if (b) [v setRunnerTables];
   [v shuffleIfNeeded];
   [v recalcAllSys];

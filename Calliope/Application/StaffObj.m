@@ -421,7 +421,7 @@ int protoVox;
 {
   if (part == nil) return [((Staff *)mystaff) getInstrument];
   if (part == nullPart) return [((Staff *)mystaff) getInstrument];
-  return [[NSApp getPartlist] instrumentForPart: part];
+  return [[[DrawApp sharedApplicationController] getPartlist] instrumentForPart: part];
 }
 
 
@@ -443,7 +443,7 @@ int protoVox;
 {
   if (part == nil) return [((Staff *)mystaff) getChannel];
   if (part == nullPart) [((Staff *)mystaff) getChannel];
-  return [[NSApp getPartlist] channelForPart: part];
+  return [[[DrawApp sharedApplicationController] getPartlist] channelForPart: part];
 }
 
 
@@ -456,7 +456,7 @@ int protoVox;
   CallInst *ci;
   Staff *sp;
   float ty;
-  cp = [[NSApp getPartlist] partNamed: n];
+  cp = [[[DrawApp sharedApplicationController] getPartlist] partNamed: n];
   if (cp == nil) return nil;
   switch(i)
   {

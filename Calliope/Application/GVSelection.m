@@ -117,7 +117,7 @@ extern int fontflag;
   while (t--) flag[t] = NO;
   if (g != nil)
   {
-    [NSApp inspectMe: g loadInspector: launch];
+    [[DrawApp sharedApplicationController] inspectMe: g loadInspector: launch];
     flag[TYPEOF(g)] = YES;
   }
   i = [slist count];
@@ -128,7 +128,7 @@ extern int fontflag;
     if (!flag[t])
     {
       flag[t] = YES;
-      [NSApp inspectMe: p loadInspector: launch];
+      [[DrawApp sharedApplicationController] inspectMe: p loadInspector: launch];
     }
   }
   return self;
@@ -137,7 +137,7 @@ extern int fontflag;
 
 - inspectSel: (BOOL) launch
 {
-  return [NSApp inspectAppWithMe: nil loadInspector: (BOOL) launch : 0];
+  return [[DrawApp sharedApplicationController] inspectAppWithMe: nil loadInspector: (BOOL) launch : 0];
 }
 
 
@@ -445,7 +445,7 @@ extern float ctimex(float d);
 	    if (fontflag != ff)
 	    {
 		// TODO LMS should be replaced, removing DrawApp
-		// [NSApp selectFontSelection: ff];
+		// [[DrawApp sharedApplicationController] selectFontSelection: ff];
 		fontflag = ff;
 	    }
 	    fs = ff;

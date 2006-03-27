@@ -138,7 +138,7 @@ static BOOL busyFlag = 0;  /* so that inspector is not inspected because of a ca
   System *st;
   NSString *n;
   int i = [[stybrowser matrixInColumn: 0] selectedRow];
-  if (i < 0 || i > [[NSApp getStylelist] count])
+  if (i < 0 || i > [[[DrawApp sharedApplicationController] getStylelist] count])
   {
     if (t != NULL) [stytext setStringValue:@""];
     [self enableButtons: 1 : 0 : 0 : 0 : 0 : 0];
@@ -146,7 +146,7 @@ static BOOL busyFlag = 0;  /* so that inspector is not inspected because of a ca
   else
   {
     if (t != nil) [stytext setStringValue:t];
-    st = [[NSApp getStylelist] objectAtIndex:i];
+    st = [[[DrawApp sharedApplicationController] getStylelist] objectAtIndex:i];
     n = [stytext stringValue];
     if (![st->style isEqualToString: n])
     {
@@ -234,7 +234,7 @@ static BOOL busyFlag = 0;  /* so that inspector is not inspected because of a ca
 
 - loadDataFor: (int) bt
 {
-  System *sys = [NSApp currentSystem];
+  System *sys = [[DrawApp sharedApplicationController] currentSystem];
   if (sys != nil) [self loadDataFor: sys : bt];
   return self;
 }
@@ -243,7 +243,7 @@ static BOOL busyFlag = 0;  /* so that inspector is not inspected because of a ca
 - setView: (int) i
 {
   if ([NSView focusView] == multiview) [multiview unlockFocus];
-  if (![NSApp currentSystem])
+  if (![[DrawApp sharedApplicationController] currentSystem])
   {
     if (multiview != nodocview) [multiview replaceView: nodocview];
     return self;
@@ -285,7 +285,7 @@ static BOOL busyFlag = 0;  /* so that inspector is not inspected because of a ca
 
 - changeStaffView: sender
 {
-  System *sys = [NSApp currentSystem];
+  System *sys = [[DrawApp sharedApplicationController] currentSystem];
   if (sys != nil) [self pickstaff: self];
   switch([staffnumbutton indexOfSelectedItem])
   {
@@ -310,7 +310,7 @@ static BOOL busyFlag = 0;  /* so that inspector is not inspected because of a ca
   if (mypartlist == partlistflag) return self;
   [partbutton removeAllItems];
   [partbutton addItemWithTitle:@"multiple selection"];
-  pl = [NSApp getPartlist];
+  pl = [[DrawApp sharedApplicationController] getPartlist];
   k = [pl count];
   for (i = 0; i < k; i++) [partbutton addItemWithTitle:[pl partNameForInt: i]];
   mypartlist = partlistflag;
@@ -320,7 +320,7 @@ static BOOL busyFlag = 0;  /* so that inspector is not inspected because of a ca
 
 - setSystemPart
 {
-  GraphicView *v = [[DrawApp currentDocument] graphicView];
+  GraphicView *v = [DrawApp currentView];
   System *sys = [v currentSystem];
   Staff *sp;
   if (sys == nil) return self;
@@ -486,7 +486,7 @@ static BOOL busyFlag = 0;  /* so that inspector is not inspected because of a ca
 {
   float conv;
   BOOL change = NO;
-  System *sys = [NSApp currentSystem];
+  System *sys = [[DrawApp sharedApplicationController] currentSystem];
   if (sys == nil)
   {
     if (![setButton isEnabled]) [setButton setEnabled:YES];
@@ -903,7 +903,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
 
 - pickstaff: sender
 {
-  System *sys = [NSApp currentSystem];
+  System *sys = [[DrawApp sharedApplicationController] currentSystem];
   if (sys != nil) [self inspStaff: sys : [self assayStaves: sys]];
   return self;
 }
@@ -917,28 +917,29 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
 
 - setnstaves: sender;
 {
-  int sn;
-  System *sys;
-  OpusDocument *doc = [DrawApp currentDocument];
-  GraphicView *v;
-  sn = [nstavestext intValue];
-  if (doc == nil)
-  {
-    doc = [OpusDocument new];
-    v = doc->view;
-  }
-  else v = doc->view;
-  if ((sys = [v currentSystem]) != nil)
-  {
-    [nstavestext setIntValue:sys->flags.nstaves];
-    NSBeep();
+    int sn;
+    System *sys;
+    OpusDocument *doc = [DrawApp currentDocument];
+    GraphicView *v;
+    sn = [nstavestext intValue];
+    if (doc == nil)
+    {
+	doc = [OpusDocument new];
+	v = [doc graphicView];
+    }
+    else 
+	v = [doc graphicView];
+    if ((sys = [v currentSystem]) != nil)
+    {
+	[nstavestext setIntValue: sys->flags.nstaves];
+	NSLog(@"-setnstaves: Current system != nil");
+	return self;
+    }
+    if ([self newSystem: v : sn] == nil) return self;
+    [newsysbutton setEnabled:NO];
+    [self prepView: v];
+    [v dirty];
     return self;
-  }
-  if ([self newSystem: v : sn] == nil) return self;
-  [newsysbutton setEnabled:NO];
-  [self prepView: v];
-  [v dirty];
-  return self;
 }
 
 
@@ -949,7 +950,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
 
 - preset
 {
-  System *sys = [NSApp currentSystem];
+  System *sys = [[DrawApp sharedApplicationController] currentSystem];
   if (sys == nil)
   {
     [nstavestext setEditable:YES];
@@ -997,7 +998,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
 
 - revert: sender
 {
-  System *sys = [NSApp currentSystem];
+  System *sys = [[DrawApp sharedApplicationController] currentSystem];
     [self loadDataFor: sys : [mainPopup indexOfSelectedItem]];
   if ([revertButton isEnabled]) [revertButton setEnabled:NO];
   if ([setButton isEnabled]) [setButton setEnabled:NO];
@@ -1011,7 +1012,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
 {
   int i, k = 0, n;
   char wantstaff[NUMSTAVES];
-  GraphicView *v = [[DrawApp currentDocument] graphicView];
+  GraphicView *v = [DrawApp currentView];
   if (![v sysSameShape])
   {
     NSRunAlertPanel(@"Extraction", @"Systems not same size", @"OK", nil, nil, NULL);
@@ -1039,9 +1040,9 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
 - hitOrder: sender
 {
   int a, i, n;
-  System *sys = [NSApp currentSystem];
+  System *sys = [[DrawApp sharedApplicationController] currentSystem];
   char order[NUMSTAVES];
-  GraphicView *v = [[DrawApp currentDocument] graphicView];
+  GraphicView *v = [DrawApp currentView];
   a = NSRunAlertPanel(@"Order Staves", @"Which systems to modify?", @"Current", @"All", @"Cancel");
   if (a == NSAlertOtherReturn) return self;
   busyFlag = YES;
@@ -1073,14 +1074,14 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
 - hitBrowser: sender
 {
   int i = [[stybrowser matrixInColumn: 0] selectedRow];
-  return [self styleButtons: [[NSApp getStylelist] styleNameForInt: i]];
+  return [self styleButtons: [[[DrawApp sharedApplicationController] getStylelist] styleNameForInt: i]];
 }
 
 
 - (System *) newEntry: (NSString *) n
 {
   System *p, *sys;
-  NSMutableArray *sl = [NSApp getStylelist];
+  NSMutableArray *sl = [[DrawApp sharedApplicationController] getStylelist];
   int k = [sl count];
   while (k--)
   {
@@ -1091,7 +1092,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
       return nil;
     }
   }
-  sys = [NSApp currentSystem];
+  sys = [[DrawApp sharedApplicationController] currentSystem];
   if (sys == nil)
   {
     NSRunAlertPanel(@"System Style", @"No current system", @"OK", nil, nil);
@@ -1114,11 +1115,11 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
 
   if ([self newEntry: s] != nil)
   {
-    [[NSApp getStylelist] sortStylelist];
+    [[[DrawApp sharedApplicationController] getStylelist] sortStylelist];
     [stybrowser loadColumnZero];
     [stybrowser setPath:s];
     [self styleButtons: s];
-    [(GraphicView *)[[DrawApp currentDocument] graphicView] dirty];
+    [(GraphicView *)[DrawApp currentView] dirty];
   }
   return self;
 }
@@ -1128,19 +1129,19 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
 {
   int i;
     NSString *buf;
-    System *st, *sys = [NSApp currentSystem];
+    System *st, *sys = [[DrawApp sharedApplicationController] currentSystem];
   if (sys == nil)
   {
     NSBeep();
     return self;
   }
   i = [[stybrowser matrixInColumn: 0] selectedRow];
-  if (i < 0 || i >= [[NSApp getStylelist] count])
+  if (i < 0 || i >= [[[DrawApp sharedApplicationController] getStylelist] count])
   {
     NSBeep();
     return self;
   }
-  st = [[NSApp getStylelist] objectAtIndex:i];
+  st = [[[DrawApp sharedApplicationController] getStylelist] objectAtIndex:i];
   if (st == nil)
   {
     NSBeep();
@@ -1160,9 +1161,9 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
   if (NSRunAlertPanel(@"Calliope", buf, @"YES", @"NO", nil) != NSAlertDefaultReturn) return self;
   [sys copyStyleTo: st];
   busyFlag = YES;
-  [(GraphicView *)[[DrawApp currentDocument] graphicView] flushStyle: st];
+  [(GraphicView *)[DrawApp currentView] flushStyle: st];
   busyFlag = NO;
-  [(GraphicView *)[[DrawApp currentDocument] graphicView] dirty];
+  [(GraphicView *)[DrawApp currentView] dirty];
   return self;
 }
 
@@ -1173,7 +1174,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
     System *st, *p;
   NSString *a;
   NSString *n;
-  NSMutableArray *sl = [NSApp getStylelist];
+  NSMutableArray *sl = [[DrawApp sharedApplicationController] getStylelist];
   int i, k;
   i = [[stybrowser matrixInColumn: 0] selectedRow];
   if (i < 0 || i >= [sl count])
@@ -1203,15 +1204,15 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
       }
     }
     a = n;
-    [(GraphicView *)[[DrawApp currentDocument] graphicView] renameStyle: st->style : [a retain]];
+    [(GraphicView *)[DrawApp currentView] renameStyle: st->style : [a retain]];
     [st->style autorelease];
     st->style = [a retain];
-    [[NSApp getStylelist] sortStylelist];
+    [[[DrawApp sharedApplicationController] getStylelist] sortStylelist];
     [stybrowser loadColumnZero];
     [stybrowser setPath:[a retain]];
     [self styleButtons: nil];
   }
-  [(GraphicView *)[[DrawApp currentDocument] graphicView] dirty];
+  [(GraphicView *)[DrawApp currentView] dirty];
   return self;
 }
 
@@ -1220,19 +1221,19 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
 {
   System *st;
   int i;
-  GraphicView *v = [[DrawApp currentDocument] graphicView];
+  GraphicView *v = [DrawApp currentView];
   if (v == nil)
   {
     NSBeep();
     return self;
   }
   i = [[stybrowser matrixInColumn: 0] selectedRow];
-  if (i < 0 || i >= [[NSApp getStylelist] count])
+  if (i < 0 || i >= [[[DrawApp sharedApplicationController] getStylelist] count])
   {
     NSBeep();
     return self;
   }
-  st = [[NSApp getStylelist] objectAtIndex:i];
+  st = [[[DrawApp sharedApplicationController] getStylelist] objectAtIndex:i];
   if (st == nil)
   {
     NSBeep();
@@ -1250,7 +1251,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
 {
   int i;
   float ss, lm;
-  GraphicView *v = [[DrawApp currentDocument] graphicView];
+  GraphicView *v = [DrawApp currentView];
   System *st, *sys = [v currentSystem];
   if (sys == nil)
   {
@@ -1258,12 +1259,12 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
     return self;
   }
   i = [[stybrowser matrixInColumn: 0] selectedRow];
-  if (i < 0 || i >= [[NSApp getStylelist] count])
+  if (i < 0 || i >= [[[DrawApp sharedApplicationController] getStylelist] count])
   {
     NSBeep();
     return self;
   }
-  st = [[NSApp getStylelist] objectAtIndex:i];
+  st = [[[DrawApp sharedApplicationController] getStylelist] objectAtIndex:i];
   if (st == nil)
   {
     NSBeep();
@@ -1302,14 +1303,14 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
     return self;
   }
   buf = [NSString stringWithFormat:@"Are you sure you want to delete style '%@'?",
-      [[NSApp getStylelist] styleNameForInt: i]];
+      [[[DrawApp sharedApplicationController] getStylelist] styleNameForInt: i]];
   if (NSRunAlertPanel(@"Calliope", buf, @"YES", @"NO", nil) != NSAlertDefaultReturn)
       return self;
-  [[NSApp getStylelist] removeObjectAtIndex:i];
+  [[[DrawApp sharedApplicationController] getStylelist] removeObjectAtIndex:i];
   [stybrowser loadColumnZero];
   [stybrowser setPath:@""];
   [self styleButtons: @""];
-  [(GraphicView *)[[DrawApp currentDocument] graphicView] dirty];
+  [(GraphicView *)[DrawApp currentView] dirty];
   return self;
 }
 
@@ -1335,14 +1336,14 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
 
 - (int)browser:(NSBrowser *)sender numberOfRowsInColumn:(int)col
 {
-  return [[NSApp getStylelist] count];
+  return [[[DrawApp sharedApplicationController] getStylelist] count];
 }
 
 
 - (void)browser:(NSBrowser *)sender willDisplayCell:(id)cell atRow:(int)row column:(int)col
 {
   if (col != 0) return;
-  [cell setStringValue:[[NSApp getStylelist] styleNameForInt: row]];
+  [cell setStringValue:[[[DrawApp sharedApplicationController] getStylelist] styleNameForInt: row]];
   [cell setLeaf:YES];
   [cell setEnabled:YES];
 }

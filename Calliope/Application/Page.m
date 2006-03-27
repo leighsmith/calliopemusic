@@ -22,12 +22,12 @@ extern NSSize paperSize;
     }
 }
 
-#if 0
 - (void) dealloc
 {
+    [margin release];
+    margin = nil;
     [super dealloc];
 }
-#endif
 
 - initWithPageNumber: (int) n topSystemNumber: (int) s0 bottomSystemNumber: (int) s1
 {
@@ -53,51 +53,35 @@ extern NSSize paperSize;
 }
 
 /* copy page table info from previous page.  p is nil if no previous page */
-// TODO should become copyWithZone:
-- prevTable: (Page *) p
+- copyWithZone: (NSZone *) zone
 {
-    int i = 12;
-    if (p == nil)
-    {
-	while (i--)
-	{
-	    headfoot[i] = nil;
-	    hfinfo[i] = 0;
-	}
-	i = MaximumMarginTypes;
-	while (i--) 
-	    margin[i] = 0;
-	alignment = format = 0;
+    Page *newPage = [[[self class] allocWithZone: zone] init];
+    int runnerIndex = 12;
+
+    while (runnerIndex--) {
+	newPage->headfoot[runnerIndex] = headfoot[runnerIndex];
+	newPage->hfinfo[runnerIndex] = hfinfo[runnerIndex];
     }
-    else
-    {
-	while (i--)
-	{
-	    headfoot[i] = p->headfoot[i];
-	    hfinfo[i] = 0;
-	}
-	i = MaximumMarginTypes;
-	while (i--) 
-	    margin[i] = p->margin[i];
-	alignment = p->alignment;
-	format = p->format;
-    }
-    return self;
+    [newPage->margin release];
+    newPage->margin = [margin copy];
+    newPage->alignment = alignment;
+    newPage->format = format;
+    return newPage;
 }
 
 /* margin = margin + binding margin */
 - (float) leftMargin
 {
-    float m = margin[0];
-    m += (num & 1) ? margin[8] : margin[6];
+    float m = margin->margin[0];
+    m += (num & 1) ? margin->margin[8] : margin->margin[6];
     return m / [[DrawApp currentDocument] staffScale];
 }
 
 
 - (float) rightMargin
 {
-    float m = margin[1];
-    m += (num & 1) ? margin[9] : margin[7];
+    float m = margin->margin[1];
+    m += (num & 1) ? margin->margin[9] : margin->margin[7];
     return m / [[DrawApp currentDocument] staffScale];
 }
 
@@ -105,7 +89,7 @@ extern NSSize paperSize;
 - (float) leftBinding
 {
     float m;
-    m = (num & 1) ? margin[8] : margin[6];
+    m = (num & 1) ? margin->margin[8] : margin->margin[6];
     return m / [[DrawApp currentDocument] staffScale];
 }
 
@@ -113,30 +97,30 @@ extern NSSize paperSize;
 - (float) rightBinding
 {
     float m;
-    m = (num & 1) ? margin[9] : margin[7];
+    m = (num & 1) ? margin->margin[9] : margin->margin[7];
     return m / [[DrawApp currentDocument] staffScale];
 }
 
 
 - (float) topMargin
 {
-    return margin[4] / [[DrawApp currentDocument] staffScale];
+    return margin->margin[4] / [[DrawApp currentDocument] staffScale];
 }
 
 
 - (float) bottomMargin
 {
-    return margin[5] / [[DrawApp currentDocument] staffScale];
+    return margin->margin[5] / [[DrawApp currentDocument] staffScale];
 }
 
 - (float) headerBase
 {
-    return margin[2] / [[DrawApp currentDocument] staffScale];
+    return margin->margin[2] / [[DrawApp currentDocument] staffScale];
 }
 
 - (float) footerBase
 {
-    return margin[3] / [[DrawApp currentDocument] staffScale];
+    return margin->margin[3] / [[DrawApp currentDocument] staffScale];
 }
 
 /* sums to page height (as screened) */
@@ -185,11 +169,6 @@ extern NSSize paperSize;
     alignment = newAlignment;
 }
 
-- (void) setMarginType: (MarginType) marginType toSize: (float) newMarginValue
-{
-    margin[marginType] = newMarginValue;
-}
-
 - (void) setRunner: (Runner *) newRunner
 {
     int j = newRunner->flags.horizpos;
@@ -205,6 +184,16 @@ extern NSSize paperSize;
 	headfoot[j] = newRunner;
 	hfinfo[j] = 1;
     }
+}
+
+- (void) setMargin: (Margin *) newMargin
+{
+    margin = [newMargin retain];
+}
+
+- (Margin *) margin
+{
+    return [[margin retain] autorelease];
 }
 
 static void drawSlants(float x, float y, float hw, float th)
@@ -275,8 +264,8 @@ static void drawSlants(float x, float y, float hw, float th)
     if (v == 0)
     {
         [aDecoder decodeValuesOfObjCTypes:"ifffss", &num, &t, &fillheight, &b, &topsys, &botsys];
-        margin[4] = t;
-        margin[5] = b;
+        margin->margin[4] = t;
+        margin->margin[5] = b;
         for (i = 0; i < 12; i++) headfoot[i] = [[aDecoder decodeObject] retain];
         [aDecoder decodeArrayOfObjCType:"c" count:12 at:hfinfo];
         //needUpgrade |= 4;
@@ -287,7 +276,7 @@ static void drawSlants(float x, float y, float hw, float th)
         [aDecoder decodeValuesOfObjCTypes:"ifss", &num, &fillheight, &topsys, &botsys];
         for (i = 0; i < 12; i++) headfoot[i] = [[aDecoder decodeObject] retain];
         [aDecoder decodeArrayOfObjCType:"c" count:12 at:hfinfo];
-        [aDecoder decodeArrayOfObjCType:"f" count:MaximumMarginTypes at:margin];
+        [aDecoder decodeArrayOfObjCType:"f" count:MaximumMarginTypes at:margin->margin];
         format = alignment = 0;
     }
     else if (v == 2)
@@ -295,7 +284,7 @@ static void drawSlants(float x, float y, float hw, float th)
         [aDecoder decodeValuesOfObjCTypes:"ifsscc", &num, &fillheight, &topsys, &botsys, &format, &alignment];
         for (i = 0; i < 12; i++) headfoot[i] = [[aDecoder decodeObject] retain];
         [aDecoder decodeArrayOfObjCType:"c" count:12 at:hfinfo];
-        [aDecoder decodeArrayOfObjCType:"f" count:MaximumMarginTypes at:margin];
+        [aDecoder decodeArrayOfObjCType:"f" count:MaximumMarginTypes at:margin->margin];
     }
     return self;
 }
@@ -308,7 +297,7 @@ static void drawSlants(float x, float y, float hw, float th)
     [aCoder encodeValuesOfObjCTypes:"ifsscc", &num, &fillheight, &topsys, &botsys, &format, &alignment];
     for (i = 0; i < 12; i++) [aCoder encodeConditionalObject:headfoot[i]];
     [aCoder encodeArrayOfObjCType:"c" count:12 at:hfinfo];
-    [aCoder encodeArrayOfObjCType:"f" count:MaximumMarginTypes at:margin];
+    [aCoder encodeArrayOfObjCType:"f" count:MaximumMarginTypes at:margin->margin];
 }
 
 - (void)encodeWithPropertyListCoder:(OAPropertyListCoder *)aCoder
@@ -326,7 +315,7 @@ static void drawSlants(float x, float y, float hw, float th)
     for (i = 0; i < 12; i++) [aCoder setObject:headfoot[i] forKey:[NSString stringWithFormat:@"hf%d",i]];
     for (i = 0; i < 12; i++) [aCoder setInteger:hfinfo[i] forKey:[NSString stringWithFormat:@"hfinfo%d",i]];
     [aCoder setInteger:MaximumMarginTypes forKey:@"nummargins"];
-    for (i = 0; i < MaximumMarginTypes; i++) [aCoder setFloat:margin[i] forKey:[NSString stringWithFormat:@"margin%d",i]];
+    for (i = 0; i < MaximumMarginTypes; i++) [aCoder setFloat:margin->margin[i] forKey:[NSString stringWithFormat:@"margin%d",i]];
 }
 
 @end

@@ -424,7 +424,7 @@ float textoff[2], baselines[2][MAXTEXT];
   if (full) s = part;
     else
   {
-    cp = [[NSApp getPartlist] partNamed: part];
+    cp = [[[DrawApp sharedApplicationController] getPartlist] partNamed: part];
     if (cp == nil) return nil;
     s = cp->abbrev;
   }
@@ -511,17 +511,21 @@ float textoff[2], baselines[2][MAXTEXT];
   { [super dealloc]; return; };
 }
 
-
+- (NSString *) description
+{
+    return [NSString stringWithFormat: @"%@ y=%f barbase=%f topmarg=%f botmarg=%f notes=%@", 
+	[super description], y, barbase, topmarg, botmarg, notes];
+}
 
 - (NSString *) getInstrument
 {
-  return [[NSApp getPartlist] instrumentForPart: part];
+  return [[[DrawApp sharedApplicationController] getPartlist] instrumentForPart: part];
 }
 
 
 - (int) getChannel
 {
-  return [[NSApp getPartlist] channelForPart: part];
+  return [[[DrawApp sharedApplicationController] getPartlist] channelForPart: part];
 }
 
 

@@ -31,7 +31,7 @@
 {
   NSRect b;
   SquareNote *p;
-  id sl, v = [[DrawApp currentDocument] graphicView];
+  id sl, v = [DrawApp currentView];
   int k, selshape, selcol, selstem, seltime, seldot, seldes;
   if ([v startInspection: SQUARENOTE : &b : &sl])
   {
@@ -90,7 +90,7 @@
 - updatePanel
 {
   int num;
-  GraphicView *v = [[DrawApp currentDocument] graphicView];
+  GraphicView *v = [DrawApp currentView];
   [self assayList: v->slist : &num];
   if (num == 0) return nil;
   clearMatrix(timematrix);

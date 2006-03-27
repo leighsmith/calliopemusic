@@ -1,8 +1,6 @@
 #import "winheaders.h"
 #import "Graphic.h"
 
-@class Page;
-
 // Differnt types of margins.
 typedef enum {
     MarginLeft = 0,
@@ -21,23 +19,51 @@ typedef enum {
 @interface Margin: Graphic
 {
 @public
-  float margin[10];
-  char format, alignment;
-  id client;			/* a System */
+    float margin[10];
+    /* PageFormat */ char format;
+    char alignment;
+@private
+    id client;			/* a System */
+    float staffScale;
 }
 
-+ (void)initialize;
++ (void) initialize;
 + myInspector;
 - init;
-- newFrom;
-- (void)removeObj;
-- setPageTable: (Page *) p;
+- (void) removeObj;
+
+/*!
+  @brief Assigns the scale of the staff to the margin.
+ */
+- (void) setStaffScale: (float) newStaffScale;
+
+/*!
+  @brief Returns the current scale of the staff.
+ */
+- (float) staffScale;
+
+/*!
+  @brief Assigns the client to the margin.
+ */
+- (void) setClient: (id) newClient;
+
+/*!
+  @brief Returns the current margin client.
+ */
+- (id) client;
+
 - (float) leftMargin;
 - (float) rightMargin;
 - (float) headerBase;
 - (float) footerBase;
 - (float) topMargin;
 - (float) bottomMargin;
+
+/*!
+  @brief Assigns the given margin.
+ */
+- (void) setMarginType: (MarginType) marginType toSize: (float) newMarginValue;
+
 - (BOOL) move: (float) dx : (float) dy : (NSPoint) p : sys : (int) alt;
 - drawMode: (int) m;
 - draw;

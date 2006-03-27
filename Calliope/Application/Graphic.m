@@ -195,7 +195,7 @@ id CrossCursor = nil;	/* global since subclassers may need it */
       break;
     case 3:
       [sys linkobject: g];
-      [NSApp resetTool];
+      [[DrawApp sharedApplicationController] resetTool];
       break;
   }
   [g reShape];

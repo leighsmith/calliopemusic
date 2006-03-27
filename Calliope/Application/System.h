@@ -14,29 +14,30 @@
     NSMutableArray *staves;			/* List of staves */
     GraphicView *view;			/* backreference to our GraphicView */
     Page *page;			/* backreference to our Page */
-  struct
-  {
-    unsigned int nstaves : 7;	/* number of staves */
-    unsigned int pgcontrol : 3;	/* page break code */
-    unsigned int haslink : 1;	/* staff linkage bar NOT USED */
-    unsigned int equidist : 1;	/* make staff y-origins equidistant */
-    unsigned int disjoint : 1;	/* polymetric format with noncoinciding bars */
-    unsigned int syssep : 2;	/* to show system separator */
-    unsigned int newbar : 1;	/* bar number changes sequence */
-    unsigned int newpage : 1;   /* page number changes sequence */
-  } flags;
-  float width;			/* width within margins and indent*/
-  short barnum;			/* number of first measure on this staff */
-  NSString *style;
-  float lindent, rindent;	/* left and right indents */
-  float oldleft;		/* left margin changes while pagination (not cache: copy/paste) */
-  float groupsep;		/* extra group separation */
-  float expansion;		/* expansion factor (default 1.0) */
+    struct
+    {
+	unsigned int nstaves : 7;	/* number of staves */
+	unsigned int pgcontrol : 3;	/* page break code */
+	unsigned int haslink : 1;	/* staff linkage bar NOT USED */
+	unsigned int equidist : 1;	/* make staff y-origins equidistant */
+	unsigned int disjoint : 1;	/* polymetric format with noncoinciding bars */
+	unsigned int syssep : 2;	/* to show system separator */
+	unsigned int newbar : 1;	/* bar number changes sequence */
+	unsigned int newpage : 1;   /* page number changes sequence */
+    } flags;
+    float width;			/* width within margins and indent*/
+    short barnum;			/* number of first measure on this staff */
+    NSString *style;
+    float lindent, rindent;	/* left and right indents */
+    float oldleft;		/* left margin changes while pagination (not cache: copy/paste) */
+    float groupsep;		/* extra group separation */
+    float expansion;		/* expansion factor (default 1.0) */
 @private
-  short pagenum;		/* system (actually page) number */
-  float barbase;		/* bar number baseline offset */
-  float height;			/* the height used in page balancing */
-  float headroom;		/* included in height */
+    float staffScale;           /* staffScale the scaling of the staff. */
+    short pagenum;		/* system (actually page) number */
+    float barbase;		/* bar number baseline offset */
+    float height;		/* the height used in page balancing */
+    float headroom;		/* included in height */
 }
 
 
@@ -65,6 +66,10 @@
 - (float) leftIndent;
 - (float) leftWhitespace;
 - (float) rightIndent;
+/*!
+  @brief Assigns the staff scale.
+ */
+- (void) setStaffScale: (float) newStaffScale;
 - makeNames: (BOOL) full : (GraphicView *) v;
 - checkMargin;
 - recalc;

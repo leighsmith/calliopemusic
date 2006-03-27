@@ -112,8 +112,8 @@ static void makeLinkage(System *sys)
 	[nsys linkobject: t];
         break;
       case MARGIN:
-        t = [(Margin *) p newFrom];
-        ((Margin *) t)->client = nsys;
+        t = [(Margin *) p copy];
+	  [(Margin *) t setClient: nsys];
         [nsys linkobject: t];
 	break;
       case TEXTBOX:
@@ -197,7 +197,7 @@ static void addBarsRest(Staff *sp, System *sys, int n)
   for (i = 0; i < NUMSTAVES; i++) barsrest[i] = 0;
   nsys = [syslist count];
   doc = [[DrawApp currentDocument] newFrom];
-  v = doc->view;
+  v = [doc graphicView];
   [[v window] disableFlushWindow];
   for (i = 0; i < nsys; i++)
   {
@@ -292,7 +292,7 @@ static void addBarsRest(Staff *sp, System *sys, int n)
   for (i = 0; i < NUMSTAVES; i++) barsrest[i] = 0;
   nsys = [syslist count];
   doc = [[DrawApp currentDocument] newFrom];
-  v = doc->view;
+  v = [doc graphicView];
   [[v window] disableFlushWindow];
   for (i = 0; i < nsys; i++)
   {

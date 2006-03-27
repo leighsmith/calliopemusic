@@ -27,7 +27,7 @@ extern NSColor * selShade;
 extern NSColor * markShade;
 extern NSColor * inkShade;
 
-int linein = 0;
+NSBezierPath *linePath = nil;
 
 // TODO should be hidden in a class & access controlled to it with labels.
 NSFont *fontdata[NUMCALFONTS];  /* known locations for needed fonts */
@@ -122,12 +122,6 @@ static NSColor * modegray[8];
 BOOL modeprint[] = {};
 
 NSRect bb;	/* to accumulate the bounding box */
-
-
-void msg(NSString *s)
-{
-  NSLog(s);
-}
 
 
 /* initialise the graphics stuff */
@@ -290,7 +284,7 @@ void unionpath()
   NSRect r;
   float llx, lly, urx, ury;
   PSpathbbox(&llx, &lly, &urx, &ury);
-  /* NSLog(@"unionpath BB = %f %f %f %f\n", llx, lly, urx - llx, ury - lly); */
+  NSLog(@"unionpath BB = %f %f %f %f\n", llx, lly, urx - llx, ury - lly);
   PSnewpath();
   /*  --llx; ++urx; --lly; ++ury; */
   r = NSMakeRect(llx, lly, urx - llx, ury - lly);
@@ -503,63 +497,58 @@ void centString(float x, float y, char *s, NSFont *f, int mode)
 
 void justString(float x, float y, char *s, NSFont *f, int j, int mode)
 {
-  if (j == JCENTRE) x -= 0.5 * [f widthOfString:[NSString stringWithCString:s]];
-  else if (j == JRIGHT) x -= [f widthOfString:[NSString stringWithCString:s]];
+  if (j == JCENTRE) x -= 0.5 * [f widthOfString: [NSString stringWithCString:s]];
+  else if (j == JRIGHT) x -= [f widthOfString: [NSString stringWithCString:s]];
   CAcString(x, y, s, f, mode);
 }
 
 
-/* draw a line. Three routines to: make, stroke, or make&stroke. */
-
+/* routines to draw a line. Three routines to: make, stroke, or make & stroke. 
+   Nowdays these are just shim around NSBezierPath and NSPoints. Perhaps they can become inline functions, or replaced?
+*/
 void cmakeline(float x1, float y1, float x2, float y2, int mode)
 {
-  if (NOPRINT(mode)) return;
-    if ((![[NSGraphicsContext currentContext] isDrawingToScreen] && ![[NSPrintOperation currentOperation] isEPSOperation])) {
-        PSCmakelinePrint(x1, y1, x2, y2);
-    }
-    else {
-        PSCmakelineDisplay(x1, y1, x2, y2);
-    }
-  linein = 1;
+    NSLog(@"cmakeline(%f,%f -> %f,%f) mode: %d\n", x1, y1, x2, y2, mode);
+    
+    if (NOPRINT(mode)) 
+	return;
+    
+    linePath = [[NSBezierPath bezierPath] retain];
+    
+    [linePath moveToPoint: NSMakePoint(x1, y1)];
+    [linePath lineToPoint: NSMakePoint(x2, y2)];
 }
 
 
 void cstrokeline(float width, int mode)
 {
-  if (NOPRINT(mode)) return;
-  if (linein == 0)
-  {
-    msg(@"cstrokeline: no line to stroke!\n");
-    return;
-  }
-  if (mode)
-  {
+    NSLog(@"strokeline(%f,%d)\n", width, mode);
+
+    if (NOPRINT(mode)) 
+	return;
+    
+    if (linePath == nil) {
+	NSLog(@"cstrokeline: no line to stroke!\n");
+	return;
+    }
+    
     [modegray[mode] set];
-    PSsetlinewidth(width);
-    PSstroke();
-  }
-  else
-  {
-    PSsetlinewidth(width);
-    PSstrokepath();
-// NSLog(@"strokeline(%f,%d)\n", width, mode);
-    unionpath();
-  }
-  linein = 0;
+    [linePath setLineWidth: width];
+    [linePath stroke];
+    
+    if(!mode) {
+	unionpath();
+    }
+    
+    [linePath release];
+    linePath = nil; // set it back to nil to flag we are no long drawing a line.
 }
 
 
 void cline(float x1, float y1, float x2, float y2, float width, int mode)
 {
-  if (NOPRINT(mode)) return;
-    if ((![[NSGraphicsContext currentContext] isDrawingToScreen] && ![[NSPrintOperation currentOperation] isEPSOperation])) {
-        PSCmakelinePrint(x1, y1, x2, y2);
-    }
-    else {
-        PSCmakelineDisplay(x1, y1, x2, y2);
-    }
-  linein = 1;
-  cstrokeline(width, mode);
+    cmakeline(x1, y1, x2, y2, mode);
+    cstrokeline(width, mode);
 }
 
 

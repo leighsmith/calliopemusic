@@ -41,6 +41,7 @@
   float pref1, pref2;		/* start and end of preface */
   id mysys;			/* backpointer */
   NSMutableArray *notes;			/* List of things on the staff */
+@private
 }
 
 + (void)initialize;

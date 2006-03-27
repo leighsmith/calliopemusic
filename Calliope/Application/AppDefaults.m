@@ -343,7 +343,7 @@ BOOL writeToFile(NSString *f)
     else if (![fn length]) i=1;
     if (i)
   {
-    savepanel = [NSApp savePanel: @"inst"];
+    savepanel = [[DrawApp sharedApplicationController] savePanel: @"inst"];
     if ([savepanel runModal] == NSCancelButton) return self;
     fn = [savepanel filename];
     [instpathtext setStringValue:fn];

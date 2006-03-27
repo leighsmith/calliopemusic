@@ -180,7 +180,7 @@ static NSString *stylescratch;
 - pasteStyle: sender
 {
   float ss, lm;
-  System *sys = [[NSApp getStylelist] styleSysForName: stylescratch];
+  System *sys = [[[DrawApp sharedApplicationController] getStylelist] styleSysForName: stylescratch];
   if (sys == nil)
   {
     NSBeep();
@@ -200,7 +200,7 @@ static NSString *stylescratch;
   [sys copyStyleTo: currentSystem];
   [currentSystem recalc];
   [self paginate: self];
-  [NSApp inspectClass: [SysInspector class] loadInspector: NO];
+  [[DrawApp sharedApplicationController] inspectClass: [SysInspector class] loadInspector: NO];
   [self dirty];
   return self;
 }
@@ -243,7 +243,7 @@ static NSString *stylescratch;
 - clearNumbering: sender
 {
   int i, j, k;
-  System *sys = [NSApp currentSystem];
+  System *sys = [[DrawApp sharedApplicationController] currentSystem];
   j = [syslist indexOfObject:sys];
   k = [syslist count];
   for (i = j; i < k; i++)
@@ -263,7 +263,7 @@ static NSString *stylescratch;
   Graphic *p;
   int i, j, k, ok;
   NSMutableArray *ol;
-  System *sys = [NSApp currentSystem];
+  System *sys = [[DrawApp sharedApplicationController] currentSystem];
   j = [syslist indexOfObject:sys];
   if (j == 0)
   {
@@ -325,13 +325,13 @@ static NSString *stylescratch;
 
 - copyParts: sender
 {
-  return [self copyPartsFrom: [NSApp currentSystem]];
+  return [self copyPartsFrom: [[DrawApp sharedApplicationController] currentSystem]];
 }
 
 
 - pasteParts: sender
 {
-  return [self pastePartsTo: [NSApp currentSystem]];
+  return [self pastePartsTo: [[DrawApp sharedApplicationController] currentSystem]];
 }
 
 
@@ -340,7 +340,7 @@ static NSString *stylescratch;
 - flushParts: sender
 {
   int i, j, k;
-  System *sys = [NSApp currentSystem];
+  System *sys = [[DrawApp sharedApplicationController] currentSystem];
   [self copyParts: self];
   j = [syslist indexOfObject:sys];
   k = [syslist count];
@@ -645,7 +645,7 @@ extern char *typename[NUMTYPES];
   [self deselectAll: self];
   [currentSystem recalcObjs];
   [self selectObj: p];
-  [NSApp inspectMe: p loadInspector: YES];
+  [[DrawApp sharedApplicationController] inspectMe: p loadInspector: YES];
   return self;
 }
 
@@ -668,26 +668,31 @@ extern char *typename[NUMTYPES];
 
 - newMargins: sender
 {
-  Margin *p, *m;
-  if (currentSystem == nil)
-  {
-    NSBeep();
+    Margin *newMargin, *previousMargin;
+    
+    if (currentSystem == nil)
+    {
+	NSLog(@"-newMargins, currentSystem == nil");
+	return self;
+    }
+    if ([currentSystem checkMargin])
+    {
+	NSLog(@"-newMargins, currentSystem failed margin check");
+	return self;
+    }
+    previousMargin = [self prevMargin: currentSystem];
+    if (previousMargin != nil)
+	newMargin = [previousMargin copy];
+    else 
+	newMargin = [[Margin alloc] init];
+    [newMargin setStaffScale: [[DrawApp currentDocument] staffScale]];
+    [newMargin setClient: currentSystem];
+    [currentSystem linkobject: newMargin];
+    [self deselectAll: self];
+    [currentSystem recalcObjs];
+    [self selectObj: newMargin];
+    [[DrawApp sharedApplicationController] inspectMe: newMargin loadInspector: YES];
     return self;
-  }
-  if ([currentSystem checkMargin])
-  {
-    NSBeep();
-    return self;
-  }
-  m = [self prevMargin: currentSystem];
-  if (m != nil) p = [m newFrom]; else p = [[Margin alloc] init];
-  p->client = currentSystem;
-  [currentSystem linkobject: p];
-  [self deselectAll: self];
-  [currentSystem recalcObjs];
-  [self selectObj: p];
-  [NSApp inspectMe: p loadInspector: YES];
-  return self;
 }
 
  
@@ -700,7 +705,7 @@ extern char *typename[NUMTYPES];
   }
   else
   {
-    [NSApp inspectClass: [SysInspector class] loadInspector: YES];
+    [[DrawApp sharedApplicationController] inspectClass: [SysInspector class] loadInspector: YES];
     [self setFontSelection: 3 : 0];
   }
   return self;
@@ -1052,7 +1057,7 @@ static BOOL doToObject(Graphic *p, int c, int a)
 	}
       }
       [self setNeedsDisplay:YES];
-      [NSApp inspectApp];
+      [[DrawApp sharedApplicationController] inspectApp];
       return self;
     }
   }
@@ -1154,7 +1159,7 @@ extern char *typename[NUMTYPES];
 //  System *sys;
   int n, nsys;
   nsys = [syslist count];
-  n = [NSApp getLayBarNumber];
+  n = [[DrawApp sharedApplicationController] getLayBarNumber];
   if (n < 0 || n > nsys)
   {
     NSBeep();
@@ -1493,7 +1498,7 @@ extern char *typename[NUMTYPES];
   if (currentSystem == nil) NSBeep();
   else
   {
-    n = [NSApp getLayBarNumber];
+    n = [[DrawApp sharedApplicationController] getLayBarNumber];
     [currentSystem layBars: n : &r];
     [self cache: r];
     [[self window] flushWindow];
@@ -1714,7 +1719,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
   if (askAboutSys("You wish to delete this system?", sys, self))
   {
     [self deleteThisSystem: currentSystem];
-    [NSApp inspectApp];
+    [[DrawApp sharedApplicationController] inspectApp];
   }
   return self;
 }
@@ -1836,7 +1841,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
   [self copySys: sender];
   [self deleteThisSystem: currentSystem];
   if (m) [self paginate: self];
-  [NSApp inspectApp];
+  [[DrawApp sharedApplicationController] inspectApp];
   return self;
 }
 
@@ -1876,7 +1881,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
   }
   [self paginate: self];
   [self thisSystem: sys];
-  [NSApp inspectApp];
+  [[DrawApp sharedApplicationController] inspectApp];
   [self setNeedsDisplay:YES];
   return self;
 }
@@ -1932,7 +1937,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
   p2 = nsys->page;
   pag = [self deleteThisSystem: nsys];
   if (!pag) [self simplePaginate: sys : 0 : 1];
-  [NSApp inspectApp];
+  [[DrawApp sharedApplicationController] inspectApp];
   return self;
 }
 
@@ -2080,7 +2085,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
 - upgradeParts
 {
   int nsys, ns, i, j, k/*, n*/;
-  NSMutableArray *al, *sl, *pl = [NSApp getPartlist];
+  NSMutableArray *al, *sl, *pl = [[DrawApp sharedApplicationController] getPartlist];
   CallPart *cp;
   System *sys;
   Staff *sp;

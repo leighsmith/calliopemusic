@@ -670,7 +670,7 @@ static float centreTime(NSMutableArray *nl)
           cmakeline(qx, qy + v, x + w, y + v, m);
           if (m == 5)
           {
-              gv = (GraphicView *)[[DrawApp currentDocument] graphicView];
+              gv = (GraphicView *)[DrawApp currentView];
             [gv lockFocus];
           }
           cstrokeline(th, m);

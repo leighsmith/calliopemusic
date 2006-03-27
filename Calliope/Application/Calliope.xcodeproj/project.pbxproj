@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D87D0FDA09AE6EA900784ACC /* draw.c in Sources */ = {isa = PBXBuildFile; fileRef = D87D0FD909AE6EA900784ACC /* draw.c */; };
+		D87D0FDA09AE6EA900784ACC /* draw.m in Sources */ = {isa = PBXBuildFile; fileRef = D87D0FD909AE6EA900784ACC /* draw.m */; };
 		D87D0FDC09AE6ED200784ACC /* muxCollide.h in Headers */ = {isa = PBXBuildFile; fileRef = D87D0FDB09AE6ED200784ACC /* muxCollide.h */; };
 		D87D0FDE09AE751300784ACC /* OAPropertyListArchiver.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD96CF0483CDC800A80164 /* OAPropertyListArchiver.m */; };
 		D87D0FE809AE7AE500784ACC /* OAPropertyListCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD96D30483CDC800A80164 /* OAPropertyListCoder.m */; };
@@ -670,7 +670,7 @@
 
 /* Begin PBXFileReference section */
 		D828320B0483E0C000A80164 /* tick.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = tick.aiff; path = Sounds/tick.aiff; sourceTree = "<group>"; };
-		D87D0FD909AE6EA900784ACC /* draw.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = draw.c; sourceTree = "<group>"; };
+		D87D0FD909AE6EA900784ACC /* draw.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.objc; fileEncoding = 30; path = draw.m; sourceTree = "<group>"; };
 		D87D0FDB09AE6ED200784ACC /* muxCollide.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = muxCollide.h; sourceTree = "<group>"; };
 		D88C84B705053B7C001855C1 /* NSColor+PropertyListCoding.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = "NSColor+PropertyListCoding.h"; sourceTree = "<group>"; };
 		D88C84B805053B7C001855C1 /* NSColor+PropertyListCoding.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = "NSColor+PropertyListCoding.m"; sourceTree = "<group>"; };
@@ -1101,7 +1101,7 @@
 		D8FD93300483CDC800A80164 /* Course.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Course.h; sourceTree = "<group>"; };
 		D8FD93320483CDC800A80164 /* DragMatrix.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DragMatrix.h; sourceTree = "<group>"; };
 		D8FD93340483CDC800A80164 /* DrawApp.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DrawApp.h; sourceTree = "<group>"; };
-		D8FD93360483CDC800A80164 /* OpusDocument.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = file; path = OpusDocument.h; sourceTree = "<group>"; };
+		D8FD93360483CDC800A80164 /* OpusDocument.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OpusDocument.h; sourceTree = "<group>"; };
 		D8FD93380483CDC800A80164 /* Enclosure.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Enclosure.h; sourceTree = "<group>"; };
 		D8FD933A0483CDC800A80164 /* EnclosureInspector.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = EnclosureInspector.h; sourceTree = "<group>"; };
 		D8FD933C0483CDC800A80164 /* GNChord.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = GNChord.h; sourceTree = "<group>"; };
@@ -1400,6 +1400,7 @@
 				D8FD92570483CDC700A80164 /* ClefInspector.m */,
 				D8FD92590483CDC700A80164 /* Course.m */,
 				D8FD925B0483CDC700A80164 /* DragMatrix.m */,
+				D8FD93340483CDC800A80164 /* DrawApp.h */,
 				D8FD925D0483CDC700A80164 /* DrawApp.m */,
 				D8FD92610483CDC700A80164 /* Enclosure.m */,
 				D8FD92630483CDC700A80164 /* EnclosureInspector.m */,
@@ -1424,6 +1425,7 @@
 				D8FD92850483CDC700A80164 /* LayBarInspector.m */,
 				D8FD92870483CDC700A80164 /* Ligature.m */,
 				D8FD92890483CDC700A80164 /* LigatureInspector.m */,
+				D8FD93620483CDC800A80164 /* Margin.h */,
 				D8FD928B0483CDC700A80164 /* Margin.m */,
 				D8FD928D0483CDC700A80164 /* MarginInspector.m */,
 				D8FD928F0483CDC700A80164 /* Metro.m */,
@@ -1439,6 +1441,7 @@
 				D8FD92A30483CDC700A80164 /* NoteInspector.m */,
 				D8FD93360483CDC800A80164 /* OpusDocument.h */,
 				D8FD925F0483CDC700A80164 /* OpusDocument.m */,
+				D8FD937E0483CDC800A80164 /* Page.h */,
 				D8FD92A50483CDC700A80164 /* Page.m */,
 				D8FD92A70483CDC700A80164 /* PlayInspector.m */,
 				D8FD92A90483CDC700A80164 /* PrefBlock.m */,
@@ -1454,6 +1457,7 @@
 				D8FD92BD0483CDC700A80164 /* SoundEffect.m */,
 				D8FD92BF0483CDC700A80164 /* SquareNote.m */,
 				D8FD92C10483CDC800A80164 /* SquareNoteInspector.m */,
+				D8FD939E0483CDC800A80164 /* Staff.h */,
 				D8FD92C30483CDC800A80164 /* Staff.m */,
 				D8FD92C50483CDC800A80164 /* StaffObj.m */,
 				D8FD92C70483CDC800A80164 /* StaffTrans.m */,
@@ -1461,6 +1465,7 @@
 				D8FD92CB0483CDC800A80164 /* SysAdjust.m */,
 				D8FD92CD0483CDC800A80164 /* SysCommands.m */,
 				D8FD92CF0483CDC800A80164 /* SysInspector.m */,
+				D8FD93AC0483CDC800A80164 /* System.h */,
 				D8FD92D10483CDC800A80164 /* System.m */,
 				D8FD92D30483CDC800A80164 /* TabInspector.m */,
 				D8FD92D50483CDC800A80164 /* Tablature.m */,
@@ -1513,7 +1518,6 @@
 				D8FD932E0483CDC800A80164 /* ClefInspector.h */,
 				D8FD93300483CDC800A80164 /* Course.h */,
 				D8FD93320483CDC800A80164 /* DragMatrix.h */,
-				D8FD93340483CDC800A80164 /* DrawApp.h */,
 				D8FD93380483CDC800A80164 /* Enclosure.h */,
 				D8FD933A0483CDC800A80164 /* EnclosureInspector.h */,
 				D8FD93D60483CDC800A80164 /* FileCompatibility.h */,
@@ -1537,7 +1541,6 @@
 				D8FD935C0483CDC800A80164 /* LayBarInspector.h */,
 				D8FD935E0483CDC800A80164 /* Ligature.h */,
 				D8FD93600483CDC800A80164 /* LigatureInspector.h */,
-				D8FD93620483CDC800A80164 /* Margin.h */,
 				D8FD93640483CDC800A80164 /* MarginInspector.h */,
 				D8FD93660483CDC800A80164 /* Metro.h */,
 				D8FD93680483CDC800A80164 /* MetroInspector.h */,
@@ -1551,7 +1554,6 @@
 				D8FD93780483CDC800A80164 /* NoteGroupInspector.h */,
 				D8FD937A0483CDC800A80164 /* NoteHead.h */,
 				D8FD937C0483CDC800A80164 /* NoteInspector.h */,
-				D8FD937E0483CDC800A80164 /* Page.h */,
 				D8FD93800483CDC800A80164 /* PlayInspector.h */,
 				D8FD93820483CDC800A80164 /* PrefBlock.h */,
 				D8FD93840483CDC800A80164 /* Preferences.h */,
@@ -1565,14 +1567,12 @@
 				D8FD93980483CDC800A80164 /* SoundEffect.h */,
 				D8FD939A0483CDC800A80164 /* SquareNote.h */,
 				D8FD939C0483CDC800A80164 /* SquareNoteInspector.h */,
-				D8FD939E0483CDC800A80164 /* Staff.h */,
 				D8FD93A00483CDC800A80164 /* StaffObj.h */,
 				D8FD93A20483CDC800A80164 /* StaffTrans.h */,
 				D8FD93A40483CDC800A80164 /* SyncScrollView.h */,
 				D8FD93A60483CDC800A80164 /* SysAdjust.h */,
 				D8FD93A80483CDC800A80164 /* SysCommands.h */,
 				D8FD93AA0483CDC800A80164 /* SysInspector.h */,
-				D8FD93AC0483CDC800A80164 /* System.h */,
 				D8FD93AE0483CDC800A80164 /* TabInspector.h */,
 				D8FD93B00483CDC800A80164 /* Tablature.h */,
 				D8FD93B20483CDC800A80164 /* TabTuner.h */,
@@ -1605,7 +1605,7 @@
 		D8FD93E80483CDC800A80164 /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
-				D87D0FD909AE6EA900784ACC /* draw.c */,
+				D87D0FD909AE6EA900784ACC /* draw.m */,
 				D8FD93EB0483CDC800A80164 /* Calliope_main.m */,
 				D8FD93ED0483CDC800A80164 /* mux.m */,
 				D8FD93EF0483CDC800A80164 /* muxchar.m */,
@@ -2786,7 +2786,7 @@
 				D8F249E909AD3F8D00B96D0D /* muxCollide.m in Sources */,
 				D8F249EA09AD3F8D00B96D0D /* muxlow.m in Sources */,
 				D8F252AB09AE669800B96D0D /* Bracket.m in Sources */,
-				D87D0FDA09AE6EA900784ACC /* draw.c in Sources */,
+				D87D0FDA09AE6EA900784ACC /* draw.m in Sources */,
 				D87D0FDE09AE751300784ACC /* OAPropertyListArchiver.m in Sources */,
 				D87D0FE809AE7AE500784ACC /* OAPropertyListCoder.m in Sources */,
 				D8C84F8109CDAAEF00376965 /* Inspector.m in Sources */,

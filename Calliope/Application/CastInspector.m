@@ -39,7 +39,7 @@
 - newEntry: (NSString *) n
 {
   CallPart *p;
-  NSMutableArray *pl = [NSApp getPartlist];
+  NSMutableArray *pl = [[DrawApp sharedApplicationController] getPartlist];
   int k = [pl count];
   while (k--)
   {
@@ -83,13 +83,13 @@
   if (r)
   {
     partlistflag++;
-    [[NSApp getPartlist] sortPartlist];
+    [[[DrawApp sharedApplicationController] getPartlist] sortPartlist];
     [partbrowser reloadColumn:0];
     [partbrowser setPath:s];
     [delbutton setEnabled:1];
     [modbutton setEnabled:1];
     [parttext setStringValue:s];
-    [(GraphicView *)[[DrawApp currentDocument] graphicView] dirty];
+    [(GraphicView *)[DrawApp currentView] dirty];
   }
   return self;
 }
@@ -100,7 +100,7 @@
   CallPart *p;
   NSString *a;
   NSString *s = [parttext stringValue];
-  NSMutableArray *pl = [NSApp getPartlist];
+  NSMutableArray *pl = [[DrawApp sharedApplicationController] getPartlist];
   int i, part;
   if (s == nil) NSLog(@"CastInspector setModify s == nil");
   else if (![s length]) NSLog(@"CastInspector setModify s empty");
@@ -113,10 +113,10 @@
       else a = [instlist instNameForInt: i];
     [p update: s : [[partform cellAtIndex:0] stringValue] : [[partform cellAtIndex:1] intValue] : a];
     partlistflag++;
-    [[NSApp getPartlist] sortPartlist];
+    [[[DrawApp sharedApplicationController] getPartlist] sortPartlist];
     [partbrowser reloadColumn:0];
     [partbrowser setPath:s];
-    [(GraphicView *)[[DrawApp currentDocument] graphicView] dirty];
+    [(GraphicView *)[DrawApp currentView] dirty];
   }
   return self;
 }
@@ -131,12 +131,12 @@
     NSLog(@"CastInspector hitRemove part < 0");
     return self;
   }
-  [[NSApp getPartlist] removeObjectAtIndex:part];
+  [[[DrawApp sharedApplicationController] getPartlist] removeObjectAtIndex:part];
   partlistflag++;
   [partbrowser reloadColumn:0];
   [partbrowser setPath:@""];
   [self enableButtons: 0 : 0 : 0];
-  [(GraphicView *)[[DrawApp currentDocument] graphicView] dirty];
+  [(GraphicView *)[DrawApp currentView] dirty];
   [parttext setStringValue:@""];
   return self;
 }
@@ -151,7 +151,7 @@
   CallPart *p;
   NSString *n;
   int i = [[partbrowser matrixInColumn: 0] selectedRow];
-  if (i < 0 || i > [[NSApp getPartlist] count])
+  if (i < 0 || i > [[[DrawApp sharedApplicationController] getPartlist] count])
   {
     if (t != nil)
         if ([t length]) [parttext setStringValue:@""];
@@ -161,7 +161,7 @@
   {
     if (t != nil)
         if ([t length]) [parttext setStringValue:t];
-    p = [[NSApp getPartlist] objectAtIndex:i];
+    p = [[[DrawApp sharedApplicationController] getPartlist] objectAtIndex:i];
     n = [parttext stringValue];
     if (![p->name isEqualToString: n])
     {
@@ -197,7 +197,7 @@
   v = [d graphicView];
   if (v == nil) return self;
   sl = v->slist;
-  pl = [NSApp getPartlist];
+  pl = [[DrawApp sharedApplicationController] getPartlist];
   k = [sl count];
   n = nil;
   mult = 0;
@@ -232,7 +232,7 @@
 - browserHit: sender
 {
   int i = [[partbrowser matrixInColumn: 0] selectedRow];
-  return [self setPanel: [[NSApp getPartlist] partNameForInt: i]];
+  return [self setPanel: [[[DrawApp sharedApplicationController] getPartlist] partNameForInt: i]];
 }
 
 
@@ -240,12 +240,12 @@
 {
   int j, n;
   CallPart *cp;
-  GraphicView *v = [[DrawApp currentDocument] graphicView];
+  GraphicView *v = [DrawApp currentView];
   NSMutableArray *pl, *xl;
   NSMatrix *m;
   NSCell *c;
   xl = [[NSMutableArray alloc] init];
-  pl = [NSApp getPartlist];
+  pl = [[DrawApp sharedApplicationController] getPartlist];
   m = [partbrowser matrixInColumn: 0];
   n = [[m cells] count];
   for (j = 0; j < n; j++)
@@ -283,7 +283,7 @@
   NSMutableArray *pl;
   if (sender == partbrowser)
   {
-    pl = [NSApp getPartlist];
+    pl = [[DrawApp sharedApplicationController] getPartlist];
     return [pl count];
   }
   return [instlist count];  
@@ -296,7 +296,7 @@
   if (col != 0) return;
   if (sender == partbrowser)
   {
-    pl = [NSApp getPartlist];
+    pl = [[DrawApp sharedApplicationController] getPartlist];
     [cell setStringValue:[pl partNameForInt: row]];
     [cell setLeaf:YES];
   }

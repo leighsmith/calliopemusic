@@ -39,6 +39,7 @@
 @public
     /*! @var documentWindow the window the GraphicView is in. TODO: we should be able to remove this as we separate out the document from window controlling */
     NSWindow *documentWindow;
+@protected
     /*! @var view the document's GraphicView */
     IBOutlet GraphicView *view;	
     /*! @var scrollView The view managing the scroll bars */

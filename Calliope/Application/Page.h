@@ -35,25 +35,25 @@ typedef enum {
 
 @interface Page: NSObject
 {
+    // TODO These are both currently public. They are only accessed by GraphicView, GVCommands, GVFormat, GVPerform.
+    // i.e. the routines in those categories of GraphicView should be factored together with syslist into the Page
 @public;
-  short topsys;
-  short botsys;
+    short topsys;
+    short botsys;
 @private
-  id headfoot[12];
-  char hfinfo[12];
-  int num;			/*! @var num The displayed paged number. */
-  float fillheight;		/* sums to page height (as screened) */
-  float margin[10];
-  PageFormat format;
-  int alignment;
+    Runner *headfoot[12];
+    char hfinfo[12];	    // can probably be removed if headfoot just checks for nil values.
+    int num;			/*! @var num The displayed paged number. */
+    float fillheight;		/* sums to page height (as screened) */
+    Margin *margin;		/*! @var margin The margins for this page. */
+    PageFormat format;
+    int alignment;
 }
 
-- initWithPageNumber: (int) n topSystemNumber: (int) s0 bottomSystemNumber: (int) s1;
-
 /*!
-  @brief copy page table info from previous page.  p is nil if no previous page 
+  @brief Initialises the page to a given page number and indexes to it's associated systems.
  */
-- prevTable: (Page *) p;
+- initWithPageNumber: (int) n topSystemNumber: (int) s0 bottomSystemNumber: (int) s1;
 
 - (float) headerBase;
 - (float) footerBase;
@@ -68,7 +68,12 @@ typedef enum {
 /*!
   @brief Assigns the given margin.
  */
-- (void) setMarginType: (MarginType) marginType toSize: (float) newMarginValue;
+- (void) setMargin: (Margin *) newMargin;
+
+/*!
+ @brief Returns the margin for this page.
+ */
+- (Margin *) margin;
 
 /*!
   @brief Returns the page height (as screened) 

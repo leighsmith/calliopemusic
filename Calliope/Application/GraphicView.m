@@ -1023,7 +1023,7 @@ extern char *typename[NUMTYPES];
     [self reDraw: g]; /* g's marker */
     [self reDraw: s]; /* old marker */
   }
-  [NSApp inspectClass: [SysInspector class] loadInspector: command];
+  [[DrawApp sharedApplicationController] inspectClass: [SysInspector class] loadInspector: command];
   return self;
 }
 
@@ -1109,7 +1109,7 @@ extern struct toolData toolCodes[NUMTOOLS];
     tool = toolCodes[currentTool].type;
     if (tool && (control || command || alternate))
     {
-	[NSApp resetTool];
+	[[DrawApp sharedApplicationController] resetTool];
 	return;
     }
     p = [event locationInWindow];
@@ -1170,8 +1170,8 @@ extern struct toolData toolCodes[NUMTOOLS];
 	[self deselectAll: self];
 	[[self findSys: p.y] newStaff: p.y];
 	[self balanceOrAsk: currentPage : 0 : 0];
-	[NSApp resetTool];
-	[NSApp inspectClass: [SysInspector class] loadInspector: NO];
+	[[DrawApp sharedApplicationController] resetTool];
+	[[DrawApp sharedApplicationController] inspectClass: [SysInspector class] loadInspector: NO];
 	trymove = nil;
     }
     else if (tool) 
@@ -1249,7 +1249,7 @@ extern struct toolData toolCodes[NUMTOOLS];
 	    sys = [(StaffObj *)g mySystem];
 	    if (sys != currentSystem) [self selectCurSys: sys : NO];
 	}
-	[NSApp inspectAppWithMe: g loadInspector: command : fontseltype];
+	[[DrawApp sharedApplicationController] inspectAppWithMe: g loadInspector: command : fontseltype];
 	i = g->gFlags.selend;
 	if ([g isResizable] && i == 7)
 	{
@@ -1259,7 +1259,7 @@ extern struct toolData toolCodes[NUMTOOLS];
 	}
 	else if ([g isEditable] && !alternate && (i != 7 && i != 4))
 	{
-	    [NSApp resetTool];
+	    [[DrawApp sharedApplicationController] resetTool];
 	    [(TextGraphic *)g edit: event in: self];
 	    trymove = nil;
 	}
@@ -1369,7 +1369,7 @@ static void drawHorz(float x, float y, float w, NSRect r)
   {
     [self dirty];
     [self drawSelectionWith: &b];
-    [NSApp inspectApp];
+    [[DrawApp sharedApplicationController] inspectApp];
   }
   return r;
 }
@@ -1406,7 +1406,7 @@ static void drawHorz(float x, float y, float w, NSRect r)
     [self selectObj: g];
     [self drawSelectionWith: NULL];
     if (!ISAVOCAL(g)) NSLog(@"handleTab: is not a vocal");
-    [NSApp inspectApp];
+    [[DrawApp sharedApplicationController] inspectApp];
     return YES;
   }
   return NO;
@@ -1468,7 +1468,7 @@ static void drawHorz(float x, float y, float w, NSRect r)
     [self deselectAll: self];
     [self selectObj: p];
     [self drawSelectionWith: NULL];
-    [NSApp inspectApp];
+    [[DrawApp sharedApplicationController] inspectApp];
   }
   return r;
 }
@@ -1498,7 +1498,7 @@ static void drawHorz(float x, float y, float w, NSRect r)
       escapedTool = currentTool;
       t = 0;
     }
-    [NSApp resetToolTo: t];
+    [[DrawApp sharedApplicationController] resetToolTo: t];
     return;
   }
   if ([slist count] == 0) {[super keyDown:event]; return;}
@@ -1544,7 +1544,7 @@ static void drawHorz(float x, float y, float w, NSRect r)
     {
       [self dirty];
       [self drawSelectionWith: &b];
-      [NSApp inspectAppWithMe: p loadInspector: NO : 0];
+      [[DrawApp sharedApplicationController] inspectAppWithMe: p loadInspector: NO : 0];
     }
     else if (act < 0) [super keyDown:event];
   }
@@ -1679,7 +1679,7 @@ static void drawHorz(float x, float y, float w, NSRect r)
     }
     else if (TYPEOF(p) == MARGIN)
     {
-        if (((Margin *)p)->client == [syslist objectAtIndex: 0])
+        if ([(Margin *) p client] == [syslist objectAtIndex: 0])
         {
           NSLog(@"delete: client == first system");
           return;
@@ -1722,7 +1722,7 @@ static void drawHorz(float x, float y, float w, NSRect r)
     {
       [self cache: sb];
     }
-    [NSApp inspectApp];
+    [[DrawApp sharedApplicationController] inspectApp];
     [[self window] flushWindow];
   }
 }
@@ -2132,7 +2132,7 @@ extern int needUpgrade;
     if (![s checkMargin])
     {
       p = [Graphic allocInit: MARGIN];
-      p->client = s;
+	[p setClient: s];
       [s linkobject: p];
       [p recalc];
       needUpgrade |= 4;

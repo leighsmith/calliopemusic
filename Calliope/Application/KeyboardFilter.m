@@ -197,7 +197,7 @@ extern void setkeysig(KeySig *p, char *key);
   NSPoint pt;
   Staff *sp;
   OpusDocument *doc = [DrawApp currentDocument];
-  PlayInspector *player = [NSApp thePlayInspector];
+  PlayInspector *player = [[DrawApp sharedApplicationController] thePlayInspector];
   if (doc) v = [doc graphicView]; else return self;
   i = [n noteTag] & 127;
   if (i < 0 || i > 127) return self;

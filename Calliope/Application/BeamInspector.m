@@ -15,7 +15,7 @@
 
 - setView: (int) i
 {
-Beam *p = [(GraphicView *)[[DrawApp currentDocument] graphicView] canInspect: BEAM];
+Beam *p = [(GraphicView *)[DrawApp currentView] canInspect: BEAM];
   if (p == nil) return [multiview replaceView: blankview];
   switch(i)
   {
@@ -39,7 +39,7 @@ Beam *p = [(GraphicView *)[[DrawApp currentDocument] graphicView] canInspect: BE
 
 - setPanel: (int) i
 {
-Beam *p = [(GraphicView *)[[DrawApp currentDocument] graphicView] canInspect: BEAM];
+Beam *p = [(GraphicView *)[DrawApp currentView] canInspect: BEAM];
   if (p == nil) return self;
   switch(i)
   {
@@ -87,7 +87,7 @@ Beam *p = [(GraphicView *)[[DrawApp currentDocument] graphicView] canInspect: BE
   Beam *p;
   if ([brokebutton state])
   {
-  p = [(GraphicView *)[[DrawApp currentDocument] graphicView] canInspect: BEAM];
+  p = [(GraphicView *)[DrawApp currentView] canInspect: BEAM];
     [timematrix selectCellAtRow:0 column:p->flags.body - 1];
     [dotmatrix selectCellAtRow:0 column:p->flags.dot];
   }
@@ -143,7 +143,7 @@ Beam *p = [(GraphicView *)[[DrawApp currentDocument] graphicView] canInspect: BE
 {
   NSRect b;
   NSMutableArray *sl;
-  GraphicView *v = [[DrawApp currentDocument] graphicView];
+  GraphicView *v = [DrawApp currentView];
   Beam *p;
   int k;
   if ([v startInspection: BEAM : &b : &sl])

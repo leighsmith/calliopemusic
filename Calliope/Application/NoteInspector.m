@@ -66,7 +66,7 @@ static int mypartlist = -1;
 //      while (k--) [instpopup removeItemAtIndex:k];
         [instbutton removeAllItems];
         [instbutton addItemWithTitle:@"multiple selection"];
-      pl = [NSApp getPartlist];
+      pl = [[DrawApp sharedApplicationController] getPartlist];
       k = [pl count];
         for (i = 0; i < k; i++) [instbutton addItemWithTitle:[pl partNameForInt: i]];
       whichlist = 1;
@@ -124,7 +124,7 @@ static int mypartlist = -1;
         i = popSelectionFor(instbutton) - 1;//sb:  was instpopup
         if (i >= 0) {
             if (p->part) [p->part autorelease];
-            p->part = [[[NSApp getPartlist] partNameForInt: i] retain];
+            p->part = [[[[DrawApp sharedApplicationController] getPartlist] partNameForInt: i] retain];
         }
       break;
     case 2:
@@ -235,7 +235,7 @@ static void setBodyTypes(GNote *p, int t)
 {
   NSRect b;
   GNote *p;
-  id sl, v = [[DrawApp currentDocument] graphicView];
+  id sl, v = [DrawApp currentView];
   int i, k, num, seltime, seldot, selstyl, selacc, selstem, selgra, nostem, seled;
   BOOL doReset = NO;
   if ([v startInspection: NOTE : &b : &sl : &num])
@@ -339,7 +339,7 @@ static void setBodyTypes(GNote *p, int t)
 - updatePanel
 {
   int a, num;
-  GraphicView *v = [[DrawApp currentDocument] graphicView];
+  GraphicView *v = [DrawApp currentView];
   [self assayList: v->slist : &num];
   if (num == 0) return nil;
   for (a = 0; a <= 1; a++)
@@ -436,7 +436,7 @@ NSString *partNameHavingPatch(int i)
 {
   int j, k;
   CallPart *cp;
-  NSMutableArray *pl = [NSApp getPartlist];
+  NSMutableArray *pl = [[DrawApp sharedApplicationController] getPartlist];
   k = [pl count];
   for (j = 0; j < k; j++)
   {
@@ -450,7 +450,7 @@ NSString *partNameHavingPatch(int i)
 - hitDefine: sender
 {
   int num, w;
-  GraphicView *v = [[DrawApp currentDocument] graphicView];
+  GraphicView *v = [DrawApp currentView];
   [self constructTuning: nil];
   if (v == nil) return self;
   w = [definebutton indexOfSelectedItem] - 1;
@@ -474,7 +474,7 @@ NSString *partNameHavingPatch(int i)
       if (ALLSAMEATOM(15, num))
       {
           selectPopFor(instbutton, instbutton,
-                     [instlist soundForInstrument: [[NSApp getPartlist] instrumentForPart: ALLVALATOM(15)]] + 1);//sb: was (midipopup, ...
+                     [instlist soundForInstrument: [[[DrawApp sharedApplicationController] getPartlist] instrumentForPart: ALLVALATOM(15)]] + 1);//sb: was (midipopup, ...
       }
         else selectPopFor(instbutton, instbutton, 0);//sb: was (midipopup, instbutton, 0)
     }

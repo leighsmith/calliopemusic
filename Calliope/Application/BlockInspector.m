@@ -45,7 +45,7 @@
 {
   NSRect b;
   Block *p;
-  id sl, v = [[DrawApp currentDocument] graphicView];
+  id sl, v = [DrawApp currentView];
   int k;
   if ([v startInspection: BLOCK : &b : &sl])
   {
@@ -85,7 +85,7 @@
 - updatePanel
 {
   int n;
-  GraphicView *v = [[DrawApp currentDocument] graphicView];
+  GraphicView *v = [DrawApp currentView];
   [self assayList: v->slist : &n];
   if (n == 0) return self;
   [[sizeform cellAtIndex:0] setStringValue:@""];

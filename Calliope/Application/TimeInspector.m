@@ -44,7 +44,7 @@ BOOL enablepunct[8] = {YES, YES, YES, YES, NO, NO, NO, NO};
 {
   NSRect b;
   TimeSig *p;
-  id sl, v = [[DrawApp currentDocument] graphicView];
+  id sl, v = [DrawApp currentView];
   int k;
   if ([v startInspection: TIMESIG : &b : &sl])
   {
@@ -92,7 +92,7 @@ BOOL enablepunct[8] = {YES, YES, YES, YES, NO, NO, NO, NO};
 - preset
 {
   int n;
-  TimeSig *p = [[[DrawApp currentDocument] graphicView] canInspect: TIMESIG : &n];
+  TimeSig *p = [[DrawApp currentView] canInspect: TIMESIG : &n];
   if (n == 0) return nil;
   [self updatePanel: p];
   [self update: self];

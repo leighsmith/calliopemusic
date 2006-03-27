@@ -64,7 +64,10 @@ extern int partlistflag;
 
 - (NSWindow *) currentWindow;
 - (void)setCurrentWindow: (id) w; //sb
+
 - selectFontSelection: (int) i;
+
++ (DrawApp *) sharedApplicationController;
 
 + (OpusDocument *) currentDocument;
 + (GraphicView *) currentView;

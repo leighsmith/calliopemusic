@@ -214,7 +214,7 @@ static Clef *proto;
     [self markHangers];
     [self setVerses];
   }
-  if (am) [NSApp inspectMe: self loadInspector: NO];
+  if (am) [[DrawApp sharedApplicationController] inspectMe: self loadInspector: NO];
   return m;
 }
 

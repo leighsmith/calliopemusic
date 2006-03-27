@@ -335,7 +335,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
     self = [super init];
     if(self != nil) {
 	gFlags.type = SYSTEM;
-	view = v; /*backpointer -- no retain */
+	view = v; /* backpointer -- no retain */
 	flags.nstaves = n;
 	pagenum = barnum = 0;
 	flags.newbar = 0;
@@ -347,7 +347,8 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 	expansion = 1.0;
 	groupsep = 0.0;
 	height = 0;
-	page =  nil; /*backpointer -- no retain */
+	staffScale = 0.0;
+	page =  nil; /* backpointer -- no retain */
 	style = nullPart;
 	objs = [[NSMutableArray alloc] init];
 	staves = [[NSMutableArray arrayWithCapacity: n] retain];
@@ -370,12 +371,13 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 - initsys
 {
     System *cursys = [view currentSystem];
-    Margin *margin;
     
     if (cursys == nil)
     {
-	margin = [Graphic allocInit: MARGIN];
-	margin->client = self;
+	Margin *margin = [Graphic allocInit: MARGIN];
+	
+	[margin setStaffScale: staffScale];
+	[margin setClient: self];
 	[self linkobject: margin];
 	page = nil;
     }
@@ -385,7 +387,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
     [view linkSystem: cursys : self];
     [view thisSystem: self];
     [view setFontSelection: 1 : 0];
-    // [NSApp inspectClass: [SysInspector class] loadInspector: NO];
+    // [[DrawApp sharedApplicationController] inspectClass: [SysInspector class] loadInspector: NO];
     return self;
 }
 
@@ -393,16 +395,15 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 /*
   Make and return a new system using self as a template
 */
-
+// TODO probably this should just become copyWithZone:
 - newFrom
 {
   int i;
   Staff *sp, *op;
   System *sys;
   id p;
-  [self init];
-  sys = [[System alloc] initWithStaveCount: flags.nstaves onGraphicView: nil];
-  sys->view = view;
+  
+  sys = [[System alloc] initWithStaveCount: flags.nstaves onGraphicView: view];
   sys->page = page;
   sys->lindent = 0.0;
   sys->rindent = 0.0;
@@ -412,6 +413,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   sys->height = height;
   sys->headroom = headroom;
   sys->style = style;
+  sys->staffScale = staffScale;
   for (i = 0; i < flags.nstaves; i++)
   {
     sp = [sys->staves objectAtIndex:i];
@@ -539,6 +541,11 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 }
 
 
+- (void) setStaffScale: (float) newStaffScale
+{
+    staffScale = newStaffScale;
+}
+
 /*  return if self has a margin object */
 
 - checkMargin
@@ -562,7 +569,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   if (page) return [page leftMargin];
   m = [self checkMargin];
   if (m) return [m leftMargin];
-  return 36.0 / [[DrawApp currentDocument] staffScale];
+  return 36.0 / staffScale;
 }
 
 
@@ -572,7 +579,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   if (page) return [page rightMargin];
   m = [self checkMargin];
   if (m) return [m rightMargin];
-  return 36.0 / [[DrawApp currentDocument] staffScale];
+  return 36.0 / staffScale;
 }
 
 
@@ -582,7 +589,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   if (page) return [page headerBase];
   m = [self checkMargin];
   if (m) return [m headerBase];
-  return 18.0 / [[DrawApp currentDocument] staffScale];
+  return 18.0 / staffScale;
 }
 
 
@@ -592,28 +599,28 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   if (page) return [page footerBase];
   m = [self checkMargin];
   if (m) return [m footerBase];
-  return 18.0 / [[DrawApp currentDocument] staffScale];
+  return 18.0 / staffScale;
 }
 
 
 - (float) leftIndent
 {
   if (lindent == 0.0) return 0.0;  /* common shortcut */
-  return lindent / [[DrawApp currentDocument] staffScale];
+  return lindent / staffScale;
 }
 
 
 - (float) leftWhitespace
 {
   if (lindent == 0.0) return [self leftMargin];  /* common shortcut */
-  return [self leftMargin] + (lindent / [[DrawApp currentDocument] staffScale]);
+  return [self leftMargin] + (lindent / staffScale);
 }
 
 
 - (float) rightIndent
 {
   if (rindent == 0.0) return 0.0;  /* common shortcut */
-  return rindent / [[DrawApp currentDocument] staffScale];
+  return rindent / staffScale;
 }
 
 
@@ -625,8 +632,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 
 - recalc
 {
-  OpusDocument *doc = [DrawApp currentDocument];
-  width = ((paperSize.width - lindent - rindent) / [doc staffScale]) - ([self leftMargin] + [self rightMargin]);
+  width = ((paperSize.width - lindent - rindent) / staffScale) - ([self leftMargin] + [self rightMargin]);
   return [self resetSys];
 }
 
@@ -1041,6 +1047,11 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   { [super dealloc]; return; };
 }
 
+- (NSString *) description
+{
+    return [NSString stringWithFormat: @"%@ Page=%p staves=%@ objs=%@", 
+	[super description], page, staves, objs];
+}
 
 /* return which marker a given obj is */
 

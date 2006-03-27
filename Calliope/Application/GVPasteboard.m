@@ -539,6 +539,7 @@ extern char *typename[NUMTYPES];
   float x=0.0, y=0.0;
   NSMutableArray *pblist, *sl;
   BOOL didstob = NO, didhang = NO;
+  
   pblist = [self pasteFromPasteboard];
   [self closeList: pblist];
   if (pblist == nil) return NO;

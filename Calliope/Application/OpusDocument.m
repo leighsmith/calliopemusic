@@ -927,6 +927,7 @@ return nil;
 {
     System *newSystem = [[System alloc] initWithStaveCount: numOfStaves onGraphicView: view];
 
+    [newSystem setStaffScale: [self staffScale]];
     [newSystem initsys];
     if (numOfStaves > 1) 
 	[newSystem installLink];
@@ -1189,7 +1190,7 @@ return nil;
     }
     
     if (!directory && !newDirectory) 
-	directory = @"."; // LMS TODO [[NSApp currentDirectory] retain];
+	directory = @"."; // LMS TODO [[[DrawApp sharedApplicationController] currentDirectory] retain];
     else {
         if (newDirectory) {
             if (directory) [directory autorelease];
@@ -1364,7 +1365,7 @@ return nil;
     }
     documentWindow = nil;
     view = nil;
-    [NSApp inspectApp];
+    [[DrawApp sharedApplicationController] inspectApp];
 //#warning PrintingConversion:  '[NSPrintInfo setSharedPrintInfo:<arg1>]' used to be '[<obj> setPrintInfo:<arg1>]'.  This might want to be [[NSPrintOperation setCurrentOperation:nil] printInfo] or possibly [[PageLayout new] runModalWithPrintInfo:nil]
 //#warning SB I can't set this to nil. Maybe get the app object to look after a default NSPrintInfo object.
 //  [NSPrintInfo setSharedPrintInfo:nil];
@@ -1403,7 +1404,7 @@ return nil;
 //    [NSPrintInfo setSharedPrintInfo:printInfo];
     [self resetCursor];
     // [NSApp presetPrefsPanel]; // TODO should be [DrawApp presetPrefsPanel]; eventually DrawApp should just become a preferences controller.
-    // [NSApp inspectApp]; // TODO must rewrite.
+    // [[DrawApp sharedApplicationController] inspectApp]; // TODO must rewrite.
     //++partlistflag;
 }
 

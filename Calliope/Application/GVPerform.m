@@ -301,7 +301,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
     MKScore *as;
     MKSynthInstrument *synth;
     MKPartPerformer *partPerformer;
-    PlayInspector *pi = [NSApp thePlayInspector];
+    PlayInspector *pi = [[DrawApp sharedApplicationController] thePlayInspector];
     struct performer *perf;
     id p, an;
     char curracc[7], keysig[7], keytmp[7];
@@ -636,7 +636,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
             break;
         case 4: /* write a MIDI file */
             as = [[MKScore alloc] init];
-            cl = [NSApp getChanlist];
+            cl = [[DrawApp sharedApplicationController] getChanlist];
             i = 16;
             while (i--) ((Channel *)[cl objectAtIndex:i])->flag = 0;
             for (i = 0; i < numParts; i++)
@@ -708,7 +708,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
             [midi acceptSys: MK_sysStart];
             [midi acceptSys: MK_sysContinue];
             [midi acceptSys: MK_sysStop];
-            cl = [NSApp getChanlist];
+            cl = [[DrawApp sharedApplicationController] getChanlist];
             i = 16;
             while (i--) ((Channel *)[cl objectAtIndex:i])->flag = 0;
                 an = [[MKNote alloc] init];
@@ -794,7 +794,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
 	return self;
     }
     [self flowTimeSig: [syslist objectAtIndex:j]];
-    [NSApp thePlayView: self];
+    [[DrawApp sharedApplicationController] thePlayView: self];
     [self play: i : j : selonly : noprogch];
     return self;
 }
@@ -802,7 +802,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
 
 - clickStop
 {
-    [MKConductor sendMsgToApplicationThreadSel: @selector(clickStopButton) to: [NSApp thePlayInspector] argCount: 0];
+    [MKConductor sendMsgToApplicationThreadSel: @selector(clickStopButton) to: [[DrawApp sharedApplicationController] thePlayInspector] argCount: 0];
     return self;
 }
 
