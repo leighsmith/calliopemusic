@@ -1,17 +1,9 @@
 #import <Foundation/Foundation.h>
-#include <string.h>
 
 /* PSWrapsInit() sets up various definitions used by the main wraps */
 void PSWrapsInit( void )
 {
     NSLog(@"Called PSWrapsInit(), needs implementation\n");
-}
-
-
-/* These are what are called from main program */
-void PSmovegray(float x, float y, float g)
-{
-    NSLog(@"Called PSmovegray(), needs implementation\n");
 }
 
 void PSslant(float w, float h, float dy, float x, float y)

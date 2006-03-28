@@ -13,8 +13,9 @@
  modegray[0] is thus never used.
  Only mode 1,2,3 prints on paper.
  
- This should become a series of DrawXXX() functions
- */
+ Nowdays these are just shim around NSBezierPath and NSPoints. Perhaps they can become inline functions, or replaced?
+ This should become a series of DrawXXX() functions.
+*/
 
 #import "mux.h"
 #import <AppKit/AppKit.h>
@@ -104,7 +105,6 @@ float barwidth[3][3] = 		/* barwidth[staff type][size] */
 
 
 /* Returns a suitable index into modegray[] and noprint[] based on [selected][invisible] */
-
 int drawmode[2][4] =
 {
     {1, 4, 3, 2},
@@ -128,7 +128,6 @@ NSRect bb;	/* to accumulate the bounding box */
 
 
 /* initialise the graphics stuff */
-
 void colorInit(int i, NSColor * c)
 {
     modegray[0] = [[NSColor whiteColor] retain]; /* for BB: not used */
@@ -176,7 +175,7 @@ float charFWX(NSFont *f, int ch)
 ////  return [f pointSize] * (fm->charMetrics[fm->encoding[ch]]).xWidth;
 //    myRect = [f boundingRectForGlyph:(NSGlyph)ch];
 //    return myRect.size.width;/*sb: should already be scaled */
-    return [f advancementForGlyph:ch].width;
+    return [f advancementForGlyph: ch].width;
 }
 
 float charFLLY(NSFont *f, int ch)
@@ -184,8 +183,8 @@ float charFLLY(NSFont *f, int ch)
     NSRect myRect;
 //  NXFontMetrics *fm = [f metrics];
 //  return [f pointSize] * (fm->charMetrics[fm->encoding[ch]]).bbox[1];
-    myRect = [f boundingRectForGlyph:(NSGlyph)ch];
-    return myRect.origin.y;/*sb: should already be scaled */
+    myRect = [f boundingRectForGlyph: (NSGlyph) ch];
+    return myRect.origin.y; /* sb: should already be scaled */
 }
 
 float charFURY(NSFont *f, int ch)
@@ -193,8 +192,8 @@ float charFURY(NSFont *f, int ch)
     NSRect myRect;
 //  NXFontMetrics *fm = [f metrics];
 //  return [f pointSize] * (fm->charMetrics[fm->encoding[ch]]).bbox[3];
-    myRect = [f boundingRectForGlyph:(NSGlyph)ch];
-    return myRect.size.height + myRect.origin.y;/*sb: should already be scaled */
+    myRect = [f boundingRectForGlyph: (NSGlyph) ch];
+    return myRect.size.height + myRect.origin.y; /* sb: should already be scaled */
 }
 
 float charFLLX(NSFont *f, int ch)
@@ -202,8 +201,8 @@ float charFLLX(NSFont *f, int ch)
     NSRect myRect;
 //  NXFontMetrics *fm = [f metrics];
 //  return [f pointSize] * (fm->charMetrics[fm->encoding[ch]]).bbox[0];
-    myRect = [f boundingRectForGlyph:(NSGlyph)ch];
-    return myRect.origin.x;/*sb: should already be scaled */
+    myRect = [f boundingRectForGlyph: (NSGlyph) ch];
+    return myRect.origin.x; /* sb: should already be scaled */
 }
 
 float charFURX(NSFont *f, int ch)
@@ -211,8 +210,8 @@ float charFURX(NSFont *f, int ch)
     NSRect myRect;
 //  NXFontMetrics *fm = [f metrics];
 //  return [f pointSize] * (fm->charMetrics[fm->encoding[ch]]).bbox[2];
-    myRect = [f boundingRectForGlyph:(NSGlyph)ch];
-    return myRect.size.width + myRect.origin.x;/*sb: should already be scaled */
+    myRect = [f boundingRectForGlyph: (NSGlyph) ch];
+    return myRect.size.width + myRect.origin.x; /* sb: should already be scaled */
 }
 
 float charFGH(NSFont *f, int ch)
@@ -221,7 +220,7 @@ float charFGH(NSFont *f, int ch)
 //  NXFontMetrics *fm = [f metrics];
 //  NXCharMetrics *cm = &(fm->charMetrics[fm->encoding[ch]]);
 //  return [f pointSize] * (cm->bbox[3] - cm->bbox[1]);
-    myRect = [f boundingRectForGlyph:(NSGlyph)ch];
+    myRect = [f boundingRectForGlyph: (NSGlyph) ch];
     return myRect.size.height;
 }
 
@@ -231,7 +230,7 @@ float charFGW(NSFont *f, int ch)
 //  NXFontMetrics *fm = [f metrics];
 //  NXCharMetrics *cm = &(fm->charMetrics[fm->encoding[ch]]);
 //  return [f pointSize] * (cm->bbox[2] - cm->bbox[0]);
-    myRect = [f boundingRectForGlyph:(NSGlyph)ch];
+    myRect = [f boundingRectForGlyph: (NSGlyph) ch];
     return myRect.size.width;
 }
 
@@ -241,7 +240,7 @@ float charFCW(NSFont *f, int ch)
 //  NXFontMetrics *fm = [f metrics];
 //  NXCharMetrics *cm = &(fm->charMetrics[fm->encoding[ch]]);
 //  return 0.5 * [f pointSize] * (cm->bbox[2] + cm->bbox[0]);
-    myRect = [f boundingRectForGlyph:(NSGlyph)ch];
+    myRect = [f boundingRectForGlyph: (NSGlyph) ch];
     return (myRect.origin.x + 0.5 * myRect.size.width);
 }
 
@@ -251,7 +250,7 @@ float charFCH(NSFont *f, int ch)
 //  NXFontMetrics *fm = [f metrics];
 //  NXCharMetrics *cm = &(fm->charMetrics[fm->encoding[ch]]);
 //  return 0.5 * [f pointSize] * (cm->bbox[1] + cm->bbox[3]);
-    myRect = [f boundingRectForGlyph:(NSGlyph)ch];
+    myRect = [f boundingRectForGlyph: (NSGlyph) ch];
     return (myRect.origin.y + 0.5 * myRect.size.height);
 }
 
@@ -261,7 +260,7 @@ float charhalfFGW(NSFont *f, int ch)
 //  NXFontMetrics *fm = [f metrics];
 //  NXCharMetrics *cm = &(fm->charMetrics[fm->encoding[ch]]);
 //  return 0.5 * [f pointSize] * (cm->bbox[2] - cm->bbox[0]);
-    myRect = [f boundingRectForGlyph:(NSGlyph)ch];
+    myRect = [f boundingRectForGlyph: (NSGlyph) ch];
     return (0.5 * myRect.size.width);
 }
 
@@ -281,22 +280,21 @@ NSRect getbb()
 
 
 /* unions the current path (then does a newpath) into bb */
-
 void unionpath()
 {
     NSRect r;
     float llx, lly, urx, ury;
+    
     PSpathbbox(&llx, &lly, &urx, &ury);
     NSLog(@"unionpath BB = %f %f %f %f\n", llx, lly, urx - llx, ury - lly);
     PSnewpath();
     /*  --llx; ++urx; --lly; ++ury; */
     r = NSMakeRect(llx, lly, urx - llx, ury - lly);
-    bb  = NSUnionRect(r , bb);
+    bb  = NSUnionRect(r, bb);
 }
 
 
 /* unions the argument into bb */
-
 void unionrect(float x, float y, float w, float h)
 {
     NSRect r;
@@ -413,89 +411,94 @@ void unionStringBB(NSRect *b, float x, float y, char *s, NSFont *f, int j)
 
 
 /* draw a character in font f. */
-
 void drawCharacterInFont(float x, float y, int ch, NSFont *f, int mode)
 {
-    char s[2];
-    if (NOPRINT(mode)) return;
-    if (mode)
-    {
+
+    if (mode) {
+	char s[2];
+	
 	s[0] = ch; s[1] = '\0';
-	[f set];
-	PSmoveto(x, y);
-	[modegray[mode] set];
-//NSLog(@"show('%s', %f, %f)\n", s, x, y);
-	PSshow(s);
+	NSLog(@"drawCharacterInFont('%c', %f, %f) mode %d", ch, x, y, mode);
+	CAcString(x, y, (const char *) s, f, mode);
     }
-    else unionCharBB(&bb, x, y, ch, f);
+    else 
+	unionCharBB(&bb, x, y, ch, f);
 }
 
-
 /* draw a character centred on x and y */
-
 void centChar(float x, float y, int ch, NSFont *f, int mode)
 {
-    if (NOPRINT(mode)) return;
+    if (NOPRINT(mode)) 
+	return;
     drawCharacterInFont(x - charFCW(f, ch), y + charFCH(f, ch), ch, f, mode);
 }
 
 /* draw a character centred on x only */
-
 void centxChar(float x, float y, int ch, NSFont *f, int mode)
 {
-    if (NOPRINT(mode)) return;
+    if (NOPRINT(mode)) 
+	return;
     drawCharacterInFont(x - charFCW(f, ch), y, ch, f, mode);
 }
 
-/* draw a string, inserting baseline ties where needed.  NOT extern, please */
-
-void cShow(const char *s, NSFont *f, int m)
+/* draw a string, in a given font, inserting baseline ties where needed. */
+void DrawTextWithBaselineTies(float x, float y, NSString *stringToDisplay, NSFont *textFont, int mode)
 {
-    float w, h, pts;
-    unsigned char c, t[256], *p;
-    w = charFWX(f, TIECHAR);
-    pts = [f pointSize];
-    h = 0.1 * pts;
-    p = t;
-    while (c = *s++)
-    {
-	if (c == TIECHAR)
-	{
+    if (NOPRINT(mode)) 
+	return;
+    
+    if (mode) {
+	float tieCharacterWidth, tieCharacterHeight, fontPointSize;
+	// unsigned char c, t[256], *p;
+	NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString: stringToDisplay];
+	NSRange wholeString = {0, [attributedText length]};
+
+	// NSLog(@"CAcString('%s', %f, %f)", s, x, y);
+	
+	[attributedText addAttribute: NSFontAttributeName
+			       value: textFont
+			       range: wholeString];
+	[attributedText addAttribute: NSForegroundColorAttributeName
+			       value: modegray[mode]
+			       range: wholeString];
+	
+	[attributedText drawAtPoint: NSMakePoint(x, y)];
+
+	
+	tieCharacterWidth = charFWX(textFont, TIECHAR);
+	fontPointSize = [textFont pointSize];
+	tieCharacterHeight = 0.1 * fontPointSize;
+#if 0
+	p = t;
+	while (c = *s++) {
+	    if (c == TIECHAR) {
+		*p = '\0';
+		PSshow(t);
+		p = t;
+		PStietext(tieCharacterWidth, 1.5, 0.3 * fontPointSize, 0.15 * fontPointSize, 0.5 * tieCharacterWidth, tieCharacterHeight);
+	    }
+	    else 
+		*p++ = c;
+	}
+	if (p != t) {
 	    *p = '\0';
 	    PSshow(t);
-	    p = t;
-	    PStietext(w, 1.5, 0.3 * pts, 0.15 * pts, 0.5 * w, h);
 	}
-	else *p++ = c;
+#endif
     }
-    if (p != t)
-    {
-	*p = '\0';
-	PSshow(t);
-    } 
+    else 
+	unionStringBB(&bb, x, y, [stringToDisplay cString], textFont, 0);
 }
 
-
-/* draw a string in font f */
 //sb: changed the following from cString to CAcString to avoid confusion.
-void CAcString(float x, float y, const char *s, NSFont *f, int mode)
+void CAcString(float x, float y, const char *s, NSFont *textFont, int mode)
 {
-    if (NOPRINT(mode)) return;
-    if (mode)
-    {
-	PSmoveto(x, y);
-	[modegray[mode] set];
-	[f set];
-// NSLog(@"show(%s, %f, %f)\n", s, x, y);
-	cShow(s, f, mode);
-    }
-    else unionStringBB(&bb, x, y, s, f, 0);
+    DrawTextWithBaselineTies(x, y, [NSString stringWithCString: s], textFont, mode);
 }
-
 
 void centString(float x, float y, char *s, NSFont *f, int mode)
 {
-    CAcString(x - 0.5 * [f widthOfString:[NSString stringWithCString:s]], y, s, f, mode);
+    CAcString(x - 0.5 * [f widthOfString: [NSString stringWithCString: s]], y, s, f, mode);
 }
 
 void justString(float x, float y, char *s, NSFont *f, int j, int mode)
@@ -507,16 +510,16 @@ void justString(float x, float y, char *s, NSFont *f, int j, int mode)
 
 
 /* routines to draw a line. Three routines to: make, stroke, or make & stroke. 
-Nowdays these are just shim around NSBezierPath and NSPoints. Perhaps they can become inline functions, or replaced?
 */
 void cmakeline(float x1, float y1, float x2, float y2, int mode)
 {
-    NSLog(@"cmakeline(%f,%f -> %f,%f) mode: %d\n", x1, y1, x2, y2, mode);
+    // NSLog(@"cmakeline(%f,%f -> %f,%f) mode: %d", x1, y1, x2, y2, mode);
     
     if (NOPRINT(mode)) 
 	return;
     
-    linePath = [[NSBezierPath bezierPath] retain];
+    if(linePath == nil)
+	linePath = [[NSBezierPath bezierPath] retain];
     
     [linePath moveToPoint: NSMakePoint(x1, y1)];
     [linePath lineToPoint: NSMakePoint(x2, y2)];
@@ -525,7 +528,7 @@ void cmakeline(float x1, float y1, float x2, float y2, int mode)
 
 void cstrokeline(float width, int mode)
 {
-    NSLog(@"strokeline(%f,%d)\n", width, mode);
+    // NSLog(@"strokeline(%f,%d)", width, mode);
     
     if (NOPRINT(mode)) 
 	return;
@@ -554,9 +557,7 @@ void cline(float x1, float y1, float x2, float y2, float width, int mode)
     cstrokeline(width, mode);
 }
 
-
 /* draw a filled rectangle */
-
 void crect(float x, float y, float w, float h, int mode)
 {
     if (NOPRINT(mode)) 
@@ -566,18 +567,19 @@ void crect(float x, float y, float w, float h, int mode)
 	[modegray[mode] set];
 	NSRectFill(NSMakeRect(x, y, w, h));
     }
-    else unionrect(x, y, w, h);
+    else 
+	unionrect(x, y, w, h);
 }
 
 
 /* draw a filled rectangle using linewidth (replaces crect) */
-
 void cfillrect(float x, float y, float w, float h, float lw, int mode)
 {
     float d = lw * 0.5;
     
     if (NOPRINT(mode)) 
 	return;
+    
     if (mode) {
 	[modegray[mode] set];
 	NSRectFill(NSMakeRect(x - d, y - d, w + lw, h + lw));
@@ -588,35 +590,30 @@ void cfillrect(float x, float y, float w, float h, float lw, int mode)
 }
 
 /* draw an outline rectangle. */
-
 void coutrect(float x, float y, float w, float h, float lw, int mode)
 {
-    float d;
-    if (NOPRINT(mode)) return;
-    if (mode)
-    {
+    if (NOPRINT(mode)) 
+	return;
+    
+    if (mode) {
 	[modegray[mode] set];
-	PSsetlinewidth(lw);
-	PSrectstroke(x, y, w, h);
+	NSFrameRectWithWidth(NSMakeRect(x, y, w, h), lw);
     }
-    else
-    {
-	d = lw * 0.5;
+    else {
+	float d = lw * 0.5;
 	unionrect(x - d, y - d, w + lw, h + lw);
     }
 }
 
 
 /* draw a handle */
-
 void chandle(float x, float y, int m)
 {
-    crect(x - HANDSIZE, y - HANDSIZE, 2*HANDSIZE, 2*HANDSIZE, (m == 7 ? markmode[0] : m));
+    crect(x - HANDSIZE, y - HANDSIZE, 2 * HANDSIZE, 2 * HANDSIZE, (m == 7 ? markmode[0] : m));
 }
 
 
 /* draw a filled slant */
-
 void cslant(float x1, float y1, float x2, float y2, float dy, int mode)
 {
     if (NOPRINT(mode)) return;
@@ -631,7 +628,7 @@ void cslant(float x1, float y1, float x2, float y2, float dy, int mode)
 	PSslant(x2 - x1, dy, y2 - y1, x1, y1);
 	PSsetlinewidth(0);
 	PSstrokepath();
-// NSLog(@"cslant(%f,...,%d)\n", x1, mode);
+	NSLog(@"cslant(%f,...,%d)", x1, mode);
 	unionpath();
     }
 }
@@ -654,7 +651,7 @@ void coutslant(float x1, float y1, float x2, float y2, float dy, float lw, int m
 	PSslant(x2 - x1, dy, y2 - y1, x1, y1);
 	PSsetlinewidth(lw);
 	PSstrokepath();
-// NSLog(@"coutslant(%f,...,%d)\n", x1, mode);
+	NSLog(@"coutslant(%f,...,%d)", x1, mode);
 	unionpath();
     }
 }
@@ -702,9 +699,7 @@ void cellipse(float cx, float cy, float rx, float ry, float a1, float a2, float 
 
 
 /* draw a brace.  th is max allowed thickness of the flourish */
-
-
-void cbrace(float x0, float y0, float xn, float yn, float th, int mode)
+void cbrace(float x0, float y0, float xn, float yn, float flourishThickness, int mode)
 {
     float dx, dy, d, t, u, h, c1x, c1y, c2x, c2y;
     float x1, y1, x2, y2, x3, y3;
@@ -715,11 +710,11 @@ void cbrace(float x0, float y0, float xn, float yn, float th, int mode)
     dy = yn - y0;
     d = hypot(dx, dy);
     h = 0.1 * d;
-    if (h > (2 * th))
-	h = 2 * th;
-    th = 0.5 * h;
+    if (h > (2 * flourishThickness))
+	h = 2 * flourishThickness;
+    flourishThickness = 0.5 * h;
     t = -(h / d);
-    u = -((h - th) / d);
+    u = -((h - flourishThickness) / d);
     x3 = x0 + 0.5 * dx - t * dy;
     y3 = y0 + 0.5 * dy + t * dx;
     c2x = 0.5 - 0.05;
@@ -805,7 +800,7 @@ void ccurve(float x0, float y0, float x3, float y3, float x1, float y1, float x2
     else
     {
 	PSflattenpath();
-// NSLog(@"ccurve(nodash)(%f,...,%d)\n", x0, mode);
+	NSLog(@"ccurve(nodash)(%f,...,%d)", x0, mode);
 	unionpath();
     }
 }
@@ -819,6 +814,7 @@ void cflat(float x0, float y0, float x1, float y1, float c1x, float c1y, float c
 {
     float dx, dy, d, t;
     float px0, py0, px1, py1, px2, py2, px3, py3;
+    
     if (NOPRINT(mode)) return;
     dx = x1 - x0;
     dy = y1 - y0;
@@ -851,7 +847,7 @@ void cflat(float x0, float y0, float x1, float y1, float c1x, float c1y, float c
 	else
 	{
 	    PSflattenpath();
-// NSLog(@"cflat(dash)(%f,...,%d)\n", x0, mode);
+	    NSLog(@"cflat(dash)(%f,...,%d)", x0, mode);
 	    unionpath();
 	}
 	return;
@@ -885,7 +881,7 @@ void cflat(float x0, float y0, float x1, float y1, float c1x, float c1y, float c
     else
     {
 	PSflattenpath();
-// NSLog(@"cflat(nodash)(%f,...,%d)\n", x0, mode);
+	NSLog(@"cflat(nodash)(%f,...,%d)", x0, mode);
 	unionpath();
     }
 }
@@ -1017,8 +1013,6 @@ static void cflatbow(float px, float py, float qx, float qy, float th, int m)
 
 
 /* draw an orthogonal bracket */
-
-
 void cbrack(int i, int p, float px, float py, float qx, float qy, float th, float d, int sz, int m)
 {
     float dpattern[1];
@@ -1292,7 +1286,6 @@ void cbrack(int i, int p, float px, float py, float qx, float qy, float th, floa
 }
 
 /* draw one of 7 types of enclosure */
-
 void cenclosure(int i, float px, float py, float qx, float qy, float th, int sz, int m)
 {
     float d, dx, dy, rx, ry;

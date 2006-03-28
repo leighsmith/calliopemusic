@@ -238,9 +238,19 @@ void PSInit();
 void colorInit(int i, NSColor * c);
 extern void bbinit();
 extern NSRect getbb();
-extern void drawCharacterInFont(float x, float y, int ch, NSFont *f, int mode);
+
+/*!
+  @brief draw a character in font f. 
+ */
+void drawCharacterInFont(float x, float y, int ch, NSFont *f, int mode);
+
+/*!
+  @brief Draw a string, in a given font, inserting baseline ties where needed. 
+ */
+void DrawTextWithBaselineTies(float x, float y, NSString *stringToDisplay, NSFont *textFont, int mode);
+
 //sb: changed the following from cString to CAcString to avoid confusion.
-extern void CAcString(float x, float y, const char *s, NSFont *f, int mode);
+void CAcString(float x, float y, const char *s, NSFont *f, int mode);
 extern void centString(float x, float y, char *s, NSFont *f, int mode);
 extern void justString(float x, float y, char *s, NSFont *f, int j, int mode);
 extern void centChar(float x, float y, int ch, NSFont *f, int mode);
