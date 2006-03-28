@@ -163,7 +163,7 @@ static char blockledger[NUMBLOCKS] = {0, 1, 1, 1, 0, 0, 1};
     s = mystaff;
     if (blockledger[t] && TYPEOF(s) == STAFF)
     {
-      drawledge(x, s->y, charhalfFGW(bf, bc),
+      drawledge(x, [s yOfTop], charhalfFGW(bf, bc),
                 sz, p, s->flags.nlines, s->flags.spacing, m);
     }
   }

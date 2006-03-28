@@ -14,21 +14,6 @@ void PSmovegray(float x, float y, float g)
     NSLog(@"Called PSmovegray(), needs implementation\n");
 }
 
-void PSCmakelineDisplay(float x1, float y1, float x2, float y2)
-{
-    NSLog(@"Called PSCmakelineDisplay(), needs implementation\n");
-}
-
-void PSCmakelinePrint(float x1, float y1, float x2, float y2)
-{
-    NSLog(@"Called PSCmakelinePrint(), needs implementation\n");
-}
-
-void PSCstrokeline(float gray, float width)
-{
-    NSLog(@"Called PSCstrokeline(), needs implementation\n");
-}
-
 void PSslant(float w, float h, float dy, float x, float y)
 {
     NSLog(@"Called PSslant(), needs implementation\n");

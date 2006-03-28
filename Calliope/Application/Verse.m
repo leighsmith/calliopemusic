@@ -65,7 +65,7 @@ extern float staffthick[3][3];
     sp = p->mystaff;
     if (TYPEOF(sp) != STAFF) return self;
     bounds.origin.x = p->x - 6;
-    bounds.origin.y = sp->y + baseline - 12;
+    bounds.origin.y = [sp yOfTop] + baseline - 12;
     bounds.size.width = bounds.size.height = 12;
     [sp sysInvalid];
   }
@@ -449,7 +449,7 @@ static void drawext(float x1, float y, float x2, Staff *sp, int f, int m)
   if (TYPEOF(sp) != STAFF) return self;
   if (m && p->gFlags.selected && !p->gFlags.seldrag && p->selver == vFlags.num) [self traceBounds];
   if (data == NULL || *data == '\0') return self;
-  bl = sp->y + baseline;
+  bl = [sp yOfTop] + baseline;
   if ([self isFigure]) return [self drawFigure: data : p->x : bl : sp : m];
   if ([self isContinuation]) return [self drawContinuation: *data : p->x : bl : sp : m];
   cx = [self textLeft: p];

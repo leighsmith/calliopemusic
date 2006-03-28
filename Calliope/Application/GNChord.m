@@ -685,7 +685,7 @@ extern float ledgedxs[3];
       if (mp & 1) ++mp;
       for (j = mp; j <= -2; j += 2)
       {
-        ly = sp->y + (int) sp->flags.spacing * j;
+        ly = [sp yOfTop] + (int) sp->flags.spacing * j;
 	dwsx = (hwsa[i] < -1 && j >= hwsa[i] ? dx : 0.0);
         if (time.stemup)
 	{
@@ -707,7 +707,7 @@ extern float ledgedxs[3];
       if (mp & 1) --mp;
       for (j = 10; j <= mp; j += 2)
       {
-        ly = sp->y + (int) sp->flags.spacing * j;
+        ly = [sp yOfTop] + (int) sp->flags.spacing * j;
 	dwsx = (lwsb[i] > 9 && j <= lwsb[i] ? dx : 0.0);
         if (time.stemup)
 	{

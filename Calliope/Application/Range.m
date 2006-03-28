@@ -64,7 +64,7 @@ static Range *proto;
 - recalc
 {
   [super recalc];
-  if (TYPEOF(mystaff) == STAFF) y = ((Staff *)mystaff)->y;
+  if (TYPEOF(mystaff) == STAFF) y = [mystaff yOfTop];
   return self; 
 }
 

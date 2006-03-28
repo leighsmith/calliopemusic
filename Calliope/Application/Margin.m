@@ -1,4 +1,4 @@
-/* $Id:$ */
+/* $Id$ */
 // #import <AppKit/NSText.h>
 #import "Page.h"
 #import "Margin.h"
@@ -13,6 +13,7 @@
 /*
   Margins are drawn as markers.
 */
+
 
 @implementation Margin
 
@@ -102,42 +103,73 @@ static float defmarg[MaximumMarginTypes] = {36.0, 36.0, 36.0, 36.0, 72.0, 72.0, 
 
 - (float) leftMargin
 {
-    return margin[0] / staffScale;
+    return margin[MarginLeft] / staffScale;
 }
 
+- (void) setLeftMargin: (float) newLeftMargin
+{
+    margin[MarginLeft] = newLeftMargin;
+}
 
 - (float) rightMargin
 {
-    return margin[1] / staffScale;
+    return margin[MarginRight] / staffScale;
 }
 
+- (void) setRightMargin: (float) newRightMargin
+{
+    margin[MarginRight] = newRightMargin;
+}
 
 - (float) headerBase
 {
-    return margin[2] / staffScale;
+    return margin[MarginHeader] / staffScale;
 }
 
+- (void) setHeaderBase: (float) newHeaderMargin
+{
+    margin[MarginHeader] = newHeaderMargin;
+}
 
 - (float) footerBase
 {
-    return margin[3] / staffScale;
+    return margin[MarginFooter] / staffScale;
 }
 
+- (void) setFooterBase: (float) newFooterMargin
+{
+    margin[MarginFooter] = newFooterMargin;
+}
 
 - (float) topMargin
 {
-    return margin[4] / staffScale;
+    return margin[MarginTop] / staffScale;
 }
 
+- (void) setTopMargin: (float) newTopMargin
+{
+    margin[MarginTop] = newTopMargin;
+}
 
 - (float) bottomMargin
 {
-    return margin[5] / staffScale;
+    return margin[MarginBottom] / staffScale;
 }
+
+- (void) setBottomMargin: (float) newBottomMargin
+{
+    margin[MarginBottom] = newBottomMargin;
+}
+
 
 - (void) setMarginType: (MarginType) marginType toSize: (float) newMarginValue
 {
     margin[marginType] = newMarginValue;
+}
+
+- (float) marginOfType: (MarginType) marginType
+{
+    return margin[marginType];
 }
 
 - (BOOL) move: (float) dx : (float) dy : (NSPoint) p : sys : (int) alt
@@ -152,7 +184,7 @@ static float defmarg[MaximumMarginTypes] = {36.0, 36.0, 36.0, 36.0, 72.0, 72.0, 
     Staff *sp = [s firststaff];
     
     float x = [s leftWhitespace] + s->width + 20;
-    float y = sp->y + [s whichMarker: self] * (SIZEBOX + 3);
+    float y = [sp yOfTop] + [s whichMarker: self] * (SIZEBOX + 3);
     coutrect(x, y, SIZEBOX, SIZEBOX, 0.0, m);
     crect(x, y, (0.25 * SIZEBOX), SIZEBOX, m);
     crect(x + (0.75 * SIZEBOX), y, (0.25 * SIZEBOX), SIZEBOX, m);

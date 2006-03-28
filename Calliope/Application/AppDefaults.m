@@ -154,8 +154,6 @@ static NSString *colorString(int i, NSColor * c)
         [[c colorUsingColorSpaceName:NSCalibratedRGBColorSpace] blueComponent]];
 }
 
-extern void colorInit(int i, NSColor * c);
-
 - setDefaults: (int) i
 {
     id newDefaults = [NSUserDefaults standardUserDefaults];

@@ -1138,7 +1138,7 @@ extern char *typename[NUMTYPES];
     for (i = 0; i < ns; i++)
     {
       sp = [sl objectAtIndex:i];
-      NSLog(@"  Staff %d [part=%s, y=%f]:\n", i+1, [sp->part cString], sp->y);
+      NSLog(@"  Staff %d [part=%s, y=%f]:\n", i+1, [sp->part cString], [sp yOfTop]);
       //[NXApp log: buf];
       nl = sp->notes;
       nn = [nl count];
@@ -1254,7 +1254,7 @@ extern char *typename[NUMTYPES];
     while (ns--)
     {
       sp = [sys->staves objectAtIndex:ns];
-      if (sp->y != sp->y) b = 1;
+      if ([sp yOfTop] != [sp yOfTop]) b = 1;
     }
     if (b)
     {
@@ -1542,9 +1542,9 @@ extern char *typename[NUMTYPES];
     while (sn--)
     {
       sp = [sl objectAtIndex:sn];
-      if (sp->y != sp->y)  /* check for NaN */
+      if ([sp yOfTop] != [sp yOfTop])  /* check for NaN */
       {
-        sp->y = 500;
+        // sp->y = 500; // TODO this seems bogus in the extreme!
 	NSLog(@"  staff %d has NaN y\n", sn+1);
 	[sp recalc];
       }

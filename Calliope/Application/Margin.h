@@ -53,16 +53,27 @@ typedef enum {
 - (id) client;
 
 - (float) leftMargin;
+- (void) setLeftMargin: (float) newLeftMargin;
 - (float) rightMargin;
+- (void) setRightMargin: (float) newRightMargin;
 - (float) headerBase;
+- (void) setHeaderBase: (float) newHeaderMargin;
 - (float) footerBase;
+- (void) setFooterBase: (float) newFooterMargin;
 - (float) topMargin;
+- (void) setTopMargin: (float) newTopMargin;
 - (float) bottomMargin;
+- (void) setBottomMargin: (float) newBottomMargin;
 
 /*!
   @brief Assigns the given margin.
  */
 - (void) setMarginType: (MarginType) marginType toSize: (float) newMarginValue;
+
+/*!
+  @brief Returns the given margin.
+ */
+- (float) marginOfType: (MarginType) marginType;
 
 - (BOOL) move: (float) dx : (float) dy : (NSPoint) p : sys : (int) alt;
 - drawMode: (int) m;

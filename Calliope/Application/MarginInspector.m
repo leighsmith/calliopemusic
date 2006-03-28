@@ -28,7 +28,7 @@ NSString *unitname[4] =
   GraphicView *v = [DrawApp currentView];
   Margin *p = [v canInspect: MARGIN : &n];
   if (n == 0) return nil;
-  conv = [NSApp pointToCurrentUnitFactor];
+  conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
 //  [[NSApp pageLayout] convertOldFactor:&conv newFactor:&anon];
   [[lbindform cellAtIndex:0] setFloatValue:conv * p->margin[6]];
   [[lbindform cellAtIndex:1] setFloatValue:conv * p->margin[8]];
@@ -66,7 +66,7 @@ NSString *unitname[4] =
   p->alignment = 0;
   if ([[alignmatrix cellAtRow:0 column:0] state]) p->alignment |= 1;
   if ([[alignmatrix cellAtRow:1 column:0] state]) p->alignment |= 2;
-  conv = [NSApp pointToCurrentUnitFactor];
+  conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
 //  [[NSApp pageLayout] convertOldFactor:&conv newFactor:&anon];
   f = [[lbindform cellAtIndex:0] floatValue] / conv;
   UPDATE(p->margin[6], f);

@@ -61,7 +61,7 @@ static Staff *bsp;
 static void blinkOn(GraphicView *v)
 {
   if (![v getBlinkX: &bx : &bsp]) return;
-  by = bsp->y;
+  by = [bsp yOfTop];
   bdy = [bsp staffHeight];
   [v lockFocus];
   cline(bx, by, bx, by + bdy, 0, 7);

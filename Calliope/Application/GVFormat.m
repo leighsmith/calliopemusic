@@ -220,7 +220,7 @@ extern NSSize paperSize;
     sp = [sys firststaff];
     if (sp != nil)
     {
-      dy = y - sp->y;
+      dy = y - [sp yOfTop];
       if (dy < 0) dy = -dy;
       if (dy < miny)
       {
@@ -424,7 +424,7 @@ extern NSSize paperSize;
   sp = [[syslist objectAtIndex:sn] lastStaff];
   ym = [sp yOfBottom];
   sp = [[syslist objectAtIndex:sn + 1] firststaff];
-  return ym + (0.5 * (sp->y - ym));
+  return ym + (0.5 * ([sp yOfTop] - ym));
 }
 
 
@@ -449,7 +449,7 @@ extern NSSize paperSize;
   if ([p alignToBottomSystem])
   {
     s = [syslist objectAtIndex:p->botsys];
-    sy += [s myHeight] - ([[s lastStaff] yOfBottom] - (((Staff *)[s firststaff])->y - [s headroom]));
+    sy += [s myHeight] - ([[s lastStaff] yOfBottom] - ([((Staff *)[s firststaff]) yOfTop] - [s headroom]));
   }
   return sy;
 }
@@ -459,10 +459,11 @@ extern NSSize paperSize;
   Return the y where the top of the page is to begin.  Default top
   margin, but depends on alignment option.
 */
-
-- (float) startTop: (System *) s : (Page *) p
+- (float) topOfPage: (Page *) p
 {
+    System *s = [syslist objectAtIndex: p->topsys];
     float y = [p topMargin];
+    
     if ([p alignToTopSystem] && ![s hasTitles])
 	y -= [s headroom];
     return y;
@@ -497,7 +498,7 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
   nsys = p->botsys - p->topsys + 1;
   pc = [p format];
   if (pc == PGAUTO) pc = autochoice[(firstp << 1) | lastp];
-  y = [self startTop: [syslist objectAtIndex:p->topsys] : p];
+  y = [self topOfPage: p];
   switch(pc)
   {
     case PGBALANCE:

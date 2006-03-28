@@ -50,7 +50,7 @@ static float shmm[8] =		/* staff height in mm given rastral number  */
 {
   float h, r, conv;
   r = [heightreal floatValue];
-  conv = [NSApp pointToCurrentUnitFactor];
+  conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
 //  [[NSApp pageLayout] convertOldFactor:&conv newFactor:&anon];
   h = [rasheightcell floatValue] / conv; 
   if (r < 1 || h < 1)
@@ -157,7 +157,7 @@ static void setFieldName(NSFont *fnt, id fld)
       currblock->texfont = p->texfont;
       break;
     case 5:
-        conv = [NSApp pointToCurrentUnitFactor];
+        conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
 //      [[NSApp pageLayout] convertOldFactor:&conv newFactor:&anon];
       [rasheightcell setFloatValue:p->staffheight * conv];
         [self setRastralNumber: p->staffheight / PTPMM];
@@ -237,7 +237,7 @@ static void setFieldName(NSFont *fnt, id fld)
       p->texfont = currblock->texfont;
       break;
     case 5:
-        conv = [NSApp pointToCurrentUnitFactor];
+        conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
 //      [[NSApp pageLayout] convertOldFactor:&conv newFactor:&anon];
       p->staffheight = [rasheightcell floatValue] / conv;
       p->unitflag = currblock->unitflag;
@@ -280,7 +280,7 @@ static void setFieldName(NSFont *fnt, id fld)
   switch(i)
   {
     case 5:
-        conv = [NSApp pointToCurrentUnitFactor];
+        conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
 //      [[NSApp pageLayout] convertOldFactor:&conv newFactor:&anon];
       f = [rasheightcell floatValue] / conv;
       r = (f > 8 && f < 288);
@@ -325,7 +325,7 @@ static void setFieldName(NSFont *fnt, id fld)
       if (!change) change = (currblock->texfont != p->texfont);
       break;
     case 5:
-        conv = [NSApp pointToCurrentUnitFactor];
+        conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
 //      [[NSApp pageLayout] convertOldFactor:&conv newFactor:&anon];
       if (!change) change = (([rasheightcell floatValue] / conv) != p->staffheight);
       if (!change) change = (currblock->unitflag != p->unitflag);
@@ -369,7 +369,7 @@ static void setFieldName(NSFont *fnt, id fld)
 - changeRastral: sender
 {
   float conv, f;
-    conv = [NSApp pointToCurrentUnitFactor];
+    conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
 //  [[NSApp pageLayout] convertOldFactor:&conv newFactor:&anon];
   f = shmm[ [sender selectedColumn] ] * 2.834646;
   [rasheightcell setFloatValue:f * conv];
@@ -386,7 +386,7 @@ static void setFieldName(NSFont *fnt, id fld)
 - hitHeight: sender
 {
     float conv;
-    conv = [NSApp pointToCurrentUnitFactor];
+    conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
 //  [[NSApp pageLayout] convertOldFactor:&conv newFactor:&anon];
     [self setRastralNumber: ([rasheightcell floatValue] / conv) / PTPMM];
     [self hitCalc: self];
@@ -801,7 +801,7 @@ BOOL writeStyleFile(NSString *f)
     float conv;
     if ([theText superview] == rasheightcell)
     {
-        conv = [NSApp pointToCurrentUnitFactor];
+        conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
 //        [[NSApp pageLayout] convertOldFactor:&conv newFactor:&anon];
         [self setRastralNumber: ([rasheightcell floatValue] / conv) / PTPMM];
     }

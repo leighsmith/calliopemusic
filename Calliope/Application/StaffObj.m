@@ -165,7 +165,7 @@ int protoVox;
   sp = [sys findOnlyStaff: y];
   [sp linknote: self];
   [self rePosition];
-  [self reCache: sp->y : sp->flags.spacing];
+  [self reCache: [sp yOfTop] : sp->flags.spacing];
   [self recalc];
   return YES;
 }
@@ -185,7 +185,7 @@ int protoVox;
   NSRect qb;
   BOOL f = NO;
   if (TYPEOF(mystaff) == SYSTEM) return self;
-  nl = ((Staff *)mystaff)->notes;
+  nl = mystaff->notes;
   k = [nl count];
   j = [nl indexOfObject:self] + 1;
   while (j < k && !f)
@@ -215,7 +215,7 @@ int protoVox;
 
 - reDefault
 {
-  float sy = (TYPEOF(mystaff) == STAFF) ? sy = ((Staff *)mystaff)->y : y;
+  float sy = (TYPEOF(mystaff) == STAFF) ? [mystaff yOfTop] : y;
   [self reCache: sy : getSpacing(mystaff)];
   return [self reShape];
 }
@@ -252,14 +252,14 @@ int protoVox;
 
 - (int) getSpacing
 {
-  if (mystaff != nil && TYPEOF(mystaff) == STAFF) return ((Staff *)mystaff)->flags.spacing;
+  if (mystaff != nil && TYPEOF(mystaff) == STAFF) return mystaff->flags.spacing;
   else return 4;
 }
 
 
 - (int) getLines
 {
-  if (mystaff != nil && TYPEOF(mystaff) == STAFF) return ((Staff *)mystaff)->flags.nlines;
+  if (mystaff != nil && TYPEOF(mystaff) == STAFF) return mystaff->flags.nlines;
   else return 5;
 }
 
@@ -381,7 +381,7 @@ int protoVox;
 - mySystem
 {
   if (TYPEOF(mystaff) == SYSTEM) return mystaff;
-  else return ((Staff *)mystaff)->mysys;
+  else return mystaff->mysys;
 }
 
 
@@ -391,7 +391,7 @@ int protoVox;
 {
   System *s;
   if (TYPEOF(mystaff) == SYSTEM) return s = mystaff;
-  else s = ((Staff *)mystaff)->mysys;
+  else s = mystaff->mysys;
   return s->view;
 }
 
@@ -413,14 +413,14 @@ int protoVox;
 - (int) myIndex
 {
   if (TYPEOF(mystaff) == SYSTEM) return -1;
-  return [((Staff *)mystaff)->notes indexOfObject:self];
+  return [(mystaff)->notes indexOfObject:self];
 }
 
 
 - (NSString *) getInstrument
 {
-  if (part == nil) return [((Staff *)mystaff) getInstrument];
-  if (part == nullPart) return [((Staff *)mystaff) getInstrument];
+  if (part == nil) return [mystaff getInstrument];
+  if (part == nullPart) return [mystaff getInstrument];
   return [[[DrawApp sharedApplicationController] getPartlist] instrumentForPart: part];
 }
 
@@ -441,8 +441,8 @@ int protoVox;
 
 - (int) getChannel
 {
-  if (part == nil) return [((Staff *)mystaff) getChannel];
-  if (part == nullPart) [((Staff *)mystaff) getChannel];
+  if (part == nil) return [mystaff getChannel];
+  if (part == nullPart) [mystaff getChannel];
   return [[[DrawApp sharedApplicationController] getPartlist] channelForPart: part];
 }
 
@@ -488,7 +488,7 @@ int protoVox;
   t->client = self;
   t->offset.x = 0;
   ty = bounds.origin.y;
-  if (sp->y < ty) ty = sp->y;
+  if ([sp yOfTop] < ty) ty = [sp yOfTop];
   t->offset.y = (ty - 10) - y;
   [self linkhanger: t];
   [t initFromString: s : [[DrawApp currentDocument] getPreferenceAsFont: TEXFONT]];
@@ -992,7 +992,7 @@ BOOL isBlank(unsigned char *s)
   for (i = 0; i < kpv; i++) [verses addObject: [[pv objectAtIndex:i] newFrom]];
   [self setVerses];
   sp = mystaff;
-  if (TYPEOF(sp) == STAFF) [[mystaff measureStaff] resetStaff: sp->y];
+  if (TYPEOF(sp) == STAFF) [[mystaff measureStaff] resetStaff: [sp yOfTop]];
   return self;
 }
 
@@ -1116,7 +1116,7 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
       if (TYPEOF(mystaff) == STAFF)
       {
         sp = mystaff;
-        [[sp measureStaff] resetStaff: sp->y];
+        [[sp measureStaff] resetStaff: [sp yOfTop]];
       }
       return 1;
     }
@@ -1147,7 +1147,7 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
     if (TYPEOF(mystaff) == STAFF)
     {
       sp = mystaff;
-      [[sp measureStaff] resetStaff: sp->y];
+      [[sp measureStaff] resetStaff: [sp yOfTop]];
     }
   }
   else {

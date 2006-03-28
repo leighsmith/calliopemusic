@@ -166,11 +166,11 @@
 	if (TYPEOF(nsp) != STAFF) return NO;
 	if (a)
 	{
-	  if (nsp->y < sy) return NO;
+	  if ([nsp yOfTop] < sy) return NO;
 	}
 	else
 	{
-	  if (nsp->y > sy) return NO;
+	  if ([nsp yOfTop] > sy) return NO;
 	}
       }
     }
@@ -195,7 +195,7 @@
 {
   if (a != time.stemup) return YES;
   if (TYPEOF(mystaff) != STAFF) return NO;
-  return [self checkRemoteNotes: a : ((Staff *)mystaff)->y];
+  return [self checkRemoteNotes: a : [mystaff yOfTop]];
 }
 
 

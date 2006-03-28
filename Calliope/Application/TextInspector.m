@@ -24,7 +24,7 @@ int subfor[4] = {2, 3, 2, 3};
   NSMutableArray *sl;
   GraphicView *v = [DrawApp currentView];
   int k, num, sn;
-  conv = [NSApp pointToCurrentUnitFactor];
+  conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
 //  [[NSApp pageLayout] convertOldFactor:&conv newFactor:&anon];
   if ([v startInspection: TEXTBOX : &b : &sl :&num])
   {
@@ -134,7 +134,7 @@ int rownum[4] = {0, 0, 0, 1};
   if (ALLVAL(0) == TITLE && num == 1)
   {
       p = [v canInspect: TEXTBOX : &num];
-      conv = [NSApp pointToCurrentUnitFactor];
+      conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
 //    [[NSApp pageLayout] convertOldFactor:&conv newFactor:&anon];
     [[marginform cellAtIndex:0] setFloatValue:p->baseline * conv];
     [marginform setEnabled:YES];

@@ -260,7 +260,7 @@ static short mywidth[2] = {2, 4};
   if (TYPEOF(sp) == STAFF)
   {
     h = 0.5 * w;
-    drawledge(x + h, sp->y, h, sz, p, sl, ss, m);
+    drawledge(x + h, [sp yOfTop], h, sz, p, sl, ss, m);
   }
   return self;
 }

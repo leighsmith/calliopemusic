@@ -144,7 +144,7 @@ static Bracket *proto;
   s1 = client1;
   s2 = client2;
   if (s1->flags.hidden || s2->flags.hidden) return NO;
-  if (s1->y < s2->y) return (s2 == s);
+  if ([s1 yOfTop] < [s2 yOfTop]) return (s2 == s);
   else return (s1 == s);
 }
 
@@ -158,7 +158,7 @@ static Bracket *proto;
   s1 = client1;
   s2 = client2;
   if (s1->flags.hidden || s2->flags.hidden) return NO;
-  if (s1->y < s2->y) return (s1 == s);
+  if ([s1 yOfTop] < [s2 yOfTop]) return (s1 == s);
   else return (s2 == s);
 }
 
@@ -174,7 +174,7 @@ static Bracket *proto;
   s2 = client2;
   s = [s1->mysys findOnlyStaff: p.y];
   if (s->gFlags.type != STAFF) return NO;
-  if ((s1->y < s2->y) == (gFlags.selend & 1))
+  if (([s1 yOfTop] < [s2 yOfTop]) == (gFlags.selend & 1))
   {
     if (s2 != s)
     {
@@ -211,7 +211,7 @@ static void displink(System *sys, int m)
   {
     s = [sys getstaff: i];
     if (s->flags.hidden) continue;
-    y = s->y;
+    y = [s yOfTop];
     if (y < ymin)
     {
       f1 = 1;
@@ -250,14 +250,14 @@ extern void cbrace(float x0, float y0, float xn, float yn, float size, int mode)
   s1 = client1;
   s2 = client2;
   if (s1->flags.hidden || s2->flags.hidden) return self;
-  if (s1->y < s2->y)
+  if ([s1 yOfTop] < [s2 yOfTop])
   {
-    y1 = s1->y;
+    y1 = [s1 yOfTop];
     y2 = [s2 yOfBottom];
   }
   else
   {
-    y1 = s2->y;
+    y1 = [s2 yOfTop];
     y2 = [s1 yOfBottom];
   }
   // gcc 4.0 doesn't like typeof bit fields so we use the long hand version

@@ -216,7 +216,7 @@ extern int selMode;
   System *s = client;
   Staff *sp = [s firststaff];
   float x = [s leftWhitespace] + s->width + 20;
-  float y = sp->y + [s whichMarker: self] * (SIZEBOX + 3);
+  float y = [sp yOfTop] + [s whichMarker: self] * (SIZEBOX + 3);
   coutrect(x, y, SIZEBOX, SIZEBOX, 0.0, m);
   if (flags.vertpos) y += 0.5 * SIZEBOX;
   crect(x, y, SIZEBOX, (0.5 * SIZEBOX), m);

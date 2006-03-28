@@ -10,6 +10,8 @@
 #import "StaffObj.h"
 #import "TextGraphic.h"
 
+#import "System.h"
+
 #define MAXTEXT 16
 #define MINPAD 4 /* = nature[0] */
 
@@ -17,37 +19,42 @@
   spacing ought to be from float table
 */
 
-@interface Staff:Graphic
+@interface Staff: Graphic
 {
 @public
-  struct
-  {
-    unsigned int nlines : 4;	/* number of lines */
-    unsigned int spacing : 4;	/* pixels between positions */
-    unsigned int subtype : 2;	/* type of notation */
-    unsigned int haspref : 1;	/* has prefatory staff */
-    unsigned int hasnums : 1;	/* has extra bar numbers */
-    unsigned int hidden : 1;	/* staff is hidden */
-    unsigned int topfixed : 1;	/* topmarg is an exact distance */
-  } flags;
+    struct
+    {
+	unsigned int nlines : 4;	/* number of lines */
+	unsigned int spacing : 4;	/* pixels between positions */
+	unsigned int subtype : 2;	/* type of notation */
+	unsigned int haspref : 1;	/* has prefatory staff */
+	unsigned int hasnums : 1;	/* has extra bar numbers */
+	unsigned int hidden : 1;	/* staff is hidden */
+	unsigned int topfixed : 1;	/* topmarg is an exact distance */
+    } flags;
     NSString *part;
-  float voffa, voffb;		/* verse offsets */
-  float vhigha;			/* amount of space taken by verses above */
-  float vhighb;			/* amount of space taken by verses below */
-  float y;			/* position */
-  float barbase;		/* barnumber baseline */
-  float topmarg;		/* amount of headroom */
-  float botmarg;		/* use for equidistant spaff spacing */
-  float pref1, pref2;		/* start and end of preface */
-  id mysys;			/* backpointer */
-  NSMutableArray *notes;			/* List of things on the staff */
+    float voffa, voffb;		/* verse offsets */
+    float vhigha;			/* amount of space taken by verses above */
+    float vhighb;			/* amount of space taken by verses below */
+    float barbase;		/* barnumber baseline */
+    float topmarg;		/* amount of headroom */
+    float botmarg;		/* use for equidistant spaff spacing */
+    float pref1, pref2;		/* start and end of preface */
+    NSMutableArray *notes;			/* List of things on the staff */
+    System *mysys;			/* backpointer */
 @private
+    float y;			/* position */
 }
 
-+ (void)initialize;
++ (void) initialize;
 
 - sysInvalid;
-- initstaff: s;				/* init a staff in system s */
+
+/*!
+  @brief Assign the system this staff instance resides within.
+ */
+- (void) setSystem: (System *) newSystem;
+
 - recalc;
 - mark;
 - (float) getHeadroom;

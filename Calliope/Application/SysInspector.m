@@ -175,7 +175,7 @@ static BOOL busyFlag = 0;  /* so that inspector is not inspected because of a ca
   {
     case -1:
     case 0:
-        conv = [NSApp pointToCurrentUnitFactor];
+        conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
 //      [[NSApp pageLayout] convertOldFactor:&conv newFactor:&anon];
       [[indentleft cellAtIndex:0] setFloatValue:sys->lindent * conv];
       [[indentright cellAtIndex:0] setFloatValue:sys->rindent * conv];
@@ -415,7 +415,7 @@ static BOOL busyFlag = 0;  /* so that inspector is not inspected because of a ca
   switch([mainPopup indexOfSelectedItem])
   {
     case 0:
-        conv = [NSApp pointToCurrentUnitFactor];
+        conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
 //      [[NSApp pageLayout] convertOldFactor:&conv newFactor:&f];
       lind = [[indentleft cellAtIndex:0] floatValue] / conv;
       if (lind < -72 || lind > 72*5)
@@ -496,7 +496,7 @@ static BOOL busyFlag = 0;  /* so that inspector is not inspected because of a ca
   switch([mainPopup indexOfSelectedItem])
   {
     case 0:
-        conv = [NSApp pointToCurrentUnitFactor];
+        conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
 //      [[NSApp pageLayout] convertOldFactor:&conv newFactor:&anon];
       if (!change) change = (sys->lindent != [[indentleft cellAtIndex:0] floatValue] / conv);
       if (!change) change = (sys->rindent != [[indentright cellAtIndex:0] floatValue] / conv);

@@ -370,7 +370,7 @@
     sp = [staves objectAtIndex:i];
     snl = sp->notes;
     dsp = [sys->staves objectAtIndex:i];
-    dy = dsp->y - sp->y;
+    dy = [dsp yOfTop] - [sp yOfTop];
     dnl = dsp->notes;
     a = [dsp skipSigIx: 0];
     destx = [dsp xOfHyphmarg] + 4;
@@ -458,7 +458,7 @@
   for (i = 0; i < ns; i++)
   {
     dsp = [staves objectAtIndex:i];
-    dy = dsp->y - ssp->y;
+    dy = [dsp yOfTop] - [ssp yOfTop];
     dnl = dsp->notes;
     if ([dnl count] == 0) rx = [self leftWhitespace];
     else rx = ((StaffObj *)[dnl lastObject])->x;
@@ -544,7 +544,7 @@
     {
       p = [Graphic allocInit: BARLINE];
       p->x = xoff + b * xwid;
-      p->y = sp->y;
+      p->y = [sp yOfTop];
       ((Barline *)p)->flags.staff = sFlag;
       ((Barline *)p)->flags.bridge = bFlag;
       [sp linknote: p];
@@ -587,15 +587,15 @@
     if (sp->flags.hidden) continue;
     ++ns;
     sindex[ns] = i;
-    sep[ns] = sp->y;
-    if (ns == 0) orgy = sp->y;
+    sep[ns] = [sp yOfTop];
+    if (ns == 0) orgy = [sp yOfTop];
     else
     {
       s = sep[ns] - sep[ns - 1];
       sep[ns - 1] = s;
       sumsep += s;
       if (s > maxsep) maxsep = s;
-      sy = sp->y + sp->vhighb;
+      sy = [sp yOfTop] + sp->vhighb;
       if (sy > maxy) maxy = sy;
     }
   }

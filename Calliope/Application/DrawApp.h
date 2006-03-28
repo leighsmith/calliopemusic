@@ -16,7 +16,7 @@
 #import <CalliopePropertyListCoders/OAPropertyListCoders.h>
 #import "OpusDocument.h"
 
-// TODO This should be renamed AppController
+// TODO This should be renamed CalliopeAppController
 @interface DrawApp : NSObject
 {
     id tools;			/* the vertical Tool Palette matrix */
@@ -39,12 +39,10 @@
     id tempoText;
     id laybarform;		/* the form in the layBarsPanel */
     id voiceInspector;
-    id processLog;		/* a Text Object */
     id charmatrix;		/* the Characters panel matrix */
     id progressPanel;		/* the progress panel */
     
     BOOL haveOpenedDoc;		/* whether we have opened a document */
-    id currentWindow;
     CallPageLayout *cpl;
     id MenuBar;			/* used for Windows only! */
 }
@@ -61,9 +59,6 @@ struct toolData
 extern int partlistflag;
 
 /* Public methods */
-
-- (NSWindow *) currentWindow;
-- (void)setCurrentWindow: (id) w; //sb
 
 - selectFontSelection: (int) i;
 
@@ -98,7 +93,6 @@ extern int partlistflag;
 - orderPlayInspector: sender;
 - orderVoiceInspector: sender;
 - orderTabTuner: sender;
-- orderLog: sender;
 - orderAppDefPanel: sender;
 - orderPreferencePanel: sender;
 

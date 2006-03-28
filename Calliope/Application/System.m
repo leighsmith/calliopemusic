@@ -259,7 +259,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   if (sp != nil)
   {
     invalidEnabled = 0;		/* so that height is not smashed while we reset */
-    [self sysheight: sp->y];	/* find compressed vertical format */
+    [self sysheight: [sp yOfTop]];	/* find compressed vertical format */
     [self alterSpacing];	/* apply any expansion */
     [self resetSpanners];	/* update what is affected */
     invalidEnabled = 1;		/* height now free to be smashed */
@@ -310,7 +310,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   if (sp != nil)
   {
     [self mark];
-    [self moveBy:0.0 :(y + headroom) - sp->y];
+    [self moveBy:0.0 :(y + headroom) - [sp yOfTop]];
   }
   return self;
 }
@@ -353,8 +353,9 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 	objs = [[NSMutableArray alloc] init];
 	staves = [[NSMutableArray arrayWithCapacity: n] retain];
 	while (n--) {
-	    Staff *aStaff = [[Staff alloc] initstaff: self];
+	    Staff *aStaff = [[Staff alloc] init];
 	    
+	    [aStaff setSystem: self];
 	    [staves addObject: aStaff];
 	    [aStaff release];   /*sb: the array will hold the single retain */
 	}
@@ -650,7 +651,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   {
     sp = [staves objectAtIndex:k];
     if (sp->flags.hidden) continue;
-    y = sp->y;
+    y = [sp yOfTop];
     if (y < miny) miny = y;
     y += sp->bounds.size.height;
     if (y > maxy) maxy = y;
@@ -835,19 +836,18 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 
 - newStaff: (float) ny
 {
-  Staff *sp, *nsp;
-  int i, n;
-  n = flags.nstaves + 1;
-  sp = [self findOnlyStaff: ny];
-  i = [staves indexOfObject:sp];
-//#error ListToMutableArray: NSArray contains no functionality for altering or inspecting the capacity
-//  [staves setAvailableCapacity:n]; //sb: no real need for this, anyway.
-  nsp = [[Staff alloc] initstaff: self];
-  if (ny > sp->y) ++i;
-  [staves insertObject:nsp atIndex:i];
-  flags.nstaves = n;
-  [self sysInvalid];
-  return self;
+    Staff *sp = [self findOnlyStaff: ny];
+    Staff *nsp = [[Staff alloc] init];
+    int i = [staves indexOfObject: sp];
+    int n = flags.nstaves + 1;
+    
+    [nsp setSystem: self];
+    if (ny > [sp yOfTop])
+	++i;
+    [staves insertObject: nsp atIndex: i];
+    flags.nstaves = n;
+    [self sysInvalid];
+    return self;
 }
 
 
@@ -986,7 +986,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   {
     s = [staves objectAtIndex:k];
     if (s->flags.hidden) continue;
-    dy = (s->y + s->flags.spacing * (s->flags.nlines - 1)) - y;
+    dy = ([s yOfTop] + s->flags.spacing * (s->flags.nlines - 1)) - y;
     if (dy < 0) dy = -dy;
     if (dy < mindy)
     {

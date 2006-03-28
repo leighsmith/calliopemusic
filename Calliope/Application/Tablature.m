@@ -90,7 +90,7 @@ static Tablature *proto;
 - recalc
 {
   [super recalc];
-  if (TYPEOF(mystaff) == STAFF) y = ((Staff *)mystaff)->y;
+  if (TYPEOF(mystaff) == STAFF) y = [mystaff yOfTop];
   return self; 
 }
 
@@ -337,7 +337,7 @@ static char tabpos[2][15] =
       n = gFlags.selend;
       if (flags.direction)
       {
-        if (TYPEOF(mystaff) == STAFF) nl = ((Staff *)mystaff)->flags.nlines;
+        if (TYPEOF(mystaff) == STAFF) nl = mystaff->flags.nlines;
         else
         {
 	    NSLog(@"Tablature -keyDownString: mystaff != STAFF");

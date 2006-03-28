@@ -48,18 +48,19 @@ int escapedTool = 0;		/* the escaped tool */
 int needUpgrade = 0;		/* whether to call upgrade */
 GraphicView *playView = nil;
 
-extern void muxlowInit();
 extern int fontflag;
 
 @implementation DrawApp
 
 NSModalSession alertSession;
 
+// Allows returning a Singleton.
+DrawApp *sharedApplicationController = nil;
+
 /*
- * PSInit() defines all the PostScript defs we use (see draw.psw).
  * setAutoupdate:YES means that updateWindows will be called after
  * every event is processed (this is how we keep our inspector and
-			     * our menu items up to date).
+ * our menu items up to date).
  * All other setup code goes here...right?
  */
 
@@ -130,20 +131,13 @@ extern void colorInit(int i, NSColor * c);
         // TODO this is probably better done by the nib file or from the menu.
         // if (!(a->appdefaults))  [NSBundle loadNibNamed:@"AppDefaults.nib" owner:a];
         // [a->appdefaults checkOpenFromFile];	
-        currentWindow = nil;
         cpl = nil;
+	if(sharedApplicationController == nil)
+	    sharedApplicationController = self; // Assign the Singleton returned by the class method.
     }
     return self;
 }
 
-- (void) setCurrentWindow:(id)w
-{
-    currentWindow = w;
-}
-- (NSWindow *) currentWindow
-{
-    return currentWindow;
-}
 
 /* Private C functions used to implement methods in this class. */
 
@@ -243,7 +237,7 @@ static OpusDocument *openDocument(NSString *document, BOOL display)
 
 + (DrawApp *) sharedApplicationController
 {
-    return nil; // TODO should attempt to "find" the DrawApp instance instantiated by the application nib loading. Probably query NSBundle.
+    return sharedApplicationController; // TODO should attempt to "find" the DrawApp instance instantiated by the application nib loading. Probably query NSBundle.
 }
 
 /* General application status and information querying/modifying methods. */
@@ -515,14 +509,6 @@ float unitFactor[4] =
 {
     if (!perfInspector)  [NSBundle loadNibNamed:@"PlayInspector.nib" owner:self];
     [perfInspector makeKeyAndOrderFront:self];
-    return self;
-}
-
-
-- orderLog: sender
-{
-    if (!processLog)  [NSBundle loadNibNamed:@"ProcessLog.nib" owner:self];
-    [[processLog window] orderFront:self];
     return self;
 }
 

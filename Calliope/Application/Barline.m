@@ -200,7 +200,7 @@ static int invismode[8] = {0, 4, 4, 4, 4, 4, 4, 7};
     barline(x, y, 0.0, (y + DRAGSIZE), barwidth[0][gFlags.size], m);
     return self;
   }
-  y1 = s->y;
+  y1 = [s yOfTop];
   if (flags.editorial)
   {
     barline(x, (y1 - nature[sz]), 0.0, (y1 - 3 * nature[sz]), barwidth[s->flags.subtype][gFlags.size], m);
@@ -218,7 +218,7 @@ static int invismode[8] = {0, 4, 4, 4, 4, 4, 4, 7};
         if (s1 != nil)
 	{
           y1 = y2;
-	  y2 = s1->y;
+	  y2 = [s1 yOfTop];
 	}
 	else  m = invismode[m];
         break;
@@ -226,7 +226,7 @@ static int invismode[8] = {0, 4, 4, 4, 4, 4, 4, 7};
         break;
       case 3:
         s1 = [s->mysys nextstaff: s];
-        if (s1 != nil) y2 = s1->y;
+        if (s1 != nil) y2 = [s1 yOfTop];
         break;
     }
   }
@@ -261,7 +261,7 @@ static int invismode[8] = {0, 4, 4, 4, 4, 4, 4, 7};
     case BARENDR:
       barthick(x, y1, sth, y2, bs, m);
       barline(x - bs, y1, sth, y2, bw, m);
-      bardots(s->flags.nlines, x - (bs * 2.0), s->y, ss, sz, m);
+      bardots(s->flags.nlines, x - (bs * 2.0), [s yOfTop], ss, sz, m);
       break;
     case BARBEG:
       barthick(x - bs, y1, sth, y2, bs, m);
@@ -270,41 +270,41 @@ static int invismode[8] = {0, 4, 4, 4, 4, 4, 4, 7};
     case BARBEGR:
       barthick(x - bs, y1, sth, y2, bs, m);
       barline(x + bs, y1, sth, y2, bw, m);
-      bardots(s->flags.nlines, x + (bs * 2.0), s->y, ss, sz, m);
+      bardots(s->flags.nlines, x + (bs * 2.0), [s yOfTop], ss, sz, m);
       break;
     case BARDOUR:
       barthick(x, y1, sth, y2, bs, m);
       barline(x + (bs * 2.0), y1, sth, y2, bw, m);
       barline(x - bs, y1, sth, y2, bw, m);
-      bardots(s->flags.nlines, x + (bs * 3.0), s->y, ss, sz, m);
-      bardots(s->flags.nlines, x - (bs * 2.0), s->y, ss, sz, m);
+      bardots(s->flags.nlines, x + (bs * 3.0), [s yOfTop], ss, sz, m);
+      bardots(s->flags.nlines, x - (bs * 2.0), [s yOfTop], ss, sz, m);
       break;
     case BARDOTS:
-      bardots(-(s->flags.nlines), x, s->y, ss, sz, m);
+      bardots(-(s->flags.nlines), x, [s yOfTop], ss, sz, m);
       break;
     case BARHALF:
-      y1 = s->y + ss * (((int) s->flags.nlines - 1) - 2);
-      y2 = s->y + ss * (((int) s->flags.nlines - 1) + 2);
+      y1 = [s yOfTop] + ss * (((int) s->flags.nlines - 1) - 2);
+      y2 = [s yOfTop] + ss * (((int) s->flags.nlines - 1) + 2);
       barline(x, y1, 0.0, y2, bw, m);
       break;
     case BARQUAR:
-      y1 = s->y - ss;
-      y2 = s->y + ss;
+      y1 = [s yOfTop] - ss;
+      y2 = [s yOfTop] + ss;
       barline(x, y1, 0.0, y2, bw, m);
       break;
     case BARUPPER:
-      y2 = s->y + ss * (s->flags.nlines - 1);
+      y2 = [s yOfTop] + ss * (s->flags.nlines - 1);
       barline(x, y1, 0.0, y2, bw, m);
       break;
     case BARLOWER:
-      y1 = s->y + ss * (s->flags.nlines - 1);
+      y1 = [s yOfTop] + ss * (s->flags.nlines - 1);
       barline(x, y1, 0.0, y2, bw, m);
       break;
     case BARDOURB:
       barthick(x, y1, sth, y2, bs, m);
       barthick(x - bs - f, y1, sth, y2, bs, m);
-      bardots(s->flags.nlines, x + (bs * 2.0), s->y, ss, sz, m);
-      bardots(s->flags.nlines, x - (bs * 2.0) - f, s->y, ss, sz, m);
+      bardots(s->flags.nlines, x + (bs * 2.0), [s yOfTop], ss, sz, m);
+      bardots(s->flags.nlines, x - (bs * 2.0) - f, [s yOfTop], ss, sz, m);
       break;
   }
   if (flags.dashed) PSsetdash(dpattern, 0, 0.0);

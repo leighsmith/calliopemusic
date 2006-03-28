@@ -20,7 +20,7 @@
 @public
   NSMutableArray *hangers;		/* List of hangers */
   NSMutableArray *verses;			/* List of Verse */
-  id mystaff;			/* backpointer */
+  Staff *mystaff;			/* backpointer */
   float x, y;			/* coordinates */
   float stamp;			/* cache (not archived) */
   float duration;		/* cache (not archived) */

@@ -169,14 +169,14 @@ static NSTextView *drawText = nil;
           client = sp;
           offset.x = pt.x - 5;/*sb: subtract 5 to compensate for text container inset */
           /* sb: subtract 1/2 fontsize, for better box positioning */
-          offset.y = [sp yOfPos: [sp findPos: pt.y]] - sp->y - floor(fontsize / 2.0);
+          offset.y = [sp yOfPos: [sp findPos: pt.y]] - [sp yOfTop] - floor(fontsize / 2.0);
           break;
       case TITLE:
           client = sys;
           sp = [client firststaff];
           offset.x = pt.x - 5;/*sb: subtract 5 to compensate for text container inset */
           /* sb: subtract 1/2 fontsize, for better box positioning */
-          offset.y = [sp yOfPos: [sp findPos: pt.y]] - sp->y - floor(fontsize / 2.0);
+          offset.y = [sp yOfPos: [sp findPos: pt.y]] - [sp yOfTop] - floor(fontsize / 2.0);
           break;
       case LABEL:
           p = [v isSelTypeCode: TC_STAFFOBJ : &n];
@@ -185,7 +185,7 @@ static NSTextView *drawText = nil;
           horizpos = 0;
           offset.x = -(0.5 * BOXSIZE) - 3;
           ty = p->bounds.origin.y - (0.5 * BOXSIZE);
-          if (sp->y < ty) ty = sp->y;
+          if ([sp yOfTop] < ty) ty = [sp yOfTop];
               offset.y = (ty - 1.5 * BOXSIZE) - p->y;
           client = p;
           [client linkhanger: self];
@@ -308,19 +308,19 @@ static NSTextView *drawText = nil;
       break;
     case 6:
         offset.x = lm  - TEXTOFFSET;
-        offset.y = [sp yOfCentre] - 0.5 * bounds.size.height - sp->y;
+        offset.y = [sp yOfCentre] - 0.5 * bounds.size.height - [sp yOfTop];
       break;
     case 7:
       offset.x = 0.5 * [s leftPlace] - 0.5 * w;
-      offset.y = [sp yOfCentre] - 0.5 * bounds.size.height - sp->y;
+      offset.y = [sp yOfCentre] - 0.5 * bounds.size.height - [sp yOfTop];
       break;
     case 8:
-        offset.x = [s leftPlace] - w - 10.0 + 2;/*sb: offset of +2*/
-        offset.y = [sp yOfCentre] - 0.5 * bounds.size.height - sp->y;
+        offset.x = [s leftPlace] - w - 10.0 + 2; /* sb: offset of +2 */
+        offset.y = [sp yOfCentre] - 0.5 * bounds.size.height - [sp yOfTop];
       break;
   }
   bounds.origin.x = offset.x;
-  bounds.origin.y = sp->y + offset.y;
+  bounds.origin.y = [sp yOfTop] + offset.y;
   [client sysInvalid];
   return self;
 }
@@ -450,12 +450,12 @@ static NSTextView *drawText = nil;
     case STAFFHEAD:
       sp = client;
       if (horizpos == 0) offset.x = nx;
-      offset.y = [sp yOfPos: [sp findPos: ny]] - sp->y;
+      offset.y = [sp yOfPos: [sp findPos: ny]] - [sp yOfTop];
       break;
     case TITLE:
       sp = [client firststaff];
       if (horizpos == 0) offset.x = nx;
-      offset.y = [sp yOfPos: [sp findPos: ny]] - sp->y;
+      offset.y = [sp yOfPos: [sp findPos: ny]] - [sp yOfTop];
       break;
   }
   [self recalc];

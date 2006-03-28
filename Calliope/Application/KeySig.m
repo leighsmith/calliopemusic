@@ -411,7 +411,7 @@ int whichfont[4] = {1, 0, 0, 1};
     bp = 8;
   }
   bpos = clefcpos[(int)clefuid[ck][cf]] + koff + p;
-  sy = (TYPEOF(sp) == STAFF) ? sp->y : y;
+  sy = (TYPEOF(sp) == STAFF) ? [sp yOfTop] : y;
   cx = x;
   f = musicFont[whichfont[gFlags.subtype]][sz];
     /* scan sharps, then flats. Works for conventional and mixed */
