@@ -29,7 +29,7 @@ NSString *unitname[4] =
   Margin *p = [v canInspect: MARGIN : &n];
   if (n == 0) return nil;
   conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
-//  [[NSApp pageLayout] convertOldFactor:&conv newFactor:&anon];
+//  [[[DrawApp sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
   [[lbindform cellAtIndex:0] setFloatValue:conv * p->margin[6]];
   [[lbindform cellAtIndex:1] setFloatValue:conv * p->margin[8]];
   [[rbindform cellAtIndex:0] setFloatValue:conv * p->margin[7]];
@@ -40,7 +40,7 @@ NSString *unitname[4] =
   [[vertmargform cellAtIndex:1] setFloatValue:conv * p->margin[4]];
   [[vertmargform cellAtIndex:2] setFloatValue:conv * p->margin[5]];
   [[vertmargform cellAtIndex:3] setFloatValue:conv * p->margin[3]];
-  [unitcell setStringValue:[NSApp unitString]];
+  [unitcell setStringValue:[[DrawApp sharedApplicationController] unitString]];
   [formatbutton selectItemAtIndex:p->format];
   [[alignmatrix cellAtRow:0 column:0] setState:(p->alignment & 1)];
   [[alignmatrix cellAtRow:1 column:0] setState:(p->alignment & 2)];
@@ -67,7 +67,7 @@ NSString *unitname[4] =
   if ([[alignmatrix cellAtRow:0 column:0] state]) p->alignment |= 1;
   if ([[alignmatrix cellAtRow:1 column:0] state]) p->alignment |= 2;
   conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
-//  [[NSApp pageLayout] convertOldFactor:&conv newFactor:&anon];
+//  [[[DrawApp sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
   f = [[lbindform cellAtIndex:0] floatValue] / conv;
   UPDATE(p->margin[6], f);
   f = [[lbindform cellAtIndex:1] floatValue] / conv;    

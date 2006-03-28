@@ -254,7 +254,7 @@
 - (BOOL) checkStyleFromFile: (GraphicView *) v
 {
   if (!usestyle) return YES;
-  return [[NSApp thePreferences] getStyleFromFile: stylepath : v];
+  return [[[DrawApp sharedApplicationController] thePreferences] getStyleFromFile: stylepath : v];
 }
 
 

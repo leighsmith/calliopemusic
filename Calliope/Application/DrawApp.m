@@ -237,7 +237,7 @@ static OpusDocument *openDocument(NSString *document, BOOL display)
 
 + (DrawApp *) sharedApplicationController
 {
-    return sharedApplicationController; // TODO should attempt to "find" the DrawApp instance instantiated by the application nib loading. Probably query NSBundle.
+    return sharedApplicationController;
 }
 
 /* General application status and information querying/modifying methods. */
@@ -809,33 +809,32 @@ else {
 /* Check for files to open specified on the command line. */
 
 
-- (void)applicationDidFinishLaunching:(NSNotification *)notification
+- (void) applicationDidFinishLaunching: (NSNotification *) notification
 {
 //  NSApplication *theApplication = [notification object];
     int i;
-#ifndef WIN32
-    MKSetErrorProc(handleMKError);
-#endif
+    
+    MKSetErrorProc(handleMKError); // TODO this needs updating to latest MK error handling delegate messages.
+    
 //sb: The following is for reading old runners. Not used for new documents.
 #if 0 // TODO LMS: Commented this out until we find a means to fake NSCStringText out
     [NSCStringText registerDirective:@"TextVarCell" forClass:[TextVarCell class]];
 #endif
-    [(NSPanel *)[tools window] setBecomesKeyOnlyIfNeeded:YES];
-    [(NSPanel *)[toolsH window] setBecomesKeyOnlyIfNeeded:YES];
-    [(NSPanel *)[tools window] setFloatingPanel:YES];
-    [(NSPanel *)[toolsH window] setFloatingPanel:YES];
+
+    [(NSPanel *)[tools window] setBecomesKeyOnlyIfNeeded: YES];
+    [(NSPanel *)[toolsH window] setBecomesKeyOnlyIfNeeded: YES];
+    [(NSPanel *)[tools window] setFloatingPanel: YES];
+    [(NSPanel *)[toolsH window] setFloatingPanel: YES];
     /* [[perfInspector window] setFloatingPanel:YES]; */
-    if ([appdefaults checkOpenPanel: 0]) [[tools window] orderFront:self];
-    if ([appdefaults checkOpenPanel: 1]) [[toolsH window] orderFront:self];
+    if ([appdefaults checkOpenPanel: 0]) [[tools window] orderFront: self];
+    if ([appdefaults checkOpenPanel: 1]) [[toolsH window] orderFront: self];
     if ([appdefaults checkOpenPanel: 2]) [self orderNewPanel: self];
     [self initCharsPanel];
-//  [[[NSFontManager sharedFontManager] fontPanel:YES] setAccessoryView:fontAccessory];
-    [[NSFontPanel sharedFontPanel] setAccessoryView:fontAccessory];
+//  [[[NSFontManager sharedFontManager] fontPanel:YES] setAccessoryView: fontAccessory];
+    [[NSFontPanel sharedFontPanel] setAccessoryView: fontAccessory];
     
-    for (i = 1; i < [[[NSProcessInfo processInfo] arguments] count]; i++)
-	haveOpenedDoc = openDocument([[[NSProcessInfo processInfo] arguments] objectAtIndex:i], YES) || haveOpenedDoc;
 #ifdef WIN32
-    [MenuBar setMenu:[NSApp mainMenu]];
+    [MenuBar setMenu: [NSApp mainMenu]];
     [MenuBar orderFront];
 #endif
 }

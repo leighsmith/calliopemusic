@@ -283,7 +283,7 @@ static void blinkOff(GraphicView *v)
         [MKOrchestra abort];
         status = MK_inactive;
     }
-    [NSApp thePlayView: nil];
+    [[DrawApp sharedApplicationController] thePlayView: nil];
     return self;
 }
 

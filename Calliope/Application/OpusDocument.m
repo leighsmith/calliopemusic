@@ -890,15 +890,15 @@ return nil;
     //this forces the page layout panel to use the units that we have defined in Calliope app preferences
     NSString * tempUnit = [[[NSUserDefaults standardUserDefaults] stringForKey:@"NSMeasurementUnit"] retain];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"NSMeasurementUnit"];
-    [[NSUserDefaults standardUserDefaults] setObject:[NSApp unitString]
+    [[NSUserDefaults standardUserDefaults] setObject:[[DrawApp sharedApplicationController] unitString]
                                               forKey:@"NSMeasurementUnit"];
-    pl = [NSApp newPageLayout];
+    pl = [[DrawApp sharedApplicationController] newPageLayout];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"NSMeasurementUnit"];
     if (tempUnit)
         [[NSUserDefaults standardUserDefaults] setObject:tempUnit
                                                   forKey:@"NSMeasurementUnit"];
 #else
-    pl = [NSApp pageLayout];
+    pl = [[DrawApp sharedApplicationController] pageLayout];
 #endif
     if ([pl runModalWithPrintInfo:printInfo] == NSOKButton)
     {
@@ -919,7 +919,7 @@ return nil;
         }
 	[view dirty];
     }
-    [NSApp inspectPreferences: NO];
+    [[DrawApp sharedApplicationController] inspectPreferences: NO];
     return self;
 }
 
@@ -959,7 +959,7 @@ return nil;
     id savepanel;
     if (!haveSavedDocument)
     {
-	savepanel = [NSApp savePanel: FILE_EXT];
+	savepanel = [[DrawApp sharedApplicationController] savePanel: FILE_EXT];
 	if ([savepanel runModalForDirectory:@"" file:@""])
 	{
 	    [self setName:[savepanel filename]];
@@ -987,7 +987,7 @@ return nil;
 - (NSString *) askForFile: (NSString *) ext
 {
     id savepanel;
-    savepanel = [NSApp savePanel: ext];
+    savepanel = [[DrawApp sharedApplicationController] savePanel: ext];
     if (![savepanel runModalForDirectory:directory file:[name stringByDeletingPathExtension]]) return nil;
     return [savepanel filename];
 }
@@ -1403,7 +1403,7 @@ return nil;
     */
 //    [NSPrintInfo setSharedPrintInfo:printInfo];
     [self resetCursor];
-    // [NSApp presetPrefsPanel]; // TODO should be [DrawApp presetPrefsPanel]; eventually DrawApp should just become a preferences controller.
+    // [[DrawApp sharedApplicationController] presetPrefsPanel]; // TODO should be [DrawApp presetPrefsPanel]; eventually DrawApp should just become a preferences controller.
     // [[DrawApp sharedApplicationController] inspectApp]; // TODO must rewrite.
     //++partlistflag;
 }
