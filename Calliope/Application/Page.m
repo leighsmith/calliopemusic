@@ -69,12 +69,19 @@ extern NSSize paperSize;
     return newPage;
 }
 
+- (NSString *) description
+{
+    return [NSString stringWithFormat: @"%@ number %d top system %d bottom system %d",
+	[super description], num, topsys, botsys];
+}
+
 /* margin = margin + binding margin */
 - (float) leftMargin
 {
     float m = margin->margin[0];
     m += (num & 1) ? margin->margin[8] : margin->margin[6];
     return m / [[DrawApp currentDocument] staffScale];
+    // return [margin leftMargin] + (num & 1) ? [margin marginOfType: MarginLeftOddBinding] : [margin marginOfType: MarginLeftEvenBinding];
 }
 
 
@@ -101,26 +108,24 @@ extern NSSize paperSize;
     return m / [[DrawApp currentDocument] staffScale];
 }
 
-
 - (float) topMargin
 {
-    return margin->margin[4] / [[DrawApp currentDocument] staffScale];
+    return [margin topMargin];
 }
-
 
 - (float) bottomMargin
 {
-    return margin->margin[5] / [[DrawApp currentDocument] staffScale];
+    return [margin bottomMargin];
 }
 
 - (float) headerBase
 {
-    return margin->margin[2] / [[DrawApp currentDocument] staffScale];
+    return [margin headerBase];
 }
 
 - (float) footerBase
 {
-    return margin->margin[3] / [[DrawApp currentDocument] staffScale];
+    return [margin footerBase];
 }
 
 /* sums to page height (as screened) */
