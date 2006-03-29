@@ -263,7 +263,7 @@ static void addBarsRest(Staff *sp, System *sys, int n)
   if (v->partlist) [v->partlist autorelease]; //sb: List is freed rather than released
   v->partlist = epl;
   [v finishExtraction];
-  [doc->documentWindow makeKeyAndOrderFront:doc];
+  // [doc->documentWindow makeKeyAndOrderFront:doc];
   return self;
 }
 
@@ -345,7 +345,7 @@ static void addBarsRest(Staff *sp, System *sys, int n)
   if (v->partlist) [v->partlist autorelease]; //sb: List is freed rather than released
   v->partlist = epl;
   [v finishExtraction];
-  [doc->documentWindow makeKeyAndOrderFront:doc];
+  // [doc->documentWindow makeKeyAndOrderFront:doc];
   return self;
 }
 

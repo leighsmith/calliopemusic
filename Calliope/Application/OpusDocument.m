@@ -264,7 +264,7 @@ static id createWindowFor(GraphicView* view, NSRect *r, NSString *fS)
     if (prefInfo)
     {
 	p = [prefInfo revert];
-	if (p) [self installPrefInfo: p];
+	if (p) [self setDocumentPreferences: p];
     }
     else prefInfo = [[PrefBlock alloc] init];
     /* old system margin format */
@@ -287,8 +287,10 @@ static id createWindowFor(GraphicView* view, NSRect *r, NSString *fS)
 {
     NSLog(@"loadDataRepresentation: Received type %@ data %@\n", aType, data);
     if([aType isEqualToString: FILE_EXT]) {
-	if(![self loadDocument: data]) // if unable to load the document normally, try the old versionless method.
+	if(![self loadDocument: data]) {
+	    // if unable to load the document normally, try the old versionless method.
 	    return [self loadOldDocument: data];
+	}
 	return YES;
     }
     else {
@@ -297,50 +299,6 @@ static id createWindowFor(GraphicView* view, NSRect *r, NSString *fS)
     }
     return NO;
 }
-
-
-/* Factory methods */
-
-#if 0
-/*
- * We reuse zones since it doesn't cost us anything to have a
- * zone lying around (e.g. if we open ten documents at the start
-		      * then don't use 8 of them for the rest of the session, it doesn't
-		      * cost us anything except VM (no real memory cost)), and it is
- * risky business to go around NSDestroy()'ing zones since if
- * your application accidentally allocates some piece of global
- * data into a zone that gets destroyed, you could have a pointer
- * to freed data on your hands!  We use the List object since it
- * is so easy to use (which is okay as long as 'id' remains a
-		      * pointer just like (NSZone *) is a pointer!).
- *
- * Note that we don't implement alloc and allocFromZone: because
- * we create our own zone to put ourselves in.  It is generally a
- * good idea to "notImplemented:" those methods if you do not allow
- * an object to be alloc'ed from an arbitrary zone (other examples
-						    * include Application and all of the Application Kit panels
-						    * (which allocate themselves into their own zone).
-						    */
-
-static List *zoneList = nil;
-
-+ (NSZone *)newZone
-{
-    if (!zoneList || ![zoneList count]) {
-        return NSCreateZone(NSPageSize(), NSPageSize(), YES);
-    } else {
-        return (NSZone *)[zoneList removeLastObject];
-    }
-}
-
-+ (void)reuseZone:(NSZone *)aZone
-{
-    if (!zoneList) zoneList = [List new];
-    [zoneList addObject:(id)aZone];
-    NSSetZoneName(aZone, @"Unused");
-}
-#endif
-
 
 // Override returning the nib file name of the document
 // If you need to use a subclass of NSWindowController or if your document supports
@@ -654,7 +612,8 @@ return nil;
     return printInfo;
 }
 
-
+// TODO all these should be within the PrefBlock itself, so the accessor just retrieves:
+// [[document documentPreferences] intValueAt: i];
 - (int) getPreferenceAsInt: (int) i
 {
     if (!prefInfo)
@@ -688,33 +647,15 @@ return nil;
 }
 
 
-- setPreferenceAsInt: (int) v at: (int) i
-{
-    if (prefInfo) [prefInfo setIntValue: v at: i];
-    else NSLog(@"PrefBlock missing!\n");
-    return self;
-}
-
-
-- setPreferenceAsFloat: (float) v at: (int) i
-{
-    if (prefInfo) [prefInfo setFloatValue: v at: i];
-    else NSLog(@"PrefBlock missing!\n");
-    return self;
-}
-
-
-- prefInfo
+- (PrefBlock *) documentPreferences
 {
     return prefInfo;
 }
 
-
-- installPrefInfo: (PrefBlock *) p
+- (void) setDocumentPreferences: (PrefBlock *) p
 {
     if (prefInfo) [prefInfo release];
-    prefInfo = p;
-    return self;
+    prefInfo = [p retain];
 }
 
 #if 0
@@ -737,7 +678,7 @@ return nil;
 /*
  * Checks to see if the new window size is too large.
  * Called whenever the page layout (either by user action or
-				    * by the opening or reverting of a file) is changed or
+ * by the opening or reverting of a file) is changed or
  * the user resizes the window.
  */
 
@@ -746,26 +687,25 @@ return nil;
     NSSize conSize;
     NSRect conRect, winFrame;
     BOOL doRuler = NO;
-    if (documentWindow)
-    {
+    
+    if (documentWindow) {
 	winFrame = [documentWindow frame];
 	conRect = [[documentWindow class] contentRectForFrameRect:winFrame styleMask:[documentWindow styleMask]];
 	getContentSizeForView(view, &conSize);
-	if ([scrollView rulersVisible])
-	{
+	if ([scrollView rulersVisible])	{
 	    conSize.height += [scrollView frame].size.height;
 	    conSize.width += [scrollView frame].size.width;
 	    doRuler = YES;
 	}
-	if (conRect.size.width >= conSize.width || conRect.size.height >= conSize.height)
-	{
+	if (conRect.size.width >= conSize.width || conRect.size.height >= conSize.height) {
 	    conSize.width = MIN(conRect.size.width, conSize.width);
 	    conSize.height = MIN(conRect.size.height, conSize.height);
 	    [documentWindow setContentSize:conSize];
 	}
 	[scrollView setPageNum: [view getPageNum]];
 	[scrollView setScaleNum: [view getScaleNum]];
-	if (doRuler) [scrollView updateRuler];
+	if (doRuler) 
+	    [scrollView updateRuler];
     }
     return self;
 }
@@ -806,6 +746,7 @@ return nil;
 - (void) zeroScale
 {
     float h, w, m;
+    
     m = 1.0 / [self staffScale];
     w = paperSize.width;
     h = paperSize.height;
@@ -820,11 +761,10 @@ return nil;
     [documentWindow enableFlushWindow];
 }
 
-
-
 - useViewScale
 {
     float h, w, ss, vs;
+    
     w = paperSize.width;
     h = paperSize.height;
     ss = 1.0 / [self staffScale];
@@ -839,6 +779,7 @@ return nil;
     return documentWindow;
 }
 
+// frameSize should be removed entirely, if we need it, we should be asking view
 - (NSRect) frameSize
 {
     return frameSize;
@@ -1097,10 +1038,8 @@ return nil;
 
 - showTextRuler: sender
 {
-//  SyncScrollView *scrollView = [documentWindow contentView];
-    if ([scrollView rulersVisible])
-    {
-//    [scrollView showHorizontalRuler:NO];
+    if ([scrollView rulersVisible]) {
+	// [scrollView showHorizontalRuler:NO];
 	[sender toggleRuler:sender];
     }
     return self;
@@ -1325,7 +1264,6 @@ return nil;
     [self zeroScale];
     // TODO kludged in here for now, it will eventually be created by a "new document sheet".
     [self setNumberOfStaves: 1];
-    // [view firstPage: self];
 }
 
 #if 0
@@ -1475,30 +1413,19 @@ return nil;
  * Validates whether a menu command that OpusDocument responds to
  * is valid at the current time.
  */
-
-- (BOOL)validateMenuItem:(NSMenuItem *)menuCell
+- (BOOL) validateMenuItem: (NSMenuItem *) menuCell
 {
     int tag = [menuCell tag];
     switch (tag)
     {
         default:
             break;
-        case 39:
-            return [view isDirty];
-        case 40:
-            return (haveSavedDocument || ![view isEmpty]);
-        case 41:
-            return ![view isEmpty];
-        case 44:
-            return ([view isDirty] && haveSavedDocument);
         case 46:
-#if 1 // TODO LMS disabled until we sort out the IBOutlet for the SyncScrollView
             if ([scrollView rulersVisible] )
                 [menuCell setTitle:@"Hide Ruler"];
             else
                 [menuCell setTitle:@"Show Ruler"];
             [menuCell setEnabled:NO];
-#endif
             break;
         case 47:
             return [[documentWindow fieldEditor:NO forObject:NSApp] superview] ? YES : NO;
@@ -1514,7 +1441,7 @@ return nil;
  * Makes the graphic view the first responder if there isn't one or if
  * no tool is selected (the cursor is the normal one).
  */
-
+// TODO this plus the tool code from DrawApp should be factored into their own class.
 - resetCursor
 {
     id fr;

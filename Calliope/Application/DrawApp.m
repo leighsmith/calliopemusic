@@ -831,6 +831,7 @@ else {
     if ([appdefaults checkOpenPanel: 2]) [self orderNewPanel: self];
     [self initCharsPanel];
 //  [[[NSFontManager sharedFontManager] fontPanel:YES] setAccessoryView: fontAccessory];
+    // Is this necessary? Only if fontAccessory points to a special font selection?
     [[NSFontPanel sharedFontPanel] setAccessoryView: fontAccessory];
     
 #ifdef WIN32

@@ -22,14 +22,16 @@ static int unitAsInt(float f)
 }
 
 
-- (void)pickedUnits:(id)sender
+- (void) pickedUnits: (id) sender
 {
     float old, new;
     int newunit; 
+    
     [self convertOldFactor:&old newFactor:&new];
     newunit = unitAsInt(new);
-    // [[DrawApp currentDocument] setPreferenceAsInt:newunit at: UNITS];/* obselete, really */
-    [[NSUserDefaults standardUserDefaults] setObject:unitname[newunit] forKey:@"Units"];
+    // TODO Should use the standard system wide default but allow users to override in case Americans are working on
+    // European scores or similar.
+    [[NSUserDefaults standardUserDefaults] setObject: unitname[newunit] forKey: @"Units"];
     [super pickedUnits:sender];
 }
 

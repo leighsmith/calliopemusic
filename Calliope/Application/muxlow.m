@@ -204,7 +204,7 @@ NSString *GeneralMidiSounds[128] = {
 					@"Gunshot"
 };
 
-NSMutableArray *instlist = nil; 		/* a List of CallInst */
+NSMutableArray *instlist = nil; 		/* a Array of CallInst */
 NSMutableArray *scratchlist = nil;	/* used for partlist in case there is no view */
 NSMutableArray *scrstylelist = nil;	/* used for scratchlist in case no view */
 int partlistflag = 0;		/* whether partlist is valid */

@@ -1,8 +1,7 @@
+/* $Id:$ */
 #import "winheaders.h"
-#import <AppKit/NSFont.h>
 #import <AppKit/AppKit.h>
 #import <Foundation/Foundation.h>
-#import <Foundation/NSArray.h>
 #import "Graphic.h"
 #import "GraphicView.h"
 #import "Verse.h"
@@ -15,12 +14,12 @@
   they are stored for all staff objects for various reasons.
 */
 
-@interface StaffObj:Graphic
+@interface StaffObj: Graphic
 {
 @public
-  NSMutableArray *hangers;		/* List of hangers */
-  NSMutableArray *verses;			/* List of Verse */
-  Staff *mystaff;			/* backpointer */
+  NSMutableArray *hangers;	/* Array of hangers */
+  NSMutableArray *verses;	/* Array of Verse */
+  Staff *mystaff;		/* backpointer */
   float x, y;			/* coordinates */
   float stamp;			/* cache (not archived) */
   float duration;		/* cache (not archived) */
@@ -30,7 +29,7 @@
   char selver;			/* selected verse */
   char isGraced;		/* 1 = graced object, 2 = backwards-timed */
   unsigned char voice;		/* voice number */
-  NSString *part;			/* part name */
+  NSString *part;		/* part name */
 }
 
 + (void)initialize;

@@ -300,7 +300,7 @@ static void setFieldName(NSFont *fnt, id fld)
 {
   float conv;
   BOOL change = NO;
-  PrefBlock *p = [[DrawApp currentDocument] prefInfo];
+  PrefBlock *p = [[DrawApp currentDocument] documentPreferences];
   switch([mainPopup indexOfSelectedItem])
   {
     case 0:
@@ -360,7 +360,7 @@ static void setFieldName(NSFont *fnt, id fld)
 - hitChoice: sender
 {
     int i = [mainPopup indexOfSelectedItem];
-  [self setPanel: i : [[DrawApp currentDocument] prefInfo]];
+  [self setPanel: i : [[DrawApp currentDocument] documentPreferences]];
   [self setView: i];
   return self;
 }
@@ -473,7 +473,7 @@ NSFontManager *fm = [NSFontManager sharedFontManager];
 {
   OpusDocument *d = [DrawApp currentDocument];
   GraphicView *v = [d graphicView];
-  PrefBlock *p = [d prefInfo];
+  PrefBlock *p = [d documentPreferences];
   float oss, nss, w, h;
   NSSize pr;
   int i;
@@ -517,11 +517,11 @@ NSFontManager *fm = [NSFontManager sharedFontManager];
 {
   int i;
   OpusDocument *d = [DrawApp currentDocument];
-  PrefBlock *p = [d prefInfo];
+  PrefBlock *p = [d documentPreferences];
   if (!p)
   {
     p = [[PrefBlock alloc] init];
-    [d installPrefInfo: p];
+    [d setDocumentPreferences: p];
   }
   i = [mainPopup indexOfSelectedItem];
   [self setPanel : i : p];
@@ -534,7 +534,7 @@ NSFontManager *fm = [NSFontManager sharedFontManager];
 {
   int i;
   OpusDocument *d = [DrawApp currentDocument];
-  PrefBlock *p = [d prefInfo];
+  PrefBlock *p = [d documentPreferences];
   if (p)
   {
       i = [mainPopup indexOfSelectedItem];
@@ -621,7 +621,7 @@ BOOL writeStyleFile(NSString *f)
   NSString *file=nil;
   NSArray *ext = [NSArray arrayWithObject:@"callstyle"];
   id openpanel;
-  PrefBlock *p = [[DrawApp currentDocument] prefInfo];
+  PrefBlock *p = [[DrawApp currentDocument] documentPreferences];
   if (p == nil)
   {
     NSRunAlertPanel(@"Preferences", @"No Document is Open", @"OK", nil, nil);
@@ -656,7 +656,7 @@ BOOL writeStyleFile(NSString *f)
 {
   id savepanel;
   NSString *fn;
-  PrefBlock *p = [[DrawApp currentDocument] prefInfo];
+  PrefBlock *p = [[DrawApp currentDocument] documentPreferences];
   int i=0;
   if (p == nil)
   {
@@ -715,7 +715,7 @@ BOOL writeStyleFile(NSString *f)
       else
       {
           [self setPanel: [mainPopup indexOfSelectedItem] : p];
-	[[DrawApp currentDocument] installPrefInfo: p];
+	[[DrawApp currentDocument] setDocumentPreferences: p];
       }
     }
   }
@@ -729,7 +729,7 @@ BOOL writeStyleFile(NSString *f)
 {
   id savepanel;
   NSString *fn;
-  PrefBlock *p = [[DrawApp currentDocument] prefInfo];
+  PrefBlock *p = [[DrawApp currentDocument] documentPreferences];
   int i=0;
   if (p == nil)
   {
@@ -759,7 +759,7 @@ BOOL writeStyleFile(NSString *f)
 
 - revert: sender
 {
-  PrefBlock *q, *p = [[DrawApp currentDocument] prefInfo];
+  PrefBlock *q, *p = [[DrawApp currentDocument] documentPreferences];
     int i = 0;
     if ([mainPopup indexOfSelectedItem] < 3)
   {
@@ -787,7 +787,7 @@ BOOL writeStyleFile(NSString *f)
   else
   {
       [self setPanel: [mainPopup indexOfSelectedItem] : q];
-    [[DrawApp currentDocument] installPrefInfo: q];
+    [[DrawApp currentDocument] setDocumentPreferences: q];
   }
   return self;
 }

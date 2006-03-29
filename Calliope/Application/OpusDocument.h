@@ -4,15 +4,19 @@
   @class OpusDocument
 
   This class is used to keep track of an Opus (Calliope) notation document.
+  It acts as a Controller in the Model-View-Controller design pattern troika.
+  In particular, it is responsible for managing document saved state, responsible for
+  retrieving and saving documents to persistent store (load/saving files) and acting as
+  a receiver and distributor of action messages from GUI views to the music notation score model.
+  In future, it should be responsible for managing the various inspector windows.
  */
 
 #import "winheaders.h"
 #import <AppKit/AppKit.h>
-//#import <Foundation/NSCompatibility.h>
 #import "PrefBlock.h"
 #import "SyncScrollView.h"
 
-/* Preferences Codes */
+/* Preferences Codes TODO should be in PrefBlock? */
 
 #define BARNUMSURROUND 0
 #define BARNUMPLACE 1
@@ -36,28 +40,29 @@
 
 @interface OpusDocument : NSDocument
 {
-@public
+@private
     /*! @var documentWindow the window the GraphicView is in. TODO: we should be able to remove this as we separate out the document from window controlling */
     NSWindow *documentWindow;
-@protected
     /*! @var view the document's GraphicView */
     IBOutlet GraphicView *view;	
     /*! @var scrollView The view managing the scroll bars */
     IBOutlet SyncScrollView *scrollView;
-@private
+    // TODO There should actually be a model here! At the moment, GraphicView mixes the view and model. We should have
+    // a model which holds the systems, the pages and other elements that define a written musical score, independent from
+    // the view which is responsible for displaying them using the ApplicationKit.
     /*! @var printInfo TODO: I don't know why this has to be held, it's probably already inherited from NSDocument nowadays */
     NSPrintInfo *printInfo;
-    /*! @var prefInfo the prefBlock */
+    /*! @var prefInfo The block of preferences specific to this document. TODO surely the preferences should be just the state within various class ivars. */
     PrefBlock *prefInfo;
     /*! @var name the name of the document */ //sb: FIXME need to check archiving of name and directory
     NSString *name;
     /*! @var directory the directory it is in */
     NSString *directory;
-    /*! @var haveSavedDocument whether document has associated disk file */
+    /*! @var haveSavedDocument whether document has associated disk file TODO this should be part of NSDocument */
     BOOL haveSavedDocument;
-    /*! @var frameString string naming the document frame */
+    /*! @var frameString string naming the document frame TODO only part of old document retrieval. */
     NSString *frameString;
-    /*! @var frameSize dimensions of the frame */
+    /*! @var frameSize dimensions of the frame TODO only part of old document retrieval. */
     NSRect frameSize;
 }
 
@@ -71,7 +76,7 @@
 /* Factory methods */
 
 + (void)initialize;
-//+ new;
+
 + newFromStream:(NSData *)stream;
 + newFromFile:(NSString *)file andDisplay: (BOOL) d;
 
@@ -119,9 +124,8 @@
 - (int) getPreferenceAsInt: (int) i;
 - (float) getPreferenceAsFloat: (int) i;
 - (NSFont *) getPreferenceAsFont: (int) i;
-- setPreferenceAsInt: (int) v at: (int) i;
-- prefInfo;
-- installPrefInfo: (PrefBlock *) p;
+- (PrefBlock *) documentPreferences;
+- (void) setDocumentPreferences: (PrefBlock *) p;
 
 /*!
   @brief Assigns the number of staves in the document 
@@ -151,7 +155,7 @@
 
 /* Menu command validation method */
 
-- (BOOL)validateMenuItem:(NSMenuItem *)menuCell;
+- (BOOL) validateMenuItem: (NSMenuItem *) menuCell;
 
 /* Cursor setting */
 

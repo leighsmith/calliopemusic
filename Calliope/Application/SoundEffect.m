@@ -23,7 +23,7 @@ static BOOL soundEnabled = NO;
 
 #define DEFAULTMAXSOUNDSTREAMS 20
 
-static NSMutableArray *soundStreams = nil;		// List of currently idle sound streams
+static NSMutableArray *soundStreams = nil;		// Array of currently idle sound streams
 static unsigned int soundStreamsAllocated = 0;	// Total number of sound streams allocated
 static unsigned int maxSoundStreams = DEFAULTMAXSOUNDSTREAMS;	// Max allowed
 

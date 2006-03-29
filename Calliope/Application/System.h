@@ -10,8 +10,8 @@
 @interface System : Graphic
 {
 @public
-    NSMutableArray *objs;			/* List of random objects on this system */
-    NSMutableArray *staves;			/* List of staves */
+    NSMutableArray *objs;			/* Array of random objects on this system */
+    NSMutableArray *staves;			/* Array of staves */
     GraphicView *view;			/* backreference to our GraphicView */
     Page *page;			/* backreference to our Page */
     struct
