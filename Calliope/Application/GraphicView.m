@@ -82,15 +82,12 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
 }
 
 /* Factory methods. */
-
-+ (void)initialize
++ (void) initialize
 {
-  if (self == [GraphicView class])
-  {
-      (void)[GraphicView setVersion: 6]; /*sb: set to 6 for List conversion */
-      PSInit();
-  }
-  return;
+    if (self == [GraphicView class]) {
+	[GraphicView setVersion: 7]; /* SB set this to 6 for List conversion, set to 7 now we move to XML property lists. */
+	PSInit();
+    }
 }
 
 
@@ -871,102 +868,107 @@ extern char *typename[NUMTYPES];
 }
 
 
-- dragSelect:(NSEvent *)event 
+- dragSelect: (NSEvent *) event 
 {
-  NSPoint p, last, start;
-    BOOL alt, shift, hasregion, canscroll,wcache=NO,didMove = NO;
-  NSRect region;
-  id window = [self window];
-  NSRect cachedRect;
-  
-  BOOL timer = FALSE;
-  p = start = [event locationInWindow];
-  start = [self convertPoint:start fromView:nil];
-  last = start;
-  shift = ([event modifierFlags] & NSShiftKeyMask) ? YES : NO;
-  alt = ([event modifierFlags] & NSAlternateKeyMask) ? YES : NO;
-  [self lockFocus];
-  event = [window nextEventMatchingMask:DRAG_MASK];
-  hasregion = NO;
-  region = [self visibleRect];
-  [selShade set];
+    NSPoint p, last, start;
+    BOOL alt, shift, hasregion, canscroll,wcache = NO, didMove = NO;
+    NSRect region;
+    NSWindow *window = [self window];
+    NSRect cachedRect;
+    
+    BOOL timer = FALSE;
+    p = start = [event locationInWindow];
+    start = [self convertPoint: start fromView:nil];
+    last = start;
+    shift = ([event modifierFlags] & NSShiftKeyMask) ? YES : NO;
+    alt = ([event modifierFlags] & NSAlternateKeyMask) ? YES : NO;
+    [self lockFocus];
+    event = [window nextEventMatchingMask:DRAG_MASK];
+    hasregion = NO;
+    region = [self visibleRect];
+    [selShade set];
   // PSsetlinewidth(0.0);
-  
-  canscroll = !NSEqualRects(region , [self bounds]);
-  if (canscroll && !timer) { [NSEvent startPeriodicEventsAfterDelay:0.1 withPeriod:0.1]; timer = TRUE; }
-  while ([event type] != NSLeftMouseUp)
-  {
-      if ([event type] == NSPeriodic) event = periodicEventWithLocationSetToPoint(event, p);
-      p = [event locationInWindow];
-      p = [self convertPoint:p fromView:nil];
-      if (p.x != last.x || p.y != last.y)
+    
+    canscroll = !NSEqualRects(region , [self bounds]);
+    if (canscroll && !timer) {
+	[NSEvent startPeriodicEventsAfterDelay:0.1 withPeriod:0.1];
+	timer = TRUE;
+    }
+    while ([event type] != NSLeftMouseUp)
+    {
+	if ([event type] == NSPeriodic) 
+	    event = periodicEventWithLocationSetToPoint(event, p);
+	p = [event locationInWindow];
+	p = [self convertPoint: p fromView: nil];
+	if (p.x != last.x || p.y != last.y)
         {
-          didMove = YES;
-          getRegion(&region, &p, &start);
-          /* ensure that it encloses some area, so NSIntersectionRect will not get confused */
-          if (region.size.width == 0) region.size.width = 0.01;
-          if (region.size.height == 0) region.size.height = 0.01;
-          hasregion = YES;
-
-          if (wcache) {
-              [window restoreCachedImage];
+	    didMove = YES;
+	    getRegion(&region, &p, &start);
+	    /* ensure that it encloses some area, so NSIntersectionRect will not get confused */
+	    if (region.size.width == 0) 
+		region.size.width = 0.01;
+	    if (region.size.height == 0) 
+		region.size.height = 0.01;
+	    hasregion = YES;
+	    
+	    if (wcache) {
+		[window restoreCachedImage];
 //              [window discardCachedImage];
-          }
-
-          [window disableFlushWindow];
-          if (canscroll)
-            {
+	    }
+	    
+	    [window disableFlushWindow];
+	    if (canscroll) {
 //              [self scrollRectToVisible:region];
-              if ([self scrollPointToVisible: p]) {
-                  [selShade set]; /* in case these are reset by the drawing code above */
-                  // PSsetlinewidth(0.0);
-                  [window displayIfNeeded];
-              }
+		if ([self scrollPointToVisible: p]) {
+		    [selShade set]; /* in case these are reset by the drawing code above */
+		    // PSsetlinewidth(0.0);
+		    [window displayIfNeeded];
+		}
             }
-          [window enableFlushWindow];
-          
-          cachedRect = NSInsetRect([self convertRect:NSIntersectionRect(region,[self visibleRect]) toView:nil],-2,-2);
-          cachedRect.origin.x = (int)cachedRect.origin.x;
-          cachedRect.origin.y = (int)cachedRect.origin.y;
-          cachedRect.size.width = ceil(cachedRect.size.width);
-          cachedRect.size.height = ceil(cachedRect.size.height);
-          [window cacheImageInRect:cachedRect];
-          wcache = YES;
-
-          PSrectstroke(region.origin.x, region.origin.y, region.size.width, region.size.height);
-          [self tryToPerform: @selector(updateRulers:) with: (void *) &region];
-          [window flushWindow];
-          last = p;
-          // PSWait();
+	    [window enableFlushWindow];
+	    
+	    cachedRect = NSInsetRect([self convertRect: NSIntersectionRect(region, [self visibleRect]) toView: nil], -2, -2);
+	    cachedRect.origin.x = (int) cachedRect.origin.x;
+	    cachedRect.origin.y = (int) cachedRect.origin.y;
+	    cachedRect.size.width = ceil(cachedRect.size.width);
+	    cachedRect.size.height = ceil(cachedRect.size.height);
+	    [window cacheImageInRect: cachedRect];
+	    wcache = YES;
+	    
+	    NSFrameRect(region);
+	    [self tryToPerform: @selector(updateRulers:) with: (void *) &region];
+	    [window flushWindow];
+	    last = p;
         }
-      else didMove = NO;
-      p = [event locationInWindow];
-      event = [window nextEventMatchingMask:DRAG_MASK];
-  }
-  if (wcache) [window restoreCachedImage];
-
-  if (canscroll && timer) [NSEvent stopPeriodicEvents];
-  timer = FALSE;
-  /* now we do something with region */
-  if (hasregion)
-  {
-    if (grabflag)
-    {
-      [self saveRect: region ofType: grabflag];
-      grabflag = 0;
-      [[window contentView] setDocumentCursor: [NSCursor arrowCursor]];
+	else 
+	    didMove = NO;
+	p = [event locationInWindow];
+	event = [window nextEventMatchingMask: DRAG_MASK];
     }
-    else
-    {
-      [self checkAll: alt : &region];
-      [self drawSelectionWith: NULL];
+    if (wcache) 
+	[window restoreCachedImage];
+    
+    if (canscroll && timer) 
+	[NSEvent stopPeriodicEvents];
+    timer = FALSE;
+    /* now we do something with region */
+    if (hasregion) {
+	if (grabflag) {
+	    [self saveRect: region ofType: grabflag];
+	    grabflag = 0;
+	    [[window contentView] setDocumentCursor: [NSCursor arrowCursor]];
+	}
+	else {
+	    [self checkAll: alt : &region];
+	    [self drawSelectionWith: NULL];
+	}
     }
-  }
-  [self tryToPerform: @selector(updateRulers:) with: nil];
-  [self unlockFocus];
-  if (hasregion && !grabflag) [self inspectSel: NO];
+    [self tryToPerform: @selector(updateRulers:) with: nil];
+    [self unlockFocus];
+    if (hasregion && !grabflag) 
+	[self inspectSel: NO];
 //[NSObject cancelPreviousPerformRequestsWithTarget:NSApp selector:@selector(updateWindows) object:nil], [NSApp performSelector:@selector(updateWindows) withObject:nil afterDelay:(1) / 1000.0];
-  return self;
+    return self;
 }
 
 
@@ -1803,7 +1805,9 @@ static void drawHorz(float x, float y, float w, NSRect r)
 
 - (float) rulerScale
 {
-  return [self bounds].size.width / paperSize.width / currentScale;
+    // TODO should be retrieving the paperSize from currentDocument or it should be set here.
+    //   [[DrawApp currentDocument] paperSize];
+    return [self bounds].size.width / paperSize.width / currentScale;
 }
 
 /* First Responder handling */
@@ -2052,93 +2056,125 @@ struct oldflags		/* for old version */
 /*sb: from awake method: */
 extern int needUpgrade;
 
-- (id)initWithCoder:(NSCoder *)aDecoder
+// This is pure, creamy fudge! Attempts to decode the View superclass that was encoded in older file formats.
+- (void) superClassDecoderFakeout: (NSCoder *) aDecoder
 {
-  struct oldflags f;
-  int v = [aDecoder versionForClassName:@"GraphicView"];
-  [super initWithCoder:aDecoder];
-  [self setFrameSize:NSMakeSize(ceil([self frame].size.width),ceil([self frame].size.height))];
-  partlist = nil;
-  stylelist = nil;
-  switch(v)
-  {
-    case 0:
-      [aDecoder decodeValuesOfObjCTypes:"@@s", &syslist, &pagelist, &f];
-        syslist = [[NSMutableArray allocWithZone:[self zone]] initFromList:syslist];
-        pagelist = [[NSMutableArray allocWithZone:[self zone]] initFromList:pagelist];
-      currentScale = 1.0;
-      break;
-    case 1:
-      [aDecoder decodeValuesOfObjCTypes:"@@fs", &syslist, &pagelist, &currentScale, &f];
-        syslist = [[NSMutableArray allocWithZone:[self zone]] initFromList:syslist];
-        pagelist = [[NSMutableArray allocWithZone:[self zone]] initFromList:pagelist];
-      break;
-    case 2:
-      [aDecoder decodeValuesOfObjCTypes:"@@f", &syslist, &pagelist, &currentScale];
-        syslist = [[NSMutableArray allocWithZone:[self zone]] initFromList:syslist];
-        pagelist = [[NSMutableArray allocWithZone:[self zone]] initFromList:pagelist];
-      break;
-    case 3:
-      [aDecoder decodeValuesOfObjCTypes:"@@@f", &syslist, &pagelist, &partlist, &currentScale];
-        syslist = [[NSMutableArray allocWithZone:[self zone]] initFromList:syslist];
-        pagelist = [[NSMutableArray allocWithZone:[self zone]] initFromList:pagelist];
-        partlist = [[NSMutableArray allocWithZone:[self zone]] initFromList:partlist];
-      break;
-    case 4:
-      [aDecoder decodeValuesOfObjCTypes:"@@@@f", &syslist, &pagelist, &partlist, &chanlist, &currentScale];
-        syslist = [[NSMutableArray allocWithZone:[self zone]] initFromList:syslist];
-        pagelist = [[NSMutableArray allocWithZone:[self zone]] initFromList:pagelist];
-        partlist = [[NSMutableArray allocWithZone:[self zone]] initFromList:partlist];
-        chanlist = [[NSMutableArray allocWithZone:[self zone]] initFromList:chanlist];
-      break;
-    case 5:
-      [aDecoder decodeValuesOfObjCTypes:"@@@@@f", &syslist, &pagelist, &partlist, &chanlist, &stylelist, &currentScale];
-        syslist = [[NSMutableArray allocWithZone:[self zone]] initFromList:syslist];
-        pagelist = [[NSMutableArray allocWithZone:[self zone]] initFromList:pagelist];
-        partlist = [[NSMutableArray allocWithZone:[self zone]] initFromList:partlist];
-        chanlist = [[NSMutableArray allocWithZone:[self zone]] initFromList:chanlist];
-        stylelist = [[NSMutableArray allocWithZone:[self zone]] initFromList:stylelist];
-      break;
-    case 6:
-      [aDecoder decodeValuesOfObjCTypes:"@@@@@f", &syslist, &pagelist, &partlist, &chanlist, &stylelist, &currentScale];
-      break;
-  }
-  dirtyflag = NO;
+    // NSView *dummySuperClassObject = [[NSView alloc] initWithFrame: NSZeroRect];
+    // Perhaps just create a dummy View and Responder & initWithCoder: those?
+    id dummySuperClassObject;
+    float dummyFloat;
+    float dummyFloat1, dummyFloat2, dummyFloat3, dummyFloat4;
+    char dummyString1[256], dummyString2[256];
+    
+    dummySuperClassObject = [aDecoder decodeObject];
+    [aDecoder decodeValuesOfObjCTypes:"f", &dummyFloat];
+    [aDecoder decodeValuesOfObjCTypes:"ffff", &dummyFloat1, &dummyFloat2, &dummyFloat3, &dummyFloat4];
+    NSLog(@"dummy floats %f %f %f %f", dummyFloat1, dummyFloat2, dummyFloat3, dummyFloat4);
+    [aDecoder decodeValuesOfObjCTypes:"ffff", &dummyFloat1, &dummyFloat2, &dummyFloat3, &dummyFloat4];
+    NSLog(@"dummy floats %f %f %f %f", dummyFloat1, dummyFloat2, dummyFloat3, dummyFloat4);
+    [aDecoder decodeObject];
+    [aDecoder decodeObject];
+    [NSUnarchiver decodeClassName: @"PSMatrix" asClassName: @"PSMatrixDecodeFaker"];
+    [aDecoder decodeValuesOfObjCTypes:"@ss@", &dummySuperClassObject, dummyString1, dummyString2, &dummySuperClassObject];
+    NSLog(@"here");
+}
 
-  /* sb: was awake method: */
-  {
-    int k;
-    System *s;
-    Margin *p;
-    [self initClassVars];
-    /* this does a test */
-    k = [syslist count];
-    while (k--)
-    {
-      s = [syslist objectAtIndex:k];
-      if (s->view == 0)
-      {
-        NSLog(@"NOTICE: corrected nil view found in unarchived system = %d\n", k);
-        s->view = self;
-      }
-      if (s->page == 0) s->page = [self myPage: s];
-      if (s->gFlags.type == 0)
-      {
-        NSLog(@"NOTICE: corrected nil type found in unarchived system = %d", k);
-        s->gFlags.type = SYSTEM;
-      }
-    }
-    s = [syslist objectAtIndex:0];
-    if (![s checkMargin])
-    {
-      p = [Graphic allocInit: MARGIN];
-	[p setClient: s];
-      [s linkobject: p];
-      [p recalc];
-      needUpgrade |= 4;
-    }
+- (id) initWithCoder: (NSCoder *) aDecoder
+{
+    struct oldflags f;
+    int v = [aDecoder versionForClassName: @"GraphicView"];
+    List *oldsyslist;
 
-  } /* sb: end from awake method */
+    NSLog(@"GraphicView decoding systemVersion %u", [aDecoder systemVersion]);
+    // We shouldn't save an NSView's ivars, this is just because the model and view are mixed together. In principle we should
+    // only be decoding the model.
+    // [super initWithCoder:aDecoder];
+    // but we still need to decode the super class in order to read past it.
+    [self superClassDecoderFakeout: aDecoder];
+
+    [self setFrameSize: NSMakeSize(ceil([self frame].size.width), ceil([self frame].size.height))];
+    partlist = nil;
+    stylelist = nil;
+    switch(v)
+    {
+	case 0:
+	    [aDecoder decodeValuesOfObjCTypes:"@@s", &syslist, &pagelist, &f];
+	    syslist = [[NSMutableArray allocWithZone:[self zone]] initFromList:syslist];
+	    pagelist = [[NSMutableArray allocWithZone:[self zone]] initFromList:pagelist];
+	    currentScale = 1.0;
+	    break;
+	case 1:
+	    [aDecoder decodeValuesOfObjCTypes:"@@fs", &syslist, &pagelist, &currentScale, &f];
+	    syslist = [[NSMutableArray allocWithZone:[self zone]] initFromList:syslist];
+	    pagelist = [[NSMutableArray allocWithZone:[self zone]] initFromList:pagelist];
+	    break;
+	case 2:
+	    [aDecoder decodeValuesOfObjCTypes:"@@f", &syslist, &pagelist, &currentScale];
+	    syslist = [[NSMutableArray allocWithZone:[self zone]] initFromList:syslist];
+	    pagelist = [[NSMutableArray allocWithZone:[self zone]] initFromList:pagelist];
+	    break;
+	case 3:
+	    [aDecoder decodeValuesOfObjCTypes:"@@@f", &syslist, &pagelist, &partlist, &currentScale];
+	    syslist = [[NSMutableArray allocWithZone:[self zone]] initFromList:syslist];
+	    pagelist = [[NSMutableArray allocWithZone:[self zone]] initFromList:pagelist];
+	    partlist = [[NSMutableArray allocWithZone:[self zone]] initFromList:partlist];
+	    break;
+	case 4:
+	    [aDecoder decodeValuesOfObjCTypes:"@@@@f", &syslist, &pagelist, &partlist, &chanlist, &currentScale];
+	    syslist = [[NSMutableArray allocWithZone:[self zone]] initFromList:syslist];
+	    pagelist = [[NSMutableArray allocWithZone:[self zone]] initFromList:pagelist];
+	    partlist = [[NSMutableArray allocWithZone:[self zone]] initFromList:partlist];
+	    chanlist = [[NSMutableArray allocWithZone:[self zone]] initFromList:chanlist];
+	    break;
+	case 5: {
+	    [aDecoder decodeValuesOfObjCTypes:"@@@@@f", &oldsyslist, &pagelist, &partlist, &chanlist, &stylelist, &currentScale];
+	    syslist = [[NSMutableArray allocWithZone:[self zone]] initFromList: oldsyslist];
+	    pagelist = [[NSMutableArray allocWithZone:[self zone]] initFromList:pagelist];
+	    partlist = [[NSMutableArray allocWithZone:[self zone]] initFromList:partlist];
+	    chanlist = [[NSMutableArray allocWithZone:[self zone]] initFromList:chanlist];
+	    stylelist = [[NSMutableArray allocWithZone:[self zone]] initFromList:stylelist];	
+	}
+	    break;
+	case 6:
+	    [aDecoder decodeValuesOfObjCTypes:"@@@@@f", &syslist, &pagelist, &partlist, &chanlist, &stylelist, &currentScale];
+	    break;
+    }
+    dirtyflag = NO;
+    
+    /* sb: was awake method: */
+    {
+	int k;
+	System *s;
+	Margin *p;
+	[self initClassVars];
+	/* this does a test */
+	k = [syslist count];
+	while (k--)
+	{
+	    s = [syslist objectAtIndex:k];
+	    if (s->view == 0)
+	    {
+		NSLog(@"NOTICE: corrected nil view found in unarchived system = %d\n", k);
+		s->view = self;
+	    }
+	    if (s->page == 0) s->page = [self myPage: s];
+	    if (s->gFlags.type == 0)
+	    {
+		NSLog(@"NOTICE: corrected nil type found in unarchived system = %d", k);
+		s->gFlags.type = SYSTEM;
+	    }
+	}
+	s = [syslist objectAtIndex:0];
+	if (![s checkMargin])
+	{
+	    p = [Graphic allocInit: MARGIN];
+	    [p setClient: s];
+	    [s linkobject: p];
+	    [p recalc];
+	    needUpgrade |= 4;
+	}
+	
+    } /* sb: end from awake method */
   return self;
 }
 
