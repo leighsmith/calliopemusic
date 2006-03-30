@@ -633,8 +633,9 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 
 - recalc
 {
-  width = ((paperSize.width - lindent - rindent) / staffScale) - ([self leftMargin] + [self rightMargin]);
-  return [self resetSys];
+    //   TODO [[DrawApp currentDocument] paperSize];
+    width = ((paperSize.width - lindent - rindent) / staffScale) - ([self leftMargin] + [self rightMargin]);
+    return [self resetSys];
 }
 
 - measureSys: (NSRect *) r

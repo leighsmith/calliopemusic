@@ -31,8 +31,6 @@
 #import "mux.h"
 #import "ProgressDisplay.h"
 
-extern NSSize paperSize;
-
 @implementation GraphicView(GVFormat)
 
 

@@ -158,83 +158,6 @@ static OpusDocument *documentInWindow(id window)
 }
 
 
-/*
- * Searches the window list looking for a OpusDocument with the specified name.
- * Returns the window containing the document if found.
- * If name == NULL then the first document found is returned.
- */
-
-static id findDocument(NSString *name)
-{
-    int count;
-    id document, window, windowList;
-    windowList = [NSApp windows];
-    count = [windowList count];
-    while (count--)
-    {
-	window = [windowList objectAtIndex:count];
-	document = documentInWindow(window);
-	if (document && (!name || [[document filename] isEqualToString:name])) return window;
-    }
-    return nil;
-}
-
-
-/*
- * Opens a file with the given name in the specified directory.
- * If we already have that file open, it is ordered front.
- * Returns the document if successful, nil otherwise.
- */
-
-static OpusDocument *openFile(NSString *theDirectory, NSString *theName, BOOL display)
-{
-    id window;
-    NSString *directory,*path;
-    if (theName)
-    {
-	if (!theDirectory)
-	{
-	    directory = @".";
-	}
-	else if (![theDirectory isAbsolutePath])
-	{
-	    directory = [@"./" stringByAppendingString:theDirectory];
-	}
-	else directory = theDirectory;
-	
-	if ([[NSFileManager defaultManager] changeCurrentDirectoryPath:directory])
-	{
-	    path = [directory stringByAppendingPathComponent:theName];
-	    window = findDocument(path);
-	    if (window)
-	    {
-		if (display) [window makeKeyAndOrderFront:window];
-		return [window delegate];
-	    }
-	    else
-	    {
-		return [OpusDocument newFromFile: path andDisplay: display];
-	    }
-	}
-	else
-	{
-	    NSRunAlertPanel(@"Open", @"Invalid path: %s", @"OK", nil, nil, directory);
-	}
-    }
-    return nil;
-}
-
-
-static OpusDocument *openDocument(NSString *document, BOOL display)
-{
-    if ([[document pathExtension] isEqualToString:FILE_EXT])
-        return openFile([document stringByDeletingLastPathComponent],[document lastPathComponent], display);
-    if ([[document pathExtension] isEqualToString:BACKUP_EXT])
-        return [NSApp openCopyOf: document reDirect: [document stringByDeletingLastPathComponent]];
-    return openFile([document stringByDeletingLastPathComponent],[[document lastPathComponent] stringByAppendingPathExtension:FILE_EXT], display);
-    
-}
-
 + (DrawApp *) sharedApplicationController
 {
     return sharedApplicationController;
@@ -675,116 +598,35 @@ float unitFactor[4] =
 }
 
 
-/* called by openCopy and the New panel */
-
-- (OpusDocument *) openCopyOf: (NSString *) fname reDirect: (NSString *) dir
-{
-    OpusDocument *doc = nil;
-    doc = [OpusDocument newFromFile: fname andDisplay: YES];
-    if (doc == nil) return nil;
-    [doc initCopy: @"UNTITLED" andDirectory: dir];
-//  [NSObject cancelPreviousPerformRequestsWithTarget:NSApp selector:@selector(updateWindows) object:nil], [NSApp performSelector:@selector(updateWindows) withObject:nil afterDelay:(1) / 1000.0];
-    return doc;
-}
-
-
-/* Called by pressing Open... */
-
-- (void)open: sender
-{
-    int i;
-    NSString *directory;
-    NSArray *files;
-    NSArray *drawType = [NSArray arrayWithObject:FILE_EXT];
-    
-    NSOpenPanel* openpanel = [NSOpenPanel openPanel];
-    [openpanel setAllowsMultipleSelection:YES];
-    directory = [[[self class] currentDocument] directory];
-    if (directory && [directory isAbsolutePath]) [openpanel setDirectory:directory];
-    else [openpanel setDirectory:[appdefaults getDefaultOpenPath]];
-    
-    if ([openpanel runModalForTypes:drawType] == NSOKButton)
-    {
-        files = [openpanel filenames];
-        directory = [openpanel directory];
-        i = [files count];
-        while (i--)
-	{
-            haveOpenedDoc = openFile([[files objectAtIndex:i] stringByDeletingLastPathComponent],
-                                     [[files objectAtIndex:i] lastPathComponent],
-                                     YES) || haveOpenedDoc;
-	}
-    }
-//  [NSObject cancelPreviousPerformRequestsWithTarget:NSApp selector:@selector(updateWindows) object:nil];
-//  [NSApp performSelector:@selector(updateWindows) withObject:nil afterDelay:(1) / 1000.0];
-    return;
-}
-
-
-/* Called by pressing Open Copy... */
-
-- (void)openCopy: sender
-{
-    NSString *directory;
-    NSArray *files;
-    NSArray *drawType = [NSArray arrayWithObject:FILE_EXT];
-    int i;
-    
-    id openpanel = [NSOpenPanel openPanel];
-    [openpanel setAllowsMultipleSelection:YES];
-    directory = [[[self class] currentDocument] directory];
-    if (directory) {
-        if ([directory isAbsolutePath]) {
-            [openpanel setDirectory:directory];
-        } else directory = nil;
-    }
-    if (!directory) [openpanel setDirectory:[appdefaults getDefaultOpenPath]];
-    if ([openpanel runModalForTypes:drawType] == NSOKButton)
-    {
-        files = [openpanel filenames];
-        i = [files count];
-        while (i--)
-	{
-            [self openCopyOf: (NSString *)[files objectAtIndex:i] reDirect: [self currentDirectory]];
-	}
-    }
-    return;
-}
-
-
 /*
  * Application object delegate methods.
  * Since we don't have an application delegate, messages that would
  * normally be sent there are sent to the Application object itself instead.
  */
-#ifndef WIN32
-
 static void handleMKError(NSString *msg)
 {
     if (![MKConductor performanceThread]) { /* Not performing */
         if (!NSRunAlertPanel(@"MKError", msg, @"OK", nil, nil, NULL))
             return; //[NSApp terminate:NSApp];
     }
-else {  
-	/* When we're performing in a separate thread, we can't bring
-	up a panel because the Application Kit is not thread-safe.
-	In fact, neither is standard IO. Therefore, we use write() to
-	stderr here, causing errors to appear on the console.
-	Note that we assume that the App is not also writing to stderr.
-	
-	An alternative would be to use mach messaging to signal the
-	App thread that there's a panel to be displayed.
-	*/
-	int fd = stderr->_file;
-	char *str = "MusicKit Error: ";
-	write(fd,str,strlen(str));
-	write(fd,[msg cString],strlen([msg cString]));
-	str = "\n";
-	write(fd,str,strlen(str));
+    else {  
+	    /* When we're performing in a separate thread, we can't bring
+	    up a panel because the Application Kit is not thread-safe.
+	    In fact, neither is standard IO. Therefore, we use write() to
+	    stderr here, causing errors to appear on the console.
+	    Note that we assume that the App is not also writing to stderr.
+	    
+	    An alternative would be to use mach messaging to signal the
+	    App thread that there's a panel to be displayed.
+	    */
+	    int fd = stderr->_file;
+	    char *str = "MusicKit Error: ";
+	    write(fd,str,strlen(str));
+	    write(fd,[msg cString],strlen([msg cString]));
+	    str = "\n";
+	    write(fd,str,strlen(str));
+    }
 }
-}
-#endif
-
 
 - initCharsPanel
 {
@@ -812,7 +654,6 @@ else {
 - (void) applicationDidFinishLaunching: (NSNotification *) notification
 {
 //  NSApplication *theApplication = [notification object];
-    int i;
     
     MKSetErrorProc(handleMKError); // TODO this needs updating to latest MK error handling delegate messages.
     
@@ -841,6 +682,7 @@ else {
 }
 
 
+#if 0
 /* Automatic update methods */
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuCell
@@ -853,13 +695,13 @@ else {
     
     return YES;
 }
+#endif
 
 
+// All of the tool methods should be factored into their own class.
 /*
  Set and reset the current tool (an integer). 
  */
-
-
 struct toolData toolCodes[NUMTOOLS] =
 {
     {2,	0,		0,	0},		/* 0 arrow */

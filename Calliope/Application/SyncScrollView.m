@@ -135,8 +135,6 @@ static void reSize(id p, float dh)
 }
 
 
-extern NSSize paperSize;
-
 - setScale: sender
 {	
     float i;

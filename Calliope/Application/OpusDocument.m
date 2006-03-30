@@ -164,7 +164,7 @@ static id createWindowFor(GraphicView* view, NSRect *r, NSString *fS)
     NSUnarchiver *ts = nil;
 //  NS_DURING
     
-    ts = [[NSUnarchiver alloc] initForReadingWithData:stream];
+    ts = [[NSUnarchiver alloc] initForReadingWithData: stream];
     if (ts)
     {
 	[ts setObjectZone:(NSZone *)[self zone]];
@@ -285,8 +285,8 @@ static id createWindowFor(GraphicView* view, NSRect *r, NSString *fS)
 // For applications targeted for Tiger or later systems, you should use the new Tiger API readFromData:ofType:error:.  In this case you can also choose to override -readFromURL:ofType:error: or -readFromFileWrapper:ofType:error: instead.
 - (BOOL) loadDataRepresentation: (NSData *) data ofType: (NSString *) aType
 {
-    NSLog(@"loadDataRepresentation: Received type %@ data %@\n", aType, data);
-    if([aType isEqualToString: FILE_EXT]) {
+    NSLog(@"loadDataRepresentation: Received type %@\n", aType);
+    if([aType isEqualToString: @"CalliopeBinary"]) {
 	if(![self loadDocument: data]) {
 	    // if unable to load the document normally, try the old versionless method.
 	    return [self loadOldDocument: data];
@@ -522,11 +522,11 @@ extern int needUpgrade;
 {
     static BOOL registered = NO;
     NSArray *validSendTypes;
-    if (!registered)
-    {
+    
+    if (!registered) {
 	registered = YES;
-	validSendTypes = [NSArray arrayWithObject:NSFilenamesPboardType];
-	[NSApp registerServicesMenuSendTypes:validSendTypes returnTypes:nil];
+	validSendTypes = [NSArray arrayWithObject: NSFilenamesPboardType];
+	[NSApp registerServicesMenuSendTypes: validSendTypes returnTypes: nil];
     }
     return self;
 }

@@ -1190,7 +1190,7 @@ extern char *typename[NUMTYPES];
  * [[PageLayout new] printInfo]. */
 /* sb: I think this is ok (1999). I'll leave it to the currentDocument to decide
  * where to get the info from (shared or not */
-  r = (NSSize)[[DrawApp currentDocument] paperSize];
+  r = [[DrawApp currentDocument] paperSize];
   sys = [syslist objectAtIndex:s];
   lox = 0;
   hix = r.width / [[DrawApp currentDocument] staffScale];

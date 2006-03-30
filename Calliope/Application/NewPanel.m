@@ -72,7 +72,7 @@
     fname = [NSString stringWithFormat:@"template%d",i];
       if (path = [[NSBundle mainBundle] pathForResource:fname ofType:FILE_EXT])
     {
-        doc = [[DrawApp sharedApplicationController] openCopyOf: path reDirect: @"~"];
+        // doc = [[DrawApp sharedApplicationController] openCopyOf: path reDirect: @"~"];
     }
     if (!doc) NSRunAlertPanel(@"Calliope", @"Cannot find template document", @"OK", nil, nil);
   }

@@ -13,10 +13,10 @@
 		D87D0FE809AE7AE500784ACC /* OAPropertyListCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD96D30483CDC800A80164 /* OAPropertyListCoder.m */; };
 		D87D0FE909AE7AE800784ACC /* OAPropertyListCoder.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD96EC0483CDC800A80164 /* OAPropertyListCoder.h */; };
 		D87D0FEA09AE7AF100784ACC /* OAPropertyListArchiver.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD96E80483CDC800A80164 /* OAPropertyListArchiver.h */; };
+		D8AB89CD09DB5BC200038515 /* PSMatrixDecodeFaker.h in Headers */ = {isa = PBXBuildFile; fileRef = D8AB89CB09DB5BC200038515 /* PSMatrixDecodeFaker.h */; };
+		D8AB89CE09DB5BC200038515 /* PSMatrixDecodeFaker.m in Sources */ = {isa = PBXBuildFile; fileRef = D8AB89CC09DB5BC200038515 /* PSMatrixDecodeFaker.m */; };
 		D8B2119109BB5333002825FC /* CallAppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = D8B2118F09BB5333002825FC /* CallAppIcon.icns */; };
 		D8B2119209BB5333002825FC /* CallDocIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = D8B2119009BB5333002825FC /* CallDocIcon.icns */; };
-		D8C84F8009CDAAEF00376965 /* Inspector.h in Headers */ = {isa = PBXBuildFile; fileRef = D8C84F7E09CDAAEF00376965 /* Inspector.h */; };
-		D8C84F8109CDAAEF00376965 /* Inspector.m in Sources */ = {isa = PBXBuildFile; fileRef = D8C84F7F09CDAAEF00376965 /* Inspector.m */; };
 		D8EC241509B9F8B500942A37 /* MusicNotationDocument.nib in Resources */ = {isa = PBXBuildFile; fileRef = D8EC241309B9F8B500942A37 /* MusicNotationDocument.nib */; };
 		D8F2478909AD280C00B96D0D /* NSObject+ErrorHandling.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD96D60483CDC800A80164 /* NSObject+ErrorHandling.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8F2478A09AD280C00B96D0D /* NSMutableString+PropertyListCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD96D80483CDC800A80164 /* NSMutableString+PropertyListCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -963,10 +963,10 @@
 		D8A8F7C30483DD1B00A80164 /* template3.opus */ = {isa = PBXFileReference; lastKnownFileType = file; name = template3.opus; path = Templates/template3.opus; sourceTree = "<group>"; };
 		D8A8F7C40483DD1B00A80164 /* template4.opus */ = {isa = PBXFileReference; lastKnownFileType = file; name = template4.opus; path = Templates/template4.opus; sourceTree = "<group>"; };
 		D8A8F7C50483DD1B00A80164 /* template5.opus */ = {isa = PBXFileReference; lastKnownFileType = file; name = template5.opus; path = Templates/template5.opus; sourceTree = "<group>"; };
+		D8AB89CB09DB5BC200038515 /* PSMatrixDecodeFaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSMatrixDecodeFaker.h; sourceTree = "<group>"; };
+		D8AB89CC09DB5BC200038515 /* PSMatrixDecodeFaker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSMatrixDecodeFaker.m; sourceTree = "<group>"; };
 		D8B2118F09BB5333002825FC /* CallAppIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CallAppIcon.icns; path = Images/CallAppIcon.icns; sourceTree = "<group>"; };
 		D8B2119009BB5333002825FC /* CallDocIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CallDocIcon.icns; path = Images/CallDocIcon.icns; sourceTree = "<group>"; };
-		D8C84F7E09CDAAEF00376965 /* Inspector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Inspector.h; sourceTree = "<group>"; };
-		D8C84F7F09CDAAEF00376965 /* Inspector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Inspector.m; sourceTree = "<group>"; };
 		D8EC241409B9F8B500942A37 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MusicNotationDocument.nib; sourceTree = "<group>"; };
 		D8F2453709AD260300B96D0D /* MKPerformSndMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MKPerformSndMIDI.framework; path = /Library/Frameworks/MKPerformSndMIDI.framework; sourceTree = "<absolute>"; };
 		D8F247B109AD280C00B96D0D /* Info-CalliopePropertyListCoders.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Info-CalliopePropertyListCoders.plist"; sourceTree = "<group>"; };
@@ -1374,8 +1374,8 @@
 		D8FD922E0483CDC700A80164 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				D8C84F7E09CDAAEF00376965 /* Inspector.h */,
-				D8C84F7F09CDAAEF00376965 /* Inspector.m */,
+				D8AB89CB09DB5BC200038515 /* PSMatrixDecodeFaker.h */,
+				D8AB89CC09DB5BC200038515 /* PSMatrixDecodeFaker.m */,
 				D8FD922F0483CDC700A80164 /* Accent.m */,
 				D8FD92310483CDC700A80164 /* AccentInspector.m */,
 				D8FD92330483CDC700A80164 /* AppDefaults.m */,
@@ -2156,7 +2156,7 @@
 				D87D0FDC09AE6ED200784ACC /* muxCollide.h in Headers */,
 				D87D0FE909AE7AE800784ACC /* OAPropertyListCoder.h in Headers */,
 				D87D0FEA09AE7AF100784ACC /* OAPropertyListArchiver.h in Headers */,
-				D8C84F8009CDAAEF00376965 /* Inspector.h in Headers */,
+				D8AB89CD09DB5BC200038515 /* PSMatrixDecodeFaker.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2789,7 +2789,7 @@
 				D87D0FDA09AE6EA900784ACC /* draw.m in Sources */,
 				D87D0FDE09AE751300784ACC /* OAPropertyListArchiver.m in Sources */,
 				D87D0FE809AE7AE500784ACC /* OAPropertyListCoder.m in Sources */,
-				D8C84F8109CDAAEF00376965 /* Inspector.m in Sources */,
+				D8AB89CE09DB5BC200038515 /* PSMatrixDecodeFaker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

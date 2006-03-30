@@ -12,8 +12,6 @@
 
 @implementation Preferences
 
-extern NSSize paperSize;
-
 PrefBlock *currblock;  /* storing state of some components */
 
 static float shmm[8] =		/* staff height in mm given rastral number  */

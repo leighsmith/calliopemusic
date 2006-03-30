@@ -418,7 +418,7 @@ void drawCharacterInFont(float x, float y, int ch, NSFont *f, int mode)
 	char s[2];
 	
 	s[0] = ch; s[1] = '\0';
-	NSLog(@"drawCharacterInFont('%c', %f, %f) mode %d", ch, x, y, mode);
+	NSLog(@"drawCharacterInFont '%c', (%f, %f) %@ mode %d", ch, x, y, f, mode);
 	CAcString(x, y, (const char *) s, f, mode);
     }
     else 
@@ -426,6 +426,7 @@ void drawCharacterInFont(float x, float y, int ch, NSFont *f, int mode)
 }
 
 /* draw a character centred on x and y */
+// DrawCharacterCenteredInFont
 void centChar(float x, float y, int ch, NSFont *f, int mode)
 {
     if (NOPRINT(mode)) 
@@ -434,6 +435,7 @@ void centChar(float x, float y, int ch, NSFont *f, int mode)
 }
 
 /* draw a character centred on x only */
+// DrawCharacterCenteredOnXInFont
 void centxChar(float x, float y, int ch, NSFont *f, int mode)
 {
     if (NOPRINT(mode)) 
@@ -496,11 +498,13 @@ void CAcString(float x, float y, const char *s, NSFont *textFont, int mode)
     DrawTextWithBaselineTies(x, y, [NSString stringWithCString: s], textFont, mode);
 }
 
+// DrawCenteredText
 void centString(float x, float y, char *s, NSFont *f, int mode)
 {
     CAcString(x - 0.5 * [f widthOfString: [NSString stringWithCString: s]], y, s, f, mode);
 }
 
+// DrawJustifiedText
 void justString(float x, float y, char *s, NSFont *f, int j, int mode)
 {
     if (j == JCENTRE) x -= 0.5 * [f widthOfString: [NSString stringWithCString:s]];
@@ -612,6 +616,10 @@ void chandle(float x, float y, int m)
     crect(x - HANDSIZE, y - HANDSIZE, 2 * HANDSIZE, 2 * HANDSIZE, (m == 7 ? markmode[0] : m));
 }
 
+void PSslant(float w, float h, float dy, float x, float y)
+{
+    NSLog(@"Called PSslant(), needs implementation\n");
+}
 
 /* draw a filled slant */
 void cslant(float x1, float y1, float x2, float y2, float dy, int mode)
@@ -679,7 +687,6 @@ void ccircle(float x, float y, float r, float a1, float a2, float w, int mode)
 
 
 /* draw (part of) an ellipse */
-
 void cellipse(float cx, float cy, float rx, float ry, float a1, float a2, float w, int mode)
 {
     if (NOPRINT(mode)) return;

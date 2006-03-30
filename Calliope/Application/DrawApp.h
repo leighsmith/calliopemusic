@@ -105,25 +105,15 @@ extern int partlistflag;
 - (NSString *)unitString;
 - (int)unitNum;
 
-- (OpusDocument *) openCopyOf: (NSString *) fname reDirect: (NSString *) dir;
 - setCurrentTool:sender;
 - help:sender;
 - info:sender;
-- (void)open:sender;
 
 /* Application delegate methods */
-
-- (void)applicationDidFinishLaunching:(NSNotification *)notification;
-//- (int)application:sender openFile:(NSString *)path;
+- (void) applicationDidFinishLaunching: (NSNotification *) notification;
 
 /* Global cursor setting methods */
-
 + cursor;
-
-/* Menu updating method */
-
-- (BOOL)validateMenuItem:(NSMenuItem *)aMenuItem;
-
 
 @end
 

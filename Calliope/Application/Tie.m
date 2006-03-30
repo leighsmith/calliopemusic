@@ -285,127 +285,127 @@ extern void ctie(float cx, float cy, float d, float h, float th, float a, float 
 
 - drawMode: (int) m
 {
-  float x[2], y[2], dx=0.0, dy=0.0, cx, cy, d=0.0, h, v, a, th, cth=0.0, sth=0.0;
-  int e, b = 0;
-  int sz = gFlags.size;
-  int style = gFlags.subtype;
-  StaffObj *p = client;
-  Tie *t = partner;
-  x[0] = p->x + offset.x;
-  y[0] = [p headY: headnum] + offset.y;
-if (t == nil)
-{
-  NSLog(@"Unpartnered connector of type %d at %f, %f\n", style, x[0], y[0]);
-  cline(x[0] - 32, y[0] - 32, x[0] + 32, y[0] + 32, 0, m);
-  cline(x[0] - 32, y[0] + 32, x[0] + 32, y[0] - 32, 0, m);
-  return self;
-}
- e = 3;
-  if (flags.same)
-  {
-    p = (StaffObj *)(t->client);
-    x[1] = p->x + t->offset.x;
-    y[1] = [p headY: t->headnum] + t->offset.y;
-  }
-  else
-  {
-    e = ([p sysNum] < [t->client sysNum]);
-    x[1] = [p xOfStaffEnd: e];
-    y[1] = y[0];
-    b = 1;
-    e += 1;
-  }
-  orderXY(x, y);
-  if (needtheta[style])
-  {
-    dx = x[1] - x[0];
-    dy = y[1] - y[0];
-    d = hypot(dx,dy);
-    cth = dx / d;
-    sth = dy / d;
-  }
-  if (candash[style] && flags.dashed)
-  {
-    dpattern[0] = nature[sz] * 2;
-    PSsetdash(dpattern, 1, 0.0);
-  }
-  if (gFlags.selected && !gFlags.seldrag)
-  {
-    if (e & 2) crect(x[0] - HANDSIZE, y[0] - HANDSIZE, 2*HANDSIZE, 2*HANDSIZE, m);
-    if (e & 1) crect(x[1] - HANDSIZE, y[1] - HANDSIZE, 2*HANDSIZE, 2*HANDSIZE, m);
-  }
-  switch(style)
-  {
-    case TIESLUR:
-    case TIEBOW:
-      if (d < 5.0) return self;
-      cth = dx / d;
-      a = acos((double) cth) * DEGpRAD;
-      if (flags.above) a += 180.0;
-      if (dy < 0) a = -a;
-      th = 0.25 * nature[sz];
-      cx = x[0] + 0.5 * dx;
-      cy = y[0] + 0.5 * dy;
-      if (b) h = getdepth(dx); else h = depth;
+    float x[2], y[2], dx=0.0, dy=0.0, cx, cy, d=0.0, h, v, a, th, cth=0.0, sth=0.0;
+    int e, b = 0;
+    int sz = gFlags.size;
+    int style = gFlags.subtype;
+    StaffObj *p = client;
+    Tie *t = partner;
+    x[0] = p->x + offset.x;
+    y[0] = [p headY: headnum] + offset.y;
+    if (t == nil)
+    {
+	NSLog(@"Unpartnered connector of type %d at %f, %f\n", style, x[0], y[0]);
+	cline(x[0] - 32, y[0] - 32, x[0] + 32, y[0] + 32, 0, m);
+	cline(x[0] - 32, y[0] + 32, x[0] + 32, y[0] - 32, 0, m);
+	return self;
+    }
+    e = 3;
+    if (flags.same)
+    {
+	p = (StaffObj *)(t->client);
+	x[1] = p->x + t->offset.x;
+	y[1] = [p headY: t->headnum] + t->offset.y;
+    }
+    else
+    {
+	e = ([p sysNum] < [t->client sysNum]);
+	x[1] = [p xOfStaffEnd: e];
+	y[1] = y[0];
+	b = 1;
+	e += 1;
+    }
+    orderXY(x, y);
+    if (needtheta[style])
+    {
+	dx = x[1] - x[0];
+	dy = y[1] - y[0];
+	d = hypot(dx,dy);
+	cth = dx / d;
+	sth = dy / d;
+    }
+    if (candash[style] && flags.dashed)
+    {
+	dpattern[0] = nature[sz] * 2;
+	PSsetdash(dpattern, 1, 0.0);
+    }
+    if (gFlags.selected && !gFlags.seldrag)
+    {
+	if (e & 2) crect(x[0] - HANDSIZE, y[0] - HANDSIZE, 2*HANDSIZE, 2*HANDSIZE, m);
+	if (e & 1) crect(x[1] - HANDSIZE, y[1] - HANDSIZE, 2*HANDSIZE, 2*HANDSIZE, m);
+    }
+    switch(style)
+    {
+	case TIESLUR:
+	case TIEBOW:
+	    if (d < 5.0) return self;
+	    cth = dx / d;
+	    a = acos((double) cth) * DEGpRAD;
+	    if (flags.above) a += 180.0;
+		if (dy < 0) a = -a;
+		    th = 0.25 * nature[sz];
+	    cx = x[0] + 0.5 * dx;
+	    cy = y[0] + 0.5 * dy;
+	    if (b) h = getdepth(dx); else h = depth;
 //NSLog(@"cx=%f, cy=%f, d=%f, h=%f, th=%f, a=%f, cth=%f, fl=%f\n", cx, cy, d, h, th, a, cth, flatness);
-      ctie(cx, cy, d, h, th, a, flatness, flags.dashed, m);
-      if (flags.ed)
-      {
-	h = depth;
-	if (flags.above) h = -h;
-        cx += -sth * h;
-        cy += cth * h;
-        cline(cx, cy - 5, cx, cy + 5, barwidth[0][sz], m);
-      }
-      break;
-    case TIELINE:
-      cline(x[0], y[0], x[1], y[1], staffthick[0][sz], m);
-      break;
-    case 2:
-    case TIEBRACK:
-      th = staffthick[0][sz];
-      v = 2.0 * nature[sz];
-      if (flags.above) v = -v;
-      cmakeline(x[0], y[0], x[0], y[0] + v, m);
-      cmakeline(x[0], y[0] + v, x[1], y[1] + v, m);
-      cmakeline(x[1], y[1] + v, x[1], y[1], m);
-      cstrokeline(th, m);
-      break;
-    case TIECORN:
-      th = staffthick[0][sz];
-      h = v = 2.0 * nature[sz];
-      if (flags.above) v = -v;
-      cmakeline(x[0], y[0], x[0], y[0] + v, m);
-      cmakeline(x[0], y[0] + v, x[0] + h * cth, (y[0] + v) + h * sth, m);
-      cmakeline(x[1], y[1], x[1], y[1] + v, m);
-      cmakeline(x[1], y[1] + v, x[1] - h * cth, (y[1] + v) - h * sth, m);
-      cstrokeline(th, m);
-      break;
-    case TIECRES:
-        th = staffthick[0][(int)smallersz[sz]];
-      h = 0.5 * depth;
-      cx = x[1] - h * sth;
-      cy = y[1] + h * cth;
-      cmakeline(x[0], y[0], cx, cy, m);
-      cx = x[1] + h * sth;
-      cy = y[1] - h * cth;
-      cmakeline(x[0], y[0], cx, cy, m);
-      cstrokeline(th, m);
-      break;
-    case TIEDECRES:
-        th = staffthick[0][(int)smallersz[sz]];
-      h = 0.5 * depth;
-      cx = x[0] - h * sth;
-      cy = y[0] + h * cth;
-      cmakeline(x[1], y[1], cx, cy, m);
-      cx = x[0] + h * sth;
-      cy = y[0] - h * cth;
-      cmakeline(x[1], y[1], cx, cy, m);
-      cstrokeline(th, m);
-      break;
-  }
-  if (candash[style] && flags.dashed) PSsetdash(dpattern, 0, 0.0);
-  return self;
+	    ctie(cx, cy, d, h, th, a, flatness, flags.dashed, m);
+	    if (flags.ed)
+	    {
+		h = depth;
+		if (flags.above) h = -h;
+		cx += -sth * h;
+		cy += cth * h;
+		cline(cx, cy - 5, cx, cy + 5, barwidth[0][sz], m);
+	    }
+		break;
+	case TIELINE:
+	    cline(x[0], y[0], x[1], y[1], staffthick[0][sz], m);
+	    break;
+	case 2:
+	case TIEBRACK:
+	    th = staffthick[0][sz];
+	    v = 2.0 * nature[sz];
+	    if (flags.above) v = -v;
+		cmakeline(x[0], y[0], x[0], y[0] + v, m);
+	    cmakeline(x[0], y[0] + v, x[1], y[1] + v, m);
+	    cmakeline(x[1], y[1] + v, x[1], y[1], m);
+	    cstrokeline(th, m);
+	    break;
+	case TIECORN:
+	    th = staffthick[0][sz];
+	    h = v = 2.0 * nature[sz];
+	    if (flags.above) v = -v;
+		cmakeline(x[0], y[0], x[0], y[0] + v, m);
+	    cmakeline(x[0], y[0] + v, x[0] + h * cth, (y[0] + v) + h * sth, m);
+	    cmakeline(x[1], y[1], x[1], y[1] + v, m);
+	    cmakeline(x[1], y[1] + v, x[1] - h * cth, (y[1] + v) - h * sth, m);
+	    cstrokeline(th, m);
+	    break;
+	case TIECRES:
+	    th = staffthick[0][(int)smallersz[sz]];
+	    h = 0.5 * depth;
+	    cx = x[1] - h * sth;
+	    cy = y[1] + h * cth;
+	    cmakeline(x[0], y[0], cx, cy, m);
+	    cx = x[1] + h * sth;
+	    cy = y[1] - h * cth;
+	    cmakeline(x[0], y[0], cx, cy, m);
+	    cstrokeline(th, m);
+	    break;
+	case TIEDECRES:
+	    th = staffthick[0][(int)smallersz[sz]];
+	    h = 0.5 * depth;
+	    cx = x[0] - h * sth;
+	    cy = y[0] + h * cth;
+	    cmakeline(x[1], y[1], cx, cy, m);
+	    cx = x[0] + h * sth;
+	    cy = y[0] - h * cth;
+	    cmakeline(x[1], y[1], cx, cy, m);
+	    cstrokeline(th, m);
+	    break;
+    }
+    if (candash[style] && flags.dashed) PSsetdash(dpattern, 0, 0.0);
+    return self;
 }
 
 
