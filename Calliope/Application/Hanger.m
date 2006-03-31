@@ -390,24 +390,17 @@ extern void msg();
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
   char b0, b1;
-    static id listclass = nil;
   int v = [aDecoder versionForClassName:@"Hanger"];
   [super initWithCoder:aDecoder];
   client = [[aDecoder decodeObject] retain];
   if (v == 0)
   {
-    // TODO LMS commented out to get things compiling, this is needed to support the legacy file format
-    //  if (!listclass) listclass = [List class];
-    if ([client class] == listclass) client = [[NSMutableArray allocWithZone:[self zone]] initFromList:client];
     UID = 0;
     hFlags.split = 0;
     hFlags.level = 0;
   }
   else if (v == 1)
   {
-    // TODO LMS commented out to get things compiling, this is needed to support the legacy file format
-    //  if (!listclass) listclass = [List class];
-    if ([client class] == listclass) client = [[NSMutableArray allocWithZone:[self zone]] initFromList:client];
     [aDecoder decodeValuesOfObjCTypes:"icc", &UID, &b0, &b1];
     hFlags.split = b0;
     hFlags.level = b1;

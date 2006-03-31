@@ -64,4 +64,19 @@ typedef enum {
 - renumPages;
 - setRanges;
 
+/*!
+  @brief Returns the channels as an immutable NSArray.
+ */
+- (NSArray *) channels;
+
+/*!
+  @brief Returns the styles as an immutable NSArray.
+ */
+- (NSArray *) styles;
+
+/*!
+  @brief Assigns the style list
+ */
+- (void) setStyles: (NSArray *) newStyles;
+
 @end

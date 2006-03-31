@@ -259,7 +259,7 @@
   }
   if ([xl count]) [v extractParts: xl];
   else NSRunAlertPanel(@"Extraction", @"No Parts Assigned", @"OK", nil, nil, NULL);
-  [xl release]; //sb: while this is a List, it is freed, not released.
+  [xl release];
   return self;
 }
 

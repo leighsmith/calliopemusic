@@ -728,12 +728,12 @@ struct oldflags	/* for old version */
 
 /* versions 1 and 2 forgot to archive uneq2! */
 
-- (id)initWithCoder:(NSCoder *)aDecoder
+- (id) initWithCoder: (NSCoder *) aDecoder
 {
   char b1, b2, b3, b4, b5, b6, b7, b8, v, anon;
   struct oldflags f;
-  static id listclass = nil;
-  [super initWithCoder:aDecoder];
+
+  [super initWithCoder: aDecoder];
   v = [aDecoder versionForClassName:@"Tuple"];
   hFlags.level = 0;
   flags.centre = 0;
@@ -741,9 +741,6 @@ struct oldflags	/* for old version */
   if (v == 0)
   {
     [aDecoder decodeValuesOfObjCTypes:"@sccffff", &client, &f, &uneq1, &uneq2, &x1, &y1, &x2, &y2];
-      // TODO LMS commented out to get things compiling, this is needed to support the legacy file format
-      // if (!listclass) listclass = [List class];
-      if ([client class] == listclass) client = [[NSMutableArray allocWithZone:[self zone]] initFromList:client];
     gFlags.subtype = f.subtype;
     flags.formliga = f.formliga;
     flags.fixed = f.fixed;
@@ -759,9 +756,6 @@ struct oldflags	/* for old version */
   else if (v == 1)
   {
     [aDecoder decodeValuesOfObjCTypes:"@ffff", &client, &x1, &y1, &x2, &y2];
-      // TODO LMS commented out to get things compiling, this is needed to support the legacy file format
-      // if (!listclass) listclass = [List class];
-      if ([client class] == listclass) client = [[NSMutableArray allocWithZone:[self zone]] initFromList:client];
     [aDecoder decodeValuesOfObjCTypes:"cccccccc", &uneq1, &b1, &b2, &b3, &b4, &b5, &b6, &b7];
     gFlags.subtype = b2;
     flags.formliga = b3;
@@ -777,9 +771,6 @@ struct oldflags	/* for old version */
   else if (v == 2)
   {
     [aDecoder decodeValuesOfObjCTypes:"@ffff", &client, &x1, &y1, &x2, &y2];
-      // TODO LMS commented out to get things compiling, this is needed to support the legacy file format
-      // if (!listclass) listclass = [List class];
-      if ([client class] == listclass) client = [[NSMutableArray allocWithZone:[self zone]] initFromList:client];
     [aDecoder decodeValuesOfObjCTypes:"ccccccc", &uneq1, &b1, &b3, &b4, &b5, &b6, &b7];
     flags.formliga = b3;
     flags.fixed = b4;
@@ -791,9 +782,6 @@ struct oldflags	/* for old version */
   else if (v == 3)
   {
     [aDecoder decodeValuesOfObjCTypes:"@ffff", &client, &x1, &y1, &x2, &y2];
-      // TODO LMS commented out to get things compiling, this is needed to support the legacy file format
-      // if (!listclass) listclass = [List class];
-      if ([client class] == listclass) client = [[NSMutableArray allocWithZone:[self zone]] initFromList:client];
     [aDecoder decodeValuesOfObjCTypes:"cccccccc", &uneq1, &uneq2, &b1, &b3, &b4, &b5, &b6, &b7];
     flags.formliga = b3;
     flags.fixed = b4;
@@ -805,9 +793,6 @@ struct oldflags	/* for old version */
   else if (v == 4)
   {
     [aDecoder decodeValuesOfObjCTypes:"@ffff", &client, &x1, &y1, &x2, &y2];
-      // TODO LMS commented out to get things compiling, this is needed to support the legacy file format
-      // if (!listclass) listclass = [List class];
-      if ([client class] == listclass) client = [[NSMutableArray allocWithZone:[self zone]] initFromList:client];
     [aDecoder decodeValuesOfObjCTypes:"cccccccccc", &style, &anon, &uneq1, &uneq2, &b1, &b3, &b4, &b5, &b6, &b7];
     flags.formliga = b3;
     flags.fixed = b4;
@@ -818,9 +803,6 @@ struct oldflags	/* for old version */
   else if (v == 5)
   {
     [aDecoder decodeValuesOfObjCTypes:"@ffff", &client, &x1, &y1, &x2, &y2];
-      // TODO LMS commented out to get things compiling, this is needed to support the legacy file format
-      // if (!listclass) listclass = [List class];
-      if ([client class] == listclass) client = [[NSMutableArray allocWithZone:[self zone]] initFromList:client];
     [aDecoder decodeValuesOfObjCTypes:"ccccccccccc", &style, &body, &dot, &uneq1, &uneq2, &b1, &b3, &b4, &b5, &b6, &b7];
     flags.formliga = b3;
     flags.fixed = b4;
@@ -831,9 +813,6 @@ struct oldflags	/* for old version */
   else if (v == 6)
   {
     [aDecoder decodeValuesOfObjCTypes:"@ffff", &client, &x1, &y1, &x2, &y2];
-      // TODO LMS commented out to get things compiling, this is needed to support the legacy file format
-      // if (!listclass) listclass = [List class];
-      if ([client class] == listclass) client = [[NSMutableArray allocWithZone:[self zone]] initFromList:client];
     [aDecoder decodeValuesOfObjCTypes:"ccccccccccc", &style, &body, &dot, &uneq1, &uneq2, &b1, &b3, &b4, &b5, &b6, &b7];
     hFlags.level = b1;
     flags.formliga = b3;

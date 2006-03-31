@@ -198,7 +198,6 @@ extern NSString *nullInstrument;
       {
 //      [aDecoder decodeValuesOfObjCTypes:"**@cccc", &name, &abbrev, &tuning, &trans, &channel, &istab, &sound];
         [aDecoder decodeValuesOfObjCTypes:"**@cccc", &n, &a, &tuning, &trans, &channel, &istab, &sound];
-        tuning = [[NSMutableArray allocWithZone:[self zone]] initFromList:tuning];
 //    name = NXUniqueStringNoCopy(name);
         if (n) name = [[NSString stringWithCString:n] retain]; else name = nil;
         if (a) abbrev = [[NSString stringWithCString:a] retain]; else abbrev = nil;
@@ -207,7 +206,6 @@ extern NSString *nullInstrument;
       {
 //      [aDecoder decodeValuesOfObjCTypes:"%*@cccc", &name, &abbrev, &tuning, &trans, &channel, &istab, &sound];
         [aDecoder decodeValuesOfObjCTypes:"%*@cccc", &n, &a, &tuning, &trans, &channel, &istab, &sound];
-        tuning = [[NSMutableArray allocWithZone:[self zone]] initFromList:tuning];
         if (n) name = [[NSString stringWithCString:n] retain]; else name = nil;
         if (a) abbrev = [[NSString stringWithCString:a] retain]; else abbrev = nil;
       }

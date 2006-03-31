@@ -275,7 +275,7 @@
     [delegate setMessage: @""];
     return self;
   }
-  [delegate setPageNum: [pg pageNumber]];
+  [delegate setPageNumber: [pg pageNumber]];
   pk = [pagelist count];
   if (pk > 0)
   {
@@ -695,7 +695,7 @@ outOfTotalSystems: (int) numsys
     sheight = [[DrawApp currentDocument] getPreferenceAsFloat: MINSYSGAP];
     sh = 0.0;
     if (pagelist != nil) 
-	[pagelist autorelease]; //sb: List is freed rather than released
+	[pagelist autorelease];
     pagelist = [[NSMutableArray allocWithZone:[self zone]] init];
     for (i = 0; i < systemCount; i++)
     {
@@ -1070,6 +1070,22 @@ outOfTotalSystems: (int) numsys
       [self setNeedsDisplay:YES];
   }
   return self;
+}
+
+- (NSArray *) channels
+{
+    return [NSArray arrayWithArray: chanlist];
+}
+
+- (NSArray *) styles
+{
+    return [NSArray arrayWithArray: stylelist];
+}
+
+- (void) setStyles: (NSArray *) newStyles
+{
+    [stylelist release];
+    stylelist = [newStyles retain];
 }
 
 @end

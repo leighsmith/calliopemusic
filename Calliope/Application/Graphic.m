@@ -234,7 +234,7 @@ id CrossCursor = nil;	/* global since subclassers may need it */
         t->gFlags.selected = 1;
         [v->slist addObject: t];
       }
-      [a autorelease];//sb: List is freed rather than released
+      [a autorelease];
     }
     else
     {
@@ -318,7 +318,7 @@ id CrossCursor = nil;	/* global since subclassers may need it */
         [p presetHanger];
 	[v selectObj: p];
       }
-      [a autorelease];//sb: List is freed rather than released
+      [a autorelease];
     }
     else
     {
@@ -1059,7 +1059,7 @@ struct oldflags			/* for old Versions */
 {
   struct oldflags f;
   char b1, b2, b3, b4, b5, b6, v;
-//  [super initWithCoder:aDecoder]; //sb: unnec
+
   bounds = [aDecoder decodeRect];
   v = [aDecoder versionForClassName:@"Graphic"];
   if (v == 0)
@@ -1083,7 +1083,6 @@ struct oldflags			/* for old Versions */
   else if (v == 2)
   {
     [aDecoder decodeValuesOfObjCTypes:"@cccccc", &enclosures, &b1, &b2, &b3, &b4, &b5, &b6];
-      enclosures = [[NSMutableArray allocWithZone:[self zone]] initFromList:enclosures];
     gFlags.locked = b1;
     gFlags.invis = b2;
     gFlags.size = b3;

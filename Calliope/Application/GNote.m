@@ -585,7 +585,7 @@ extern void getNumOct(int pos, int mc, int *num, int *oct);
 	{
 	  if (q->p != p)
 	  {
-              [r autorelease];//sb: List is freed rather than released
+              [r autorelease];
 	    return nil;
 	  }
 	  else
@@ -1166,8 +1166,6 @@ extern void readTimeData2(NSCoder *s, struct timeinfo *t); /*sb; changed from NS
     [self resetDots];
   }
   else [self readOldFormats: aDecoder : v];
-  /*sb: the following to convert old List objects to NSMutableArrays */
-  headlist = [[NSMutableArray allocWithZone:[self zone]] initFromList:headlist];
 
   { /*sb: this section came from the awake method */
     NoteHead *h;

@@ -343,7 +343,6 @@ extern void cenclosure(int i, float px, float py, float qx, float qy, float th, 
   if (v == 0)
   {
     [aDecoder decodeValuesOfObjCTypes:"@ffff", &notes, &x1, &y1, &x2, &y2];
-      notes = [[NSMutableArray allocWithZone:[self zone]] initFromList:notes];
   }
   else if (v == 1)
     {

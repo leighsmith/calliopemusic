@@ -1,7 +1,6 @@
 /* $Id: OpusDocument.m 67 2006-03-25 19:12:10Z leighsmith $ */
 #import <AppKit/AppKit.h>
 #import <Foundation/NSArray.h>
-#import <objc/List.h>
 #import <CalliopePropertyListCoders/OAPropertyListCoders.h>
 #import "OpusDocument.h"
 #import "DrawApp.h"
@@ -569,7 +568,7 @@ extern int needUpgrade;
             if ([types containsObject:NSFilenamesPboardType]) {
                 if ([view isDirty]) {
                     save = NSRunAlertPanel(@"Service", @"Do you wish to save this document before your request is serviced?", @"Save", @"Don't Save", nil);
-                    if (save == NSAlertDefaultReturn) [self save];
+                    if (save == NSAlertDefaultReturn) [self saveDocument: self];
                 }
                 [pboard declareTypes:[NSArray arrayWithObject:NSFilenamesPboardType] owner:self];
                 [pboard setPropertyList:[NSArray arrayWithObject:[self filename]]  forType:NSFilenamesPboardType];
@@ -702,7 +701,7 @@ return nil;
 	    conSize.height = MIN(conRect.size.height, conSize.height);
 	    [documentWindow setContentSize:conSize];
 	}
-	[scrollView setPageNum: [view getPageNum]];
+	[scrollView setPageNumber: [view getPageNum]];
 	[scrollView setScaleNum: [view getScaleNum]];
 	if (doRuler) 
 	    [scrollView updateRuler];
@@ -889,28 +888,6 @@ return nil;
     return self;
 }
 
-
-/*
- * Saves the file.  If this document has never been saved to disk,
- * then a SavePanel is put up to ask for the file name.
- */
-
-- (id) save:sender
-{
-    id savepanel;
-    if (!haveSavedDocument)
-    {
-	savepanel = [[DrawApp sharedApplicationController] savePanel: FILE_EXT];
-	if ([savepanel runModalForDirectory:@"" file:@""])
-	{
-	    [self setName:[savepanel filename]];
-	} else return self;
-    }
-    [self save];
-    return self;
-}
-
-
 /* save under a different name */
 
 - saveAs:sender
@@ -919,20 +896,6 @@ return nil;
     haveSavedDocument = NO;
     return [self save:sender];
 }
-
-
-/*
- * Panels a filename of the given extension
- */
-
-- (NSString *) askForFile: (NSString *) ext
-{
-    id savepanel;
-    savepanel = [[DrawApp sharedApplicationController] savePanel: ext];
-    if (![savepanel runModalForDirectory:directory file:[name stringByDeletingPathExtension]]) return nil;
-    return [savepanel filename];
-}
-
 
 /*
  * Revert the document back to what is on the disk.
@@ -1057,10 +1020,10 @@ return nil;
     * ruler stay up).
  */
 
-- hideRuler:sender
+- hideRuler: sender
 {
-//    id scrollView = [documentWindow contentView];
     id fe = [documentWindow fieldEditor:NO forObject:NSApp];
+    
     if (!sender && [scrollView rulersVisible])
     {
         [fe toggleRuler:sender];
@@ -1117,7 +1080,7 @@ return nil;
  * Updates the name and directory of the document.
  * newName or newDirectory can be nil, in which case the name or directory
  * will not be changed (unless one is currently not set, in which case
-			* a default name will be used).
+ * a default name will be used).
  //sb: FIXME I have not tried to allocate names in the same zone as the document. Need to do this!
  */
 - setName:(NSString *)newName andDirectory:(NSString *)newDirectory
@@ -1178,70 +1141,41 @@ return nil;
 	return NO;
 }
 
-// TODO put the inner data writing routines in dataRepresentationOfTYpe: but we should be writing out MusicXML instead.
-- save
-{
-    NSString *s;
-    int version = DOC_VERSION;
-    NSArchiver *ts;
-    OAPropertyListArchiver *tsO;
-    
-    NSString *filename = [self filename];
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSString *backupFilename = [[filename stringByDeletingPathExtension] stringByAppendingPathExtension:BACKUP_EXT];
-    
-    if ([view isDirty])
-    {
-	if (([fileManager fileExistsAtPath:backupFilename] && ![fileManager removeFileAtPath:backupFilename handler:[self class]]) ||
-	    ([fileManager fileExistsAtPath:filename] && ![fileManager movePath:filename toPath:backupFilename handler:[self class]])) {
-	    NSRunAlertPanel(@"Calliope", @"CANT_CREATE_BACKUP", nil, nil, nil);
-	}
-	
-	ts = [[NSArchiver alloc] initForWritingWithMutableData:[NSMutableData data]];
-	if (ts && [fileManager isWritableFileAtPath:[filename stringByDeletingLastPathComponent]])
-        {
-	    NS_DURING
-		[documentWindow makeFirstResponder:view];
-		[(GraphicView *)view deselectAll: self];
-		[ts encodeValueOfObjCType:"i" at:&version];
-		[ts encodeRootObject:printInfo];
-		[ts encodeRootObject:prefInfo];
-		s = [documentWindow stringWithSavedFrame];
-		[ts encodeObject:s];
-		[ts encodeRootObject:view];
-		
-		/* PROPERTY LIST ENCODING */
-		tsO = [OAPropertyListArchiver propertyListWithRootObject:view];
-		[[tsO description] writeToFile:[filename stringByAppendingPathExtension:@"ppl"] atomically:YES];
-		/* END PROPERTY LIST CODING */
-        //NSLog(@"Description: %s\n",[[tsO description] cString]);
-		
-		if (![[ts archiverData] writeToFile:filename atomically:YES]) {
-		    Notify(@"Save", @"Error writing file. Check disk space at save location, or save to a different location.");
-		    haveSavedDocument = NO;
-		}
-		else haveSavedDocument = YES;
-		
-		[ts release];
-		[prefInfo backup];
-	    NS_HANDLER
-		Notify(@"Save", @"Unknown error writing file.");
-	    NS_ENDHANDLER
-        }
-	else Notify(@"Save", @"Cannot write file to this location. Check permissions on the directory you were trying to save to.");
-    }
-//    [NSObject cancelPreviousPerformRequestsWithTarget:NSApp selector:@selector(updateWindows) object:nil];
-//    [NSApp performSelector:@selector(updateWindows) withObject:nil afterDelay:(1) / 1000.0];
-    return self;
-}
-
 // Used for writing
 // For applications targeted for Tiger or later systems, you should use the new Tiger API -dataOfType:error:.  In this case you can also choose to override -writeToURL:ofType:error:, -fileWrapperOfType:error:, or -writeToURL:ofType:forSaveOperation:originalContentsURL:error: instead.
 - (NSData *) dataRepresentationOfType: (NSString *) docType
 {
-    NSLog(@"dataRepresentationOfType:\n");
-    // return [NSData data];
-    return nil;
+    int version = DOC_VERSION;
+    OAPropertyListArchiver *tsO;
+    NSArchiver *ts = [[NSArchiver alloc] initForWritingWithMutableData: [NSMutableData data]];
+
+    NSLog(@"dataRepresentationOfType: %@", docType);
+ 
+    if (ts) {
+	NS_DURING
+	    [documentWindow makeFirstResponder:view];
+	    [(GraphicView *)view deselectAll: self];
+	    [ts encodeValueOfObjCType:"i" at:&version];
+	    [ts encodeRootObject:printInfo];
+	    [ts encodeRootObject:prefInfo];
+	    [ts encodeObject: [documentWindow stringWithSavedFrame]];
+	    [ts encodeRootObject:view];
+	    [ts release];
+	    
+	    /* PROPERTY LIST ENCODING */
+	    // TODO save version number.
+	    tsO = [OAPropertyListArchiver propertyListWithRootObject: view];
+	    // [[tsO description] writeToFile: [filename stringByAppendingPathExtension: @"ppl"] atomically: YES];
+	    /* END PROPERTY LIST CODING */
+	    //NSLog(@"Description: %@", tsO);
+	    	    
+	    [prefInfo backup]; // TODO huh? shouldn't prefInfo be saved along with the document?
+	NS_HANDLER
+	    Notify(@"Save", @"Unknown error writing file.");
+	NS_ENDHANDLER
+    }    
+    
+    return [[tsO description] dataUsingEncoding: NSASCIIStringEncoding];
 }
 
 #if 0
@@ -1398,9 +1332,9 @@ return nil;
     [scrollView setMessage: message];
 }
 
-- (void) setPageNum: (int) pageNumber
+- (void) setPageNumber: (int) pageNumber
 {
-    [scrollView setPageNum: pageNumber];
+    [scrollView setPageNumber: pageNumber];
 }
 
 

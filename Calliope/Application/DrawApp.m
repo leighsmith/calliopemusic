@@ -574,7 +574,7 @@ float unitFactor[4] =
     OpusDocument *d = [[self class] currentDocument];
     if (d == nil) return nil;
     if ([d graphicView] == nil) return nil;
-    return ((GraphicView *)[d graphicView])->chanlist;
+    return [[d graphicView] channels];
 }
 
 
@@ -583,7 +583,7 @@ float unitFactor[4] =
     OpusDocument *d = [[self class] currentDocument];
     if (d == nil) return scrstylelist;
     if ([d graphicView] == nil) return nil;
-    return ((GraphicView *)[d graphicView])->stylelist;
+    return [[d graphicView] styles];
 }
 
 - thePlayView
@@ -805,14 +805,14 @@ struct toolData toolCodes[NUMTOOLS] =
 
 
 /* target of the Menu tools */
-
 - setToolByMenu: sender
 {
     OpusDocument *currdoc = documentInWindow([NSApp mainWindow]);
+    
     currentTool = [[sender selectedCell] tag];
-    if (toolCodes[currentTool].press != 1) [currdoc resetCursor];
-    else
-    {
+    if (toolCodes[currentTool].press != 1) 
+	[currdoc resetCursor];
+    else {
 	[[currdoc graphicView] pressTool: toolCodes[currentTool].type : toolCodes[currentTool].arg1];
 	[self resetTool];
     }
@@ -822,8 +822,8 @@ struct toolData toolCodes[NUMTOOLS] =
 
 - resetToolTo: (int) t
 {
-    [tools selectCellWithTag:t];
-    [toolsH selectCellWithTag:t];
+    [tools selectCellWithTag: t];
+    [toolsH selectCellWithTag: t];
     currentTool = t;
     [documentInWindow([NSApp mainWindow]) resetCursor];
 //  [NSObject cancelPreviousPerformRequestsWithTarget:NSApp selector:@selector(updateWindows) object:nil];

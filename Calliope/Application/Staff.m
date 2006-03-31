@@ -21,7 +21,6 @@
 #import "muxlow.h"
 #import "FileCompatibility.h"
 
-
 // TODO Arrgh, so they should be subclasses!!!
 /* staff subtypes are 0=staff, 1=tablature, 2=chant */
 
@@ -504,7 +503,7 @@ float textoff[2], baselines[2][MAXTEXT];
 - (void)dealloc
 {
   [notes removeAllObjects];
-    [notes autorelease]; //sb:List is freed rather than released.
+    [notes autorelease];
   { [super dealloc]; return; };
 }
 
@@ -549,7 +548,7 @@ float textoff[2], baselines[2][MAXTEXT];
 
 
 /*
-  link StaffObj p into notes List, setting its mystaff and returning p.
+  link StaffObj p into notes NSArray, setting its mystaff and returning p.
   Could be done by binary chop instead!
 */
  
@@ -575,7 +574,7 @@ float textoff[2], baselines[2][MAXTEXT];
  
 
 /*
-  like linknotes, except p is already in List, and minimum change is made.
+  like linknotes, except p is already in NSArray, and minimum change is made.
   This is an exchange-sort, where at most one element is out of place.
 */
 
@@ -1648,7 +1647,6 @@ extern int needUpgrade;
   part = [self checkPart];
   if (v < 9) {
       [aDecoder decodeValuesOfObjCTypes:"@", &notes];
-      notes = [[NSMutableArray allocWithZone:[self zone]] initFromList:notes];
   }
   mysys = [[aDecoder decodeObject] retain];
   return self;

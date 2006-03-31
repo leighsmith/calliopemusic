@@ -31,7 +31,7 @@
 - (void)updateRuler;
 - setRulerClass:factoryId;
 
-- (void) setPageNum: (int) p;
+- (void) setPageNumber: (int) p;
 - setScaleNum: (int) i;
 - (void) setMessage: (NSString *) s;
 

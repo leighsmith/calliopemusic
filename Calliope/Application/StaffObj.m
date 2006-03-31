@@ -982,7 +982,7 @@ BOOL isBlank(unsigned char *s)
   if (verses != nil)
   {
     while ([verses count]) [[verses lastObject] removeObj];
-      [verses autorelease]; //sb: List is freed, not released
+      [verses autorelease];
     verses = nil;
   }
   pv = q->verses;
@@ -1553,10 +1553,6 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
     [aDecoder decodeValuesOfObjCTypes:"@@@", &hangers, &verses, &part];
     [aDecoder decodeValuesOfObjCTypes:"ff", &x, &y];
     [part retain];
-  }
-  if (v < 7) { /*sb for List conversion */
-      hangers = [[NSMutableArray allocWithZone:[self zone]] initFromList:hangers];
-      verses = [[NSMutableArray allocWithZone:[self zone]] initFromList:verses];
   }
   return self;
 }

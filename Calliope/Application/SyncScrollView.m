@@ -165,7 +165,7 @@ static void reSize(id p, float dh)
 }
 
 
-- (void) setPageNum: (int) p
+- (void) setPageNumber: (int) p
 {
     [[pageForm cellAtIndex: 0] setIntValue: p];
 }

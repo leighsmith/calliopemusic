@@ -508,7 +508,7 @@ float figHeight(unsigned char *s, float n)
 }
 
 
-/* List l contains things of which to find endpoints */
+/* NSArray l contains things of which to find endpoints */
 
 BOOL findEndpoints(NSMutableArray *l, id *n0, id *n1)
 {

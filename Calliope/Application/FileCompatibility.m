@@ -4,39 +4,60 @@
  */
 #import <FileCompatibility.h>
 
+@implementation ListDecodeFaker
+
 /*
  * This is just a convenience method for reading old Calliope files that
  * have List classes archived in them.  It creates an NSMutableArray
- * out of the passed in List.  It frees the List (it does this because
- * it assumes you are converting to the new world and want nothing to
- * do with the old world).
+ * out of the decoded elements of the List. It returns a NSMutableArray.
  */
-
-@implementation NSMutableArray(Compatibility)
-
-- (id)initFromList:(id)aList
+- initWithCoder: (NSCoder *) aDecoder
 {
-    // TODO LMS commented out to get things compiling, this is needed to support the legacy file format
+    unsigned int elementIndex, elementCount;
+    NSMutableArray *replacementForList;
+    id *staticObjectArray;
+    
+    [aDecoder decodeValuesOfObjCTypes: "i", &elementCount];
+    NSLog(@"decoding List with %d elements", elementCount);
+    
+    replacementForList = [NSMutableArray arrayWithCapacity: elementCount];
+    staticObjectArray = (id *) malloc(sizeof(id) * elementCount);
+    
+    [aDecoder decodeArrayOfObjCType: "@" count: elementCount at: staticObjectArray];
+	
 #if 0
-    int i, count;
-
-    if ([aList isKindOf:[List class]]) {
-        count = [aList count];
-        [self initWithCapacity:count];
-        for (i = 0; i < count; i++) {
-            [self addObject:[aList objectAt:i]];
-        }
+    for (elementIndex = 0; elementIndex < elementCount; elementIndex++) {
+	id arrayElement;
+	
+	[aDecoder decodeValuesOfObjCTypes: "[1@]", &arrayElement];
+	[replacementForList addObject: arrayElement];
     }
 #else
-    if(0) ;
+    for (elementIndex = 0; elementIndex < elementCount; elementIndex++) {
+	
+	[replacementForList addObject: staticObjectArray[elementIndex]];
+    }    
 #endif
-    else if ([aList isKindOf:[NSArray class]]) {
-        return [self initWithArray:aList];
-    }
-    else {
-        /* should probably raise */
-    }
+    free(staticObjectArray);
+    
+    // should these be retained or should the receiving decoder do this?
+    return replacementForList;
+}
 
+@end
+
+@implementation PSMatrixDecodeFaker
+
+- (id) initWithCoder: (NSCoder *) aDecoder
+{
+    float matrixValues[12];
+    char s[256];
+    
+    self = [super init]; // make sure we are in good health before doing anything wacky...
+    NSLog(@"faking out the decoding of a PSMatrix");
+    [aDecoder decodeValuesOfObjCTypes: "[12f]", matrixValues];
+    NSLog(@"matrixValue[0] = %f, matrixValue[11] = %f", matrixValues[0], matrixValues[11]);
+    [aDecoder decodeValuesOfObjCTypes: "s", s];
     return self;
 }
 

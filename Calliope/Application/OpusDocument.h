@@ -92,35 +92,37 @@
 
 /* Public methods */
 
+// TODO should become copyWithZone:
 - newFrom;
-- (void)dealloc;
 - initCopy: (NSString *) name andDirectory: (NSString *) dir;
+
 - printInfo;
 - resetScrollers;
+
+/*!
+  @brief Returns the graphic view displaying this document.
+ */
 - (GraphicView *) graphicView;
+
 - changeSize: (float) width : (float) height : (NSPoint)origin;
 
 /* Target/Action methods */
 
 - changeLayout:sender;
-#if 0
-- (id) save:sender;
-- saveAs:sender;
-- revertToSaved:sender;
-#endif
+
 - showTextRuler:sender;
 - hideRuler:sender;
 
 /* Document name and file handling methods */
 
-// - (NSString *) askForFile: (NSString *) ext;
 - (NSString *)filename;
 - (NSString *)directory;
 - (NSString *)name;
 - setName: (NSString *) name andDirectory:(NSString *)directory;
 - setName: (NSString *) name;
-- save;
+
 // - (BOOL)needsSaving;
+
 - (int) getPreferenceAsInt: (int) i;
 - (float) getPreferenceAsFloat: (int) i;
 - (NSFont *) getPreferenceAsFont: (int) i;
@@ -131,7 +133,7 @@
   @brief Assigns the number of staves in the document 
  */
 - (void) setNumberOfStaves: (int) numOfStaves;
-- (NSSize)paperSize;
+- (NSSize) paperSize;
 - (void) zeroScale;
 - useViewScale;
 - (float) viewScale;
@@ -164,7 +166,7 @@
 
 /* Receive GraphicView delegate methods */
 - (void) setMessage: (NSString *) message;
-- (void) setPageNum: (int) pageNumber;
+- (void) setPageNumber: (int) pageNumber;
 
 - (NSString *) frameString;
 - (NSRect) frameSize;

@@ -268,7 +268,7 @@
       /* draw the well */
 	if (!NSIsEmptyRect(NSIntersectionRect(cellBorder , rect))) {
 	    cellBorder  = NSDrawTiledRects(cellBorder , NSZeroRect , sides, grays, 6);
-	    PSsetgray(0.17);
+	    [[NSColor darkGrayColor] set]; 
 	    NSRectFill(cellBorder);
 	}
     }

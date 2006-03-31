@@ -808,10 +808,8 @@ struct oldflags /* for old version */
       richTextData = [[aDecoder decodeObject] retain];
   } else {/* sb: the old way (v3 and older) */
       char *newdata;
-      static id listclass = nil;
-      // TODO LMS commented out to get things compiling, this is needed to support the legacy file format
-      //if (!listclass) listclass = [List class];
-      newdata = malloc(length+1);
+      
+      newdata = malloc(length + 1);
       [aDecoder decodeArrayOfObjCType:"c" count:length at:newdata];
       richTextData = [[NSData dataWithBytes:newdata length:length] retain];
       free(newdata);
@@ -850,7 +848,6 @@ struct oldflags /* for old version */
           }
       }         
 //      printf("text frame from old doc: %g %g %g %g\n",bounds.origin.x,bounds.origin.y,bounds.size.width,bounds.size.height);
-      if ([client class] == listclass) client = [[NSMutableArray allocWithZone:[self zone]] initFromList:client]; /*fix up List object */
   }
     [[self class] initClassVars];
   return self;

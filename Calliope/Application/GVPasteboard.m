@@ -132,7 +132,7 @@ NSArray *TypesDrawExports(void)
     [pb setData:stream forType:type];
 
     [list removeAllObjects];
-    [list autorelease];//sb: List is freed, not released
+    [list autorelease];
     [w release];
     NSRecycleZone(zone);
 
@@ -398,7 +398,7 @@ NSArray *TypesDrawExports(void)
       if (i) [self dirty];
       else
       {
-          [pblist autorelease]; //sb: List is freed, not released
+          [pblist autorelease];
 	pblist = nil;
       }
       [ts release];
@@ -520,7 +520,7 @@ extern char *typename[NUMTYPES];
     }
     else 
 	NSLog(@"GVPasteboard -paste: !didstob && !didhang");
-    [pblist autorelease]; //sb: List is freed, not released
+    [pblist autorelease];
     [slcopy autorelease];
 }
 
@@ -568,8 +568,8 @@ extern char *typename[NUMTYPES];
       if (k == 1 && [sl count] == 1) didhang |= [g linkPaste: self : sl];
     }
   }
-  [pblist autorelease]; //sb: List is freed, not released
-  [sl autorelease]; //sb: List is freed, not released
+  [pblist autorelease];
+  [sl autorelease];
   if (didstob) [self terminateMove];
 //  [NSObject cancelPreviousPerformRequestsWithTarget:NSApp selector:@selector(updateWindows) object:nil], [NSApp performSelector:@selector(updateWindows) withObject:nil afterDelay:(1) / 1000.0];
   return (didstob || didhang);

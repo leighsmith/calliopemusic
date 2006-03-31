@@ -260,7 +260,7 @@ static void addBarsRest(Staff *sp, System *sys, int n)
   
     /* do something! */
   }
-  if (v->partlist) [v->partlist autorelease]; //sb: List is freed rather than released
+  if (v->partlist) [v->partlist autorelease];
   v->partlist = epl;
   [v finishExtraction];
   // [doc->documentWindow makeKeyAndOrderFront:doc];
@@ -342,7 +342,7 @@ static void addBarsRest(Staff *sp, System *sys, int n)
   
     /* do something! */
   }
-  if (v->partlist) [v->partlist autorelease]; //sb: List is freed rather than released
+  if (v->partlist) [v->partlist autorelease];
   v->partlist = epl;
   [v finishExtraction];
   // [doc->documentWindow makeKeyAndOrderFront:doc];
@@ -358,7 +358,7 @@ static void orderStaves(System *sys, char *order)
   sn = [sl count];
   nsl = [[NSMutableArray alloc] init];
   for (j = 0; j < sn; j++) [nsl addObject: [sl objectAtIndex:order[j]]];
-  [sl autorelease]; //sb: List is freed rather than released
+  [sl autorelease];
   sys->staves = nsl;
 }
 

@@ -91,12 +91,11 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 
 + (void)initialize
 {
-  if (self == [System class])
-  {
-      (void)[System setVersion: 112];	/* class version, see read: */ /*sb: increased to 112 from 12 for List conversion */
-    markpage = [[NSImage imageNamed:@"markPage"] retain];
-  }
-  return;
+    if (self == [System class])
+    {
+	[System setVersion: 112];	/* class version, see read: */ /*sb: increased to 112 from 12 for List conversion */
+	markpage = [[NSImage imageNamed:@"markPage"] retain];
+    }
 }
 
 
@@ -1042,9 +1041,9 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
     p = [objs objectAtIndex:i];
     if (!ISASTAFFOBJ(p)) [p release];
   }
-  [objs autorelease];//sb: List is freed, not released
+  [objs autorelease];
   [staves removeAllObjects];
-  [staves autorelease];//sb: List is freed, not released
+  [staves autorelease];
   { [super dealloc]; return; };
 }
 
@@ -1165,6 +1164,7 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
   char b1, b2, b3, b4, b5=0, b6=0, b7=0, b8=0;
   struct oldflags f;
   char *oldstyle;
+  
   [super initWithCoder:aDecoder];
   v = [aDecoder versionForClassName:@"System"];
   if (v == 112)
@@ -1198,8 +1198,6 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
     [aDecoder decodeValuesOfObjCTypes:"ssfffffffff", &pagenum, &barnum, &barbase, &width, &lindent, &rindent, &groupsep, &expansion, &height, &headroom, &oldleft];
     [aDecoder decodeValuesOfObjCTypes:"@@%", &staves, &objs, &oldstyle];
     if (oldstyle) style = [[NSString stringWithCString:oldstyle] retain]; else style = nil;
-    staves = [[NSMutableArray allocWithZone:[self zone]] initFromList:staves];
-    objs = [[NSMutableArray allocWithZone:[self zone]] initFromList:objs];
     view = [[aDecoder decodeObject] retain];
     page = [[aDecoder decodeObject] retain];
     return self;
@@ -1219,8 +1217,6 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
     [self updateNumbering];
     [aDecoder decodeValuesOfObjCTypes:"@@%", &staves, &objs, &oldstyle];
     if (oldstyle) style = [[NSString stringWithCString:oldstyle] retain]; else style = nil;
-    staves = [[NSMutableArray allocWithZone:[self zone]] initFromList:staves];
-    objs = [[NSMutableArray allocWithZone:[self zone]] initFromList:objs];
     view = [[aDecoder decodeObject] retain];
     page = [[aDecoder decodeObject] retain];
     return self;
@@ -1239,8 +1235,6 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
     if (oldstyle) style = [[NSString stringWithCString:oldstyle] retain]; else style = nil;
     view = [[aDecoder decodeObject] retain];
     page = [[aDecoder decodeObject] retain];
-    staves = [[NSMutableArray allocWithZone:[self zone]] initFromList:staves];
-    objs = [[NSMutableArray allocWithZone:[self zone]] initFromList:objs];
     return self;
   }
   style = nullPart;
@@ -1255,8 +1249,6 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
     [aDecoder decodeValuesOfObjCTypes:"ssffffffff", &pagenum, &barnum, &barbase, &width, &lindent, &rindent, &groupsep, &expansion, &height, &headroom];
     [self updateNumbering];
     [aDecoder decodeValuesOfObjCTypes:"@@", &staves, &objs];
-    staves = [[NSMutableArray allocWithZone:[self zone]] initFromList:staves];
-    objs = [[NSMutableArray allocWithZone:[self zone]] initFromList:objs];
     view = [[aDecoder decodeObject] retain];
     page = [[aDecoder decodeObject] retain];
     return self;
@@ -1272,8 +1264,6 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
     [aDecoder decodeValuesOfObjCTypes:"ssffffffff", &pagenum, &barnum, &barbase, &width, &lindent, &rindent, &groupsep, &expansion, &height, &headroom];
     [self updateNumbering];
     [aDecoder decodeValuesOfObjCTypes:"@@", &staves, &objs];
-    staves = [[NSMutableArray allocWithZone:[self zone]] initFromList:staves];
-    objs = [[NSMutableArray allocWithZone:[self zone]] initFromList:objs];
     view = [[aDecoder decodeObject] retain];
     return self;
   }
@@ -1287,8 +1277,6 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
     [aDecoder decodeValuesOfObjCTypes:"ssffffffff", &pagenum, &barnum, &barbase, &width, &lindent, &rindent, &groupsep, &expansion, &height, &headroom];
     [self updateNumbering];
     [aDecoder decodeValuesOfObjCTypes:"@@", &staves, &objs];
-    staves = [[NSMutableArray allocWithZone:[self zone]] initFromList:staves];
-    objs = [[NSMutableArray allocWithZone:[self zone]] initFromList:objs];
     view = [[aDecoder decodeObject] retain];
     return self;
   }
@@ -1302,8 +1290,6 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
     [aDecoder decodeValuesOfObjCTypes:"ssffffff", &pagenum, &barnum, &barbase, &width, &lindent, &rindent, &groupsep, &expansion];
     [self updateNumbering];
     [aDecoder decodeValuesOfObjCTypes:"@@", &staves, &objs];
-    staves = [[NSMutableArray allocWithZone:[self zone]] initFromList:staves];
-    objs = [[NSMutableArray allocWithZone:[self zone]] initFromList:objs];
     view = [[aDecoder decodeObject] retain];
     return self;
   }
@@ -1317,8 +1303,6 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
     [aDecoder decodeValuesOfObjCTypes:"ssfffff", &pagenum, &barnum, &width, &lindent, &rindent, &groupsep, &expansion];
     [self updateNumbering];
     [aDecoder decodeValuesOfObjCTypes:"@@", &staves, &objs];
-    staves = [[NSMutableArray allocWithZone:[self zone]] initFromList:staves];
-    objs = [[NSMutableArray allocWithZone:[self zone]] initFromList:objs];
     view = [[aDecoder decodeObject] retain];
     return self;
   }
@@ -1354,8 +1338,6 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
     flags.equidist = b5;
   }
   [aDecoder decodeValuesOfObjCTypes:"@@", &staves, &objs];
-  staves = [[NSMutableArray allocWithZone:[self zone]] initFromList:staves];
-  objs = [[NSMutableArray allocWithZone:[self zone]] initFromList:objs];
   view = [[aDecoder decodeObject] retain];
   lindent *= (sheight / 32.0);
   return self;

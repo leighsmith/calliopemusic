@@ -19,11 +19,11 @@
 // TODO This should be renamed CalliopeAppController
 @interface DrawApp : NSObject
 {
-    id tools;			/* the vertical Tool Palette matrix */
-    id toolsH;			/* the horizontal Tool Palette matrix */
-    id infoPanel;		/* the Info... panel */
+    IBOutlet NSMatrix *tools;			/* the vertical Tool Palette matrix */
+    IBOutlet NSMatrix *toolsH;			/* the horizontal Tool Palette matrix */
+    IBOutlet id infoPanel;		/* the Info... panel */
     IBOutlet id version;			/* the version field in the Info... panel */
-    id preferences;		/* the Preferences Panel */
+    IBOutlet id preferences;		/* the Preferences Panel */
     id fontAccessory;
     id fontAccMatrix;
     id inspector;		/* inspectors loaded into here */
@@ -39,8 +39,7 @@
     id tempoText;
     id laybarform;		/* the form in the layBarsPanel */
     id voiceInspector;
-    id charmatrix;		/* the Characters panel matrix */
-    id progressPanel;		/* the progress panel */
+    IBOutlet NSMatrix *charmatrix;		/* the Characters panel matrix */
     
     BOOL haveOpenedDoc;		/* whether we have opened a document */
     CallPageLayout *cpl;

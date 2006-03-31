@@ -23,6 +23,8 @@
  */
 #define TIFF_COMPRESSION_FACTOR NSTIFFCompressionJPEG
 
+// ivars syslist, pagelist, partlist, chanlist, stylelist, currentScale should be refactored into a model class NotationScore.
+
 @interface GraphicView : NSView
 {
 @public
@@ -30,8 +32,8 @@
     NSMutableArray *slist;				/*! @var slist The NSArray of selected Graphics */
     NSMutableArray *syslist;				/*! @var syslist The NSArray of Systems */
     NSMutableArray *stylelist;				/*! @var stylelist NSArray of Systems (templates for styles) */
-    NSMutableArray *chanlist;				/*! @var chanlist The NSArray of Channels */
 @private
+    NSMutableArray *chanlist;				/*! @var chanlist The NSArray of Channels */
     /*! @var delegate The object informed when page numbers have changed. */
     id delegate;
     NSMutableArray *partlist;				/*! @var partlist The NSArray of Parts */

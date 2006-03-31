@@ -356,7 +356,7 @@ void unionCharBB(NSRect *b, float x, float y, int ch, NSFont *f)
 }
 
 
-void unionStringBB(NSRect *b, float x, float y, char *s, NSFont *f, int j)
+void unionStringBB(NSRect *b, float x, float y, const char *s, NSFont *f, int j)
 {
     NSRect r;
 //  NXFontMetrics *fm = [f metrics];

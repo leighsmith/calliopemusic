@@ -82,6 +82,9 @@ extern NSSize paperSize;
     m += (num & 1) ? margin->margin[8] : margin->margin[6];
     return m / [[DrawApp currentDocument] staffScale];
     // return [margin leftMargin] + (num & 1) ? [margin marginOfType: MarginLeftOddBinding] : [margin marginOfType: MarginLeftEvenBinding];
+
+    // return [margin leftMarginWithBindingOnOddPage: (num & 1)];
+    // implement by [margin leftMargin] + [margin leftBindingOnOddPage: ];
 }
 
 
@@ -90,6 +93,7 @@ extern NSSize paperSize;
     float m = margin->margin[1];
     m += (num & 1) ? margin->margin[9] : margin->margin[7];
     return m / [[DrawApp currentDocument] staffScale];
+    // return [margin rightMarginWithBindingOnOddPage: (num & 1)];
 }
 
 
@@ -98,6 +102,7 @@ extern NSSize paperSize;
     float m;
     m = (num & 1) ? margin->margin[8] : margin->margin[6];
     return m / [[DrawApp currentDocument] staffScale];
+    // [margin leftBindingOnOddPage: (num & 1)];
 }
 
 
@@ -265,33 +270,45 @@ static void drawSlants(float x, float y, float hw, float th)
 {
     int i, v;
     float t, b;
+    MarginType marginType;
+    float marginValues[MaximumMarginTypes];
     
-    v = [aDecoder versionForClassName:@"Page"];
-    if (v == 0)
-    {
-        [aDecoder decodeValuesOfObjCTypes:"ifffss", &num, &t, &fillheight, &b, &topsys, &botsys];
-        margin->margin[4] = t;
-        margin->margin[5] = b;
+    v = [aDecoder versionForClassName: @"Page"];
+    switch(v) {
+    case 0:
+        [aDecoder decodeValuesOfObjCTypes: "ifffss", &num, &t, &fillheight, &b, &topsys, &botsys];
+        [margin setTopMargin: t];
+        [margin setBottomMargin: b];
         for (i = 0; i < 12; i++) headfoot[i] = [[aDecoder decodeObject] retain];
-        [aDecoder decodeArrayOfObjCType:"c" count:12 at:hfinfo];
+        [aDecoder decodeArrayOfObjCType: "c" count:12 at: hfinfo];
         //needUpgrade |= 4;
         format = alignment = 0;
-    }
-    else if (v == 1)
-    {
-        [aDecoder decodeValuesOfObjCTypes:"ifss", &num, &fillheight, &topsys, &botsys];
-        for (i = 0; i < 12; i++) headfoot[i] = [[aDecoder decodeObject] retain];
-        [aDecoder decodeArrayOfObjCType:"c" count:12 at:hfinfo];
-        [aDecoder decodeArrayOfObjCType:"f" count:MaximumMarginTypes at:margin->margin];
+	break;
+    case 1:
+        [aDecoder decodeValuesOfObjCTypes: "ifss", &num, &fillheight, &topsys, &botsys];
+        for (i = 0; i < 12; i++) 
+	    headfoot[i] = [[aDecoder decodeObject] retain];
+        [aDecoder decodeArrayOfObjCType: "c" count: 12 at: hfinfo];
+        [aDecoder decodeArrayOfObjCType: "f" count: MaximumMarginTypes at: marginValues];
         format = alignment = 0;
-    }
-    else if (v == 2)
-    {
+	break;
+    case 2:
         [aDecoder decodeValuesOfObjCTypes:"ifsscc", &num, &fillheight, &topsys, &botsys, &format, &alignment];
-        for (i = 0; i < 12; i++) headfoot[i] = [[aDecoder decodeObject] retain];
-        [aDecoder decodeArrayOfObjCType:"c" count:12 at:hfinfo];
-        [aDecoder decodeArrayOfObjCType:"f" count:MaximumMarginTypes at:margin->margin];
+        for (i = 0; i < 12; i++) 
+	    headfoot[i] = [[aDecoder decodeObject] retain];
+        [aDecoder decodeArrayOfObjCType: "c" count: 12 at: hfinfo];
+        [aDecoder decodeArrayOfObjCType: "f" count: MaximumMarginTypes at: marginValues];
+
+	break;
+    default:
+	NSLog(@"Unhandled Page version (%d) during decoding.", v);
     }
+
+    if(v != 0) {
+	for(marginType = MarginLeft; marginType < MaximumMarginTypes; marginType++)
+	    [margin setMarginType: marginType toSize: marginValues[marginType]];	
+    }
+
     return self;
 }
 

@@ -449,7 +449,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
                                 if ((k = [tl indexOfObject:p]) != NSNotFound)
                                 {
                                     [tl removeObjectAtIndex:k];
-                                    [cl autorelease]; //sb: List object is freed not released
+                                    [cl autorelease];
                                     break;
                                 }
                                 else
@@ -893,7 +893,7 @@ char *ntypename[5] = {"dur", "on", "off", "update", "mute"};
 	    [self dumpNote: note];
 	    NSLog(@"\n");
 	}
-	[notes autorelease]; //sb: List is freed, not released. Careful here when working with MK...
+	[notes autorelease]; // Careful here when working with MK...
     }
     [parts release];
     [newScore release];

@@ -203,14 +203,14 @@
     p = [sl objectAtIndex:k];
     if (TYPEOF(p) == NOTE)
     {
-        if ([p myChordGroup] != nil) { [cl release]; return nil; }//sb: while this is a List, it is freed, not released.
+        if ([p myChordGroup] != nil) { [cl release]; return nil; }
       [cl addObject: p];
       nb += [p isBeamed];
     }
   }
   /* check for independent voices */
   ck = [cl count];
-  if (ck < 2 || nb > 1) { [cl release]; return nil; }//sb: while this is a List, it is freed, not released.
+  if (ck < 2 || nb > 1) { [cl release]; return nil; }
   for (i = 0; i < ck; i++)
   {
     p = [cl objectAtIndex:i];
@@ -219,15 +219,15 @@
     {
       q = [cl objectAtIndex:j];
       vj = VOICEID(q->voice, [q->mystaff myIndex]);
-      if (vi == vj) { [cl release]; return nil; }//sb: while this is a List, it is freed, not released.
+      if (vi == vj) { [cl release]; return nil; }
     }
   }
   [self sortGroup: cl];
   p = [self pickProximal: cl];
-  if (p == nil) { [cl release]; return nil; }//sb: while this is a List, it is freed, not released.
+  if (p == nil) { [cl release]; return nil; }
   [self linkGroup: cl];
   [self setGroup];
-  [cl release];//sb: while this is a List, it is freed, not released.
+  [cl release];
   return p;
 }
 

@@ -49,8 +49,6 @@
 #define MINIMTICK 64
 #define VOICEID(v, s) (v ? NUMSTAVES + v : s)
 
-extern NSSize paperSize;
-
 int staffFlag;
 BOOL cvFlag;	/* whether in copyverse mode */
 NSMutableArray *cvList;		/* stores list for copyverse */
@@ -101,7 +99,7 @@ static NSString *stylescratch;
         }
       }
     }
-    [slc autorelease]; //sb: List is freed rather than released
+    [slc autorelease];
   }
   if (b)
   {
@@ -523,7 +521,7 @@ extern char *typename[NUMTYPES];
 
 - wantVerse: sender
 {
-    if (cvList != nil) [cvList autorelease]; //sb: List is freed rather than released
+    if (cvList != nil) [cvList autorelease];
   if (slist != nil)
   {
     [self setupGrabCursor];
@@ -554,7 +552,7 @@ extern char *typename[NUMTYPES];
   b1  = NSUnionRect(b0 , b1);
   [self cache: b1];
   [[self window] flushWindow];
-  [cvList autorelease]; //sb: List is freed rather than released
+  [cvList autorelease];
   cvList = nil;
   [self dirty];
   return self;
@@ -1242,7 +1240,6 @@ extern char *typename[NUMTYPES];
 {
   System *sys;
   Staff *sp;
-//  List *nl;
 //  StaffObj *p;
   int b,/* i, j,*/ k, ns;
   k = [syslist count];

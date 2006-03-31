@@ -163,7 +163,7 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
   Page vars are set so that Runners can be viewed.
  */
  
-- initWithFrame:(NSRect)frameRect
+- initWithFrame: (NSRect) frameRect
 {
     self = [super initWithFrame: frameRect];
     if(self != nil) {
@@ -2076,64 +2076,47 @@ extern int needUpgrade;
     [aDecoder decodeObject];
     [NSUnarchiver decodeClassName: @"PSMatrix" asClassName: @"PSMatrixDecodeFaker"];
     [aDecoder decodeValuesOfObjCTypes:"@ss@", &dummySuperClassObject, dummyString1, dummyString2, &dummySuperClassObject];
-    NSLog(@"here");
 }
 
 - (id) initWithCoder: (NSCoder *) aDecoder
 {
     struct oldflags f;
     int v = [aDecoder versionForClassName: @"GraphicView"];
-    List *oldsyslist;
 
     NSLog(@"GraphicView decoding systemVersion %u", [aDecoder systemVersion]);
     // We shouldn't save an NSView's ivars, this is just because the model and view are mixed together. In principle we should
     // only be decoding the model.
     // [super initWithCoder:aDecoder];
+    [self initWithFrame: NSZeroRect]; // TODO this isn't right. [self frameRect]
     // but we still need to decode the super class in order to read past it.
     [self superClassDecoderFakeout: aDecoder];
+    
 
+    [NSUnarchiver decodeClassName: @"List" asClassName: @"ListDecodeFaker"];
+    
+    // TODO is this even necessary anymore?
     [self setFrameSize: NSMakeSize(ceil([self frame].size.width), ceil([self frame].size.height))];
     partlist = nil;
     stylelist = nil;
-    switch(v)
-    {
+    switch(v) {
 	case 0:
 	    [aDecoder decodeValuesOfObjCTypes:"@@s", &syslist, &pagelist, &f];
-	    syslist = [[NSMutableArray allocWithZone:[self zone]] initFromList:syslist];
-	    pagelist = [[NSMutableArray allocWithZone:[self zone]] initFromList:pagelist];
 	    currentScale = 1.0;
 	    break;
 	case 1:
 	    [aDecoder decodeValuesOfObjCTypes:"@@fs", &syslist, &pagelist, &currentScale, &f];
-	    syslist = [[NSMutableArray allocWithZone:[self zone]] initFromList:syslist];
-	    pagelist = [[NSMutableArray allocWithZone:[self zone]] initFromList:pagelist];
 	    break;
 	case 2:
 	    [aDecoder decodeValuesOfObjCTypes:"@@f", &syslist, &pagelist, &currentScale];
-	    syslist = [[NSMutableArray allocWithZone:[self zone]] initFromList:syslist];
-	    pagelist = [[NSMutableArray allocWithZone:[self zone]] initFromList:pagelist];
 	    break;
 	case 3:
 	    [aDecoder decodeValuesOfObjCTypes:"@@@f", &syslist, &pagelist, &partlist, &currentScale];
-	    syslist = [[NSMutableArray allocWithZone:[self zone]] initFromList:syslist];
-	    pagelist = [[NSMutableArray allocWithZone:[self zone]] initFromList:pagelist];
-	    partlist = [[NSMutableArray allocWithZone:[self zone]] initFromList:partlist];
 	    break;
 	case 4:
 	    [aDecoder decodeValuesOfObjCTypes:"@@@@f", &syslist, &pagelist, &partlist, &chanlist, &currentScale];
-	    syslist = [[NSMutableArray allocWithZone:[self zone]] initFromList:syslist];
-	    pagelist = [[NSMutableArray allocWithZone:[self zone]] initFromList:pagelist];
-	    partlist = [[NSMutableArray allocWithZone:[self zone]] initFromList:partlist];
-	    chanlist = [[NSMutableArray allocWithZone:[self zone]] initFromList:chanlist];
 	    break;
-	case 5: {
-	    [aDecoder decodeValuesOfObjCTypes:"@@@@@f", &oldsyslist, &pagelist, &partlist, &chanlist, &stylelist, &currentScale];
-	    syslist = [[NSMutableArray allocWithZone:[self zone]] initFromList: oldsyslist];
-	    pagelist = [[NSMutableArray allocWithZone:[self zone]] initFromList:pagelist];
-	    partlist = [[NSMutableArray allocWithZone:[self zone]] initFromList:partlist];
-	    chanlist = [[NSMutableArray allocWithZone:[self zone]] initFromList:chanlist];
-	    stylelist = [[NSMutableArray allocWithZone:[self zone]] initFromList:stylelist];	
-	}
+	case 5:
+	    [aDecoder decodeValuesOfObjCTypes:"@@@@@f", &syslist, &pagelist, &partlist, &chanlist, &stylelist, &currentScale];
 	    break;
 	case 6:
 	    [aDecoder decodeValuesOfObjCTypes:"@@@@@f", &syslist, &pagelist, &partlist, &chanlist, &stylelist, &currentScale];
@@ -2146,7 +2129,7 @@ extern int needUpgrade;
 	int k;
 	System *s;
 	Margin *p;
-	[self initClassVars];
+
 	/* this does a test */
 	k = [syslist count];
 	while (k--)

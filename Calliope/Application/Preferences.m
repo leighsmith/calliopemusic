@@ -1,14 +1,14 @@
-
+/*! $Id:$ */
+#import <AppKit/AppKit.h>
 #import "Preferences.h"
 #import "DrawApp.h"
 #import "OpusDocument.h"
 #import "GVCommands.h"
+#import "GVFormat.h"
 #import "PrefBlock.h"
 #import "MultiView.h"
 #import "mux.h"
 #import "muxlow.h"
-#import <AppKit/AppKit.h>
-
 
 @implementation Preferences
 
@@ -562,11 +562,13 @@ NSFontManager *fm = [NSFontManager sharedFontManager];
    
     NS_DURING
       ts = [[NSUnarchiver alloc] initForReadingWithData:s];
-      [ts decodeValueOfObjCType:"i" at:&version];
+      [ts decodeValueOfObjCType: "i" at: &version];
       if (version == STYLE_VERSION)
       {
-        if (v->stylelist) free(v->stylelist);
-	[ts decodeValueOfObjCType:"@" at:&(v->stylelist)];
+	  NSMutableArray *newStyleList;
+	  
+	  [ts decodeValueOfObjCType: "@" at: &newStyleList];
+	  [v setStyles: newStyleList];
       }
       else ok = NO;
     NS_HANDLER
@@ -604,7 +606,7 @@ BOOL writeStyleFile(NSString *f)
   {
     version = STYLE_VERSION;
     [ts encodeValueOfObjCType:"i" at:&version];
-    [ts encodeRootObject:v->stylelist];
+    [ts encodeRootObject: [v styles]];
     [[ts archiverData] writeToFile:f atomically:YES];
     [ts release];
     return YES;
