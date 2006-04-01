@@ -1077,9 +1077,10 @@ outOfTotalSystems: (int) numsys
     return [NSArray arrayWithArray: chanlist];
 }
 
-- (NSArray *) styles
+- (NSMutableArray *) styles
 {
-    return [NSArray arrayWithArray: stylelist];
+    // return [NSArray arrayWithArray: stylelist];
+    return [[stylelist retain] autorelease];
 }
 
 - (void) setStyles: (NSArray *) newStyles

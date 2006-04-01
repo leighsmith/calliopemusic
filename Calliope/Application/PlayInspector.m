@@ -147,7 +147,7 @@ static void blinkOff(GraphicView *v)
 {
   int c = [[channelmatrix selectedCell] tag];
   Channel *ch;
-  NSMutableArray *cl = [[DrawApp sharedApplicationController] getChanlist];
+  NSArray *cl = [[DrawApp sharedApplicationController] getChanlist];
   if (cl == nil) return self;
   ch = [cl objectAtIndex:c];
   [[slidermatrix cellAtRow:0 column:0] setFloatValue:ch->level];
@@ -166,7 +166,7 @@ static void blinkOff(GraphicView *v)
   int c = [[channelmatrix selectedCell] tag];
   float f = [sender floatValue];
   Channel *ch;
-  NSMutableArray *cl = [[DrawApp sharedApplicationController] getChanlist];
+  NSArray *cl = [[DrawApp sharedApplicationController] getChanlist];
   if (cl == nil) return self;
   ch = [cl objectAtIndex:c];
   switch(s)

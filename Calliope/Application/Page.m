@@ -328,17 +328,18 @@ static void drawSlants(float x, float y, float hw, float th)
     int i;
 //    [super encodeWithPropertyListCoder:(OAPropertyListCoder *)aCoder];
     
-    [aCoder setInteger:num forKey:@"num"];
-    [aCoder setFloat:fillheight forKey:@"fillheight"];
-    [aCoder setInteger:topsys forKey:@"topsys"];
-    [aCoder setInteger:botsys forKey:@"botsys"];
-    [aCoder setInteger:format forKey:@"format"];
-    [aCoder setInteger:alignment forKey:@"alignment"];
+    [aCoder setInteger: num forKey: @"num"];
+    [aCoder setFloat: fillheight forKey: @"fillheight"];
+    [aCoder setInteger: topsys forKey: @"topsys"];
+    [aCoder setInteger: botsys forKey: @"botsys"];
+    [aCoder setInteger: format forKey: @"format"];
+    [aCoder setInteger: alignment forKey: @"alignment"];
     
-    for (i = 0; i < 12; i++) [aCoder setObject:headfoot[i] forKey:[NSString stringWithFormat:@"hf%d",i]];
-    for (i = 0; i < 12; i++) [aCoder setInteger:hfinfo[i] forKey:[NSString stringWithFormat:@"hfinfo%d",i]];
-    [aCoder setInteger:MaximumMarginTypes forKey:@"nummargins"];
-    for (i = 0; i < MaximumMarginTypes; i++) [aCoder setFloat:margin->margin[i] forKey:[NSString stringWithFormat:@"margin%d",i]];
+    for (i = 0; i < 12; i++) 
+	[aCoder setObject: headfoot[i] forKey: [NSString stringWithFormat: @"hf%d", i]];
+    for (i = 0; i < 12; i++) 
+	[aCoder setInteger: hfinfo[i] forKey: [NSString stringWithFormat: @"hfinfo%d", i]];
+    [aCoder setObject: margin forKey: @"margins"];
 }
 
 @end

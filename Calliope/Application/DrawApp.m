@@ -569,7 +569,7 @@ float unitFactor[4] =
 }
 
 
-- (NSMutableArray *) getChanlist
+- (NSArray *) getChanlist
 {
     OpusDocument *d = [[self class] currentDocument];
     if (d == nil) return nil;

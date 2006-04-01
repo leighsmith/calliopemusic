@@ -709,7 +709,8 @@ void cellipse(float cx, float cy, float rx, float ry, float a1, float a2, float 
 void cbrace(float x0, float y0, float xn, float yn, float flourishThickness, int mode)
 {
     float dx, dy, d, t, u, h, c1x, c1y, c2x, c2y;
-    float x1, y1, x2, y2, x3, y3;
+    NSPoint point1, point2, point3;
+    NSBezierPath *bracePath = [NSBezierPath bezierPath];
     
     if (NOPRINT(mode)) 
 	return;
@@ -722,55 +723,55 @@ void cbrace(float x0, float y0, float xn, float yn, float flourishThickness, int
     flourishThickness = 0.5 * h;
     t = -(h / d);
     u = -((h - flourishThickness) / d);
-    x3 = x0 + 0.5 * dx - t * dy;
-    y3 = y0 + 0.5 * dy + t * dx;
+    point3.x = x0 + 0.5 * dx - t * dy;
+    point3.y = y0 + 0.5 * dy + t * dx;
     c2x = 0.5 - 0.05;
     c2y = 0.05;
     c1x = 0.1;
     c1y = t - 0.05;
-    x2 = x0 + c2x * dx - c2y * dy;
-    y2 = y0 + c2x * dy + c2y * dx;
-    x1 = x0 + c1x * dx - c1y * dy;
-    y1 = y0 + c1x * dy + c1y * dx;
-    PSmoveto(x0, y0);
-    PScurveto(x1, y1, x2, y2, x3, y3);
+    point2.x = x0 + c2x * dx - c2y * dy;
+    point2.y = y0 + c2x * dy + c2y * dx;
+    point1.x = x0 + c1x * dx - c1y * dy;
+    point1.y = y0 + c1x * dy + c1y * dx;
+    [bracePath moveToPoint: NSMakePoint(x0, y0)];
+    [bracePath curveToPoint: point1 controlPoint1: point2 controlPoint2: point3];
     c1x = 1.0 - 0.1;
     c1y = t - 0.05;
     c2x = 0.5 + 0.05;
     c2y = 0.05;
-    x2 = x0 + c2x * dx - c2y * dy;
-    y2 = y0 + c2x * dy + c2y * dx;
-    x1 = x0 + c1x * dx - c1y * dy;
-    y1 = y0 + c1x * dy + c1y * dx;
-    PScurveto(x2, y2, x1, y1, xn, yn);
+    point2.x = x0 + c2x * dx - c2y * dy;
+    point2.y = y0 + c2x * dy + c2y * dx;
+    point1.x = x0 + c1x * dx - c1y * dy;
+    point1.y = y0 + c1x * dy + c1y * dx;
+    [bracePath curveToPoint: point2 controlPoint1: point1 controlPoint2: NSMakePoint(xn, yn)];
     c1x = 1.0 - 0.1;
     c1y = u - 0.05;
     c2x = 0.5 + 0.05;
     c2y = (u - t) + 0.05;
-    x2 = x0 + c2x * dx - c2y * dy;
-    y2 = y0 + c2x * dy + c2y * dx;
-    x1 = x0 + c1x * dx - c1y * dy;
-    y1 = y0 + c1x * dy + c1y * dx;
-    PScurveto(x1, y1, x2, y2, x3, y3);
+    point2.x = x0 + c2x * dx - c2y * dy;
+    point2.y = y0 + c2x * dy + c2y * dx;
+    point1.x = x0 + c1x * dx - c1y * dy;
+    point1.y = y0 + c1x * dy + c1y * dx;
+    [bracePath curveToPoint: point1 controlPoint1: point2 controlPoint2: point3];
     c2x = 0.5 - 0.05;
     c2y = (u - t) + 0.05;
     c1x = 0.1;
     c1y = u - 0.05;
-    x2 = x0 + c2x * dx - c2y * dy;
-    y2 = y0 + c2x * dy + c2y * dx;
-    x1 = x0 + c1x * dx - c1y * dy;
-    y1 = y0 + c1x * dy + c1y * dx;
-    PScurveto(x2, y2, x1, y1, x0, y0);
-    PSclosepath();
+    point2.x = x0 + c2x * dx - c2y * dy;
+    point2.y = y0 + c2x * dy + c2y * dx;
+    point1.x = x0 + c1x * dx - c1y * dy;
+    point1.y = y0 + c1x * dy + c1y * dx;
+    [bracePath curveToPoint: point2 controlPoint1: point1 controlPoint2: NSMakePoint(x0, y0)];
+    [bracePath closePath];
     if (mode)
     {
 	[modegray[mode] set];
-	PSfill();
+	[bracePath fill];
     }
     else
     {
 	PSflattenpath();
-// NSLog(@"cbrace(%f,...,%d)\n", x0, mode);
+	// NSLog(@"cbrace(%f,...,%d)\n", x0, mode);
 	unionpath();
     }
 }
@@ -778,34 +779,31 @@ void cbrace(float x0, float y0, float xn, float yn, float flourishThickness, int
 
 void ccurve(float x0, float y0, float x3, float y3, float x1, float y1, float x2, float y2, float x4, float y4, float x5, float y5, float th, int dash, int mode)
 {
+    NSBezierPath *curvePath = [NSBezierPath bezierPath];
+
     if (NOPRINT(mode)) return;
-    PSmoveto(x0, y0);
-    PScurveto(x1, y1, x2, y2, x3, y3);
-    if (dash)
-    {
-	if (mode)
-	{
+    [curvePath moveToPoint: NSMakePoint(x0, y0)];
+    [curvePath curveToPoint: NSMakePoint(x1, y1) controlPoint1: NSMakePoint(x2, y2) controlPoint2: NSMakePoint(x3, y3)];
+    if (dash) {
+	if (mode) {
 	    [modegray[mode] set];
-	    PSsetlinewidth(th * 0.5);
-	    PSstroke();
+	    [curvePath setLineWidth: th * 0.5];
+	    [curvePath stroke];
 	}
-	else
-	{
+	else {
 	    PSflattenpath();
-// NSLog(@"ccurve(dash)(%f,...,%d)\n", x0, mode);
+	    // NSLog(@"ccurve(dash)(%f,...,%d)\n", x0, mode);
 	    unionpath();
 	}
 	return;
     }
-    PScurveto(x5, y5, x4, y4, x0, y0);
-    PSclosepath();
-    if (mode)
-    {
+    [curvePath curveToPoint: NSMakePoint(x5, y5) controlPoint1: NSMakePoint(x4, y4) controlPoint2: NSMakePoint(x0, y0)];
+    [curvePath closePath];
+    if (mode) {
 	[modegray[mode] set];
-	PSfill();
+	[curvePath fill];
     }
-    else
-    {
+    else {
 	PSflattenpath();
 	NSLog(@"ccurve(nodash)(%f,...,%d)", x0, mode);
 	unionpath();
@@ -820,36 +818,37 @@ void ccurve(float x0, float y0, float x3, float y3, float x1, float y1, float x2
 void cflat(float x0, float y0, float x1, float y1, float c1x, float c1y, float c2x, float c2y, float th, int dash, int mode)
 {
     float dx, dy, d, t;
-    float px0, py0, px1, py1, px2, py2, px3, py3;
+    NSPoint point0, point1, point2, point3;
+    NSBezierPath *flatCurvePath = [NSBezierPath bezierPath];
     
     if (NOPRINT(mode)) return;
     dx = x1 - x0;
     dy = y1 - y0;
-    px1 = x0 - 0.5 * c1y * dy;
-    py1 = y0 + 0.5 * c1y * dx;
-    px2 = x0 - c1y * dy;
-    py2 = y0 + c1y * dx;
-    px3 = x0 + c1x * dx - c1y * dy;
-    py3 = y0 + c1x * dy + c1y * dx;
-    PSmoveto(x0, y0);
-    PScurveto(px1, py1, px2, py2, px3, py3);
-    px0 = x0 + c2x * dx - c2y * dy;
-    py0 = y0 + c2x * dy + c2y * dx;
-    px1 = x0 + dx - c2y * dy;
-    py1 = y0 + dy + c2y * dx;
-    px2 = x0 + dx - 0.5 * c2y * dy;
-    py2 = y0 + dy + 0.5 * c2y * dx;
-    px3 = x0 + dx;
-    py3 = y0 + dy;
-    PSlineto(px0, py0);
-    PScurveto(px1, py1, px2, py2, px3, py3);
+    point1.x = x0 - 0.5 * c1y * dy;
+    point1.y = y0 + 0.5 * c1y * dx;
+    point2.x = x0 - c1y * dy;
+    point2.y = y0 + c1y * dx;
+    point3.x = x0 + c1x * dx - c1y * dy;
+    point3.y = y0 + c1x * dy + c1y * dx;
+    [flatCurvePath moveToPoint: NSMakePoint(x0, y0)];
+    [flatCurvePath curveToPoint: point1 controlPoint1: point2 controlPoint2: point3];
+    point0.x = x0 + c2x * dx - c2y * dy;
+    point0.y = y0 + c2x * dy + c2y * dx;
+    point1.x = x0 + dx - c2y * dy;
+    point1.y = y0 + dy + c2y * dx;
+    point2.x = x0 + dx - 0.5 * c2y * dy;
+    point2.y = y0 + dy + 0.5 * c2y * dx;
+    point3.x = x0 + dx;
+    point3.y = y0 + dy;
+    [flatCurvePath lineToPoint: point0];
+    [flatCurvePath curveToPoint: point1 controlPoint1: point2 controlPoint2: point3];
     if (dash)
     {
 	if (mode)
 	{
 	    [modegray[mode] set];
-	    PSsetlinewidth(th * 0.5);
-	    PSstroke();
+	    [flatCurvePath setLineWidth: th * 0.5];
+	    [flatCurvePath stroke];
 	}
 	else
 	{
@@ -861,29 +860,29 @@ void cflat(float x0, float y0, float x1, float y1, float c1x, float c1y, float c
     }
     d = hypot(dx, dy);
     t = (c2y * d - th) / d;
-    px0 = x0 + c2x * dx - t * dy;
-    py0 = y0 + c2x * dy + t * dx;
-    px1 = x0 + dx - t * dy;
-    py1 = y0 + dy + t * dx;
-    px2 = x0 + dx - 0.5 * t * dy;
-    py2 = y0 + dy + 0.5 * t * dx;
-    PScurveto(px2, py2, px1, py1, px0, py0);
+    point0.x = x0 + c2x * dx - t * dy;
+    point0.y = y0 + c2x * dy + t * dx;
+    point1.x = x0 + dx - t * dy;
+    point1.y = y0 + dy + t * dx;
+    point2.x = x0 + dx - 0.5 * t * dy;
+    point2.y = y0 + dy + 0.5 * t * dx;
+    [flatCurvePath curveToPoint: point2 controlPoint1: point1 controlPoint2: point0];
     t = (c1y * d - th) / d;
-    px0 = x0;
-    py0 = y0;
-    px1 = x0 - 0.5 * t * dy;
-    py1 = y0 + 0.5 * t * dx;
-    px2 = x0 - t * dy;
-    py2 = y0 + t * dx;
-    px3 = x0 + c1x * dx - t * dy;
-    py3 = y0 + c1x * dy + t * dx;
-    PSlineto(px3, py3);
-    PScurveto(px2, py2, px1, py1, px0, py0);
-    PSclosepath();
+    point0.x = x0;
+    point0.y = y0;
+    point1.x = x0 - 0.5 * t * dy;
+    point1.y = y0 + 0.5 * t * dx;
+    point2.x = x0 - t * dy;
+    point2.y = y0 + t * dx;
+    point3.x = x0 + c1x * dx - t * dy;
+    point3.y = y0 + c1x * dy + t * dx;
+    [flatCurvePath lineToPoint: point3];
+    [flatCurvePath curveToPoint: point2 controlPoint1: point1 controlPoint2: point0];
+    [flatCurvePath closePath];
     if (mode)
     {
 	[modegray[mode] set];
-	PSfill();
+	[flatCurvePath fill];
     }
     else
     {
@@ -1160,6 +1159,7 @@ void cbrack(int i, int p, float px, float py, float qx, float qy, float th, floa
 	case 5:  /* dashed line */
 	    dpattern[0] = d;
 	    PSsetdash(dpattern, 1, 0.0);
+	    // [bezPath setLineDash: dpattern count: 1 phase: 0.0];
 	    switch(p)
 	    {
 		case 0:

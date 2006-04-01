@@ -82,7 +82,7 @@ extern int partlistflag;
 - (NSSavePanel *)mySavePanel;
 - launchIt: p;
 - (NSMutableArray *) getPartlist;
-- (NSMutableArray *) getChanlist;
+- (NSArray *) getChanlist;
 - (NSMutableArray *) getStylelist;
 - thePlayView;
 - thePlayView: v;

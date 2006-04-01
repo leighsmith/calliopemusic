@@ -77,10 +77,6 @@
 
 + (void)initialize;
 
-+ newFromStream:(NSData *)stream;
-+ newFromFile:(NSString *)file andDisplay: (BOOL) d;
-
-
 /*!
   @method dataRepresentationOfType:
   @abstract Generates a NSData representation of the type given by docType.
@@ -89,7 +85,6 @@
  */
 - (NSData *) dataRepresentationOfType: (NSString *) docType;
 
-
 /* Public methods */
 
 // TODO should become copyWithZone:
@@ -97,6 +92,7 @@
 - initCopy: (NSString *) name andDirectory: (NSString *) dir;
 
 - printInfo;
+
 - resetScrollers;
 
 /*!

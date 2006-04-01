@@ -288,8 +288,13 @@ static id createWindowFor(GraphicView* view, NSRect *r, NSString *fS)
     if([aType isEqualToString: @"CalliopeBinary"]) {
 	if(![self loadDocument: data]) {
 	    // if unable to load the document normally, try the old versionless method.
-	    return [self loadOldDocument: data];
+	    if(![self loadOldDocument: data])
+		return NO;
 	}
+	[view firstPage: self];
+	[self resetScrollers];
+        if (![prefInfo checkStyleFromFile: view])
+	    Notify(@"Preferences", @"Cannot Read Shared Style Sheet.");
 	return YES;
     }
     else {
@@ -313,7 +318,6 @@ static id createWindowFor(GraphicView* view, NSRect *r, NSString *fS)
 {
     self = [super init];
     if (self != nil) {
-	// [self registerForServicesMenu]; // LMS Necessary?
 	printInfo = [[NSPrintInfo alloc] init];
 	prefInfo = [[PrefBlock alloc] init];
 	[self setDefaultFormat];
@@ -326,6 +330,7 @@ static id createWindowFor(GraphicView* view, NSRect *r, NSString *fS)
     return self;
 }
 
+#if 0
 
 /*
  * Creates a new document from what is in the passed stream.
@@ -352,28 +357,6 @@ static id createWindowFor(GraphicView* view, NSRect *r, NSString *fS)
         if (![doc->prefInfo checkStyleFromFile: doc->view]) Notify(@"Preferences", @"Cannot Read Shared Style Sheet.");
         doc->haveSavedDocument = YES;
         return doc;
-    }
-    return nil;
-}
-
-+ newOldFromStream:(NSData *)stream
-{
-//    NSZone *zone;
-    OpusDocument *doc;
-//    zone = [self newZone];
-    doc = [[[self class] alloc] init];
-    [doc registerForServicesMenu];
-    if (stream && [doc loadOldDocument: stream])
-    {
-	NSRect contFrame = [doc frameSize];
-	doc->documentWindow = createWindowFor(doc->view, &contFrame, nil);
-	[(NSWindow *)doc->documentWindow setDelegate:doc];
-	
-	[doc->view firstPage:doc];
-	
-	[doc resetScrollers];
-	doc->haveSavedDocument = YES;
-	return doc;
     }
     return nil;
 }
@@ -438,6 +421,7 @@ extern int needUpgrade;
     }
     return nil;
 }
+#endif
 
 // TODO should become copyWithZone: 
 - newFrom
@@ -481,8 +465,7 @@ extern int needUpgrade;
     return doc;
 }
 
-
-- (void)dealloc
+- (void) dealloc
 {
     [printInfo release];
     [prefInfo release];
@@ -1152,8 +1135,6 @@ return nil;
     NSLog(@"dataRepresentationOfType: %@", docType);
  
     if (ts) {
-	NS_DURING
-	    [documentWindow makeFirstResponder:view];
 	    [(GraphicView *)view deselectAll: self];
 	    [ts encodeValueOfObjCType:"i" at:&version];
 	    [ts encodeRootObject:printInfo];
@@ -1170,9 +1151,6 @@ return nil;
 	    //NSLog(@"Description: %@", tsO);
 	    	    
 	    [prefInfo backup]; // TODO huh? shouldn't prefInfo be saved along with the document?
-	NS_HANDLER
-	    Notify(@"Save", @"Unknown error writing file.");
-	NS_ENDHANDLER
     }    
     
     return [[tsO description] dataUsingEncoding: NSASCIIStringEncoding];
@@ -1194,6 +1172,7 @@ return nil;
     documentWindow = [[primaryWindowController window] retain];
     // Add any code here that needs to be executed once the windowController has loaded the document's window.
     [documentWindow setDelegate: self]; // TODO Hmm shouldn't be necessary eventually.
+    // [self registerForServicesMenu]; // LMS Necessary?
     [view setDelegate: self];
     [self zeroScale];
     // TODO kludged in here for now, it will eventually be created by a "new document sheet".

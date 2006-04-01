@@ -1991,30 +1991,24 @@ static void drawHorz(float x, float y, float w, NSRect r)
 
 - updateMargins: (float) hb : (float) fb : pi
 {
-  float lm, rm, top, bot;
-  System *s = [syslist objectAtIndex:0];
-  Margin *m = [s checkMargin];
-  if (m)
-  {
-    m->margin[2] = hb;
-    m->margin[3] = fb;
-
-    lm = [pi leftMargin];
-    rm = [pi rightMargin];
-    top = [pi topMargin];
-    bot = [pi bottomMargin];
+    System *s = [syslist objectAtIndex:0];
+    Margin *m = [s checkMargin];
     
-    m->margin[0] = lm;
-    m->margin[1] = rm;
-    m->margin[4] = top;
-    m->margin[5] = bot;
-  }
-
-  [pi setLeftMargin:0];
-  [pi setRightMargin:0];
-  [pi setTopMargin:0];
-  [pi setBottomMargin:0];
-  return self;
+    if (m) {
+	[m setHeaderBase: hb];
+	[m setFooterBase: fb];
+		
+	[m setLeftMargin: [pi leftMargin]];
+	[m setRightMargin: [pi rightMargin]];
+	[m setTopMargin: [pi topMargin]];
+	[m setBottomMargin: [pi bottomMargin]];
+    }
+    
+    [pi setLeftMargin: 0];
+    [pi setRightMargin: 0];
+    [pi setTopMargin: 0];
+    [pi setBottomMargin: 0];
+    return self;
 }
 
 
@@ -2059,39 +2053,47 @@ extern int needUpgrade;
 // This is pure, creamy fudge! Attempts to decode the View superclass that was encoded in older file formats.
 - (void) superClassDecoderFakeout: (NSCoder *) aDecoder
 {
-    // NSView *dummySuperClassObject = [[NSView alloc] initWithFrame: NSZeroRect];
     // Perhaps just create a dummy View and Responder & initWithCoder: those?
     id dummySuperClassObject;
     float dummyFloat;
     float dummyFloat1, dummyFloat2, dummyFloat3, dummyFloat4;
     char dummyString1[256], dummyString2[256];
+    unsigned int systemVersion = [aDecoder systemVersion];
     
-    dummySuperClassObject = [aDecoder decodeObject];
-    [aDecoder decodeValuesOfObjCTypes:"f", &dummyFloat];
-    [aDecoder decodeValuesOfObjCTypes:"ffff", &dummyFloat1, &dummyFloat2, &dummyFloat3, &dummyFloat4];
-    NSLog(@"dummy floats %f %f %f %f", dummyFloat1, dummyFloat2, dummyFloat3, dummyFloat4);
-    [aDecoder decodeValuesOfObjCTypes:"ffff", &dummyFloat1, &dummyFloat2, &dummyFloat3, &dummyFloat4];
-    NSLog(@"dummy floats %f %f %f %f", dummyFloat1, dummyFloat2, dummyFloat3, dummyFloat4);
-    [aDecoder decodeObject];
-    [aDecoder decodeObject];
-    [NSUnarchiver decodeClassName: @"PSMatrix" asClassName: @"PSMatrixDecodeFaker"];
-    [aDecoder decodeValuesOfObjCTypes:"@ss@", &dummySuperClassObject, dummyString1, dummyString2, &dummySuperClassObject];
+    NSLog(@"GraphicView decoding systemVersion %u", systemVersion);
+    switch(systemVersion) {
+	case 1000:
+	    // for files that encoded OpenStep era AppKit objects, we can just use initWithCoder: to read it.
+	    [[NSView alloc] initWithCoder: aDecoder];
+	    break;
+	default:
+	    // Decode pre-OpenStep Appkit objects
+	    [NSUnarchiver decodeClassName: @"PSMatrix" asClassName: @"PSMatrixDecodeFaker"];
+	    dummySuperClassObject = [aDecoder decodeObject];
+	    [aDecoder decodeValuesOfObjCTypes: "f", &dummyFloat];
+	    [aDecoder decodeValuesOfObjCTypes: "ffff", &dummyFloat1, &dummyFloat2, &dummyFloat3, &dummyFloat4];
+	    //NSLog(@"dummy floats %f %f %f %f", dummyFloat1, dummyFloat2, dummyFloat3, dummyFloat4);
+	    [aDecoder decodeValuesOfObjCTypes: "ffff", &dummyFloat1, &dummyFloat2, &dummyFloat3, &dummyFloat4];
+	    //NSLog(@"dummy floats %f %f %f %f", dummyFloat1, dummyFloat2, dummyFloat3, dummyFloat4);
+	    [aDecoder decodeObject];
+	    [aDecoder decodeObject];
+	    [aDecoder decodeValuesOfObjCTypes: "@ss@", &dummySuperClassObject, dummyString1, dummyString2, &dummySuperClassObject];
+	    break;
+    }
 }
 
 - (id) initWithCoder: (NSCoder *) aDecoder
 {
     struct oldflags f;
     int v = [aDecoder versionForClassName: @"GraphicView"];
-
-    NSLog(@"GraphicView decoding systemVersion %u", [aDecoder systemVersion]);
-    // We shouldn't save an NSView's ivars, this is just because the model and view are mixed together. In principle we should
+    
+    // We shouldn't have saved an NSView's ivars, this is just because the model and view are mixed together. In principle we should
     // only be decoding the model.
     // [super initWithCoder:aDecoder];
-    [self initWithFrame: NSZeroRect]; // TODO this isn't right. [self frameRect]
     // but we still need to decode the super class in order to read past it.
-    [self superClassDecoderFakeout: aDecoder];
+    [self initWithFrame: NSZeroRect]; // TODO this isn't right. [self frameRect]
+    [self superClassDecoderFakeout: aDecoder];    
     
-
     [NSUnarchiver decodeClassName: @"List" asClassName: @"ListDecodeFaker"];
     
     // TODO is this even necessary anymore?
@@ -2129,7 +2131,7 @@ extern int needUpgrade;
 	int k;
 	System *s;
 	Margin *p;
-
+	
 	/* this does a test */
 	k = [syslist count];
 	while (k--)
@@ -2158,7 +2160,7 @@ extern int needUpgrade;
 	}
 	
     } /* sb: end from awake method */
-  return self;
+    return self;
 }
 
 

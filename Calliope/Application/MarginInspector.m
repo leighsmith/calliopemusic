@@ -23,28 +23,29 @@ NSString *unitname[4] =
 
 - preset
 {
-  int n;
-  float conv;
-  GraphicView *v = [DrawApp currentView];
-  Margin *p = [v canInspect: MARGIN : &n];
-  if (n == 0) return nil;
-  conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
+    int n;
+    float conv;
+    GraphicView *v = [DrawApp currentView];
+    Margin *p = [v canInspect: MARGIN : &n];
+    
+    if (n == 0) return nil;
+    conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
 //  [[[DrawApp sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
-  [[lbindform cellAtIndex:0] setFloatValue:conv * p->margin[6]];
-  [[lbindform cellAtIndex:1] setFloatValue:conv * p->margin[8]];
-  [[rbindform cellAtIndex:0] setFloatValue:conv * p->margin[7]];
-  [[rbindform cellAtIndex:1] setFloatValue:conv * p->margin[9]];
-  [lmargcell setFloatValue:conv * p->margin[0]];
-  [rmargcell setFloatValue:conv * p->margin[1]];
-  [[vertmargform cellAtIndex:0] setFloatValue:conv * p->margin[2]];
-  [[vertmargform cellAtIndex:1] setFloatValue:conv * p->margin[4]];
-  [[vertmargform cellAtIndex:2] setFloatValue:conv * p->margin[5]];
-  [[vertmargform cellAtIndex:3] setFloatValue:conv * p->margin[3]];
-  [unitcell setStringValue:[[DrawApp sharedApplicationController] unitString]];
-  [formatbutton selectItemAtIndex:p->format];
-  [[alignmatrix cellAtRow:0 column:0] setState:(p->alignment & 1)];
-  [[alignmatrix cellAtRow:1 column:0] setState:(p->alignment & 2)];
-  return self;
+    [[lbindform cellAtIndex: 0] setFloatValue: conv * [p marginOfType: MarginLeftEvenBinding]];
+    [[lbindform cellAtIndex: 1] setFloatValue: conv * [p marginOfType: MarginLeftOddBinding]];
+    [[rbindform cellAtIndex: 0] setFloatValue: conv * [p marginOfType: MarginRightEvenBinding]];
+    [[rbindform cellAtIndex: 1] setFloatValue: conv * [p marginOfType: MarginRightOddBinding]];
+    [lmargcell setFloatValue: conv * [p leftMargin]];
+    [rmargcell setFloatValue: conv * [p rightMargin]];
+    [[vertmargform cellAtIndex: 0] setFloatValue: conv * [p headerBase]];
+    [[vertmargform cellAtIndex: 1] setFloatValue: conv * [p topMargin]];
+    [[vertmargform cellAtIndex: 2] setFloatValue: conv * [p bottomMargin]];
+    [[vertmargform cellAtIndex: 3] setFloatValue: conv * [p footerBase]];
+    [unitcell setStringValue: [[DrawApp sharedApplicationController] unitString]];
+    [formatbutton selectItemAtIndex: p->format];
+    [[alignmatrix cellAtRow: 0 column: 0] setState: (p->alignment & 1)];
+    [[alignmatrix cellAtRow: 1 column: 0] setState: (p->alignment & 2)];
+    return self;
 }
 
 

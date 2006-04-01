@@ -291,7 +291,8 @@ static void addNote(int v, int k, int ch, MKNote *n)
     float f=0.0, mm, mt, t, xt, tn, qt, dur, lt, fine, minstamp, lwhite;
     System *sys;
     Staff *sp;
-    NSMutableArray *nl, *hl, *sl, *cl, *tl;
+    NSMutableArray *nl, *hl, *sl, *tl;
+    NSArray *channelList;
     NoteHead *h;
     GNote *q;
     Metro *mp;
@@ -444,20 +445,20 @@ static void addNote(int v, int k, int ch, MKNote *n)
                             trn = [instlist transForInstrument: inst];
                             tn = DURTIME(((StaffObj *)p)->stamp - minstamp) + t;
                             dur = DURTIME(((StaffObj *)p)->duration);
-                            if ((cl = [p tiedWith]) != nil)
+                            if ((channelList = [p tiedWith]) != nil)
                             {
                                 if ((k = [tl indexOfObject:p]) != NSNotFound)
                                 {
                                     [tl removeObjectAtIndex:k];
-                                    [cl autorelease];
+                                    [channelList autorelease];
                                     break;
                                 }
                                 else
                                 {
-                                    k = [cl count];
+                                    k = [channelList count];
                                     while (k--)
                                     {
-                                        q = [cl objectAtIndex:k];
+                                        q = [channelList objectAtIndex:k];
                                         if (((StaffObj *)q)->stamp > ((StaffObj *)p)->stamp)
                                         {
                                             [tl addObject: q];
@@ -636,9 +637,9 @@ static void addNote(int v, int k, int ch, MKNote *n)
             break;
         case 4: /* write a MIDI file */
             as = [[MKScore alloc] init];
-            cl = [[DrawApp sharedApplicationController] getChanlist];
+            channelList = [[DrawApp sharedApplicationController] getChanlist];
             i = 16;
-            while (i--) ((Channel *)[cl objectAtIndex:i])->flag = 0;
+            while (i--) ((Channel *)[channelList objectAtIndex:i])->flag = 0;
             for (i = 0; i < numParts; i++)
             {
                 ch = player[i].channel;
@@ -654,7 +655,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
             an = [[MKNote alloc] init];
             for (i = 0; i < numParts; i++) {
                 ch = player[i].channel;
-                chan = [cl objectAtIndex:ch];
+                chan = [channelList objectAtIndex:ch];
                 if (!chan->flag) {
                     chan->flag = 1;
                     [an setNoteType: MK_noteUpdate];
@@ -708,13 +709,13 @@ static void addNote(int v, int k, int ch, MKNote *n)
             [midi acceptSys: MK_sysStart];
             [midi acceptSys: MK_sysContinue];
             [midi acceptSys: MK_sysStop];
-            cl = [[DrawApp sharedApplicationController] getChanlist];
+            channelList = [[DrawApp sharedApplicationController] getChanlist];
             i = 16;
-            while (i--) ((Channel *)[cl objectAtIndex:i])->flag = 0;
+            while (i--) ((Channel *)[channelList objectAtIndex:i])->flag = 0;
                 an = [[MKNote alloc] init];
             for (i = 0; i < numParts; i++) {
                 ch = player[i].channel;
-                chan = [cl objectAtIndex:ch];
+                chan = [channelList objectAtIndex:ch];
                 if (!chan->flag)
                 {
                 chan->flag = 1;

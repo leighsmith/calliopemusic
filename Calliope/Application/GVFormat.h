@@ -70,9 +70,9 @@ typedef enum {
 - (NSArray *) channels;
 
 /*!
-  @brief Returns the styles as an immutable NSArray.
+  @brief Returns the styles as an  NSMutableArray.
  */
-- (NSArray *) styles;
+- (NSMutableArray *) styles;
 
 /*!
   @brief Assigns the style list

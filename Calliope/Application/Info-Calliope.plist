@@ -9,6 +9,24 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
+				<string>calliope</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>CallDocIcon</string>
+			<key>CFBundleTypeName</key>
+			<string>CalliopePropertyList</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
+			<key>NSDocumentClass</key>
+			<string>OpusDocument</string>
+			<key>NSPersistentStoreTypeKey</key>
+			<string>XML</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
 				<string>opus</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
@@ -16,7 +34,7 @@
 			<key>CFBundleTypeName</key>
 			<string>CalliopeBinary</string>
 			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
+			<string>Viewer</string>
 			<key>LSTypeIsPackage</key>
 			<false/>
 			<key>NSDocumentClass</key>

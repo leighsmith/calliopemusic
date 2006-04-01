@@ -239,6 +239,7 @@ static int invismode[8] = {0, 4, 4, 4, 4, 4, 4, 7};
   {
     dpattern[0] = nature[sz];
     PSsetdash(dpattern, 1, 0.0);
+    // [bezPath setLineDash: dpattern count: 1 phase: 0.0];
   }
   if (s->flags.nlines == 1 && !flags.bridge)
   {

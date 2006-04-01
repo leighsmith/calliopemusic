@@ -23,7 +23,6 @@
  */
 #define TIFF_COMPRESSION_FACTOR NSTIFFCompressionJPEG
 
-// ivars syslist, pagelist, partlist, chanlist, stylelist, currentScale should be refactored into a model class NotationScore.
 
 @interface GraphicView : NSView
 {
@@ -31,17 +30,21 @@
     unsigned int cacheing;	/*! @var  whether cacheing or drawing */
     NSMutableArray *slist;				/*! @var slist The NSArray of selected Graphics */
     NSMutableArray *syslist;				/*! @var syslist The NSArray of Systems */
-    NSMutableArray *stylelist;				/*! @var stylelist NSArray of Systems (templates for styles) */
 @private
-    NSMutableArray *chanlist;				/*! @var chanlist The NSArray of Channels */
+
+    // ivars syslist, pagelist, partlist, chanlist, stylelist, currentScale should be refactored into a model class NotationScore.
+
+    NSMutableArray *stylelist;		/*! @var stylelist NSArray of Systems (templates for styles) */
+    NSMutableArray *chanlist;		/*! @var chanlist The NSArray of Channels */
+    NSMutableArray *partlist;		/*! @var partlist The NSArray of Parts */
+    NSMutableArray *pagelist;		/*! @var pagelist The NSArray of Pages */
+    float currentScale;			/*! @var currentScale The scaling factor: 1.0 = no scaling. */
+
     /*! @var delegate The object informed when page numbers have changed. */
     id delegate;
-    NSMutableArray *partlist;				/*! @var partlist The NSArray of Parts */
-    NSMutableArray *pagelist;				/*! @var pagelist The NSArray of Pages */
     Page *currentPage;			    /*! @var currentPage The current page to be drawn */
     System *currentSystem;                   /*! @var currentSystem System at top of page of view */
     NSFont *currentFont;                /*! @var currentFont TODO Used to display what? Musical font at any moment, for a particular task? */
-    float currentScale;		      /*! @var currentScale The scaling factor: 1.0 = no scaling. */
     BOOL serviceActsOnSelection;        /*! @var serviceActsOnSelection Whether a service has arguments */
     BOOL dirtyflag;
     NSImage *cacheImage;		/*! @var cacheImage The cache of drawn graphics */
