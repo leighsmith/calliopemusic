@@ -1,4 +1,4 @@
-/* $Id:$ */
+/* $Id$ */
 #import "winheaders.h"
 #import <AppKit/AppKit.h>
 #import <Foundation/Foundation.h>
@@ -61,8 +61,17 @@
 - (float) yOfPos: (int) p;
 - (float) yOfTopLine;
 - (float) yOfBottomLine;
-- mySystem;
-- myView;
+
+/*!
+  @brief Returns the parent system.
+ */
+- (System *) mySystem;
+
+/*!
+  @brief Returns the parent encompassing GraphicView (TODO eventually the NotationScore).
+ */
+- (GraphicView *) myView;
+
 - (int) sysNum;
 - (int) myIndex;
 - (NSString *) getInstrument;

@@ -863,10 +863,8 @@ extern int selMode;
   [view lockFocus];
 
   /* get rid of original image to prepare for instance drawing */
-  ((GraphicView *)view)->cacheing = YES;
   // TODO why the hell is Graphic attempting to draw the page?
   [view drawRect: b nonSelectedOnly: YES];
-  ((GraphicView *)view)->cacheing = NO;
   // TODO why the hell is Graphic attempting to draw the page?
   [view drawRect: b nonSelectedOnly: YES];
 

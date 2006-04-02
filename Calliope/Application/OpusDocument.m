@@ -1176,7 +1176,7 @@ return nil;
     [view setDelegate: self];
     [self zeroScale];
     // TODO kludged in here for now, it will eventually be created by a "new document sheet".
-    [self setNumberOfStaves: 1];
+    [self setNumberOfStaves: 2];
 }
 
 #if 0

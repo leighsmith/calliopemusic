@@ -676,11 +676,7 @@ extern char *typename[NUMTYPES];
 */
 
 - cache:(NSRect)rect
-{
-//    cacheing = YES;
-//    [self drawRect:rect];
-//    cacheing = NO;
-    
+{    
   if ([self canDraw])
   {
     [self lockFocus];

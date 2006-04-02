@@ -378,33 +378,33 @@ int protoVox;
 
 /* return system self is associated with */
 
-- mySystem
+- (System *) mySystem
 {
-  if (TYPEOF(mystaff) == SYSTEM) return mystaff;
-  else return mystaff->mysys;
+    // TODO I'm not sure why mystaff this should ever not be a Staff instance, but the test was here originally, so it's been rewritten as an assertion.
+    if (TYPEOF(mystaff) != STAFF)
+	NSLog(@"assertion failed in StaffObj sysNum, mystaff != STAFF");
+    if (TYPEOF(mystaff) == SYSTEM)
+	return mystaff;
+    else
+	return mystaff->mysys;
 }
 
 
 /* return view self is associated with */
 
-- myView
+- (GraphicView *) myView
 {
-  System *s;
-  if (TYPEOF(mystaff) == SYSTEM) return s = mystaff;
-  else s = mystaff->mysys;
-  return s->view;
+    System *s = [self mySystem];
+    return s->view;
 }
 
 
 /* return index of system on which object appears */
-
 - (int) sysNum
 {
-  GraphicView *v;
-  id sp = mystaff;
-  if (TYPEOF(sp) == STAFF) sp = ((Staff *)sp)->mysys;
-  v = ((System *)sp)->view;
-  return [v->syslist indexOfObject:sp];
+    GraphicView *v = [self myView];
+    
+    return [[v allSystems] indexOfObject: [self mySystem]];
 }
 
 
@@ -1107,6 +1107,7 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
     if (verses == nil) { NSLog(@"keyDownString: verses = nil"); return 0; }
       if (selver >= 0 && (selver < k))  v = [verses objectAtIndex:selver];
     if (v == nil) { NSLog(@"keyDownString: v = nil"); return 0; }
+    
     s = v->data;
     if (s == NULL || strlen(s) == 0)
     {

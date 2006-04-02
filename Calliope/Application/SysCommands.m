@@ -425,82 +425,84 @@
 
 - grabBar
 {
-  int i, j, k, ns, q, ds;
-  float rx, dy;
-  Staff *ssp, *dsp;
-  NSMutableArray *snl, *dnl, *sysl;
-  System *sys;
-  StaffObj *p;
-  BOOL b;
-  ns = flags.nstaves;
-  /* find next system */
-  sysl = ((GraphicView *)view)->syslist;
-  ds = [sysl indexOfObject:self];
-  while (1)
-  {
-    ++ds;
-    if (ds >= [sysl count])
+    int i, j, k, ns, q, ds;
+    float rx, dy;
+    Staff *ssp, *dsp;
+    NSMutableArray *snl, *dnl;
+    NSArray *sysl;
+    System *sys;
+    StaffObj *p;
+    BOOL b;
+    
+    ns = flags.nstaves;
+    /* find next system */
+    sysl = [view allSystems];
+    ds = [sysl indexOfObject: self];
+    while (1)
     {
-      NSRunAlertPanel(@"Cannot Grab", @"No next system", @"OK", nil, nil, NULL);
-      return nil;
+	++ds;
+	if (ds >= [sysl count])
+	{
+	    NSRunAlertPanel(@"Cannot Grab", @"No next system", @"OK", nil, nil, NULL);
+	    return nil;
+	}
+	sys = [sysl objectAtIndex:ds];
+	if (sys->flags.nstaves != ns)
+	{
+	    NSRunAlertPanel(@"Cannot Grab", @"Next system not same size", @"OK", nil, nil, NULL);
+	    return nil;
+	}
+	ssp = [sys->staves objectAtIndex:0];
+	q = [ssp skipSigIx: 0];
+	if (q == [ssp->notes count]) continue;
+	else break;
     }
-    sys = [sysl objectAtIndex:ds];
-    if (sys->flags.nstaves != ns)
+    for (i = 0; i < ns; i++)
     {
-      NSRunAlertPanel(@"Cannot Grab", @"Next system not same size", @"OK", nil, nil, NULL);
-      return nil;
-    }
-    ssp = [sys->staves objectAtIndex:0];
-    q = [ssp skipSigIx: 0];
-    if (q == [ssp->notes count]) continue;
-    else break;
-  }
-  for (i = 0; i < ns; i++)
-  {
-    dsp = [staves objectAtIndex:i];
-    dy = [dsp yOfTop] - [ssp yOfTop];
-    dnl = dsp->notes;
-    if ([dnl count] == 0) rx = [self leftWhitespace];
-    else rx = ((StaffObj *)[dnl lastObject])->x;
-    ssp = [sys->staves objectAtIndex:i];
-    snl = ssp->notes;
-    q = [ssp skipSigIx: 0];
-    k = [snl count];
-    for (j = q; j < k; j++)
-    {
-      p = [snl objectAtIndex:j];
-      if (TYPEOF(p) == BARLINE)
-      {
-        [sys findSplits: ssp : q : j : 0];
-	break;
-      }
-    }
-    k = [snl count] - q;
-    b = NO;
-    while (!b && k--)
-    {
+	dsp = [staves objectAtIndex:i];
+	dy = [dsp yOfTop] - [ssp yOfTop];
+	dnl = dsp->notes;
+	if ([dnl count] == 0) rx = [self leftWhitespace];
+	else rx = ((StaffObj *)[dnl lastObject])->x;
+	ssp = [sys->staves objectAtIndex:i];
+	snl = ssp->notes;
+	q = [ssp skipSigIx: 0];
+	k = [snl count];
+	for (j = q; j < k; j++)
+	{
+	    p = [snl objectAtIndex:j];
+	    if (TYPEOF(p) == BARLINE)
+	    {
+		[sys findSplits: ssp : q : j : 0];
+		break;
+	    }
+	}
+	k = [snl count] - q;
+	b = NO;
+	while (!b && k--)
+	{
 //      p = [snl removeObjectAtIndex:q];
 //      if (p != nil)
-        if (q <= [snl count])
-      {
-          p = [[[snl objectAtIndex:q] retain] autorelease];
-          [snl removeObjectAtIndex:q];
-        [dnl addObject: p];
-        p->mystaff = dsp;
-        p->x += rx;
-        if (TYPEOF(p) == BARLINE) b = YES;
-      }
+	    if (q <= [snl count])
+	    {
+		p = [[[snl objectAtIndex:q] retain] autorelease];
+		[snl removeObjectAtIndex:q];
+		[dnl addObject: p];
+		p->mystaff = dsp;
+		p->x += rx;
+		if (TYPEOF(p) == BARLINE) b = YES;
+	    }
+	}
     }
-  }
-  sys->barnum += 1;
-  [view flowTimeSig: sys];
-  [self findJoins];
-  [self sysInvalid];
-  [self userAdjust: YES]; /* does the recache, recalc, sysheight */
-  [sys sysInvalid];
-  [sys userAdjust: YES];
-  [view resetPagesOn: self : sys];
-  return self;
+    sys->barnum += 1;
+    [view flowTimeSig: sys];
+    [self findJoins];
+    [self sysInvalid];
+    [self userAdjust: YES]; /* does the recache, recalc, sysheight */
+    [sys sysInvalid];
+    [sys userAdjust: YES];
+    [view resetPagesOn: self : sys];
+    return self;
 }
 
 

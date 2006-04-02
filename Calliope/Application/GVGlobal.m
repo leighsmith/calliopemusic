@@ -251,7 +251,7 @@ static void addBarsRest(Staff *sp, System *sys, int n)
     if (hassys)
     {
       [self copyObjs: sys : esys];
-      [v->syslist addObject: esys];
+      [v addSystem: esys];
     }
   }
   if (barsrest[j]) /* any left over */
@@ -333,7 +333,7 @@ static void addBarsRest(Staff *sp, System *sys, int n)
     if (hassys)
     {
       [self copyObjs: sys : esys];
-      [v->syslist addObject: esys];
+      [v addSystem: esys];
     }
   }
   if (barsrest[j]) /* any left over */

@@ -114,14 +114,17 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 
 - (int) myIndex
 {
-  return [((GraphicView *)view)->syslist indexOfObject:self];
+  return [[view allSystems] indexOfObject: self];
 }
-
 
 - (BOOL) lastSystem
 {
-    if (![((GraphicView *)view)->syslist count]) return NO;
-  return ([((GraphicView *)view)->syslist lastObject] == self);
+    NSArray *allSystems = [view allSystems];
+    
+    if (![allSystems count]) 
+	return NO;
+    return [allSystems lastObject] == self; 
+// TODO return [[allSystems lastObject] isEqual: self];
 }
 
 

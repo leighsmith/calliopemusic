@@ -4,8 +4,8 @@
   @class GraphicView
   @brief The GraphicView class is the visual representation of a single page of a OpusDocument (which holds several pages).
 
- TODO should become MusicalScoreView? or ScorePageView
- Probably there should be a MusicalScore which should hold the array of systems and Graphics as the model,
+ TODO should become ScorePageView
+ Probably there should be a NotationScore which should hold the array of systems and Graphics as the model,
  and ScorePageView which should be displaying a single Page (which should be renamed ScorePage).
  
   It overrides the NSView methods related to drawing and event handling
@@ -24,34 +24,43 @@
 #define TIFF_COMPRESSION_FACTOR NSTIFFCompressionJPEG
 
 
-@interface GraphicView : NSView
+@interface GraphicView: NSView
 {
 @public
-    unsigned int cacheing;	/*! @var  whether cacheing or drawing */
     NSMutableArray *slist;				/*! @var slist The NSArray of selected Graphics */
-    NSMutableArray *syslist;				/*! @var syslist The NSArray of Systems */
 @private
 
     // ivars syslist, pagelist, partlist, chanlist, stylelist, currentScale should be refactored into a model class NotationScore.
-
-    NSMutableArray *stylelist;		/*! @var stylelist NSArray of Systems (templates for styles) */
-    NSMutableArray *chanlist;		/*! @var chanlist The NSArray of Channels */
-    NSMutableArray *partlist;		/*! @var partlist The NSArray of Parts */
+    NSMutableArray *syslist;		/*! @var syslist The NSArray of Systems */
     NSMutableArray *pagelist;		/*! @var pagelist The NSArray of Pages */
+    NSMutableArray *partlist;		/*! @var partlist The NSArray of Parts */
+    NSMutableArray *chanlist;		/*! @var chanlist The NSArray of Channels */
+    NSMutableArray *stylelist;		/*! @var stylelist NSArray of Systems (templates for styles) */
     float currentScale;			/*! @var currentScale The scaling factor: 1.0 = no scaling. */
 
+    BOOL dirtyflag;
+
+    // These ivars strictly manage drawing the view and responding to user events on the view.
     /*! @var delegate The object informed when page numbers have changed. */
     id delegate;
-    Page *currentPage;			    /*! @var currentPage The current page to be drawn */
-    System *currentSystem;                   /*! @var currentSystem System at top of page of view */
-    NSFont *currentFont;                /*! @var currentFont TODO Used to display what? Musical font at any moment, for a particular task? */
-    BOOL serviceActsOnSelection;        /*! @var serviceActsOnSelection Whether a service has arguments */
-    BOOL dirtyflag;
-    NSImage *cacheImage;		/*! @var cacheImage The cache of drawn graphics */
-    NSRect *dragRect;			/*! @var dragRect Last rectangle we dragged out to select */
+    /*! @var currentPage The current page to be drawn */
+    Page *currentPage;			    
+    /*! @var currentSystem System at top of page of view */
+    System *currentSystem;                   
+    /*! @var currentFont TODO Used to display what? Musical font at any moment, for a particular task? */
+    NSFont *currentFont;                
+    /*! @var serviceActsOnSelection Whether a service has arguments */
+    BOOL serviceActsOnSelection;        
+    /*! @var cacheImage The cache of drawn graphics */
+    NSImage *cacheImage;		
+    /*! @var dragRect Last rectangle we dragged out to select */
+    NSRect *dragRect;			
+    /*! @var cached TODO */
     BOOL cached;
+    /*! @var scrolling TODO */
     BOOL scrolling;
-    BOOL showMargins;			/*! @var showMargins YES to display margins on the page. */
+    /*! @var showMargins YES to display margins on the page. */
+    BOOL showMargins;
 }
 
 typedef enum { Normal, Resizing } DrawStatusType;

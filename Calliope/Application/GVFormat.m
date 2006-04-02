@@ -1089,4 +1089,14 @@ outOfTotalSystems: (int) numsys
     stylelist = [newStyles retain];
 }
 
+- (void) addSystem: (System *) newSystem
+{
+    [syslist addObject: newSystem];
+}
+
+- (NSArray *) allSystems
+{
+    return [NSArray arrayWithArray: syslist];
+}
+
 @end

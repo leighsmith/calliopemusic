@@ -70,7 +70,7 @@ typedef enum {
 - (NSArray *) channels;
 
 /*!
-  @brief Returns the styles as an  NSMutableArray.
+  @brief Returns the styles as an NSMutableArray.
  */
 - (NSMutableArray *) styles;
 
@@ -78,5 +78,15 @@ typedef enum {
   @brief Assigns the style list
  */
 - (void) setStyles: (NSArray *) newStyles;
+
+/*!
+  @brief Assigns the system to the system list.
+ */
+- (void) addSystem: (System *) newSystem;
+
+/*!
+  @brief Returns the systems as an immutable NSArray.
+ */
+- (NSArray *) allSystems;
 
 @end
