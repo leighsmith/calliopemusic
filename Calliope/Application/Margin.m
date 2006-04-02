@@ -1,19 +1,12 @@
 /* $Id$ */
-// #import <AppKit/NSText.h>
 #import "Page.h"
 #import "Margin.h"
-#import "DrawApp.h"
 #import "OpusDocument.h"
 #import "MarginInspector.h"
 #import "System.h"
 #import "Staff.h"
 #import "GVFormat.h"
 #import "mux.h"
-
-/*
-  Margins are drawn as markers.
-*/
-
 
 @implementation Margin
 
@@ -40,11 +33,9 @@ static float defmarg[MaximumMarginTypes] = {36.0, 36.0, 36.0, 36.0, 72.0, 72.0, 
     
     self = [super init];
     if(self != nil) {
-	gFlags.type = MARGIN;
+	gFlags.type = MARGIN; // TODO [self setTypeOfGraphic: MARGIN];
 	while (i--) 
 	    margin[i] = defmarg[i];
-	format = PGAUTO;
-	alignment = 0;
 	staffScale = 0.0;
     }
     return self;
@@ -62,8 +53,6 @@ static float defmarg[MaximumMarginTypes] = {36.0, 36.0, 36.0, 36.0, 72.0, 72.0, 
 
     while (marginIndex--)
 	newMargin->margin[marginIndex] = margin[marginIndex];
-    newMargin->format = format;
-    newMargin->alignment = alignment;
     newMargin->staffScale = staffScale;
     newMargin->client = client;
     return newMargin;
@@ -160,7 +149,26 @@ static float defmarg[MaximumMarginTypes] = {36.0, 36.0, 36.0, 36.0, 72.0, 72.0, 
 {
     margin[MarginBottom] = newBottomMargin;
 }
+   
+- (float) leftBindingOnOddPage: (BOOL) oddPage
+{
+    return oddPage ? [self marginOfType: MarginLeftOddBinding] : [self marginOfType: MarginLeftEvenBinding];    
+}
 
+- (float) rightBindingOnOddPage: (BOOL) oddPage
+{
+    return oddPage ? [self marginOfType: MarginRightOddBinding] : [self marginOfType: MarginRightEvenBinding];    
+}
+
+- (float) leftMarginWithBindingOnOddPage: (BOOL) oddPage
+{
+    return [self leftMargin] + [self leftBindingOnOddPage: oddPage];
+}
+
+- (float) rightMarginWithBindingOnOddPage: (BOOL) oddPage
+{
+    return [self rightMargin] + [self rightBindingOnOddPage: oddPage];
+}
 
 - (void) setMarginType: (MarginType) marginType toSize: (float) newMarginValue
 {
@@ -178,16 +186,16 @@ static float defmarg[MaximumMarginTypes] = {36.0, 36.0, 36.0, 36.0, 72.0, 72.0, 
 }
 
 
-- drawMode: (int) m
+- drawMode: (int) markedMode
 {
     System *s = client;
     Staff *sp = [s firststaff];
-    
     float x = [s leftWhitespace] + s->width + 20;
     float y = [sp yOfTop] + [s whichMarker: self] * (SIZEBOX + 3);
-    coutrect(x, y, SIZEBOX, SIZEBOX, 0.0, m);
-    crect(x, y, (0.25 * SIZEBOX), SIZEBOX, m);
-    crect(x + (0.75 * SIZEBOX), y, (0.25 * SIZEBOX), SIZEBOX, m);
+    
+    coutrect(x, y, SIZEBOX, SIZEBOX, 0.0, markedMode);
+    crect(x, y, (0.25 * SIZEBOX), SIZEBOX, markedMode);
+    crect(x + (0.75 * SIZEBOX), y, (0.25 * SIZEBOX), SIZEBOX, markedMode);
     return self;
 }
 
@@ -204,6 +212,9 @@ static float defmarg[MaximumMarginTypes] = {36.0, 36.0, 36.0, 36.0, 72.0, 72.0, 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     int v = [aDecoder versionForClassName: @"Margin"];
+    int format; // No longer required. TODO may need recovery into Page.
+    int alignment; // No longer required. TODO may need recovery into Page.
+    
     [super initWithCoder: aDecoder];
     if (v == 2)
     {
@@ -226,25 +237,16 @@ static float defmarg[MaximumMarginTypes] = {36.0, 36.0, 36.0, 36.0, 72.0, 72.0, 
     return self;
 }
 
-
-- (void)encodeWithCoder:(NSCoder *)aCoder
+- (void) encodeWithPropertyListCoder: (OAPropertyListCoder *) aCoder
 {
-    [super encodeWithCoder:aCoder];
-    [aCoder encodeValuesOfObjCTypes: "@cc",  &client, &format, &alignment];
-    [aCoder encodeArrayOfObjCType: "f" count: MaximumMarginTypes at: margin];
-}
-
-- (void)encodeWithPropertyListCoder:(OAPropertyListCoder *)aCoder
-{
-    int i;
+    int marginIndex;
     
     [super encodeWithPropertyListCoder: (OAPropertyListCoder *) aCoder];
     [aCoder setObject: client forKey: @"client"];
-    [aCoder setInteger: format forKey: @"format"];
-    [aCoder setInteger: alignment forKey: @"alignment"];
-    [aCoder setInteger: MaximumMarginTypes forKey: @"MaximumMarginTypes"];
-    for (i = 0; i < MaximumMarginTypes; i++)
-	[aCoder setFloat: margin[i] forKey: [NSString stringWithFormat:@"margin%d", i]];
+    [aCoder setFloat: staffScale forKey: @"staffScale"];
+    [aCoder setInteger: MaximumMarginTypes forKey: @"maximumMarginTypes"];
+    for (marginIndex = 0; marginIndex < MaximumMarginTypes; marginIndex++)
+	[aCoder setFloat: margin[marginIndex] forKey: [NSString stringWithFormat:@"margin%d", marginIndex]];
 }
 
 @end

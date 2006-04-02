@@ -773,7 +773,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
 	    i = [syslist indexOfObject:currentSystem];
 	    break;
 	case 1:
-	    i = p->topsys;
+	    i = [p topSystemNumber];
 	    break;
 	case 2:
 	    i = 0;
@@ -785,7 +785,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
 	    j = [syslist indexOfObject:currentSystem];
 	    break;
 	case 1:
-	    j = p->botsys;
+	    j = [p bottomSystemNumber];
 	    break;
 	case 2:
 	    j = [syslist count] - 1;

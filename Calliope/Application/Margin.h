@@ -1,7 +1,15 @@
+/* $Id:$ */
+
+/*!
+  @class Margin
+
+  @discussion Margins are drawn as markers.
+ */
+ 
 #import "winheaders.h"
 #import "Graphic.h"
 
-// Differnt types of margins.
+// Different types of margins.
 typedef enum {
     MarginLeft = 0,
     MarginRight = 1,
@@ -18,11 +26,7 @@ typedef enum {
 
 @interface Margin: Graphic
 {
-@public
     float margin[10];
-    /* PageFormat */ char format;
-    char alignment;
-@private
     id client;			/* a System */
     float staffScale;
 }
@@ -66,6 +70,26 @@ typedef enum {
 - (void) setBottomMargin: (float) newBottomMargin;
 
 /*!
+ @brief Returns the left binding depending on it being an odd or even page.
+ */
+- (float) leftBindingOnOddPage: (BOOL) oddPage;
+
+/*!
+ @brief Returns the right binding depending on it being an odd or even page.
+ */
+- (float) rightBindingOnOddPage: (BOOL) oddPage;
+
+/*!
+  @brief Returns the left margin with the binding depending on it being an odd or even page.
+ */
+- (float) leftMarginWithBindingOnOddPage: (BOOL) oddPage;
+
+/*!
+  @brief Returns the right margin with the binding depending on it being an odd or even page.
+ */
+- (float) rightMarginWithBindingOnOddPage: (BOOL) oddPage;
+
+/*!
   @brief Assigns the given margin.
  */
 - (void) setMarginType: (MarginType) marginType toSize: (float) newMarginValue;
@@ -78,8 +102,6 @@ typedef enum {
 - (BOOL) move: (float) dx : (float) dy : (NSPoint) p : sys : (int) alt;
 - drawMode: (int) m;
 - draw;
-- (id)initWithCoder:(NSCoder *)aDecoder;
-- (void)encodeWithCoder:(NSCoder *)aCoder;
-
+- (id) initWithCoder: (NSCoder *) aDecoder;
 
 @end

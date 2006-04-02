@@ -36,7 +36,7 @@ typedef enum {
 @interface Page: NSObject
 {
     // TODO These are both currently public. They are only accessed by GraphicView, GVCommands, GVFormat, GVPerform.
-    // i.e. the routines in those categories of GraphicView should be factored together with syslist into the Page
+
 @public;
     short topsys;
     short botsys;
@@ -47,6 +47,7 @@ typedef enum {
     float fillheight;		/* sums to page height (as screened) */
     Margin *margin;		/*! @var margin The margins for this page. */
     PageFormat format;
+    /*! @var controls whether margins are aligned with the highest or lowest staff lines */
     int alignment;
 }
 
@@ -54,6 +55,16 @@ typedef enum {
   @brief Initialises the page to a given page number and indexes to it's associated systems.
  */
 - initWithPageNumber: (int) n topSystemNumber: (int) s0 bottomSystemNumber: (int) s1;
+
+/*!
+  @brief Returns the system number at the top of the page.
+ */
+- (int) topSystemNumber;
+
+/*!
+  @brief Returns the system number at the bottom of this page.
+ */
+- (int) bottomSystemNumber;
 
 - (float) headerBase;
 - (float) footerBase;
@@ -91,9 +102,19 @@ typedef enum {
 - (BOOL) alignToTopSystem;
 
 /*!
-  @brief Returns NO if pages are to be aligned to the top system.
+  @brief Returns YES if pages are to be aligned to the bottom system.
  */
 - (BOOL) alignToBottomSystem;
+
+/*!
+  @brief Assigns the page to be aligned to the top system on the page.
+ */
+- (void) setAlignToTopSystem;
+
+/*!
+  @brief Assigns the page to be aligned to the bottom system on the page.
+ */
+- (void) setAlignToBottomSystem;
 
 /*!
   @brief Assigns the alignment.

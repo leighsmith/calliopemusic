@@ -18,7 +18,7 @@ extern NSSize paperSize;
 + (void) initialize
 {
     if (self == [Page class]) {
-	[Page setVersion: 2];	/* class version, see read: */
+	[Page setVersion: 3];	/* class version, bumped since we now hold Margin instances. */
     }
 }
 
@@ -29,15 +29,15 @@ extern NSSize paperSize;
     [super dealloc];
 }
 
-- initWithPageNumber: (int) n topSystemNumber: (int) s0 bottomSystemNumber: (int) s1
+- initWithPageNumber: (int) n topSystemNumber: (int) newTopSystem bottomSystemNumber: (int) newBottomSystem
 {
     self = [super init];
     if(self != nil) {
-	topsys = s0;
-	botsys = s1;
+	topsys = newTopSystem;
+	botsys = newBottomSystem;
 	num = n;
 	alignment = 0;
-	format = 0;	
+	format = PGAUTO;
     }
     return self;
 }
@@ -78,39 +78,23 @@ extern NSSize paperSize;
 /* margin = margin + binding margin */
 - (float) leftMargin
 {
-    float m = margin->margin[0];
-    m += (num & 1) ? margin->margin[8] : margin->margin[6];
-    return m / [[DrawApp currentDocument] staffScale];
-    // return [margin leftMargin] + (num & 1) ? [margin marginOfType: MarginLeftOddBinding] : [margin marginOfType: MarginLeftEvenBinding];
-
-    // return [margin leftMarginWithBindingOnOddPage: (num & 1)];
-    // implement by [margin leftMargin] + [margin leftBindingOnOddPage: ];
+    return [margin leftMarginWithBindingOnOddPage: (num & 1)];
 }
 
 
 - (float) rightMargin
 {
-    float m = margin->margin[1];
-    m += (num & 1) ? margin->margin[9] : margin->margin[7];
-    return m / [[DrawApp currentDocument] staffScale];
-    // return [margin rightMarginWithBindingOnOddPage: (num & 1)];
+    return [margin rightMarginWithBindingOnOddPage: (num & 1)];
 }
-
 
 - (float) leftBinding
 {
-    float m;
-    m = (num & 1) ? margin->margin[8] : margin->margin[6];
-    return m / [[DrawApp currentDocument] staffScale];
-    // [margin leftBindingOnOddPage: (num & 1)];
+    return [margin leftBindingOnOddPage: (num & 1)];
 }
-
 
 - (float) rightBinding
 {
-    float m;
-    m = (num & 1) ? margin->margin[9] : margin->margin[7];
-    return m / [[DrawApp currentDocument] staffScale];
+    return [margin rightBindingOnOddPage: (num & 1)];
 }
 
 - (float) topMargin
@@ -177,6 +161,16 @@ extern NSSize paperSize;
 - (void) setAlignment: (int) newAlignment
 {
     alignment = newAlignment;
+}
+
+- (void) setAlignToTopSystem
+{
+    alignment |= 1;
+}
+
+- (void) setAlignToBottomSystem
+{
+    alignment |= 2;
 }
 
 - (void) setRunner: (Runner *) newRunner
@@ -320,7 +314,8 @@ static void drawSlants(float x, float y, float hw, float th)
     [aCoder encodeValuesOfObjCTypes:"ifsscc", &num, &fillheight, &topsys, &botsys, &format, &alignment];
     for (i = 0; i < 12; i++) [aCoder encodeConditionalObject:headfoot[i]];
     [aCoder encodeArrayOfObjCType:"c" count:12 at:hfinfo];
-    [aCoder encodeArrayOfObjCType:"f" count:MaximumMarginTypes at:margin->margin];
+    [aCoder encodeObject: margin];
+
 }
 
 - (void)encodeWithPropertyListCoder:(OAPropertyListCoder *)aCoder

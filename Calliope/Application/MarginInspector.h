@@ -1,7 +1,7 @@
 #import "winheaders.h"
 #import <AppKit/AppKit.h>
 
-@interface MarginInspector:NSPanel
+@interface MarginInspector: NSPanel
 {
     id  alignmatrix;
     id	lbindform;
@@ -14,6 +14,6 @@
 }
 
 - preset;
-- set:sender;
+- set: sender;
 
 @end

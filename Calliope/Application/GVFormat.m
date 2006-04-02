@@ -209,8 +209,8 @@
   System *sys, *minsys = nil;
   Staff *sp;
   float dy, miny = MAXFLOAT;
-  i = currentPage->topsys;
-  j = currentPage->botsys;
+  i = [currentPage topSystemNumber];
+  j = [currentPage bottomSystemNumber];
   for (k = i; k <= j; k++)
   {
     sys = [syslist objectAtIndex:k];
@@ -248,7 +248,7 @@
 {
   int i = [syslist indexOfObject:sys];
   Page *p = sys->page;
-  *sn = i - p->topsys + 1;
+  *sn = i - [p topSystemNumber] + 1;
   *pn = [p pageNumber];
   return self;
 }
@@ -329,7 +329,7 @@
 	    for (i = 0; (i < pageCount && !f); i++)
 	    {
 		p = [pagelist objectAtIndex:i];
-		if (p->topsys <= n && n <= p->botsys)  { f = YES; break; };
+		if ([p topSystemNumber] <= n && n <= [p bottomSystemNumber])  { f = YES; break; };
 	    }
 	    if (f == NO) return NO;
 	    if (currentPage) [currentPage autorelease];
@@ -343,7 +343,7 @@
     if (currentPage) 
 	[currentPage autorelease];
     currentPage = [[pagelist objectAtIndex: n] retain];
-    [self thisSystem: [syslist objectAtIndex: currentPage->topsys]];
+    [self thisSystem: [syslist objectAtIndex: [currentPage topSystemNumber]]];
     return YES;
 }
 
@@ -441,12 +441,12 @@
   System *s;
   if ([p alignToTopSystem])
   {
-    s = [syslist objectAtIndex:p->topsys];
+    s = [syslist objectAtIndex: [p topSystemNumber]];
     if (![s hasTitles]) sy += [s headroom];
   }
   if ([p alignToBottomSystem])
   {
-    s = [syslist objectAtIndex:p->botsys];
+    s = [syslist objectAtIndex: [p bottomSystemNumber]];
     sy += [s myHeight] - ([[s lastStaff] yOfBottom] - ([((Staff *)[s firststaff]) yOfTop] - [s headroom]));
   }
   return sy;
@@ -459,7 +459,7 @@
 */
 - (float) topOfPage: (Page *) p
 {
-    System *s = [syslist objectAtIndex: p->topsys];
+    System *s = [syslist objectAtIndex: [p topSystemNumber]];
     float y = [p topMargin];
     
     if ([p alignToTopSystem] && ![s hasTitles])
@@ -488,12 +488,12 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
   
   defsep = [[DrawApp currentDocument] getPreferenceAsFloat: MAXBALGAP];
   sumheights = 0.0;
-  for (i = p->topsys; i <= p->botsys; i++) sumheights += [[syslist objectAtIndex:i] myHeight];
+  for (i = [p topSystemNumber]; i <= [p bottomSystemNumber]; i++) sumheights += [[syslist objectAtIndex:i] myHeight];
   sumheights -= [self alignShave: p];
   white = [p fillHeight] - sumheights;
   lastp = ((p == [pagelist lastObject]) && white > 0);
   firstp = (p == [pagelist objectAtIndex:0]);
-  nsys = p->botsys - p->topsys + 1;
+  nsys = [p bottomSystemNumber] - [p topSystemNumber] + 1;
   pc = [p format];
   if (pc == PGAUTO) pc = autochoice[(firstp << 1) | lastp];
   y = [self topOfPage: p];
@@ -551,7 +551,7 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
       y += white;
       break;
   }
-  for (i = p->topsys; i <= p->botsys; i++)
+  for (i = [p topSystemNumber]; i <= [p bottomSystemNumber]; i++)
   {
     s = [syslist objectAtIndex:i];
     [s moveTo: y];
@@ -613,8 +613,8 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
 	    // otherwise what is wanted is assigning parameters from the previous to current. */
 	    pg = [lp copy];
 	}
-	firstSystem = pg->topsys;
-	s1 = pg->botsys;
+	firstSystem = [pg topSystemNumber];
+	s1 = [pg bottomSystemNumber];
 	for (j = firstSystem; j <= s1; j++)
 	{
 	    System *sys = [syslist objectAtIndex: j];
@@ -837,7 +837,7 @@ outOfTotalSystems: (int) numsys
     for (i = 0; i < k; i++)
     {
 	pg = [pagelist objectAtIndex:i];
-	for (r = pg->topsys; r <= pg->botsys; r++)
+	for (r = [pg topSystemNumber]; r <= [pg bottomSystemNumber]; r++)
 	{
 	    sys = [syslist objectAtIndex:r];
 	    if (sys->flags.newpage) 

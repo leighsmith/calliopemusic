@@ -123,7 +123,19 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
 - (float) getScaleFactor;
 - (void) setScaleFactor: (float) newScaleFactor;
 - (float) rulerScale;
+
+/*!
+  @brief Returns the printed number of the current page.
+ 
+ Returns 0 if there is no current page.
+ */
 - (int) getPageNum;
+
+/*!
+  @brief Returns the page currently being displayed.
+ */
+- (Page *) currentPage;
+
 - updateMargins: (float) h : (float) f : pi;
 
 /* First Responder */

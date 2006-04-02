@@ -1,10 +1,10 @@
+/* $Id:$ */
 #import "MarginInspector.h"
 #import "Margin.h"
 #import "GraphicView.h"
 #import "GVFormat.h"
 #import "GVCommands.h"
 #import "GVSelection.h"
-#import "MarginInspector.h"
 #import "System.h"
 #import "DrawApp.h"
 #import "OpusDocument.h"
@@ -13,11 +13,9 @@
 
 @implementation MarginInspector
 
-#define UPDATE(lv,rv) if (lv != rv) { lv = rv; b = YES; }
-
 NSString *unitname[4] =
 {
-  @"Inches", @"Centimeters", @"Points", @"Picas"
+    @"Inches", @"Centimeters", @"Points", @"Picas"
 };
 
 
@@ -26,78 +24,83 @@ NSString *unitname[4] =
     int n;
     float conv;
     GraphicView *v = [DrawApp currentView];
-    Margin *p = [v canInspect: MARGIN : &n];
+    Margin *margin = [v canInspect: MARGIN : &n];
+    Page *page = [v currentPage];
     
-    if (n == 0) return nil;
+    if (n == 0)
+	return nil;
     conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
 //  [[[DrawApp sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
-    [[lbindform cellAtIndex: 0] setFloatValue: conv * [p marginOfType: MarginLeftEvenBinding]];
-    [[lbindform cellAtIndex: 1] setFloatValue: conv * [p marginOfType: MarginLeftOddBinding]];
-    [[rbindform cellAtIndex: 0] setFloatValue: conv * [p marginOfType: MarginRightEvenBinding]];
-    [[rbindform cellAtIndex: 1] setFloatValue: conv * [p marginOfType: MarginRightOddBinding]];
-    [lmargcell setFloatValue: conv * [p leftMargin]];
-    [rmargcell setFloatValue: conv * [p rightMargin]];
-    [[vertmargform cellAtIndex: 0] setFloatValue: conv * [p headerBase]];
-    [[vertmargform cellAtIndex: 1] setFloatValue: conv * [p topMargin]];
-    [[vertmargform cellAtIndex: 2] setFloatValue: conv * [p bottomMargin]];
-    [[vertmargform cellAtIndex: 3] setFloatValue: conv * [p footerBase]];
+    [[lbindform cellAtIndex: 0] setFloatValue: conv * [margin marginOfType: MarginLeftEvenBinding]];
+    [[lbindform cellAtIndex: 1] setFloatValue: conv * [margin marginOfType: MarginLeftOddBinding]];
+    [[rbindform cellAtIndex: 0] setFloatValue: conv * [margin marginOfType: MarginRightEvenBinding]];
+    [[rbindform cellAtIndex: 1] setFloatValue: conv * [margin marginOfType: MarginRightOddBinding]];
+    [lmargcell setFloatValue: conv * [margin leftMargin]];
+    [rmargcell setFloatValue: conv * [margin rightMargin]];
+    [[vertmargform cellAtIndex: 0] setFloatValue: conv * [margin headerBase]];
+    [[vertmargform cellAtIndex: 1] setFloatValue: conv * [margin topMargin]];
+    [[vertmargform cellAtIndex: 2] setFloatValue: conv * [margin bottomMargin]];
+    [[vertmargform cellAtIndex: 3] setFloatValue: conv * [margin footerBase]];
     [unitcell setStringValue: [[DrawApp sharedApplicationController] unitString]];
-    [formatbutton selectItemAtIndex: p->format];
-    [[alignmatrix cellAtRow: 0 column: 0] setState: (p->alignment & 1)];
-    [[alignmatrix cellAtRow: 1 column: 0] setState: (p->alignment & 2)];
+    [formatbutton selectItemAtIndex: [page format]];
+    [[alignmatrix cellAtRow: 0 column: 0] setState: [page alignToTopSystem]];
+    [[alignmatrix cellAtRow: 1 column: 0] setState: [page alignToBottomSystem]];
     return self;
 }
 
+#define UPDATE(lv, rv) if ([margin marginOfType: (lv)] != (rv)) { [margin setMarginType: lv toSize: rv]; didChange = YES; }
 
-- set:sender
+- set: sender
 {
-  int n;
-  float f, conv;
-  BOOL b = NO;
-  System *sys;
-  GraphicView *v = [DrawApp currentView];
-  Margin *p = [v canInspect: MARGIN : &n];
-  if (n == 0)
-  {
-    NSLog(@"MarginInspector -set: n == 0");
-    return nil;
-  }
-  [v saveSysLeftMargin];
-  p->format = [formatbutton indexOfItemWithTitle:[formatbutton title]];
-  p->alignment = 0;
-  if ([[alignmatrix cellAtRow:0 column:0] state]) p->alignment |= 1;
-  if ([[alignmatrix cellAtRow:1 column:0] state]) p->alignment |= 2;
-  conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
-//  [[[DrawApp sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
-  f = [[lbindform cellAtIndex:0] floatValue] / conv;
-  UPDATE(p->margin[6], f);
-  f = [[lbindform cellAtIndex:1] floatValue] / conv;    
-  UPDATE(p->margin[8], f);
-  f = [[rbindform cellAtIndex:0] floatValue] / conv;    
-  UPDATE(p->margin[7], f);
-  f = [[rbindform cellAtIndex:1] floatValue] / conv;    
-  UPDATE(p->margin[9], f);
-  f = [lmargcell floatValue] / conv;    
-  UPDATE(p->margin[0], f);
-  f = [rmargcell floatValue] / conv;    
-  UPDATE(p->margin[1], f);
-  f = [[vertmargform cellAtIndex:0] floatValue] / conv;    
-  UPDATE(p->margin[2], f);
-  f = [[vertmargform cellAtIndex:1] floatValue] / conv;    
-  UPDATE(p->margin[4], f);
-  f = [[vertmargform cellAtIndex:2] floatValue] / conv;    
-  UPDATE(p->margin[5], f);
-  f = [[vertmargform cellAtIndex:3] floatValue] / conv;    
-  UPDATE(p->margin[3], f);
-  sys = [p client];
-  if (b) [v setRunnerTables];
-  [v shuffleIfNeeded];
-  [v recalcAllSys];
-  [v paginate: self];
-  [v dirty];
-  [v setNeedsDisplay:YES];
-  return self;
-}
+    int n;
+    float f, conv;
+    BOOL didChange = NO;
+    System *sys;
+    GraphicView *v = [DrawApp currentView];
+    Margin *margin = [v canInspect: MARGIN : &n];
+    Page *page = [v currentPage];
 
+    if (n == 0) {
+	NSLog(@"MarginInspector -set: n == 0");
+	return nil;
+    }
+    [v saveSysLeftMargin];
+    [page setFormat: [formatbutton indexOfItemWithTitle: [formatbutton title]]];
+    if ([[alignmatrix cellAtRow: 0 column: 0] state])
+	[page setAlignToTopSystem];
+    if ([[alignmatrix cellAtRow: 1 column: 0] state])
+	[page setAlignToBottomSystem];
+    conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
+    // [[[DrawApp sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
+    f = [[lbindform cellAtIndex: 0] floatValue] / conv;
+    UPDATE(MarginLeftEvenBinding, f);
+    f = [[lbindform cellAtIndex: 1] floatValue] / conv;    
+    UPDATE(MarginLeftOddBinding, f);
+    f = [[rbindform cellAtIndex: 0] floatValue] / conv;    
+    UPDATE(MarginRightEvenBinding, f);
+    f = [[rbindform cellAtIndex: 1] floatValue] / conv;    
+    UPDATE(MarginRightOddBinding, f);
+    f = [lmargcell floatValue] / conv;    
+    UPDATE(MarginLeft, f);
+    f = [rmargcell floatValue] / conv;    
+    UPDATE(MarginRight, f);
+    f = [[vertmargform cellAtIndex: 0] floatValue] / conv;    
+    UPDATE(MarginHeader, f);
+    f = [[vertmargform cellAtIndex: 1] floatValue] / conv;    
+    UPDATE(MarginTop, f);
+    f = [[vertmargform cellAtIndex: 2] floatValue] / conv;    
+    UPDATE(MarginBottom, f);
+    f = [[vertmargform cellAtIndex: 3] floatValue] / conv;    
+    UPDATE(MarginFooter, f);
+    sys = [margin client];
+    if (didChange) 
+	[v setRunnerTables];
+    [v shuffleIfNeeded];
+    [v recalcAllSys];
+    [v paginate: self];
+    [v dirty];
+    [v setNeedsDisplay: YES];
+    return self;
+}
 
 @end

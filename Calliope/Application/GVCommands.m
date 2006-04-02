@@ -1424,8 +1424,10 @@ extern char *typename[NUMTYPES];
 {
   int systemIndex;
   Page *p = currentPage;
-  [self flowTimeSig: [syslist objectAtIndex:p->botsys]];
-  for (systemIndex = p->topsys; systemIndex <= p->botsys; systemIndex++) [[syslist objectAtIndex:systemIndex] userAdjust: YES];
+  
+  [self flowTimeSig: [syslist objectAtIndex: [p bottomSystemNumber]]];
+  for (systemIndex = [p topSystemNumber]; systemIndex <= [p bottomSystemNumber]; systemIndex++) 
+    [[syslist objectAtIndex:systemIndex] userAdjust: YES];
   [self resetPage: currentPage];
   return [self dirty];
 }
@@ -1690,7 +1692,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
   theLocation = [syslist indexOfObject:sys];
   if (theLocation != NSNotFound) [syslist removeObjectAtIndex: theLocation];
   if (m) [self shuffleIfNeeded];
-  if (p->topsys == p->botsys)
+  if ([p topSystemNumber] == [p bottomSystemNumber])
   {
     [self paginate: self];
     r = YES;
