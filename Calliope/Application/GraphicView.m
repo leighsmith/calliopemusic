@@ -1166,7 +1166,7 @@ extern struct toolData toolCodes[NUMTOOLS];
 	/* new staff */
 	[self deselectAll: self];
 	[[self findSys: p.y] newStaff: p.y];
-	[self balanceOrAsk: currentPage : 0 : 0];
+	[self balanceOrAsk: currentPage : 0 askIfLoose: NO];
 	[[DrawApp sharedApplicationController] resetTool];
 	[[DrawApp sharedApplicationController] inspectClass: [SysInspector class] loadInspector: NO];
 	trymove = nil;

@@ -52,7 +52,7 @@ typedef enum {
 - setRunnerTables;
 - doPaginate;
 - balancePages;
-- simplePaginate: (System *) sys afterAdding: (int) i askIfLoose: (BOOL) f;
+- simplePaginate: (System *) sys afterAddingCount: (int) i askIfLoose: (BOOL) f;
 - linkSystem: (System *) s : (System *) ns;
 - thisSystem: (System *) s;
 - (Staff *) nextStaff: sys : (int) sn;

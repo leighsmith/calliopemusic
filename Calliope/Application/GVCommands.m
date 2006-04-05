@@ -1398,7 +1398,7 @@ extern char *typename[NUMTYPES];
 
 - balancePage: sender
 {
-  [self balanceOrAsk: currentPage : 0 : 1];
+  [self balanceOrAsk: currentPage : 0 askIfLoose: YES];
   return [self dirty];
 }
 
@@ -1457,7 +1457,7 @@ extern char *typename[NUMTYPES];
 {
   System *sys = currentSystem;
   [sys newFrom];
-  [self simplePaginate: sys : 1 : 0];
+  [self simplePaginate: sys afterAddingCount: 1 askIfLoose: NO];
   return [self dirty];
 }
 
@@ -1699,7 +1699,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
   }
   else
   {
-    [self resetPagelist: p : -1];
+    [self resetPagelist: p addingSystemCount: -1];
     [self resetPage: p];
   }
   [self dirty];
@@ -1935,7 +1935,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
   p1 = sys->page;
   p2 = nsys->page;
   pag = [self deleteThisSystem: nsys];
-  if (!pag) [self simplePaginate: sys : 0 : 1];
+  if (!pag) [self simplePaginate: sys afterAddingCount: 0 askIfLoose: YES];
   [[DrawApp sharedApplicationController] inspectApp];
   return self;
 }

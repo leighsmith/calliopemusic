@@ -1057,7 +1057,7 @@ outOfTotalSystems: (int) numsys
 }
 
 // TODO should become addSystems: (int) i duplicatingSystem: (System *) sys askIfLoose: (BOOL) askIfLoose
-- simplePaginate: (System *) sys : (int) i askIfLoose: (BOOL) f
+- simplePaginate: (System *) sys afterAddingCount: (int) i askIfLoose: (BOOL) f
 {
     Page *p = sys->page;
     
