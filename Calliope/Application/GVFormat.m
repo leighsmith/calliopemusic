@@ -988,7 +988,7 @@ outOfTotalSystems: (int) numsys
   Reset all the page's top/bot indices.
 */
 
-- resetPagelist: (Page *) p : (int) i;
+- resetPagelist: (Page *) p addingSystemCount: (int) i;
 {
   int j, k, ip;
   k = [pagelist count];
@@ -1034,7 +1034,7 @@ outOfTotalSystems: (int) numsys
   too tight or too loose.  Whether ask-if-loose depends on f.
 */
 
-- (BOOL) balanceOrAsk: (Page *) p : (int) i : (int) f
+- (BOOL) balanceOrAsk: (Page *) p : (int) i askIfLoose: (BOOL) f
 {
   float w;
   w = [self balanceSystems: p];
@@ -1056,20 +1056,21 @@ outOfTotalSystems: (int) numsys
   return NO;
 }
 
-
-- simplePaginate: (System *) sys : (int) i : (int) f
+// TODO should become addSystems: (int) i duplicatingSystem: (System *) sys askIfLoose: (BOOL) askIfLoose
+- simplePaginate: (System *) sys : (int) i askIfLoose: (BOOL) f
 {
-  Page *p = sys->page;
-  if (p == nil)
-  {
-    [self paginate: self];
+    Page *p = sys->page;
+    
+    if (p == nil)
+    {
+	[self paginate: self];
+	return self;
+    }
+    [self resetPagelist: p addingSystemCount: i];
+    if (![self balanceOrAsk: p : i askIfLoose: f]) {
+	[self setNeedsDisplay: YES];
+    }
     return self;
-  }
-  [self resetPagelist: p : i];
-  if (![self balanceOrAsk: p : i : f]) {
-      [self setNeedsDisplay:YES];
-  }
-  return self;
 }
 
 - (NSArray *) channels

@@ -411,7 +411,7 @@
   [sys sysInvalid];
   [sys userAdjust: b];
   if (b) [view resetPagesOn: self : sys];
-  else [view simplePaginate: self : 1 : 0];
+  else [view simplePaginate: self afterAddingCount: 1 askIfLoose: NO];
   return self;
 }
 
