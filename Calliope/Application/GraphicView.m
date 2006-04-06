@@ -375,10 +375,10 @@ static void noteAndHangBB(NSMutableArray *l, NSRect *bbox)
   cached = YES;
   for (i = 0; i < k; i++)/*second pass -- draw the objects */
   {
-      [[slist objectAtIndex:i] draw: NSZeroRect : 0];
+      [[slist objectAtIndex:i] draw: NSZeroRect nonSelectedOnly: NO];
   }
   for (i = 0; i < k; i++)
-      [[slist objectAtIndex:i] drawHangers: NSZeroRect : 0];
+      [[slist objectAtIndex:i] drawHangers: NSZeroRect nonSelectedOnly: NO];
 
   [window flushWindow];
   return self;
@@ -989,22 +989,22 @@ extern char *typename[NUMTYPES];
 
 - noteheadTool: (GNote *) p : (float) y
 {
-  Staff *sp;
-  System *sys;
-  NSRect b;
-  
-  sys = [self findSys: y];
-  sp = [sys findOnlyStaff: y];
-  if (sp != p->mystaff && [p myChordGroup] != nil) return self;
-  [self selectionHandBBox: &b];
-  if (![p newHead: y : p->mystaff : 0])
-  {
-    NSLog(@"noteheadTool: newHead: returned nil");
+    Staff *sp;
+    System *sys;
+    NSRect b;
+    
+    sys = [self findSys: y];
+    sp = [sys findOnlyStaff: y];
+    if (sp != [p staff] && [p myChordGroup] != nil) return self;
+    [self selectionHandBBox: &b];
+    if (![p newHeadOnStaff: [p staff] atHeight: y accidental: 0])
+    {
+	NSLog(@"noteheadTool: newHead: returned NO");
+	return self;
+    }
+    [self dirty];
+    [self drawSelectionWith: &b];
     return self;
-  }
-  [self dirty];
-  [self drawSelectionWith: &b];
-  return self;
 }
 
 
@@ -1111,8 +1111,7 @@ extern struct toolData toolCodes[NUMTOOLS];
     }
     p = [event locationInWindow];
     p = [self convertPoint:p fromView:nil];
-//#error EventConversion: addToEventMask:NX_MOUSEDRAGGEDMASK|NX_MOUSEUPMASK: is obsolete; you no longer need to use the eventMask methods; for mouse moved events, see 'setAcceptsMouseMovedEvents:'
-//    oldMask = [window addToEventMask:NSLeftMouseDraggedMask|NSLeftMouseUpMask];
+    NSLog(@"mouse down point %f, %f", p.x, p.y);
     if (grabflag)
     {
 	[self dragSelect: event];
@@ -1331,9 +1330,9 @@ static void drawHorz(float x, float y, float w, NSRect r)
     [pageToDraw drawRect: rectToDrawWithin];
     
     for (systemIndex = [pageToDraw topSystemNumber]; systemIndex <= [pageToDraw bottomSystemNumber]; systemIndex++) 
-	[[syslist objectAtIndex: systemIndex] draw: rectToDrawWithin : scrolling];
+	[[syslist objectAtIndex: systemIndex] draw: rectToDrawWithin nonSelectedOnly: scrolling];
     for (systemIndex = [pageToDraw topSystemNumber]; systemIndex <= [pageToDraw bottomSystemNumber]; systemIndex++) 
-	[[syslist objectAtIndex: systemIndex] drawHangers: rectToDrawWithin : scrolling];    
+	[[syslist objectAtIndex: systemIndex] drawHangers: rectToDrawWithin nonSelectedOnly: scrolling];    
 }
 
 
@@ -2170,6 +2169,7 @@ extern int needUpgrade;
   [[self window] setDocumentEdited:NO];
   [aCoder encodeValuesOfObjCTypes:"@@@@@f", &syslist, &pagelist, &partlist, &chanlist, &stylelist, &currentScale];
 }
+
 - (void)encodeWithPropertyListCoder:(OAPropertyListCoder *)aCoder
 {
     [aCoder setObject:syslist forKey:@"syslist"];
@@ -2180,6 +2180,7 @@ extern int needUpgrade;
     [aCoder setFloat:currentScale forKey:@"CurrentScale"];
 }
 
+#if 0
 - (void)lockFocus
 {
     [super lockFocus];
@@ -2189,6 +2190,7 @@ extern int needUpgrade;
 {
     [super unlockFocus];
 }
+#endif
 
 - (void) setDelegate: (id) newDelegate
 {

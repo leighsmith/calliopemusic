@@ -2,13 +2,16 @@
 /*!
   @class Page
  
-  This suffers the classic confusion between a view and a model. It should be a model of the layout of systems on a page, 
+  @brief Relatively lightweight class holding which Systems span a page. Effectively it's a cursor or more correctly, a window
+         over all the systems being displayed.
+ 
+  In the past this suffered the classic confusion between a view and a model. It should be a model of the layout of systems on a page, 
   which using a particular view, should then be able to be displayed appropriately.
  
-  However GraphicView is performing half the function of what should be PageView and half the function of Page (the model).
+  However GraphicView is performing half the function of what should be PageView and half the function of NotationScore (the model).
 
   So this class should be split so that the drawing routines move into GraphicView and many of the computational routines
-  in GVFormat move into Page.
+  in GVFormat move into Page or .
  */
 #import "winheaders.h"
 #import <Foundation/NSObject.h>
@@ -20,7 +23,6 @@
 @class GraphicView;
 
 /* ways pages can be formatted */
-
 typedef enum {
     PGAUTO = 0,		/* default */
     PGTOP = 1,		/* top justified */
@@ -46,8 +48,9 @@ typedef enum {
     int num;			/*! @var num The displayed paged number. */
     float fillheight;		/* sums to page height (as screened) */
     Margin *margin;		/*! @var margin The margins for this page. */
+    /*! @var format The current method page is formatted */
     PageFormat format;
-    /*! @var controls whether margins are aligned with the highest or lowest staff lines */
+    /*! @var alignment Controls whether margins are aligned with the highest or lowest staff lines */
     int alignment;
 }
 

@@ -1128,30 +1128,30 @@ return nil;
 // For applications targeted for Tiger or later systems, you should use the new Tiger API -dataOfType:error:.  In this case you can also choose to override -writeToURL:ofType:error:, -fileWrapperOfType:error:, or -writeToURL:ofType:forSaveOperation:originalContentsURL:error: instead.
 - (NSData *) dataRepresentationOfType: (NSString *) docType
 {
-    int version = DOC_VERSION;
+    // int version = DOC_VERSION;
     OAPropertyListArchiver *tsO;
-    NSArchiver *ts = [[NSArchiver alloc] initForWritingWithMutableData: [NSMutableData data]];
+//    NSArchiver *ts = [[NSArchiver alloc] initForWritingWithMutableData: [NSMutableData data]];
 
     NSLog(@"dataRepresentationOfType: %@", docType);
  
-    if (ts) {
-	    [(GraphicView *)view deselectAll: self];
-	    [ts encodeValueOfObjCType:"i" at:&version];
-	    [ts encodeRootObject:printInfo];
-	    [ts encodeRootObject:prefInfo];
-	    [ts encodeObject: [documentWindow stringWithSavedFrame]];
-	    [ts encodeRootObject:view];
-	    [ts release];
+#if 0
+    [(GraphicView *)view deselectAll: self];
+    [ts encodeValueOfObjCType:"i" at:&version];
+    [ts encodeRootObject:printInfo];
+    [ts encodeRootObject:prefInfo];
+    [ts encodeObject: [documentWindow stringWithSavedFrame]];
+    [ts encodeRootObject:view];
+    [ts release];
+#endif
+    
+    /* PROPERTY LIST ENCODING */
+    // TODO save version number.
+    tsO = [OAPropertyListArchiver propertyListWithRootObject: view];
+    // [[tsO description] writeToFile: [filename stringByAppendingPathExtension: @"ppl"] atomically: YES];
+    /* END PROPERTY LIST CODING */
+    //NSLog(@"Description: %@", tsO);
 	    
-	    /* PROPERTY LIST ENCODING */
-	    // TODO save version number.
-	    tsO = [OAPropertyListArchiver propertyListWithRootObject: view];
-	    // [[tsO description] writeToFile: [filename stringByAppendingPathExtension: @"ppl"] atomically: YES];
-	    /* END PROPERTY LIST CODING */
-	    //NSLog(@"Description: %@", tsO);
-	    	    
-	    [prefInfo backup]; // TODO huh? shouldn't prefInfo be saved along with the document?
-    }    
+    [prefInfo backup]; // TODO huh? shouldn't prefInfo be saved along with the document?
     
     return [[tsO description] dataUsingEncoding: NSASCIIStringEncoding];
 }

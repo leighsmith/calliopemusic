@@ -455,7 +455,7 @@ void DrawTextWithBaselineTies(float x, float y, NSString *stringToDisplay, NSFon
 	NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString: stringToDisplay];
 	NSRange wholeString = {0, [attributedText length]};
 
-	// NSLog(@"CAcString('%s', %f, %f)", s, x, y);
+	// NSLog(@"DrawTextWithBaselineTies("%@", %f, %f)", stringToDisplay, x, y);
 	
 	[attributedText addAttribute: NSFontAttributeName
 			       value: textFont
@@ -464,7 +464,7 @@ void DrawTextWithBaselineTies(float x, float y, NSString *stringToDisplay, NSFon
 			       value: modegray[mode]
 			       range: wholeString];
 	
-	[attributedText drawAtPoint: NSMakePoint(x, y)];
+	[attributedText drawAtPoint: NSMakePoint(x, y)]; // must check which coordinate system used? not flipped?
 
 	
 	tieCharacterWidth = charFWX(textFont, TIECHAR);

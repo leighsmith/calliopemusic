@@ -1092,7 +1092,7 @@ char ch[8] = ".@#!.FSN";
     while (k--)
     {
       g = [slist objectAtIndex: k];
-      [g printMe];
+      NSLog(@"%@", g);
     }
     return self;
 #if 0
@@ -1107,7 +1107,7 @@ char ch[8] = ".@#!.FSN";
   {
     p = [nl objectAtIndex:k];
       buf = [NSString stringWithFormat:@"  %s\n", typename[TYPEOF(p)]];
-    NSLog(buf];
+    NSLog(buf);
   }
   return self;
 #endif
@@ -1451,14 +1451,16 @@ extern char *typename[NUMTYPES];
 }
 
 
-/* Duplicate current system, and make it current */
-
+/* Duplicate current system, and make it current. TODO This should become part of NotationScore */
 - duplicateSystem: sender
 {
-  System *sys = currentSystem;
-  [sys newFrom];
-  [self simplePaginate: sys afterAddingCount: 1 askIfLoose: NO];
-  return [self dirty];
+    System *sys = [currentSystem newFormattedSystem];
+    
+    [self addSystem: sys]; // append it.
+    [self simplePaginate: sys afterAddingCount: 1 askIfLoose: NO];
+    [currentSystem release];
+    currentSystem = [sys retain];
+    return [self dirty];
 }
 
 
@@ -1470,8 +1472,8 @@ extern char *typename[NUMTYPES];
 - (System *) nextSystem: (System *) s : (int *) r
 {
   System *sys;
-  int b = 1;
-  if (s == [syslist lastObject]) b = 0;
+  int b = YES;
+  if (s == [syslist lastObject]) b = NO;
   else
   {
       unsigned ix = [syslist indexOfObject:s];
@@ -1480,9 +1482,10 @@ extern char *typename[NUMTYPES];
           if ([syslist count]) ix = 0; else return nil;
       }
       sys = [syslist objectAtIndex:ix + 1];
-      if (sys->flags.nstaves != s->flags.nstaves) b = 0;
+      if (sys->flags.nstaves != s->flags.nstaves) b = NO;
   }
-  if (!b) sys = [s newFrom];
+  if (!b) 
+      sys = [s newFormattedSystem];
   *r = b;
   return sys;
 }

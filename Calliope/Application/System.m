@@ -111,7 +111,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   return self;
 }
 
-
+// TODO should be named - (unsigned int) indexWithinScore
 - (int) myIndex
 {
   return [[view allSystems] indexOfObject: self];
@@ -131,61 +131,62 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 /*
   Main vertical formatter.  System becomes vertically compressed. 
   Even hidden staves need to be processed, because their bounds are used for adjustment.
-  caller must recalcObjs and recalcBars after sysheight.
+  Caller must recalcObjs and recalcBars after sysheight.
 */
-
 - (float) sysheight: (float) yi
 {
-  int i, k;
-  float y, maxh, h, ss, toff, sn;
-  Staff *s;
-  BOOL b = 0;
-  k = flags.nstaves;
-  sn = 0;
-  toff = titleRoom(objs);
-  y = yi;
-  for (i = 0; i < k; i++)
-  {
-    s = [staves objectAtIndex:i];
-    [s trimVerses];
-    if (s->flags.hidden)
-    {
-      [[s measureStaff] resetStaff: y];
-      [s recalc];
-      continue;
+    int staveIndex, staveCount;
+    float y, maxHeight, h, ss, titleOffset;
+    unsigned int numberOfVisibleStaves;
+    BOOL b = NO;
+    
+    staveCount = flags.nstaves;
+    numberOfVisibleStaves = 0;
+    titleOffset = titleRoom(objs);
+    y = yi;
+    for (staveIndex = 0; staveIndex < staveCount; staveIndex++) {
+	Staff *staff = [staves objectAtIndex: staveIndex];
+	
+	[staff trimVerses];
+	if (staff->flags.hidden) {
+	    [[staff measureStaff] resetStaff: y];
+	    [staff recalc];
+	    continue;
+	}
+	++numberOfVisibleStaves;
+	[staff measureStaff];
+	ss = staff->flags.spacing * 2.0;
+	maxHeight = staff->topmarg * ss;
+	if (!(staff->flags.topfixed)) {
+	    if (numberOfVisibleStaves == 1) {
+		if (titleOffset > maxHeight) 
+		    maxHeight = titleOffset;
+		h = [fontdata[FONTTEXT] pointSize] + ss; /* enough for bar numbers etc */
+		if (h > maxHeight) 
+		    maxHeight = h;
+	    }
+	    h = staffheadRoom(objs, staff);
+	    if (h > maxHeight) 
+		maxHeight = h;
+	    h = [staff getHeadroom]; /* only valid because measureStaff sets vhigha */
+	    if (h > maxHeight) 
+		maxHeight = h;
+	}
+	y += maxHeight;
+	if (numberOfVisibleStaves == 1) 
+	    headroom = maxHeight;
+	staff->botmarg = 0.0;
+	[staff resetStaff: y];
+	[staff recalc];
+	if (!b)	{
+	    b = YES;
+	    bounds = NSMakeRect(staff->bounds.origin.x + staff->bounds.size.width + 8, y, SIZEBOX, SIZEBOX);
+	}
+	y += staff->vhighb;
     }
-    ++sn;
-    [s measureStaff];
-    ss = s->flags.spacing * 2.0;
-    maxh = s->topmarg * ss;
-    if (!(s->flags.topfixed)) 
-    {
-      if (sn == 1)
-      {
-        if (toff > maxh) maxh = toff;
-        h = [fontdata[FONTTEXT] pointSize] + ss; /* enough for bar numbers etc */
-        if (h > maxh) maxh = h;
-      }
-      h = staffheadRoom(objs, s);
-      if (h > maxh) maxh = h;
-      h = [s getHeadroom]; /* only valid because measureStaff sets vhigha */
-      if (h > maxh) maxh = h;
-    }
-    y += maxh;
-    if (sn == 1) headroom = maxh;
-    s->botmarg = 0.0;
-    [s resetStaff: y];
-    [s recalc];
-    if (!b)
-    {
-      b = 1;
-      bounds = NSMakeRect(s->bounds.origin.x + s->bounds.size.width + 8, y, SIZEBOX, SIZEBOX);
-    }
-    y = y + s->vhighb;
-  }
-  height = y - yi;
-// NSLog(@"Height of sys %d = %f\n", [self myIndex], height);
-  return height;
+    height = y - yi;
+    NSLog(@"Height of sys %d = %f\n", [self myIndex], height);
+    return height;
 }
 
 
@@ -256,17 +257,16 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 
 - resetSys
 {
-  Staff *sp;
-  sp = [self firststaff];
-  if (sp != nil)
-  {
-    invalidEnabled = 0;		/* so that height is not smashed while we reset */
-    [self sysheight: [sp yOfTop]];	/* find compressed vertical format */
-    [self alterSpacing];	/* apply any expansion */
-    [self resetSpanners];	/* update what is affected */
-    invalidEnabled = 1;		/* height now free to be smashed */
-  }
-  return self;
+    Staff *sp = [self firststaff];
+    
+    if (sp != nil) {
+	invalidEnabled = NO;		/* so that height is not smashed while we reset */
+	[self sysheight: [sp yOfTop]];	/* find compressed vertical format */
+	[self alterSpacing];		/* apply any expansion */
+	[self resetSpanners];		/* update what is affected */
+	invalidEnabled = YES;		/* height now free to be smashed */
+    }
+    return self;
 }
 
 
@@ -398,54 +398,57 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 /*
   Make and return a new system using self as a template
 */
-// TODO probably this should just become copyWithZone:
-- newFrom
+- (System *) newFormattedSystem
 {
-  int i;
-  Staff *sp, *op;
-  System *sys;
-  id p;
-  
-  sys = [[System alloc] initWithStaveCount: flags.nstaves onGraphicView: view];
-  sys->page = page;
-  sys->lindent = 0.0;
-  sys->rindent = 0.0;
-  sys->expansion = 1.0;
-  sys->groupsep = groupsep;
-  sys->barbase = 0.0;
-  sys->height = height;
-  sys->headroom = headroom;
-  sys->style = style;
-  sys->staffScale = staffScale;
-  for (i = 0; i < flags.nstaves; i++)
-  {
-    sp = [sys->staves objectAtIndex:i];
-    op = [staves objectAtIndex:i];
-    sp->flags = op->flags;
-    sp->flags.haspref = 0;
-    sp->gFlags.size = op->gFlags.size;
-    sp->part = [op->part retain];
-    sp->pref1 = sp->pref2 = 0.0;
-    sp->voffa = op->voffa;
-    sp->voffb = op->voffb;
-    sp->vhigha = op->vhigha;
-    sp->vhighb = op->vhighb;
-    sp->topmarg = op->topmarg;
-    sp->botmarg = op->botmarg;
-    p = [view lastObject: self : i : CLEF : YES];
-    if (p != nil) [sp linknote: [(Clef *) p newFrom]];
-    p = [view lastObject: self : i : KEY : NO];
-    if (p != nil) [sp linknote: [(KeySig *) p newFrom]];
-  }
-  i = [objs count];
-  while (i--)
-  {
-    p = [objs objectAtIndex:i];
-    if (TYPEOF(p) == BRACKET) [sys linkobject: [(Bracket *) p newFrom: sys]];
-  }
-  [sys initsys];
-  [sys sigAdjust];
-  return sys;
+    int staffIndex;
+    int systemObjectsCount;
+    System *newSystem;
+    
+    newSystem = [[System alloc] initWithStaveCount: flags.nstaves onGraphicView: view];
+    newSystem->page = page;
+    newSystem->lindent = 0.0;
+    newSystem->rindent = 0.0;
+    newSystem->expansion = 1.0;
+    newSystem->groupsep = groupsep;
+    newSystem->barbase = 0.0;
+    newSystem->height = height;
+    newSystem->headroom = headroom;
+    newSystem->style = style;
+    newSystem->staffScale = staffScale;
+    for (staffIndex = 0; staffIndex < flags.nstaves; staffIndex++) {
+	Clef *lastClef;
+	KeySig *lastKeySignature;
+	Staff *sp = [newSystem->staves objectAtIndex: staffIndex];
+	Staff *op = [staves objectAtIndex: staffIndex];
+	
+	sp->flags = op->flags;
+	sp->flags.haspref = 0;
+	sp->gFlags.size = op->gFlags.size;
+	sp->part = [op->part retain];
+	sp->pref1 = sp->pref2 = 0.0;
+	sp->voffa = op->voffa;
+	sp->voffb = op->voffb;
+	sp->vhigha = op->vhigha;
+	sp->vhighb = op->vhighb;
+	sp->topmarg = op->topmarg;
+	sp->botmarg = op->botmarg;
+	lastClef = [view lastObject: self : staffIndex : CLEF : YES];
+	if (lastClef != nil) 
+	    [sp linknote: [lastClef newFrom]];
+	lastKeySignature = [view lastObject: self : staffIndex : KEY : NO];
+	if (lastKeySignature != nil) 
+	    [sp linknote: [lastKeySignature newFrom]];
+    }
+    systemObjectsCount = [objs count];
+    while (systemObjectsCount--) {
+	id p = [objs objectAtIndex: systemObjectsCount];
+	
+	if (TYPEOF(p) == BRACKET) 
+	    [newSystem linkobject: [(Bracket *) p newFrom: newSystem]];
+    }
+    [newSystem initsys];
+    [newSystem sigAdjust];
+    return [newSystem autorelease];
 }
 
 
@@ -906,7 +909,8 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 - (BOOL) relinknote : (StaffObj *) p
 {
   int inv = NO;
-  Staff *sp, *ms = p->mystaff;
+  Staff *sp, *ms = [p staff];
+  
   if (p->gFlags.locked)
   {
     [ms staffRelink: p];
@@ -1082,26 +1086,36 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 
 /* draw any subobjects (in this case, staves, objs, marker, bar numbers) */
 
-- draw: (NSRect) r : (BOOL) nso
+- draw: (NSRect) r nonSelectedOnly: (BOOL) nso
 {
-  int i;
-  for (i = 0; i < flags.nstaves; i++) [[staves objectAtIndex:i] draw: r : nso];
-  i = [objs count];
-  while (i--) [[objs objectAtIndex:i] draw: r : nso];
-  crect(bounds.origin.x, bounds.origin.y, 8, 8, markmode[gFlags.selected]);
-  if (flags.pgcontrol) crect(bounds.origin.x + 24, bounds.origin.y, 8, 12, markmode[0]);
-  if (flags.syssep && page != nil && ![self lastSystem]) [page drawSysSep: r : self : view];
-  return self;
+    int staveIndex;
+    int objectsCount;
+    
+    for (staveIndex = 0; staveIndex < flags.nstaves; staveIndex++) 
+	[[staves objectAtIndex: staveIndex] draw: r nonSelectedOnly: nso];
+    objectsCount = [objs count];
+    while (objectsCount--) 
+	[[objs objectAtIndex: objectsCount] draw: r nonSelectedOnly: nso];
+    // draw a box for access in different colours based on it's selection.
+    crect(bounds.origin.x, bounds.origin.y, 8, 8, markmode[gFlags.selected]);
+    if (flags.pgcontrol) 
+	crect(bounds.origin.x + 24, bounds.origin.y, 8, 12, markmode[0]);
+    if (flags.syssep && page != nil && ![self lastSystem]) 
+	[page drawSysSep: r : self : view];
+    return self;
 }
 
 
-- drawHangers: (NSRect) r : (BOOL) nso
+- drawHangers: (NSRect) r nonSelectedOnly: (BOOL) nso
 {
-  int i;
-  for (i = 0; i < flags.nstaves; i++) [[staves objectAtIndex:i] drawHangers: r : nso];
-  i = [objs count];
-  while (i--) [[objs objectAtIndex:i] drawHangers: r : nso];
-  return self;
+    int i;
+    
+    for (i = 0; i < flags.nstaves; i++)
+	[[staves objectAtIndex:i] drawHangers: r nonSelectedOnly: nso];
+    i = [objs count];
+    while (i--)
+	[[objs objectAtIndex:i] drawHangers: r nonSelectedOnly: nso];
+    return self;
 }
 
 

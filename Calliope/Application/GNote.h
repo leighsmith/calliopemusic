@@ -1,13 +1,18 @@
+/*! $Id:$ */
+/*!
+  @class GNote
+  @brief The class responsible for representing and displaying musical notes.
+ */
 #import "winheaders.h"
 #import "TimedObj.h"
 
-@interface GNote:TimedObj
+@interface GNote: TimedObj
 {
 @public
-  NSMutableArray *headlist;
-  float dotdx;
-  unsigned char instrument;
-  unsigned char showslash;
+    NSMutableArray *headlist;
+    float dotdx;
+    unsigned char instrument;
+    unsigned char showslash;
 }
 
 + (void)initialize;

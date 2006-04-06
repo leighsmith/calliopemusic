@@ -626,8 +626,8 @@ static int signof(float f)
   while (i--)
   {
     p = [client objectAtIndex:i];
-    if (sp == nil) sp = p->mystaff;
-    else if (sp != p->mystaff) return YES;
+    if (sp == nil) sp = [p staff];
+    else if (sp != [p staff]) return YES;
   }
   return NO;
 }

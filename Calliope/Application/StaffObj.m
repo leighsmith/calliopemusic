@@ -38,14 +38,16 @@ int protoVox;
 
 - init
 {
-  [super init];
-  hangers = nil;
-  verses = nil;
-  mystaff = nil;
-  isGraced = 0;
-  versepos = 0;
-  part = nil;
-  return self;
+    self = [super init];
+    if(self != nil) {
+	hangers = nil;
+	verses = nil;
+	mystaff = nil;
+	isGraced = 0;
+	versepos = 0;
+	part = nil;	
+    }
+    return self;
 }
 
 - (void)dealloc
@@ -53,7 +55,7 @@ int protoVox;
     [hangers autorelease];
     [verses autorelease];
     if (part) [part autorelease];
-  { [super dealloc]; return; };
+    [super dealloc];
 }
 
 
@@ -398,6 +400,15 @@ int protoVox;
     return s->view;
 }
 
+- (Staff *) staff
+{
+    return mystaff;
+}
+
+- (void) setStaff: (Staff *) newStaff
+{
+    mystaff = newStaff; // weakly held. Don't retain since it is a backpointer.
+}
 
 /* return index of system on which object appears */
 - (int) sysNum
@@ -413,7 +424,7 @@ int protoVox;
 - (int) myIndex
 {
   if (TYPEOF(mystaff) == SYSTEM) return -1;
-  return [(mystaff)->notes indexOfObject:self];
+  return [mystaff->notes indexOfObject: self];
 }
 
 
@@ -525,7 +536,7 @@ int protoVox;
     k = [verses count];
     while (k--) [[verses objectAtIndex:k] removeObj];
     if (TYPEOF(mystaff) == STAFF) [mystaff unlinknote: self];
-    else [mystaff unlinkobject: self];
+    else [mystaff unlinkobject: self]; // Could be (System *) mystaff but why should the type change?
     [self release];
 }
 
@@ -1464,18 +1475,18 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
 
 
 
-- drawHangers: (NSRect) r : (BOOL) nso
+- drawHangers: (NSRect) r nonSelectedOnly: (BOOL) nso
 {
   Hanger *h;
   int k = [hangers count];
-  [super drawHangers: r : nso];
+  [super drawHangers: r nonSelectedOnly: nso];
   while (k--)
   {
     h = [hangers objectAtIndex:k];
     if (h->gFlags.morphed)
     {
-      [h drawHangers: r : nso];
-      [h draw: r : nso];
+      [h drawHangers: r nonSelectedOnly: nso];
+      [h draw: r nonSelectedOnly: nso];
       h->gFlags.morphed = 0;
     }
   }
@@ -1483,7 +1494,7 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
 }
 
 
-- drawVerses: (NSRect) r : (BOOL) nso
+- drawVerses: (NSRect) r nonSelectedOnly: (BOOL) nso
 {
   Verse *v;
   int k;
@@ -1495,8 +1506,8 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
       v = [verses objectAtIndex:k];
       if (!ISINVIS(v))
       {
-        [v drawHangers: r : nso];
-        [v draw: r : nso];
+        [v drawHangers: r nonSelectedOnly: nso];
+        [v draw: r nonSelectedOnly: nso];
       }
     }
   }

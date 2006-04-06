@@ -1,4 +1,4 @@
-/* $Id:$ */
+/* $Id$ */
 #import "winheaders.h"
 #import <Foundation/NSArray.h>
 #import "Graphic.h"
@@ -52,7 +52,15 @@
 - initWithStaveCount: (int) n onGraphicView: (GraphicView *) v;
 - initsys;
 - mark;
-- newFrom;
+
+/*!
+  @brief Make and return a new system using the receiver as a template.
+  
+  The number of staves, clef, keysignature and brackets are duplicated.
+  An autoreleased System is returned.
+ */
+- (System *) newFormattedSystem;
+
 - newExtraction: (GraphicView *) v : (int) sn;
 - measureSys: (NSRect *) r;
 - resetSys;
@@ -101,8 +109,8 @@
 - (int) whichMarker: (Graphic *) p;
 - (void)searchFor: (NSPoint) p :(NSMutableArray *)arr;	/* look for a hit in the system */
 - (void)dealloc;
-- draw: (NSRect) r : (BOOL) nso;
-- drawHangers: (NSRect) r : (BOOL) nso;
+- draw: (NSRect) r nonSelectedOnly: (BOOL) nso;
+- drawHangers: (NSRect) r nonSelectedOnly: (BOOL) nso;
 - draw;
 - (id)initWithCoder:(NSCoder *)aDecoder;
 - (void)encodeWithCoder:(NSCoder *)aCoder;

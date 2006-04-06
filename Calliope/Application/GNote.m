@@ -106,27 +106,27 @@ unsigned char accifont[NUMHEADS][NUMACCS] =
 
 - init
 {
-  NoteHead *h;
-  [super init];
-  headlist = [[NSMutableArray alloc] init];
-  h = [[NoteHead alloc] init];
-  [(NSMutableArray *)headlist addObject: h];
-  [h release];
-  gFlags.subtype = 0;
-  p = 0;
-  gFlags.type = NOTE;
-  dotdx = 0.0;
-  instrument = 0;
-  showslash = 0;
-  return self;
+    self = [super init];
+    if(self != nil) {
+	NoteHead *h = [[NoteHead alloc] init];
+
+	headlist = [[NSMutableArray alloc] init];
+	[headlist addObject: h]; // start with a single note-head.
+	[h release];
+	gFlags.subtype = 0;
+	p = 0;
+	gFlags.type = NOTE;
+	dotdx = 0.0;
+	instrument = 0;
+	showslash = 0;	
+    }
+    return self;
 }
 
 
-- printMe
+- (NSString *) description
 {
-  NSLog(@"NOTE: x = %f, y = %f ", x, y);
-  [self printHeads];
-  return self;
+    return [NSString stringWithFormat: @"%@: x = %f, y = %f %@", super, x, y, [self describeChordHeads]];
 }
 
 
@@ -934,84 +934,85 @@ extern int modeinvis[5];
     if (h->accidental && h->accidoff < 0.0) drawacc(x, h, bt, sz, m);
     if (time.dot) drawnotedot(sz, x + dotdx, h->myY, h->dotoff, [h->myNote getSpacing], bt, time.dot, 0, m);
   }
-    [self drawLedger: hw : sz : m];
+    [self drawLedgerAt: hw size: sz mode: m];
     return self;
 }
 
 
 - drawMode: (int) m
 {
-  struct timeinfo *t;
-  NSMutableArray *nl;
-  NoteHead *h=nil, *q;
-  int k, nlk, body, bt=0, sb, sz, st, b, sid = 0;
-  int ksym, knum, midc;
-  float nx, dy, hw=0.0;
-  BOOL stemup,gotsinfo = NO;
-  if ([self myChordGroup] != nil) return [self drawMember: m];
-  t = &time;
-  sz = gFlags.size;
-  st = stype[gFlags.subtype];
-  b = [self isBeamed];
-  nl = headlist;
-  q = [nl lastObject];
-  body = t->body;
-  nlk = [nl count];
-  stemup = t->stemup;
-  k = nlk;
-  if (k == 1)
-  {
-    h = q;
-    bt = h->type;
-    if (bt == 6)
+    struct timeinfo *t;
+    NSMutableArray *nl;
+    NoteHead *h=nil, *q;
+    int k, nlk, body, bt=0, sb, sz, st, b, sid = 0;
+    int ksym, knum, midc;
+    float nx, dy, hw=0.0;
+    BOOL stemup,gotsinfo = NO;
+    
+    if ([self myChordGroup] != nil) return [self drawMember: m];
+    t = &time;
+    sz = gFlags.size;
+    st = stype[gFlags.subtype];
+    b = [self isBeamed];
+    nl = headlist;
+    q = [nl lastObject];
+    body = t->body;
+    nlk = [nl count];
+    stemup = t->stemup;
+    k = nlk;
+    if (k == 1)
     {
-      [self getKeyInfo: &ksym : &knum : &midc];
-      sid = getShapeID(h->pos, ksym, knum, midc);
+	h = q;
+	bt = h->type;
+	if (bt == 6)
+	{
+	    [self getKeyInfo: &ksym : &knum : &midc];
+	    sid = getShapeID(h->pos, ksym, knum, midc);
+	}
+	hw = halfwidth[sz][bt][body];
+	drawnote(sz, hw, x, h->myY, body, bt, st, sid, b, t->stemlen, t->nostem, (showslash && isGraced == 1), m);
+	if (h->accidental && h->accidoff < 0.0) drawacc(x, h, bt, sz, m);
+	if (t->dot) drawnotedot(sz, x + dotdx, h->myY, h->dotoff, [h->myNote getSpacing], bt, t->dot, 0, m);
     }
-    hw = halfwidth[sz][bt][body];
-    drawnote(sz, hw, x, h->myY, body, bt, st, sid, b, t->stemlen, t->nostem, (showslash && isGraced == 1), m);
-    if (h->accidental && h->accidoff < 0.0) drawacc(x, h, bt, sz, m);
-    if (t->dot) drawnotedot(sz, x + dotdx, h->myY, h->dotoff, [h->myNote getSpacing], bt, t->dot, 0, m);
-  }
-  else
-  {
-    while (k--)
+    else
     {
-      h = [nl objectAtIndex:k];
-      bt = h->type;
-      if (bt == 6)
-      {
-        if (!gotsinfo)
-        {
-          [self getKeyInfo: &ksym : &knum : &midc];
-          gotsinfo = YES;
-        }
-        sid = getShapeID(h->pos, ksym, knum, midc);
-      }
-      hw = halfwidth[sz][bt][body];
-      nx = x;
-      if (centhead[bt]) nx -= hw;
-      if (h->side) nx += hw * offside[(int)stemup];
-      drawhead(nx, h->myY, bt, body, sid, stemup, sz, m);
-      if (h->accidental && h->accidoff < 0.0) drawacc(x, h, bt, sz, m);
-      if (t->dot) drawnotedot(sz, x + dotdx, h->myY, h->dotoff, [h->myNote getSpacing], bt, t->dot, 0, m);
+	while (k--)
+	{
+	    h = [nl objectAtIndex:k];
+	    bt = h->type;
+	    if (bt == 6)
+	    {
+		if (!gotsinfo)
+		{
+		    [self getKeyInfo: &ksym : &knum : &midc];
+		    gotsinfo = YES;
+		}
+		sid = getShapeID(h->pos, ksym, knum, midc);
+	    }
+	    hw = halfwidth[sz][bt][body];
+	    nx = x;
+	    if (centhead[bt]) nx -= hw;
+	    if (h->side) nx += hw * offside[(int)stemup];
+	    drawhead(nx, h->myY, bt, body, sid, stemup, sz, m);
+	    if (h->accidental && h->accidoff < 0.0) drawacc(x, h, bt, sz, m);
+	    if (t->dot) drawnotedot(sz, x + dotdx, h->myY, h->dotoff, [h->myNote getSpacing], bt, t->dot, 0, m);
+	}
+	/* Note: h will now be [nl objectAt: 0], with valid bt, f, hw */
+	if (hasstem[body] && (!b || nlk > 1))
+	{
+	    dy = q->myY - h->myY;
+	    if (b) sb = 5;
+	    else
+	    {
+		dy += t->stemlen;
+		sb = body;
+	    }
+	    drawstem(x, h->myY, sb, dy, sz, bt, st, m);
+	    if (showslash && isGraced == 1) drawgrace(x, q->myY, sb, t->stemlen, sz, bt, st, m);
+	}
     }
-    /* Note: h will now be [nl objectAt: 0], with valid bt, f, hw */
-    if (hasstem[body] && (!b || nlk > 1))
-    {
-      dy = q->myY - h->myY;
-      if (b) sb = 5;
-      else
-      {
-        dy += t->stemlen;
-        sb = body;
-      }
-      drawstem(x, h->myY, sb, dy, sz, bt, st, m);
-      if (showslash && isGraced == 1) drawgrace(x, q->myY, sb, t->stemlen, sz, bt, st, m);
-    }
-  }
-  [self drawLedger: hw : sz : m];
-  return self;
+    [self drawLedgerAt: hw size: sz mode: m];
+    return self;
 }
 
 

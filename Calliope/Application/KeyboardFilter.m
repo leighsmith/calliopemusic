@@ -213,7 +213,7 @@ extern void setkeysig(KeySig *p, char *key);
 	  sp = q->mystaff;
 	  mc = [sp getKeyThru: q : ks];
 	  posOfNote(mc, ks, [n keyNum], &pos, &acc);
-	  [q newHead: [sp yOfPos: pos] : sp : acc];
+	  [q newHeadOnStaff: sp atHeight: [sp yOfPos: pos] accidental: acc];
 	  [v reShapeAndRedraw: q];
 	}
 	else

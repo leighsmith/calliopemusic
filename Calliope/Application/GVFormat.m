@@ -900,7 +900,7 @@ outOfTotalSystems: (int) numsys
 	  pos = p->p;
 	  if (pos < -8 || pos > pb + 8)
 	  {
-	    NSLog(@"note %d of staff %d, sys %d has pos %d\n", k, j, i, pos);
+	    NSLog(@"Note %d of staff %d, sys %d has pos %d\n", k, j, i, pos);
 	  }
 	  if (!ISINVIS(p))
 	  {

@@ -8,9 +8,6 @@
 
 @implementation Hanger
 
-extern void msg();
-
-
 + (void)initialize
 {
   if (self == [Hanger class])

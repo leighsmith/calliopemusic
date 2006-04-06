@@ -347,27 +347,28 @@ id CrossCursor = nil;	/* global since subclassers may need it */
 }
 
 
-- printMe
+- (NSString *) description
 {
-  NSLog(@"   type=%d, subtype=%d\n", gFlags.type, gFlags.subtype);
-  return self;
+    return [NSString stringWithFormat: @"%@ type=%d, subtype=%d", super, gFlags.type, gFlags.subtype];
 }
 
 
 - init
 {
-    [super init];
-    gFlags.selected = 0;
-    gFlags.seldrag = 0;
-    gFlags.selend = 0;
-    gFlags.selbit = 0;
-    gFlags.morphed = 0;
-    gFlags.locked = 0;
-    gFlags.invis = 0;
-    gFlags.size = 0;
-    gFlags.type = 0;
-    gFlags.subtype = 0;
-    enclosures = nil;
+    self = [super init];
+    if(self != nil) {
+	gFlags.selected = 0;
+	gFlags.seldrag = 0;
+	gFlags.selend = 0;
+	gFlags.selbit = 0;
+	gFlags.morphed = 0;
+	gFlags.locked = 0;
+	gFlags.invis = 0;
+	gFlags.size = 0;
+	gFlags.type = 0;
+	gFlags.subtype = 0;
+	enclosures = nil;	
+    }
     return self;
 }
 
@@ -397,11 +398,15 @@ id CrossCursor = nil;	/* global since subclassers may need it */
 
 - recalc
 {
-  bbinit();
-  [self drawMode: 0];
-  bounds = getbb();
-  [self sysInvalid];
-  return self;
+    // This attempts to force redrawing, whereas in a NSView app, we at best just mark that the NSView needs redisplaying.
+    bbinit();
+#if 0
+    [self drawMode: 0];
+#endif
+    bounds = getbb();
+    
+    [self sysInvalid];
+    return self;
 }
 
 
@@ -433,7 +438,7 @@ id CrossCursor = nil;	/* global since subclassers may need it */
 
 - (void)removeObj
 {
-  msg(@"Warning: did [Graphic removeObj::]\n");
+  NSLog(@"Warning: did [Graphic removeObj::]\n");
 }
 
 
@@ -696,7 +701,7 @@ id CrossCursor = nil;	/* global since subclassers may need it */
 }
 
 
-- drawHangers: (NSRect) r : (BOOL) nso
+- drawHangers: (NSRect) r nonSelectedOnly: (BOOL) nso
 {
   Enclosure *h;
   int k = [enclosures count];
@@ -705,7 +710,7 @@ id CrossCursor = nil;	/* global since subclassers may need it */
     h = [enclosures objectAtIndex:k];
     if (h->gFlags.morphed)
     {
-      [h draw: r : nso];
+      [h draw: r nonSelectedOnly: nso];
       h->gFlags.morphed = 0;
     }
   }
@@ -793,18 +798,23 @@ id CrossCursor = nil;	/* global since subclassers may need it */
   It calls the overrideable method "draw".
 */
 
-- draw:(NSRect)rect : (BOOL) nso
+- draw: (NSRect) rect nonSelectedOnly: (BOOL) nso
 {
-  [self markHangers];
-  if (ISASTAFFOBJ(self)) [self drawVerses: rect : nso];
-  if (nso && gFlags.selected) return nil;
-  if (TYPEOF(self) == ENCLOSURE) {
-          NSRect box;
-          [(Enclosure *)self getHandleBBox:&box];
-          if (NSIsEmptyRect(rect) || !NSIsEmptyRect(NSIntersectionRect(rect , box))) [self draw];
-      }
-  else  if (NSIsEmptyRect(rect) || !NSIsEmptyRect(NSIntersectionRect(rect , bounds))) [self draw];
-  return nil;
+    [self markHangers];
+    if (ISASTAFFOBJ(self)) 
+	[self drawVerses: rect nonSelectedOnly: nso];
+    if (nso && gFlags.selected) 
+	return nil;
+    if (TYPEOF(self) == ENCLOSURE) {
+	NSRect box;
+	
+	[(Enclosure *)self getHandleBBox: &box];
+	if (NSIsEmptyRect(rect) || !NSIsEmptyRect(NSIntersectionRect(rect, box)))
+	    [self draw];
+    }
+    else if (NSIsEmptyRect(rect) || !NSIsEmptyRect(NSIntersectionRect(rect, bounds)))
+	[self draw];
+    return nil;
 }
 
 extern int selMode;
@@ -980,21 +990,20 @@ extern int selMode;
 
 - drawMode: (int) m
 {
-  msg(@"Warning: did [Graphic drawMode:]\n");
-  [self printMe];
-  return self;
+    NSLog(@"Warning: did [Graphic drawMode:] for %@\n", self);
+    return self;
 }
 
 - (BOOL) hasVoltaBesides: p
 {
-  msg(@"Warning: did [Graphic hasVoltaBesides]\n");
+  NSLog(@"Warning: did [Graphic hasVoltaBesides]\n");
   return NO;
 }
 
 
-- drawVerses: (NSRect)rect : (BOOL) nso
+- drawVerses: (NSRect) rect nonSelectedOnly: (BOOL) nso
 {
-  msg(@"Warning: did [Graphic drawVerses::]\n");
+  NSLog(@"Warning: did [Graphic drawVerses:nonSelectedOnly:]\n");
   return self;
 }
 

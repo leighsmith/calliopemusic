@@ -123,10 +123,9 @@ static void orderXY(float *x, float *y)
 }
 
 
-- printMe
+- (NSString *) description
 {
-  NSLog(@"TIE type %d, head1=%d, head2=%d, clients=%d\n", gFlags.subtype, head1, head2, [client count]);
-  return self;
+    return [NSString stringWithFormat: @"%@ type %d, head1=%d, head2=%d, clients=%d\n", super, gFlags.subtype, head1, head2, [client count]];
 }
 
 - init

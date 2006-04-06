@@ -214,11 +214,11 @@
   for (i = 0; i < ck; i++)
   {
     p = [cl objectAtIndex:i];
-    vi = VOICEID(p->voice, [p->mystaff myIndex]);
+    vi = VOICEID(p->voice, [[p staff] myIndex]);
     for (j = i + 1; j < ck; j++)
     {
       q = [cl objectAtIndex:j];
-      vj = VOICEID(q->voice, [q->mystaff myIndex]);
+      vj = VOICEID(q->voice, [[q staff] myIndex]);
       if (vi == vj) { [cl release]; return nil; }
     }
   }

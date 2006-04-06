@@ -15,7 +15,7 @@
 + (void) initialize
 {
     if (self == [Margin class]) {
-	[Margin setVersion: 2];		/* class version, see read: */
+	[Margin setVersion: 3];		/* class version, see read:, changed ivars */
     }
 }
 

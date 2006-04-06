@@ -46,7 +46,6 @@ extern id CrossCursor;
 + (BOOL) createMember: (int) t : (GraphicView *) v : (int) arg;
 + myInspector;
 - myInspector;
-- printMe;
 - init;
 - mark;
 - proto: (GraphicView *) v : (NSPoint) pt : (Staff *) sp : (System *) sys : (Graphic *) g : (int) i;
@@ -72,7 +71,7 @@ extern id CrossCursor;
 - moveFinished: (GraphicView *) v;
 - resize:(NSEvent *)event in: view;
 - traceBounds;
-- draw:(NSRect)rect : (BOOL) nso;
+- draw:(NSRect)rect nonSelectedOnly: (BOOL) nso;
 - (float) modifyTick: (float) t;
 - (BOOL) isDangler;
 - (BOOL) isEditable;
@@ -115,8 +114,8 @@ extern id CrossCursor;
 - setPageTable: p;
 - draw;
 - drawMode: (int) m;
-- drawHangers: (NSRect)rect : (BOOL) nso;
-- drawVerses: (NSRect)rect : (BOOL) nso;
+- drawHangers: (NSRect)rect nonSelectedOnly: (BOOL) nso;
+- drawVerses: (NSRect)rect nonSelectedOnly: (BOOL) nso;
  /*sb: this added at this juncture to prevent compiler warnings. Here, returns only self. Intended to be subclassed. */
 - sysInvalid;
 

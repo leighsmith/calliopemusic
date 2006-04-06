@@ -40,7 +40,7 @@
     k = [sl count];
     while (k--) if ((p = [sl objectAtIndex:k]) && TYPEOF(p) == CLEF)
     {
-      dotrans = ([transswitch state] && (TYPEOF(p->mystaff) == STAFF));
+      dotrans = ([transswitch state] && (TYPEOF([p staff]) == STAFF));
       if (dotrans)
       {
         tb = p->bounds;
@@ -59,7 +59,7 @@
 	if (i == 1) off = -7; else if (i == 2) off = 7;
         if ((off += [p middleC] - mc))
 	{
-          [p->mystaff transClef: p : off];
+          [[p staff] transClef: p : off];
           b  = NSUnionRect(tb , b);
 	}
       }

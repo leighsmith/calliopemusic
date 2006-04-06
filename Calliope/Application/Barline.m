@@ -171,7 +171,8 @@ void bardots(int nl, float x, float y, int spacing, int sz, int m)
 
 void barline(float x, float y1, float sth, float y2, float th, int m)
 {
-  cline(x, y1 - sth, x, y2, th, m);
+    NSLog(@"y1=%f, sth=%f, y2=%f", y1, sth, y2);
+    cline(x, y1 - sth, x, y2, th, m);
 }
 
 

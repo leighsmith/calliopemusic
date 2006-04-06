@@ -1,3 +1,4 @@
+/* $Id:$ */
 #import "winheaders.h"
 #import "GNote.h"
 #import "Staff.h"
@@ -5,12 +6,12 @@
 
 @interface GNote(GNChord)
 
-- printHeads;		/* diagnostics */
+- (NSString *) describeChordHeads;
 
 - normaliseChord;
 - resetChord;
 - reshapeChord;
-- (BOOL) newHead: (float) y : (Staff *) sp : (int) acc;
+- (BOOL) newHeadOnStaff: (Staff *) sp atHeight: (float) y accidental: (int) acc;
 - deleteHead: (int) i;
 - (BOOL) insertHead: (NoteHead *) h;
 - relinkHead: (int) i;
@@ -21,6 +22,6 @@
 - resetStemlen;
 - resetStemlenUsing: (int) i;
 - resetAccidentals;
-- drawLedger: (float) dx : (int) sz : (int) mode;
+- drawLedgerAt: (float) dx size: (int) sz mode: (int) mode;
 
 @end

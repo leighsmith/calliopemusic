@@ -100,7 +100,7 @@ static float getTop(StaffObj *p)
   int j;
   j = [p posAboveBelow: 1];
   if (!(j & 1)) --j;
-  return [p->mystaff yOfPos: j];
+  return [[p staff] yOfPos: j];
 }
 
 
@@ -109,7 +109,7 @@ static float getBottom(StaffObj *p)
   int j;
   j = [p posAboveBelow: 0];
   if (!(j & 1)) ++j;
-  return [p->mystaff yOfPos: j];
+  return [[p staff] yOfPos: j];
 }
 
 static Accent *proto;
@@ -323,7 +323,7 @@ float tyoff[2][5] =
       if (TYPEOF(p) != NOTE) return self;
       k = signs[j].dnsign;
       sz = p->gFlags.size;
-      ss = getSpacing(p->mystaff);
+      ss = getSpacing([p staff]);
       bh = 0.5 * nature[sz];
       pb = p->time.body;
       dx = halfwidth[sz][0][pb];
@@ -381,23 +381,28 @@ float tyoff[2][5] =
   int i, j, sz, dir, top;
   NSFont *f;
   StaffObj *p = client;
+  Staff *staff = [p staff];
   BOOL fr;
-  if (!(p->mystaff)) {printf("unattached accent character?\n"); return self;}
-  if (TYPEOF(p->mystaff) != STAFF) return self;
+  
+  if (!staff) {
+      NSLog(@"unattached accent character?\n");
+      return self;
+  }
+  if (TYPEOF(staff) != STAFF) return self;
   fr = (xoff != 0.0 || yoff != 0.0);
   x = p->x + xoff;
-  dir = 2 * getSpacing(p->mystaff);
+  dir = 2 * getSpacing(staff);
   top = updir[(TYPEOF(p) == NOTE && ((TimedObj *)p)->time.stemup)][gFlags.subtype];
   if (top)
   {
     dir = -dir;
-    sy = [p->mystaff yOfTop];
+    sy = [staff yOfTop];
     ny = getTop(p);
     if (sy > ny) sy = ny;
   }
   else
   {
-    sy = [p->mystaff yOfBottom];
+    sy = [staff yOfBottom];
     ny = getBottom(p);
     if (sy < ny) sy = ny;
   }

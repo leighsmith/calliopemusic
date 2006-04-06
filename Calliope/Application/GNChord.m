@@ -78,19 +78,18 @@ static void putPos(Staff *sp, int pn, int u)
 
 
 /* for debugging only */
-
-- printHeads
+- (NSString *) describeChordHeads
 {
-  NoteHead *h;
-  int i, k = [headlist count];
-  NSLog(@"( ");
-  for (i = 0; i < k; i++)
-  {
-    h = [headlist objectAtIndex:i];
-    NSLog(@"(%d-%f) ", h->pos, h->myY);
-  }
-  NSLog(@")\n");
-  return self;
+    NoteHead *h;
+    int headIndex, headCount = [headlist count];
+    NSMutableString *listString = [NSMutableString stringWithString: @"( "];
+    
+    for (headIndex = 0; headIndex < headCount; headIndex++) {
+	h = [headlist objectAtIndex: headIndex];
+	[listString appendString: [NSString stringWithFormat: @"(%d-%f) ", h->pos, h->myY]];
+    }
+    [listString appendString: @")"];
+    return listString;
 }
 
 
@@ -558,22 +557,23 @@ NSLog(@"curx %f: pos[%d] set to: %f\n", curx, h->pos, h->accidoff);
   Return whether succeeded.
 */
 
-- (BOOL) newHead: (float) ny : (Staff *) sp : (int) acc
+- (BOOL) newHeadOnStaff: (Staff *) sp atHeight: (float) ny accidental: (int) acc
 {
-  NoteHead *h;
-  if ([headlist count] == MAXHEADS) return NO;
-  h = [[NoteHead alloc] init];
-  h->pos = [sp findPos: ny];
-  h->myY = [sp yOfPos: h->pos];
-  h->accidental = acc;
-  h->myNote = self;
-  h->type = gFlags.subtype;
-  [self insertHead: h];
-  gFlags.selend = [headlist indexOfObject:h];
-  [self normaliseChord];
-  [self recalc];
-  [self setOwnHangers];
-  return YES;
+    NoteHead *h;
+    
+    if ([headlist count] == MAXHEADS) return NO;
+    h = [[NoteHead alloc] init];
+    h->pos = [sp findPos: ny];
+    h->myY = [sp yOfPos: h->pos];
+    h->accidental = acc;
+    h->myNote = self;
+    h->type = gFlags.subtype;
+    [self insertHead: h];
+    gFlags.selend = [headlist indexOfObject:h];
+    [self normaliseChord];
+    [self recalc];
+    [self setOwnHangers];
+    return YES;
 }
 
 
@@ -636,7 +636,7 @@ extern float ledgethicks[3];
 extern float ledgedxs[3];
 
 
-- drawLedger: (float) dx : (int) sz : (int) mode
+- drawLedgerAt: (float) dx size: (int) sz mode: (int) mode
 {
   char ha[NUMSTAVES], hwsa[NUMSTAVES], lb[NUMSTAVES], lwsb[NUMSTAVES];
   Staff *sps[NUMSTAVES];

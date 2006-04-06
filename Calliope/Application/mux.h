@@ -196,7 +196,6 @@ extern float charFCH(NSFont *f, int ch);
 extern float charhalfFGW(NSFont *f, int ch);
 
 
-extern void msg();		/* write to stderr */
 extern short typecode[NUMTYPES];
 extern char nature[3];
 extern float pronature[3];

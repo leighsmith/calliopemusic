@@ -309,13 +309,14 @@ float textoff[2], baselines[2][MAXTEXT];
   Caller must recalc the staff to get new bounds.
 */
 
-- resetStaff: (float) ny
+- resetStaff: (float) newYPosition
 {
   StaffObj *p;
   Verse *v;
   int i, j, k, n, vk, vp;
+  
   k = [notes count];
-  y = ny;
+  y = newYPosition;
   /* pass 1 */
   for (i = 0; i < k; i++)
   {
@@ -556,8 +557,9 @@ float textoff[2], baselines[2][MAXTEXT];
 {
   int i, k;
   StaffObj *q;
+  
   float px = p->x;
-  p->mystaff = self;
+  [p setStaff: self];
   k = [notes count];
   for (i = 0; i < k; i++)
   {
@@ -720,7 +722,7 @@ float textoff[2], baselines[2][MAXTEXT];
   {
     k = [notes count];
     i = [notes indexOfObject:p];
-    if (i == -1) msg(@"SYSTEM ERROR: StaffObj not found by skipSig\n");
+    if (i == -1) NSLog(@"SYSTEM ERROR: StaffObj not found by skipSig\n");
     while (i < k && ISASIGBLOCK(p))
     {
       if (TYPEOF(p) == CLEF)
@@ -1402,23 +1404,23 @@ static void drawbarnum(int n, float x, float y, NSFont *f, int j, int eb, int mo
 
 /* draw any subobjects (in this case, staffobjs) */
 
-- draw: (NSRect) r : (BOOL) nso
+- draw: (NSRect) r nonSelectedOnly: (BOOL) nso
 {
   int i, k;
   if (flags.hidden) return self;
-  [super draw: r : nso];
+  [super draw: r nonSelectedOnly: nso];
   k = [notes count];
-  for (i = 0; i < k; i++) [[notes objectAtIndex:i] draw: r : nso];
+  for (i = 0; i < k; i++) [[notes objectAtIndex:i] draw: r nonSelectedOnly: nso];
   return self;
 }
 
 
-- drawHangers: (NSRect) r : (BOOL) nso
+- drawHangers: (NSRect) r nonSelectedOnly: (BOOL) nso
 {
   int k;
   if (flags.hidden) return self;
   k = [notes count];
-  while (k--) [[notes objectAtIndex:k] drawHangers: r : nso];
+  while (k--) [[notes objectAtIndex:k] drawHangers: r nonSelectedOnly: nso];
   return self;
 }
 
@@ -1427,38 +1429,36 @@ static void drawbarnum(int n, float x, float y, NSFont *f, int j, int eb, int mo
 {
     int i, m;
     float dy, by, bx, th, lm, li;
-    System *s = mysys;
     
     if (flags.hidden)
 	return self;
     if (staffFlag)
 	return self;
-    lm = [s leftMargin];
-    li = [s leftIndent];
+    lm = [mysys leftMargin];
+    li = [mysys leftIndent];
     dy = 2 * flags.spacing;
-    bx =  lm + li;
+    bx = lm + li;
     th = staffthick[flags.subtype][gFlags.size];
     by = y - 0.5 * th;
     m = drawmode[0][0];
     i = flags.nlines;
-    while (i--)
-    {
-	cmakeline(bx, by, bx + s->width - th, by, m);
+    while (i--) {
+	cmakeline(bx, by, bx + mysys->width - th, by, m);
 	if (flags.haspref) 
 	    cmakeline(lm + pref1 * 0.01 * li, by, lm + pref2 * 0.01 * li, by, m);
 	by += dy;
     }
     cstrokeline(th, 1);
     /* draw staff number marker */
-    CAcString(bx + s->width + 8, [self yOfBottom], [[NSString stringWithFormat: @"%d", [s->staves indexOfObject: self] + 1] cString], fontdata[FONTSTMR], markmode[0]);
+    DrawTextWithBaselineTies(bx + mysys->width + 8, [self yOfBottom], [NSString stringWithFormat: @"%d", [mysys->staves indexOfObject: self] + 1], fontdata[FONTSTMR], markmode[0]);
     /* draw bar numbers */
-    if ([s firststaff] == self || (flags.hasnums && [[DrawApp currentDocument] getPreferenceAsInt: BARNUMPLACE] == 2))
+    if ([mysys firststaff] == self || (flags.hasnums && [[DrawApp currentDocument] getPreferenceAsInt: BARNUMPLACE] == 2))
 	[self drawBarnumbers: m];
 #if 0   // diagnostic
     dy = y - vhigha;
-    cline(bx, dy, bx+s->width, dy, 0.0, 2);
+    cline(bx, dy, bx + mysys->width, dy, 0.0, 2);
     dy = y + vhighb;
-    cline(bx, dy, bx+s->width, dy, 0.0, 2);
+    cline(bx, dy, bx + mysys->width, dy, 0.0, 2);
 #endif
     return self;
 }

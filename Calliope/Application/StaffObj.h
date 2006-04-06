@@ -19,7 +19,6 @@
 @public
   NSMutableArray *hangers;	/* Array of hangers */
   NSMutableArray *verses;	/* Array of Verse */
-  Staff *mystaff;		/* backpointer */
   float x, y;			/* coordinates */
   float stamp;			/* cache (not archived) */
   float duration;		/* cache (not archived) */
@@ -30,6 +29,8 @@
   char isGraced;		/* 1 = graced object, 2 = backwards-timed */
   unsigned char voice;		/* voice number */
   NSString *part;		/* part name */
+//@protected
+  Staff *mystaff;		/* backpointer */
 }
 
 + (void)initialize;
@@ -71,6 +72,16 @@
   @brief Returns the parent encompassing GraphicView (TODO eventually the NotationScore).
  */
 - (GraphicView *) myView;
+
+/*!
+  @brief Returns the staff this object resides on.
+ */
+- (Staff *) staff;
+
+/*!
+  @brief Assigns the backpointer to the Staff this StaffObj is part of.
+ */
+- (void) setStaff: (Staff *) newStaff;
 
 - (int) sysNum;
 - (int) myIndex;
@@ -127,8 +138,8 @@
 - (BOOL) performKey: (int) c;
 - (int)keyDownString:(NSString *)cc;
 - (float)verseOrigin; /* sb: inherited but only used by NeumeNew */
-- drawHangers: (NSRect) r : (BOOL) nso;
-- drawVerses: (NSRect) r : (BOOL) nso;
+- drawHangers: (NSRect) r nonSelectedOnly: (BOOL) nso;
+- drawVerses: (NSRect) r nonSelectedOnly: (BOOL) nso;
 - (id)initWithCoder:(NSCoder *)aDecoder;
 - (void)encodeWithCoder:(NSCoder *)aCoder;
 

@@ -51,7 +51,7 @@
 - sysInvalid;
 
 /*!
-  @brief Assign the system this staff instance resides within.
+  @brief Assign the System this Staff instance resides within.
  */
 - (void) setSystem: (System *) newSystem;
 
@@ -113,8 +113,8 @@
 - (BOOL) allRests;
 - (int) countRests;
 - drawBarnumbers: (int) mode;
-- draw: (NSRect) r : (BOOL) nso;
-- drawHangers: (NSRect) r : (BOOL) nso;
+- draw: (NSRect) r nonSelectedOnly: (BOOL) nso;
+- drawHangers: (NSRect) r nonSelectedOnly: (BOOL) nso;
 - draw;
 - (id)initWithCoder:(NSCoder *)aDecoder;
 - (void)encodeWithCoder:(NSCoder *)aCoder;
