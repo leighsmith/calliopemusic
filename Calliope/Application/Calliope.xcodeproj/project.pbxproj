@@ -76,7 +76,6 @@
 		D8F247DC09AD3F8C00B96D0D /* Enclosure.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD93380483CDC800A80164 /* Enclosure.h */; };
 		D8F247DD09AD3F8C00B96D0D /* EnclosureInspector.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD933A0483CDC800A80164 /* EnclosureInspector.h */; };
 		D8F247DE09AD3F8C00B96D0D /* GNChord.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD933C0483CDC800A80164 /* GNChord.h */; };
-		D8F247DF09AD3F8C00B96D0D /* GNote.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD933E0483CDC800A80164 /* GNote.h */; };
 		D8F247E009AD3F8C00B96D0D /* Graphic.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD93400483CDC800A80164 /* Graphic.h */; };
 		D8F247E109AD3F8C00B96D0D /* GraphicView.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD93420483CDC800A80164 /* GraphicView.h */; };
 		D8F247E209AD3F8C00B96D0D /* GVCommands.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD93440483CDC800A80164 /* GVCommands.h */; };
@@ -1101,7 +1100,6 @@
 		D8FD93380483CDC800A80164 /* Enclosure.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Enclosure.h; sourceTree = "<group>"; };
 		D8FD933A0483CDC800A80164 /* EnclosureInspector.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = EnclosureInspector.h; sourceTree = "<group>"; };
 		D8FD933C0483CDC800A80164 /* GNChord.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = GNChord.h; sourceTree = "<group>"; };
-		D8FD933E0483CDC800A80164 /* GNote.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = GNote.h; sourceTree = "<group>"; };
 		D8FD93400483CDC800A80164 /* Graphic.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Graphic.h; sourceTree = "<group>"; };
 		D8FD93420483CDC800A80164 /* GraphicView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = GraphicView.h; sourceTree = "<group>"; };
 		D8FD93440483CDC800A80164 /* GVCommands.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = GVCommands.h; sourceTree = "<group>"; };
@@ -1394,17 +1392,15 @@
 				D8FD92570483CDC700A80164 /* ClefInspector.m */,
 				D8FD92590483CDC700A80164 /* Course.m */,
 				D8FD925B0483CDC700A80164 /* DragMatrix.m */,
-				D8FD93340483CDC800A80164 /* DrawApp.h */,
 				D8FD925D0483CDC700A80164 /* DrawApp.m */,
 				D8FD92610483CDC700A80164 /* Enclosure.m */,
 				D8FD92630483CDC700A80164 /* EnclosureInspector.m */,
 				D8FD92F90483CDC800A80164 /* FileCompatibility.m */,
 				D8FD92FB0483CDC800A80164 /* FlippedView.m */,
+				D8FD92650483CDC700A80164 /* GNChord.m */,
+				D8FD92670483CDC700A80164 /* GNote.m */,
 				D8FD92690483CDC700A80164 /* Graphic.m */,
 				D8FD926B0483CDC700A80164 /* GraphicView.m */,
-				D8FD92650483CDC700A80164 /* GNChord.m */,
-				D8FD933E0483CDC800A80164 /* GNote.h */,
-				D8FD92670483CDC700A80164 /* GNote.m */,
 				D8FD926D0483CDC700A80164 /* GVCommands.m */,
 				D8FD926F0483CDC700A80164 /* GVFormat.m */,
 				D8FD92710483CDC700A80164 /* GVGlobal.m */,
@@ -1420,7 +1416,6 @@
 				D8FD92850483CDC700A80164 /* LayBarInspector.m */,
 				D8FD92870483CDC700A80164 /* Ligature.m */,
 				D8FD92890483CDC700A80164 /* LigatureInspector.m */,
-				D8FD93620483CDC800A80164 /* Margin.h */,
 				D8FD928B0483CDC700A80164 /* Margin.m */,
 				D8FD928D0483CDC700A80164 /* MarginInspector.m */,
 				D8FD928F0483CDC700A80164 /* Metro.m */,
@@ -1434,14 +1429,12 @@
 				D8FD929F0483CDC700A80164 /* NoteGroupInspector.m */,
 				D8FD92A10483CDC700A80164 /* NoteHead.m */,
 				D8FD92A30483CDC700A80164 /* NoteInspector.m */,
-				D8FD93360483CDC800A80164 /* OpusDocument.h */,
+				D8FD93030483CDC800A80164 /* OAPLAExtensions.m */,
 				D8FD925F0483CDC700A80164 /* OpusDocument.m */,
-				D8FD937E0483CDC800A80164 /* Page.h */,
 				D8FD92A50483CDC700A80164 /* Page.m */,
 				D8FD92A70483CDC700A80164 /* PlayInspector.m */,
 				D8FD92A90483CDC700A80164 /* PrefBlock.m */,
 				D8FD92AB0483CDC700A80164 /* Preferences.m */,
-				D8FD93860483CDC800A80164 /* ProgressDisplay.h */,
 				D8FD92AD0483CDC700A80164 /* ProgressDisplay.m */,
 				D8FD92B10483CDC700A80164 /* Range.m */,
 				D8FD92B30483CDC700A80164 /* RangeInspector.m */,
@@ -1452,7 +1445,6 @@
 				D8FD92BD0483CDC700A80164 /* SoundEffect.m */,
 				D8FD92BF0483CDC700A80164 /* SquareNote.m */,
 				D8FD92C10483CDC800A80164 /* SquareNoteInspector.m */,
-				D8FD939E0483CDC800A80164 /* Staff.h */,
 				D8FD92C30483CDC800A80164 /* Staff.m */,
 				D8FD92C50483CDC800A80164 /* StaffObj.m */,
 				D8FD92C70483CDC800A80164 /* StaffTrans.m */,
@@ -1460,7 +1452,6 @@
 				D8FD92CB0483CDC800A80164 /* SysAdjust.m */,
 				D8FD92CD0483CDC800A80164 /* SysCommands.m */,
 				D8FD92CF0483CDC800A80164 /* SysInspector.m */,
-				D8FD93AC0483CDC800A80164 /* System.h */,
 				D8FD92D10483CDC800A80164 /* System.m */,
 				D8FD92D30483CDC800A80164 /* TabInspector.m */,
 				D8FD92D50483CDC800A80164 /* Tablature.m */,
@@ -1481,7 +1472,6 @@
 				D8FD92F30483CDC800A80164 /* Verse.m */,
 				D8FD92F50483CDC800A80164 /* VoiceInspector.m */,
 				D8FD92F70483CDC800A80164 /* Volta.m */,
-				D8FD93030483CDC800A80164 /* OAPLAExtensions.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -1489,7 +1479,6 @@
 		D8FD93050483CDC800A80164 /* Headers */ = {
 			isa = PBXGroup;
 			children = (
-				D87D0FDB09AE6ED200784ACC /* muxCollide.h */,
 				D8FD93060483CDC800A80164 /* Accent.h */,
 				D8FD93080483CDC800A80164 /* AccentInspector.h */,
 				D8FD930A0483CDC800A80164 /* AppDefaults.h */,
@@ -1504,6 +1493,7 @@
 				D8FD931C0483CDC800A80164 /* CallInst.h */,
 				D8FD931E0483CDC800A80164 /* CalliopeThreeStateButton.h */,
 				D8FD93200483CDC800A80164 /* CalliopeThreeStateButtonCell.h */,
+				D8FD93DE0483CDC800A80164 /* CalliopeWindow.h */,
 				D8FD93220483CDC800A80164 /* CallPageLayout.h */,
 				D8FD93240483CDC800A80164 /* CallPart.h */,
 				D8FD93260483CDC800A80164 /* CastInspector.h */,
@@ -1513,6 +1503,7 @@
 				D8FD932E0483CDC800A80164 /* ClefInspector.h */,
 				D8FD93300483CDC800A80164 /* Course.h */,
 				D8FD93320483CDC800A80164 /* DragMatrix.h */,
+				D8FD93340483CDC800A80164 /* DrawApp.h */,
 				D8FD93380483CDC800A80164 /* Enclosure.h */,
 				D8FD933A0483CDC800A80164 /* EnclosureInspector.h */,
 				D8FD93D60483CDC800A80164 /* FileCompatibility.h */,
@@ -1535,11 +1526,15 @@
 				D8FD935C0483CDC800A80164 /* LayBarInspector.h */,
 				D8FD935E0483CDC800A80164 /* Ligature.h */,
 				D8FD93600483CDC800A80164 /* LigatureInspector.h */,
+				D8FD93620483CDC800A80164 /* Margin.h */,
 				D8FD93640483CDC800A80164 /* MarginInspector.h */,
 				D8FD93660483CDC800A80164 /* Metro.h */,
 				D8FD93680483CDC800A80164 /* MetroInspector.h */,
 				D8FD936A0483CDC800A80164 /* MultiView.h */,
+				D8FD93DA0483CDC800A80164 /* musfont.h */,
 				D8FD936C0483CDC800A80164 /* mux.h */,
+				D87D0FDB09AE6ED200784ACC /* muxCollide.h */,
+				D8FD93DC0483CDC800A80164 /* muxlow.h */,
 				D8FD936E0483CDC800A80164 /* Neume.h */,
 				D8FD93700483CDC800A80164 /* NeumeInspector.h */,
 				D8FD93720483CDC800A80164 /* NeumeNew.h */,
@@ -1548,9 +1543,13 @@
 				D8FD93780483CDC800A80164 /* NoteGroupInspector.h */,
 				D8FD937A0483CDC800A80164 /* NoteHead.h */,
 				D8FD937C0483CDC800A80164 /* NoteInspector.h */,
+				D8FD93E60483CDC800A80164 /* OAPLAExtensions.h */,
+				D8FD93360483CDC800A80164 /* OpusDocument.h */,
+				D8FD937E0483CDC800A80164 /* Page.h */,
 				D8FD93800483CDC800A80164 /* PlayInspector.h */,
 				D8FD93820483CDC800A80164 /* PrefBlock.h */,
 				D8FD93840483CDC800A80164 /* Preferences.h */,
+				D8FD93860483CDC800A80164 /* ProgressDisplay.h */,
 				D8FD938A0483CDC800A80164 /* Range.h */,
 				D8FD938C0483CDC800A80164 /* RangeInspector.h */,
 				D8FD938E0483CDC800A80164 /* Rest.h */,
@@ -1561,12 +1560,14 @@
 				D8FD93980483CDC800A80164 /* SoundEffect.h */,
 				D8FD939A0483CDC800A80164 /* SquareNote.h */,
 				D8FD939C0483CDC800A80164 /* SquareNoteInspector.h */,
+				D8FD939E0483CDC800A80164 /* Staff.h */,
 				D8FD93A00483CDC800A80164 /* StaffObj.h */,
 				D8FD93A20483CDC800A80164 /* StaffTrans.h */,
 				D8FD93A40483CDC800A80164 /* SyncScrollView.h */,
 				D8FD93A60483CDC800A80164 /* SysAdjust.h */,
 				D8FD93A80483CDC800A80164 /* SysCommands.h */,
 				D8FD93AA0483CDC800A80164 /* SysInspector.h */,
+				D8FD93AC0483CDC800A80164 /* System.h */,
 				D8FD93AE0483CDC800A80164 /* TabInspector.h */,
 				D8FD93B00483CDC800A80164 /* Tablature.h */,
 				D8FD93B20483CDC800A80164 /* TabTuner.h */,
@@ -1587,11 +1588,7 @@
 				D8FD93D00483CDC800A80164 /* Verse.h */,
 				D8FD93D20483CDC800A80164 /* VoiceInspector.h */,
 				D8FD93D40483CDC800A80164 /* Volta.h */,
-				D8FD93DA0483CDC800A80164 /* musfont.h */,
-				D8FD93DC0483CDC800A80164 /* muxlow.h */,
-				D8FD93DE0483CDC800A80164 /* CalliopeWindow.h */,
 				D8FD93E00483CDC800A80164 /* winheaders.h */,
-				D8FD93E60483CDC800A80164 /* OAPLAExtensions.h */,
 			);
 			name = Headers;
 			sourceTree = "<group>";
@@ -2065,7 +2062,6 @@
 				D8F247DC09AD3F8C00B96D0D /* Enclosure.h in Headers */,
 				D8F247DD09AD3F8C00B96D0D /* EnclosureInspector.h in Headers */,
 				D8F247DE09AD3F8C00B96D0D /* GNChord.h in Headers */,
-				D8F247DF09AD3F8C00B96D0D /* GNote.h in Headers */,
 				D8F247E009AD3F8C00B96D0D /* Graphic.h in Headers */,
 				D8F247E109AD3F8C00B96D0D /* GraphicView.h in Headers */,
 				D8F247E209AD3F8C00B96D0D /* GVCommands.h in Headers */,
@@ -3242,6 +3238,7 @@
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 					"~/Sources/Music/Calliope/Application",
 					"~/Sources/Music/Calliope/Application/CalliopePropertyListCoders",
+					/opt/local/include,
 				);
 				INFOPLIST_FILE = "Info-Calliope.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
@@ -3272,6 +3269,7 @@
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 					"~/Sources/Music/Calliope/Application",
 					"~/Sources/Music/Calliope/Application/CalliopePropertyListCoders",
+					/opt/local/include,
 				);
 				INFOPLIST_FILE = "Info-Calliope.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
@@ -3301,6 +3299,7 @@
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 					"~/Sources/Music/Calliope/Application",
 					"~/Sources/Music/Calliope/Application/CalliopePropertyListCoders",
+					/opt/local/include,
 				);
 				INFOPLIST_FILE = "Info-Calliope.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
