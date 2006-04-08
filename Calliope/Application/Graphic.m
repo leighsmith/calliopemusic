@@ -349,7 +349,7 @@ id CrossCursor = nil;	/* global since subclassers may need it */
 
 - (NSString *) description
 {
-    return [NSString stringWithFormat: @"%@ type=%d, subtype=%d", super, gFlags.type, gFlags.subtype];
+    return [NSString stringWithFormat: @"%@ type=%d, subtype=%d", [super description], gFlags.type, gFlags.subtype];
 }
 
 
