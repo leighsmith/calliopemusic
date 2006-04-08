@@ -170,7 +170,7 @@ static BOOL busyFlag = 0;  /* so that inspector is not inspected because of a ca
 - loadDataFor: (System *) sys : (int) bt
 {
   float conv;
-  [nstavestext setIntValue:sys->flags.nstaves];
+  [nstavestext setIntValue: [sys numberOfStaves]];
   switch (bt)
   {
     case -1:
@@ -739,7 +739,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
     [staffmatrix setNeedsDisplay];
     return self;
   }
-  sn = sys->flags.nstaves;
+  sn = [sys numberOfStaves];
   n = [[staffmatrix cells] count];
   [staffmatrix renewRows:sn columns:1];
 //  [staffmatrix lockFocus];
@@ -822,9 +822,9 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
     if ([self newSystem: v : [nstavestext intValue]] == nil) return self;
     sys = [v currentSystem];
   }
-  if (sys->flags.nstaves != [nstavestext intValue])
+  if ([sys numberOfStaves] != [nstavestext intValue])
   {
-    [nstavestext setIntValue:sys->flags.nstaves];
+    [nstavestext setIntValue: [sys numberOfStaves]];
   }
   [v saveSysLeftMargin];
   i = [self setSystem: sys];
@@ -931,7 +931,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
 	v = [doc graphicView];
     if ((sys = [v currentSystem]) != nil)
     {
-	[nstavestext setIntValue: sys->flags.nstaves];
+	[nstavestext setIntValue: [sys numberOfStaves]];
 	NSLog(@"-setnstaves: Current system != nil");
 	return self;
     }
@@ -1098,7 +1098,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
     NSRunAlertPanel(@"System Style", @"No current system", @"OK", nil, nil);
     return nil;
   }
-  p = [[System alloc] initWithStaveCount: sys->flags.nstaves onGraphicView: sys->view];
+  p = [[System alloc] initWithStaveCount: [sys numberOfStaves] onGraphicView: sys->view];
   [sys copyStyleTo: p];
   p->style =[[n copy] retain];
   [sl addObject: p];
@@ -1147,7 +1147,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
     NSBeep();
     return self;
   }
-  if (sys->flags.nstaves != st->flags.nstaves)
+  if ([sys numberOfStaves] != [st numberOfStaves])
   {
     NSBeep();
     return self;
@@ -1253,6 +1253,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
   float ss, lm;
   GraphicView *v = [DrawApp currentView];
   System *st, *sys = [v currentSystem];
+  
   if (sys == nil)
   {
     NSBeep();
@@ -1270,7 +1271,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
     NSBeep();
     return self;
   }
-  if (sys->flags.nstaves != st->flags.nstaves)
+  if ([sys numberOfStaves] != [st numberOfStaves])
   {
     NSBeep();
     return self;

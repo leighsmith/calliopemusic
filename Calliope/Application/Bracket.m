@@ -205,7 +205,7 @@ static void displink(System *sys, int m)
   if (sys == nil) return;
   ymin = 32000.0;
   ymax = 0.0;
-  i = sys->flags.nstaves;
+  i = [sys numberOfStaves];
   f1 = f2 = 0;
   while (i--)
   {

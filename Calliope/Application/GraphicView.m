@@ -817,7 +817,7 @@ extern char *typename[NUMTYPES];
   while (systemIndex <= [currentPage bottomSystemNumber] && systemIndex <= theCount)
   {
     sys = [syslist objectAtIndex:systemIndex];
-    n = sys->flags.nstaves;
+    n = [sys numberOfStaves];
     while (n--)
     {
       sp = [sys getstaff: n];
@@ -1016,7 +1016,7 @@ extern char *typename[NUMTYPES];
   if (currentSystem != g)
   {
     s = currentSystem;
-    [self thisSystem: g];
+    [self selectSystemAsCurrent: g];
     [self reDraw: g]; /* g's marker */
     [self reDraw: s]; /* old marker */
   }
@@ -1414,9 +1414,11 @@ static void drawHorz(float x, float y, float w, NSRect r)
   NSPoint pt;
   Staff *sp;
   TimedObj *p;
+  Barline *newBarLine;
   Barline *bl;
   int tb, td, b = NO, r = YES;
   int cst;
+  
 //#warning EventConversion: the 'characters' method of NSEvent replaces the '.data.key.charCode' field of NXEvent. Use 'charactersIgnoringModifiers' to get the chars that would have been generated regardless of modifier keys (except shift)
   switch (cst = *[[event characters] cString])
   {
@@ -1431,20 +1433,20 @@ static void drawHorz(float x, float y, float w, NSRect r)
       case 'm': /*13:  M */
       [self getInsertionX: &(pt.x) : &sp : &p : &tb : &td];
       pt.y = [sp yOfCentre];
-      p = [Graphic allocInit: BARLINE];
-      [p proto: self : pt : sp : sp->mysys : nil : 0];
+      newBarLine = (Barline *) [Graphic graphicOfType: BARLINE];
+      [newBarLine proto: self : pt : sp : sp->mysys : nil : 0];
       bl = [self lastObject: sp->mysys : [sp myIndex] : BARLINE : YES];
       if (bl != nil)
       {
-        ((Barline *)p)->flags.staff = bl->flags.staff;
-        ((Barline *)p)->flags.bridge = bl->flags.bridge;
+        newBarLine->flags.staff = bl->flags.staff;
+        newBarLine->flags.bridge = bl->flags.bridge;
       }
       b = YES;
       break;
       case 'r': /*18:  R */
       [self getInsertionX: &(pt.x) : &sp : &p : &tb : &td];
       pt.y = [sp yOfCentre];
-      p = [Graphic allocInit: REST];
+      p = [Graphic graphicOfType: REST];
       [p proto: self : pt : sp : sp->mysys : nil : 5];
       p->time.body = tb;
       p->time.dot = 0;
@@ -1976,7 +1978,7 @@ static void drawHorz(float x, float y, float w, NSRect r)
             {
               p = [sender draggingLocation];
               p = [self convertPoint:p fromView:nil];
-              [[Graphic allocInit: IMAGE] protoFromPasteboard: pboard : self : p];
+              [[Graphic graphicOfType: IMAGE] protoFromPasteboard: pboard : self : p];
               [self setNeedsDisplay:YES];
             }
       }
@@ -2150,7 +2152,7 @@ extern int needUpgrade;
 	s = [syslist objectAtIndex:0];
 	if (![s checkMargin])
 	{
-	    p = [Graphic allocInit: MARGIN];
+	    p = [Graphic graphicOfType: MARGIN];
 	    [p setClient: s];
 	    [s linkobject: p];
 	    [p recalc];

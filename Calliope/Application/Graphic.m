@@ -135,12 +135,16 @@ id CrossCursor = nil;	/* global since subclassers may need it */
 }
 
 
-+ allocInit: (int) t
++ (Graphic *) graphicOfType: (int) t
 {
-  id obj = [self classFor: t];
-  if (obj == nil) NSLog(@"missing case in [Graphic allocInit(%d)]", t);
-  else obj = [[obj alloc] init];
-  return obj;
+    Graphic *obj;
+    Class GraphicSubclass = [self classFor: t];
+    
+    if (GraphicSubclass == nil) 
+	NSLog(@"missing case in [Graphic graphicOfType: %d]", t);
+    else 
+	obj = [[[GraphicSubclass alloc] init] autorelease];
+    return obj;
 }
 
 
@@ -181,7 +185,7 @@ id CrossCursor = nil;	/* global since subclassers may need it */
 {
   Graphic *g = nil;
   Staff *sp = [sys findOnlyStaff: pt.y];
-  g = [self allocInit: t];
+  g = [self graphicOfType: t];
   [g proto: v : pt : sp : sys : nil : arg1];
   switch (arg2)
   {
@@ -222,7 +226,7 @@ id CrossCursor = nil;	/* global since subclassers may need it */
   [v deselectAll: v];
   for (i = 0; i < k; i++)
   {
-      t = (TieNew *)[self allocInit: TIENEW];
+      t = (TieNew *)[self graphicOfType: TIENEW];
     [t proto: v : p : q : i];
     if (a = [t willSplit])
     {
@@ -265,7 +269,7 @@ id CrossCursor = nil;	/* global since subclassers may need it */
     p = [sl objectAtIndex:k];
     if (ISASTAFFOBJ(p))
     {
-      a = [self allocInit: ACCENT];
+      a = [self graphicOfType: ACCENT];
       [a proto: v : NSZeroPoint : nil : nil : p : 0];
       [a recalc];
       [al addObject: a];
@@ -298,7 +302,7 @@ id CrossCursor = nil;	/* global since subclassers may need it */
   }
   else
   {
-    p = [self allocInit: t];
+    p = [self graphicOfType: t];
     if ([p proto: v : NSZeroPoint : nil : nil : nil : arg] == nil)
     {
       [p release];

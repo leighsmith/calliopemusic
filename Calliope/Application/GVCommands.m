@@ -184,7 +184,7 @@ static NSString *stylescratch;
     NSBeep();
     return self;
   }
-  if (sys->flags.nstaves != currentSystem->flags.nstaves)
+  if ([sys numberOfStaves] != [currentSystem numberOfStaves])
   {
     NSBeep();
     return self;
@@ -366,7 +366,7 @@ static NSString *stylescratch;
     for (v = 0; v < NUMVOICES; v++) numrests[v] = numvox[v] = 0;
     sys = [syslist objectAtIndex:i];
     sl = sys->staves;
-    ns = sys->flags.nstaves;
+    ns = [sys numberOfStaves];
     for (j = 0; j < ns; j++)
     {
       sp = [sl objectAtIndex:j];
@@ -438,7 +438,7 @@ static NSString *stylescratch;
   {
     sys = [syslist objectAtIndex:i];
     sl = sys->staves;
-    ns = sys->flags.nstaves;
+    ns = [sys numberOfStaves];
     lwhite = [sys leftWhitespace];
     [sys  doStamp: ns : lwhite];
     for (j = 0; j < ns; j++)
@@ -637,7 +637,7 @@ extern char *typename[NUMTYPES];
     NSBeep();
     return self;
   }
-  p = [Graphic allocInit: RUNNER];
+  p = [Graphic graphicOfType: RUNNER];
   p->client = currentSystem;
   [currentSystem linkobject: p];
   [self deselectAll: self];
@@ -1079,7 +1079,7 @@ char ch[8] = ".@#!.FSN";
   {
     sys = [syslist objectAtIndex:k];
     ns = [sys->staves count];
-    if (ns != sys->flags.nstaves) NSLog(@"System %d: count=%d, nstaves=%d\n", k, ns, sys->flags.nstaves);
+    if (ns != [sys numberOfStaves]) NSLog(@"System %d: count=%d, nstaves=%d\n", k, ns, [sys numberOfStaves]);
   }
   NSLog(@"checking finished\n");
 #endif
@@ -1283,7 +1283,7 @@ extern char *typename[NUMTYPES];
   while (k--)
   {
     sys = [syslist objectAtIndex:k];
-    if (sys->flags.nstaves != 3) continue;
+    if ([sys numberOfStaves] != 3) continue;
     sp = [sys->staves objectAtIndex:2];
     if (sp->flags.subtype != 1) continue;
     [sys->staves removeObjectAtIndex:2];
@@ -1456,10 +1456,12 @@ extern char *typename[NUMTYPES];
 {
     System *sys = [currentSystem newFormattedSystem];
     
-    [self addSystem: sys]; // append it.
+    [self insertSystem: sys afterSystem: currentSystem];
+    [self selectSystemAsCurrent: sys];
+    [self setFontSelection: 1 : 0];
     [self simplePaginate: sys afterAddingCount: 1 askIfLoose: NO];
-    [currentSystem release];
-    currentSystem = [sys retain];
+    // TODO if we are going to display an inspector it should be from a controller.
+    // [[DrawApp sharedApplicationController] inspectClass: [SysInspector class] loadInspector: NO];
     return [self dirty];
 }
 
@@ -1469,25 +1471,33 @@ extern char *typename[NUMTYPES];
   Return sys; pass back whether next system was there already.
 */
 
-- (System *) nextSystem: (System *) s : (int *) r
+- (System *) nextSystem: (System *) prototypeSystem didCreate: (BOOL *) didCreate
 {
-  System *sys;
-  int b = YES;
-  if (s == [syslist lastObject]) b = NO;
-  else
-  {
-      unsigned ix = [syslist indexOfObject:s];
-      if (ix == NSNotFound) {
-          NSLog(@"System not in syslist? Should not happen.\n");
-          if ([syslist count]) ix = 0; else return nil;
-      }
-      sys = [syslist objectAtIndex:ix + 1];
-      if (sys->flags.nstaves != s->flags.nstaves) b = NO;
-  }
-  if (!b) 
-      sys = [s newFormattedSystem];
-  *r = b;
-  return sys;
+    System *nextSystem;
+    
+    *didCreate = NO;
+    if (prototypeSystem == [syslist lastObject]) 
+	*didCreate = YES;
+    else {
+	unsigned whereToInsertNewSystem = [syslist indexOfObject: prototypeSystem];
+	
+	if (whereToInsertNewSystem == NSNotFound) {
+	    NSLog(@"System not in syslist? Should not happen!");
+	    
+	    if ([syslist count]) 
+		whereToInsertNewSystem = 0;
+	    else 
+		return nil;
+	}
+	nextSystem = [syslist objectAtIndex: whereToInsertNewSystem + 1];
+	if ([nextSystem numberOfStaves] != [prototypeSystem numberOfStaves])
+	    *didCreate = YES;
+    }
+    if (*didCreate) {
+	nextSystem = [prototypeSystem newFormattedSystem];
+	[self addSystem: nextSystem];
+    }
+    return nextSystem;
 }
 
 
@@ -1689,7 +1699,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
   BOOL r = NO, m = NO;
   int theLocation;
   i = (sys == [syslist lastObject]) ? -1 : 1;
-  [self thisSystem: [self getSystem: sys offsetBy: i]];
+  [self selectSystemAsCurrent: [self getSystem: sys offsetBy: i]];
   m = ([sys checkMargin] != nil);
   if (m) [self saveSysLeftMargin];
   theLocation = [syslist indexOfObject:sys];
@@ -1870,7 +1880,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
       ns->view = self;
       ns->page = sys->page;
       [ns closeSystem];
-      [self linkSystem: sys : ns];
+      [self insertSystem: ns afterSystem: sys];
       if (ns->oldleft != [ns leftMargin]) [ns shuffleNotes: ns->oldleft : [ns leftMargin]];
       [ns recalc];
       sys = ns;
@@ -1882,7 +1892,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
     return nil;
   }
   [self paginate: self];
-  [self thisSystem: sys];
+  [self selectSystemAsCurrent: sys];
   [[DrawApp sharedApplicationController] inspectApp];
   [self setNeedsDisplay:YES];
   return self;
@@ -1914,7 +1924,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
     NSBeep();
     return self;
   }
-  sys->flags.nstaves += nsys->flags.nstaves;
+  sys->flags.nstaves += [nsys numberOfStaves];
   k = [nsys->staves count];
   for (i = 0; i < k; i++)
   {
@@ -1958,7 +1968,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
   {
     sys = [syslist objectAtIndex:i];
     sl = sys->staves;
-    ns = sys->flags.nstaves;
+    ns = [sys numberOfStaves];
     for (j = 0; j < ns; j++)
     {
       sp = [sl objectAtIndex:j];
@@ -2006,7 +2016,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
   {
     sys = [syslist objectAtIndex:i];
     sl = sys->staves;
-    ns = sys->flags.nstaves;
+    ns = [sys numberOfStaves];
     for (j = 0; j < ns; j++)
     {
       sp = [sl objectAtIndex:j];
@@ -2058,7 +2068,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
   {
     sys = [syslist objectAtIndex:i];
     sl = sys->staves;
-    ns = sys->flags.nstaves;
+    ns = [sys numberOfStaves];
     for (j = 0; j < ns; j++)
     {
       sp = [sl objectAtIndex:j];
@@ -2107,7 +2117,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
   {
     sys = [syslist objectAtIndex:i];
     sl = sys->staves;
-    ns = sys->flags.nstaves;
+    ns = [sys numberOfStaves];
     for (j = 0; j < ns; j++)
     {
       sp = [sl objectAtIndex:j];
@@ -2151,7 +2161,7 @@ void setSplit(Hanger *h, int u, int f)
   {
     sys = [syslist objectAtIndex:i];
     sl = sys->staves;
-    ns = sys->flags.nstaves;
+    ns = [sys numberOfStaves];
     for (j = 0; j < ns; j++)
     {
       sp = [sl objectAtIndex:j];

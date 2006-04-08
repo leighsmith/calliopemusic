@@ -75,6 +75,7 @@
 - (float) leftIndent;
 - (float) leftWhitespace;
 - (float) rightIndent;
+
 /*!
   @brief Assigns the staff scale.
  */
@@ -95,17 +96,26 @@
 - (float) getBracketX: (Bracket *) b : (int) sz;
 - linkobject: p;		/* put arg on objs list */
 - unlinkobject: p;		/* remove p from objs list */
+- (unsigned int)indexOfObject:s;	/* return index of given staff */
+- (BOOL) relinknote : (StaffObj *) p;		/* relink note to sensible destination */
+
+// Staff manipulation.
+
+/*!
+  @brief Returns the number of staves (i.e Staff instances).
+ */
+- (int) numberOfStaves;
 - newStaff: (float) y;		/* put a new staff near y */
-- getstaff : (int) n;		/* return staff indexed by n */
+- getstaff: (int) n;		/* return staff indexed by n */
 - getVisStaff: (int) n;		/* same, but nil if hidden */
 - lastStaff;
-- (unsigned int)indexOfObject:s;	/* return index of given staff */
 - (int) whereIs: (Staff *) sp;		/* code for location of staff */
-- (BOOL) relinknote : (StaffObj *) p;		/* relink note to sensible destination */
 - firststaff;			/* return first visible staff */
 - nextstaff: s;			/* return next visible staff after s */
 - (Staff *) findOnlyStaff: (float) y; 	 /* find staff closest to y */
 - sameStaff: (Staff *) sp;
+
+
 - (int) whichMarker: (Graphic *) p;
 - (void)searchFor: (NSPoint) p :(NSMutableArray *)arr;	/* look for a hit in the system */
 - (void)dealloc;

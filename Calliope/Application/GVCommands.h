@@ -13,7 +13,13 @@
 - recalcAllSys;
 - (int) gotoPage: (int) n;
 - (BOOL) showMargins;
-- (System *) nextSystem: (System *) s : (int *) r;
+
+/*
+  @brief Find or make the next system of same number of staves as prototypeSystem.
+  @return Returns the next system;
+  @param didCreate Pass back whether next system was created.
+ */
+- (System *) nextSystem: (System *) prototypeSystem didCreate: (BOOL *) didCreate;
 - hideSystemVerse: sender;
 - hideStaffVerse: sender;
 - wantVerse: sender;
@@ -44,6 +50,12 @@
 - delAll3rdStaves: sender; /* this is for my own use in converting old files */
 - toggleStaffDisp: sender;
 - reShapeAllSys: sender;
+
+/*!
+    @brief Duplicate current system, and make it current. 
+ 
+    TODO This should become part of NotationScore.
+ */
 - duplicateSystem: sender;
 - spillBar: sender;
 - grabBar: sender;

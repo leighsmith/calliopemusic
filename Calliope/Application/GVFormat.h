@@ -53,8 +53,15 @@ typedef enum {
 - doPaginate;
 - balancePages;
 - simplePaginate: (System *) sys afterAddingCount: (int) i askIfLoose: (BOOL) f;
-- linkSystem: (System *) s : (System *) ns;
-- thisSystem: (System *) s;
+
+- insertSystem: (System *) newSystem afterSystem: (System *) s;
+
+/*!
+  @brief Selects the given system as being the current system.
+ 
+  The given system must already be in the system list.
+ */
+- (void) selectSystemAsCurrent: (System *) s;
 - (Staff *) nextStaff: sys : (int) sn;
 - (Staff *) prevStaff: sys : (int) sn;
 - (int) prevHyphened: sys : (int) sn : (int) vn : (int) vc;

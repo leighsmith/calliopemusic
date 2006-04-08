@@ -198,6 +198,7 @@ extern void setkeysig(KeySig *p, char *key);
   Staff *sp;
   OpusDocument *doc = [DrawApp currentDocument];
   PlayInspector *player = [[DrawApp sharedApplicationController] thePlayInspector];
+  
   if (doc) v = [doc graphicView]; else return self;
   i = [n noteTag] & 127;
   if (i < 0 || i > 127) return self;
@@ -222,7 +223,7 @@ extern void setkeysig(KeySig *p, char *key);
 	  mc = [sp getKeyThru: p : ks];
 	  posOfNote(mc, ks, [n keyNum], &pos, &acc);
 	  pt.y = [sp yOfPos: pos];
-	  q = [Graphic allocInit: NOTE];
+	  q = [Graphic graphicOfType: NOTE];
 	  [q proto: v : pt : sp : sp->mysys : nil : 5];
 	  if (acc) setAccidental(q, acc);
           [sp linknote: q];

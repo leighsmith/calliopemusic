@@ -407,7 +407,7 @@ NSArray *TypesDrawExports(void)
     {
       if ([type isEqualToString:NSPostScriptPboardType] || [type isEqualToString:NSTIFFPboardType])
       {
-        g = [[Graphic allocInit: IMAGE] protoFromPasteboard: pboard : self];
+        g = [[Graphic graphicOfType: IMAGE] protoFromPasteboard: pboard : self];
 	if (g)
 	{
 	  pblist = [[NSMutableArray allocWithZone:[self zone]] initWithCapacity:1];

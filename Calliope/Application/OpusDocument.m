@@ -851,9 +851,10 @@ return nil;
     System *newSystem = [[System alloc] initWithStaveCount: numOfStaves onGraphicView: view];
 
     [newSystem setStaffScale: [self staffScale]];
-    [newSystem initsys];
+    [newSystem initsys];  // initWithSystem: [view currentSystem]
     if (numOfStaves > 1) 
-	[newSystem installLink];
+	[newSystem installLink]; // to what?
+    [view addSystem: newSystem];
     [view renumSystems];
     [view doPaginate];
     [view renumPages];

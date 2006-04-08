@@ -29,12 +29,12 @@ static Staff *staffmap[NUMSTAVES]; /* indexed by old staff, points to new staff 
   int k, n;
   System *sys;
   if (currentSystem == nil) return NO;
-  n = currentSystem->flags.nstaves;
+  n = [currentSystem numberOfStaves];
   k = [syslist count];
   while (k--)
   {
     sys = [syslist objectAtIndex:k];
-    if (sys->flags.nstaves != n) return NO;
+    if ([sys numberOfStaves] != n) return NO;
   }
   return YES;
 }
@@ -86,7 +86,7 @@ static void makeLinkage(System *sys)
   Staff *sp1, *sp2;
   int i;
   NSMutableArray *ol = osys->objs;
-  if (nsys->flags.nstaves > 1) makeLinkage(nsys);
+  if ([nsys numberOfStaves] > 1) makeLinkage(nsys);
   else
   {
     sp1 = [osys->staves objectAtIndex:0];
@@ -204,7 +204,7 @@ static void addBarsRest(Staff *sp, System *sys, int n)
     sys = [syslist objectAtIndex:i];
     hassys = NO;
     sl = sys->staves;
-    ns = sys->flags.nstaves;
+    ns = [sys numberOfStaves];
     /* first pass tries to find relevant staves */
     n = 0;
     for (j = 0; j < ns; j++)
@@ -299,7 +299,7 @@ static void addBarsRest(Staff *sp, System *sys, int n)
     sys = [syslist objectAtIndex:i];
     hassys = NO;
     sl = sys->staves;
-    ns = sys->flags.nstaves;
+    ns = [sys numberOfStaves];
     for (j = 0; j < ns; j++)
     {
       sp = [sl objectAtIndex:j];

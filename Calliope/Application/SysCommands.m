@@ -332,6 +332,8 @@
   NSMutableArray *snl, *dnl;
   System *sys;
   StaffObj *p;
+  BOOL createdSystem;
+  
   ns = flags.nstaves;
   lmx = [self leftWhitespace];
   /* first find all the bar boundaries. */
@@ -363,7 +365,7 @@
     if (b) [self findSplits: sp : begbar[i] : endbar[i] : 1];
   }
   /* find or make next system */
-  sys = [view nextSystem: self : &b];
+  sys = [view nextSystem: self didCreate: &createdSystem];
   /* find where to insert the last bar if there is one */
   for (i = 0; i < ns; i++) if (endbar[i] > -1)
   {
@@ -409,8 +411,8 @@
   [self sysInvalid];
   [self userAdjust: YES]; /* does the recache, recalc and sysHeight */
   [sys sysInvalid];
-  [sys userAdjust: b];
-  if (b) [view resetPagesOn: self : sys];
+  [sys userAdjust: !createdSystem];
+  if (!createdSystem) [view resetPagesOn: self : sys];
   else [view simplePaginate: self afterAddingCount: 1 askIfLoose: NO];
   return self;
 }
@@ -447,7 +449,7 @@
 	    return nil;
 	}
 	sys = [sysl objectAtIndex:ds];
-	if (sys->flags.nstaves != ns)
+	if ([sys numberOfStaves] != ns)
 	{
 	    NSRunAlertPanel(@"Cannot Grab", @"Next system not same size", @"OK", nil, nil, NULL);
 	    return nil;
@@ -510,59 +512,61 @@
 
 - layBars: (int) n : (NSRect *) r
 {
-  int ns, i, b;
-  float x, xoff, xwid;
-  Staff *sp;
-  StaffObj *p;
-  Barline *prev[NUMSTAVES];
-  BOOL f = NO;
-  char sFlag, bFlag;
-  float lwhite = [self leftWhitespace];
-  ns = flags.nstaves;
-  for (i = 0; i < ns; i++) prev[i] = [view lastObject: self : i : BARLINE : YES];
-  xoff = 0.0;
-  for (i = 0; i < ns; i++)
-  {
-    sp = [staves objectAtIndex:i];
-    p = [sp->notes lastObject];
-    if (p != nil) x = RIGHTBOUND(p); else x = lwhite;
-    if (x > xoff) xoff = x;
-  }
-  xwid = (lwhite + width - xoff) / n;
-  for (i = 0; i < ns; i++)
-  {
-    if (prev[i] == nil)
+    int ns, i, b;
+    float x, xoff, xwid;
+    Staff *sp;
+    StaffObj *p;
+    Barline *prev[NUMSTAVES];
+    BOOL f = NO;
+    char sFlag, bFlag;
+    float lwhite = [self leftWhitespace];
+    
+    ns = flags.nstaves;
+    for (i = 0; i < ns; i++) prev[i] = [view lastObject: self : i : BARLINE : YES];
+    xoff = 0.0;
+    for (i = 0; i < ns; i++)
     {
-      sFlag = 1;
-      bFlag = 0;
+	sp = [staves objectAtIndex:i];
+	p = [sp->notes lastObject];
+	if (p != nil) x = RIGHTBOUND(p); else x = lwhite;
+	if (x > xoff) xoff = x;
     }
-    else
+    xwid = (lwhite + width - xoff) / n;
+    for (i = 0; i < ns; i++)
     {
-      sFlag = prev[i]->flags.staff;
-      bFlag = prev[i]->flags.bridge;
-    }
-    sp = [staves objectAtIndex:i];
-    for (b = 1; b <= n; b++)
-    {
-      p = [Graphic allocInit: BARLINE];
-      p->x = xoff + b * xwid;
-      p->y = [sp yOfTop];
-      ((Barline *)p)->flags.staff = sFlag;
-      ((Barline *)p)->flags.bridge = bFlag;
-      [sp linknote: p];
-      [p recalc];
-      if (!(sp->flags.hidden))
-      {
-        if (f) *r  = NSUnionRect((p->bounds) , *r);
+	if (prev[i] == nil)
+	{
+	    sFlag = 1;
+	    bFlag = 0;
+	}
 	else
 	{
-	  f = YES;
-	  *r = p->bounds;
+	    sFlag = prev[i]->flags.staff;
+	    bFlag = prev[i]->flags.bridge;
 	}
-      }
+	sp = [staves objectAtIndex:i];
+	for (b = 1; b <= n; b++)
+	{
+	    Barline *barline = [Graphic graphicOfType: BARLINE];
+	    
+	    barline->x = xoff + b * xwid;
+	    barline->y = [sp yOfTop];
+	    barline->flags.staff = sFlag;
+	    barline->flags.bridge = bFlag;
+	    [sp linknote: barline];
+	    [barline recalc];
+	    if (!(sp->flags.hidden))
+	    {
+		if (f) *r  = NSUnionRect((barline->bounds), *r);
+		else
+		{
+		    f = YES;
+		    *r = barline->bounds;
+		}
+	    }
+	}
     }
-  }
-  return self;
+    return self;
 }
 
 

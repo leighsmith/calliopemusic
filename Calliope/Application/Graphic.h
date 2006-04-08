@@ -39,7 +39,12 @@ extern id CrossCursor;
 /* Factory methods */
 
 + (void)initialize;
-+ allocInit: (int) t;
+
+/*!
+  @brief Return an autoreleased version of the named subclass of Graphic.
+ */
++ (Graphic *) graphicOfType: (int) t;
+
 + cursor;
 + getInspector: (int) t;
 + createMember: (GraphicView *) v : (int) t : (NSPoint) pt : (System *) sys : (int) arg1 : (int) arg2;

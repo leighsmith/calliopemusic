@@ -315,7 +315,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
     {
         sys = [syslist objectAtIndex:si];
         lwhite = [sys leftWhitespace];
-        n = sys->flags.nstaves;
+        n = [sys numberOfStaves];
         [sys  doStamp: n : lwhite];
         sl = sys->staves;
         for (i = 0; i < n; i++)
@@ -372,7 +372,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
             [player[0].part addNote: an];
         }
         lwhite = [sys leftWhitespace];
-        n = sys->flags.nstaves;
+        n = [sys numberOfStaves];
         for (i = 0; i < n; i++)
         {
             sp = [sys->staves objectAtIndex:i];

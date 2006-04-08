@@ -25,7 +25,7 @@
   if (sys == nil) return self;
   [v deselectAll: v];
   sl = sys->staves;
-  n = sys->flags.nstaves;
+  n = [sys numberOfStaves];
   for (i = 0; i < n; i++)
   {
     sp = [sl objectAtIndex:i];
@@ -56,7 +56,7 @@
   vox = [[selAllForm cellAtIndex:0] intValue];
   [v deselectAll: v];
   sl = sys->staves;
-  n = sys->flags.nstaves;
+  n = [sys numberOfStaves];
   for (i = 0; i < n; i++)
   {
     sp = [sl objectAtIndex:i];

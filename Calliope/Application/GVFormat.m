@@ -41,28 +41,28 @@
 
 /* link in new system ns after existing system s */
 
-- linkSystem: (System *) s : (System *) ns
+- insertSystem: (System *) ns afterSystem: (System *) s
 {
-  if ([syslist count] == 0 || s == nil)
-  {
-    [syslist addObject: ns];
-    currentSystem = ns;
-    ns->gFlags.selected = 1;
-  }
-  else [syslist insertObject:ns atIndex:([syslist indexOfObject:s] + 1)];
-  return s;
+    if ([syslist count] == 0 || s == nil) {
+	[syslist addObject: ns];
+	currentSystem = ns;
+	ns->gFlags.selected = YES;
+    }
+    else 
+	[syslist insertObject: ns atIndex: ([syslist indexOfObject: s] + 1)];
+    return s;
 }
 
 
 /* specify a new currentSystem */
 
-- thisSystem: (System *) s
+- (void) selectSystemAsCurrent: (System *) s
 {
     if (currentSystem != nil) 
 	currentSystem->gFlags.selected = 0;
-    currentSystem = s;
+    [currentSystem release];
+    currentSystem = [s retain];
     s->gFlags.selected = 1;
-    return s;
 }
 
 
@@ -334,7 +334,7 @@
 	    if (f == NO) return NO;
 	    if (currentPage) [currentPage autorelease];
 		currentPage = [p retain];
-	    [self thisSystem: [syslist objectAtIndex: n]];
+	    [self selectSystemAsCurrent: [syslist objectAtIndex: n]];
 	    return YES;
 	    break;
     }
@@ -343,7 +343,7 @@
     if (currentPage) 
 	[currentPage autorelease];
     currentPage = [[pagelist objectAtIndex: n] retain];
-    [self thisSystem: [syslist objectAtIndex: [currentPage topSystemNumber]]];
+    [self selectSystemAsCurrent: [syslist objectAtIndex: [currentPage topSystemNumber]]];
     return YES;
 }
 
@@ -801,7 +801,7 @@ outOfTotalSystems: (int) numsys
     sys = [syslist objectAtIndex:i];
     if (sys->flags.newbar) b = sys->barnum; else sys->barnum = b;
     al = sys->staves;
-    ns = sys->flags.nstaves;
+    ns = [sys numberOfStaves];
     if (i == k - 1) break;
     sp = [sys firststaff];
     if (sp == nil) continue;
@@ -874,7 +874,7 @@ outOfTotalSystems: (int) numsys
   {
     sys = [syslist objectAtIndex:i];
     sl = sys->staves;
-    ns = sys->flags.nstaves;
+    ns = [sys numberOfStaves];
     for (j = 0; j < ns; j++)
     {
       sp = [sl objectAtIndex:j];
@@ -955,7 +955,7 @@ outOfTotalSystems: (int) numsys
   {
     sys = [syslist objectAtIndex:i];
     sl = sys->staves;
-    ns = sys->flags.nstaves;
+    ns = [sys numberOfStaves];
     for (j = 0; j < ns; j++)
     {
       sp = [sl objectAtIndex:j];
