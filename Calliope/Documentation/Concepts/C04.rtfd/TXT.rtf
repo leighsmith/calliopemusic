@@ -1,0 +1,59 @@
+{\rtf0\ansi{\fonttbl\f0\froman Times-Roman;\f1\fswiss Helvetica;}
+\paperw11900
+\paperh16840
+\margl1440
+\margr1440
+\margt1440
+\margb1440
+\pard\tx1440\tx2880\tx4320\tx5760\ql\keepn\fi0\sb360\sa200\li0\ri0\f1\fs48\b1\i0\ul0\strike0\scaps0\cf0 Bar Numbering\line  (or Measure Numbering)\par
+\pard\tx1440\tx2880\tx4320\tx5760\qj\fi0\sb80\sa0\li0\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 There are many conventions for numbering bars. The general idea implemented by Calliope is that bar numbering happens automatically according to defaults, but it is possible to customise what will happen.\par
+\pard\tx1440\tx2880\tx4320\tx5760\qj\keepn\fi0\sb240\sa80\li0\ri0\f1\fs32\b1\i0\ul0\strike0\scaps0\cf0 General Format\par
+\pard\tx1440\tx2880\tx4320\tx5760\qj\fi0\sb80\sa0\li0\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 Three bar numbering formats are in general use:\par
+\pard\tx360\tx2880\tx4320\tx5760\qj\fi-230\sb80\sa0\li360\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 ·	writing the number in the left margin of each system;\par
+\pard\tx360\tx2880\tx4320\tx5760\qj\fi-230\sb80\sa0\li360\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 ·	writing the number at the beginning of the top staff of each system;\par
+\pard\tx360\tx2880\tx4320\tx5760\qj\fi-230\sb80\sa0\li360\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 ·	writing the number above certain bar lines (normally every 5 bars)  for the top staff (and sometimes other staves) of each system.\par
+\pard\tx1440\tx2880\tx4320\tx5760\qj\fi0\sb80\sa0\li0\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 We shall call these `margin', `staff' and `every N' formats, respectively.  They are depicted here:\par
+\pard\tx1440\tx2880\tx4320\tx5760\qc\fi0\sb80\sa0\li0\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 {{\NeXTGraphic4 graphic_4.eps \width4540\height1180
+}¬} \par
+\pard\tx1440\tx2880\tx4320\tx5760\qc\fi0\sb80\sa0\li0\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 {{\NeXTGraphic4 graphic_2.eps \width3600\height1200
+}¬} \par
+\pard\tx1440\tx2880\tx4320\tx5760\qc\fi0\sb80\sa0\li0\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 {{\NeXTGraphic4 graphic_3.eps \width6580\height1080
+}¬} \par
+\pard\tx1440\tx2880\tx4320\tx5760\qj\fi0\sb80\sa0\li0\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 In addition, it is conventional that the bars on some systems are left unnumbered. The first system of a document is not numbered because it obviously starts with 1.  If `every N' format is used, the last system of a document is usually not numbered because bars are often referred to as being "3 from the end", say.  Also, it is conventional that when 'Every N' format is used, the last bar on a staff is not numbered.  \par
+\pard\tx1440\tx2880\tx4320\tx5760\qj\fi0\sb80\sa0\li0\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 In Calliope, the general format is specified using the Bar Numbers aspect of the Document Preferences Panel:\par
+\pard\tx1440\tx2880\tx4320\tx5760\qc\fi0\sb80\sa0\li0\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 {{\NeXTGraphic4 graphic_5.tiff \width3640\height4540
+}¬} \par
+\pard\tx1440\tx2880\tx4320\tx5760\ql\fi0\sb80\sa0\li0\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 Here you can see it is possible to specify the integer multiple of which bars are shown when 'Every N' format is selected.  Whether the bar number is shown in the first and last system of the document is also an option.  Refer to the Document preferences documentation for more information on using this panel.\par
+\pard\tx1440\tx2880\tx4320\tx5760\qj\keepn\fi0\sb240\sa80\li0\ri0\f1\fs32\b1\i0\ul0\strike0\scaps0\cf0 Restarting Numbering\par
+\pard\tx1440\tx2880\tx4320\tx5760\qj\fi0\sb80\sa0\li0\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 It is useful to start or restart numbering at any place.  This is used mainly when a system begins a new movement or section of a document.   With Calliope this is done on a system-by-system basis.  The Numbering aspect of the System Inspector allows bar numbers to start with any value. Numbering then automatically takes place sequentially, as usual.  The normal situation is for sequention numbering, in which case the Numbering aspect of the System Inspector is likely to look like this:\par
+\pard\tx1440\tx2880\tx4320\tx5760\qc\fi0\sb80\sa0\li0\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 {{\NeXTGraphic4 graphic_10.tiff \width3880\height1080
+}¬} \par
+\pard\tx1440\tx2880\tx4320\tx5760\qj\fi0\sb80\sa0\li0\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 The option is not checked, and the textbox displays the current number in effect at the beginning of the inspected system.  This is shown in grey to indicate that a restart is not specified.  If it is desired to restart numbering with the current system, the box is checked and the staring value entered into the box, as shown:\par
+\pard\tx1440\tx2880\tx4320\tx5760\qc\fi0\sb80\sa0\li0\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 {{\NeXTGraphic4 graphic_11.tiff \width3900\height920
+}¬} \par
+\pard\tx1440\tx2880\tx4320\tx5760\qj\keepn\fi0\sb240\sa80\li0\ri0\f1\fs32\b1\i0\ul0\strike0\scaps0\cf0 Interrupting Numbering\par
+\pard\tx1440\tx2880\tx4320\tx5760\qj\fi0\sb80\sa0\li0\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 It is useful to be able to 'skip' or not to count certain bar lines for the purpose of calculating bars.  With Calliope this can be done on a bar-by-bar basis by two methods:\par
+\pard\tx360\tx2880\tx4320\tx5760\qj\fi-230\sb80\sa0\li360\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 ·	making a bar invisible.  Invisible bars do not take part in the bar counting procedure.\par
+\pard\tx360\tx2880\tx4320\tx5760\qj\fi-230\sb80\sa0\li360\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 ·	using the '\fs24\f1\b0\i0 D\f1 o not count this bar\f0 ' option in the Bar Inspector, as shown here:\par
+\pard\tx1440\tx2880\tx4320\tx5760\qc\fi0\sb80\sa0\li0\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 {{\NeXTGraphic4 graphic_8.tiff \width4820\height3120
+}¬} \par
+\pard\tx1440\tx2880\tx4320\tx5760\ql\fi0\sb80\sa0\li0\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 The radio buttons in the \fs24\f1\b0\i0 B\f1 ar Numbers\f0  box are used for another purpose, described next.\par
+\pard\tx1440\tx2880\tx4320\tx5760\qj\keepn\fi0\sb240\sa80\li0\ri0\f1\fs32\b1\i0\ul0\strike0\scaps0\cf0 Overriding Individual Bars\par
+\pard\tx1440\tx2880\tx4320\tx5760\qj\fi0\sb80\sa0\li0\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 When using 'Every N' format it is useful to be able to override the general rule on a bar-by-bar basis.  For example, it is useful to place a bar number above a bar that would not ordinarily have one, and it is useful to suppress a bar number over a bar in case it might be a multiple of N.  An example of this can be seen here, where a volta occurs at bar 20.  In this case it is more useful to number bar 19 instead, because there is no elegant way to place a  bar number with a volta bracket:\par
+\pard\tx1440\tx2880\tx4320\tx5760\qc\fi0\sb80\sa0\li0\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 {{\NeXTGraphic4 graphic_6.eps \width8820\height4160
+}¬} \par
+\pard\tx1440\tx2880\tx4320\tx5760\qj\fi0\sb80\sa0\li0\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 With Calliope this is accomplished by inspecting bar 19, and changing it to display whatever the current bar number is, then inspecting bar 20 and changing it to suppress the number.  The Inspector for the bar which happens to be numbered 20 is shown here, where the option \fs24\f1\b0\i0 S\f1 uppress Number\f0  is set:\par
+\pard\tx1440\tx2880\tx4320\tx5760\qc\fi0\sb80\sa0\li0\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 {{\NeXTGraphic4 graphic_9.tiff \width4820\height3120
+}¬} \par
+\pard\tx1440\tx2880\tx4320\tx5760\ql\fi0\sb80\sa0\li0\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 Correspondingly, the inspector for bar 19 has the choice \fs24\f1\b0\i0 F\f1 orce Number\f0  set.\par
+\pard\tx1440\tx2880\tx4320\tx5760\qj\keepn\fi0\sb240\sa80\li0\ri0\f1\fs32\b1\i0\ul0\strike0\scaps0\cf0 Numbering Other Staves\par
+\pard\tx1440\tx2880\tx4320\tx5760\qj\fi0\sb80\sa0\li0\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 In scores where `Every N' format is used, it is useful to provide bar numbers in certain staves in addition to the top one.  The following example shows this:\par
+\pard\tx1440\tx2880\tx4320\tx5760\qj\fi0\sb80\sa0\li0\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 {{\NeXTGraphic4 graphic_7.eps \width9020\height5840
+}¬} \par
+\pard\tx1440\tx2880\tx4320\tx5760\qj\fi0\sb80\sa0\li0\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 With Calliope this is accomplished by setting the Extra Bar Numbers flag of the desired stave (in this case, staves 5 and 8) of the current system, as seen in the Staff Layout Options aspect of the System Inspector:\par
+\pard\tx1440\tx2880\tx4320\tx5760\qc\fi0\sb80\sa0\li0\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 {{\NeXTGraphic4 graphic_1.tiff \width4280\height3060
+}¬} \par
+\pard\tx1440\tx2880\tx4320\tx5760\qj\fi0\sb80\sa0\li0\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 It is not necessary to specify Extra Bar Numbers for the first staff because the top staves are always numbered by default.\par
+\pard\tx1440\tx2880\tx4320\tx5760\qj\fi0\sb80\sa0\li0\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 \par
+\pard\tx1440\tx2880\tx4320\tx5760\qj\fi0\sb80\sa0\li0\ri0\f0\fs24\b0\i0\ul0\strike0\scaps0\cf0 \par
+}

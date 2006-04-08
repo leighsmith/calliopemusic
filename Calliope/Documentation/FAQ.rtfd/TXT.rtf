@@ -1,0 +1,128 @@
+{\rtf0\ansi{\fonttbl\f0\fnil Times-Roman;\f1\fswiss Helvetica;}
+\paperw12340
+\paperh15660
+\margl120
+\margr120
+{\colortbl;\red0\green0\blue0;}
+\pard\tx520\tx1060\tx1600\tx2120\tx2660\tx3200\tx3720\tx4260\tx4800\tx5320\f0\b\i0\ulnone\fs36\fc0\cf0 Frequently Asked Questions for Calliope
+\b0\fs24 \
+\
+
+\b How do I make grace notes?
+\b0 \
+\
+This will be explained for the general case of the 
+\i appoggiatura
+\i0 .  Individual grace notes are done in a similar manner.\
+\
+(a) Place the notes of the 
+\i appoggiatura
+\i0  on the staff before the note that they lead to.\
+(b) If desired, beam the notes of the 
+\i appoggiatura
+\i0 , and tie them to the following note.  The beam can be slashed, if desired, by setting an attribute in the Beam Inspector.\
+(c)  Select the notes of the 
+\i appoggiatura
+\i0 , and press the 
+\f1 Object->Grace
+\f0  menu command.   This changes the way that the notes are timed during adjustment and playback.  Grace notes are considered to be timed 'back' from the following note, and so they will look right when adjusted and sound right when played back.\
+(d)  Press the 
+\f1\fc1\cf1 Object->Smaller
+\f0\fc0\cf0  command if desired.  It may be necessary to make the beam smaller also by including it in the selection.\
+(e)  Adjust the system (
+\f1\fc1\cf1 System->Adjust to Width
+\f0\fc0\cf0  or 
+\f1\fc1\cf1 System->Adjust to Design
+\f0\fc0\cf0 ) to see the formatted layout.\
+\
+Note that (b), (c) and (d) may be done in any order.  Note that the 
+\f1\fc1\cf1 Object->Grace
+\f0\fc0\cf0  command sets the graced attribute for all notes in the selection.  On the Note Inspector, the 
+\f1\fc1\cf1 Timing
+\f0\fc0\cf0  button that looks like a grace note has the same effect.\
+\
+\
+
+\b How can I control where objects are Pasted?\
+
+\b0 \
+This is in the tutorial, actually.  Make a selection.  Press Copy (Command-C).  Press the Paste Tool (the Tool that looks like a mouse in the first row of buttons on the Tool Panel).  Now for every mouse click, a copy will be pasted where you click (hold down to drag, like all Tools).  Remember to switch off the Paste Tool when finished!\
+\
+\
+
+\b How do I input music from a MIDI keyboard?
+\b0 \
+\
+Prepare a document onto which you wish to have the notes input.   Select an object on the desired staff that marks where you would like the input to start.  You will see a blinking cursor after at the notes from the MIDI input will appear.  On the Playback Panel press 
+\f1\fc1\cf1 Record
+\f0\fc0\cf0 .  All notes input with the keyboard on MIDI Channel 1 will appear after the selected object, and will be selected in turn.   The cursor will be advanced to the next reasonable location.  Calliope will automatically move to the next system, creating one if necessary, when the music comes to the end of the staff.   If the "
+\f1\fc1\cf1 from previous
+\f0\fc0\cf0 " option is selected, the note will take its value from the previous one.  You can use the Command-
+\i digit
+\i0  keys to change the note value on the fly.  If the "
+\f1\fc1\cf1 from tempo
+\f0\fc0\cf0 " option is selected, Calliope will attempt to estimate the note value from the selected tempo and the elapsed time between the note on and note off.   The estimate is not very accurate. The inaccuracy of the estimate stems from three sources: (a) the fact that perceived duration is not directly related to note on/off interval, (b) manual note input does not have mechanical accuracy, (c) measurement error depending on processor loading, particularly on the 25Mhz Motorola processors, and (d) the algorithm is not in its final form.  If you want to gauge the tempo from a metronome, press the "
+\f1\fc1\cf1 Metronome
+\f0\fc0\cf0 " button in the Playback Panel, and you will hear a simulated metronome.  To input a barline at the current insertion point, type control-M. To input a rest, type control-R.   \
+\
+\
+
+\b Playback using the 'internal' option is erratic and unreliable.  How should documents be performed?
+\b0 \
+\
+Owing to problems concerning memory allocation for the NeXT DSP driver, audio output using the internal DSP orchestra is not reliable.  It is easily overloaded, and the orchestra runs late.  The DSP driver often hangs the Calliope process, and thus is not recommended.  This is a problem with NeXT DSP driver software, not with Calliope or the MusicKit. The General-MIDI option works perfectly, and is recommended for all audio playback.\
+\
+
+\b How do I connect a MIDI interface and General MIDI synthesiser?\
+
+\b0 \
+I do not use a separate MIDI interface.  Instead, the Roland SC-7 sound module connects directly to the NeXT 
+\i serial port
+\i0 , and also has a 
+\i MIDI In
+\i0  socket for the connection of a keyboard controller.  The interface selection switch on the SC-7 must be set to RS-232C-1.\
+					
+{{\NeXTGraphic4119 paste.eps \width6220 \height5760
+}
+¬}\pard\tx520\tx1060\tx1600\tx2120\tx2660\tx3200\tx3720\tx4260\tx4800\tx5320\f0\b0\i0\ulnone\fs24\fc0\cf0 \
+\
+\
+
+\b What kind of cable is needed to connect a NeXT computer to a ROland SC-7?
+\b0 \
+\
+		
+{{\NeXTGraphic4200 193521_paste.eps \width6200 \height4440
+}
+¬}\pard\tx520\tx1060\tx1600\tx2120\tx2660\tx3200\tx3720\tx4260\tx4800\tx5320\f0\b0\i0\ulnone\fs24\fc0\cf0 \
+		\
+		\
+
+\b How do I change the pitch of an individual notehead within a chord?\
+
+\b0 \
+This is in the tutorial, actually.   Hold down the Alt key.  Now click on the notehead, and holding the mouse button down, drag the notehead up or down to the desired pitch. This is called 'Alt-dragging'.  Notice that the entire chord is selected while you are doing this, and that the chord automatically changes its configuration to the correct one as the notehead is dragged up and down.\
+\
+\
+
+\b The indentation of new systems reverts to 0 with every new system .  How can  I set indentation once for the entire document?\
+
+\b0 \
+Calliope provides several kinds of indentations.  Using the appropriate one for the job is the key to easy formatting.  The indentations given in the System Inspector affect only systems on an invividual basis, and are expected to be used in exceptional situations such as at the beginning of a document to show, for example, the prefatory staves.  To set the indentation for a range of pages of the document, use the Page Format Inspector.  There is a Page Format marker for the first system of the piece.  Command-click on the page format marker to bring up the Page Format Inspector, on which suitable alterations can be made to the margins.  The desired page format stays in effect for all subsequent pages until a system is found with a Page Format marker.   You can add new Page Format markers whenever you wish to begin a new section of the document that has different page format.  System indentations are added to whatever the Page Format margins are.\
+\
+\
+
+\b How do I add pedal marks?
+\b0 \
+\
+The Punctuation Inspector has the pedal mark and the star, and the NoteGroup Inspector has the various brackets required.\
+
+\pard\tx533\tx1067\tx1601\tx2135\tx2668\tx3202\tx3736\tx4270\tx4803\tx5337\fc0\cf0 \
+\
+
+\b Is it possible to import MIDI files as Calliope documents?
+\b0 \
+\
+I have been investigating the translation of MIDI files, but am sufficiently perplexed to postpone implementation for the moment.  MIDI does not provide much of the typographical information required to set up a score.  Yet, I notice advertisements about programs claiming to convert MIDI to scores.  I just do not understand how such claims can be justified.  I suspect there are some hidden conventions about channels relating to staves etc.  If anybody is in a position to advise me on this, please contact me.\
+
+}
