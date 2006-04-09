@@ -588,7 +588,7 @@
 		D8F249E409AD3F8D00B96D0D /* CalliopeWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD92FD0483CDC800A80164 /* CalliopeWindow.m */; settings = {ATTRIBUTES = (); }; };
 		D8F249E509AD3F8D00B96D0D /* OAPLAExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD93030483CDC800A80164 /* OAPLAExtensions.m */; settings = {ATTRIBUTES = (); }; };
 		D8F249E609AD3F8D00B96D0D /* Calliope_main.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD93EB0483CDC800A80164 /* Calliope_main.m */; settings = {ATTRIBUTES = (); }; };
-		D8F249E709AD3F8D00B96D0D /* mux.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD93ED0483CDC800A80164 /* mux.m */; settings = {ATTRIBUTES = (); }; };
+		D8F249E709AD3F8D00B96D0D /* DrawingFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD93ED0483CDC800A80164 /* DrawingFunctions.m */; settings = {ATTRIBUTES = (); }; };
 		D8F249E809AD3F8D00B96D0D /* muxchar.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD93EF0483CDC800A80164 /* muxchar.m */; settings = {ATTRIBUTES = (); }; };
 		D8F249E909AD3F8D00B96D0D /* muxCollide.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD93F10483CDC800A80164 /* muxCollide.m */; settings = {ATTRIBUTES = (); }; };
 		D8F249EA09AD3F8D00B96D0D /* muxlow.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD93F30483CDC800A80164 /* muxlow.m */; settings = {ATTRIBUTES = (); }; };
@@ -1182,7 +1182,7 @@
 		D8FD93E00483CDC800A80164 /* winheaders.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = winheaders.h; sourceTree = "<group>"; };
 		D8FD93E60483CDC800A80164 /* OAPLAExtensions.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OAPLAExtensions.h; sourceTree = "<group>"; };
 		D8FD93EB0483CDC800A80164 /* Calliope_main.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Calliope_main.m; sourceTree = "<group>"; };
-		D8FD93ED0483CDC800A80164 /* mux.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = mux.m; sourceTree = "<group>"; };
+		D8FD93ED0483CDC800A80164 /* DrawingFunctions.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = file; path = DrawingFunctions.m; sourceTree = "<group>"; };
 		D8FD93EF0483CDC800A80164 /* muxchar.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = muxchar.m; sourceTree = "<group>"; };
 		D8FD93F10483CDC800A80164 /* muxCollide.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = muxCollide.m; sourceTree = "<group>"; };
 		D8FD93F30483CDC800A80164 /* muxlow.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = muxlow.m; sourceTree = "<group>"; };
@@ -1598,7 +1598,7 @@
 			children = (
 				D87D0FD909AE6EA900784ACC /* draw.m */,
 				D8FD93EB0483CDC800A80164 /* Calliope_main.m */,
-				D8FD93ED0483CDC800A80164 /* mux.m */,
+				D8FD93ED0483CDC800A80164 /* DrawingFunctions.m */,
 				D8FD93EF0483CDC800A80164 /* muxchar.m */,
 				D8FD93F10483CDC800A80164 /* muxCollide.m */,
 				D8FD93F30483CDC800A80164 /* muxlow.m */,
@@ -2770,7 +2770,7 @@
 				D8F249E409AD3F8D00B96D0D /* CalliopeWindow.m in Sources */,
 				D8F249E509AD3F8D00B96D0D /* OAPLAExtensions.m in Sources */,
 				D8F249E609AD3F8D00B96D0D /* Calliope_main.m in Sources */,
-				D8F249E709AD3F8D00B96D0D /* mux.m in Sources */,
+				D8F249E709AD3F8D00B96D0D /* DrawingFunctions.m in Sources */,
 				D8F249E809AD3F8D00B96D0D /* muxchar.m in Sources */,
 				D8F249E909AD3F8D00B96D0D /* muxCollide.m in Sources */,
 				D8F249EA09AD3F8D00B96D0D /* muxlow.m in Sources */,
