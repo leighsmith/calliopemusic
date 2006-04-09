@@ -125,7 +125,7 @@ int rownum[4] = {0, 0, 0, 1};
   float conv;
   TextGraphic *p;
   GraphicView *v = [DrawApp currentView];
-  [self assayList: v->slist : &num];
+  [self assayList: [v selectedGraphics] : &num];
   if (num == 0) return nil;
   if (ALLSAME(0, num)) [typematrix selectCellAtRow:rownum[ALLVAL(0)] column:0];
   else clearMatrix(typematrix);

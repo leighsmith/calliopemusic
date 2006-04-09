@@ -183,7 +183,7 @@ char defpos[NUMNOTEGROUPS] = {0, 0, 0, 0, 2, 4, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0};
 
 - proto: (GraphicView *) v : (NSPoint) pt : (Staff *) sp : (System *) sys : (Graphic *) g : (int) i
 {
-  if ([self linkGroup: v->slist] == nil) return nil;
+  if ([self linkGroup: [v selectedGraphics]] == nil) return nil;
   gFlags.subtype = i;
   if (i == GROUPVOLTA)
   {

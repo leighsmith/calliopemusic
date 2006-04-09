@@ -195,7 +195,7 @@
 {
   GNote *p, *q;
   NSMutableArray *cl = [[NSMutableArray alloc] init];
-  NSMutableArray *sl = v->slist;
+  NSMutableArray *sl = [v selectedGraphics];
   int i, j, k, ck, nb = 0, sk = [sl count], vi, vj;
   k = sk;
   while (k--)

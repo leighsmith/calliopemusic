@@ -225,7 +225,7 @@ static OpusDocument *documentInWindow(id window)
     }
     if ([NSApp keyWindow] == [v window])
     {
-	if ([v->slist count] == 0) [v setFontSelection: 3 : 0];
+	if ([[v selectedGraphics] count] == 0) [v setFontSelection: 3 : 0];
 	else [v setFontSelection: 0 : 2];
     }
     else
@@ -465,7 +465,7 @@ float unitFactor[4] =
     v = [[self class] currentView];
     if (v != nil)
     {
-	if ([v->slist count] > 0)
+	if ([[v selectedGraphics] count] > 0)
 	{
 	    [v inspectSelWithMe: g : launch : fontseltype];
 	    [v setFontSelection: fontseltype : 0];

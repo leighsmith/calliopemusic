@@ -372,7 +372,7 @@ static float braoffy[2][2] =
 
 - proto: (GraphicView *) v : (NSPoint) pt : (Staff *) sp : (System *) sys : (Graphic *) g : (int) i;
 {
-  if ([self linkGroup: v->slist] == nil) return nil;
+  if ([self linkGroup: [v selectedGraphics]] == nil) return nil;
   style = proto->style;
   gFlags.subtype = proto->gFlags.subtype;
   [self setTuple: 1 : 1];

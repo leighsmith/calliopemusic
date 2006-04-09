@@ -111,7 +111,7 @@
 {
   int num, a;
   GraphicView *v = [DrawApp currentView];
-  [self assayList: v->slist : &num];
+  [self assayList: [v selectedGraphics] : &num];
   if (num == 0) return self;
   for (a = 0; a <= 4; a++)
   {

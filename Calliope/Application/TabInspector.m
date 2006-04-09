@@ -252,7 +252,7 @@ void setMatrix(int a, int num, int rv, int cv, NSMatrix *m)
 {
   int b, num;
   GraphicView *v = [DrawApp currentView];
-  [self assayList: v->slist : &num];
+  [self assayList: [v selectedGraphics] : &num];
   if (num == 0) return nil;
   if (ALLSAME(0, num)) /* strum */
   {
@@ -410,7 +410,7 @@ NSString *partNameHavingInst(NSString *i)
   if (v == nil) return self;
   w = [definebutton indexOfSelectedItem] - 1;
   if (w < 0) return nil;
-  [self assayList: v->slist : &num];
+  [self assayList: [v selectedGraphics] : &num];
   if (num == 0) return nil;
   if (!ALLSAME(11, num))
   {

@@ -691,11 +691,11 @@ static int signof(float f)
   gFlags.subtype = i;
   if (i == 0)
   {
-    if ([self linkbeam: v->slist] == nil) return nil;
+    if ([self linkbeam: [v selectedGraphics]] == nil) return nil;
   }
   else
   {
-    if ([self linktremolo: v->slist] == nil) return nil;
+    if ([self linktremolo: [v selectedGraphics]] == nil) return nil;
   }
   [self setbeam: [self beamType] : 1];
   return self;

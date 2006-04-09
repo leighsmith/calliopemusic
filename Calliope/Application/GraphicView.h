@@ -23,13 +23,8 @@
  */
 #define TIFF_COMPRESSION_FACTOR NSTIFFCompressionJPEG
 
-
 @interface GraphicView: NSView
 {
-@public
-    NSMutableArray *slist;				/*! @var slist The NSArray of selected Graphics */
-@private
-
     // ivars syslist, pagelist, partlist, chanlist, stylelist, currentScale should be refactored into a model class NotationScore.
     NSMutableArray *syslist;		/*! @var syslist The NSArray of Systems */
     NSMutableArray *pagelist;		/*! @var pagelist The NSArray of Pages */
@@ -38,7 +33,9 @@
     NSMutableArray *stylelist;		/*! @var stylelist NSArray of Systems (templates for styles) */
     float currentScale;			/*! @var currentScale The scaling factor: 1.0 = no scaling. */
 
+    // These ones still need deciding on which side of the model/view divide they should sit.
     BOOL dirtyflag;
+    NSMutableArray *slist;				/*! @var slist The NSArray of selected Graphics */
 
     // These ivars strictly manage drawing the view and responding to user events on the view.
     /*! @var delegate The object informed when page numbers have changed. */
@@ -83,7 +80,17 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
 - drawSelectionWith: (NSRect *) b;
 - selectionBBox:(NSRect *) b;
 - selectionHandBBox: (NSRect *) b;
-- emptySlist;
+
+/*!
+  @brief Returns the list of Graphic objects which have been selected.
+ */
+- (NSMutableArray *) selectedGraphics;
+ 
+/*! 
+  @brief clean out the selection list, free/realloc only if necessary
+ */
+- (void) clearSelection;
+
 - currentSystem;
 
 // These should be removed, a document can be "dirty" i.e. modified, not a view.

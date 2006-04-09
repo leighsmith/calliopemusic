@@ -1548,18 +1548,23 @@ static void drawHorz(float x, float y, float w, NSRect r)
   }
 }
 
+- (NSMutableArray *) selectedGraphics
+{
+// TODO This might be a little heavy weight, since it probably involves a copy, but I'd rather enforce the immutability of the array than
+// save processor cycles these days.
+    // return [NSArray arrayWithArray: slist];
+    return [[slist retain] autorelease];
+}
 
 /* clean out the selection list, free/realloc only if necessary */
-
-- emptySlist
+- (void) clearSelection
 {  
-  if ([slist count] <= 16) [slist removeAllObjects];
-  else
-  {
-      [slist autorelease];
-      slist = [[NSMutableArray allocWithZone:[self zone]] init];
-  }
-  return self;
+    if ([slist count] <= 16) 
+	[slist removeAllObjects];
+    else {
+	[slist autorelease];
+	slist = [[NSMutableArray allocWithZone:[self zone]] init];
+    }
 }
 
 
@@ -1708,7 +1713,7 @@ static void drawHorz(float x, float y, float w, NSRect r)
       [p sysInvalid];
       [p removeObj];
     }
-    [self emptySlist];
+    [self clearSelection];
     if (runs || marg)
     {
       [self setRunnerTables];
@@ -1750,7 +1755,7 @@ static void drawHorz(float x, float y, float w, NSRect r)
             [p selectHangers:slist : 0];
         }
         [self cache: sb];
-        [self emptySlist];
+        [self clearSelection];
     //    [NSObject cancelPreviousPerformRequestsWithTarget:NSApp selector:@selector(updateWindows) object:nil], [NSApp performSelector:@selector(updateWindows) withObject:nil afterDelay:(1) / 1000.0];
         if (sender != self) [[self window] flushWindow];
     }

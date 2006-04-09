@@ -91,7 +91,7 @@
 {
   int num;
   GraphicView *v = [DrawApp currentView];
-  [self assayList: v->slist : &num];
+  [self assayList: [v selectedGraphics] : &num];
   if (num == 0) return nil;
   clearMatrix(timematrix);
   clearMatrix(dotmatrix);

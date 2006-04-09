@@ -547,7 +547,7 @@
 	sp = [staves objectAtIndex:i];
 	for (b = 1; b <= n; b++)
 	{
-	    Barline *barline = [Graphic graphicOfType: BARLINE];
+	    Barline *barline = [[[Barline alloc] init] autorelease];
 	    
 	    barline->x = xoff + b * xwid;
 	    barline->y = [sp yOfTop];

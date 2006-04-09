@@ -340,7 +340,7 @@ static void setBodyTypes(GNote *p, int t)
 {
   int a, num;
   GraphicView *v = [DrawApp currentView];
-  [self assayList: v->slist : &num];
+  [self assayList: [v selectedGraphics] : &num];
   if (num == 0) return nil;
   for (a = 0; a <= 1; a++)
   {
@@ -455,7 +455,7 @@ NSString *partNameHavingPatch(int i)
   if (v == nil) return self;
   w = [definebutton indexOfSelectedItem] - 1;
   if (w < 0) return nil;
-  [self assayList: v->slist : &num];
+  [self assayList: [v selectedGraphics] : &num];
   if (num == 0) return nil;
   if (!ALLSAME(11, num))
   {

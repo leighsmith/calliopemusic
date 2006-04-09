@@ -61,7 +61,7 @@ extern float barwidth[3][3];
 - proto: (GraphicView *) v : (NSPoint) pt : (Staff *) sp : (System *) sys : (Graphic *) g : (int) i
 {
   id n0, n1;
-  if (!findEndpoints(v->slist, &n0, &n1)) return nil;
+  if (!findEndpoints([v selectedGraphics], &n0, &n1)) return nil;
   client = n0;
   endpoint = n1;
   [n0 linkhanger: self];

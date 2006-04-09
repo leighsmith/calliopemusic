@@ -196,7 +196,7 @@
   if (d == nil) return self;
   v = [d graphicView];
   if (v == nil) return self;
-  sl = v->slist;
+  sl = [v selectedGraphics];
   pl = [[DrawApp sharedApplicationController] getPartlist];
   k = [sl count];
   n = nil;

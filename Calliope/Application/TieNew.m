@@ -606,7 +606,7 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
 
 - proto: (GraphicView *) v : (NSPoint) pt : (Staff *) sp : (System *) sys : (Graphic *) g : (int) i
 {
-  if ([self linkGroup: v->slist : i] == nil) return nil;
+  if ([self linkGroup: [v selectedGraphics] : i] == nil) return nil;
   flags.fixed = proto->flags.fixed;
   flags.place = proto->flags.place;
   flags.ed = proto->flags.ed;

@@ -86,7 +86,7 @@
 {
   int n;
   GraphicView *v = [DrawApp currentView];
-  [self assayList: v->slist : &n];
+  [self assayList: [v selectedGraphics] : &n];
   if (n == 0) return self;
   [[sizeform cellAtIndex:0] setStringValue:@""];
   [[sizeform cellAtIndex:1] setStringValue:@""];

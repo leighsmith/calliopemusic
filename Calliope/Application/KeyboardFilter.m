@@ -206,7 +206,7 @@ extern void setkeysig(KeySig *p, char *key);
   switch([n noteType])
   {
     case MK_noteOn:
-      if (v && [v->slist count])
+      if (v && [[v selectedGraphics] count])
       {
         if (cbase && ([n timeTag] - cbase->stamp < 0.1))
 	{

@@ -80,7 +80,7 @@
   StaffObj *p;
   int k, vox;
   GraphicView *v = [DrawApp currentView];
-  NSMutableArray *sl = v->slist;
+  NSMutableArray *sl = [v selectedGraphics];
   vox = [[selectForm cellAtIndex:0] intValue];
   k = [sl count];
   while(k--)

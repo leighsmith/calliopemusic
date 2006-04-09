@@ -141,7 +141,7 @@
 {
   int a, i, j, num, v;
   GraphicView *gv = [DrawApp currentView];
-  [self assayList: gv->slist : &num];
+  [self assayList: [gv selectedGraphics] : &num];
   if (num == 0) return nil;
   for (i = 0; i <= 4; i++) for (j = 0; j <= 4; j++)
   {

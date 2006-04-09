@@ -1836,7 +1836,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
     [slist addObject: sys];
   }
   [self copyToPasteboard];
-  [(GraphicView *)self emptySlist];
+  [self clearSelection];
   return self;
 }
 

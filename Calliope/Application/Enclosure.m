@@ -149,7 +149,7 @@ float qxoff[7] = {2.0, 0.0, 3.0, 0.0, 2.0, 2.0, 2.0};
 
 - proto: (GraphicView *) v : (NSPoint) pt : (Staff *) sp : (System *) sys : (Graphic *) g : (int) i;
 {
-    if ([self linkGroup: v->slist] == nil) return nil;
+    if ([self linkGroup: [v selectedGraphics]] == nil) return nil;
     gFlags.subtype = proto->gFlags.subtype;
     gFlags.locked = proto->gFlags.locked;
     [self setEnclosure: 1 : 1];

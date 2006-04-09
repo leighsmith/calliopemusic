@@ -215,7 +215,7 @@ id CrossCursor = nil;	/* global since subclassers may need it */
   GNote *p, *q;
   NSMutableArray *a;
   int i, j, k = 0;
-  findEndpoints(v->slist, &p, &q);
+  findEndpoints([v selectedGraphics], &p, &q);
   if (p == q) return NO;
   if (TYPEOF(p) != NOTE || TYPEOF(q) != NOTE) return NO;
   k = [p->headlist count];
@@ -236,7 +236,7 @@ id CrossCursor = nil;	/* global since subclassers may need it */
         t = [a objectAtIndex:j];
         [t presetHanger];
         t->gFlags.selected = 1;
-        [v->slist addObject: t];
+        [[v selectedGraphics] addObject: t];
       }
       [a autorelease];
     }
@@ -244,7 +244,7 @@ id CrossCursor = nil;	/* global since subclassers may need it */
     {
       [t presetHanger];
       t->gFlags.selected = 1;
-      [v->slist addObject: t];
+      [[v selectedGraphics] addObject: t];
     }
   }
   return YES;
@@ -255,7 +255,7 @@ id CrossCursor = nil;	/* global since subclassers may need it */
 
 + (BOOL) makeAccents: (GraphicView *) v
 {
-  NSMutableArray *sl = v->slist;
+  NSMutableArray *sl = [v selectedGraphics];
   NSMutableArray *al;
   int t, k, r = 0;
   Accent *a;
