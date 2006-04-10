@@ -1182,7 +1182,7 @@
 		D8FD93E00483CDC800A80164 /* winheaders.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = winheaders.h; sourceTree = "<group>"; };
 		D8FD93E60483CDC800A80164 /* OAPLAExtensions.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OAPLAExtensions.h; sourceTree = "<group>"; };
 		D8FD93EB0483CDC800A80164 /* Calliope_main.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Calliope_main.m; sourceTree = "<group>"; };
-		D8FD93ED0483CDC800A80164 /* DrawingFunctions.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = file; path = DrawingFunctions.m; sourceTree = "<group>"; };
+		D8FD93ED0483CDC800A80164 /* DrawingFunctions.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = DrawingFunctions.m; sourceTree = "<group>"; };
 		D8FD93EF0483CDC800A80164 /* muxchar.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = muxchar.m; sourceTree = "<group>"; };
 		D8FD93F10483CDC800A80164 /* muxCollide.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = muxCollide.m; sourceTree = "<group>"; };
 		D8FD93F30483CDC800A80164 /* muxlow.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = muxlow.m; sourceTree = "<group>"; };

@@ -1303,7 +1303,7 @@ static void drawTremolo(int n, TimedObj *a, TimedObj *b, float ytrem, int sz, in
     if ([self coordsForHandle: 0  asX: &x  andY: &y]) chandle(x, y, m);
     if ([self coordsForHandle: 1  asX: &x  andY: &y]) chandle(x, y, m);
   }
-  if (!client) printf("will die: client nil (in Beam.m)\n");
+  if (!client) NSLog(@"will die: client nil (in Beam.m)\n");
   p = [client objectAtIndex:0];
   if ([client count] == 1)
   {

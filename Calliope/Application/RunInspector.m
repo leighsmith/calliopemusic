@@ -68,7 +68,7 @@ extern int justcode[4];
         theAtt = [anObj attribute:NSAttachmentAttributeName atIndex:theRange.location + i effectiveRange:NULL];
         if (theAtt) {
             theFont = [anObj attribute:NSFontAttributeName atIndex:theRange.location + i effectiveRange:NULL];
-//            printf("font of cell at %d is %s\n",theRange.location + i,
+//            NSLog(@"font of cell at %d is %s\n",theRange.location + i,
 //                   [[theFont displayName] cString]);
             if (theFont) [(TextVarCell *)[theAtt attachmentCell] setFont:theFont];
             /* previous line assumes that once set, a font cannot be removed, only changed.
@@ -198,7 +198,7 @@ extern int justcode[4];
 clickedOnCell:(id <NSTextAttachmentCell>)attachmentCell
 inRect:(NSRect)cellFrame
 {
-    printf("clicked on cell %p\n",attachmentCell);
+    NSLog(@"clicked on cell %p\n",attachmentCell);
 }
 
 - (void)textViewDidChangeSelection:(NSNotification *)aNotification
@@ -221,7 +221,7 @@ inRect:(NSRect)cellFrame
     NSFont *theFont;
     BOOL isMult = NO;
     int theLength = [[[scroller documentView] textStorage] length];
-//    printf("length: %d\n",theLength);
+//    NSLog(@"length: %d\n",theLength);
     if (theLength) {
         oldRange = [[scroller documentView] selectedRange];
         if (oldRange.location >= theLength) oldRange.location--;
@@ -231,7 +231,7 @@ inRect:(NSRect)cellFrame
                                                     longestEffectiveRange:&aRange
                                                            inRange:oldRange];
         if (aRange.location + aRange.length < oldRange.location + oldRange.length) isMult = YES;
-//        printf("isMult: %d font: %s\n",isMult,[[theFont displayName] cString]);
+//        NSLog(@"isMult: %d font: %s\n",isMult,[[theFont displayName] cString]);
         [[NSFontManager sharedFontManager] setSelectedFont:theFont isMultiple:isMult];
     }
 }

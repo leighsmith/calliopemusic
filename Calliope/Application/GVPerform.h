@@ -17,7 +17,7 @@
 #define MINIMTICK 64.0
 #define DURTIME(t) ((t) * (1.0 / MINIMTICK))
 
-
+// TODO Should become a full class as a NotationPerformer
 struct performer
 {
   short thread;

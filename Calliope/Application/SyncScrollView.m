@@ -18,7 +18,7 @@
 
 @interface NSView(Ruler)
 - hidePosition;				/* hide any positioning markers */
-- showPosition:(float)p :(float)q;	/* positioning markers at p and q */
+- showPosition: (float)p : (float)q;	/* positioning markers at p and q */
 @end
 
 #define GADGET_HEIGHT		16.0
@@ -26,26 +26,27 @@
 @implementation SyncScrollView
 
 
-- initWithFrame:(NSRect)frameRect
+- initWithFrame: (NSRect) frameRect
 {
     id oldWindow;
-    [super initWithFrame:frameRect];
-    [NSBundle loadNibNamed:@"ScrollerGadgets.nib" owner:self];
+    
+    [super initWithFrame: frameRect];
+    [NSBundle loadNibNamed: @"ScrollerGadgets.nib" owner: self];
     oldWindow = [pageUpButton window];
-    [self addSubview:pageUpButton];
-    [self addSubview:pageDownButton];
-    [self addSubview:pageLabel];
-    [self addSubview:pageForm];
+    [self addSubview: pageUpButton];
+    [self addSubview: pageDownButton];
+    [self addSubview: pageLabel];
+    [self addSubview: pageForm];
     [self addSubview: zoomPopUpList];
     [self addSubview: pageFirstButton];
     [self addSubview: pageLastButton];
     [oldWindow release];
-  //sb additions:
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(descendantFrameChanged:)
-//                                                 name:NSViewFrameDidChangeNotification object:nil];
-
-  return self;
+    //sb additions:
+    //    [[NSNotificationCenter defaultCenter] addObserver: self
+    //                                             selector:@selector(descendantFrameChanged: )
+    //                                                 name: NSViewFrameDidChangeNotification object: nil];
+    
+    return self;
 }
 
 
@@ -57,7 +58,7 @@ static void reSize(id p, float dh)
     NSRect r;
     r = [p frame];
     r.size.height = GADGET_HEIGHT + dh;
-    [p setFrame:r];
+    [p setFrame: r];
 }
 
 
@@ -89,48 +90,48 @@ static void reSize(id p, float dh)
 
 - prevPage: sender
 {
-    [[[[self contentView] documentView] viewWithTag:1] prevPage: sender];
-    [[NSRunLoop currentRunLoop]  performSelector:@selector(makeFirstResponder:)
-                                          target:[self window]
-                                        argument:[[[self contentView] documentView] viewWithTag:1]
-                                           order:0
-                                           modes:[NSArray  arrayWithObject:NSDefaultRunLoopMode]];
+    [[[[self contentView] documentView] viewWithTag: 1] prevPage: sender];
+    [[NSRunLoop currentRunLoop]  performSelector: @selector(makeFirstResponder:)
+                                          target: [self window]
+                                        argument: [[[self contentView] documentView] viewWithTag: 1]
+                                           order: 0
+                                           modes: [NSArray  arrayWithObject: NSDefaultRunLoopMode]];
     return self;
 }
 
 
 - nextPage: sender
 {
-    [[[[self contentView] documentView] viewWithTag:1] nextPage: sender];
-    [[NSRunLoop currentRunLoop]  performSelector:@selector(makeFirstResponder:)
-                                          target:[self window]
-                                        argument:[[[self contentView] documentView] viewWithTag:1]
-                                           order:0
-                                           modes:[NSArray  arrayWithObject:NSDefaultRunLoopMode]];
+    [[[[self contentView] documentView] viewWithTag: 1] nextPage: sender];
+    [[NSRunLoop currentRunLoop]  performSelector: @selector(makeFirstResponder:)
+                                          target: [self window]
+                                        argument: [[[self contentView] documentView] viewWithTag: 1]
+                                           order: 0
+                                           modes: [NSArray  arrayWithObject: NSDefaultRunLoopMode]];
     return self;
 }
 
 
 - firstPage: sender
 {
-    [[[[self contentView] documentView] viewWithTag:1] firstPage: sender];
-    [[NSRunLoop currentRunLoop]  performSelector:@selector(makeFirstResponder:)
-                                          target:[self window]
-                                        argument:[[[self contentView] documentView] viewWithTag:1]
-                                           order:0
-                                           modes:[NSArray  arrayWithObject:NSDefaultRunLoopMode]];
+    [[[[self contentView] documentView] viewWithTag: 1] firstPage: sender];
+    [[NSRunLoop currentRunLoop]  performSelector: @selector(makeFirstResponder:)
+                                          target: [self window]
+                                        argument: [[[self contentView] documentView] viewWithTag: 1]
+                                           order: 0
+                                           modes: [NSArray  arrayWithObject: NSDefaultRunLoopMode]];
     return self;
 }
 
 
 - lastPage: sender
 {
-    [[[[self contentView] documentView] viewWithTag:1] lastPage: sender];
-    [[NSRunLoop currentRunLoop]  performSelector:@selector(makeFirstResponder:)
-                                          target:[self window]
-                                        argument:[[[self contentView] documentView] viewWithTag:1]
-                                           order:0
-                                           modes:[NSArray  arrayWithObject:NSDefaultRunLoopMode]];
+    [[[[self contentView] documentView] viewWithTag: 1] lastPage: sender];
+    [[NSRunLoop currentRunLoop]  performSelector: @selector(makeFirstResponder:)
+                                          target: [self window]
+                                        argument: [[[self contentView] documentView] viewWithTag: 1]
+                                           order: 0
+                                           modes: [NSArray  arrayWithObject: NSDefaultRunLoopMode]];
     return self;
 }
 
@@ -140,13 +141,13 @@ static void reSize(id p, float dh)
     float i;
     i = [[sender selectedCell] tag];
     if (i == 127) i = 127.778;
-    [pageLabel setStringValue:@""];
-    [[[[self contentView] documentView] viewWithTag:1] scaleTo: i];
-    [[NSRunLoop currentRunLoop]  performSelector:@selector(makeFirstResponder:)
-                                          target:[self window]
-                                        argument:[[[self contentView] documentView] viewWithTag:1]
-                                           order:0
-                                           modes:[NSArray  arrayWithObject:NSDefaultRunLoopMode]];
+    [pageLabel setStringValue: @""];
+    [[[[self contentView] documentView] viewWithTag: 1] scaleTo: i];
+    [[NSRunLoop currentRunLoop]  performSelector: @selector(makeFirstResponder:)
+                                          target: [self window]
+                                        argument: [[[self contentView] documentView] viewWithTag: 1]
+                                           order: 0
+                                           modes: [NSArray  arrayWithObject: NSDefaultRunLoopMode]];
     return self;
 }
 
@@ -154,14 +155,14 @@ static void reSize(id p, float dh)
 - pageTo: sender
 {
     int n=0;
-    n = [[[[self contentView] documentView] viewWithTag:1] gotoPage: [[sender cellAtIndex:0] intValue]];
-    if (n >= 0) [[pageForm cellAtIndex:0] setIntValue:n];
-    [[NSRunLoop currentRunLoop]  performSelector:@selector(makeFirstResponder:)
-                                        target:[self window]
-                                      argument:[[[self contentView] documentView] viewWithTag:1]
-                                           order:0
-                                           modes:[NSArray  arrayWithObject:NSDefaultRunLoopMode]];
-  return self;
+    n = [[[[self contentView] documentView] viewWithTag: 1] gotoPage: [[sender cellAtIndex:0] intValue]];
+    if (n >= 0) [[pageForm cellAtIndex: 0] setIntValue: n];
+    [[NSRunLoop currentRunLoop]  performSelector: @selector(makeFirstResponder:)
+					  target: [self window]
+					argument: [[[self contentView] documentView] viewWithTag: 1]
+                                           order: 0
+                                           modes: [NSArray  arrayWithObject: NSDefaultRunLoopMode]];
+    return self;
 }
 
 
@@ -174,18 +175,19 @@ static void reSize(id p, float dh)
 - setScaleNum: (int) i
 {
     int c;
-    if (i == 127) c = [zoomPopUpList indexOfItemWithTitle:@"127.778%"];
-    else c = [zoomPopUpList indexOfItemWithTitle:[NSString stringWithFormat:@"%d%",i]];
+    
+    if (i == 127) c = [zoomPopUpList indexOfItemWithTitle: @"127.778%"];
+    else c = [zoomPopUpList indexOfItemWithTitle: [NSString stringWithFormat: @"%d%",i]];
     if (c == -1)
-      {
-        [zoomPopUpList setTitle:@"Other:"];
-        [pageLabel setIntValue:i];
-      }
-  else
     {
-      [zoomPopUpList selectItemAtIndex:c];
-      [zoomPopUpList synchronizeTitleAndSelectedItem];
-      [pageLabel setStringValue:@""];
+        [zoomPopUpList setTitle:@"Other: "];
+        [pageLabel setIntValue: i];
+    }
+    else
+    {
+	[zoomPopUpList selectItemAtIndex: c];
+	[zoomPopUpList synchronizeTitleAndSelectedItem];
+	[pageLabel setStringValue: @""];
     }
     return self;
 }
@@ -197,28 +199,28 @@ static void reSize(id p, float dh)
 }
 
 
-- setRulerClass:factoryId
+- setRulerClass: factoryId
 {
     rulerClass = factoryId;
     return self;
 }
 
-- (BOOL)bothRulersAreVisible
+- (BOOL) bothRulersAreVisible
 {
     return verticalRulerIsVisible && horizontalRulerIsVisible;
 }
 
-- (BOOL)eitherRulerIsVisible
+- (BOOL) eitherRulerIsVisible
 {
     return verticalRulerIsVisible || horizontalRulerIsVisible;
 }
 
-- (BOOL)verticalRulerIsVisible
+- (BOOL) verticalRulerIsVisible
 {
     return verticalRulerIsVisible;
 }
 
-- (BOOL)horizontalRulerIsVisible
+- (BOOL) horizontalRulerIsVisible
 {
     return horizontalRulerIsVisible;
 }
@@ -228,106 +230,108 @@ static void reSize(id p, float dh)
  * This makes the rulers.
  * We do this lazily in case the user never asks for the rulers.
  */
- 
+
 - makeRulers
 {
-    GraphicView *v = [[[self contentView] documentView] viewWithTag:1];
-
-//    if (!rulerClass || (!horizontalRulerWidth && !verticalRulerWidth)) return nil;
-    [self setHasHorizontalRuler:YES];
-    [self setHasVerticalRuler:YES];
+    GraphicView *v = [[[self contentView] documentView] viewWithTag: 1];
+    
+    //    if (!rulerClass || (!horizontalRulerWidth && !verticalRulerWidth)) return nil;
+    [self setHasHorizontalRuler: YES];
+    [self setHasVerticalRuler: YES];
     hRuler = [self horizontalRulerView];
-    [hRuler setReservedThicknessForMarkers:0.0];
+    [hRuler setReservedThicknessForMarkers: 0.0];
     vRuler = [self verticalRulerView];
-    [hRuler setClientView:v];
-    [vRuler setClientView:v];
-//    [self setRulersVisible:YES];
-
+    [hRuler setClientView: v];
+    [vRuler setClientView: v];
+    //    [self setRulersVisible: YES];
+    
     rulersMade = YES;
-
+    
     return self;
 }
 
-- (void)drawRulerlinesWithRect:(NSRect)aRect
+- (void) drawRulerlinesWithRect: (NSRect) aRect
 {
     NSRect convRect;
-    id gv = [[self documentView] viewWithTag:1];
+    id gv = [[self documentView] viewWithTag: 1];
+    
     if (hRuler) {
-        convRect = [gv convertRect:aRect toView:hRuler];
-
-        [hRuler moveRulerlineFromLocation:-1.0
-                toLocation:NSMinX(convRect)];
-        [hRuler moveRulerlineFromLocation:-1.0
-                toLocation:NSMaxX(convRect)];
+        convRect = [gv convertRect: aRect toView: hRuler];
+	
+        [hRuler moveRulerlineFromLocation: -1.0
+			       toLocation: NSMinX(convRect)];
+        [hRuler moveRulerlineFromLocation: -1.0
+			       toLocation: NSMaxX(convRect)];
     }
     if (vRuler) {
-        convRect = [gv convertRect:aRect toView:vRuler];
-
-        [vRuler moveRulerlineFromLocation:-1.0
-                toLocation:NSMinY(convRect)];
-        [vRuler moveRulerlineFromLocation:-1.0
-                toLocation:NSMaxY(convRect)];
+        convRect = [gv convertRect: aRect toView: vRuler];
+	
+        [vRuler moveRulerlineFromLocation: -1.0
+			       toLocation: NSMinY(convRect)];
+        [vRuler moveRulerlineFromLocation: -1.0
+			       toLocation: NSMaxY(convRect)];
     }
 }
 
-- (void)updateRulerlinesWithOldRect:(NSRect)oldRect newRect:(NSRect)newRect
+- (void) updateRulerlinesWithOldRect: (NSRect) oldRect newRect: (NSRect) newRect
 {
     NSRect convOldRect, convNewRect;
-    id gv = [[self documentView] viewWithTag:1];
+    id gv = [[self documentView] viewWithTag: 1];
+    
     if (hRuler) {
-        convOldRect = [gv convertRect:oldRect toView:hRuler];
-        convNewRect = [gv convertRect:newRect toView:hRuler];
-        [hRuler moveRulerlineFromLocation:NSMinX(convOldRect)
-                toLocation:NSMinX(convNewRect)];
-        [hRuler moveRulerlineFromLocation:NSMaxX(convOldRect)
-                toLocation:NSMaxX(convNewRect)];
+        convOldRect = [gv convertRect: oldRect toView: hRuler];
+        convNewRect = [gv convertRect: newRect toView: hRuler];
+        [hRuler moveRulerlineFromLocation: NSMinX(convOldRect)
+			       toLocation: NSMinX(convNewRect)];
+        [hRuler moveRulerlineFromLocation: NSMaxX(convOldRect)
+			       toLocation: NSMaxX(convNewRect)];
     }
     if (vRuler) {
-        convOldRect = [gv convertRect:oldRect toView:vRuler];
-        convNewRect = [gv convertRect:newRect toView:vRuler];
-        [vRuler moveRulerlineFromLocation:NSMinY(convOldRect)
-                toLocation:NSMinY(convNewRect)];
-        [vRuler moveRulerlineFromLocation:NSMaxY(convOldRect)
-                toLocation:NSMaxY(convNewRect)];
+        convOldRect = [gv convertRect: oldRect toView: vRuler];
+        convNewRect = [gv convertRect: newRect toView: vRuler];
+        [vRuler moveRulerlineFromLocation: NSMinY(convOldRect)
+			       toLocation: NSMinY(convNewRect)];
+        [vRuler moveRulerlineFromLocation: NSMaxY(convOldRect)
+			       toLocation: NSMaxY(convNewRect)];
     }
 }
 
-- (void)eraseRulerlines
+- (void) eraseRulerlines
 {
     if (hRuler) {
-        [hRuler setNeedsDisplay:YES]; /* gets rid of instance drawing (highlighting of Rulerlines) */
+        [hRuler setNeedsDisplay: YES]; /* gets rid of instance drawing (highlighting of Rulerlines) */
     }
     if (vRuler) {
-        [vRuler setNeedsDisplay:YES];
+        [vRuler setNeedsDisplay: YES];
     }
     return;
 }
 
-- updateRulers:(const NSRect *)rect
+- updateRulers: (const NSRect *) rect
 {
-//    printf("update rulers\n");
+    //    NSLog(@"update rulers\n");
     if ([self rulersVisible]) {
-    if (!rect)
-      {
-        if (rulerlineRect.origin.x != -1) {
-            [self eraseRulerlines];
-            rulerlineRect.origin.x = rulerlineRect.origin.y = -1;
-        }
-      }
-    else
-      {
-        if (rulerlineRect.origin.x == -1)
-            [self drawRulerlinesWithRect:(NSRect)*rect];
-        else [self updateRulerlinesWithOldRect:(NSRect)rulerlineRect newRect:(NSRect)*rect];
-        rulerlineRect = *rect;
-      }
+	if (!rect)
+	{
+	    if (rulerlineRect.origin.x != -1) {
+		[self eraseRulerlines];
+		rulerlineRect.origin.x = rulerlineRect.origin.y = -1;
+	    }
+	}
+	else
+	{
+	    if (rulerlineRect.origin.x == -1)
+		[self drawRulerlinesWithRect: (NSRect)*rect];
+	    else [self updateRulerlinesWithOldRect: (NSRect)rulerlineRect newRect: (NSRect)*rect];
+	    rulerlineRect = *rect;
+	}
     }
     return self;
 }
 
-- (void)updateRuler
+- (void) updateRuler
 {
-    printf("update ruler\n");
+    NSLog(@"update ruler\n");
     return;
 }
 
@@ -336,8 +340,7 @@ static void reSize(id p, float dh)
  * Adds or removes a ruler from the view hierarchy.
  * Returns whether or not it succeeded in doing so.
  */
- 
-- (BOOL)showRuler:(BOOL)showIt isHorizontal:(BOOL)isHorizontal
+- (BOOL) showRuler: (BOOL) showIt isHorizontal: (BOOL) isHorizontal
 {
     if (showIt && !rulersMade && ![self makeRulers]) return NO;
     return YES;
@@ -349,16 +352,16 @@ static void reSize(id p, float dh)
     id windelegate;
     NSRect winFrame;
     NSWindow *window = [self window];
-    printf("adjustSizes\n");
+    NSLog(@"adjustSizes\n");
     windelegate = [window delegate];
-    if ([windelegate respondsToSelector:@selector(windowWillResize:toSize:)])
-      {
+    if ([windelegate respondsToSelector:@selector(windowWillResize:toSize: )])
+    {
         winFrame = [window frame];
-        winFrame.size = [windelegate windowWillResize:window toSize:winFrame.size];
-        [window setFrame:winFrame display:NO];
-      }
-
-    [self resizeSubviewsWithOldSize:NSZeroSize];
+        winFrame.size = [windelegate windowWillResize: window toSize: winFrame.size];
+        [window setFrame: winFrame display: NO];
+    }
+    
+    [self resizeSubviewsWithOldSize: NSZeroSize];
     return self;
 }
 
@@ -366,12 +369,10 @@ static void reSize(id p, float dh)
  * If both rulers are visible, they are both hidden.
  * Otherwise, both rulers are made visible.
  */
-
-- (void)showHideRulers:sender
+- (void) showHideRulers: sender
 {
     if (!rulersMade) [self makeRulers];
-    [self setRulersVisible:![self rulersVisible]];
-
+    [self setRulersVisible: ![self rulersVisible]];
 }
 
 
@@ -380,11 +381,10 @@ static void reSize(id p, float dh)
 
 /*
  * We only reflect scroll in the contentView, not the rulers.
-*/
-
-- (void)reflectScrolledClipView:(NSClipView *)cView
+ */
+- (void) reflectScrolledClipView: (NSClipView *)cView
 {
-    if (cView != hRuler && cView != vRuler) [super reflectScrolledClipView:cView];
+    if (cView != hRuler && cView != vRuler) [super reflectScrolledClipView: cView];
 }
 
 
@@ -396,69 +396,70 @@ static void reSize(id p, float dh)
  * ScrollView.
  */
 
-- (void)tile
+- (void) tile
 {
     NSRect aRect, cRect;
     float zoom_width, page_label_width, page_cell_width;
     float y;
-//    printf("tile\n");
+    
+    // NSLog(@"tile\n");
     [super tile];
-	/* take the zoom popup list & page display into account on the horizontal scroller */
-	aRect = [[self horizontalScroller] frame];
-	cRect = [zoomPopUpList frame];
-	zoom_width = cRect.size.width;
-	cRect = [pageLabel frame];
-	page_label_width = cRect.size.width;
-	cRect = [pageForm frame];
-	page_cell_width = cRect.size.width;
-	aRect.size.width -= zoom_width + page_label_width + page_cell_width;
-	[[self horizontalScroller] setFrame:aRect];
-	/* position the zoom popup list in the correct place */
-	aRect.origin.x += aRect.size.width;
-	aRect.size.width = zoom_width;
-	horzScrollerArea = aRect;
-	horzScrollerArea.size.width += page_label_width + page_cell_width;
-	[zoomPopUpList setFrameOrigin:NSMakePoint(aRect.origin.x, aRect.origin.y +1.0)];
-	/* position the page display after the popuplist in the horizontal scroller */
-	aRect.origin.x += zoom_width;
-	aRect.size.width = page_cell_width;
-	[pageForm setFrameOrigin:NSMakePoint(aRect.origin.x, aRect.origin.y)];
-	aRect.origin.x += page_cell_width;
-	aRect.origin.y += 3.0;
-	aRect.size.width = page_label_width;
-	[pageLabel setFrameOrigin:NSMakePoint(aRect.origin.x, aRect.origin.y)];
-	/* take the page up/down buttons into account on the vertical scroller */
-	aRect = [[self verticalScroller] frame];
-	aRect.size.height -= (4.0 * GADGET_HEIGHT) + 4.0;
-	[[self verticalScroller] setFrame:aRect];
-	/* position the buttons in the correct place */
-	aRect.origin.y += aRect.size.height;
-	vertScrollerArea = aRect;
-	aRect.size.height = (4.0 * GADGET_HEIGHT) + 4.0;
-	y = aRect.origin.y;
-	[pageFirstButton setFrameOrigin:NSMakePoint(1.0, y)];
-	[pageUpButton setFrameOrigin:NSMakePoint(1.0, y + GADGET_HEIGHT + 1.0)];
-	[pageDownButton setFrameOrigin:NSMakePoint(1.0, y + (2.0 * GADGET_HEIGHT) + 2.0)];
-	[pageLastButton setFrameOrigin:NSMakePoint(1.0, y + (3.0 * GADGET_HEIGHT) + 3.0)];
+    /* take the zoom popup list & page display into account on the horizontal scroller */
+    aRect = [[self horizontalScroller] frame];
+    cRect = [zoomPopUpList frame];
+    zoom_width = cRect.size.width;
+    cRect = [pageLabel frame];
+    page_label_width = cRect.size.width;
+    cRect = [pageForm frame];
+    page_cell_width = cRect.size.width;
+    aRect.size.width -= zoom_width + page_label_width + page_cell_width;
+    [[self horizontalScroller] setFrame: aRect];
+    /* position the zoom popup list in the correct place */
+    aRect.origin.x += aRect.size.width;
+    aRect.size.width = zoom_width;
+    horzScrollerArea = aRect;
+    horzScrollerArea.size.width += page_label_width + page_cell_width;
+    [zoomPopUpList setFrameOrigin: NSMakePoint(aRect.origin.x, aRect.origin.y +1.0)];
+    /* position the page display after the popuplist in the horizontal scroller */
+    aRect.origin.x += zoom_width;
+    aRect.size.width = page_cell_width;
+    [pageForm setFrameOrigin: NSMakePoint(aRect.origin.x, aRect.origin.y)];
+    aRect.origin.x += page_cell_width;
+    aRect.origin.y += 3.0;
+    aRect.size.width = page_label_width;
+    [pageLabel setFrameOrigin: NSMakePoint(aRect.origin.x, aRect.origin.y)];
+    /* take the page up/down buttons into account on the vertical scroller */
+    aRect = [[self verticalScroller] frame];
+    aRect.size.height -= (4.0 * GADGET_HEIGHT) + 4.0;
+    [[self verticalScroller] setFrame: aRect];
+    /* position the buttons in the correct place */
+    aRect.origin.y += aRect.size.height;
+    vertScrollerArea = aRect;
+    aRect.size.height = (4.0 * GADGET_HEIGHT) + 4.0;
+    y = aRect.origin.y;
+    [pageFirstButton setFrameOrigin: NSMakePoint(1.0, y)];
+    [pageUpButton setFrameOrigin: NSMakePoint(1.0, y + GADGET_HEIGHT + 1.0)];
+    [pageDownButton setFrameOrigin: NSMakePoint(1.0, y + (2.0 * GADGET_HEIGHT) + 2.0)];
+    [pageLastButton setFrameOrigin: NSMakePoint(1.0, y + (3.0 * GADGET_HEIGHT) + 3.0)];
 #if 0
-        if (horizontalRulerIsVisible || verticalRulerIsVisible)
-  {
-      aRect = [[self contentView] frame];
-      cRect = [[[self documentView] viewWithTag:1] frame];
-      if (horizontalRulerIsVisible && hRuler)
+    if (horizontalRulerIsVisible || verticalRulerIsVisible)
     {
-      NSDivideRect(aRect , &bRect , &aRect , horizontalRulerWidth, NSMinYEdge);
-          [hRuler setFrame:bRect];
-          [[hRuler documentView] setFrameSize:NSMakeSize(cRect.size.width+verticalRulerWidth, bRect.size.height)];
+	aRect = [[self contentView] frame];
+	cRect = [[[self documentView] viewWithTag: 1] frame];
+	if (horizontalRulerIsVisible && hRuler)
+	{
+	    NSDivideRect(aRect , &bRect , &aRect , horizontalRulerWidth, NSMinYEdge);
+	    [hRuler setFrame: bRect];
+	    [[hRuler documentView] setFrameSize: NSMakeSize(cRect.size.width+verticalRulerWidth, bRect.size.height)];
+	}
+	if (verticalRulerIsVisible && vRuler)
+	{
+	    NSDivideRect(aRect , &bRect , &aRect , verticalRulerWidth, NSMinXEdge);
+	    [vRuler setFrame: bRect];
+	    [[vRuler documentView] setFrameSize: NSMakeSize(bRect.size.width, cRect.size.height)];
+	}
+	[[self contentView] setFrame: aRect];
     }
-    if (verticalRulerIsVisible && vRuler)
-    {
-      NSDivideRect(aRect , &bRect , &aRect , verticalRulerWidth, NSMinXEdge);
-        [vRuler setFrame:bRect];
-        [[vRuler documentView] setFrameSize:NSMakeSize(bRect.size.width, cRect.size.height)];
-    }
-    [[self contentView] setFrame:aRect];
-  }
 #endif
 }
 
@@ -467,43 +468,44 @@ static void reSize(id p, float dh)
  * This is sent to us instead of rawScroll:.
  * We scroll the two rulers, then the clipView itself.
  */
- 
-- (void)scrollClipView:(NSClipView *)aClipView toPoint:(NSPoint)aPoint
+
+- (void) scrollClipView: (NSClipView *)aClipView toPoint: (NSPoint)aPoint
 {
     id fr;
     id window = [self window];
+    
 #ifdef DEBUGno
-    printf("scroll to vertical?: %g\n",aPoint.y);
+    NSLog(@"scroll to vertical?: %g\n",aPoint.y);
 #endif
     if (aClipView != [self contentView]) return;
 #ifdef DEBUGno
-    printf("scroll to vertical OK: %g\n",aPoint.y);
+    NSLog(@"scroll to vertical OK: %g\n",aPoint.y);
 #endif
     [window disableFlushWindow];
 #if 0
-
+    
     if (horizontalRulerIsVisible && hRuler)
-      {
+    {
         rRect = [hRuler bounds];
         rRect.origin.x = aPoint.x;
-        [hRuler scrollToPoint:(rRect.origin)];
-      }
+        [hRuler scrollToPoint: (rRect.origin)];
+    }
     if (verticalRulerIsVisible && vRuler)
-      {
+    {
         rRect = [vRuler bounds];
         rRect.origin.y = aPoint.y;
-        [vRuler scrollToPoint:(rRect.origin)];
-      }
+        [vRuler scrollToPoint: (rRect.origin)];
+    }
 #endif
     
-    [aClipView scrollToPoint:aPoint];
-
+    [aClipView scrollToPoint: aPoint];
+    
     fr = [[self window] firstResponder];
-    if ([fr respondsToSelector:@selector(isRulerVisible)] && [fr isRulerVisible]) [fr updateRuler]; // keeps Text ruler up-to-date
-
+    if ([fr respondsToSelector: @selector(isRulerVisible)] && [fr isRulerVisible]) [fr updateRuler]; // keeps Text ruler up-to-date
+    
     [window enableFlushWindow];
     [window flushWindow];
-
+    
 }
 
 
@@ -512,45 +514,44 @@ static void reSize(id p, float dh)
  * called to update the size of the rulers to be equal to
  * the size of the docView.
  */
- 
-//- (void)descendantFrameChanged:(NSNotification *)notification
-- (void)viewFrameChanged:(NSNotification *)notification
+//- (void)descendantFrameChanged: (NSNotification *)notification
+- (void) viewFrameChanged: (NSNotification *) notification
 {
     NSRect aRect, bRect, cRect;
     NSView *changedView = [notification object];
-    printf("descendantFrameChanged\n");
-    if (changedView == [[[self documentView] viewWithTag:1] superview]) {
-        printf("(the one we wanted)\n");
-
+    
+    NSLog(@"descendantFrameChanged\n");
+    if (changedView == [[[self documentView] viewWithTag: 1] superview]) {
+        NSLog(@"(the one we wanted)\n");
+	
         if (horizontalRulerIsVisible || verticalRulerIsVisible) {
             aRect = [[self contentView] frame];
-            cRect = [[[self documentView] viewWithTag:1] frame];
+            cRect = [[[self documentView] viewWithTag: 1] frame];
             if (horizontalRulerIsVisible && hRuler) {
-                NSDivideRect(aRect , &bRect , &aRect , horizontalRulerWidth, NSMinYEdge);
-                [[hRuler documentView] setFrameSize:NSMakeSize(cRect.size.width+verticalRulerWidth, bRect.size.height)];
-                }
+                NSDivideRect(aRect, &bRect, &aRect, horizontalRulerWidth, NSMinYEdge);
+                [[hRuler documentView] setFrameSize: NSMakeSize(cRect.size.width+verticalRulerWidth, bRect.size.height)];
+	    }
             if (verticalRulerIsVisible && vRuler) {
-                NSDivideRect(aRect , &bRect , &aRect , verticalRulerWidth, NSMinXEdge);
-                [[vRuler documentView] setFrameSize:NSMakeSize(bRect.size.width, cRect.size.height)];
-                }
+                NSDivideRect(aRect, &bRect, &aRect, verticalRulerWidth, NSMinXEdge);
+                [[vRuler documentView] setFrameSize: NSMakeSize(bRect.size.width, cRect.size.height)];
+	    }
         }
     }
 }
 
 /*
-  We need to override drawSelf to make the background behind the new gadgets 
-  grey instead of the default white
-*/
-
-- (void)drawRect:(NSRect)rect
+ We need to override drawRect: to make the background behind the new gadgets 
+ grey instead of the default white
+ */
+- (void) drawRect: (NSRect) rect
 {
 #ifdef DEBUG
-//    printf("SyncScrollView drawRect\n");
+    // NSLog(@"SyncScrollView drawRect\n");
 #endif
     [[NSColor lightGrayColor] set];
     NSRectFill(vertScrollerArea);
     NSRectFill(horzScrollerArea);
-    [super drawRect:rect];
+    [super drawRect: rect];
 }
 
 @end

@@ -354,7 +354,7 @@ struct oldflags		/* for old version */
           [data addAttribute:NSFontAttributeName value:theFont range:NSMakeRange(rangeStart,1)];
           [data endEditing];
       }
-//      printf("%s\n",(char *)[results bytes]);
+//      NSLog(@"%s\n",(char *)[results bytes]);
   }
   else {
       data = [[aDecoder decodeObject] retain];

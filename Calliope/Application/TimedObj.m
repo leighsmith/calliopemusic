@@ -368,7 +368,7 @@ void writeTimeData5(NSCoder *s, struct timeinfo *t) /*sb: changed from NSArchive
   else if (v == 3) readTimeData3(aDecoder, &time);
   else if (v == 4) readTimeData4(aDecoder, &time);
   else if (v == 5) readTimeData5(aDecoder, &time);
-  if (!mystaff) printf("TimedObj %p has nil mystaff\n",self);
+  if (!mystaff) NSLog(@"TimedObj %p has nil mystaff\n",self);
   return self;
 }
 

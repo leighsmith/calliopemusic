@@ -1321,7 +1321,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
 - (void)controlTextDidChange:(NSNotification *)notification
 {
     NSText *theText = [[notification userInfo] objectForKey:@"NSFieldEditor"];
-    printf("didchange\n");
+    NSLog(@"didchange\n");
     if (stytext == [theText superview])
       {
         [self styleButtons: nil];

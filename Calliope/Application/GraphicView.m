@@ -362,7 +362,7 @@ static void noteAndHangBB(NSMutableArray *l, NSRect *bbox)
     }
     else selectionBlat = NSUnionRect(selectionBlat,mybb);
   }
-//  printf("selectionblat %g %g %g %g\n",selectionBlat.origin.x,selectionBlat.origin.y,selectionBlat.size.width,selectionBlat.size.height);
+//  NSLog(@"selectionblat %g %g %g %g\n",selectionBlat.origin.x,selectionBlat.origin.y,selectionBlat.size.width,selectionBlat.size.height);
 
   cachedRect = NSInsetRect([self convertRect:selectionBlat toView:nil],-2,-2);
   cachedRect.origin.x = (int)cachedRect.origin.x;
@@ -607,7 +607,7 @@ extern char *typename[NUMTYPES];
       {
           if (cached) [window restoreCachedImage];//sb: this should blat the selection OFF the screen
           else
-              printf("huh?\n");
+              NSLog(@"huh?\n");
           cached = NO; /* so restoreCachedImage doesn't try to restore image after scroll */
           scrolling = YES;
           [self scrollPointToVisible: p];

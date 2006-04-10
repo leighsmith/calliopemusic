@@ -11,19 +11,19 @@
 - (void)setAttributes:(NSDictionary *)attributes range:(NSRange)aRange
 {
     [super setAttributes:(NSDictionary *)attributes range:(NSRange)aRange];
-    printf("Range location %d length %d\n",aRange.location,aRange.length);
+    NSLog(@"Range location %d length %d\n",aRange.location,aRange.length);
 }
 - (void)addAttributes:(NSDictionary *)attributes range:(NSRange)aRange
 {
     [super addAttributes:(NSDictionary *)attributes range:(NSRange)aRange];
-    printf("Range location %d length %d\n",aRange.location,aRange.length);
+    NSLog(@"Range location %d length %d\n",aRange.location,aRange.length);
 }
 - (void)addAttribute:(NSString *)name value:(id)value range:(NSRange)aRange
 {
     [super addAttribute:(NSString *)name
                           value:(id)value
                   range:(NSRange)aRange];
-    printf("Range location %d length %d name %s\n",aRange.location,aRange.length,[name cString]);
+    NSLog(@"Range location %d length %d name %s\n",aRange.location,aRange.length,[name cString]);
 }
 @end
 
@@ -49,7 +49,7 @@
     }
 
 
-    printf("font found at %d, %p\n",i,theFont);
+    NSLog(@"font found at %d, %p\n",i,theFont);
     if (theFont) return theFont;
   return [[DrawApp currentDocument] getPreferenceAsFont: RUNFONT];
 }

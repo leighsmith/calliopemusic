@@ -245,7 +245,7 @@ static NSTextView *drawText = nil;
   maxSize.height = 500.0;
   [drawText setMinSize:bounds.size];
   [drawText setMaxSize:maxSize];
-  printf("set max size in initFromString to %g %g\n",maxSize.width, maxSize.height);
+  NSLog(@"set max size in initFromString to %g %g\n",maxSize.width, maxSize.height);
   [drawText setVerticallyResizable:YES];
   [drawText setHorizontallyResizable:YES];
   [drawText setString:s];//sb: changed
@@ -400,11 +400,11 @@ static NSTextView *drawText = nil;
     if (richTextData == nil) return NO;
     maxSize.width = 500.0;
     maxSize.height = 500.0;
-    printf("changing vfont in TextGraphic! Didn't think we'd make it to here.\n");
+    NSLog(@"changing vfont in TextGraphic! Didn't think we'd make it to here.\n");
     
     [drawText setMinSize:bounds.size];
     [drawText setMaxSize:maxSize];
-    printf("set max size in changeVFont to %g %g\n",maxSize.width, maxSize.height);
+    NSLog(@"set max size in changeVFont to %g %g\n",maxSize.width, maxSize.height);
     [drawText setVerticallyResizable:YES];
     [drawText setHorizontallyResizable:YES];
   [drawText replaceCharactersInRange:NSMakeRange(0, [[drawText string] length]) withRTF:richTextData];
@@ -625,8 +625,8 @@ extern int selMode;
         conts = bounds.size;
         conts.width += 1; /* allow text to take a little more room than it would otherwise */
         [[drawText textContainer] setContainerSize:conts];
-//        printf("drawText textContainer size: %g %g\n",conts.width,conts.height);
-//        printf("drawText frame size: %g %g\n",bounds.size.width,bounds.size.height);
+//        NSLog(@"drawText textContainer size: %g %g\n",conts.width,conts.height);
+//        NSLog(@"drawText frame size: %g %g\n",bounds.size.width,bounds.size.height);
         [[graphicView window] setAutodisplay:NO]; // don't let addSubview: cause redisplay
         [[NSView focusView] addSubview:drawText];
         [drawText setSelectedTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: selShade, NSBackgroundColorAttributeName, nil]];
@@ -699,7 +699,7 @@ extern int selMode;
     int len;
     NSRect redrawRect;
 
-    printf("did end editing\n");
+    NSLog(@"did end editing\n");
 
     if (richTextData) {
         [richTextData autorelease];
@@ -717,8 +717,8 @@ extern int selMode;
         richTextData = [[NSData alloc] initWithData:[fe RTFFromRange:NSMakeRange(0, len)]];
         bounds = [fe frame];
 //        bounds.size.width = ceil(bounds.size.width + 2); /* without this, sometimes text rewraps unexpectedly */
-        printf("frame: %g %g %g %g\n",bounds.origin.x,bounds.origin.y,bounds.size.width,bounds.size.height);
-        printf("cont size: %g %g\n",conts.width,conts.height);
+        NSLog(@"frame: %g %g %g %g\n",bounds.origin.x,bounds.origin.y,bounds.size.width,bounds.size.height);
+        NSLog(@"cont size: %g %g\n",conts.width,conts.height);
         [self getHandleBBox: &redrawRect];
         redrawRect  = NSUnionRect(bounds , redrawRect);
         [self recalc];
@@ -847,7 +847,7 @@ struct oldflags /* for old version */
               break;
           }
       }         
-//      printf("text frame from old doc: %g %g %g %g\n",bounds.origin.x,bounds.origin.y,bounds.size.width,bounds.size.height);
+//      NSLog(@"text frame from old doc: %g %g %g %g\n",bounds.origin.x,bounds.origin.y,bounds.size.width,bounds.size.height);
   }
     [[self class] initClassVars];
   return self;
