@@ -319,52 +319,53 @@ extern float ctimex(float d);
 
 - getInsertionX: (float *) x : (Staff **) rsp : (StaffObj **) rp : (int *) tb : (int *) td
 {
-  int b;
-  System *sys;
-  Staff *sp;
-  TimedObj *t = [self isTimedRightmost];
-  StaffObj *p = [self isSelRightmost];
-  if (t != nil)
-  {
-    *x = t->x + ctimex([t noteEval: NO]) * 8;
-    *tb = t->time.body;
-    *td = t->time.dot;
-  }
-  else
-  {
-    *x = RIGHTBOUND(p) + 4 * nature[p->gFlags.size];
-    *tb = CROTCHET;
-    *td = 0;
-  }
-  sp = p->mystaff;
-  if (*x > [sp xOfEnd])
-  {
-    sys = [self nextSystem: sp->mysys didCreate: &b];
-    if (!b) [self simplePaginate: sys afterAddingCount: 1 askIfLoose: NO];
-    sp = [sys sameStaff: sp];
-    if ([sp->notes count] > 0)
+    BOOL newSystem;
+    System *sys;
+    Staff *sp;
+    TimedObj *t = [self isTimedRightmost];
+    StaffObj *p = [self isSelRightmost];
+    
+    if (t != nil)
     {
-      p = [sp->notes lastObject];
-      if (ISATIMEDOBJ(p))
-      {
-        t = (TimedObj *) p;
-       *x = t->x + ctimex([t noteEval: NO]) * 8;
-        *tb = t->time.body;
-        *td = t->time.dot;
-      }
-      else
-      {
-        *x = RIGHTBOUND(p) + 4 * nature[p->gFlags.size];
-      }
+	*x = t->x + ctimex([t noteEval: NO]) * 8;
+	*tb = t->time.body;
+	*td = t->time.dot;
     }
     else
     {
-      *x = 4 * getSpacing(sp) + [sys leftWhitespace];
+	*x = RIGHTBOUND(p) + 4 * nature[p->gFlags.size];
+	*tb = CROTCHET;
+	*td = 0;
     }
-  }
-  *rsp = sp;
-  *rp = p;
-  return self;
+    sp = p->mystaff;
+    if (*x > [sp xOfEnd])
+    {
+	sys = [self nextSystem: sp->mysys didCreate: &newSystem];
+	if (!newSystem) [self simplePaginate: sys afterAddingCount: 1 askIfLoose: NO];
+	sp = [sys sameStaff: sp];
+	if ([sp->notes count] > 0)
+	{
+	    p = [sp->notes lastObject];
+	    if (ISATIMEDOBJ(p))
+	    {
+		t = (TimedObj *) p;
+		*x = t->x + ctimex([t noteEval: NO]) * 8;
+		*tb = t->time.body;
+		*td = t->time.dot;
+	    }
+	    else
+	    {
+		*x = RIGHTBOUND(p) + 4 * nature[p->gFlags.size];
+	    }
+	}
+	else
+	{
+	    *x = 4 * getSpacing(sp) + [sys leftWhitespace];
+	}
+    }
+    *rsp = sp;
+    *rp = p;
+    return self;
 }
 
 
