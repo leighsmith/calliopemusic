@@ -1,3 +1,4 @@
+/* $Id:$ */
 #import "SyncScrollView.h"
 #import "GraphicView.h"
 #import "GVFormat.h"
@@ -21,32 +22,26 @@
 - showPosition: (float)p : (float)q;	/* positioning markers at p and q */
 @end
 
-#define GADGET_HEIGHT		16.0
+// TODO should be determined from the NIB button frame height.
+#define GADGET_HEIGHT		16.0 
 
 @implementation SyncScrollView
 
-
-- initWithFrame: (NSRect) frameRect
+- (void) initialiseControls
 {
-    id oldWindow;
-    
-    [super initWithFrame: frameRect];
-    [NSBundle loadNibNamed: @"ScrollerGadgets.nib" owner: self];
-    oldWindow = [pageUpButton window];
-    [self addSubview: pageUpButton];
-    [self addSubview: pageDownButton];
+    // Assuming all IB outlets will be connected up before this class is initialised.
     [self addSubview: pageLabel];
     [self addSubview: pageForm];
     [self addSubview: zoomPopUpList];
     [self addSubview: pageFirstButton];
+    [self addSubview: pageUpButton];
+    [self addSubview: pageDownButton];
     [self addSubview: pageLastButton];
-    [oldWindow release];
+    
     //sb additions:
     //    [[NSNotificationCenter defaultCenter] addObserver: self
     //                                             selector:@selector(descendantFrameChanged: )
-    //                                                 name: NSViewFrameDidChangeNotification object: nil];
-    
-    return self;
+    //                                                 name: NSViewFrameDidChangeNotification object: nil];    
 }
 
 
@@ -84,57 +79,6 @@ static void reSize(id p, float dh)
     reSize(sender, 4.0);
     return self;
 }
-
-
-/* messages from controls */
-
-- prevPage: sender
-{
-    [[[[self contentView] documentView] viewWithTag: 1] prevPage: sender];
-    [[NSRunLoop currentRunLoop]  performSelector: @selector(makeFirstResponder:)
-                                          target: [self window]
-                                        argument: [[[self contentView] documentView] viewWithTag: 1]
-                                           order: 0
-                                           modes: [NSArray  arrayWithObject: NSDefaultRunLoopMode]];
-    return self;
-}
-
-
-- nextPage: sender
-{
-    [[[[self contentView] documentView] viewWithTag: 1] nextPage: sender];
-    [[NSRunLoop currentRunLoop]  performSelector: @selector(makeFirstResponder:)
-                                          target: [self window]
-                                        argument: [[[self contentView] documentView] viewWithTag: 1]
-                                           order: 0
-                                           modes: [NSArray  arrayWithObject: NSDefaultRunLoopMode]];
-    return self;
-}
-
-
-- firstPage: sender
-{
-    [[[[self contentView] documentView] viewWithTag: 1] firstPage: sender];
-    [[NSRunLoop currentRunLoop]  performSelector: @selector(makeFirstResponder:)
-                                          target: [self window]
-                                        argument: [[[self contentView] documentView] viewWithTag: 1]
-                                           order: 0
-                                           modes: [NSArray  arrayWithObject: NSDefaultRunLoopMode]];
-    return self;
-}
-
-
-- lastPage: sender
-{
-    [[[[self contentView] documentView] viewWithTag: 1] lastPage: sender];
-    [[NSRunLoop currentRunLoop]  performSelector: @selector(makeFirstResponder:)
-                                          target: [self window]
-                                        argument: [[[self contentView] documentView] viewWithTag: 1]
-                                           order: 0
-                                           modes: [NSArray  arrayWithObject: NSDefaultRunLoopMode]];
-    return self;
-}
-
 
 - setScale: sender
 {	
@@ -309,7 +253,7 @@ static void reSize(id p, float dh)
 
 - updateRulers: (const NSRect *) rect
 {
-    //    NSLog(@"update rulers\n");
+    // NSLog(@"update rulers\n");
     if ([self rulersVisible]) {
 	if (!rect)
 	{
@@ -388,22 +332,11 @@ static void reSize(id p, float dh)
 }
 
 
-/*
- * Here is where we lay out the subviews of the ScrollView.
- * Note the use of NXDivideRect() to "slice off" a section of
- * a rectangle.  This is useful since the two scrollers each
- * result in slicing a section off the contentView of the
- * ScrollView.
- */
-
-- (void) tile
+- (void) tileHorizontalScroller
 {
     NSRect aRect, cRect;
     float zoom_width, page_label_width, page_cell_width;
-    float y;
-    
-    // NSLog(@"tile\n");
-    [super tile];
+
     /* take the zoom popup list & page display into account on the horizontal scroller */
     aRect = [[self horizontalScroller] frame];
     cRect = [zoomPopUpList frame];
@@ -414,12 +347,14 @@ static void reSize(id p, float dh)
     page_cell_width = cRect.size.width;
     aRect.size.width -= zoom_width + page_label_width + page_cell_width;
     [[self horizontalScroller] setFrame: aRect];
+    
     /* position the zoom popup list in the correct place */
     aRect.origin.x += aRect.size.width;
     aRect.size.width = zoom_width;
     horzScrollerArea = aRect;
     horzScrollerArea.size.width += page_label_width + page_cell_width;
-    [zoomPopUpList setFrameOrigin: NSMakePoint(aRect.origin.x, aRect.origin.y +1.0)];
+    [zoomPopUpList setFrameOrigin: NSMakePoint(aRect.origin.x, aRect.origin.y + 1.0)];
+    
     /* position the page display after the popuplist in the horizontal scroller */
     aRect.origin.x += zoom_width;
     aRect.size.width = page_cell_width;
@@ -427,34 +362,57 @@ static void reSize(id p, float dh)
     aRect.origin.x += page_cell_width;
     aRect.origin.y += 3.0;
     aRect.size.width = page_label_width;
-    [pageLabel setFrameOrigin: NSMakePoint(aRect.origin.x, aRect.origin.y)];
+    [pageLabel setFrameOrigin: NSMakePoint(aRect.origin.x, aRect.origin.y)];    
+}
+
+- (void) tileVerticalScroller
+{
+    NSRect verticalScrollerFrame;
+    
     /* take the page up/down buttons into account on the vertical scroller */
-    aRect = [[self verticalScroller] frame];
-    aRect.size.height -= (4.0 * GADGET_HEIGHT) + 4.0;
-    [[self verticalScroller] setFrame: aRect];
+    verticalScrollerFrame = [[self verticalScroller] frame];
+    verticalScrollerFrame.size.height -= (4.0 * GADGET_HEIGHT) + 4.0;
+    [[self verticalScroller] setFrame: verticalScrollerFrame];
+    
     /* position the buttons in the correct place */
-    aRect.origin.y += aRect.size.height;
-    vertScrollerArea = aRect;
-    aRect.size.height = (4.0 * GADGET_HEIGHT) + 4.0;
-    y = aRect.origin.y;
-    [pageFirstButton setFrameOrigin: NSMakePoint(1.0, y)];
-    [pageUpButton setFrameOrigin: NSMakePoint(1.0, y + GADGET_HEIGHT + 1.0)];
-    [pageDownButton setFrameOrigin: NSMakePoint(1.0, y + (2.0 * GADGET_HEIGHT) + 2.0)];
-    [pageLastButton setFrameOrigin: NSMakePoint(1.0, y + (3.0 * GADGET_HEIGHT) + 3.0)];
+    verticalScrollerFrame.origin.y += verticalScrollerFrame.size.height;
+    vertScrollerArea = verticalScrollerFrame;
+    verticalScrollerFrame.size.height = (4.0 * GADGET_HEIGHT) + 4.0;
+    
+    [pageFirstButton setFrameOrigin: NSMakePoint(verticalScrollerFrame.origin.x, verticalScrollerFrame.origin.y)];
+    [pageUpButton    setFrameOrigin: NSMakePoint(verticalScrollerFrame.origin.x, verticalScrollerFrame.origin.y + GADGET_HEIGHT + 1.0)];
+    [pageDownButton  setFrameOrigin: NSMakePoint(verticalScrollerFrame.origin.x, verticalScrollerFrame.origin.y + (2.0 * GADGET_HEIGHT) + 2.0)];
+    [pageLastButton  setFrameOrigin: NSMakePoint(verticalScrollerFrame.origin.x, verticalScrollerFrame.origin.y + (3.0 * GADGET_HEIGHT) + 3.0)];    
+}
+
+/*
+ * Here is where we lay out the subviews of the NSScrollView.
+ * Note the use of NSDivideRect() to "slice off" a section of
+ * a rectangle.  This is useful since the two scrollers each
+ * result in slicing a section off the contentView of the
+ * NSScrollView.
+ */
+- (void) tile
+{
+    
+    NSLog(@"tile");
+    [super tile];
+    
+    [self tileHorizontalScroller];
+    [self tileVerticalScroller];
+    
 #if 0
-    if (horizontalRulerIsVisible || verticalRulerIsVisible)
-    {
-	aRect = [[self contentView] frame];
-	cRect = [[[self documentView] viewWithTag: 1] frame];
-	if (horizontalRulerIsVisible && hRuler)
-	{
-	    NSDivideRect(aRect , &bRect , &aRect , horizontalRulerWidth, NSMinYEdge);
+    if (horizontalRulerIsVisible || verticalRulerIsVisible) {
+	NSRect aRect = [[self contentView] frame];
+	NSRect cRect = [[[self documentView] viewWithTag: 1] frame];
+	
+	if (horizontalRulerIsVisible && hRuler)	{
+	    NSDivideRect(aRect, &bRect, &aRect, horizontalRulerWidth, NSMinYEdge);
 	    [hRuler setFrame: bRect];
 	    [[hRuler documentView] setFrameSize: NSMakeSize(cRect.size.width+verticalRulerWidth, bRect.size.height)];
 	}
-	if (verticalRulerIsVisible && vRuler)
-	{
-	    NSDivideRect(aRect , &bRect , &aRect , verticalRulerWidth, NSMinXEdge);
+	if (verticalRulerIsVisible && vRuler) {
+	    NSDivideRect(aRect, &bRect, &aRect, verticalRulerWidth, NSMinXEdge);
 	    [vRuler setFrame: bRect];
 	    [[vRuler documentView] setFrameSize: NSMakeSize(bRect.size.width, cRect.size.height)];
 	}
@@ -474,11 +432,11 @@ static void reSize(id p, float dh)
     id fr;
     id window = [self window];
     
-#ifdef DEBUGno
+#ifdef DEBUG
     NSLog(@"scroll to vertical?: %g\n",aPoint.y);
 #endif
     if (aClipView != [self contentView]) return;
-#ifdef DEBUGno
+#ifdef DEBUG
     NSLog(@"scroll to vertical OK: %g\n",aPoint.y);
 #endif
     [window disableFlushWindow];

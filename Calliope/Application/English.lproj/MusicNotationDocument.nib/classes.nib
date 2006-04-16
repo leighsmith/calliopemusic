@@ -28,20 +28,35 @@
             SUPERCLASS = NSView; 
         }, 
         {
+            ACTIONS = {
+                changeLayout = id; 
+                firstPage = id; 
+                hideRuler = id; 
+                lastPage = id; 
+                nextPage = id; 
+                prevPage = id; 
+                showTextRuler = id; 
+            }; 
+            CLASS = OpusDocument; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {scrollView = SyncScrollView; view = GraphicView; }; 
+            SUPERCLASS = NSDocument; 
+        }, 
+        {
             ACTIONS = {pageTo = id; showHideRulers = id; }; 
             CLASS = SyncScrollView; 
             LANGUAGE = ObjC; 
             OUTLETS = {
                 hRuler = id; 
-                pageDownButton = id; 
-                pageFirstButton = id; 
-                pageForm = id; 
-                pageLabel = id; 
-                pageLastButton = id; 
-                pageUpButton = id; 
+                pageDownButton = NSButton; 
+                pageFirstButton = NSButton; 
+                pageForm = NSForm; 
+                pageLabel = NSTextField; 
+                pageLastButton = NSButton; 
+                pageUpButton = NSButton; 
                 rulerClass = id; 
                 vRuler = id; 
-                zoomPopUpList = id; 
+                zoomPopUpList = NSPopUpButton; 
             }; 
             SUPERCLASS = NSScrollView; 
         }

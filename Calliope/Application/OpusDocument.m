@@ -803,12 +803,13 @@ return nil;
  choices of paper size, margins, etc.
  */
 
-- changeLayout:sender
+- (IBAction) changeLayout:sender
 {
     float w, h, ss, vs;
     NSSize opr = [self paperSize];
     CallPageLayout * pl;
     BOOL p;
+    
 #ifndef WIN32
     //this forces the page layout panel to use the units that we have defined in Calliope app preferences
     NSString * tempUnit = [[[NSUserDefaults standardUserDefaults] stringForKey:@"NSMeasurementUnit"] retain];
@@ -843,7 +844,6 @@ return nil;
 	[view dirty];
     }
     [[DrawApp sharedApplicationController] inspectPreferences: NO];
-    return self;
 }
 
 - (void) setNumberOfStaves: (int) numOfStaves
@@ -983,13 +983,12 @@ return nil;
  * Only does anything if the rulers are already visible.
  */
 
-- showTextRuler: sender
+- (IBAction) showTextRuler: sender
 {
     if ([scrollView rulersVisible]) {
 	// [scrollView showHorizontalRuler:NO];
 	[sender toggleRuler:sender];
     }
-    return self;
 }
 
 
@@ -1004,13 +1003,13 @@ return nil;
     * ruler stay up).
  */
 
-- hideRuler: sender
+- (IBAction) hideRuler: sender
 {
-    id fe = [documentWindow fieldEditor:NO forObject:NSApp];
+    id fieldEditor = [documentWindow fieldEditor:NO forObject:NSApp];
     
     if (!sender && [scrollView rulersVisible])
     {
-        [fe toggleRuler:sender];
+        [fieldEditor toggleRuler:sender];
 //        [scrollView toggleRuler:nil];//huh?
 //    if ([scrollView verticalRulerIsVisible]) [scrollView showHorizontalRuler:YES];
         [scrollView resizeSubviewsWithOldSize:NSZeroSize];
@@ -1018,18 +1017,17 @@ return nil;
     }
     else if (sender)
     {
-        [fe toggleRuler:sender];
+        [fieldEditor toggleRuler:sender];
         [scrollView showHideRulers:self];
 #if 0 // TODO Disabled until we figure out why we attempt to toggle scrollView rulers? LMS
         if ([scrollView rulersVisible]) {
-            if (![fe window]) [scrollView toggleRuler:nil];//huh?
+            if (![fieldEditor window]) [scrollView toggleRuler:nil];//huh?
         }
         else
             [scrollView toggleRuler:nil];//huh?
 #endif
     }
 //  [NSObject cancelPreviousPerformRequestsWithTarget:NSApp selector:@selector(updateWindows) object:nil], [NSApp performSelector:@selector(updateWindows) withObject:nil afterDelay:(1) / 1000.0];
-    return self;
 }
 
 
@@ -1175,6 +1173,7 @@ return nil;
     [documentWindow setDelegate: self]; // TODO Hmm shouldn't be necessary eventually.
     // [self registerForServicesMenu]; // LMS Necessary?
     [view setDelegate: self];
+    [scrollView initialiseControls]; // Connect up the page up & down buttons.
     [self zeroScale];
     // TODO kludged in here for now, it will eventually be created by a "new document sheet".
     [self setNumberOfStaves: 2];
@@ -1318,9 +1317,39 @@ return nil;
 }
 
 
-/*Icon dragging methods */
+/* action messages from scrollView. */
+/* TODO at the moment, the model and view is merged, so for now, we just redirect the message. 
+  In the future, we should change the page on the model and then update the view of that model, assuming the model holds
+  the concept of a current page. If current page is deemed to be entirely a display attribute, not impacting the model, then
+  the target should stay the view.
+*/
+- (void) prevPage: sender
+{
+    [view prevPage: sender];
+}
 
-/*put code here for 3.0 */
+
+- (void) nextPage: sender
+{
+    [view nextPage: sender];
+}
+
+
+- (void) firstPage: sender
+{
+    [view firstPage: sender];
+}
+
+
+- (void) lastPage: sender
+{
+    [view lastPage: sender];
+}
+
+
+/* Icon dragging methods */
+
+/* put code here for 3.0 */
 
 
 /*

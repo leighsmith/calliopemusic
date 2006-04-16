@@ -103,17 +103,20 @@
 - changeSize: (float) width : (float) height : (NSPoint)origin;
 
 /* Target/Action methods */
+- (IBAction) changeLayout: sender;
+- (IBAction) showTextRuler: sender;
+- (IBAction) hideRuler: sender;
 
-- changeLayout:sender;
-
-- showTextRuler:sender;
-- hideRuler:sender;
+/* Action methods for updating the current page. */
+- (IBAction) prevPage: sender;
+- (IBAction) nextPage: sender;
+- (IBAction) firstPage: sender;
+- (IBAction) lastPage: sender;
 
 /* Document name and file handling methods */
-
-- (NSString *)filename;
-- (NSString *)directory;
-- (NSString *)name;
+- (NSString *) filename;
+- (NSString *) directory;
+- (NSString *) name;
 - setName: (NSString *) name andDirectory:(NSString *)directory;
 - setName: (NSString *) name;
 
@@ -129,6 +132,7 @@
   @brief Assigns the number of staves in the document 
  */
 - (void) setNumberOfStaves: (int) numOfStaves;
+
 - (NSSize) paperSize;
 - (void) zeroScale;
 - useViewScale;
@@ -141,28 +145,17 @@
 - validRequestorForSendType:(NSString *)sendType returnType:(NSString *)returnType;
 - writeSelectionToPasteboard:pboard types:(NSArray *)types;
 
-/* Window delegate methods */
-#if 0
-- windowWillClose:sender action:(NSString *)action;
-
-- (BOOL)windowShouldClose:(id)sender;
-
-- (void)windowDidBecomeMain:(NSNotification *)notification;
-- (NSSize)windowWillResize:(NSWindow *)sender toSize:(NSSize)size;
-#endif
-
 /* Menu command validation method */
-
 - (BOOL) validateMenuItem: (NSMenuItem *) menuCell;
 
 /* Cursor setting */
-
 - resetCursor;
 - sendCharacter: (int) c;
 
 /* Receive GraphicView delegate methods */
 - (void) setMessage: (NSString *) message;
 - (void) setPageNumber: (int) pageNumber;
+
 
 - (NSString *) frameString;
 - (NSRect) frameSize;
