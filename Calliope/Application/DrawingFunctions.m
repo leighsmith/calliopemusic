@@ -164,6 +164,7 @@ void colorInit(int i, NSColor * c)
 
 void PSInit()
 {
+    // Nowadays does nothing...
     PSWrapsInit();
 }
 
@@ -465,11 +466,13 @@ void DrawTextWithBaselineTies(float x, float y, NSString *stringToDisplay, NSFon
 			       range: wholeString];
 	
 	[attributedText drawAtPoint: NSMakePoint(x, y)]; // must check which coordinate system used? not flipped?
-
 	
 	tieCharacterWidth = charFWX(textFont, TIECHAR);
 	fontPointSize = [textFont pointSize];
 	tieCharacterHeight = 0.1 * fontPointSize;
+
+	NSFrameRect(NSMakeRect(x, y, 20, fontPointSize)); // For debugging.
+
 #if 0
 	p = t;
 	while (c = *s++) {
@@ -493,18 +496,19 @@ void DrawTextWithBaselineTies(float x, float y, NSString *stringToDisplay, NSFon
 }
 
 //sb: changed the following from cString to CAcString to avoid confusion.
+// Should be removed eventually
 void CAcString(float x, float y, const char *s, NSFont *textFont, int mode)
 {
     DrawTextWithBaselineTies(x, y, [NSString stringWithCString: s], textFont, mode);
 }
 
-// DrawCenteredText
+// DrawCenteredText(float x, float y, NSString *s, NSFont *f, int mode)
 void centString(float x, float y, char *s, NSFont *f, int mode)
 {
     CAcString(x - 0.5 * [f widthOfString: [NSString stringWithCString: s]], y, s, f, mode);
 }
 
-// DrawJustifiedText
+// DrawJustifiedText(float x, float y, NSString *s, NSFont *f, int j, int mode)
 void justString(float x, float y, char *s, NSFont *f, int j, int mode)
 {
     if (j == JCENTRE) x -= 0.5 * [f widthOfString: [NSString stringWithCString:s]];
