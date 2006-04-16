@@ -223,7 +223,7 @@ extern void setkeysig(KeySig *p, char *key);
 	  mc = [sp getKeyThru: p : ks];
 	  posOfNote(mc, ks, [n keyNum], &pos, &acc);
 	  pt.y = [sp yOfPos: pos];
-	  q = [Graphic graphicOfType: NOTE];
+	  q = [[[GNote alloc] init] autorelease];
 	  [q proto: v : pt : sp : sp->mysys : nil : 5];
 	  if (acc) setAccidental(q, acc);
           [sp linknote: q];
