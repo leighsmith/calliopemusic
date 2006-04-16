@@ -2135,7 +2135,6 @@ extern int needUpgrade;
     {
 	int k;
 	System *s;
-	Margin *p;
 	
 	/* this does a test */
 	k = [syslist count];
@@ -2157,10 +2156,12 @@ extern int needUpgrade;
 	s = [syslist objectAtIndex:0];
 	if (![s checkMargin])
 	{
-	    p = [Graphic graphicOfType: MARGIN];
-	    [p setClient: s];
-	    [s linkobject: p];
-	    [p recalc];
+	    Margin *newMargin = [[Margin alloc] init];
+	    
+	    [newMargin setClient: s];
+	    [s linkobject: newMargin];
+	    [newMargin recalc];
+	    [newMargin release];
 	    needUpgrade |= 4;
 	}
 	
