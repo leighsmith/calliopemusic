@@ -1,4 +1,4 @@
-/* $Id:$ */
+/* $Id$ */
 #import "SyncScrollView.h"
 #import "GraphicView.h"
 #import "GVFormat.h"

@@ -125,7 +125,7 @@
 		D8F2480F09AD3F8C00B96D0D /* Staff.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD939E0483CDC800A80164 /* Staff.h */; };
 		D8F2481009AD3F8C00B96D0D /* StaffObj.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD93A00483CDC800A80164 /* StaffObj.h */; };
 		D8F2481109AD3F8C00B96D0D /* StaffTrans.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD93A20483CDC800A80164 /* StaffTrans.h */; };
-		D8F2481209AD3F8C00B96D0D /* SyncScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD93A40483CDC800A80164 /* SyncScrollView.h */; };
+		D8F2481209AD3F8C00B96D0D /* PageScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD93A40483CDC800A80164 /* PageScrollView.h */; };
 		D8F2481309AD3F8C00B96D0D /* SysAdjust.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD93A60483CDC800A80164 /* SysAdjust.h */; };
 		D8F2481409AD3F8C00B96D0D /* SysCommands.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD93A80483CDC800A80164 /* SysCommands.h */; };
 		D8F2481509AD3F8C00B96D0D /* SysInspector.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD93AA0483CDC800A80164 /* SysInspector.h */; };
@@ -559,7 +559,7 @@
 		D8F249C709AD3F8D00B96D0D /* Staff.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD92C30483CDC800A80164 /* Staff.m */; settings = {ATTRIBUTES = (); }; };
 		D8F249C809AD3F8D00B96D0D /* StaffObj.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD92C50483CDC800A80164 /* StaffObj.m */; settings = {ATTRIBUTES = (); }; };
 		D8F249C909AD3F8D00B96D0D /* StaffTrans.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD92C70483CDC800A80164 /* StaffTrans.m */; settings = {ATTRIBUTES = (); }; };
-		D8F249CA09AD3F8D00B96D0D /* SyncScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD92C90483CDC800A80164 /* SyncScrollView.m */; settings = {ATTRIBUTES = (); }; };
+		D8F249CA09AD3F8D00B96D0D /* PageScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD92C90483CDC800A80164 /* PageScrollView.m */; settings = {ATTRIBUTES = (); }; };
 		D8F249CB09AD3F8D00B96D0D /* SysAdjust.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD92CB0483CDC800A80164 /* SysAdjust.m */; settings = {ATTRIBUTES = (); }; };
 		D8F249CC09AD3F8D00B96D0D /* SysCommands.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD92CD0483CDC800A80164 /* SysCommands.m */; settings = {ATTRIBUTES = (); }; };
 		D8F249CD09AD3F8D00B96D0D /* SysInspector.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD92CF0483CDC800A80164 /* SysInspector.m */; settings = {ATTRIBUTES = (); }; };
@@ -1044,7 +1044,7 @@
 		D8FD92C30483CDC800A80164 /* Staff.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Staff.m; sourceTree = "<group>"; };
 		D8FD92C50483CDC800A80164 /* StaffObj.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = StaffObj.m; sourceTree = "<group>"; };
 		D8FD92C70483CDC800A80164 /* StaffTrans.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = StaffTrans.m; sourceTree = "<group>"; };
-		D8FD92C90483CDC800A80164 /* SyncScrollView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = SyncScrollView.m; sourceTree = "<group>"; };
+		D8FD92C90483CDC800A80164 /* PageScrollView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = file; path = PageScrollView.m; sourceTree = "<group>"; };
 		D8FD92CB0483CDC800A80164 /* SysAdjust.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = SysAdjust.m; sourceTree = "<group>"; };
 		D8FD92CD0483CDC800A80164 /* SysCommands.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = SysCommands.m; sourceTree = "<group>"; };
 		D8FD92CF0483CDC800A80164 /* SysInspector.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = SysInspector.m; sourceTree = "<group>"; };
@@ -1149,7 +1149,7 @@
 		D8FD939E0483CDC800A80164 /* Staff.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Staff.h; sourceTree = "<group>"; };
 		D8FD93A00483CDC800A80164 /* StaffObj.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = StaffObj.h; sourceTree = "<group>"; };
 		D8FD93A20483CDC800A80164 /* StaffTrans.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = StaffTrans.h; sourceTree = "<group>"; };
-		D8FD93A40483CDC800A80164 /* SyncScrollView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = SyncScrollView.h; sourceTree = "<group>"; };
+		D8FD93A40483CDC800A80164 /* PageScrollView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = file; path = PageScrollView.h; sourceTree = "<group>"; };
 		D8FD93A60483CDC800A80164 /* SysAdjust.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = SysAdjust.h; sourceTree = "<group>"; };
 		D8FD93A80483CDC800A80164 /* SysCommands.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = SysCommands.h; sourceTree = "<group>"; };
 		D8FD93AA0483CDC800A80164 /* SysInspector.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = SysInspector.h; sourceTree = "<group>"; };
@@ -1432,6 +1432,7 @@
 				D8FD93030483CDC800A80164 /* OAPLAExtensions.m */,
 				D8FD925F0483CDC700A80164 /* OpusDocument.m */,
 				D8FD92A50483CDC700A80164 /* Page.m */,
+				D8FD92C90483CDC800A80164 /* PageScrollView.m */,
 				D8FD92A70483CDC700A80164 /* PlayInspector.m */,
 				D8FD92A90483CDC700A80164 /* PrefBlock.m */,
 				D8FD92AB0483CDC700A80164 /* Preferences.m */,
@@ -1448,7 +1449,6 @@
 				D8FD92C30483CDC800A80164 /* Staff.m */,
 				D8FD92C50483CDC800A80164 /* StaffObj.m */,
 				D8FD92C70483CDC800A80164 /* StaffTrans.m */,
-				D8FD92C90483CDC800A80164 /* SyncScrollView.m */,
 				D8FD92CB0483CDC800A80164 /* SysAdjust.m */,
 				D8FD92CD0483CDC800A80164 /* SysCommands.m */,
 				D8FD92CF0483CDC800A80164 /* SysInspector.m */,
@@ -1546,6 +1546,7 @@
 				D8FD93E60483CDC800A80164 /* OAPLAExtensions.h */,
 				D8FD93360483CDC800A80164 /* OpusDocument.h */,
 				D8FD937E0483CDC800A80164 /* Page.h */,
+				D8FD93A40483CDC800A80164 /* PageScrollView.h */,
 				D8FD93800483CDC800A80164 /* PlayInspector.h */,
 				D8FD93820483CDC800A80164 /* PrefBlock.h */,
 				D8FD93840483CDC800A80164 /* Preferences.h */,
@@ -1563,7 +1564,6 @@
 				D8FD939E0483CDC800A80164 /* Staff.h */,
 				D8FD93A00483CDC800A80164 /* StaffObj.h */,
 				D8FD93A20483CDC800A80164 /* StaffTrans.h */,
-				D8FD93A40483CDC800A80164 /* SyncScrollView.h */,
 				D8FD93A60483CDC800A80164 /* SysAdjust.h */,
 				D8FD93A80483CDC800A80164 /* SysCommands.h */,
 				D8FD93AA0483CDC800A80164 /* SysInspector.h */,
@@ -2111,7 +2111,7 @@
 				D8F2480F09AD3F8C00B96D0D /* Staff.h in Headers */,
 				D8F2481009AD3F8C00B96D0D /* StaffObj.h in Headers */,
 				D8F2481109AD3F8C00B96D0D /* StaffTrans.h in Headers */,
-				D8F2481209AD3F8C00B96D0D /* SyncScrollView.h in Headers */,
+				D8F2481209AD3F8C00B96D0D /* PageScrollView.h in Headers */,
 				D8F2481309AD3F8C00B96D0D /* SysAdjust.h in Headers */,
 				D8F2481409AD3F8C00B96D0D /* SysCommands.h in Headers */,
 				D8F2481509AD3F8C00B96D0D /* SysInspector.h in Headers */,
@@ -2742,7 +2742,7 @@
 				D8F249C509AD3F8D00B96D0D /* SquareNote.m in Sources */,
 				D8F249C609AD3F8D00B96D0D /* SquareNoteInspector.m in Sources */,
 				D8F249C909AD3F8D00B96D0D /* StaffTrans.m in Sources */,
-				D8F249CA09AD3F8D00B96D0D /* SyncScrollView.m in Sources */,
+				D8F249CA09AD3F8D00B96D0D /* PageScrollView.m in Sources */,
 				D8F249CB09AD3F8D00B96D0D /* SysAdjust.m in Sources */,
 				D8F249CC09AD3F8D00B96D0D /* SysCommands.m in Sources */,
 				D8F249CD09AD3F8D00B96D0D /* SysInspector.m in Sources */,
