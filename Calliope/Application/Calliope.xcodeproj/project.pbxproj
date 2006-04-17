@@ -1044,7 +1044,7 @@
 		D8FD92C30483CDC800A80164 /* Staff.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Staff.m; sourceTree = "<group>"; };
 		D8FD92C50483CDC800A80164 /* StaffObj.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = StaffObj.m; sourceTree = "<group>"; };
 		D8FD92C70483CDC800A80164 /* StaffTrans.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = StaffTrans.m; sourceTree = "<group>"; };
-		D8FD92C90483CDC800A80164 /* PageScrollView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = file; path = PageScrollView.m; sourceTree = "<group>"; };
+		D8FD92C90483CDC800A80164 /* PageScrollView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PageScrollView.m; sourceTree = "<group>"; };
 		D8FD92CB0483CDC800A80164 /* SysAdjust.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = SysAdjust.m; sourceTree = "<group>"; };
 		D8FD92CD0483CDC800A80164 /* SysCommands.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = SysCommands.m; sourceTree = "<group>"; };
 		D8FD92CF0483CDC800A80164 /* SysInspector.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = SysInspector.m; sourceTree = "<group>"; };
@@ -1149,7 +1149,7 @@
 		D8FD939E0483CDC800A80164 /* Staff.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Staff.h; sourceTree = "<group>"; };
 		D8FD93A00483CDC800A80164 /* StaffObj.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = StaffObj.h; sourceTree = "<group>"; };
 		D8FD93A20483CDC800A80164 /* StaffTrans.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = StaffTrans.h; sourceTree = "<group>"; };
-		D8FD93A40483CDC800A80164 /* PageScrollView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = file; path = PageScrollView.h; sourceTree = "<group>"; };
+		D8FD93A40483CDC800A80164 /* PageScrollView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PageScrollView.h; sourceTree = "<group>"; };
 		D8FD93A60483CDC800A80164 /* SysAdjust.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = SysAdjust.h; sourceTree = "<group>"; };
 		D8FD93A80483CDC800A80164 /* SysCommands.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = SysCommands.h; sourceTree = "<group>"; };
 		D8FD93AA0483CDC800A80164 /* SysInspector.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = SysInspector.h; sourceTree = "<group>"; };

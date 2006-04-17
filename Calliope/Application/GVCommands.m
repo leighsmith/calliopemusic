@@ -33,7 +33,7 @@
 #import "SysInspector.h"
 #import "SysAdjust.h"
 #import "SysCommands.h"
-#import "SyncScrollView.h"
+#import "PageScrollView.h"
 #import "Rest.h"
 #import "Range.h"
 #import "Verse.h"

@@ -22,7 +22,7 @@
 #import "Bracket.h"
 #import "TextGraphic.h"
 #import "Tablature.h"
-#import "SyncScrollView.h"
+#import "PageScrollView.h"
 #import "Rest.h"
 #import "Barline.h"
 #import "Runner.h"

@@ -8,7 +8,7 @@
 #import "GVFormat.h"
 #import "GVSelection.h"
 #import "GVCommands.h"
-#import "SyncScrollView.h"
+#import "PageScrollView.h"
 #import "Page.h"
 #import "System.h"
 #import "CallPageLayout.h"
@@ -72,7 +72,7 @@ static void getContentSizeForView(id view, NSSize *contentSize)
 {
     NSRect viewFrame;
     viewFrame = [view frame];
-    *contentSize = [SyncScrollView frameSizeForContentSize:viewFrame.size hasHorizontalScroller:YES hasVerticalScroller:YES borderType:SCROLLVIEW_BORDER];
+    *contentSize = [PageScrollView frameSizeForContentSize:viewFrame.size hasHorizontalScroller:YES hasVerticalScroller:YES borderType:SCROLLVIEW_BORDER];
 }
 
 
@@ -126,7 +126,7 @@ static id createWindowFor(GraphicView* view, NSRect *r, NSString *fS)
 		    backing:NSBackingStoreBuffered
 		      defer:NO];
     if (fS) [w setFrameFromString:fS];
-    sV = [[SyncScrollView allocWithZone:[view zone]] initWithFrame:*r];
+    sV = [[PageScrollView allocWithZone:[view zone]] initWithFrame:*r];
     [sV setHasVerticalScroller:YES];
     [sV setHasHorizontalScroller:YES];
     [sV setBorderType:SCROLLVIEW_BORDER];
@@ -1268,7 +1268,7 @@ return nil;
 {
     NSRect fRect, cRect;
     getContentSizeForView(view, &cRect.size);
-//    SyncScrollView *scrollView = [documentWindow contentView];
+//    PageScrollView *scrollView = [documentWindow contentView];
     
     fRect = [[documentWindow class] frameRectForContentRect:cRect styleMask:[documentWindow styleMask]];
     if ([scrollView rulersVisible]) {

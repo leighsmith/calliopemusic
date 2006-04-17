@@ -1,5 +1,5 @@
 /* $Id$ */
-#import "SyncScrollView.h"
+#import "PageScrollView.h"
 #import "GraphicView.h"
 #import "GVFormat.h"
 #import "GVCommands.h"
@@ -25,7 +25,7 @@
 // TODO should be determined from the NIB button frame height.
 #define GADGET_HEIGHT		16.0 
 
-@implementation SyncScrollView
+@implementation PageScrollView
 
 - (void) initialiseControls
 {
@@ -504,7 +504,7 @@ static void reSize(id p, float dh)
 - (void) drawRect: (NSRect) rect
 {
 #ifdef DEBUG
-    // NSLog(@"SyncScrollView drawRect\n");
+    // NSLog(@"PageScrollView drawRect\n");
 #endif
     [[NSColor lightGrayColor] set];
     NSRectFill(vertScrollerArea);

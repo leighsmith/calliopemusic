@@ -14,7 +14,7 @@
 #import "winheaders.h"
 #import <AppKit/AppKit.h>
 #import "PrefBlock.h"
-#import "SyncScrollView.h"
+#import "PageScrollView.h"
 
 /* Preferences Codes TODO should be in PrefBlock? */
 
@@ -46,7 +46,7 @@
     /*! @var view the document's GraphicView */
     IBOutlet GraphicView *view;	
     /*! @var scrollView The view managing the scroll bars */
-    IBOutlet SyncScrollView *scrollView;
+    IBOutlet PageScrollView *scrollView;
     // TODO There should actually be a model here! At the moment, GraphicView mixes the view and model. We should have
     // a model which holds the systems, the pages and other elements that define a written musical score, independent from
     // the view which is responsible for displaying them using the ApplicationKit.

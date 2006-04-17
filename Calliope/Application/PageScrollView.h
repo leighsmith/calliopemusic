@@ -2,7 +2,7 @@
 #import "winheaders.h"
 #import <AppKit/AppKit.h>
 
-@interface SyncScrollView : NSScrollView
+@interface PageScrollView : NSScrollView
 {
     /* items in the ScrollerGadgets window */
     IBOutlet NSButton *pageUpButton;
