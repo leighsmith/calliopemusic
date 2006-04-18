@@ -39,8 +39,26 @@
             }; 
             CLASS = OpusDocument; 
             LANGUAGE = ObjC; 
-            OUTLETS = {scrollView = SyncScrollView; view = GraphicView; }; 
+            OUTLETS = {scrollView = PageScrollView; view = GraphicView; }; 
             SUPERCLASS = NSDocument; 
+        }, 
+        {
+            ACTIONS = {pageTo = id; showHideRulers = id; }; 
+            CLASS = PageScrollView; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                hRuler = id; 
+                pageDownButton = NSButton; 
+                pageFirstButton = NSButton; 
+                pageForm = NSForm; 
+                pageLabel = NSTextField; 
+                pageLastButton = NSButton; 
+                pageUpButton = NSButton; 
+                rulerClass = id; 
+                vRuler = id; 
+                zoomPopUpList = NSPopUpButton; 
+            }; 
+            SUPERCLASS = NSScrollView; 
         }, 
         {
             ACTIONS = {pageTo = id; showHideRulers = id; }; 
