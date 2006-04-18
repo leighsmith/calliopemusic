@@ -3239,6 +3239,7 @@
 					"~/Sources/Music/Calliope/Application",
 					"~/Sources/Music/Calliope/Application/CalliopePropertyListCoders",
 					/opt/local/include,
+					/sw/include,
 				);
 				INFOPLIST_FILE = "Info-Calliope.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
@@ -3270,6 +3271,7 @@
 					"~/Sources/Music/Calliope/Application",
 					"~/Sources/Music/Calliope/Application/CalliopePropertyListCoders",
 					/opt/local/include,
+					/sw/include,
 				);
 				INFOPLIST_FILE = "Info-Calliope.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
@@ -3300,6 +3302,7 @@
 					"~/Sources/Music/Calliope/Application",
 					"~/Sources/Music/Calliope/Application/CalliopePropertyListCoders",
 					/opt/local/include,
+					/sw/include,
 				);
 				INFOPLIST_FILE = "Info-Calliope.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
