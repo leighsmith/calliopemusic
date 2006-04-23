@@ -812,6 +812,7 @@ extern char *typename[NUMTYPES];
   StaffObj *q;
   Hanger *h;
   int systemIndex, k, j, n, theCount;
+  
   systemIndex = [currentPage topSystemNumber];
   theCount = [syslist count];
   while (systemIndex <= [currentPage bottomSystemNumber] && systemIndex <= theCount)
@@ -826,6 +827,8 @@ extern char *typename[NUMTYPES];
       k = [nl count];
       while (k--)
       {
+	  NSArray *enclosureList;
+	  
         q = [nl objectAtIndex:k];
         hl = q->hangers;
         if (hl != nil)
@@ -837,13 +840,13 @@ extern char *typename[NUMTYPES];
 	    if (!(h->gFlags.selected) && CHECKBOX(h)) [self selectObj: h];
 	  }
 	}
-        hl = q->enclosures;
-        if (hl != nil)
+        enclosureList = [q enclosures];
+        if (enclosureList != nil)
 	{
-	  j = [hl count];
+	  j = [enclosureList count];
 	  while (j--)
 	  {
-	    h = [hl objectAtIndex:j];
+	    h = [enclosureList objectAtIndex:j];
 	    if (!(h->gFlags.selected) && CHECKBOX(h)) [self selectObj: h];
 	  }
 	}
@@ -1305,6 +1308,8 @@ static void drawHorz(float x, float y, float w, NSRect r)
     
     if (pageToDraw == nil) 
 	return;
+    
+    NSLog(@"GraphicView drawRect: (%f, %f, %f, %f)", rectToDrawWithin.origin.x, rectToDrawWithin.origin.y, rectToDrawWithin.size.width, rectToDrawWithin.size.height);
     
     if ([self showMargins]) {
 	NSRect viewBounds = [self bounds];	
@@ -2097,10 +2102,9 @@ extern int needUpgrade;
     // [super initWithCoder:aDecoder];
     // but we still need to decode the super class in order to read past it.
     [self initWithFrame: NSZeroRect]; // TODO this isn't right. [self frameRect]
-    [self superClassDecoderFakeout: aDecoder];    
-    
     [NSUnarchiver decodeClassName: @"List" asClassName: @"ListDecodeFaker"];
-    
+    [self superClassDecoderFakeout: aDecoder];    
+
     // TODO is this even necessary anymore?
     [self setFrameSize: NSMakeSize(ceil([self frame].size.width), ceil([self frame].size.height))];
     partlist = nil;
