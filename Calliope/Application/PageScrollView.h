@@ -13,10 +13,11 @@
     IBOutlet NSTextField *pageLabel;
     IBOutlet NSPopUpButton *zoomPopUpList;
 
+    NSRect vertScrollerArea, horzScrollerArea;
+    
     id hRuler;
     id vRuler;
     id rulerClass;
-    NSRect vertScrollerArea, horzScrollerArea;
     float horizontalRulerWidth;
     float verticalRulerWidth;
     BOOL verticalRulerIsVisible;
@@ -30,6 +31,11 @@
  */
 - (void) initialiseControls;
 
+// Methods for setting page, scale and message.
+- (void) setPageNumber: (int) p;
+- (void) setScaleNumber: (int) i;
+- (void) setMessage: (NSString *) s;
+
 /* Setting up the rulers */
 - (void) drawRulerlinesWithRect: (NSRect) aRect;
 - (void) updateRulerlinesWithOldRect: (NSRect) oldRect newRect: (NSRect) newRect;
@@ -42,17 +48,11 @@
 - (void) updateRuler;
 - setRulerClass: factoryId;
 
-- (void) setPageNumber: (int) p;
-- setScaleNum: (int) i;
-- (void) setMessage: (NSString *) s;
-
 /* Comes up the responder chain to us */
-- pageTo: sender;
 - updateRulers: (const NSRect *) rect;
 - (void) showHideRulers: sender;
 
 /* Overridden from superclass */
-
 - (void) reflectScrolledClipView: (NSClipView *) cView;
 - (void) tile;
 - (void) scrollClipView: (NSClipView *) aClipView toPoint: (NSPoint) aPoint;

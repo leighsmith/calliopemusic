@@ -46,8 +46,6 @@
 
 
 /* Needs to be smaller than IB will allow to fit into the scroller. */
-
-
 static void reSize(id p, float dh)
 {
     NSRect r;
@@ -80,62 +78,39 @@ static void reSize(id p, float dh)
     return self;
 }
 
-- setScale: sender
-{	
-    float i;
-    i = [[sender selectedCell] tag];
-    if (i == 127) i = 127.778;
-    [pageLabel setStringValue: @""];
-    [[[[self contentView] documentView] viewWithTag: 1] scaleTo: i];
-    [[NSRunLoop currentRunLoop]  performSelector: @selector(makeFirstResponder:)
-                                          target: [self window]
-                                        argument: [[[self contentView] documentView] viewWithTag: 1]
-                                           order: 0
-                                           modes: [NSArray  arrayWithObject: NSDefaultRunLoopMode]];
-    return self;
-}
-
 
 - pageTo: sender
 {
-    int n=0;
-    n = [[[[self contentView] documentView] viewWithTag: 1] gotoPage: [[sender cellAtIndex:0] intValue]];
-    if (n >= 0) [[pageForm cellAtIndex: 0] setIntValue: n];
-    [[NSRunLoop currentRunLoop]  performSelector: @selector(makeFirstResponder:)
-					  target: [self window]
-					argument: [[[self contentView] documentView] viewWithTag: 1]
-                                           order: 0
-                                           modes: [NSArray  arrayWithObject: NSDefaultRunLoopMode]];
+    NSLog(@"PageScrollVIew pageTo: called, obsolete");
     return self;
 }
 
 
 - (void) setPageNumber: (int) p
 {
-    [[pageForm cellAtIndex: 0] setIntValue: p];
+    if (p >= 0) 
+	[[pageForm cellAtIndex: 0] setIntValue: p];
 }
 
 
-- setScaleNum: (int) i
+- (void) setScaleNumber: (int) i
 {
     int c;
     
-    if (i == 127) c = [zoomPopUpList indexOfItemWithTitle: @"127.778%"];
-    else c = [zoomPopUpList indexOfItemWithTitle: [NSString stringWithFormat: @"%d%",i]];
-    if (c == -1)
-    {
-        [zoomPopUpList setTitle:@"Other: "];
+    if (i == 127) 
+	c = [zoomPopUpList indexOfItemWithTitle: @"127.778%"];
+    else 
+	c = [zoomPopUpList indexOfItemWithTitle: [NSString stringWithFormat: @"%d%", i]];
+    if (c == -1) {
+        [zoomPopUpList setTitle: @"Other: "];
         [pageLabel setIntValue: i];
     }
-    else
-    {
+    else {
 	[zoomPopUpList selectItemAtIndex: c];
 	[zoomPopUpList synchronizeTitleAndSelectedItem];
 	[pageLabel setStringValue: @""];
     }
-    return self;
 }
-
 
 - (void) setMessage: (NSString *) s
 {

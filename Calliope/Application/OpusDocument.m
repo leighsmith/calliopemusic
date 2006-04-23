@@ -685,7 +685,7 @@ return nil;
 	    [documentWindow setContentSize:conSize];
 	}
 	[scrollView setPageNumber: [view getPageNum]];
-	[scrollView setScaleNum: [view getScaleNum]];
+	[scrollView setScaleNumber: [view getScaleNum]];
 	if (doRuler) 
 	    [scrollView updateRuler];
     }
@@ -844,6 +844,16 @@ return nil;
 	[view dirty];
     }
     [[DrawApp sharedApplicationController] inspectPreferences: NO];
+}
+
+- (IBAction) setScale: (id) sender
+{	
+    float i = [[sender selectedCell] tag];
+    
+    if (i == 127)
+	i = 127.778;
+    [scrollView setMessage: @""];
+    [view scaleTo: i];
 }
 
 - (void) setNumberOfStaves: (int) numOfStaves
