@@ -126,7 +126,7 @@ unsigned char accifont[NUMHEADS][NUMACCS] =
 
 - (NSString *) description
 {
-    return [NSString stringWithFormat: @"%@: x = %f, y = %f %@", super, x, y, [self describeChordHeads]];
+    return [NSString stringWithFormat: @"%@: x = %f, y = %f %@", [super description], x, y, [self describeChordHeads]];
 }
 
 
