@@ -235,7 +235,7 @@ id CrossCursor = nil;	/* global since subclassers may need it */
       {
         t = [a objectAtIndex:j];
         [t presetHanger];
-        t->gFlags.selected = 1;
+        t->gFlags.selected = YES;
         [[v selectedGraphics] addObject: t];
       }
       [a autorelease];
@@ -243,7 +243,7 @@ id CrossCursor = nil;	/* global since subclassers may need it */
     else
     {
       [t presetHanger];
-      t->gFlags.selected = 1;
+      t->gFlags.selected = YES;
       [[v selectedGraphics] addObject: t];
     }
   }
@@ -734,6 +734,10 @@ id CrossCursor = nil;	/* global since subclassers may need it */
   return ([enclosures count] > 0);
 }
 
+- (NSArray *) enclosures
+{
+    return [NSArray arrayWithArray: enclosures];
+}
 
 - (int) hasHangers
 {
@@ -878,9 +882,9 @@ extern int selMode;
 
   /* get rid of original image to prepare for instance drawing */
   // TODO why the hell is Graphic attempting to draw the page?
-  [view drawRect: b nonSelectedOnly: YES];
+  // [view drawRect: b nonSelectedOnly: YES];
   // TODO why the hell is Graphic attempting to draw the page?
-  [view drawRect: b nonSelectedOnly: YES];
+  // [view drawRect: b nonSelectedOnly: YES];
 
   [window cacheImageInRect:[view convertRect:b toView:nil]];
   [view drawSelectionInstance];

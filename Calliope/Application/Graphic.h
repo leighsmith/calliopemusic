@@ -1,3 +1,4 @@
+/* $Id:$ */
 #import "winheaders.h"
 #import <Foundation/Foundation.h>
 #import <AppKit/AppKit.h>
@@ -13,27 +14,32 @@
 #define RIGHTBEARING(p) (RIGHTBOUND(p) - p->x)
 #define MOVE(p, nx) { LEFTBOUND(p) += ((nx) - (p)->x); (p)->x = (nx); }
 
+#define TYPEOF(p) (((Graphic *)(p))->gFlags.type)
+#define SUBTYPEOF(p) (((Graphic *)(p))->gFlags.subtype)
+#define ISINVIS(p)  (((Graphic *) (p))->gFlags.invis == 1)
 
 extern id CrossCursor;
 
 @interface Graphic : NSObject
 {
 @public
-  NSRect bounds;			/* the bounds */
-  NSMutableArray *enclosures;			/* the list of enclosures */
-  struct
-  {
-    unsigned int selected : 1;		/* selected (displays in white) */
-    unsigned int seldrag : 1;		/* if it was drag-selected */
-    unsigned int morphed : 1;		/* mark bit for hanger graphs */
-    unsigned int locked : 1;		/* won't move beyond own staff */
-    unsigned int invis : 2;		/* colour/invisible (displays in gray) */
-    unsigned int selend : 5;		/* selected end (32 codes possible )*/
-    unsigned int selbit : 1;		/* another bit used during selecting */
-    unsigned int size : 2;		/* size code */
-    unsigned int type : 5;		/* type */
-    unsigned int subtype : 5;		/* subtype */
-  } gFlags;
+    NSRect bounds;			/* the bounds */
+    struct {
+	unsigned int selected : 1;	/* selected (displays in white) */
+	unsigned int seldrag : 1;	/* if it was drag-selected */
+	unsigned int morphed : 1;	/* mark bit for hanger graphs */
+	unsigned int locked : 1;	/* won't move beyond own staff */
+	unsigned int invis : 2;		/* colour/invisible (displays in gray) */
+	unsigned int selend : 5;	/* selected end (32 codes possible )*/
+	unsigned int selbit : 1;	/* another bit used during selecting */
+	unsigned int size : 2;		/* size code */
+	unsigned int type : 5;		/* type */
+	unsigned int subtype : 5;	/* subtype */
+    } gFlags;
+@protected
+    /*! @var staffScale The scale of the staff this graphic is to be drawn on. */
+    float staffScale;
+    NSMutableArray *enclosures;			/* the list of enclosures */
 }
 
 /* Factory methods */
@@ -103,6 +109,12 @@ extern id CrossCursor;
 - (BOOL) changeVFont: (int) fid;
 - (int) noteCode: (int) a;
 - (BOOL) hasEnclosures;
+
+/*!
+  @brief Returns an immutable array of Enclosures.
+ */
+- (NSArray *) enclosures;
+
 - linkEnclosure: (Enclosure *) e;
 - unlinkEnclosure: (Enclosure *) e;
 - markHangers;
