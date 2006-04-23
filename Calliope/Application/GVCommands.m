@@ -634,10 +634,10 @@ extern char *typename[NUMTYPES];
   Runner *p;
   if (currentSystem == nil)
   {
-    NSBeep();
+    NSLog(@"No current system");
     return self;
   }
-  p = [Graphic graphicOfType: RUNNER];
+  p = [[[Runner alloc] init] autorelease];
   p->client = currentSystem;
   [currentSystem linkobject: p];
   [self deselectAll: self];
