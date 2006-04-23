@@ -187,7 +187,6 @@
 		D8F2484E09AD3F8C00B96D0D /* TextInspector.nib in Resources */ = {isa = PBXBuildFile; fileRef = D8FD94470483CDC800A80164 /* TextInspector.nib */; };
 		D8F2484F09AD3F8C00B96D0D /* InfoPanel.nib in Resources */ = {isa = PBXBuildFile; fileRef = D8FD944A0483CDC800A80164 /* InfoPanel.nib */; };
 		D8F2485009AD3F8C00B96D0D /* LigatureInspector.nib in Resources */ = {isa = PBXBuildFile; fileRef = D8FD944D0483CDC800A80164 /* LigatureInspector.nib */; };
-		D8F2485109AD3F8C00B96D0D /* ScrollerGadgets.nib in Resources */ = {isa = PBXBuildFile; fileRef = D8FD94500483CDC800A80164 /* ScrollerGadgets.nib */; };
 		D8F2485209AD3F8C00B96D0D /* ProcessLog.nib in Resources */ = {isa = PBXBuildFile; fileRef = D8FD94530483CDC800A80164 /* ProcessLog.nib */; };
 		D8F2485309AD3F8C00B96D0D /* AccentInspector.nib in Resources */ = {isa = PBXBuildFile; fileRef = D8FD94560483CDC800A80164 /* AccentInspector.nib */; };
 		D8F2485409AD3F8C00B96D0D /* NoteGroupInspector.nib in Resources */ = {isa = PBXBuildFile; fileRef = D8FD94590483CDC800A80164 /* NoteGroupInspector.nib */; };
@@ -1216,7 +1215,6 @@
 		D8FD94490483CDC800A80164 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/TextInspector.nib; sourceTree = "<group>"; };
 		D8FD944C0483CDC800A80164 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/InfoPanel.nib; sourceTree = "<group>"; };
 		D8FD944F0483CDC800A80164 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/LigatureInspector.nib; sourceTree = "<group>"; };
-		D8FD94520483CDC800A80164 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/ScrollerGadgets.nib; sourceTree = "<group>"; };
 		D8FD94550483CDC800A80164 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/ProcessLog.nib; sourceTree = "<group>"; };
 		D8FD94580483CDC800A80164 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/AccentInspector.nib; sourceTree = "<group>"; };
 		D8FD945B0483CDC800A80164 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/NoteGroupInspector.nib; sourceTree = "<group>"; };
@@ -1616,7 +1614,6 @@
 				D8FD943E0483CDC800A80164 /* Preferences.nib */,
 				D8FD94440483CDC800A80164 /* ProgressPanel.nib */,
 				D8FD944A0483CDC800A80164 /* InfoPanel.nib */,
-				D8FD94500483CDC800A80164 /* ScrollerGadgets.nib */,
 				D8FD94530483CDC800A80164 /* ProcessLog.nib */,
 				D8EC241309B9F8B500942A37 /* MusicNotationDocument.nib */,
 				D8184A0709B4E12D00F1A7DF /* Inspectors */,
@@ -2318,7 +2315,6 @@
 				D8F2484E09AD3F8C00B96D0D /* TextInspector.nib in Resources */,
 				D8F2484F09AD3F8C00B96D0D /* InfoPanel.nib in Resources */,
 				D8F2485009AD3F8C00B96D0D /* LigatureInspector.nib in Resources */,
-				D8F2485109AD3F8C00B96D0D /* ScrollerGadgets.nib in Resources */,
 				D8F2485209AD3F8C00B96D0D /* ProcessLog.nib in Resources */,
 				D8F2485309AD3F8C00B96D0D /* AccentInspector.nib in Resources */,
 				D8F2485409AD3F8C00B96D0D /* NoteGroupInspector.nib in Resources */,
@@ -3030,14 +3026,6 @@
 				D8FD944F0483CDC800A80164 /* English */,
 			);
 			name = LigatureInspector.nib;
-			sourceTree = "<group>";
-		};
-		D8FD94500483CDC800A80164 /* ScrollerGadgets.nib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D8FD94520483CDC800A80164 /* English */,
-			);
-			name = ScrollerGadgets.nib;
 			sourceTree = "<group>";
 		};
 		D8FD94530483CDC800A80164 /* ProcessLog.nib */ = {
