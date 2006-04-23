@@ -579,7 +579,7 @@ void listBBox(NSRect *b, NSMutableArray *l)
 
 /*  The BB routines are meant to be fast "message unrolled" versions */
 
-static void doList(NSRect *b, NSMutableArray *pl)
+static void doList(NSRect *b, NSArray *pl)
 {
   Graphic *p;
   int pk;
@@ -593,7 +593,7 @@ static void doList(NSRect *b, NSMutableArray *pl)
   }
 }
 
-static void doHandList(NSRect *b, NSMutableArray *pl)
+static void doHandList(NSRect *b, NSArray *pl)
 {
   Graphic *p;
   NSRect h;
@@ -620,7 +620,7 @@ static void doHangers(NSRect *b, NSMutableArray *pl)
     {
       p = [pl objectAtIndex:pk];
       *b  = NSUnionRect((p->bounds) , *b);
-      doList(b, p->enclosures);
+      doList(b, [p enclosures]);
     }
   }
 }
@@ -638,7 +638,7 @@ static void doHandHangers(NSRect *b, NSMutableArray *pl)
       p = [pl objectAtIndex:pk];
       *b  = NSUnionRect((p->bounds) , *b);
       if ([p getHandleBBox: &h]) *b  = NSUnionRect(h , *b);
-      doHandList(b, p->enclosures);
+      doHandList(b, [p enclosures]);
     }
   }
 }
@@ -649,7 +649,7 @@ static void doHandHangers(NSRect *b, NSMutableArray *pl)
 void graphicBBox(NSRect *b, Graphic *g)
 {
   *b = g->bounds;
-  doList(b, g->enclosures);
+  doList(b, [g enclosures]);
   if (ISASTAFFOBJ(g))
   {
     doHangers(b, ((StaffObj *)g)->hangers);
@@ -670,7 +670,7 @@ void graphicListBBox(NSRect *b, NSMutableArray *l)
   {
     g = [l objectAtIndex:k];
     *b  = NSUnionRect((g->bounds) , *b);
-    doList(b, g->enclosures);
+    doList(b, [g enclosures]);
     if (ISASTAFFOBJ(g))
     {
       doHangers(b, ((StaffObj *)g)->hangers);
@@ -695,7 +695,7 @@ void graphicHandListBBox(NSRect *b, NSMutableArray *l)
     g = [l objectAtIndex:k];
     *b  = NSUnionRect((g->bounds) , *b);
     if ([g getHandleBBox: &h]) *b  = NSUnionRect(h , *b);
-    doHandList(b, g->enclosures);
+    doHandList(b, [g enclosures]);
     if (ISASTAFFOBJ(g))
     {
       doHandHangers(b, ((StaffObj *)g)->hangers);
@@ -712,14 +712,16 @@ void graphicListBBoxEx(NSRect *b, NSMutableArray *l, Graphic *ex)
   int k, pk, ek;
   StaffObj *g;
   Graphic *p;
-  NSMutableArray *pl, *el;
+  NSArray *pl;
+  NSArray *el;
+  
   k = [l count];
   *b = NSZeroRect;
   while (k--)
   {
     g = [l objectAtIndex:k];
       if (g != (StaffObj *)ex) *b  = NSUnionRect((g->bounds) , *b); //sb: typed the (StaffObj *) for compiler warnings
-    pl = g->enclosures;
+    pl = [g enclosures];
     if (pl != nil && (pk = [pl count]))
     {
       while (pk--)
@@ -737,7 +739,7 @@ void graphicListBBoxEx(NSRect *b, NSMutableArray *l, Graphic *ex)
 	{
 	  p = [pl objectAtIndex:pk];
           if (p != ex) *b  = NSUnionRect((p->bounds) , *b);
-	  el = p->enclosures;
+	  el = [p enclosures];
 	  if (el != nil && (ek = [el count]))
           {
             while (ek--)
@@ -759,14 +761,14 @@ void graphicListBBoxExVolta(NSRect *b, NSMutableArray *l)
   int k, pk, ek;
   StaffObj *g;
   Graphic *p;
-  NSMutableArray *pl, *el;
+  NSArray *pl, *el;
   k = [l count];
   *b = NSZeroRect;
   while (k--)
   {
     g = [l objectAtIndex:k];
     if (!ISVOLTA(g)) *b  = NSUnionRect((g->bounds) , *b);
-    pl = g->enclosures;
+    pl = [g enclosures];
     if (pl != nil && (pk = [pl count]))
     {
       while (pk--)
@@ -784,7 +786,7 @@ void graphicListBBoxExVolta(NSRect *b, NSMutableArray *l)
 	{
 	  p = [pl objectAtIndex:pk];
           if (!ISVOLTA(p)) *b  = NSUnionRect((p->bounds) , *b);
-	  el = p->enclosures;
+	  el = [p enclosures];
 	  if (el != nil && (ek = [el count]))
           {
             while (ek--)
