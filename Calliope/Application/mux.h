@@ -65,9 +65,6 @@
 
 /* type codes index array of short bitcodes */
 
-#define TYPEOF(p) (((Graphic *)(p))->gFlags.type)
-#define SUBTYPEOF(p) (((Graphic *)(p))->gFlags.subtype)
-#define ISINVIS(p)  (((Graphic *) (p))->gFlags.invis == 1)
 #define TC_HANGER   1
 #define TC_STAFFOBJ 2
 #define TC_TIMEDOBJ 4
