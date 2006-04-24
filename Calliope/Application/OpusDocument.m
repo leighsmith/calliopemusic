@@ -163,6 +163,9 @@ static id createWindowFor(GraphicView* view, NSRect *r, NSString *fS)
     NSUnarchiver *ts = nil;
 //  NS_DURING
     
+    [NSUnarchiver decodeClassName: @"List" asClassName: @"ListDecodeFaker"];
+    [NSUnarchiver decodeClassName: @"Font" asClassName: @"NSFont"];
+
     ts = [[NSUnarchiver alloc] initForReadingWithData: stream];
     if (ts)
     {
