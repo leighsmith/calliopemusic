@@ -2103,6 +2103,7 @@ extern int needUpgrade;
     // but we still need to decode the super class in order to read past it.
     [self initWithFrame: NSZeroRect]; // TODO this isn't right. [self frameRect]
     [NSUnarchiver decodeClassName: @"List" asClassName: @"ListDecodeFaker"];
+    [NSUnarchiver decodeClassName: @"Font" asClassName: @"NSFont"];
     [self superClassDecoderFakeout: aDecoder];    
 
     // TODO is this even necessary anymore?
