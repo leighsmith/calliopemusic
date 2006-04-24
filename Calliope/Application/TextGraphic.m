@@ -105,6 +105,11 @@ static NSTextView *drawText = nil;
   return;
 }
 
+- (NSString *) description
+{
+	return [NSString stringWithFormat: @"%@ richTextData=%@", [super description], 
+		[[[[NSAttributedString alloc] initWithRTF: richTextData documentAttributes: NULL] autorelease] string]];
+}
 
 - sysInvalid
 {
