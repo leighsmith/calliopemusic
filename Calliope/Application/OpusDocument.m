@@ -165,7 +165,6 @@ static id createWindowFor(GraphicView* view, NSRect *r, NSString *fS)
     
     [NSUnarchiver decodeClassName: @"List" asClassName: @"ListDecodeFaker"];
     [NSUnarchiver decodeClassName: @"Font" asClassName: @"NSFont"];
-
     ts = [[NSUnarchiver alloc] initForReadingWithData: stream];
     if (ts)
     {
@@ -179,9 +178,9 @@ static id createWindowFor(GraphicView* view, NSRect *r, NSString *fS)
 	    [ts decodeValueOfObjCType:"*" at: &s];
 	    frameString = [[NSString stringWithCString: s] retain]; //sb: was strcpy(frameString, s);
 	    free(s);
-	    view = [[ts decodeObject] retain];
+	    archiveView = [[ts decodeObject] retain];
 	    prefInfo->staffheight = staffheight;
-	    [view updateMargins: headerbase : footerbase : printInfo];
+	    [archiveView updateMargins: headerbase : footerbase : printInfo];
 	}
 	else if (version == 2)
 	{
@@ -199,7 +198,7 @@ static id createWindowFor(GraphicView* view, NSRect *r, NSString *fS)
 	    [ts decodeValueOfObjCType:"*" at:&s];
 	    frameString = [[NSString stringWithCString: s] retain]; //sb: was strcpy(frameString, s);
 	    free(s);
-	    view = [[ts decodeObject] retain];
+	    archiveView = [[ts decodeObject] retain];
 	}
 	else if (version == DOC_VERSION)
 	{
@@ -208,7 +207,7 @@ static id createWindowFor(GraphicView* view, NSRect *r, NSString *fS)
 	    prefInfo = [[ts decodeObject] retain];
 	    newS = [ts decodeObject];
 	    frameString = [newS retain]; //sb: was strcpy(frameString, s);
-	    view = [[ts decodeObject] retain];
+	    archiveView = [[ts decodeObject] retain];
 	}
 	else retval = NO;
     }
@@ -238,7 +237,7 @@ static id createWindowFor(GraphicView* view, NSRect *r, NSString *fS)
 	{
 	    [ts setObjectZone:(NSZone *)[self zone]];
 	    frameSize = [ts decodeRect];
-	    view = [[ts decodeObject] retain];
+	    archiveView = [[ts decodeObject] retain];
 	    if (![ts isAtEnd])
 	    {
 		printInfo = [[ts decodeObject] retain];
@@ -294,7 +293,7 @@ static id createWindowFor(GraphicView* view, NSRect *r, NSString *fS)
 	    if(![self loadOldDocument: data])
 		return NO;
 	}
-	[view firstPage: self];
+	[archiveView firstPage: self];
 	[self resetScrollers];
         if (![prefInfo checkStyleFromFile: view])
 	    Notify(@"Preferences", @"Cannot Read Shared Style Sheet.");
@@ -1186,10 +1185,18 @@ return nil;
     [documentWindow setDelegate: self]; // TODO Hmm shouldn't be necessary eventually.
     // [self registerForServicesMenu]; // LMS Necessary?
     [view setDelegate: self];
-    [scrollView initialiseControls]; // Connect up the page up & down buttons.
-    [self zeroScale];
-    // TODO kludged in here for now, it will eventually be created by a "new document sheet".
-    [self setNumberOfStaves: 2];
+    if (archiveView == nil) {
+        [scrollView initialiseControls]; // Connect up the page up & down buttons.
+        [self zeroScale];
+        // TODO kludged in here for now, it will eventually be created by a "new document sheet".
+        [self setNumberOfStaves: 2];
+    }
+    else {
+        [view initWithGraphicView: archiveView];
+        [scrollView initialiseControls]; // Connect up the page up & down buttons.
+        [self zeroScale];
+        [view setNeedsDisplay: YES];
+    }
 }
 
 #if 0

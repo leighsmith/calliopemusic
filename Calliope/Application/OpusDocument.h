@@ -50,6 +50,7 @@
     // TODO There should actually be a model here! At the moment, GraphicView mixes the view and model. We should have
     // a model which holds the systems, the pages and other elements that define a written musical score, independent from
     // the view which is responsible for displaying them using the ApplicationKit.
+    GraphicView *archiveView;
     /*! @var printInfo TODO: I don't know why this has to be held, it's probably already inherited from NSDocument nowadays */
     NSPrintInfo *printInfo;
     /*! @var prefInfo The block of preferences specific to this document. TODO surely the preferences should be just the state within various class ivars. */
