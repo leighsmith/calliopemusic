@@ -181,6 +181,23 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
     return self;
 }
 
+/*
+    Kludge to get the model aspects of a GraphicView into another one
+*/
+
+- initWithGraphicView: (GraphicView *) v
+{
+    syslist       = v->syslist;
+    pagelist      = v->pagelist;
+    partlist      = v->partlist;
+    chanlist      = v->chanlist;
+    stylelist     = v->stylelist;
+    currentSystem = v->currentSystem;
+    currentPage   = v->currentPage;
+    
+    return self;
+}
+
 - (BOOL)isFlipped /*sb: added this to replace [self setFlipped:YES], above */
 {
     return YES;
@@ -2102,6 +2119,8 @@ extern int needUpgrade;
     // [super initWithCoder:aDecoder];
     // but we still need to decode the super class in order to read past it.
     [self initWithFrame: NSZeroRect]; // TODO this isn't right. [self frameRect]
+//    [NSUnarchiver decodeClassName: @"List" asClassName: @"ListDecodeFaker"];
+//    [NSUnarchiver decodeClassName: @"Font" asClassName: @"NSFont"];
     [self superClassDecoderFakeout: aDecoder];    
 
     // TODO is this even necessary anymore?

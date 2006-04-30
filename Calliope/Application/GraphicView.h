@@ -69,6 +69,7 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
 + (void) initialize;
 
 - initWithFrame: (NSRect) frameRect;
+- initWithGraphicView: (GraphicView *) v;
 - (BOOL) isFlipped;
 - (void) dealloc;
 - (BOOL) isWithinBounds: (NSRect) rect;
