@@ -82,7 +82,7 @@
 {
     CalliopeThreeStateButtonCell * newClass = [super copyWithZone:zone];
 #ifdef DEBUG
-    printf("copyWithZone\n");
+    NSLog(@"copyWithZone\n");
 #endif
     if (firstImage) newClass->firstImage = [firstImage retain];
     else newClass->firstImage = nil;
@@ -94,7 +94,7 @@
     newClass->threeState = [self threeState];
     [newClass setCyclic:[self cyclic]];
 #ifdef DEBUG
-    printf("copied WithZone\n");
+    NSLog(@"copied WithZone\n");
 #endif
     return newClass;
 }
@@ -103,7 +103,7 @@
 - (BOOL)trackMouse:(NSEvent *)theEvent inRect:(NSRect)cellFrame ofView:(NSView *)controlView untilMouseUp:(BOOL)_untilMouseUp
 {
 #ifdef DEBUG
-    printf("trackMouse \n");
+    NSLog(@"trackMouse \n");
 #endif
        altClicked = (ALTKEY)? YES:NO;
     return [super trackMouse:theEvent inRect:cellFrame ofView:controlView untilMouseUp:_untilMouseUp];
@@ -122,7 +122,7 @@
 -(void) setState:(int)aState
 {
 #ifdef DEBUG
-    printf("setState  \n");
+    NSLog(@"setState  \n");
 #endif
     if (cyclic) [self incState];
     else {
@@ -195,7 +195,7 @@
 -(void) _setImage;
 {
 #ifdef DEBUG
-    printf("_setImage %d \n",[self threeState]);
+    NSLog(@"_setImage %d \n",[self threeState]);
 #endif
     switch ([self threeState])
     {
