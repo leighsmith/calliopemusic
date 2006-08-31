@@ -41,17 +41,23 @@
 @interface OpusDocument : NSDocument
 {
 @private
-    /*! @var documentWindow the window the GraphicView is in. TODO: we should be able to remove this as we separate out the document from window controlling */
+    /*! @var documentWindow The window the GraphicView is in. TODO: we should be able to remove this as we separate out the document from window controlling */
     NSWindow *documentWindow;
-    /*! @var view the document's GraphicView */
+    /*! @var view The document's GraphicView */
     IBOutlet GraphicView *view;	
     /*! @var scrollView The view managing the scroll bars */
     IBOutlet PageScrollView *scrollView;
+    /*! @var newDocumentSheet the New Document sheet */
+    IBOutlet NSWindow *newDocumentSheet;
+
     // TODO There should actually be a model here! At the moment, GraphicView mixes the view and model. We should have
     // a model which holds the systems, the pages and other elements that define a written musical score, independent from
     // the view which is responsible for displaying them using the ApplicationKit.
+    // NotationScore *score;
+
+    // This is what is recovered from unarchiving the file. It is held independent from the ivar view to allow unarchiving hairy old GraphicView versions.
     GraphicView *archiveView;
-    /*! @var printInfo TODO: I don't know why this has to be held, it's probably already inherited from NSDocument nowadays */
+    /*! @var printInfo TODO: I don't know why this has to be held, it's probably already inherited from NSDocument nowadays and could be removed. */
     NSPrintInfo *printInfo;
     /*! @var prefInfo The block of preferences specific to this document. TODO surely the preferences should be just the state within various class ivars. */
     PrefBlock *prefInfo;
@@ -61,6 +67,7 @@
     NSString *directory;
     /*! @var haveSavedDocument whether document has associated disk file TODO this should be part of NSDocument */
     BOOL haveSavedDocument;
+
     /*! @var frameString string naming the document frame TODO only part of old document retrieval. */
     NSString *frameString;
     /*! @var frameSize dimensions of the frame TODO only part of old document retrieval. */
@@ -107,6 +114,15 @@
 - (IBAction) changeLayout: sender;
 - (IBAction) showTextRuler: sender;
 - (IBAction) hideRuler: sender;
+
+/*!
+  @brief Messaged when the new document parameters have been selected.
+ */
+- (IBAction) closeNewDocumentSheet: (id) sender;
+
+// Display the new document sheet allowing users to choose the number of staves in the document.
+- (void) showStaffSelectionSheet: (id) sender;
+
 
 /* Action methods for updating the current page. */
 - (IBAction) prevPage: sender;

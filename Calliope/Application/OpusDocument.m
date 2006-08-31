@@ -425,6 +425,31 @@ extern int needUpgrade;
 }
 #endif
 
+- (void) showStaffSelectionSheet: (id) sender
+{
+    [NSApp beginSheet: newDocumentSheet
+       modalForWindow: documentWindow
+	modalDelegate: self
+       didEndSelector: @selector(didEndNewDocumentSheet:returnCode:contextInfo:)
+	  contextInfo: nil];
+    
+    // Sheet is up, return processing to the event loop
+}
+
+- (IBAction) closeNewDocumentSheet: (id) sender
+{
+    [NSApp endSheet: newDocumentSheet];
+}
+
+- (void) didEndNewDocumentSheet: (NSWindow *) sheet returnCode: (int) returnCode contextInfo: (void *) contextInfo
+{
+    int numberOfStaves = 4;
+    
+    // Retrieve number of staves and call
+    [self setNumberOfStaves: numberOfStaves];
+    [sheet orderOut: self];
+}
+
 // TODO should become copyWithZone: 
 - newFrom
 {
@@ -1167,14 +1192,6 @@ return nil;
     return [[tsO description] dataUsingEncoding: NSASCIIStringEncoding];
 }
 
-#if 0
-- (BOOL) needsSaving
-{
-    return ([view isDirty] && (haveSavedDocument || ![view isEmpty]));
-}
-#endif
-
-
 /* Window delegate methods. */
 
 - (void) windowControllerDidLoadNib: (NSWindowController *) primaryWindowController
@@ -1183,23 +1200,28 @@ return nil;
     documentWindow = [[primaryWindowController window] retain];
     // Add any code here that needs to be executed once the windowController has loaded the document's window.
     [documentWindow setDelegate: self]; // TODO Hmm shouldn't be necessary eventually.
-    // [self registerForServicesMenu]; // LMS Necessary?
+    // [self registerForServicesMenu]; // TODO Necessary? Here?
     [view setDelegate: self];
     if (archiveView == nil) {
         [scrollView initialiseControls]; // Connect up the page up & down buttons.
-        [self zeroScale];
+	[self zeroScale]; // TODO is this necessary here?
         // TODO kludged in here for now, it will eventually be created by a "new document sheet".
         [self setNumberOfStaves: 2];
     }
     else {
         [view initWithGraphicView: archiveView];
         [scrollView initialiseControls]; // Connect up the page up & down buttons.
-        [self zeroScale];
+	[self zeroScale]; // TODO is this necessary here?
         [view setNeedsDisplay: YES];
     }
 }
 
 #if 0
+
+- (BOOL) needsSaving
+{
+    return ([view isDirty] && (haveSavedDocument || ![view isEmpty]));
+}
 
 /*
  * If the GraphicView has been edited, then this asks the user if she
@@ -1426,7 +1448,9 @@ NSEvent *anEvent;
 {
     id fr = [[NSApp keyWindow] firstResponder];
     NSString *theString = [NSString stringWithFormat:@"%c",c];
-    if (!fr) [documentWindow makeFirstResponder:view];
+    
+    if (!fr) 
+	[documentWindow makeFirstResponder:view];
     anEvent = [NSEvent keyEventWithType:NSKeyDown location:NSZeroPoint modifierFlags:0
 			      timestamp:(NSTimeInterval)0.0
 			   windowNumber:[[NSApp keyWindow] windowNumber]
