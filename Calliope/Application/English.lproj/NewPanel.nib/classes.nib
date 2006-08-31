@@ -13,6 +13,26 @@
             LANGUAGE = ObjC; 
             OUTLETS = {choicematrix = id; inspbutton = id; numstavestext = id; }; 
             SUPERCLASS = NSPanel; 
+        }, 
+        {
+            ACTIONS = {
+                changeLayout = id; 
+                closeNewDocumentSheet = id; 
+                firstPage = id; 
+                hideRuler = id; 
+                lastPage = id; 
+                nextPage = id; 
+                prevPage = id; 
+                showTextRuler = id; 
+            }; 
+            CLASS = OpusDocument; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                newDocumentSheet = NSWindow; 
+                scrollView = PageScrollView; 
+                view = GraphicView; 
+            }; 
+            SUPERCLASS = NSDocument; 
         }
     ); 
     IBVersion = 1; 
