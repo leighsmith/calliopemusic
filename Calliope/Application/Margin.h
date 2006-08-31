@@ -1,4 +1,4 @@
-/* $Id:$ */
+/* $Id$ */
 
 /*!
   @class Margin
@@ -28,7 +28,6 @@ typedef enum {
 {
     float margin[10];
     id client;			/* a System */
-    float staffScale;
 }
 
 + (void) initialize;

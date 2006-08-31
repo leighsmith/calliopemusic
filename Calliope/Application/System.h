@@ -34,7 +34,6 @@
     float groupsep;		/* extra group separation */
     float expansion;		/* expansion factor (default 1.0) */
 @private
-    float staffScale;           /* staffScale the scaling of the staff. */
     short pagenum;		/* system (actually page) number */
     float barbase;		/* bar number baseline offset */
     float height;		/* the height used in page balancing */
