@@ -837,12 +837,16 @@ extern void cflat(float x0, float y0, float x1, float y1, float c1x, float c1y, 
   {
     dpattern[0] = nature[sz] * 2;
     PSsetdash(dpattern, 1, 0.0);
+        // TODO [bezPath setLineDash: dpattern count: 1 phase: 0.0]; // but we need to know bezPath!
+
   }
   th = nature[sz] * 0.5;
   if (flags.flat) cflat(x[0], y[0], x[1], y[1], con1.x, con1.y, con2.x, con2.y, th * 0.75, flags.dashed, m);
   else ccurve(x[0], y[0], x[1], y[1], x[2], y[2], x[3], y[3], x[4], y[4], x[5], y[5], th, flags.dashed, m);
   if (flags.ed) drawEdmark(x[0], y[0], x[1], y[1], x[2], y[2], x[3], y[3], sz, m);
   if (flags.dashed) PSsetdash(dpattern, 0, 0.0);
+      // TODO [bezPath setLineDash: dpattern count: 1 phase: 0.0]; // but we need to know bezPath!
+
   return self;
 }
 

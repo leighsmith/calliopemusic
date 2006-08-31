@@ -399,8 +399,12 @@ static void doDashJog(float x, float y, float x1, int j, int a, int sz, int m)
   dpattern[0] = 3 * nature[sz];
   th = staffthick[0][sz];
   PSsetdash(dpattern, 1, 0.0);
+      // TODO [bezPath setLineDash: dpattern count: 1 phase: 0.0]; // but we need to know bezPath!
+
   cline(x, y, x1, y, th, m);
   PSsetdash(dpattern, 0, 0.0);
+      // TODO [bezPath setLineDash: dpattern count: 0 phase: 0.0]; // but we need to know bezPath!
+
   if (j)
   {
     sw = nature[sz] * (a ? 3 : -3);
@@ -447,7 +451,7 @@ float fontsize[3] = { 12, 8, 6};
           buff[0] = 165;
           buff[1] = '\0';
           CAcString(px, py + 0.5 * charFGH(f, 165), buff, f, m);
-          doDashJog(px + nature[sz] + [f widthOfString:[NSString stringWithCString:buff]], py, qx, (sf == 0), (flags.position == 0), sz, m);
+          doDashJog(px + nature[sz] + [f widthOfString: [NSString stringWithCString: buff]], py, qx, (sf == 0), (flags.position == 0), sz, m);
 	  break;
 	case 2:
 	case 3:
@@ -466,7 +470,7 @@ float fontsize[3] = { 12, 8, 6};
           buff[1] = 176;
           buff[2] = '\0';
           CAcString(px, py + 0.5 * charFGH(f, 165), buff, f, m);
-          doDashJog(px + nature[sz] + [f widthOfString:[NSString stringWithCString:buff]], py, qx, (sf == 0), (flags.position == 0), sz, m);
+          doDashJog(px + nature[sz] + [f widthOfString: [NSString stringWithCString: buff]], py, qx, (sf == 0), (flags.position == 0), sz, m);
           break;
 	case 2:
 	case 3:

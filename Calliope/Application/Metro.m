@@ -133,26 +133,26 @@ static Metro *proto;
 
 - drawMode: (int) m
 {
-  float x, y, dx, nx, dy;
-  char t[4];
-  NSFont *f = fontdata[FONTSTMR];
-  id sp = ((StaffObj *)client)->mystaff;
-  int sz = smallersz[gFlags.size];
-  if (TYPEOF(sp) != STAFF) return self;
-  x = ((StaffObj *)client)->x;
-  y = [sp yOfPos: pos];
-  dx = charFGW(f, '=');
-  centxChar(x, y, '=', f, m);
-  nx = dx * (2.0 + dot[0] * 0.5);
-  dy = charFCH(f, '=');
-  csnote(x - nx, y - dy, -stemshorts[sz], body[0], dot[0], sz, 0, 0, m);
-  if (gFlags.subtype)
-  {
-    sprintf(t, "%d", ticks);
-    CAcString(x + dx, y, t, f, m);
-  }
-  else csnote(x + 2.0 * dx, y - dy, -stemshorts[sz], body[1], dot[1], sz, 0, 0, m);
-  return self;
+    float x, y, dx, nx, dy;
+    NSFont *f = fontdata[FONTSTMR];
+    id sp = ((StaffObj *)client)->mystaff;
+    int sz = smallersz[gFlags.size];
+    
+    if (TYPEOF(sp) != STAFF) 
+	return self;
+    x = ((StaffObj *)client)->x;
+    y = [sp yOfPos: pos];
+    dx = charFGW(f, '=');
+    centxChar(x, y, '=', f, m);
+    nx = dx * (2.0 + dot[0] * 0.5);
+    dy = charFCH(f, '=');
+    csnote(x - nx, y - dy, -stemshorts[sz], body[0], dot[0], sz, 0, 0, m);
+    if (gFlags.subtype) {
+	DrawTextWithBaselineTies(x + dx, y, [NSString stringWithFormat: @"%d", ticks], f, m);
+    }
+    else 
+	csnote(x + 2.0 * dx, y - dy, -stemshorts[sz], body[1], dot[1], sz, 0, 0, m);
+    return self;
 }
 
 

@@ -328,6 +328,8 @@ extern void ctie(float cx, float cy, float d, float h, float th, float a, float 
     {
 	dpattern[0] = nature[sz] * 2;
 	PSsetdash(dpattern, 1, 0.0);
+	    // TODO [bezPath setLineDash: dpattern count: 1 phase: 0.0]; // but we need to know bezPath!
+
     }
     if (gFlags.selected && !gFlags.seldrag)
     {
@@ -405,6 +407,8 @@ extern void ctie(float cx, float cy, float d, float h, float th, float a, float 
 	    break;
     }
     if (candash[style] && flags.dashed) PSsetdash(dpattern, 0, 0.0);
+        // TODO [bezPath setLineDash: dpattern count: 0 phase: 0.0]; // but we need to know bezPath!
+
     return self;
 }
 

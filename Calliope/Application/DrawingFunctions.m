@@ -451,13 +451,12 @@ void DrawTextWithBaselineTies(float x, float y, NSString *stringToDisplay, NSFon
 	return;
     
     if (mode) {
-	float tieCharacterWidth, tieCharacterHeight, fontPointSize;
-	// unsigned char c, t[256], *p;
+	float tieCharacterWidth, tieCharacterHeight;
+	float fontPointSize = [textFont pointSize];
 	NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString: stringToDisplay];
 	NSRange wholeString = {0, [attributedText length]};
+	NSPoint textPoint = NSMakePoint(x, y);
 
-	// NSLog(@"DrawTextWithBaselineTies("%@", %f, %f)", stringToDisplay, x, y);
-	
 	[attributedText addAttribute: NSFontAttributeName
 			       value: textFont
 			       range: wholeString];
@@ -465,15 +464,22 @@ void DrawTextWithBaselineTies(float x, float y, NSString *stringToDisplay, NSFon
 			       value: modegray[mode]
 			       range: wholeString];
 	
-	[attributedText drawAtPoint: NSMakePoint(x, y)]; // must check which coordinate system used? not flipped?
+	[attributedText drawAtPoint: textPoint]; // must check which coordinate system used? not flipped?
 	
 	tieCharacterWidth = charFWX(textFont, TIECHAR);
-	fontPointSize = [textFont pointSize];
 	tieCharacterHeight = 0.1 * fontPointSize;
 
-	NSFrameRect(NSMakeRect(x, y, 20, fontPointSize)); // For debugging.
-
+	// For debugging.
+#if 1
+	NSLog(@"DrawTextWithBaselineTies(\"%@\", %f, %f) fontPointSize = %f", stringToDisplay, x, y, fontPointSize);
+	NSFrameRect(NSMakeRect(x, y, 20, fontPointSize));
+	NSFrameRect(NSMakeRect(x, y, 3, 3)); 
+#endif
+	
 #if 0
+	
+	// unsigned char c, t[256], *p;
+
 	p = t;
 	while (c = *s++) {
 	    if (c == TIECHAR) {
@@ -496,7 +502,7 @@ void DrawTextWithBaselineTies(float x, float y, NSString *stringToDisplay, NSFon
 }
 
 //sb: changed the following from cString to CAcString to avoid confusion.
-// Should be removed eventually
+// TODO Should be eventually removed and replaced with a direct call to DrawTextWithBaselineTies
 void CAcString(float x, float y, const char *s, NSFont *textFont, int mode)
 {
     DrawTextWithBaselineTies(x, y, [NSString stringWithCString: s], textFont, mode);
@@ -1180,6 +1186,8 @@ void cbrack(int i, int p, float px, float py, float qx, float qy, float th, floa
 		    break;
 	    }
 		PSsetdash(dpattern, 0, 0.0);
+	        // TODO [bezPath setLineDash: dpattern count: 1 phase: 0.0]; // but we need to know bezPath!
+
 	    break;
 	case 6:  /* wavy line */
 	    switch(p)

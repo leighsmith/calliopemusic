@@ -477,6 +477,8 @@ static float dpattern[1];
   {
     dpattern[0] = nature[sz] * 2;
     PSsetdash(dpattern, 1, 0.0);
+        // TODO [bezPath setLineDash: dpattern count: 1 phase: 0.0]; // but we need to know bezPath!
+
   }
   th = 2.0 * staffthick[0][sz];
   switch (gFlags.subtype)
@@ -516,6 +518,8 @@ static float dpattern[1];
       break;
   }
   if (flags.dashed) PSsetdash(dpattern, 0, 0.0);
+      // TODO [bezPath setLineDash: dpattern count: 0 phase: 0.0]; // but we need to know bezPath!
+
   return self;
 }
 
