@@ -420,13 +420,13 @@ static BOOL busyFlag = 0;  /* so that inspector is not inspected because of a ca
       lind = [[indentleft cellAtIndex:0] floatValue] / conv;
       if (lind < -72 || lind > 72*5)
       {
-        NSBeep();
+        NSLog(@"Assertion failure in SysInspector");
 	return 0;
       }
       rind = [[indentright cellAtIndex:0] floatValue] / conv;
       if (rind < -72 || rind > 72*5)
       {
-        NSBeep();
+        NSLog(@"Assertion failure in SysInspector");
 	return 0;
       }
       if (lind != sys->lindent) r |= 8;
@@ -456,14 +456,14 @@ static BOOL busyFlag = 0;  /* so that inspector is not inspected because of a ca
       f = [[expansionform cellAtIndex:0] floatValue] * 0.01;
       if (f < 0.5 || f > 2.0)
       {
-        NSBeep();
+        NSLog(@"Assertion failure in SysInspector");
 	return 0;
       }
       sys->expansion = f;
       f = [[expansionform cellAtIndex:1] floatValue];
       if (f < -3 || f > 30)
       {
-        NSBeep();
+        NSLog(@"Assertion failure in SysInspector");
 	return 0;
       }
       sys->groupsep = f;
@@ -813,7 +813,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
   int i, j, n;
   if (v == nil)
   {
-    NSBeep();
+    NSLog(@"Assertion failure in SysInspector");
     return self;
   }
   sys = [v currentSystem];
@@ -1132,29 +1132,29 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
     System *st, *sys = [[DrawApp sharedApplicationController] currentSystem];
   if (sys == nil)
   {
-    NSBeep();
+    NSLog(@"Assertion failure in SysInspector");
     return self;
   }
   i = [[stybrowser matrixInColumn: 0] selectedRow];
   if (i < 0 || i >= [[[DrawApp sharedApplicationController] getStylelist] count])
   {
-    NSBeep();
+    NSLog(@"Assertion failure in SysInspector");
     return self;
   }
   st = [[[DrawApp sharedApplicationController] getStylelist] objectAtIndex:i];
   if (st == nil)
   {
-    NSBeep();
+    NSLog(@"Assertion failure in SysInspector");
     return self;
   }
   if ([sys numberOfStaves] != [st numberOfStaves])
   {
-    NSBeep();
+    NSLog(@"Assertion failure in SysInspector");
     return self;
   }
   if (![sys->style isEqualToString: st->style])
   {
-    NSBeep();
+    NSLog(@"Assertion failure in SysInspector");
     return self;
   }
   buf = [NSString stringWithFormat:@"Are you sure you want to modify style '%@'?", st->style];
@@ -1179,13 +1179,13 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
   i = [[stybrowser matrixInColumn: 0] selectedRow];
   if (i < 0 || i >= [sl count])
   {
-    NSBeep();
+    NSLog(@"Assertion failure in SysInspector");
     return self;
   }
   st = [sl objectAtIndex:i];
   if (st == nil)
   {
-    NSBeep();
+    NSLog(@"Assertion failure in SysInspector");
     return self;
   }
   n = [stytext stringValue];
@@ -1224,19 +1224,19 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
   GraphicView *v = [DrawApp currentView];
   if (v == nil)
   {
-    NSBeep();
+    NSLog(@"Assertion failure in SysInspector");
     return self;
   }
   i = [[stybrowser matrixInColumn: 0] selectedRow];
   if (i < 0 || i >= [[[DrawApp sharedApplicationController] getStylelist] count])
   {
-    NSBeep();
+    NSLog(@"Assertion failure in SysInspector");
     return self;
   }
   st = [[[DrawApp sharedApplicationController] getStylelist] objectAtIndex:i];
   if (st == nil)
   {
-    NSBeep();
+    NSLog(@"Assertion failure in SysInspector");
     return self;
   }
   busyFlag = YES;
@@ -1256,24 +1256,24 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
   
   if (sys == nil)
   {
-    NSBeep();
+    NSLog(@"Assertion failure in SysInspector");
     return self;
   }
   i = [[stybrowser matrixInColumn: 0] selectedRow];
   if (i < 0 || i >= [[[DrawApp sharedApplicationController] getStylelist] count])
   {
-    NSBeep();
+    NSLog(@"Assertion failure in SysInspector");
     return self;
   }
   st = [[[DrawApp sharedApplicationController] getStylelist] objectAtIndex:i];
   if (st == nil)
   {
-    NSBeep();
+    NSLog(@"Assertion failure in SysInspector");
     return self;
   }
   if ([sys numberOfStaves] != [st numberOfStaves])
   {
-    NSBeep();
+    NSLog(@"Assertion failure in SysInspector");
     return self;
   }
   busyFlag = YES;
@@ -1300,7 +1300,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
     i = [[stybrowser matrixInColumn: 0] selectedRow];
   if (i < 0)
   {
-    NSBeep();
+    NSLog(@"Assertion failure in SysInspector");
     return self;
   }
   buf = [NSString stringWithFormat:@"Are you sure you want to delete style '%@'?",
