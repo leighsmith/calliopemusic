@@ -34,7 +34,6 @@
     id tabTuner;		/* the tablature tuning panel */
     id castInspector;
     id appdefaults;		/* application Defaults panel */
-    id newpanel;		/* the New panel */
     id tempoSlider;
     id tempoText;
     id laybarform;		/* the form in the layBarsPanel */
