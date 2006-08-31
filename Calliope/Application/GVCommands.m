@@ -181,12 +181,12 @@ static NSString *stylescratch;
   System *sys = [[[DrawApp sharedApplicationController] getStylelist] styleSysForName: stylescratch];
   if (sys == nil)
   {
-    NSBeep();
+    NSLog(@"Assertion failure in GVCommands");
     return self;
   }
   if ([sys numberOfStaves] != [currentSystem numberOfStaves])
   {
-    NSBeep();
+    NSLog(@"Assertion failure in GVCommands");
     return self;
   }
   if (sys->lindent != currentSystem->lindent)
@@ -265,7 +265,7 @@ static NSString *stylescratch;
   j = [syslist indexOfObject:sys];
   if (j == 0)
   {
-    NSBeep();
+    NSLog(@"Assertion failure in GVCommands");
     return self;
   }
   k = [syslist count];
@@ -565,7 +565,7 @@ extern char *typename[NUMTYPES];
 {
   if (currentSystem == nil)
   {
-    NSBeep();
+    NSLog(@"Assertion failure in GVCommands");
     return self;
   }
   [currentSystem showVerse];
@@ -583,7 +583,7 @@ extern char *typename[NUMTYPES];
   StaffObj *p;
   if (currentSystem == nil)
   {
-    NSBeep();
+    NSLog(@"Assertion failure in GVCommands");
     return self;
   }
   k = [slist count];
@@ -608,7 +608,7 @@ extern char *typename[NUMTYPES];
   Staff *sp;
   if (currentSystem == nil)
   {
-    NSBeep();
+    NSLog(@"Assertion failure in GVCommands");
     return self;
   }
   k = [slist count];
@@ -913,7 +913,7 @@ static BOOL doToObject(Graphic *p, int c, int a)
     [self dirty];
   [[NSFontManager sharedFontManager] setSelectedFont:f isMultiple:NO];
   }
-  else NSBeep();
+  else NSLog(@"Assertion failure in GVCommands");
 }
 
 
@@ -1059,7 +1059,7 @@ static BOOL doToObject(Graphic *p, int c, int a)
       return self;
     }
   }
-  NSBeep();
+  NSLog(@"Assertion failure in GVCommands");
   return self;
 }
 
@@ -1160,7 +1160,7 @@ extern char *typename[NUMTYPES];
   n = [[DrawApp sharedApplicationController] getLayBarNumber];
   if (n < 0 || n > nsys)
   {
-    NSBeep();
+    NSLog(@"Assertion failure in GVCommands");
     return self;
   }
   [syslist removeObjectAtIndex:n - 1];
@@ -1226,7 +1226,7 @@ extern char *typename[NUMTYPES];
   int i;
   if (currentSystem  == nil)
   {
-    NSBeep();
+    NSLog(@"Assertion failure in GVCommands");
     return self;
   }
   [self deselectAll: self];
@@ -1328,7 +1328,7 @@ extern char *typename[NUMTYPES];
   System *sys;
   if (currentSystem  == nil)
   {
-    NSBeep();
+    NSLog(@"Assertion failure in GVCommands");
     return self;
   }
   [self deselectAll: self];
@@ -1507,7 +1507,7 @@ extern char *typename[NUMTYPES];
 {
   NSRect r;
   int n;
-  if (currentSystem == nil) NSBeep();
+  if (currentSystem == nil) NSLog(@"Assertion failure in GVCommands");
   else
   {
     n = [[DrawApp sharedApplicationController] getLayBarNumber];
@@ -1594,7 +1594,7 @@ extern char *typename[NUMTYPES];
 
 - sizeAllSys: sender
 {
-  NSBeep();
+  NSLog(@"Assertion failure in GVCommands");
   return self;
 }
 
@@ -1609,7 +1609,7 @@ extern char *typename[NUMTYPES];
   Staff *tp, *sp;
   if (s == nil)
   {
-    NSBeep();
+    NSLog(@"Assertion failure in GVCommands");
     return self;
   }
   spl = s->staves;
@@ -1636,7 +1636,7 @@ extern char *typename[NUMTYPES];
 
 - spillBar: sender
 {
-  if (currentSystem == nil) NSBeep();
+  if (currentSystem == nil) NSLog(@"Assertion failure in GVCommands");
   else
   {
     [currentSystem spillBar];
@@ -1649,7 +1649,7 @@ extern char *typename[NUMTYPES];
 
 - grabBar: sender
 {
-  if (currentSystem == nil) NSBeep();
+  if (currentSystem == nil) NSLog(@"Assertion failure in GVCommands");
   else
   {
     [currentSystem grabBar];
@@ -1725,7 +1725,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
   System *sys = currentSystem;
   if ([syslist count] <= 1)
   {
-    NSBeep();
+    NSLog(@"Assertion failure in GVCommands");
     return nil;
   }
   if (askAboutSys("You wish to delete this system?", sys, self))
@@ -1781,7 +1781,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
   System *sys = currentSystem;
   if ([syslist count] <= 1)
   {
-    NSBeep();
+    NSLog(@"Assertion failure in GVCommands");
     return nil;
   }
   if (!askAboutSys("You wish to delete all hidden staves from this system?", sys, self)) return nil;
@@ -1797,7 +1797,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
   System *sys = currentSystem;
   if (sys == nil || [syslist count] < 1)
   {
-    NSBeep();
+    NSLog(@"Assertion failure in GVCommands");
     return nil;
   }
   if (!askAboutSys("You wish to delete all hidden staves from ALL systems?", sys, self)) return nil;
@@ -1846,7 +1846,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
   BOOL m = NO;
   if ([syslist count] <= 1)
   {
-    NSBeep();
+    NSLog(@"Assertion failure in GVCommands");
     return nil;
   }
   m = ([currentSystem checkMargin] != nil);
@@ -1888,7 +1888,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
   }
   if (n == 0)
   {
-    NSBeep();
+    NSLog(@"Assertion failure in GVCommands");
     return nil;
   }
   [self paginate: self];
@@ -1915,13 +1915,13 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
   BOOL pag;
   if (currentSystem  == nil)
   {
-    NSBeep();
+    NSLog(@"Assertion failure in GVCommands");
     return self;
   }
   nsys = [self getSystem: currentSystem offsetBy: 1];
   if (nsys == nil)
   {
-    NSBeep();
+    NSLog(@"Assertion failure in GVCommands");
     return self;
   }
   sys->flags.nstaves += [nsys numberOfStaves];
