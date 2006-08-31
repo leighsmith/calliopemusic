@@ -1,18 +1,5 @@
 {
     IBClasses = (
-        {
-            ACTIONS = {
-                changeLayout = id; 
-                hideRuler = id; 
-                revertToSaved = id; 
-                saveAs = id; 
-                showTextRuler = id; 
-            }; 
-            CLASS = DrawDocument; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {scrollView = SyncScrollView; view = GraphicView; }; 
-            SUPERCLASS = NSDocument; 
-        }, 
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
             ACTIONS = {
@@ -30,16 +17,22 @@
         {
             ACTIONS = {
                 changeLayout = id; 
+                closeNewDocumentSheet = id; 
                 firstPage = id; 
                 hideRuler = id; 
                 lastPage = id; 
+                makeNewSheet = id; 
                 nextPage = id; 
                 prevPage = id; 
                 showTextRuler = id; 
             }; 
             CLASS = OpusDocument; 
             LANGUAGE = ObjC; 
-            OUTLETS = {scrollView = PageScrollView; view = GraphicView; }; 
+            OUTLETS = {
+                newDocumentSheet = NSWindow; 
+                scrollView = PageScrollView; 
+                view = GraphicView; 
+            }; 
             SUPERCLASS = NSDocument; 
         }, 
         {
