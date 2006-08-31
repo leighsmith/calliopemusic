@@ -402,15 +402,6 @@ float unitFactor[4] =
 }
 
 
-- orderNewPanel: sender
-{
-    if (!newpanel)  [NSBundle loadNibNamed:@"NewPanel.nib" owner:self];
-    [newpanel preset];
-    [newpanel makeKeyAndOrderFront:self];
-    return self;
-}
-
-
 - orderTabTuner: sender
 {
     if (!tabTuner)  [NSBundle loadNibNamed:@"TabTuner.nib" owner:self];
