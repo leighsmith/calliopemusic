@@ -656,72 +656,72 @@ static int getShapeID(int pos, int s, int n, int c)
 }
 
 /* the big case statement applies only to separate noteheads, hence the test */
-
 - (BOOL) performKey: (int) c
 {
-  BOOL r = NO;
-  if (self == lastHit) switch(c)
-  {
-    case '!':
-      [self setAccidental: 3];
-      r = YES;
-      break;
-    case '@':
-      [self setAccidental: 1];
-      r = YES;
-      break;
-    case '#':
-      [self setAccidental: 2];
-      r = YES;
-      break;
-    case '$':
-      [self setAccidental: 5];
-      r = YES;
-      break;
-    case '%':
-      [self setAccidental: 4];
-      r = YES;
-      break;
-    case '/':
-      [self setAccidental: 0];
-      r = YES;
-      break;
-    case '^':
-      [self setHead: 0];
-      r = YES;
-      break;
-    case '&':
-      [self setHead: 1];
-      r = YES;
-      break;
-    case '*':
-      [self setHead: 5];
-      r = YES;
-      break;
-    case '(':
-      [self setHead: 2];
-      r = YES;
-      break;
-    case ')':
-      [self setHead: 3];
-      r = YES;
-      break;
-    case '+':
-      [self setHead: 4];
-      r = YES;
-      break;
-    case ' ':
-      if ([headlist count] > 1) [self deleteHead: gFlags.selend];
-      r = YES;
-      break;
-  }
-  if (r)
-  {
-    [self recalc];
-    [self setOwnHangers];
-    return YES;
-  }
-  else return [super performKey: c];
+    BOOL r = NO;
+    
+    if (self == lastHit) 
+	switch(c) {
+	    case '!':
+		[self setAccidental: 3];
+		r = YES;
+		break;
+	    case '@':
+		[self setAccidental: 1];
+		r = YES;
+		break;
+	    case '#':
+		[self setAccidental: 2];
+		r = YES;
+		break;
+	    case '$':
+		[self setAccidental: 5];
+		r = YES;
+		break;
+	    case '%':
+		[self setAccidental: 4];
+		r = YES;
+		break;
+	    case '/':
+		[self setAccidental: 0];
+		r = YES;
+		break;
+	    case '^':
+		[self setHead: 0];
+		r = YES;
+		break;
+	    case '&':
+		[self setHead: 1];
+		r = YES;
+		break;
+	    case '*':
+		[self setHead: 5];
+		r = YES;
+		break;
+	    case '(':
+		[self setHead: 2];
+		r = YES;
+		break;
+	    case ')':
+		[self setHead: 3];
+		r = YES;
+		break;
+	    case '+':
+		[self setHead: 4];
+		r = YES;
+		break;
+	    case ' ':
+		if ([headlist count] > 1) [self deleteHead: gFlags.selend];
+		r = YES;
+		break;
+	}
+	if (r) {
+	    [self recalc];
+	    [self setOwnHangers];
+	    return YES;
+	}
+	else 
+	    return [super performKey: c];
 }
 
 

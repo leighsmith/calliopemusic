@@ -186,7 +186,7 @@ int protoVox;
   StaffObj *q;
   NSRect qb;
   BOOL f = NO;
-  if (TYPEOF(mystaff) == SYSTEM) return self;
+
   nl = mystaff->notes;
   k = [nl count];
   j = [nl indexOfObject:self] + 1;
@@ -217,7 +217,7 @@ int protoVox;
 
 - reDefault
 {
-  float sy = (TYPEOF(mystaff) == STAFF) ? [mystaff yOfTop] : y;
+  float sy = [mystaff yOfTop];
   [self reCache: sy : getSpacing(mystaff)];
   return [self reShape];
 }
@@ -254,15 +254,18 @@ int protoVox;
 
 - (int) getSpacing
 {
-  if (mystaff != nil && TYPEOF(mystaff) == STAFF) return mystaff->flags.spacing;
-  else return 4;
+    if (mystaff != nil)
+	return mystaff->flags.spacing;
+    else 
+	return 4;
 }
-
 
 - (int) getLines
 {
-  if (mystaff != nil && TYPEOF(mystaff) == STAFF) return mystaff->flags.nlines;
-  else return 5;
+    if (mystaff != nil)
+	return mystaff->flags.nlines;
+    else
+	return 5;
 }
 
 /* find the keysym, num and middleC of the controlling key signature and clef */
@@ -271,7 +274,7 @@ int protoVox;
 {
   KeySig *ks;
   Clef *cl;
-  if (mystaff == nil || TYPEOF(mystaff) != STAFF)
+  if (mystaff == nil)
   {
     *s = 0;
     *n = 0;
@@ -352,43 +355,32 @@ int protoVox;
 
 - (int) posOfY: (float) sy
 {
-  if (TYPEOF(mystaff) == STAFF) return [mystaff findPos: sy];
-  else return p;
+  return [mystaff findPos: sy];
 }
 
 
 - (float) yOfPos: (int) ip
 {
-  if (TYPEOF(mystaff) == STAFF) return [mystaff yOfPos: ip];
-  else return(y);
+  return [mystaff yOfPos: ip];
 }
 
 
 - (float) yOfTopLine
 {
-  if (TYPEOF(mystaff) == STAFF) return [mystaff yOfTop];
-  else return(y);
+  return [mystaff yOfTop];
 }
 
 
 - (float) yOfBottomLine
 {
-  if (TYPEOF(mystaff) == STAFF) return [mystaff yOfBottom];
-  else return(y);
+  return [mystaff yOfBottom];
 }
 
 
-/* return system self is associated with */
-
+/* return system the receiver is associated with */
 - (System *) mySystem
 {
-    // TODO I'm not sure why mystaff this should ever not be a Staff instance, but the test was here originally, so it's been rewritten as an assertion.
-    if (TYPEOF(mystaff) != STAFF)
-	NSLog(@"assertion failed in StaffObj sysNum, mystaff != STAFF");
-    if (TYPEOF(mystaff) == SYSTEM)
-	return mystaff;
-    else
-	return mystaff->mysys;
+    return mystaff->mysys;
 }
 
 
@@ -423,7 +415,6 @@ int protoVox;
 
 - (int) myIndex
 {
-  if (TYPEOF(mystaff) == SYSTEM) return -1;
   return [mystaff->notes indexOfObject: self];
 }
 
@@ -491,7 +482,6 @@ int protoVox;
   if (s == nil) return nil;
   if (![s length]) return nil;
   sp = mystaff;
-  if (TYPEOF(sp) != STAFF) return nil;
   t = [[TextGraphic alloc] init];
   SUBTYPEOF(t) = LABEL;
   t->just = 0;
@@ -514,7 +504,6 @@ int protoVox;
 - (float) xOfStaffEnd: (BOOL) e
 {
   id sp = mystaff;
-  if (TYPEOF(sp) == SYSTEM) sp = [sp firststaff];
   return e ? [sp xOfEnd] : [sp xOfHyphmarg] + 2 * ((Staff *)sp)->flags.spacing;
 }
 
@@ -528,16 +517,15 @@ int protoVox;
 - (void)removeObj
 {
     int k;
-    [self retain];
+    [self retain]; // TODO highly suspicious
     k = [enclosures count];
     while (k--) [[enclosures objectAtIndex:k] removeObj];
     k = [hangers count];
     while (k--) [[hangers objectAtIndex:k] removeObj];
     k = [verses count];
     while (k--) [[verses objectAtIndex:k] removeObj];
-    if (TYPEOF(mystaff) == STAFF) [mystaff unlinknote: self];
-    else [mystaff unlinkobject: self]; // Could be (System *) mystaff but why should the type change?
-    [self release];
+    [mystaff unlinknote: self];
+    [self release];  // TODO highly suspicious
 }
 
 
@@ -1003,7 +991,7 @@ BOOL isBlank(unsigned char *s)
   for (i = 0; i < kpv; i++) [verses addObject: [[pv objectAtIndex:i] newFrom]];
   [self setVerses];
   sp = mystaff;
-  if (TYPEOF(sp) == STAFF) [[mystaff measureStaff] resetStaff: [sp yOfTop]];
+  [[mystaff measureStaff] resetStaff: [sp yOfTop]];
   return self;
 }
 
@@ -1066,106 +1054,103 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
 }
 
 
-- (int)keyDownString:(NSString *)cc
+- (int) keyDownString: (NSString *) cc
 {
-  int k, r;
-  Verse *v = nil;
-  Staff *sp;
-  char *s;
+    int k, r;
+    Verse *v = nil;
+    Staff *sp;
+    char *s;
+    
 //  if (cs == NX_SYMBOLSET)
 //  if ([cc canBeConvertedToEncoding:NSSymbolStringEncoding])
-      if (![cc canBeConvertedToEncoding:NSNEXTSTEPStringEncoding])
-  {
-    if (verses == nil) return -1;
-    r = -1;
-    k = [verses count];
-    switch([cc characterAtIndex:0])
+    if (![cc canBeConvertedToEncoding:NSNEXTSTEPStringEncoding])
     {
-        case NSUpArrowFunctionKey:
-        selver = [self incSelver: -1 : k];
-	r = 1;
-	break;
-        case NSDownArrowFunctionKey:
-        selver = [self incSelver: 1 : k];
-	r = 1;
-	break;
-      case NSLeftArrowFunctionKey:
-          if (selver < k && selver >= 0) v = [verses objectAtIndex:selver];
-        if (v != nil)
-        {
-	  v->offset--;
-	  [v recalc];
+	if (verses == nil) return -1;
+	r = -1;
+	k = [verses count];
+	switch([cc characterAtIndex:0])
+	{
+	    case NSUpArrowFunctionKey:
+		selver = [self incSelver: -1 : k];
+		r = 1;
+		break;
+	    case NSDownArrowFunctionKey:
+		selver = [self incSelver: 1 : k];
+		r = 1;
+		break;
+	    case NSLeftArrowFunctionKey:
+		if (selver < k && selver >= 0) v = [verses objectAtIndex:selver];
+		if (v != nil)
+		{
+		    v->offset--;
+		    [v recalc];
+		}
+		    r = 1;
+		break;
+	    case NSRightArrowFunctionKey:
+		if (selver < k && selver >= 0) v = [verses objectAtIndex:selver];
+		if (v != nil)
+		{
+		    v->offset++;
+		    [v recalc];
+		}
+		    r = 1;
+		break;
 	}
-	r = 1;
-	break;
-      case NSRightArrowFunctionKey:
-          if (selver < k && selver >= 0) v = [verses objectAtIndex:selver];
-        if (v != nil)
-        {
-	  v->offset++;
-	  [v recalc];
-	}
-	r = 1;
-        break;
+	return r;
     }
-    return r;
-  }
-  /* check if deleting a verse or character */
-  v=nil;
-  k = [verses count];
-  if (*[cc cString] == 127)
-  {
-    if (verses == nil) { NSLog(@"keyDownString: verses = nil"); return 0; }
-      if (selver >= 0 && (selver < k))  v = [verses objectAtIndex:selver];
-    if (v == nil) { NSLog(@"keyDownString: v = nil"); return 0; }
-    
-    s = v->data;
-    if (s == NULL || strlen(s) == 0)
-    {
-      [self unlinkverse: v];
-      k = [verses count];
-      if (selver >= k) selver = k - 1;
-      if (TYPEOF(mystaff) == STAFF)
-      {
-        sp = mystaff;
-        [[sp measureStaff] resetStaff: [sp yOfTop]];
-      }
-      return 1;
-    }
-    else { /*sb: what a gross hack. All to convert to NSASCIIStringEncoding. Bah. */
-        char temp[2];
-        temp[0] = 127;
-        temp[1] = 0;
-        return [v keyDownString:[[[NSString alloc] initWithData:[NSData dataWithBytes:temp length:1] encoding:NSASCIIStringEncoding] autorelease]];
-    }
-  }
-  /* check if adding a verse or character */
-  v = nil;
-  if (verses == nil) verses = [[NSMutableArray alloc] init];
-  else {
-      if (selver >= 0 && selver < [verses count]) v = [verses objectAtIndex:selver];
-  }
-  if (v == nil || *[cc cString] == '\n' || *[cc cString] == '\r')
-  {
+    /* check if deleting a verse or character */
+    v=nil;
     k = [verses count];
-    if (k + 1 >= MAXTEXT) { NSLog(@"k + 1 >= MAXTEXT"); return 0; }
-    v = [[Verse alloc] init];
-    [verses addObject: v];
-    v->note = self;
-    if (k == 0) [v keyDownString:cc];
-    [self setVerses];
-    v->gFlags.selected = 1;
-    selver = [verses indexOfObject:v];
-    if (TYPEOF(mystaff) == STAFF)
+    if (*[cc cString] == 127)
     {
-      sp = mystaff;
-      [[sp measureStaff] resetStaff: [sp yOfTop]];
+	if (verses == nil) { NSLog(@"keyDownString: verses = nil"); return 0; }
+	if (selver >= 0 && (selver < k))  v = [verses objectAtIndex:selver];
+	if (v == nil) { NSLog(@"keyDownString: v = nil"); return 0; }
+	
+	s = v->data;
+	if (s == NULL || strlen(s) == 0)
+	{
+	    [self unlinkverse: v];
+	    k = [verses count];
+	    if (selver >= k) selver = k - 1;
+	    sp = mystaff;
+	    [[sp measureStaff] resetStaff: [sp yOfTop]];
+	    return 1;
+	}
+	else { /*sb: what a gross hack. All to convert to NSASCIIStringEncoding. Bah. */
+	    char temp[2];
+	    temp[0] = 127;
+	    temp[1] = 0;
+	    return [v keyDownString:[[[NSString alloc] initWithData:[NSData dataWithBytes:temp length:1] encoding:NSASCIIStringEncoding] autorelease]];
+	}
     }
-  }
-  else {
-      return [v keyDownString:cc];
-  }
-  return 1;
+    /* check if adding a verse or character */
+    v = nil;
+    if (verses == nil) 
+	verses = [[NSMutableArray alloc] init];
+    else {
+	if (selver >= 0 && selver < [verses count])
+	    v = [verses objectAtIndex:selver];
+    }
+    if (v == nil || *[cc cString] == '\n' || *[cc cString] == '\r')
+    {
+	k = [verses count];
+	if (k + 1 >= MAXTEXT) { NSLog(@"k + 1 >= MAXTEXT"); return 0; }
+	v = [[Verse alloc] init];
+	[verses addObject: v];
+	v->note = self;
+	if (k == 0) [v keyDownString:cc];
+	[self setVerses];
+	v->gFlags.selected = 1;
+	selver = [verses indexOfObject:v];
+	sp = mystaff;
+	[[sp measureStaff] resetStaff: [sp yOfTop]];
+    }
+    else {
+	return [v keyDownString:cc];
+    }
+    return 1;
 }
 
 
@@ -1517,56 +1502,63 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
-  char c1;
-  int v = [aDecoder versionForClassName:@"StaffObj"];
-  [super initWithCoder:aDecoder];
-  /* NSLog(@"reading StaffObj v%d\n", v); */
-  part = nil;
-  mystaff = [[aDecoder decodeObject] retain];
-  if (v < 2)
-  {
-    [aDecoder decodeValuesOfObjCTypes:"@@ccff", &hangers, &verses, &p, &selver, &x, &y];
-    voice = 0;
-  }
-  else if (v == 2)
-  {
-    [aDecoder decodeValuesOfObjCTypes:"@@cccff", &hangers, &verses, &p, &selver, &isGraced, &x, &y];
-    voice = 0;
-  }
-  else if (v == 3)
-  {
-    [aDecoder decodeValuesOfObjCTypes:"@@ccccfff", &hangers, &verses, &p, &selver, &isGraced, &voice, &x, &y, &stamp];
-  }
-  else if (v == 4)
-  {
-    [aDecoder decodeValuesOfObjCTypes:"ccccc", &p, &selver, &isGraced, &voice, &versepos];
-    [aDecoder decodeValuesOfObjCTypes:"@@", &hangers, &verses];
-    [aDecoder decodeValuesOfObjCTypes:"ff", &x, &y];
-  }
-  else if (v == 5)
-  {
-    [aDecoder decodeValuesOfObjCTypes:"cccccc", &p, &selver, &isGraced, &voice, &versepos, &c1];
-    part = [NSString stringWithFormat: @"%d", c1];
-    [aDecoder decodeValuesOfObjCTypes:"@@", &hangers, &verses];
-    [aDecoder decodeValuesOfObjCTypes:"ff", &x, &y];
-  }
-  else if (v == 6)
-  {
-      char *partChar;
-    [aDecoder decodeValuesOfObjCTypes:"ccccc", &p, &selver, &isGraced, &voice, &versepos];
+    char c1;
+    int v = [aDecoder versionForClassName:@"StaffObj"];
+
+    [super initWithCoder:aDecoder];
+    /* NSLog(@"reading StaffObj v%d\n", v); */
+    part = nil;
+    
+    mystaff = [[aDecoder decodeObject] retain];
+    if (TYPEOF(mystaff) != STAFF) {
+	NSLog(@"mystaff != STAFF, need to convert!");
+	// TODO I think earlier versions can decode this as System, not a Staff. Need to handle accordingly and based on file version number.
+    }
+    
+    if (v < 2)
+    {
+	[aDecoder decodeValuesOfObjCTypes:"@@ccff", &hangers, &verses, &p, &selver, &x, &y];
+	voice = 0;
+    }
+    else if (v == 2)
+    {
+	[aDecoder decodeValuesOfObjCTypes:"@@cccff", &hangers, &verses, &p, &selver, &isGraced, &x, &y];
+	voice = 0;
+    }
+    else if (v == 3)
+    {
+	[aDecoder decodeValuesOfObjCTypes:"@@ccccfff", &hangers, &verses, &p, &selver, &isGraced, &voice, &x, &y, &stamp];
+    }
+    else if (v == 4)
+    {
+	[aDecoder decodeValuesOfObjCTypes:"ccccc", &p, &selver, &isGraced, &voice, &versepos];
+	[aDecoder decodeValuesOfObjCTypes:"@@", &hangers, &verses];
+	[aDecoder decodeValuesOfObjCTypes:"ff", &x, &y];
+    }
+    else if (v == 5)
+    {
+	[aDecoder decodeValuesOfObjCTypes:"cccccc", &p, &selver, &isGraced, &voice, &versepos, &c1];
+	part = [NSString stringWithFormat: @"%d", c1];
+	[aDecoder decodeValuesOfObjCTypes:"@@", &hangers, &verses];
+	[aDecoder decodeValuesOfObjCTypes:"ff", &x, &y];
+    }
+    else if (v == 6)
+    {
+	char *partChar;
+	[aDecoder decodeValuesOfObjCTypes:"ccccc", &p, &selver, &isGraced, &voice, &versepos];
 //    [aDecoder decodeValuesOfObjCTypes:"@@%", &hangers, &verses, &part];
-    [aDecoder decodeValuesOfObjCTypes:"@@%", &hangers, &verses, &partChar];
-    [aDecoder decodeValuesOfObjCTypes:"ff", &x, &y];
-    if (partChar) part = [[NSString stringWithCString:partChar] retain]; else part = nil;
-  }
-  else if (v == 7)
-  {
-    [aDecoder decodeValuesOfObjCTypes:"ccccc", &p, &selver, &isGraced, &voice, &versepos];
-    [aDecoder decodeValuesOfObjCTypes:"@@@", &hangers, &verses, &part];
-    [aDecoder decodeValuesOfObjCTypes:"ff", &x, &y];
-    [part retain];
-  }
-  return self;
+	[aDecoder decodeValuesOfObjCTypes:"@@%", &hangers, &verses, &partChar];
+	[aDecoder decodeValuesOfObjCTypes:"ff", &x, &y];
+	if (partChar) part = [[NSString stringWithCString:partChar] retain]; else part = nil;
+    }
+    else if (v == 7)
+    {
+	[aDecoder decodeValuesOfObjCTypes:"ccccc", &p, &selver, &isGraced, &voice, &versepos];
+	[aDecoder decodeValuesOfObjCTypes:"@@@", &hangers, &verses, &part];
+	[aDecoder decodeValuesOfObjCTypes:"ff", &x, &y];
+	[part retain];
+    }
+    return self;
 }
 
 

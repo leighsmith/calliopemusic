@@ -260,6 +260,7 @@ id CrossCursor = nil;	/* global since subclassers may need it */
   int t, k, r = 0;
   Accent *a;
   StaffObj *p;
+  
   [v canInspectTypeCode: TC_STAFFOBJ : &t];
   if (t == 0) return 0;
   al = [[NSMutableArray alloc] init];

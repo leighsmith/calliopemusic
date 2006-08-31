@@ -245,25 +245,26 @@ return NO;
 }
 
 
-- (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)v
+- (void) drawWithFrame: (NSRect) cellFrame inView: (NSView *) v
 {
-  NSFont *f;
-  NSPoint pt;
-  PSgsave();
-  pt = cellFrame.origin;
-  pt.y += cellFrame.size.height;
-  if (runnerStatus)
-  {
-      if (theFont) f = theFont;
-      else f = [(NSTextView *)v fontOfCell: self];
-
-      CAcString(pt.x, pt.y, [[self getVarString] cString], f, 1);
-  }
-  else
-  {
-      [images[(int)type] compositeToPoint:pt operation:NSCompositeSourceOver];
-  }
-  PSgrestore();
+    NSFont *f;
+    NSPoint pt;
+    
+    PSgsave();
+    pt = cellFrame.origin;
+    pt.y += cellFrame.size.height;
+    if (runnerStatus) {
+	if (theFont) 
+	    f = theFont;
+	else 
+	    f = [(NSTextView *)v fontOfCell: self];
+	
+	DrawTextWithBaselineTies(pt.x, pt.y, [self getVarString], f, 1);
+    }
+    else {
+	[images[(int)type] compositeToPoint:pt operation:NSCompositeSourceOver];
+    }
+    PSgrestore();
 }
 
 
