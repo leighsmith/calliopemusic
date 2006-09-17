@@ -4,7 +4,7 @@
 #import "OpusDocument.h"
 #import "GraphicView.h"
 #import "GVSelection.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 #import "CalliopeThreeStateButton.h"
 #import <AppKit/NSButton.h>

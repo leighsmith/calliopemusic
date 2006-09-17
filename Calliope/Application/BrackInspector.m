@@ -9,7 +9,7 @@
 #import "GVSelection.h"
 #import "System.h"
 #import "Staff.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import <AppKit/NSMatrix.h>
 #import <AppKit/NSButton.h>
 

@@ -5,7 +5,7 @@
 #import "GVCommands.h"
 #import "GVSelection.h"
 #import "System.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "DrawApp.h"
 #import "OpusDocument.h"
 #import "muxCollide.h"

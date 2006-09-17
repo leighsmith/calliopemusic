@@ -4,7 +4,7 @@
 
 #import "Accent.h"
 #import "AccentInspector.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 #import "GNote.h"
 #import "GraphicView.h"

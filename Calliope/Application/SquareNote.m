@@ -1,11 +1,11 @@
-#import "mux.h"
+/* $Id:$ */
+#import <Foundation/Foundation.h>
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 #import "SquareNote.h"
 #import "SquareNoteInspector.h"
 #import "Staff.h"
 #import "System.h"
-#import <Foundation/NSArray.h>
-
 
 @implementation SquareNote
 
@@ -173,8 +173,6 @@ static float squaretick[3] = {1.0, 1.0, 0.5};
   else return [super performKey: c];
 }
 
-
-extern void cfillrect(float x, float y, float w, float h, float lw, int mode);
 
 static float squarelinewidth[3] = {1.6, 1.2, 0.8};
 

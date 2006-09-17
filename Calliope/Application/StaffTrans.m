@@ -1,6 +1,6 @@
 #import "StaffTrans.h"
 #import "Staff.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "GNote.h"
 #import "GNChord.h"
 #import "NoteHead.h"

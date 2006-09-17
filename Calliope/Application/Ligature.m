@@ -1,6 +1,9 @@
+/* $Id:$ */
+#import <AppKit/AppKit.h>
+#import <Foundation/Foundation.h>
 #import "Ligature.h"
 #import "LigatureInspector.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 #import "GNote.h"
 #import "GraphicView.h"
@@ -9,21 +12,13 @@
 #import "OpusDocument.h"
 #import "System.h"
 #import "Staff.h"
-#import <AppKit/NSApplication.h>
-#import <AppKit/NSGraphics.h>
-#import <Foundation/NSArray.h>
-
-/*sb: moved to here from mid file: */
 #import "Tie.h"
 
 /*
   note groups can have >= 1 staff objects in the group.
 */
 
-
-@implementation Ligature:Hanger
-
-extern void cbrack(int i, int p, float px, float py, float qx, float qy, float th, float d, int sz, int m);
+@implementation Ligature
 
 static Ligature *proto;
 

@@ -1,7 +1,7 @@
 /* $Id$ */
 #import "TuningView.h"
 #import "Course.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 
 

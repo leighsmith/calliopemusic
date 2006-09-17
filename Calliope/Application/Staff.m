@@ -17,7 +17,7 @@
 #import "Page.h"
 #import "CallPart.h"
 #import "Barline.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 #import "FileCompatibility.h"
 

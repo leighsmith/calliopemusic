@@ -4,7 +4,7 @@
 #import "OpusDocument.h"
 #import <AppKit/NSTextView.h>
 #import <AppKit/NSFont.h>
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 
 @implementation NSTextStorage(Cells)

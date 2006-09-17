@@ -2,7 +2,7 @@
   Character codes and classes
 */
 
-#import "mux.h"
+#import "DrawingFunctions.h"
 
 /* modified for NeXTStupid Encoding */
 

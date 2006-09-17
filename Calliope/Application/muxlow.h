@@ -6,7 +6,7 @@
 #import "Staff.h"
 #import <AppKit/NSButton.h>
 #import <AppKit/NSPopUpButton.h>
-#import "mux.h"
+#import "DrawingFunctions.h"
 
 extern NSMutableArray *instlist;
 extern NSMutableArray *scratchlist;

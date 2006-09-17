@@ -15,7 +15,7 @@
 #import "Rest.h"
 #import "Barline.h"
 #import "CallPart.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 #import <AppKit/AppKit.h>
 

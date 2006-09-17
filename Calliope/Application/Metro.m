@@ -1,6 +1,6 @@
 #import "Metro.h"
 #import "MetroInspector.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 #import "StaffObj.h"
 #import "GraphicView.h"

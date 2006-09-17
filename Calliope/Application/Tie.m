@@ -1,6 +1,8 @@
+/* $Id$ */
+#import <Foundation/Foundation.h>
 #import "Tie.h"
 #import "TieInspector.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 #import "TimedObj.h"
 #import "GNote.h"
@@ -12,7 +14,6 @@
 #import "System.h"
 #import "DrawApp.h"
 #import "Staff.h"
-#import <Foundation/NSArray.h>
 
 @implementation Tie
 
@@ -278,10 +279,7 @@ static char defConst[NUMTIES] = {0, 0, 1, 0, 0, 1, 1, 0};
   t->gFlags.morphed = 0;
 }
 
-
 static float dpattern[1];
-
-extern void ctie(float cx, float cy, float d, float h, float th, float a, float f, int dash, int mode);
 
 - drawMode: (int) m
 {

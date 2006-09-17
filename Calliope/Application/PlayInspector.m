@@ -9,7 +9,7 @@
 #import "SoundEffect.h"
 #import "MultiView.h"
 #import "Channel.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 #import <MusicKit/MusicKit.h>
 #import <AppKit/NSPanel.h>

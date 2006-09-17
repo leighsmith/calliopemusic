@@ -12,7 +12,7 @@
 #import "Page.h"
 #import "System.h"
 #import "CallPageLayout.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "CalliopeWindow.h"
 
 extern NSColor * backShade;

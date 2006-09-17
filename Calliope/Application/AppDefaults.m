@@ -4,7 +4,7 @@
 #import "DrawApp.h"
 #import "OpusDocument.h"
 #import "GraphicView.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 #import <AppKit/AppKit.h>
 

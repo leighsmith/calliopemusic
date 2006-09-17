@@ -3,7 +3,7 @@
 #import "Hanger.h"
 #import "TimedObj.h"
 #import "System.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "FileCompatibility.h"
 
 @implementation Hanger
@@ -343,7 +343,7 @@
   float x, y;
   for (i = j; i <= k; i++)
   {
-    [(Graphic *)self coordsForHandle: i  asX: &x  andY: &y];
+    [self coordsForHandle: i  asX: &x  andY: &y];
     if (TOLFLOATEQ(p.x, x, HANDSIZE) && TOLFLOATEQ(p.y, y, HANDSIZE))
     {
       gFlags.selend = i;
@@ -360,7 +360,7 @@
   float x, y;
   for (i = j; i <= k; i++)
   {
-      [(Graphic *)self coordsForHandle: i  asX: &x  andY: &y];
+      [self coordsForHandle: i  asX: &x  andY: &y];
     if (TOLFLOATEQ(p.x, x, HANDSIZE) && TOLFLOATEQ(p.y, y, HANDSIZE))
     {
       return hypot(p.x - x, p.y - y);

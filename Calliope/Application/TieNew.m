@@ -1,6 +1,8 @@
+/* $Id$ */
+#import <Foundation/Foundation.h>
 #import "TieNew.h"
 #import "TieInspector.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 #import "TimedObj.h"
 #import "GNote.h"
@@ -10,10 +12,8 @@
 #import "System.h"
 #import "DrawApp.h"
 #import "Staff.h"
-#import <Foundation/NSArray.h>
 /* sb: moved import from middle of file: */
 #import "Tie.h"
-
 
 @implementation TieNew
 
@@ -644,8 +644,6 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
 
 /* special case for upgrading old format.  might be nil, to indicate split. */
 
-/* sb: moved import to top of file: #import "Tie.h" */
-
 - proto: (Tie *) t1 : (Tie *) t2
 {
   StaffObj *p, *q;
@@ -821,8 +819,6 @@ void drawEdmark(float x0, float y0, float x3, float y3, float x1, float y1, floa
 
 
 static float dpattern[1];
-extern void ccurve(float x0, float y0, float x3, float y3, float x1, float y1, float x2, float y2, float x4, float y4, float x5, float y5, float th, int dash, int mode);
-extern void cflat(float x0, float y0, float x1, float y1, float c1x, float c1y, float c2x, float c2y, float th, int dash, int m);
 
 - drawMode: (int) m
 {

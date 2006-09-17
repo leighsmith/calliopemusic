@@ -5,7 +5,7 @@
 #import "SysInspector.h"
 #import "OpusDocument.h"
 #import "DrawApp.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import <AppKit/AppKit.h>
 
 @implementation NewPanel

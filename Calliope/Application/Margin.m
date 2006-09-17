@@ -6,7 +6,7 @@
 #import "System.h"
 #import "Staff.h"
 #import "GVFormat.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 
 @implementation Margin
 

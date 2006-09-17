@@ -9,7 +9,7 @@
 #import "Page.h"
 #import "GVFormat.h"
 #import "FlippedView.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "TextVarCell.h"
 
 /*

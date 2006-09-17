@@ -1,5 +1,5 @@
 /* $Id$ */
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 #import <Foundation/NSArray.h>
 #import "Graphic.h"

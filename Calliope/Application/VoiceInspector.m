@@ -6,7 +6,7 @@
 #import "StaffObj.h"
 #import "Staff.h"
 #import "System.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import <AppKit/NSForm.h>
 #import <Foundation/NSArray.h>
 #import <AppKit/NSGraphics.h>

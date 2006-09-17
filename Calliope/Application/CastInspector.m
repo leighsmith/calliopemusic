@@ -14,7 +14,7 @@
 #import "CallInst.h"
 #import "StaffObj.h"
 #import "muxlow.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import <AppKit/AppKit.h>
 
 @implementation CastInspector

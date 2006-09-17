@@ -40,7 +40,7 @@
 #import "TimeSig.h"
 #import "Barline.h"
 #import "Enclosure.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 #import "ProgressDisplay.h"
 

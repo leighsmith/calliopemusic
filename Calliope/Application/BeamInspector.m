@@ -5,7 +5,7 @@
 #import "GraphicView.h"
 #import "MultiView.h"
 #import "GVSelection.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 #import <AppKit/NSMatrix.h>
 #import <AppKit/NSButton.h>

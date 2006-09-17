@@ -1,10 +1,9 @@
 /* $Id$ */
-#import <AppKit/NSApplication.h>
-#import <AppKit/NSGraphics.h>
-#import <Foundation/NSArray.h>
+#import <AppKit/AppKit.h>
+#import <Foundation/Foundation.h>
 #import "NoteGroup.h"
 #import "NoteGroupInspector.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 #import "GNote.h"
 #import "GraphicView.h"
@@ -13,9 +12,7 @@
 #import "OpusDocument.h"
 #import "System.h"
 #import "Staff.h"
-/*sb: grabbed this from mid-file */
 #import "Tie.h"
-/*sb: grabbed this from mid-file */
 #import "Volta.h"
 #import "FileCompatibility.h"
 
@@ -387,11 +384,6 @@ char corner[2][4] =
   else return -1;
   return 1;
 }
-
-
-extern void cbrack(int i, int p, float px, float py, float qx, float qy, float th, float d, int sz, int m);
-extern void cdashhjog(float x0, float y, float x1, int a, float nat, float th, int m);
-
 
 static void doDashJog(float x, float y, float x1, int j, int a, int sz, int m)
 {

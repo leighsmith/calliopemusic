@@ -31,7 +31,7 @@
 #import "UserInstrument.h"
 #import "CallInst.h"
 #import "Channel.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 #import <MusicKit/MusicKit.h>
 

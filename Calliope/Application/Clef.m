@@ -9,7 +9,7 @@
 #import "Staff.h"
 #import "StaffObj.h"
 #import "System.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 
 @implementation Clef

@@ -15,7 +15,7 @@
 #import "AppDefaults.h"
 #import "Preferences.h"
 #import "LayBarInspector.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 
 #if defined (WIN32)

@@ -6,7 +6,7 @@
 #import "System.h"
 #import "DrawApp.h"
 #import "OpusDocument.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 
 

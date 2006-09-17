@@ -15,7 +15,7 @@
 #import "TimedObj.h"
 #import "Tie.h"
 #import "muxlow.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 
 extern int fontflag;
 

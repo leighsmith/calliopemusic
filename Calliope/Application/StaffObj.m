@@ -17,7 +17,7 @@
 #import "CallPart.h"
 #import "CallInst.h"
 #import "TextGraphic.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 #import "FileCompatibility.h"
 

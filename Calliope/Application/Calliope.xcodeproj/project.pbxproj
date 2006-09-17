@@ -98,7 +98,7 @@
 		D8F247F309AD3F8C00B96D0D /* Metro.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD93660483CDC800A80164 /* Metro.h */; };
 		D8F247F409AD3F8C00B96D0D /* MetroInspector.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD93680483CDC800A80164 /* MetroInspector.h */; };
 		D8F247F509AD3F8C00B96D0D /* MultiView.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD936A0483CDC800A80164 /* MultiView.h */; };
-		D8F247F609AD3F8C00B96D0D /* mux.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD936C0483CDC800A80164 /* mux.h */; };
+		D8F247F609AD3F8C00B96D0D /* DrawingFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD936C0483CDC800A80164 /* DrawingFunctions.h */; };
 		D8F247F709AD3F8C00B96D0D /* Neume.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD936E0483CDC800A80164 /* Neume.h */; };
 		D8F247F809AD3F8C00B96D0D /* NeumeInspector.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD93700483CDC800A80164 /* NeumeInspector.h */; };
 		D8F247F909AD3F8C00B96D0D /* NeumeNew.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD93720483CDC800A80164 /* NeumeNew.h */; };
@@ -628,30 +628,6 @@
 		};
 /* End PBXBuildRule section */
 
-/* Begin PBXBuildStyle section */
-		D8FD92230483CDC700A80164 /* Development */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				ZERO_LINK = YES;
-			};
-			name = Development;
-		};
-		D8FD92240483CDC700A80164 /* Deployment */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-/* End PBXBuildStyle section */
-
 /* Begin PBXCopyFilesBuildPhase section */
 		D8F249F509AD3F8D00B96D0D /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -1121,7 +1097,7 @@
 		D8FD93660483CDC800A80164 /* Metro.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Metro.h; sourceTree = "<group>"; };
 		D8FD93680483CDC800A80164 /* MetroInspector.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MetroInspector.h; sourceTree = "<group>"; };
 		D8FD936A0483CDC800A80164 /* MultiView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MultiView.h; sourceTree = "<group>"; };
-		D8FD936C0483CDC800A80164 /* mux.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = mux.h; sourceTree = "<group>"; };
+		D8FD936C0483CDC800A80164 /* DrawingFunctions.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DrawingFunctions.h; sourceTree = "<group>"; };
 		D8FD936E0483CDC800A80164 /* Neume.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Neume.h; sourceTree = "<group>"; };
 		D8FD93700483CDC800A80164 /* NeumeInspector.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = NeumeInspector.h; sourceTree = "<group>"; };
 		D8FD93720483CDC800A80164 /* NeumeNew.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = NeumeNew.h; sourceTree = "<group>"; };
@@ -1502,6 +1478,7 @@
 				D8FD93300483CDC800A80164 /* Course.h */,
 				D8FD93320483CDC800A80164 /* DragMatrix.h */,
 				D8FD93340483CDC800A80164 /* DrawApp.h */,
+				D8FD936C0483CDC800A80164 /* DrawingFunctions.h */,
 				D8FD93380483CDC800A80164 /* Enclosure.h */,
 				D8FD933A0483CDC800A80164 /* EnclosureInspector.h */,
 				D8FD93D60483CDC800A80164 /* FileCompatibility.h */,
@@ -1530,7 +1507,6 @@
 				D8FD93680483CDC800A80164 /* MetroInspector.h */,
 				D8FD936A0483CDC800A80164 /* MultiView.h */,
 				D8FD93DA0483CDC800A80164 /* musfont.h */,
-				D8FD936C0483CDC800A80164 /* mux.h */,
 				D87D0FDB09AE6ED200784ACC /* muxCollide.h */,
 				D8FD93DC0483CDC800A80164 /* muxlow.h */,
 				D8FD936E0483CDC800A80164 /* Neume.h */,
@@ -2081,7 +2057,7 @@
 				D8F247F309AD3F8C00B96D0D /* Metro.h in Headers */,
 				D8F247F409AD3F8C00B96D0D /* MetroInspector.h in Headers */,
 				D8F247F509AD3F8C00B96D0D /* MultiView.h in Headers */,
-				D8F247F609AD3F8C00B96D0D /* mux.h in Headers */,
+				D8F247F609AD3F8C00B96D0D /* DrawingFunctions.h in Headers */,
 				D8F247F709AD3F8C00B96D0D /* Neume.h in Headers */,
 				D8F247F809AD3F8C00B96D0D /* NeumeInspector.h in Headers */,
 				D8F247F909AD3F8C00B96D0D /* NeumeNew.h in Headers */,
@@ -2164,36 +2140,6 @@
 				D8F247B309AD280C00B96D0D /* PBXBuildRule */,
 				D8F247B409AD280C00B96D0D /* PBXBuildRule */,
 			);
-			buildSettings = {
-				CC = "/usr/bin/gcc-3.3";
-				CPLUSPLUS = "/usr/bin/g++-3.3";
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = /Local/Users/leigh/Sources/Music/Calliope/Source/CalliopePropertyListCoders;
-				FRAMEWORK_VERSION = A;
-				GCC_VERSION = 3.x;
-				HEADER_SEARCH_PATHS = (
-					"$(LOCAL_LIBRARY_DIR)/Frameworks",
-					"~/Sources/Music/Calliope/Source",
-					/Local/Users/leigh/Sources/Music/Calliope/Source,
-					"~/Sources/Music/Calliope/Source/CalliopePropertyListCoders.fproj",
-				);
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LIBRARY_SEARCH_PATHS = /Apps/Calliope/CalliopeThreeStateButton;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOL_FLAGS = "";
-				OTHER_REZFLAGS = "";
-				PRINCIPAL_CLASS = "";
-				PRODUCT_NAME = CalliopePropertyListCoders;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = framework;
-			};
 			dependencies = (
 			);
 			name = "CalliopePropertyListCoders (Framework)";
@@ -2215,33 +2161,6 @@
 			);
 			buildRules = (
 			);
-			buildSettings = {
-				CC = "/usr/bin/gcc-3.3";
-				CPLUSPLUS = "/usr/bin/g++-3.3";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(LOCAL_LIBRARY_DIR)/Frameworks",
-					"~/Sources/Music/Calliope/Source/CalliopePropertyListCoders",
-				);
-				HEADER_SEARCH_PATHS = (
-					"$(LOCAL_LIBRARY_DIR)/Frameworks",
-					"~/Sources/Music/Calliope/Source",
-					/Local/Users/leigh/Sources/Music/Calliope/Source,
-					"~/Sources/Music/Calliope/Source/CalliopePropertyListCoders",
-				);
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "";
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = Calliope;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = app;
-			};
 			dependencies = (
 			);
 			name = "Calliope (Application)";
@@ -2256,12 +2175,6 @@
 		D8FD971D0483CDC800A80164 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = D8F2446E09AD250900B96D0D /* Build configuration list for PBXProject "Calliope" */;
-			buildSettings = {
-			};
-			buildStyles = (
-				D8FD92230483CDC700A80164 /* Development */,
-				D8FD92240483CDC700A80164 /* Deployment */,
-			);
 			hasScannedForEncodings = 1;
 			mainGroup = D8FD92210483CDC700A80164 /* Calliope */;
 			productRefGroup = D8FD922C0483CDC700A80164 /* Products */;

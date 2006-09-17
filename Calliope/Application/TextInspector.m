@@ -8,7 +8,7 @@
 #import "Staff.h"
 #import "TextVarCell.h"
 #import <AppKit/AppKit.h>
-#import "mux.h"
+#import "DrawingFunctions.h"
 
 @implementation TextInspector
 

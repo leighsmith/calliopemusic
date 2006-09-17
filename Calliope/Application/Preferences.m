@@ -1,4 +1,4 @@
-/*! $Id:$ */
+/*! $Id$ */
 #import <AppKit/AppKit.h>
 #import "Preferences.h"
 #import "DrawApp.h"
@@ -7,7 +7,7 @@
 #import "GVFormat.h"
 #import "PrefBlock.h"
 #import "MultiView.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 
 @implementation Preferences

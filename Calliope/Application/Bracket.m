@@ -8,7 +8,7 @@
 #import "Graphic.h"
 #import "Bracket.h"
 #import "BrackInspector.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import <Foundation/NSArray.h>
 #import <AppKit/NSFont.h>
 
@@ -232,8 +232,6 @@ static void displink(System *sys, int m)
     cline(x, ymin, x, ymax, 1.0, m);
   }
 }
-
-extern void cbrace(float x0, float y0, float xn, float yn, float size, int mode);
 
 - drawMode: (int) m
 {

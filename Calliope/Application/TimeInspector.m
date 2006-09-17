@@ -4,7 +4,7 @@
 #import "GraphicView.h"
 #import "GVSelection.h"
 #import "TimeSig.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import <AppKit/AppKit.h>
 
 @implementation TimeInspector

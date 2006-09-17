@@ -20,7 +20,7 @@
 #import "GNote.h"
 #import "GNChord.h"
 #import "NoteHead.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 
 #import <Foundation/NSArray.h>
 

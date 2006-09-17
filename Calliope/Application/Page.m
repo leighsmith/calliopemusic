@@ -5,7 +5,7 @@
 #import "Runner.h"
 #import "Margin.h"
 #import "GVFormat.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 #import "DrawApp.h"
 #import "OpusDocument.h"

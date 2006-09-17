@@ -3,7 +3,7 @@
 #import "PrefBlock.h"
 #import "GVPerform.h"
 #import "Preferences.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 #import <AppKit/AppKit.h>
 

@@ -6,7 +6,7 @@
 #import "GraphicView.h"
 #import "GVSelection.h"
 #import <AppKit/AppKit.h>
-#import "mux.h"
+#import "DrawingFunctions.h"
 
 @implementation KeyInspector
 

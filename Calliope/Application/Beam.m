@@ -1,6 +1,6 @@
 #import "Beam.h"
 #import "BeamInspector.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 #import "GNote.h"
 #import "GNChord.h"

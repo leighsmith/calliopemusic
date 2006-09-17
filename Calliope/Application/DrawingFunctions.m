@@ -22,7 +22,7 @@
 */
 
 #import <AppKit/AppKit.h>
-#import "mux.h"
+#import "DrawingFunctions.h"
 
 
 #define BRANGLE   (30.0)  /* bracket tilt = BRANGLE * aspect ratio */
@@ -722,20 +722,46 @@ void ccircle(float x, float y, float r, float a1, float a2, float w, int mode)
     }
 }
 
+void PSellipse(float cx, float cy, float rx, float ry, float a1, float a2)
+{
+    NSLog(@"Called PSellipse(), needs implementation\n");
+    
+    /*
+     arc x y r ang1 ang2 arc - 
+     
+     appends a counterclockwise arc of a circle to the current path, possibly preceded by a straight line segment.
+     The arc has (x, y) as center, r as radius, ang1 the angle of a vector from (x, y) of length r to the first endpoint of the arc,
+     and ang2 the angle of a vector from (x, y) of length r to the second endpoint of the arc. 
+     */ 
+    
+    /*
+     defineps PSellipse(float cx, cy, rx, ry, a1, a2)
+     matrix currentmatrix
+     cx cy moveto
+     currentpoint translate
+     rx ry scale
+     newpath
+     0 0 1 a1 a2 arc
+     setmatrix
+     endps
+     */ 
+}
+
 
 /* draw (part of) an ellipse */
 void cellipse(float cx, float cy, float rx, float ry, float a1, float a2, float w, int mode)
 {
-    if (NOPRINT(mode)) return;
-    if (mode)
-    {
+    if (NOPRINT(mode)) 
+	return;
+    if (mode) {
+	NSBezierPath *ellipsePath = [NSBezierPath bezierPath];
+	
 	PSellipse(cx, cy, rx, ry, a1, a2);
 	[modegray[mode] set];
-	PSsetlinewidth(w); // [path setLineWith: w];
-	PSstroke(); // [path stroke];
+	PSsetlinewidth(w); // [ellipsePath setLineWith: w];
+	PSstroke(); // [ellipsePath stroke];
     }
-    else
-    {
+    else {
 	w *= 0.5;
 	unionrect(cx - rx - w, cy - ry - w, 2 * rx + w, 2 * ry + w);
     }
@@ -1330,7 +1356,7 @@ void cbrack(int i, int p, float px, float py, float qx, float qy, float th, floa
 		    cmakeline(qx, qy, qx - d, qy, m);
 		    break;
 	    }
-		cstrokeline(th, m);
+	    cstrokeline(th, m);
 	    break;
     }
 }

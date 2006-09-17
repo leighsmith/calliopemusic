@@ -18,7 +18,7 @@
 #import "TextGraphic.h"
 #import "Margin.h"
 #import "Page.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 #import "FileCompatibility.h"
 

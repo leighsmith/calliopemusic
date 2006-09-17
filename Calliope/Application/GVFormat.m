@@ -28,7 +28,7 @@
 #import "Runner.h"
 #import "Range.h"
 #import "TimeSig.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "ProgressDisplay.h"
 
 @implementation GraphicView(GVFormat)

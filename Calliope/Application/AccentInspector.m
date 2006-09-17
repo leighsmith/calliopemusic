@@ -7,7 +7,7 @@
 #import "OpusDocument.h"
 #import "GraphicView.h"
 #import "GVSelection.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import <AppKit/NSMatrix.h>
 #import <AppKit/NSButton.h>
 #import <Foundation/NSArray.h>

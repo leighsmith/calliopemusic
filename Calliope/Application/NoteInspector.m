@@ -10,7 +10,7 @@
 #import "GVCommands.h"
 #import "CallInst.h"
 #import "CallPart.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 #import <AppKit/AppKit.h>
 

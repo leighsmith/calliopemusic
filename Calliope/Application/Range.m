@@ -2,7 +2,7 @@
 #import "RangeInspector.h"
 #import "Staff.h"
 #import "StaffObj.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 
 @implementation Range

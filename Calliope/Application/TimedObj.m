@@ -5,7 +5,7 @@
 #import "NoteHead.h"
 #import <AppKit/AppKit.h>
 #import <Foundation/NSArray.h>
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 
 @implementation TimedObj

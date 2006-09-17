@@ -5,7 +5,7 @@
 #import "TupleInspector.h"
 #import "NoteGroupInspector.h"
 #import "Beam.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 #import "GNote.h"
 #import "GraphicView.h"
@@ -484,14 +484,11 @@ static float braoffy[2][2] =
   [self setTuple: 0 : 0];
   [self recalc];
   return YES;
-  
 }
 
 /* draw the old fashioned tie notation */
 
 static float sluroffy[2] = { 1.0, -1.0};
-
-extern void ccurve(float x0, float y0, float x3, float y3, float x1, float y1, float x2, float y2, float x4, float y4, float x5, float y5, float th, int dash, int mode);
 
 - drawBow: (int) a : (float) h : (float) x0 : (float) y0 : (float) xe1 : (float) ye1 : (int) m
 {

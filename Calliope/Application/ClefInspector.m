@@ -12,7 +12,7 @@
 #import <AppKit/NSMatrix.h>
 #import <AppKit/NSButton.h>
 #import <Foundation/NSArray.h>
-#import "mux.h"
+#import "DrawingFunctions.h"
 
 
 @implementation ClefInspector

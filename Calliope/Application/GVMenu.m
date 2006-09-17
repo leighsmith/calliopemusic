@@ -3,7 +3,7 @@
 #import "GVMenu.h"
 #import "GVCommands.h"
 #import "GNote.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 
 @implementation GraphicView(NSMenu)

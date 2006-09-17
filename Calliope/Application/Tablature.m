@@ -3,7 +3,7 @@
 #import "DrawApp.h"
 #import "OpusDocument.h"
 #import "GVPerform.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 #import "Staff.h"
 #import "CallInst.h"

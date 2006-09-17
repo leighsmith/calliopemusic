@@ -7,7 +7,7 @@
 #import <AppKit/NSMatrix.h>
 #import <AppKit/NSForm.h>
 #import <Foundation/NSArray.h>
-#import "mux.h"
+#import "DrawingFunctions.h"
 
 @implementation BlockInspector
 

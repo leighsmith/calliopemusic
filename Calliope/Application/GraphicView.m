@@ -18,7 +18,7 @@
 #import "ImageGraphic.h"
 #import "TextGraphic.h"
 #import "Hanger.h"
-#import "mux.h"
+#import "DrawingFunctions.h"
 #import "muxlow.h"
 #import "GNote.h"
 #import "GNChord.h"
@@ -769,40 +769,38 @@ extern char *typename[NUMTYPES];
 
 - searchFor: (NSPoint) p;
 {
-  System *sys;
-  NSMutableArray *l = [[NSMutableArray alloc] init];
-  int systemIndex, k, theCount;
-  id q, r;
-  float d, dmin=0.0;
-  d = MAXFLOAT;
-  systemIndex = [currentPage topSystemNumber];
-  theCount = [syslist count];
-  while (systemIndex <= [currentPage bottomSystemNumber] && (systemIndex <= theCount))
-  {
-      sys = [syslist objectAtIndex:systemIndex];
-      [sys searchFor: p :l];
-      if ([l count] > 0) break;
-    ++systemIndex;
-  }
-  if ([l count] == 1) r = [l objectAtIndex: 0];
-  else
-  {
-    r = nil;
-    k = [l count];
-    while (k--)
-    {
-      q = [l objectAtIndex: k];
-      d = [q hitDistance: p];
-      if (d < dmin)
-      {
-        d = dmin;
-        r = q;
-      }
+    NSMutableArray *l = [[NSMutableArray alloc] init];
+    int k;
+    id q, r;
+    float d = MAXFLOAT, dmin = 0.0;
+    int systemIndex = [currentPage topSystemNumber];
+    int theCount = [syslist count];
+    
+    while (systemIndex <= [currentPage bottomSystemNumber] && (systemIndex <= theCount)) {
+	System *sys = [syslist objectAtIndex: systemIndex];
+	
+	[sys searchFor: p : l];
+	if ([l count] > 0) 
+	    break;
+	++systemIndex;
     }
-  }
-  [l removeAllObjects];
-  [l release];
-  return r;
+    if ([l count] == 1) 
+	r = [l objectAtIndex: 0];
+    else {
+	r = nil;
+	k = [l count];
+	while (k--) {
+	    q = [l objectAtIndex: k];
+	    d = [q hitDistance: p];
+	    if (d < dmin) {
+		d = dmin;
+		r = q;
+	    }
+	}
+    }
+    [l removeAllObjects];
+    [l release];
+    return r;
 }
 
 
