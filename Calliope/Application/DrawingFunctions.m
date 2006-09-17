@@ -1,15 +1,19 @@
 /*
  $Id$
- Various lowlevel drawing routines
- The mode passed to routines is
- 0 for BB
-	1 print & display ink
-	2 print & display tone 1
-	3 print & display tone 2
-	4 display only invis objects
-	5 display only markers
-	6 display only background
-	7 display only selection
+
+ Various lowlevel drawing routines.
+ 
+ The mode passed to routines is:
+   0 for BB
+   1 print & display ink
+   2 print & display tone 1
+   3 print & display tone 2
+   4 display only invis objects
+   5 display only markers
+   6 display only background
+   7 display only selection
+ TODO This should become an enum.
+ 
  modegray[0] is thus never used.
  Only mode 1,2,3 prints on paper.
  
@@ -17,21 +21,21 @@
  This should become a series of DrawXXX() functions.
 */
 
-#import "mux.h"
 #import <AppKit/AppKit.h>
-
-#import "DrawApp.h" // why?
+#import "mux.h"
 
 
 #define BRANGLE   (30.0)  /* bracket tilt = BRANGLE * aspect ratio */
 #define NOPRINT(m) (![[NSGraphicsContext currentContext] isDrawingToScreen] && noprint[m])
 
-extern NSColor * backShade;
-extern NSColor * selShade;
-extern NSColor * markShade;
-extern NSColor * inkShade;
+// TODO Hmm, these should probably be formally passed in.
+extern NSColor *backShade;
+extern NSColor *selShade;
+extern NSColor *markShade;
+extern NSColor *inkShade;
 
-NSBezierPath *linePath = nil;
+// held as a static for cmakeline and related functions
+static NSBezierPath *linePath = nil;
 
 // TODO font management should be hidden in a class & access controlled to it with labels.
 NSFont *fontdata[NUMCALFONTS];  /* known locations for needed fonts */
@@ -124,7 +128,7 @@ static NSColor * modegray[8];
 
 BOOL modeprint[] = {};
 
-NSRect bb;	/* to accumulate the bounding box */
+NSRect boundingBox;	/* to accumulate the bounding box */
 
 
 /* initialise the graphics stuff */
@@ -270,17 +274,17 @@ float charhalfFGW(NSFont *f, int ch)
 
 void bbinit()
 {
-    bb = NSZeroRect;
+    boundingBox = NSZeroRect;
 }
 
 
 NSRect getbb()
 {
-    return bb;
+    return boundingBox;
 }
 
 
-/* unions the current path (then does a newpath) into bb */
+/* unions the current path (then does a newpath) into boundingBox */
 void unionpath()
 {
     NSRect r;
@@ -291,17 +295,17 @@ void unionpath()
     PSnewpath();
     /*  --llx; ++urx; --lly; ++ury; */
     r = NSMakeRect(llx, lly, urx - llx, ury - lly);
-    bb  = NSUnionRect(r, bb);
+    boundingBox  = NSUnionRect(r, boundingBox);
 }
 
 
-/* unions the argument into bb */
+/* unions the argument into boundingBox */
 void unionrect(float x, float y, float w, float h)
 {
     NSRect r;
     /* --x; --y; w +=2; h+=2; */
     r = NSMakeRect(x, y, w, h);
-    bb  = NSUnionRect(r , bb);
+    boundingBox  = NSUnionRect(r , boundingBox);
 }
 
 
@@ -414,7 +418,6 @@ void unionStringBB(NSRect *b, float x, float y, const char *s, NSFont *f, int j)
 /* draw a character in font f. */
 void drawCharacterInFont(float x, float y, int ch, NSFont *f, int mode)
 {
-
     if (mode) {
 	char s[2];
 	
@@ -423,7 +426,7 @@ void drawCharacterInFont(float x, float y, int ch, NSFont *f, int mode)
 	CAcString(x, y, (const char *) s, f, mode);
     }
     else 
-	unionCharBB(&bb, x, y, ch, f);
+	unionCharBB(&boundingBox, x, y, ch, f);
 }
 
 /* draw a character centred on x and y */
@@ -498,7 +501,7 @@ void DrawTextWithBaselineTies(float x, float y, NSString *stringToDisplay, NSFon
 #endif
     }
     else 
-	unionStringBB(&bb, x, y, [stringToDisplay cString], textFont, 0);
+	unionStringBB(&boundingBox, x, y, [stringToDisplay cString], textFont, 0);
 }
 
 //sb: changed the following from cString to CAcString to avoid confusion.
@@ -587,35 +590,35 @@ void crect(float x, float y, float w, float h, int mode)
 
 
 /* draw a filled rectangle using linewidth (replaces crect) */
-void cfillrect(float x, float y, float w, float h, float lw, int mode)
+void cfillrect(float x, float y, float w, float h, float lineWidth, int mode)
 {
-    float d = lw * 0.5;
+    float d = lineWidth * 0.5;
     
     if (NOPRINT(mode)) 
 	return;
     
     if (mode) {
 	[modegray[mode] set];
-	NSRectFill(NSMakeRect(x - d, y - d, w + lw, h + lw));
+	NSRectFill(NSMakeRect(x - d, y - d, w + lineWidth, h + lineWidth));
     }
     else {
-	unionrect(x - d, y - d, w + lw, h + lw);
+	unionrect(x - d, y - d, w + lineWidth, h + lineWidth);
     }
 }
 
 /* draw an outline rectangle. */
-void coutrect(float x, float y, float w, float h, float lw, int mode)
+void coutrect(float x, float y, float w, float h, float lineWidth, int mode)
 {
     if (NOPRINT(mode)) 
 	return;
     
     if (mode) {
 	[modegray[mode] set];
-	NSFrameRectWithWidth(NSMakeRect(x, y, w, h), lw);
+	NSFrameRectWithWidth(NSMakeRect(x, y, w, h), lineWidth);
     }
     else {
-	float d = lw * 0.5;
-	unionrect(x - d, y - d, w + lw, h + lw);
+	float d = lineWidth * 0.5;
+	unionrect(x - d, y - d, w + lineWidth, h + lineWidth);
     }
 }
 
@@ -626,26 +629,48 @@ void chandle(float x, float y, int m)
     crect(x - HANDSIZE, y - HANDSIZE, 2 * HANDSIZE, 2 * HANDSIZE, (m == 7 ? markmode[0] : m));
 }
 
-void PSslant(float w, float h, float dy, float x, float y)
+/*
+  Was:
+ % width height dy x y slant
+	
+ /slant
+ {
+     moveto
+     2 index 1 index rlineto
+     0 2 index rlineto
+     2 index neg 1 index neg rlineto closepath
+     pop pop pop
+ } bind def
+*/
+NSBezierPath *makeSlantedPath(float width, float height, float dy, float x, float y)
 {
-    NSLog(@"Called PSslant(), needs implementation\n");
+    NSBezierPath *slantPath = [NSBezierPath bezierPath];
+    
+    [slantPath moveToPoint: NSMakePoint(x, y)];
+    [slantPath relativeLineToPoint: NSMakePoint(x, dy)]; // or width height
+    [slantPath relativeLineToPoint: NSMakePoint(0, dy)]; // or 0 width
+    [slantPath relativeLineToPoint: NSMakePoint(-x, -dy)]; // -width -height
+    [slantPath closePath];
+    return slantPath;
 }
 
 /* draw a filled slant */
 void cslant(float x1, float y1, float x2, float y2, float dy, int mode)
 {
-    if (NOPRINT(mode)) return;
-    if (mode)
-    {
+    NSBezierPath *slantedPath;
+
+    if (NOPRINT(mode)) 
+	return;
+    
+    slantedPath = makeSlantedPath(x2 - x1, dy, y2 - y1, x1, y1);
+    [slantedPath setLineWidth: 0];
+
+    if (mode) {
 	[modegray[mode] set];
-	PSslant(x2 - x1, dy, y2 - y1, x1, y1);
-	PSfill();
+	[slantedPath fill];
     }
-    else
-    {
-	PSslant(x2 - x1, dy, y2 - y1, x1, y1);
-	PSsetlinewidth(0);
-	PSstrokepath();
+    else {
+	[slantedPath stroke];
 	NSLog(@"cslant(%f,...,%d)", x1, mode);
 	unionpath();
     }
@@ -653,22 +678,22 @@ void cslant(float x1, float y1, float x2, float y2, float dy, int mode)
 
 
 /* draw an outline slant */
-
-void coutslant(float x1, float y1, float x2, float y2, float dy, float lw, int mode)
+void coutslant(float x1, float y1, float x2, float y2, float dy, float lineWidth, int mode)
 {
-    if (NOPRINT(mode)) return;
-    if (mode)
-    {
-	PSslant(x2 - x1, dy, y2 - y1, x1, y1);
+    NSBezierPath *slantedPath;
+    
+    if (NOPRINT(mode))
+	return;
+    
+    slantedPath = makeSlantedPath(x2 - x1, dy, y2 - y1, x1, y1);
+    [slantedPath setLineWidth: lineWidth];
+
+    if (mode) {	
 	[modegray[mode] set];
-	PSsetlinewidth(lw);
-	PSstroke();
+	[slantedPath stroke]; // was PSstroke();
     }
-    else
-    {
-	PSslant(x2 - x1, dy, y2 - y1, x1, y1);
-	PSsetlinewidth(lw);
-	PSstrokepath();
+    else {
+	[slantedPath stroke]; // was PSstrokepath();
 	NSLog(@"coutslant(%f,...,%d)", x1, mode);
 	unionpath();
     }
@@ -682,11 +707,13 @@ void ccircle(float x, float y, float r, float a1, float a2, float w, int mode)
     if (NOPRINT(mode)) return;
     if (mode)
     {
-	PSnewpath();
+	// NSBezierPath *slantPath = [NSBezierPath bezierPath];
+	PSnewpath(); 
+
 	PSarc(x, y, r, a1, a2);
 	[modegray[mode] set];
-	PSsetlinewidth(w);
-	PSstroke();
+	PSsetlinewidth(w); // [path setLineWidth: w];
+	PSstroke(); // [path stroke];
     }
     else
     {
@@ -704,8 +731,8 @@ void cellipse(float cx, float cy, float rx, float ry, float a1, float a2, float 
     {
 	PSellipse(cx, cy, rx, ry, a1, a2);
 	[modegray[mode] set];
-	PSsetlinewidth(w);
-	PSstroke();
+	PSsetlinewidth(w); // [path setLineWith: w];
+	PSstroke(); // [path stroke];
     }
     else
     {
@@ -733,44 +760,35 @@ void cbrace(float x0, float y0, float xn, float yn, float flourishThickness, int
     flourishThickness = 0.5 * h;
     t = -(h / d);
     u = -((h - flourishThickness) / d);
-    point3.x = x0 + 0.5 * dx - t * dy;
-    point3.y = y0 + 0.5 * dy + t * dx;
+    point3 = NSMakePoint(x0 + 0.5 * dx - t * dy, y0 + 0.5 * dy + t * dx);
     c2x = 0.5 - 0.05;
     c2y = 0.05;
     c1x = 0.1;
     c1y = t - 0.05;
-    point2.x = x0 + c2x * dx - c2y * dy;
-    point2.y = y0 + c2x * dy + c2y * dx;
-    point1.x = x0 + c1x * dx - c1y * dy;
-    point1.y = y0 + c1x * dy + c1y * dx;
+    point2 = NSMakePoint(x0 + c2x * dx - c2y * dy, y0 + c2x * dy + c2y * dx);
+    point1 = NSMakePoint(x0 + c1x * dx - c1y * dy, y0 + c1x * dy + c1y * dx);
     [bracePath moveToPoint: NSMakePoint(x0, y0)];
     [bracePath curveToPoint: point1 controlPoint1: point2 controlPoint2: point3];
     c1x = 1.0 - 0.1;
     c1y = t - 0.05;
     c2x = 0.5 + 0.05;
     c2y = 0.05;
-    point2.x = x0 + c2x * dx - c2y * dy;
-    point2.y = y0 + c2x * dy + c2y * dx;
-    point1.x = x0 + c1x * dx - c1y * dy;
-    point1.y = y0 + c1x * dy + c1y * dx;
+    point2 = NSMakePoint(x0 + c2x * dx - c2y * dy, y0 + c2x * dy + c2y * dx);
+    point1 = NSMakePoint(x0 + c1x * dx - c1y * dy, y0 + c1x * dy + c1y * dx);
     [bracePath curveToPoint: point2 controlPoint1: point1 controlPoint2: NSMakePoint(xn, yn)];
     c1x = 1.0 - 0.1;
     c1y = u - 0.05;
     c2x = 0.5 + 0.05;
     c2y = (u - t) + 0.05;
-    point2.x = x0 + c2x * dx - c2y * dy;
-    point2.y = y0 + c2x * dy + c2y * dx;
-    point1.x = x0 + c1x * dx - c1y * dy;
-    point1.y = y0 + c1x * dy + c1y * dx;
+    point2 = NSMakePoint(x0 + c2x * dx - c2y * dy, y0 + c2x * dy + c2y * dx);
+    point1 = NSMakePoint(x0 + c1x * dx - c1y * dy, y0 + c1x * dy + c1y * dx);
     [bracePath curveToPoint: point1 controlPoint1: point2 controlPoint2: point3];
     c2x = 0.5 - 0.05;
     c2y = (u - t) + 0.05;
     c1x = 0.1;
     c1y = u - 0.05;
-    point2.x = x0 + c2x * dx - c2y * dy;
-    point2.y = y0 + c2x * dy + c2y * dx;
-    point1.x = x0 + c1x * dx - c1y * dy;
-    point1.y = y0 + c1x * dy + c1y * dx;
+    point2 = NSMakePoint(x0 + c2x * dx - c2y * dy, y0 + c2x * dy + c2y * dx);
+    point1 = NSMakePoint(x0 + c1x * dx - c1y * dy, y0 + c1x * dy + c1y * dx);
     [bracePath curveToPoint: point2 controlPoint1: point1 controlPoint2: NSMakePoint(x0, y0)];
     [bracePath closePath];
     if (mode)
@@ -787,13 +805,26 @@ void cbrace(float x0, float y0, float xn, float yn, float flourishThickness, int
 }
 
 
-void ccurve(float x0, float y0, float x3, float y3, float x1, float y1, float x2, float y2, float x4, float y4, float x5, float y5, float th, int dash, int mode)
+void ccurve(float x0, float y0, 
+	    float x3, float y3, 
+	    float x1, float y1, 
+	    float x2, float y2, 
+	    float x4, float y4, 
+	    float x5, float y5, 
+	    float th, int dash, int mode)
 {
     NSBezierPath *curvePath = [NSBezierPath bezierPath];
+    NSPoint fromPoint = NSMakePoint(x0, y0),
+	    forwardControlPoint1 = NSMakePoint(x1, y1),
+	    forwardControlPoint2 = NSMakePoint(x2, y2),
+	    toPoint = NSMakePoint(x3, y3),
+	    reverseControlPoint2 = NSMakePoint(x4, y4),
+	    reverseControlPoint1 = NSMakePoint(x5, y5);
 
-    if (NOPRINT(mode)) return;
-    [curvePath moveToPoint: NSMakePoint(x0, y0)];
-    [curvePath curveToPoint: NSMakePoint(x1, y1) controlPoint1: NSMakePoint(x2, y2) controlPoint2: NSMakePoint(x3, y3)];
+    if (NOPRINT(mode)) 
+	return;
+    [curvePath moveToPoint: fromPoint];
+    [curvePath curveToPoint: toPoint controlPoint1: forwardControlPoint1 controlPoint2: forwardControlPoint2];
     if (dash) {
 	if (mode) {
 	    [modegray[mode] set];
@@ -807,7 +838,7 @@ void ccurve(float x0, float y0, float x3, float y3, float x1, float y1, float x2
 	}
 	return;
     }
-    [curvePath curveToPoint: NSMakePoint(x5, y5) controlPoint1: NSMakePoint(x4, y4) controlPoint2: NSMakePoint(x0, y0)];
+    [curvePath curveToPoint: fromPoint controlPoint1: reverseControlPoint1 controlPoint2: reverseControlPoint2];
     [curvePath closePath];
     if (mode) {
 	[modegray[mode] set];
@@ -932,7 +963,7 @@ void ctie(float cx, float cy, float d, float h, float th, float a, float f, int 
 	if (mode)
 	{
 	    [modegray[mode] set];
-	    PSfill();
+	    PSfill(); // [path fill];
 	}
 	else
 	{
