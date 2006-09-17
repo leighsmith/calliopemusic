@@ -987,15 +987,15 @@ extern char *typename[NUMTYPES];
 
 /* the Press Tools */
 
-- pressTool: (int) t : (int) arg
+- pressTool: (int) t withArgument: (int) arg
 {
     NSRect b0, b1;
     
     [self selectionHandBBox: &b0];
-    if (![Graphic createMember: (int) t : self : arg])
-	NSLog(@"pressTool: Could not create member");
+    if (![Graphic canCreateGraphicOfType: t asMemberOfView: self withArgument: arg])
+	NSLog(@"pressTool: Could not create tool %d as member of graphic view with argument %d", t, arg);
     [self selectionHandBBox: &b1];
-    b0  = NSUnionRect(b1 , b0);
+    b0 = NSUnionRect(b1, b0);
     [self cache: b0];
     [[self window] flushWindow];
     [self dirty];
@@ -1443,10 +1443,10 @@ static void drawHorz(float x, float y, float w, NSRect r)
   switch (cst = *[[event characters] cString])
   {
       case 'b': /* 2:   B */
-      [self pressTool: BEAM : 0];
+      [self pressTool: BEAM withArgument: 0];
       break;
       case 't': /* 20:   T */
-      [self pressTool: TIENEW : 0];
+      [self pressTool: TIENEW withArgument: 0];
       break;
       case 'n': /*14:  N */
       break;

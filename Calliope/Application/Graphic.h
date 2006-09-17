@@ -1,4 +1,4 @@
-/* $Id:$ */
+/* $Id$ */
 #import "winheaders.h"
 #import <Foundation/Foundation.h>
 #import <AppKit/AppKit.h>
@@ -53,8 +53,14 @@ extern id CrossCursor;
 
 + cursor;
 + getInspector: (int) t;
+
+// + graphicOfType: (int) t asMemberOfView: (GraphicView *) v atPoint: (NSPoint) pt withSystem: (System *) sys withArgument: (int) arg1 andArgument: (int) arg2;
 + createMember: (GraphicView *) v : (int) t : (NSPoint) pt : (System *) sys : (int) arg1 : (int) arg2;
-+ (BOOL) createMember: (int) t : (GraphicView *) v : (int) arg;
+
+/*!
+  @result Returns YES if able to create a Graphic within the view using the argument, NO if unable to.
+ */
++ (BOOL) canCreateGraphicOfType: (int) t asMemberOfView: (GraphicView *) v withArgument: (int) arg;
 + myInspector;
 - myInspector;
 - init;
@@ -73,16 +79,16 @@ extern id CrossCursor;
 - (void)moveBy:(float)x :(float)y;
 - verseWidths: (float *) tb : (float *) ta;
 - (BOOL) performKey: (int) c;
-- (int)keyDownString:(NSString *)cc;
+- (int) keyDownString:(NSString *)cc;
 - (BOOL) changeVFont: (NSFont *) f : (BOOL) all;
 - (BOOL) getXY: (float *) x : (float *) y;
 - (float) headY: (int) n;
-- (BOOL)selectMe: (NSMutableArray *) l : (int) drag :(int)active;
+- (BOOL) selectMe: (NSMutableArray *) l : (int) drag :(int)active;
 - (BOOL) move: (float) dx : (float) dy : (NSPoint) p : sys : (int) alt;
 - moveFinished: (GraphicView *) v;
-- resize:(NSEvent *)event in: view;
+- resize: (NSEvent *)event in: view;
 - traceBounds;
-- draw:(NSRect)rect nonSelectedOnly: (BOOL) nso;
+- draw: (NSRect) rect nonSelectedOnly: (BOOL) nso;
 - (float) modifyTick: (float) t;
 - (BOOL) isDangler;
 - (BOOL) isEditable;
@@ -109,6 +115,11 @@ extern id CrossCursor;
 - (BOOL) changeVFont: (int) fid;
 - (int) noteCode: (int) a;
 - (BOOL) hasEnclosures;
+
+/*!
+  @brief used by some subclasses to initialise the hanger.
+ */
+- presetHanger;
 
 /*!
   @brief Returns an immutable array of Enclosures.

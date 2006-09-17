@@ -4,11 +4,11 @@
  Various lowlevel drawing routines.
  
  The mode passed to routines is:
-   0 for BB
+   0 for BB (bounding box?)
    1 print & display ink
    2 print & display tone 1
    3 print & display tone 2
-   4 display only invis objects
+   4 display only invisible objects
    5 display only markers
    6 display only background
    7 display only selection
@@ -701,22 +701,20 @@ void coutslant(float x1, float y1, float x2, float y2, float dy, float lineWidth
 
 
 /* draw (part of) a circle centred on x and y */
-
 void ccircle(float x, float y, float r, float a1, float a2, float w, int mode)
 {
-    if (NOPRINT(mode)) return;
-    if (mode)
-    {
-	// NSBezierPath *slantPath = [NSBezierPath bezierPath];
-	PSnewpath(); 
+    if (NOPRINT(mode))
+	return;
+    
+    if (mode) {
+	NSBezierPath *circlePath = [NSBezierPath bezierPath];
 
-	PSarc(x, y, r, a1, a2);
+	[circlePath appendBezierPathWithArcWithCenter: NSMakePoint(x, y) radius: r startAngle: a1 endAngle: a2];
 	[modegray[mode] set];
-	PSsetlinewidth(w); // [path setLineWidth: w];
-	PSstroke(); // [path stroke];
+	[circlePath setLineWidth: w];
+	[circlePath stroke];
     }
-    else
-    {
+    else {
 	w *= 0.5;
 	unionrect(x - r - w, y - r - w, 2 * r + w, 2 * r + w);
     }
@@ -777,6 +775,7 @@ void cbrace(float x0, float y0, float xn, float yn, float flourishThickness, int
     
     if (NOPRINT(mode)) 
 	return;
+    
     dx = xn - x0;
     dy = yn - y0;
     d = hypot(dx, dy);
@@ -966,7 +965,9 @@ void cflat(float x0, float y0, float x1, float y1, float c1x, float c1y, float c
 void ctie(float cx, float cy, float d, float h, float th, float a, float f, int dash, int mode)
 {
     float hmin, r, dx, dy;
-    if (NOPRINT(mode)) return;
+    
+    if (NOPRINT(mode))
+	return;
     hmin = h - th;
     r = 0.5 * d;
     dy = r * sin(10.0 / (180.0 * 3.14159));
@@ -1033,8 +1034,8 @@ static void cwavev(float x, float y0, float y1, int sz, int m)
 {
     NSFont *f = musicFont[1][sz];
     float ch = 0.5 * charFGH(f, 103);
-    int n;
-    n = ((y1 - y0) / ch) + 0.5;
+    int n = ((y1 - y0) / ch) + 0.5;
+    
     if (n < 1) n = 1;
     while (n--)
     {
@@ -1073,8 +1074,9 @@ static void cspline(float x0, float y0, float x3, float y3, float th, int dash, 
 
 static void cflatbow(float px, float py, float qx, float qy, float th, int m)
 {
-    float d, t;
-    d = hypot(qx - px, qy - py);
+    float t;
+    float d = hypot(qx - px, qy - py);
+    
     if (d < 5) d = 5;
     t = d * 0.25;
     if (t > 12.0) t = 12.0;
@@ -1130,7 +1132,7 @@ void cbrack(int i, int p, float px, float py, float qx, float qy, float th, floa
 		    cmakeline(qx, qy, qx - d, qy, m);
 		    break;
 	    }
-		cstrokeline(th, m);
+	    cstrokeline(th, m);
 	    break;
 	case 1:  /* round bracket */
 	    switch(p)

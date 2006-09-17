@@ -758,36 +758,35 @@ struct toolData toolCodes[NUMTOOLS] =
 
 
 /* target of the Tools panels */
-
 - setCurrentTool: sender
 {
     OpusDocument *currdoc = documentInWindow([NSApp mainWindow]);
     id sel = [sender selectedCell];
     int flags = [sel mouseDownFlags];
-    id insp, p;
+    
     currentTool = [sel tag];
-    if (flags & NSCommandKeyMask)
-    {
-	insp = [Graphic getInspector: toolCodes[currentTool].type];
-	if (insp == nil) NSLog(@"setCurrentTool: inspector is nil");
-	else
-	{
-	    p = [self getInspectorForClass: insp loadInspector: YES];
-	    if (p)
-	    {
+    if (flags & NSCommandKeyMask) { // Command clicked the tool.
+	id inspectorClass = [Graphic getInspector: toolCodes[currentTool].type];
+	
+	if (inspectorClass == nil) 
+	    NSLog(@"setCurrentTool: inspectorClass is nil");
+	else {
+	    id p = [self getInspectorForClass: inspectorClass loadInspector: YES];
+	    
+	    if (p) {
 		[p makeKeyAndOrderFront:self];
 		[p presetTo: toolCodes[currentTool].arg1];
 	    }
-	    else NSLog(@"Couldn't find inspector\n");
+	    else 
+		NSLog(@"Couldn't find inspector\n");
 	}
 	[self resetTool];
     }
-    else
-    {
-	if (toolCodes[currentTool].press != 1) [currdoc resetCursor];
-	else
-	{
-	    [[currdoc graphicView] pressTool: toolCodes[currentTool].type : toolCodes[currentTool].arg1];
+    else {
+	if (toolCodes[currentTool].press != 1) 
+	    [currdoc resetCursor];
+	else {
+	    [[currdoc graphicView] pressTool: toolCodes[currentTool].type withArgument: toolCodes[currentTool].arg1];
 	    [self resetTool];
 	}
     }
@@ -804,7 +803,7 @@ struct toolData toolCodes[NUMTOOLS] =
     if (toolCodes[currentTool].press != 1) 
 	[currdoc resetCursor];
     else {
-	[[currdoc graphicView] pressTool: toolCodes[currentTool].type : toolCodes[currentTool].arg1];
+	[[currdoc graphicView] pressTool: toolCodes[currentTool].type withArgument: toolCodes[currentTool].arg1];
 	[self resetTool];
     }
     return self;

@@ -257,18 +257,32 @@ extern void cmakeline(float x1, float y1, float x2, float y2, int mode);
 extern void coutrect(float x, float y, float w, float h, float lw, int mode);
 extern void chandle(float x, float y, int mode);
 extern void crect(float x, float y, float w, float h, int mode);
-extern void ccircle(float x, float y, float r, float a1, float a2, float w, int mode);
+
+/*!
+  @function ccircle
+  @brief draw (part of) a circle centred on x and y.
+ */
+void ccircle(float x, float y, float r, float a1, float a2, float w, int mode);
 extern void cellipse(float cx, float cy, float rx, float ry, float a1, float a2, float w, int mode);
 extern void cslant(float x1, float y1, float x2, float y2, float dy, int mode);
 extern void coutslant(float x1, float y1, float x2, float y2, float dy, float lw, int mode);
 
 /*!
   @function cbrace
+  @brief draw a brace.
+  @param flourishThickness is max allowed thickness of the flourish.
  */
-void cbrace(float x0, float y0, float xn, float yn, float size, int mode);
+void cbrace(float x0, float y0, float xn, float yn, float flourishThickness, int mode);
 
 /*!
   @function ccurve
+  @brief Draw a curve forward and backward, potentially altering the curve at each stage.
+  @param x0, y0 point to draw from.
+  @param x3, y3 point to draw to.
+  @param x1, y1 forward control point 1.
+  @param x2, y2 forward control point 2.
+  @param x4, y4 reverse control point 2.
+  @param x5, y5 reverse control point 1.
  */ 
 void ccurve(float x0, float y0, float x3, float y3, float x1, float y1, float x2, float y2, float x4, float y4, float x5, float y5, float th, int dash, int mode);
 

@@ -104,7 +104,11 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
 - cache:(NSRect)rect;
 
 - setupGrabCursor;
-- pressTool: (int) t : (int) a;
+
+/*!
+  @brief method to initiate the use of the given tool t.
+ */
+- pressTool: (int) t withArgument: (int) a;
 
 /*!
   Returns an NSData instance of the nominated region in the requested format.

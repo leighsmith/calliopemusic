@@ -492,7 +492,7 @@ static NSString *stylescratch;
 
 - joinChords: sender
 {
-  return [self pressTool: CHORDGROUP : 0];
+  return [self pressTool: CHORDGROUP withArgument: 0];
 }
 
 extern char *typename[NUMTYPES];

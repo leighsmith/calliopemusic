@@ -1032,7 +1032,7 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
         [view deselectAll: self];
         if (selver >= 0 && selver < [verses count]) vv = [verses objectAtIndex:selver];
         [view selectObj: vv];
-        [view pressTool: ENCLOSURE : 0];
+        [view pressTool: ENCLOSURE withArgument: 0];
         r = YES;
         break;
     case 'r':

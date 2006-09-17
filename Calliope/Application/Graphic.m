@@ -206,6 +206,11 @@ id CrossCursor = nil;	/* global since subclassers may need it */
   return g;
 }
 
+// The work is done by subclasses.
+- presetHanger
+{
+    return self;
+}
 
 /* tie up a pair of chords.  Return NO if need to use default method */
 
@@ -287,56 +292,46 @@ id CrossCursor = nil;	/* global since subclassers may need it */
   return r;
 }
 
-
-+ (BOOL) createMember: (int) t : (GraphicView *) v : (int) arg
++ (BOOL) canCreateGraphicOfType: (int) t asMemberOfView: (GraphicView *) v withArgument: (int) arg 
 {
-  Graphic *p;
-  NSMutableArray *a;
-  int i;
-  if (t == TIENEW)
-  {
-    if ([self tieChord: v]) return YES;
-  }
-  if (t == ACCENT)
-  {
-    if (![self makeAccents: v]) return NO;
-  }
-  else
-  {
-    p = [self graphicOfType: t];
-    if ([p proto: v : NSZeroPoint : nil : nil : nil : arg] == nil)
-    {
-      [p release];
-      return NO;
+    NSMutableArray *a;
+    int i;
+    
+    if (t == TIENEW) {
+	if ([self tieChord: v]) 
+	    return YES;
     }
-    /* we release p here because we don't want to hold it! It should have been retained by
-     * some other object eg staff, system, or as an enclosure.
-     */
-    [p release];
-    [v deselectAll: v];
-    if ([p canSplit] && (a = [p willSplit]))
-    {
-      [p removeObj];
-      for (i = 0; i < 2; i++)
-      {
-        p = [a objectAtIndex:i];
-        [p presetHanger];
+    if (t == ACCENT) {
+	if (![self makeAccents: v]) 
+	    return NO;
+    }
+    else {
+	Graphic *p = [self graphicOfType: t];
+	
+	if ([p proto: v : NSZeroPoint : nil : nil : nil : arg] == nil) {
+	    return NO;
+	}
+	[v deselectAll: v];
+	if ([p canSplit] && (a = [p willSplit])) {
+	    [p removeObj];
+	    for (i = 0; i < 2; i++) {
+		p = [a objectAtIndex: i];
+		[p presetHanger];
+		[v selectObj: p];
+	    }
+	    [a autorelease];
+	}
+	else {
+	    [p presetHanger];
+	}
+	[p recalc];
 	[v selectObj: p];
-      }
-      [a autorelease];
+	if (p->gFlags.subtype == LABEL) {
+	    if ([p respondsToSelector: @selector(editMe:)])
+		[(TextGraphic *)p performSelector: @selector(editMe:) withObject: v afterDelay: 0];
+	}
     }
-    else
-    {
-      [p presetHanger];
-    }
-    [p recalc];
-    [v selectObj: p];
-    if (p->gFlags.subtype == LABEL) {
-        if ([p respondsToSelector:@selector(editMe:)])
-            [(TextGraphic *)p performSelector:@selector(editMe:) withObject:v afterDelay:0];
-    }
-  }
-  return YES;
+    return YES;
 }
 
 
