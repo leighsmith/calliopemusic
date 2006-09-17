@@ -261,4 +261,45 @@ extern void ccircle(float x, float y, float r, float a1, float a2, float w, int 
 extern void cellipse(float cx, float cy, float rx, float ry, float a1, float a2, float w, int mode);
 extern void cslant(float x1, float y1, float x2, float y2, float dy, int mode);
 extern void coutslant(float x1, float y1, float x2, float y2, float dy, float lw, int mode);
+
+/*!
+  @function cbrace
+ */
+void cbrace(float x0, float y0, float xn, float yn, float size, int mode);
+
+/*!
+  @function ccurve
+ */ 
+void ccurve(float x0, float y0, float x3, float y3, float x1, float y1, float x2, float y2, float x4, float y4, float x5, float y5, float th, int dash, int mode);
+
+/*!
+  @function cflat
+ */ 
+void cflat(float x0, float y0, float x1, float y1, float c1x, float c1y, float c2x, float c2y, float th, int dash, int m);
+
+/*!
+  @function ctie
+ */ 
+void ctie(float cx, float cy, float d, float h, float th, float a, float f, int dash, int mode);
+
+/*!
+  @function cfillrect
+ */ 
+void cfillrect(float x, float y, float w, float h, float lw, int mode);
+
+/*!
+  @function cbrack
+ */ 
+void cbrack(int i, int p, float px, float py, float qx, float qy, float th, float d, int sz, int m);
+
+/*!
+  @function cdashhjog
+ */ 
+void cdashhjog(float x0, float y, float x1, int a, float nat, float th, int m);
+
+/*!
+  @function cenclosure
+ */ 
+void cenclosure(int i, float px, float py, float qx, float qy, float th, int sz, int m);
+
 #endif MUX_H
