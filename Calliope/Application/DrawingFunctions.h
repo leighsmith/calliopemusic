@@ -28,40 +28,40 @@
 #define FONTHMUS 16		/* our id for half-sized music font */
 
 /* gFlags.type */
-
-#define NUMTYPES 31
-
-#define VERSE 0
-#define BRACKET 1
-#define BARLINE 2
-#define TIMESIG 3
-#define NOTE 4
-#define REST 5
-#define CLEF 6
-#define KEY 7
-#define RANGE 8
-#define TABLATURE 9
-#define TEXTBOX 10
-#define BLOCK 11
-#define BEAM 12
-#define TIE 13
-#define METRO 14
-#define ACCENT 15
-#define TUPLE 16
-#define NEUME 17
-#define STAFF 18
-#define SYSTEM 19
-#define RUNNER 20
-#define VOLTA 21
-#define GROUP 22
-#define ENCLOSURE 23
-#define SQUARENOTE 24
-#define CHORDGROUP 25
-#define TIENEW 26
-#define LIGATURE 27
-#define NEUMENEW 28
-#define MARGIN 29
-#define IMAGE 30
+typedef enum {
+    VERSE = 0,
+    BRACKET = 1,
+    BARLINE = 2,
+    TIMESIG = 3,
+    NOTE = 4,
+    REST = 5,
+    CLEF = 6,
+    KEY = 7,
+    RANGE = 8,
+    TABLATURE = 9,
+    TEXTBOX = 10,
+    BLOCK = 11,
+    BEAM = 12,
+    TIE = 13,
+    METRO = 14,
+    ACCENT = 15,
+    TUPLE = 16,
+    NEUME = 17,
+    STAFF = 18,
+    SYSTEM = 19,
+    RUNNER = 20,
+    VOLTA = 21,
+    GROUP = 22,
+    ENCLOSURE = 23,
+    SQUARENOTE = 24,
+    CHORDGROUP = 25,
+    TIENEW = 26,
+    LIGATURE = 27,
+    NEUMENEW = 28,
+    MARGIN = 29,
+    IMAGE = 30,
+    NUMTYPES = 31
+} GraphicType;
 
 /* type codes index array of short bitcodes */
 
@@ -291,10 +291,12 @@ void ccurve(float x0, float y0, float x3, float y3, float x1, float y1, float x2
  */ 
 void cflat(float x0, float y0, float x1, float y1, float c1x, float c1y, float c2x, float c2y, float th, int dash, int m);
 
+#if 1 // obsolete
 /*!
   @function ctie
  */ 
 void ctie(float cx, float cy, float d, float h, float th, float a, float f, int dash, int mode);
+#endif
 
 /*!
   @function cfillrect
