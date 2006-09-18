@@ -47,11 +47,11 @@ id CrossCursor = nil;	/* global since subclassers may need it */
 #define startTimer(timer) if (!timer) { [NSEvent startPeriodicEventsAfterDelay:0.1 withPeriod:0.1]; timer = TRUE ; }
 
 
-+ classFor: (int) t
++ (Class) classFor: (int) t
 {
   id obj;
-  switch(t)
-  {
+  
+  switch(t) {
     case NOTE:
       obj = [GNote class];
       break;
@@ -135,13 +135,13 @@ id CrossCursor = nil;	/* global since subclassers may need it */
 }
 
 
-+ (Graphic *) graphicOfType: (int) t
++ (Graphic *) graphicOfType: (int) typeCode
 {
-    Graphic *obj;
-    Class GraphicSubclass = [self classFor: t];
+    Graphic *obj = nil;
+    Class GraphicSubclass = [self classFor: typeCode];
     
     if (GraphicSubclass == nil) 
-	NSLog(@"missing case in [Graphic graphicOfType: %d]", t);
+	NSLog(@"missing case in [Graphic graphicOfType: %d]", typeCode);
     else 
 	obj = [[[GraphicSubclass alloc] init] autorelease];
     return obj;
@@ -260,53 +260,53 @@ id CrossCursor = nil;	/* global since subclassers may need it */
 
 + (BOOL) makeAccents: (GraphicView *) v
 {
-  NSMutableArray *sl = [v selectedGraphics];
-  NSMutableArray *al;
-  int t, k, r = 0;
-  Accent *a;
-  StaffObj *p;
-  
-  [v canInspectTypeCode: TC_STAFFOBJ : &t];
-  if (t == 0) return 0;
-  al = [[NSMutableArray alloc] init];
-  k = [sl count];
-  while (k--)
-  {
-    p = [sl objectAtIndex:k];
-    if (ISASTAFFOBJ(p))
-    {
-      a = [self graphicOfType: ACCENT];
-      [a proto: v : NSZeroPoint : nil : nil : p : 0];
-      [a recalc];
-      [al addObject: a];
+    NSMutableArray *sl = [v selectedGraphics];
+    NSMutableArray *accentList;
+    int typeCode, accentCount, numberSelected;
+    BOOL r = NO;
+    Accent *a;
+    StaffObj *p;
+    
+    [v canInspectTypeCode: TC_STAFFOBJ : &typeCode];
+    if (typeCode == 0) 
+	return NO;
+    accentList = [[NSMutableArray alloc] init];
+    numberSelected = [sl count];
+    while (numberSelected--) {
+	p = [sl objectAtIndex: numberSelected];
+	if (ISASTAFFOBJ(p)) {
+	    a = (Accent *) [self graphicOfType: ACCENT];
+	    [a proto: v : NSZeroPoint : nil : nil : p : 0];
+	    [a recalc];
+	    [accentList addObject: a];
+	}
     }
-  }
-  k = [al count];
-  if (k > 0)
-  {
-    [v deselectAll: v];
-    while (k--) [v selectObj: [al objectAtIndex:k]];
-    r = 1;
-  }
-  [al autorelease];
-  return r;
+    accentCount = [accentList count];
+    if (accentCount > 0) {
+	[v deselectAll: v];
+	while (accentCount--) 
+	    [v selectObj: [accentList objectAtIndex: accentCount]];
+	r = YES;
+    }
+    [accentList autorelease];
+    return r;
 }
 
-+ (BOOL) canCreateGraphicOfType: (int) t asMemberOfView: (GraphicView *) v withArgument: (int) arg 
++ (BOOL) canCreateGraphicOfType: (int) typeCode asMemberOfView: (GraphicView *) v withArgument: (int) arg 
 {
     NSMutableArray *a;
     int i;
     
-    if (t == TIENEW) {
+    if (typeCode == TIENEW) {
 	if ([self tieChord: v]) 
 	    return YES;
     }
-    if (t == ACCENT) {
+    if (typeCode == ACCENT) {
 	if (![self makeAccents: v]) 
 	    return NO;
     }
     else {
-	Graphic *p = [self graphicOfType: t];
+	Graphic *p = [self graphicOfType: typeCode];
 	
 	if ([p proto: v : NSZeroPoint : nil : nil : nil : arg] == nil) {
 	    return NO;

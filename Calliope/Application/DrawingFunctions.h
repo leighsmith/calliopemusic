@@ -264,7 +264,17 @@ extern void crect(float x, float y, float w, float h, int mode);
  */
 void ccircle(float x, float y, float r, float a1, float a2, float w, int mode);
 extern void cellipse(float cx, float cy, float rx, float ry, float a1, float a2, float w, int mode);
-extern void cslant(float x1, float y1, float x2, float y2, float dy, int mode);
+
+/*!
+  @function cslant
+  @brief draw a filled slant, starting at x1, y1 slanting to x2, y2 of dy thickness.
+ */
+void cslant(float x1, float y1, float x2, float y2, float dy, int mode);
+
+/*!
+  @function coutslant
+  @brief draw an outline slant, starting at x1, y1 slanting to x2, y2 of dy thickness, the outline lw wide.
+ */ 
 extern void coutslant(float x1, float y1, float x2, float y2, float dy, float lw, int mode);
 
 /*!
