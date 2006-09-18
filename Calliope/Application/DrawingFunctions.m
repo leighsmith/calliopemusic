@@ -629,32 +629,19 @@ void chandle(float x, float y, int m)
     crect(x - HANDSIZE, y - HANDSIZE, 2 * HANDSIZE, 2 * HANDSIZE, (m == 7 ? markmode[0] : m));
 }
 
-/*
-  Was:
- % width height dy x y slant
-	
- /slant
- {
-     moveto
-     2 index 1 index rlineto
-     0 2 index rlineto
-     2 index neg 1 index neg rlineto closepath
-     pop pop pop
- } bind def
-*/
-NSBezierPath *makeSlantedPath(float width, float height, float dy, float x, float y)
+static NSBezierPath *makeSlantedPath(float width, float height, float offsetY, float x, float y)
 {
     NSBezierPath *slantPath = [NSBezierPath bezierPath];
     
     [slantPath moveToPoint: NSMakePoint(x, y)];
-    [slantPath relativeLineToPoint: NSMakePoint(x, dy)]; // or width height
-    [slantPath relativeLineToPoint: NSMakePoint(0, dy)]; // or 0 width
-    [slantPath relativeLineToPoint: NSMakePoint(-x, -dy)]; // -width -height
+    [slantPath relativeLineToPoint: NSMakePoint(width, offsetY)];
+    [slantPath relativeLineToPoint: NSMakePoint(0, height)];
+    [slantPath relativeLineToPoint: NSMakePoint(-width, -offsetY)];
     [slantPath closePath];
     return slantPath;
 }
 
-/* draw a filled slant */
+/* draw a filled slant, starting at x1, y1 slanting to x2, y2 of dy thickness */
 void cslant(float x1, float y1, float x2, float y2, float dy, int mode)
 {
     NSBezierPath *slantedPath;
@@ -676,8 +663,7 @@ void cslant(float x1, float y1, float x2, float y2, float dy, int mode)
     }
 }
 
-
-/* draw an outline slant */
+/* draw an outline slant, starting at x1, y1 slanting to x2, y2 of dy thickness */
 void coutslant(float x1, float y1, float x2, float y2, float dy, float lineWidth, int mode)
 {
     NSBezierPath *slantedPath;
@@ -958,7 +944,7 @@ void cflat(float x0, float y0, float x1, float y1, float c1x, float c1y, float c
     }
 }
 
-
+#if 1
 /*
  This goes when Tie goes.
  */
@@ -999,7 +985,7 @@ void ctie(float cx, float cy, float d, float h, float th, float a, float f, int 
     }
     PSgrestore();
 }
-
+#endif
 
 /* draw strings CHUNKSZ at a time (cheaper than xyshow) */
 
