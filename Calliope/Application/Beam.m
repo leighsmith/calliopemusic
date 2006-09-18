@@ -1,3 +1,6 @@
+/* $Id:$ */
+#import <Foundation/Foundation.h>
+#import <AppKit/AppKit.h>
 #import "Beam.h"
 #import "BeamInspector.h"
 #import "DrawingFunctions.h"
@@ -9,10 +12,8 @@
 #import "DrawApp.h"
 #import "OpusDocument.h"
 #import "System.h"
-#import <AppKit/NSFont.h>
-#import <Foundation/NSArray.h>
 
-@implementation Beam:Hanger
+@implementation Beam
 
 #define MINSTEMLEN 4.0		/* minimum stem length within a beam in ss's (sock size) */
 #define NUMBEAMS 32		/* number of distinct slants */
@@ -38,38 +39,39 @@ static Beam *proto;
 int nbeams;
 
 
-+ (void)initialize
++ (void) initialize
 {
-  if (self == [Beam class])
-  {
-      (void)[Beam setVersion: 8];		/* class version, see read: */
-    proto = [Beam alloc];
-    proto->flags.broken = 0;
-  }
-  return;
+    if (self == [Beam class]) {
+	[Beam setVersion: 8];		/* class version, see read: */
+	proto = [[Beam alloc] init];
+	proto->flags.broken = 0;
+    }
+    return;
 }
 
 
 + myInspector
 {
-  return [BeamInspector class];
+    return [BeamInspector class];
 }
 
 
 + myPrototype
 {
-  return proto;
+    return proto;
 }
 
 
 - init
 {
-  [super init];
-  gFlags.type = BEAM;
-  client = nil;
-  flags.broken = 0;
-  flags.taper = 0;
-  return self;
+    self = [super init];
+    if (self != nil) {
+	gFlags.type = BEAM;
+	client = nil;
+	flags.broken = 0;
+	flags.taper = 0;
+    }
+    return self;
 }
 
 
@@ -118,10 +120,10 @@ int nbeams;
 }
 
 
-- (void)dealloc
+- (void) dealloc
 {
-  [client release];
-  { [super dealloc]; return; };
+    [client release];
+    [super dealloc];
 }
 
 
@@ -744,7 +746,7 @@ static int signof(float f)
 }
 
 
-- (BOOL) coordsForHandle: (int) h  asX: (float *) x  andY: (float *) y
+- (BOOL) coordsForHandle: (int) h asX: (float *) x andY: (float *) y
 {
   TimedObj *p;
   if (h == 0)
@@ -763,21 +765,23 @@ static int signof(float f)
 
 - (BOOL) getHandleBBox: (NSRect *) r
 {
-  int h, k;
-  float x, y;
-  NSRect b;
-  k = 0;
-  for (h = 0; h <= 1; h++) if ([self coordsForHandle: h  asX: &x  andY: &y])
-  {
-    if (k == 0) *r = NSMakeRect(x - HANDSIZE, y - HANDSIZE, 2 * HANDSIZE, 2 * HANDSIZE);
-    else
-    {
-      b = NSMakeRect(x - HANDSIZE, y - HANDSIZE, 2 * HANDSIZE, 2 * HANDSIZE);
-      *r  = NSUnionRect(b , *r);
+    int h;
+    BOOL k = NO;
+    float x, y;
+    NSRect b;
+    
+    for (h = 0; h <= 1; h++) {
+	if ([self coordsForHandle: h asX: &x andY: &y]) {
+	    if (k == NO) 
+		*r = NSMakeRect(x - HANDSIZE, y - HANDSIZE, 2 * HANDSIZE, 2 * HANDSIZE);
+	    else {
+		b = NSMakeRect(x - HANDSIZE, y - HANDSIZE, 2 * HANDSIZE, 2 * HANDSIZE);
+		*r  = NSUnionRect(b , *r);
+	    }
+	}
+	k = YES;
     }
-    k = 1;
-  }
-  return k;
+    return k;
 }
 
 
@@ -911,7 +915,11 @@ int getHalfCode(TimedObj *r, int a, int k)
 }
 
 
-- (float) drawBeams: (int) df : (TimedObj *) p : (TimedObj *) q : (int) sz : (int) dflag
+- (float) drawBeams: (int) df 
+    : (TimedObj *) p 
+    : (TimedObj *) q 
+    : (int) sz 
+    : (int) dflag
 {
   int i, k, a, b, lev, bl, w, code;
   float ticks = 0.0, broke;
@@ -968,8 +976,10 @@ int getHalfCode(TimedObj *r, int a, int k)
   }
   ya = m * (xa - x1) + y1;
   yb = m * (xb - x1) + y1;
-  if (sup[a]) bth = th;
-  else  bth = -th;
+  if (sup[a]) 
+    bth = th;
+  else  
+    bth = -th;
   cslant(xa, ya, xb, yb, bth, dflag);
   ymax = ya + (sup[0] ? bsep : -bsep);
   /* do in case of any secondaries */
@@ -1294,39 +1304,43 @@ static void drawTremolo(int n, TimedObj *a, TimedObj *b, float ytrem, int sz, in
 
 - drawMode: (int) m
 {
-  TimedObj *p, *q;
-  int sz;
-  float ytrem, x, y;
-  sz = gFlags.size;
-  if (gFlags.selected && !gFlags.seldrag)
-  {
-    if ([self coordsForHandle: 0  asX: &x  andY: &y]) chandle(x, y, m);
-    if ([self coordsForHandle: 1  asX: &x  andY: &y]) chandle(x, y, m);
-  }
-  if (!client) NSLog(@"will die: client nil (in Beam.m)\n");
-  p = [client objectAtIndex:0];
-  if ([client count] == 1)
-  {
-    if (p->time.body < CROTCHET) ytrem = [self drawSplit: CROTCHET : p : sz : m];
-//    if (flags.dir && [self isGraced]) [self drawBeamGrace: p : q : sz : m];
-//    if (gFlags.subtype) drawTremolo(gFlags.subtype, p, q, -1, sz, m);
+    TimedObj *p, *q;
+    float ytrem, x, y;
+    int sz = gFlags.size;
+    
+    if (gFlags.selected && !gFlags.seldrag) {
+	if ([self coordsForHandle: 0 asX: &x andY: &y]) 
+	    chandle(x, y, m);
+	if ([self coordsForHandle: 1 asX: &x andY: &y]) 
+	    chandle(x, y, m);
+    }
+    if (!client) 
+	NSLog(@"will die: client nil (in Beam.m)\n");
+    p = [client objectAtIndex: 0];
+    if ([client count] == 1) {
+	if (p->time.body < CROTCHET) 
+	    ytrem = [self drawSplit: CROTCHET : p : sz : m];
+	//    if (flags.dir && [self isGraced]) [self drawBeamGrace: p : q : sz : m];
+	//    if (gFlags.subtype) drawTremolo(gFlags.subtype, p, q, -1, sz, m);
+	return self;
+    }
+    q = [client lastObject];
+    if (TOLFLOATEQ(p->x, q->x, 2.0))
+	return self;
+    if (TYPEOF(p) == TABLATURE) {
+	return [self drawTabBeams: CROTCHET + 1 + [[DrawApp currentDocument] getPreferenceAsInt: TABCROTCHET] : p : q : sz : m];
+    }
+    else if (p->time.body < CROTCHET) {
+	ytrem = [self drawBeams: CROTCHET : p : q : sz : m];
+	if (gFlags.subtype) 
+	    drawTremolo(gFlags.subtype, p, q, ytrem, sz, m);
+	/* the following can be used for slashed groups, but is not standard */
+	if (flags.dir && [self isGraced]) 
+	    [self drawBeamGrace: p : q : sz : m];
+    }
+    if (gFlags.subtype) 
+	drawTremolo(gFlags.subtype, p, q, -1, sz, m);
     return self;
-  }
-  q = [client lastObject];
-  if (TOLFLOATEQ(p->x, q->x, 2.0)) return self;
-  if (TYPEOF(p) == TABLATURE)
-  {
-    return [self drawTabBeams: CROTCHET + 1 + [[DrawApp currentDocument] getPreferenceAsInt: TABCROTCHET] : p : q : sz : m];
-  }
-  else if (p->time.body < CROTCHET)
-  {
-    ytrem = [self drawBeams: CROTCHET : p : q : sz : m];
-    if (gFlags.subtype) drawTremolo(gFlags.subtype, p, q, ytrem, sz, m);
-    /* the following can be used for slashed groups, but is not standard */
-    if (flags.dir && [self isGraced]) [self drawBeamGrace: p : q : sz : m];
-  }
-  if (gFlags.subtype) drawTremolo(gFlags.subtype, p, q, -1, sz, m);
-  return self;
 }
 
 
