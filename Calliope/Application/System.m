@@ -1047,17 +1047,13 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 
 - (void)dealloc
 {
-  Graphic *p;
-  int i = [objs count];
-  while (i--)
-  {
-    p = [objs objectAtIndex:i];
-    if (!ISASTAFFOBJ(p)) [p release];
-  }
-  [objs autorelease];
-  [staves removeAllObjects];
-  [staves autorelease];
-  { [super dealloc]; return; };
+    [style release];
+    style = nil;
+    [objs release];
+    objs = nil;
+    [staves release];
+    staves = nil;
+    [super dealloc];
 }
 
 - (NSString *) description

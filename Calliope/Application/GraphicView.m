@@ -187,13 +187,13 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
 
 - initWithGraphicView: (GraphicView *) v
 {
-    syslist       = v->syslist;
-    pagelist      = v->pagelist;
-    partlist      = v->partlist;
-    chanlist      = v->chanlist;
-    stylelist     = v->stylelist;
-    currentSystem = v->currentSystem;
-    currentPage   = v->currentPage;
+    syslist       = [v->syslist retain];
+    pagelist      = [v->pagelist retain];
+    partlist      = [v->partlist retain];
+    chanlist      = [v->chanlist retain];
+    stylelist     = [v->stylelist retain];
+    currentSystem = [v->currentSystem retain];;
+    currentPage   = [v->currentPage retain];
     
     return self;
 }
@@ -245,16 +245,33 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
     }
 }
 
-- (void)dealloc
+- (void) dealloc
 {
-    [slist autorelease];
-    [cacheImage autorelease];
-    [pagelist removeAllObjects];
-    [pagelist autorelease];
-    [syslist removeAllObjects];
-    [syslist autorelease];
+    [cacheImage release];
+    cacheImage = nil;
+
+    [currentSystem release];
+    currentSystem = nil;
+    [currentPage release];
+    currentPage = nil;
+    [currentFont release];
+    currentFont = nil;
+
+    [slist release];
+    slist = nil;
+    
+    // All the following are NotationScore ivars in need of dealloc.
+    [stylelist release];
+    stylelist = nil;
+    [chanlist release];
+    chanlist = nil;
+    [partlist release];
+    partlist = nil;
+    [pagelist release];
+    pagelist = nil;
+    [syslist release];
+    syslist = nil;
     [super dealloc];
-    return;
 }
 
 
