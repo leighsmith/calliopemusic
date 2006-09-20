@@ -40,10 +40,11 @@ extern float staffthick[3][3];
 }
 
 
-- (void)dealloc
+- (void) dealloc
 {
-  if (data) free(data);
-  { [super dealloc]; return; };
+    if (data)
+	free(data);
+    [super dealloc];
 }
 
 

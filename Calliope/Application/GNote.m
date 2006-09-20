@@ -127,15 +127,11 @@ unsigned char accifont[NUMHEADS][NUMACCS] =
 }
 
 
-- (void)dealloc
+- (void) dealloc
 {
-  if (headlist)
-  {
-    [headlist removeAllObjects];
     [headlist release];
     headlist = nil;
-  }
-  { [super dealloc]; return; };
+    [super dealloc];
 }
 
 

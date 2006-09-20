@@ -50,11 +50,14 @@ int protoVox;
     return self;
 }
 
-- (void)dealloc
+- (void) dealloc
 {
-    [hangers autorelease];
-    [verses autorelease];
-    if (part) [part autorelease];
+    [hangers release];
+    hangers = nil;
+    [verses release];
+    verses = nil;
+    [part release];
+    part = nil;
     [super dealloc];
 }
 

@@ -1,4 +1,4 @@
-/* $Id:$ */
+/* $Id$ */
 
 #import <Foundation/Foundation.h>
 #import "Enclosure.h"
@@ -74,9 +74,10 @@ static Enclosure *proto;
 }
 
 
-- (void)dealloc
+- (void) dealloc
 {
-    [notes autorelease];
+    [notes release];
+    notes = nil;
     [super dealloc];
     return;
 }

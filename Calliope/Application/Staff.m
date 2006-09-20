@@ -494,18 +494,20 @@ float textoff[2], baselines[2][MAXTEXT];
     [p reShape];
     /* [p recalcVerses]; */
   }
-  for (i = 0; i < k; i++) [[notes objectAtIndex:i] resizeHangers: ds];
+  for (i = 0; i < k; i++) 
+    [[notes objectAtIndex: i] resizeHangers: ds];
   return self;
 }
 
 
 /* free objs first because some might point to staff objects */
-
-- (void)dealloc
+- (void) dealloc
 {
-  [notes removeAllObjects];
-    [notes autorelease];
-  { [super dealloc]; return; };
+    [part release];
+    part = nil;
+    [notes release];
+    notes = nil;
+    [super dealloc];
 }
 
 - (NSString *) description

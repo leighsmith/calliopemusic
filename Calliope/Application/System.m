@@ -1012,40 +1012,37 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 
 
 /* look in the system for a hit on any object (and obj's enclosures) */
-
-- (void)searchFor: (NSPoint) p :(NSMutableArray *)arr
+// TODO we should be returning an autoreleased NSArray rather than modifying one passed in.
+- (void) searchFor: (NSPoint) p : (NSMutableArray *) arr
 {
-  Staff *s;
-  id q;
-  int k = flags.nstaves;
-  if (NSPointInRect(p , bounds)) {
-      if (![arr containsObject:self])
-          [arr addObject:self];
-          return;
-  }
-  while (k--)
-  {
-    s = [staves objectAtIndex:k];
-    if (s->flags.hidden) continue;
-    [s searchFor: p :arr];
-  }
-  k = [objs count];
-  while (k--)
-  {
-    q = [objs objectAtIndex:k];
-    if ([q hit: p])
-        if (![arr containsObject:q])
-            [arr addObject:q];
-
-    [q searchFor: p :arr];  /* does enclosures */
-  }
-  return;
+    int numOfStaves = flags.nstaves;
+    int numOfObjects;
+    
+    if (NSPointInRect(p, bounds)) {
+	if (![arr containsObject: self])
+	    [arr addObject: self];
+	return;
+    }
+    while (numOfStaves--) {
+	Staff *s = [staves objectAtIndex: numOfStaves];
+	
+	if (s->flags.hidden) continue;
+	[s searchFor: p : arr];
+    }
+    numOfObjects = [objs count];
+    while (numOfObjects--) {
+	id q = [objs objectAtIndex: numOfObjects];
+	
+	if ([q hit: p])
+	    if (![arr containsObject: q])
+		[arr addObject: q];
+	
+	[q searchFor: p :arr];  /* does enclosures */
+    }
 }
 
-
 /* free objs first because some might point to staff objects */
-
-- (void)dealloc
+- (void) dealloc
 {
     [style release];
     style = nil;

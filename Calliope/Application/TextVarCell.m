@@ -148,11 +148,11 @@ NSString *imfiles[NUMVARTYPES] =
     return ret;
 }
 
-- (void)dealloc
+- (void) dealloc
 {
-    if (theFont) [theFont release];
+    [theFont release];
+    theFont = nil;
     [super dealloc];
-    return;
 }
 
 - (NSSize)cellSize

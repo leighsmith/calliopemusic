@@ -495,13 +495,16 @@ extern int needUpgrade;
 - (void) dealloc
 {
     [printInfo release];
+    printInfo = nil;
     [prefInfo release];
+    prefInfo = nil;
     [documentWindow release];
-    if (name) [name autorelease];
-    if (directory) [directory autorelease];
-//    [[self class] reuseZone:(NSZone *)[self zone]];
+    documentWindow = nil;
+    [name release];
+    name = nil;
+    [directory release];
+    directory = nil;
     [super dealloc];
-//  return [NSObject cancelPreviousPerformRequestsWithTarget:NSApp selector:@selector(updateWindows) object:nil], [NSApp performSelector:@selector(updateWindows) withObject:nil afterDelay:(100) / 1000.0];
 }
 
 /* used by openCopy and New... */

@@ -40,7 +40,7 @@
     float topmarg;		/* amount of headroom */
     float botmarg;		/* use for equidistant spaff spacing */
     float pref1, pref2;		/* start and end of preface */
-    NSMutableArray *notes;			/* Array of things on the staff */
+    NSMutableArray *notes;			/*! @var notes Array of things on the staff. */
     System *mysys;			/* backpointer */
 @private
     float y;			/* position */

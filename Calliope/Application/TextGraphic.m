@@ -100,9 +100,9 @@ static NSTextView *drawText = nil;
 
 - (void)dealloc
 {
-    if (richTextData) [richTextData release];
-  [super dealloc];
-  return;
+    [richTextData release];
+    richTextData = nil;
+    [super dealloc];
 }
 
 - (NSString *) description

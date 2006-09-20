@@ -181,10 +181,12 @@ extern NSString *nullInstrument;
 }
 
 
-- (void)dealloc
+- (void) dealloc
 {
-    if (abbrev) [abbrev release];
-    if (name) [name release];
+    [abbrev release];
+    abbrev = nil;
+    [name release];
+    name = nil;
     [super dealloc];  
 }
 

@@ -1,4 +1,4 @@
-/* $Id:$ */
+/* $Id$ */
 #import <Foundation/Foundation.h>
 #import <AppKit/AppKit.h>
 #import "Beam.h"
@@ -123,6 +123,7 @@ int nbeams;
 - (void) dealloc
 {
     [client release];
+    client = nil;
     [super dealloc];
 }
 
