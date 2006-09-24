@@ -660,7 +660,7 @@ static void handleMKError(NSString *msg)
     /* [[perfInspector window] setFloatingPanel:YES]; */
     if ([appdefaults checkOpenPanel: 0]) [[tools window] orderFront: self];
     if ([appdefaults checkOpenPanel: 1]) [[toolsH window] orderFront: self];
-    if ([appdefaults checkOpenPanel: 2]) [self orderNewPanel: self];
+    // if ([appdefaults checkOpenPanel: 2]) [self orderNewPanel: self];
     [self initCharsPanel];
 //  [[[NSFontManager sharedFontManager] fontPanel:YES] setAccessoryView: fontAccessory];
     // Is this necessary? Only if fontAccessory points to a special font selection?

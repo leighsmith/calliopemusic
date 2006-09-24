@@ -89,7 +89,7 @@ static void makeLinkage(System *sys)
   if ([nsys numberOfStaves] > 1) makeLinkage(nsys);
   else
   {
-    sp1 = [osys->staves objectAtIndex:0];
+    sp1 = [osys getStaff: 0];
     if (sp1->flags.haspref) makeLinkage(nsys);
   }
   i = [ol count];
@@ -186,7 +186,7 @@ static void addBarsRest(Staff *sp, System *sys, int n)
   int i, j, nsys, ns, n, barsrest[NUMSTAVES];
   Staff *sp, *esp;
   System *sys, *esys=nil;
-  NSMutableArray *sl, *epl;
+  NSMutableArray *epl;
   OpusDocument *doc;
   GraphicView *v;
   BOOL hassys, wantstaff[NUMSTAVES];
@@ -203,14 +203,13 @@ static void addBarsRest(Staff *sp, System *sys, int n)
   {
     sys = [syslist objectAtIndex:i];
     hassys = NO;
-    sl = sys->staves;
     ns = [sys numberOfStaves];
     /* first pass tries to find relevant staves */
     n = 0;
     for (j = 0; j < ns; j++)
     {
       wantstaff[j] = 0;
-      sp = [sl objectAtIndex:j];
+      sp = [sys getStaff: j];
       if ([sp hasAnyPart: pl])
       {
         wantstaff[j] = YES;
@@ -220,7 +219,7 @@ static void addBarsRest(Staff *sp, System *sys, int n)
     /* now do normal thing */
     for (j = 0; j < ns; j++)
     {
-      sp = [sl objectAtIndex:j];
+      sp = [sys getStaff: j];
       if (wantstaff[j] == 0) staffmap[j] = nil;
       else
       {
@@ -279,87 +278,84 @@ static void addBarsRest(Staff *sp, System *sys, int n)
 
 - extractStaves: (int) n : (char *) wantstaff
 {
-  int i, j, nsys, ns, barsrest[NUMSTAVES];
-  Staff *sp, *esp;
-  System *sys, *esys=nil;
-  NSMutableArray *sl, *epl;
-  OpusDocument *doc;
-  GraphicView *v;
-  BOOL hassys;
-  epl = [[NSMutableArray alloc] init];
-  [epl addObject: [[CallPart alloc] init: nullPart : nil : 1 : nullInstrument]];
-  [self deselectAll: self];
-  for (i = 0; i < NUMSTAVES; i++) barsrest[i] = 0;
-  nsys = [syslist count];
-  doc = [[DrawApp currentDocument] newFrom];
-  v = [doc graphicView];
-  [[v window] disableFlushWindow];
-  for (i = 0; i < nsys; i++)
-  {
-    sys = [syslist objectAtIndex:i];
-    hassys = NO;
-    sl = sys->staves;
-    ns = [sys numberOfStaves];
-    for (j = 0; j < ns; j++)
-    {
-      sp = [sl objectAtIndex:j];
-      if (wantstaff[j] == 0) staffmap[j] = nil;
-      else
-      {
-        if (sp->flags.hidden || [sp allRests])
+    int i, j, nsys, ns, barsrest[NUMSTAVES];
+    Staff *sp, *esp;
+    System *sys, *esys=nil;
+    OpusDocument *doc;
+    GraphicView *v;
+    BOOL hassys;
+    NSMutableArray *epl = [[NSMutableArray alloc] init];
+    
+    [epl addObject: [[CallPart alloc] init: nullPart : nil : 1 : nullInstrument]];
+    [self deselectAll: self];
+    for (i = 0; i < NUMSTAVES; i++) barsrest[i] = 0;
+    nsys = [syslist count];
+    doc = [[DrawApp currentDocument] newFrom];
+    v = [doc graphicView];
+    [[v window] disableFlushWindow];
+    for (i = 0; i < nsys; i++) {
+	sys = [syslist objectAtIndex:i];
+	hassys = NO;
+	ns = [sys numberOfStaves];
+	for (j = 0; j < ns; j++)
 	{
-	  barsrest[j] += [sp countRests];
+	    sp = [sys getStaff: j];
+	    if (wantstaff[j] == 0) staffmap[j] = nil;
+	    else
+	    {
+		if (sp->flags.hidden || [sp allRests])
+		{
+		    barsrest[j] += [sp countRests];
+		}
+		else
+		{
+		    if (!hassys)
+		    {
+			esys = [sys newExtraction: v : n];
+			hassys = YES;
+		    }
+		    esp = [sp newFrom];
+		    staffmap[j] = esp;
+		    esp->mysys = esys;
+		    [self copyNotes: sp->notes : esp : epl];
+		    [esys->staves addObject: esp];
+		    if (barsrest[j]) 
+		    {
+			addBarsRest(esp, esys, barsrest[j]);
+			barsrest[j] = 0;
+		    }
+		}
+	    }
 	}
-	else
+	if (hassys)
 	{
-	  if (!hassys)
-	  {
-	    esys = [sys newExtraction: v : n];
-	    hassys = YES;
-	  }
-          esp = [sp newFrom];
-	  staffmap[j] = esp;
-	  esp->mysys = esys;
-	  [self copyNotes: sp->notes : esp : epl];
-	  [esys->staves addObject: esp];
-	  if (barsrest[j]) 
-	  {
-	    addBarsRest(esp, esys, barsrest[j]);
-	    barsrest[j] = 0;
-	  }
+	    [self copyObjs: sys : esys];
+	    [v addSystem: esys];
 	}
-      }
     }
-    if (hassys)
+    if (barsrest[j]) /* any left over */
     {
-      [self copyObjs: sys : esys];
-      [v addSystem: esys];
+	/* do something! */
+	
+	/* do something! */
     }
-  }
-  if (barsrest[j]) /* any left over */
-  {
-    /* do something! */
-  
-    /* do something! */
-  }
-  if (v->partlist) [v->partlist autorelease];
-  v->partlist = epl;
-  [v finishExtraction];
-  // [doc->documentWindow makeKeyAndOrderFront:doc];
-  return self;
+    if (v->partlist) [v->partlist autorelease];
+    v->partlist = epl;
+    [v finishExtraction];
+    // [doc->documentWindow makeKeyAndOrderFront:doc];
+    return self;
 }
 
 
 static void orderStaves(System *sys, char *order)
 {
-  int sn, j;
-  NSMutableArray *sl, *nsl;
-  sl = sys->staves;
-  sn = [sl count];
-  nsl = [[NSMutableArray alloc] init];
-  for (j = 0; j < sn; j++) [nsl addObject: [sl objectAtIndex:order[j]]];
-  [sl autorelease];
-  sys->staves = nsl;
+    int j;
+    int sn = [sys numberOfStaves];
+    NSMutableArray *nsl = [[NSMutableArray alloc] init];
+    
+    for (j = 0; j < sn; j++) 
+	[nsl addObject: [sys getStaff: order[j]]];
+    sys->staves = nsl;
 }
 
 

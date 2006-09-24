@@ -371,7 +371,7 @@
   {
     sp = [staves objectAtIndex:i];
     snl = sp->notes;
-    dsp = [sys->staves objectAtIndex:i];
+    dsp = [sys getStaff: i];
     dy = [dsp yOfTop] - [sp yOfTop];
     dnl = dsp->notes;
     a = [dsp skipSigIx: 0];
@@ -454,7 +454,7 @@
 	    NSRunAlertPanel(@"Cannot Grab", @"Next system not same size", @"OK", nil, nil, NULL);
 	    return nil;
 	}
-	ssp = [sys->staves objectAtIndex:0];
+	ssp = [sys getStaff: 0];
 	q = [ssp skipSigIx: 0];
 	if (q == [ssp->notes count]) continue;
 	else break;
@@ -466,7 +466,7 @@
 	dnl = dsp->notes;
 	if ([dnl count] == 0) rx = [self leftWhitespace];
 	else rx = ((StaffObj *)[dnl lastObject])->x;
-	ssp = [sys->staves objectAtIndex:i];
+	ssp = [sys getStaff: i];
 	snl = ssp->notes;
 	q = [ssp skipSigIx: 0];
 	k = [snl count];

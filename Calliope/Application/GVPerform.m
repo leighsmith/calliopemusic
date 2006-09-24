@@ -317,10 +317,9 @@ static void addNote(int v, int k, int ch, MKNote *n)
         lwhite = [sys leftWhitespace];
         n = [sys numberOfStaves];
         [sys  doStamp: n : lwhite];
-        sl = sys->staves;
         for (i = 0; i < n; i++)
         {
-            sp = [sl objectAtIndex:i];
+            sp = [sys getStaff: i];
             if (sp->flags.hidden) continue;
             nl = sp->notes;
             nk = [nl count];
@@ -375,7 +374,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
         n = [sys numberOfStaves];
         for (i = 0; i < n; i++)
         {
-            sp = [sys->staves objectAtIndex:i];
+            sp = [sys getStaff: i];
             if (sp->flags.hidden) continue;
             nix  = [sp indexOfNoteAfter: lwhite];
             nk = [sp->notes count];

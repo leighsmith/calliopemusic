@@ -325,7 +325,7 @@ static BOOL busyFlag = 0;  /* so that inspector is not inspected because of a ca
   Staff *sp;
   if (sys == nil) return self;
   if (popSelectionFor(partbutton) == 0) return self;
-  sp = [sys getstaff: [staffmatrix selectedRow]];
+  sp = [sys getStaff: [staffmatrix selectedRow]];
   if (sp->part) [sp->part autorelease];
   sp->part = [popSelectionNameFor(partbutton) retain];
   [v dirty];
@@ -568,7 +568,7 @@ BOOL isClearForm(NSForm *f, int i)
 - (BOOL) loadstaff: (System *) sys : (int) n
 {
   int i, ds = 0, up = 0;
-  Staff *sp = [sys getstaff: n];
+  Staff *sp = [sys getStaff: n];
 //NSLog(@"enters loadstaff: %d\n", n);
   switch([staffnumbutton indexOfSelectedItem])
   {
@@ -716,7 +716,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
       [[staffmatrix cellAtRow:i column:0] setTitle:[NSString stringWithFormat:@"%d",i+1]];
   }
   /* figure out an icon */
-  sp = [sys->staves objectAtIndex:i];
+  sp = [sys getStaff: i];
   si = imstype[sp->flags.subtype];
   if (sp->flags.subtype == 0)
   {
@@ -876,7 +876,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
   for (i = 0; i < n; i++) if ([[staffmatrix cellAtRow:i column:0] isHighlighted])
   {
     ++a;
-    sp = [sys getstaff: i];
+    sp = [sys getStaff: i];
     assay(0, sp->flags.topfixed);
     assay(1, sp->flags.hidden);
     assay(2, sp->flags.subtype);

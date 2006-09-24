@@ -121,7 +121,7 @@
   i = [syslist indexOfObject:sys] + 1;
   while (i--)
   {
-    sp = [[syslist objectAtIndex:i] getstaff: sn];
+    sp = [[syslist objectAtIndex:i] getStaff: sn];
     if (sp == nil) return nil;
     nl = sp->notes;
     j = [nl count];
@@ -158,7 +158,7 @@
   i = [syslist indexOfObject:sp->mysys];
   while (i--)
   {
-    sp = [[syslist objectAtIndex:i] getstaff: sn];
+    sp = [[syslist objectAtIndex:i] getStaff: sn];
     if (sp == nil) continue;
     q = [sp->notes lastObject];
     if (q != nil) return q;
@@ -191,7 +191,7 @@
   while (i < k - 1)
   {
     i++;
-    sp = [[syslist objectAtIndex:i] getstaff: sn];
+    sp = [[syslist objectAtIndex:i] getStaff: sn];
     if (sp == nil) continue;
 //    q = [sp->notes objectAtIndex:0];
 //    if (q != nil) return q;
@@ -800,7 +800,6 @@ outOfTotalSystems: (int) numsys
   {
     sys = [syslist objectAtIndex:i];
     if (sys->flags.newbar) b = sys->barnum; else sys->barnum = b;
-    al = sys->staves;
     ns = [sys numberOfStaves];
     if (i == k - 1) break;
     sp = [sys firststaff];
@@ -854,78 +853,75 @@ outOfTotalSystems: (int) numsys
 
 
 /* set the ranges of the piece */
-
 - setRanges
 {
-  Range *r[NUMSTAVES];
-  int nsys, ns=0, i, j, k, n, pos, pb, minp[NUMSTAVES], maxp[NUMSTAVES];
-  NSMutableArray *al, *sl;
-  System *sys;
-  Staff *sp;
-  StaffObj *p;
-  BOOL flag[NUMSTAVES];
-  for (i = 0; i < NUMSTAVES; i++)
-  {
-    r[i] = nil;
-    flag[i] = NO;
-  }
-  nsys = [syslist count];
-  for (i = 0; i < nsys; i++)
-  {
-    sys = [syslist objectAtIndex:i];
-    sl = sys->staves;
-    ns = [sys numberOfStaves];
-    for (j = 0; j < ns; j++)
-    {
-      sp = [sl objectAtIndex:j];
-      pb = [sp posOfBottom];
-      al = sp->notes;
-      n = [al count];
-      for (k = 0; k < n; k++)
-      {
-        p = [al objectAtIndex:k];
-        if (TYPEOF(p) == RANGE)
-        {
-          if (r[j] != nil)
-          {
-            r[j]->p2 = minp[j];
-            r[j]->p1 = maxp[j];
-	    [r[j] recalc];
-          }
-          r[j] = (Range *) p;
-          flag[j] = NO;
-        }
-        else if (ISAVOCAL(p))
-        {
-	  pos = p->p;
-	  if (pos < -8 || pos > pb + 8)
-	  {
-	    NSLog(@"Note %d of staff %d, sys %d has pos %d\n", k, j, i, pos);
-	  }
-	  if (!ISINVIS(p))
-	  {
-            if (flag[j])
-            {
-              if (pos < minp[j]) minp[j] = pos;
-              if (pos > maxp[j]) maxp[j] = pos;
-            }
-            else
-            {
-              minp[j] = maxp[j] = pos;
-              flag[j] = YES;
-            }
-	  }
-        }
-      }
+    Range *r[NUMSTAVES];
+    int nsys, ns=0, i, j, k, n, pos, pb, minp[NUMSTAVES], maxp[NUMSTAVES];
+    NSMutableArray *al;
+    System *sys;
+    Staff *sp;
+    StaffObj *p;
+    BOOL flag[NUMSTAVES];
+    
+    for (i = 0; i < NUMSTAVES; i++) {
+	r[i] = nil;
+	flag[i] = NO;
     }
-  }
-  for (i = 0; i < ns; i++) if (r[i] != nil && flag[i])
-  {
-    r[i]->p2 = minp[i];
-    r[i]->p1 = maxp[i];
-    [r[i] recalc];
-  }
-  return self;
+    nsys = [syslist count];
+    for (i = 0; i < nsys; i++) {
+	sys = [syslist objectAtIndex: i];
+	ns = [sys numberOfStaves];
+	for (j = 0; j < ns; j++)
+	{
+	    sp = [sys getStaff: j];
+	    pb = [sp posOfBottom];
+	    al = sp->notes;
+	    n = [al count];
+	    for (k = 0; k < n; k++)
+	    {
+		p = [al objectAtIndex:k];
+		if (TYPEOF(p) == RANGE)
+		{
+		    if (r[j] != nil)
+		    {
+			r[j]->p2 = minp[j];
+			r[j]->p1 = maxp[j];
+			[r[j] recalc];
+		    }
+		    r[j] = (Range *) p;
+		    flag[j] = NO;
+		}
+		else if (ISAVOCAL(p))
+		{
+		    pos = p->p;
+		    if (pos < -8 || pos > pb + 8)
+		    {
+			NSLog(@"Note %d of staff %d, sys %d has pos %d\n", k, j, i, pos);
+		    }
+		    if (!ISINVIS(p))
+		    {
+			if (flag[j])
+			{
+			    if (pos < minp[j]) minp[j] = pos;
+			    if (pos > maxp[j]) maxp[j] = pos;
+			}
+			else
+			{
+			    minp[j] = maxp[j] = pos;
+			    flag[j] = YES;
+			}
+		    }
+		}
+	    }
+	}
+    }
+    for (i = 0; i < ns; i++) if (r[i] != nil && flag[i])
+    {
+	r[i]->p2 = minp[i];
+	r[i]->p1 = maxp[i];
+	[r[i] recalc];
+    }
+    return self;
 }
 
 
@@ -939,46 +935,42 @@ outOfTotalSystems: (int) numsys
 
 - flowTimeSig: (System *) until
 {
-  int nsys, ns, i, j, k, n, bart[NUMSTAVES];
-  float fact[NUMSTAVES];
-  System *sys;
-  Staff *sp;
-  TimedObj *p;
-  NSMutableArray *nl, *sl;
-  nsys = [syslist count];
-  for (i = 0; i < NUMSTAVES; i++)
-  {
-    fact[i] = 1.0;
-    bart[i] = MINIMTICK * 2;
-  }
-  for (i = 0; i < nsys; i++)
-  {
-    sys = [syslist objectAtIndex:i];
-    sl = sys->staves;
-    ns = [sys numberOfStaves];
-    for (j = 0; j < ns; j++)
-    {
-      sp = [sl objectAtIndex:j];
-      nl = sp->notes;
-      k = [nl count];
-      for (n = 0; n < k; n++)
-      {
-        p = [nl objectAtIndex:n];
-	if (TYPEOF(p) == TIMESIG)
-	{
-	  fact[j] = [((TimeSig *)p) myFactor: 0];
-	  bart[j] = [((TimeSig *)p) myBarLength];
-	}
-        else if (ISATIMEDOBJ(p))
-	{
-	  p->time.factor = fact[j];
-	  if (TYPEOF(p) == REST) ((Rest *)p)->barticks = bart[j];
-	}
-      }
+    int nsys, ns, i, j, k, n, bart[NUMSTAVES];
+    float fact[NUMSTAVES];
+    System *sys;
+    Staff *sp;
+    TimedObj *p;
+    NSMutableArray *nl;
+    nsys = [syslist count];
+    
+    for (i = 0; i < NUMSTAVES; i++) {
+	fact[i] = 1.0;
+	bart[i] = MINIMTICK * 2;
     }
-    if (sys == until) break;
-  }
-  return self;
+    for (i = 0; i < nsys; i++) {
+	sys = [syslist objectAtIndex:i];
+	ns = [sys numberOfStaves];
+	for (j = 0; j < ns; j++) {
+	    sp = [sys getStaff: j];
+	    nl = sp->notes;
+	    k = [nl count];
+	    for (n = 0; n < k; n++) {
+		p = [nl objectAtIndex: n];
+		if (TYPEOF(p) == TIMESIG) {
+		    fact[j] = [((TimeSig *)p) myFactor: 0];
+		    bart[j] = [((TimeSig *)p) myBarLength];
+		}
+		else if (ISATIMEDOBJ(p)) {
+		    p->time.factor = fact[j];
+		    if (TYPEOF(p) == REST) 
+			((Rest *)p)->barticks = bart[j];
+		}
+	    }
+	}
+	if (sys == until) 
+	    break;
+    }
+    return self;
 }
 
 

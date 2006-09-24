@@ -204,6 +204,7 @@ NSString *GeneralMidiSounds[128] = {
 					@"Gunshot"
 };
 
+// TODO all these should be part of the NotationScore ivar.
 NSMutableArray *instlist = nil; 		/* a Array of CallInst */
 NSMutableArray *scratchlist = nil;	/* used for partlist in case there is no view */
 NSMutableArray *scrstylelist = nil;	/* used for scratchlist in case no view */

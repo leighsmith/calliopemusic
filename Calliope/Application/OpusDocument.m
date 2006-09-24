@@ -180,7 +180,7 @@ static id createWindowFor(GraphicView* view, NSRect *r, NSString *fS)
 	    free(s);
 	    archiveView = [[ts decodeObject] retain];
 	    prefInfo->staffheight = staffheight;
-	    [archiveView updateMargins: headerbase : footerbase : printInfo];
+	    [archiveView updateMarginsWithHeader: headerbase footer: footerbase printInfo: printInfo];
 	}
 	else if (version == 2)
 	{

@@ -398,7 +398,8 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 
 
 /*
-  Make and return a new system using self as a template
+  Make and return a new system using self as a template.
+  TODO should become copyWithZone:?
 */
 - (System *) newFormattedSystem
 {
@@ -420,7 +421,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
     for (staffIndex = 0; staffIndex < flags.nstaves; staffIndex++) {
 	Clef *lastClef;
 	KeySig *lastKeySignature;
-	Staff *sp = [newSystem->staves objectAtIndex: staffIndex];
+	Staff *sp = [newSystem getStaff:  staffIndex];
 	Staff *op = [staves objectAtIndex: staffIndex];
 	
 	sp->flags = op->flags;
@@ -494,7 +495,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   sys->style = style;
   for (i = 0; i < flags.nstaves; i++)
   {
-    sp = [sys->staves objectAtIndex:i];
+    sp = [sys getStaff: i];
     op = [staves objectAtIndex:i];
     sp->flags = op->flags;
     sp->gFlags.subtype = op->gFlags.subtype;
@@ -862,10 +863,14 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
     return self;
 }
 
-
-- getstaff : (int) n
+- (NSArray *) staves
 {
-  return [staves objectAtIndex:n];
+    return [[staves retain] autorelease];
+}
+
+- (Staff *) getStaff: (int) n
+{
+  return [staves objectAtIndex: n];
 }
 
 

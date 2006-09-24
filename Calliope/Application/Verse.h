@@ -25,42 +25,53 @@
 #define CONTHYPH (0xb1)
 #define CONTLINE (0xd0)
 
-@interface Verse:Graphic
+@interface Verse: Graphic
 {
 @public
-  struct
-  {
-    unsigned int above : 1;
-    unsigned int hyphen : 3;	/* type of hyphen */
-    unsigned int line : 4;	/* actual line */
-    unsigned int num : 4;	/* verse number */
-  } vFlags;
-  char offset;
-  char align;
-  NSFont *font;
-  float pixlen;
-  float baseline;
-  id note;				/* a backpointer */
-  unsigned char *data;		/* the string */
+    struct
+    {
+	unsigned int above : 1;
+	unsigned int hyphen : 3;	/* type of hyphen */
+	unsigned int line : 4;	/* actual line */
+	unsigned int num : 4;	/* verse number */
+    } vFlags;
+    char offset;
+    char align;
+    NSFont *font;
+    float pixlen;
+    float baseline;
+    id note;				/* a backpointer */
+// @private    
+    unsigned char *data;		/* the string TODO should be a NSString */
 }
 
 + (void)initialize;
-
-
 - init;
-- (void)dealloc;
 - recalc;
 - newFrom;
-- (void)removeObj;
+- (void) removeObj;
 - (BOOL) isFigure;
 - reShape;
 - alignVerse;
 - (float) textLeft: (StaffObj *) p;
-- (int)keyDownString:(NSString *)cc;
+- (int) keyDownString:(NSString *)cc;
 - (BOOL) hit: (NSPoint) p;
 - drawMode: (int) m;
 - draw;
 - (id)initWithCoder:(NSCoder *)aDecoder;
 - (void)encodeWithCoder:(NSCoder *)aCoder;
+
+/*!
+  @brief Returns the text constituting the verse as an immutable NSString.
+ */
+- (NSString *) string;
+
+/*!
+  @brief Assigns the text constituting the verse.
+ */
+- (void) setString: (NSString *) newText;
+
+/* return whether a string is a blank verse */
+- (BOOL) isBlank;
 
 @end

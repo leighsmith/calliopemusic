@@ -284,40 +284,37 @@ static NSString *stylescratch;
 }
 
 
-- copyPartsFrom: (System *) sys
 /*sb: I am not worrying about retaining the parts as they are copied. They are retained if they are moved
  * from here into another part list
  */
+- copyPartsFrom: (System *) sys
 {
-  int i, ns;
-  NSMutableArray *sl;
-  Staff *sp;
-  for (i = 0; i < NUMSTAVES; i++) partscratchpad[i] = 0;
-  sl = sys->staves;
-  ns = [sl count];
-  for (i = 0; i < ns; i++)
-  {
-    sp = [sl objectAtIndex:i];
-    partscratchpad[i] = sp->part;
-  }
-  return self;
+    int i;
+    int ns = [sys numberOfStaves];
+    
+    for (i = 0; i < NUMSTAVES; i++) 
+	partscratchpad[i] = 0;
+    for (i = 0; i < ns; i++) {
+	Staff *sp = [sys getStaff: i];
+	
+	partscratchpad[i] = sp->part;
+    }
+    return self;
 }
 
 
 - pastePartsTo: (System *) sys
 {
-  int ns, s;
-  NSMutableArray *sl;
-  Staff *sp;
-  sl = sys->staves;
-  ns = [sl count];
-  for (s = 0; s < ns; s++)
-  {
-    sp = [sl objectAtIndex:s];
-    sp->part = [partscratchpad[s] retain];
-    [sp defaultNoteParts];
-  }
-  return self;
+    int s;
+    int ns = [sys numberOfStaves];
+    
+    for (s = 0; s < ns; s++) {
+	Staff *sp = [sys getStaff: s];
+	
+	sp->part = [partscratchpad[s] retain];
+	[sp defaultNoteParts];
+    }
+    return self;
 }
 
 
@@ -358,18 +355,17 @@ static NSString *stylescratch;
   TimedObj *p;
   Rest *r;//sb: these were originally Rest, but I made them superclass
   Rest *rests[NUMVOICES]; //sb: these were originally Rest, but I made them superclass
-  NSMutableArray *nl, *sl;
+  NSMutableArray *nl;
   nsys = [syslist count];
   for (i = 0; i < NUMSTAVES; i++) bart[i] = MINIMTICK * 2;
   for (i = 0; i < nsys; i++)
   {
     for (v = 0; v < NUMVOICES; v++) numrests[v] = numvox[v] = 0;
     sys = [syslist objectAtIndex:i];
-    sl = sys->staves;
     ns = [sys numberOfStaves];
     for (j = 0; j < ns; j++)
     {
-      sp = [sl objectAtIndex:j];
+      sp = [sys getStaff: j];
       nl = sp->notes;
       k = [nl count];
       for (n = 0; n < k; n++)
@@ -425,7 +421,7 @@ static NSString *stylescratch;
   System *sys;
   Staff *sp;
   StaffObj *p;
-  NSMutableArray *nl, *sl;
+  NSMutableArray *nl;
   nsys = [syslist count];
   for (i = 0; i < NUMSTAVES; i++)
   {
@@ -437,7 +433,6 @@ static NSString *stylescratch;
   for (i = 0; i < nsys; i++)
   {
     sys = [syslist objectAtIndex:i];
-    sl = sys->staves;
     ns = [sys numberOfStaves];
     lwhite = [sys leftWhitespace];
     [sys  doStamp: ns : lwhite];
@@ -445,7 +440,7 @@ static NSString *stylescratch;
     {
       bn = sys->barnum;
       bt = 0;
-      sp = [sl objectAtIndex:j];
+      sp = [sys getStaff: j];
       ni = [sp indexOfNoteAfter: lwhite];
       nl = sp->notes;
       k = [nl count];
@@ -1046,7 +1041,7 @@ static BOOL doToObject(Graphic *p, int c, int a)
       for (i = j; i < k; i++)
       {
         sys = [syslist objectAtIndex:i];
-	sp = [sys->staves objectAtIndex:st];
+	sp = [sys getStaff: st];
 	if (sp != nil)
 	{
 	  nl = sp->notes;
@@ -1078,7 +1073,7 @@ char ch[8] = ".@#!.FSN";
   while (k--)
   {
     sys = [syslist objectAtIndex:k];
-    ns = [sys->staves count];
+    ns = [sys numberOfStaves];
     if (ns != [sys numberOfStaves]) NSLog(@"System %d: count=%d, nstaves=%d\n", k, ns, [sys numberOfStaves]);
   }
   NSLog(@"checking finished\n");
@@ -1119,7 +1114,7 @@ extern char *typename[NUMTYPES];
 {
   System *sys;
   Staff *sp;
-  NSMutableArray *nl, *sl;
+  NSMutableArray *nl;
   StaffObj *p;
 //  char buf[192];
   int i, j, k, ns, nsys, nn;
@@ -1127,15 +1122,14 @@ extern char *typename[NUMTYPES];
   nsys = [syslist count];
   while (k < nsys)
   {
-    sys = [syslist objectAtIndex:k];
+    sys = [syslist objectAtIndex: k];
     NSLog(@"System %d [page %d]:\n", k + 1, [sys pageNumber]);
     ++k;
     //[NXApp log: buf];
-    sl = sys->staves;
-    ns = [sl count];
+    ns = [sys numberOfStaves];
     for (i = 0; i < ns; i++)
     {
-      sp = [sl objectAtIndex:i];
+      sp = [sys getStaff: i];
       NSLog(@"  Staff %d [part=%s, y=%f]:\n", i+1, [sp->part cString], [sp yOfTop]);
       //[NXApp log: buf];
       nl = sp->notes;
@@ -1192,10 +1186,10 @@ extern char *typename[NUMTYPES];
   sys = [syslist objectAtIndex:s];
   lox = 0;
   hix = r.width / [[DrawApp currentDocument] staffScale];
-  k = [sys->staves count];
+  k = [sys numberOfStaves];
   for (i = 0; i < k; i++)
   {
-    sp = [sys->staves objectAtIndex:i];
+    sp = [sys getStaff: i];
     nl = sp->notes;
     nk = [nl count];
     while (nk--)
@@ -1247,10 +1241,10 @@ extern char *typename[NUMTYPES];
   {
     sys = [syslist objectAtIndex:k];
     b = 0;
-    ns = [sys->staves count];
+    ns = [sys numberOfStaves];
     while (ns--)
     {
-      sp = [sys->staves objectAtIndex:ns];
+      sp = [sys getStaff: ns];
       if ([sp yOfTop] != [sp yOfTop]) b = 1;
     }
     if (b)
@@ -1284,7 +1278,7 @@ extern char *typename[NUMTYPES];
   {
     sys = [syslist objectAtIndex:k];
     if ([sys numberOfStaves] != 3) continue;
-    sp = [sys->staves objectAtIndex:2];
+    sp = [sys getStaff: 2];
     if (sp->flags.subtype != 1) continue;
     [sys->staves removeObjectAtIndex:2];
     ++r;
@@ -1333,10 +1327,10 @@ extern char *typename[NUMTYPES];
   }
   [self deselectAll: self];
   sys = currentSystem;
-  k = [sys->staves count];
+  k = [sys numberOfStaves];
   for (i = 0; i < k; i++)
   {
-    sp = [sys->staves objectAtIndex:i];
+    sp = [sys getStaff: i];
     nl = sp->notes;
     nk = [nl count];
     while (nk--)
@@ -1539,34 +1533,30 @@ extern char *typename[NUMTYPES];
 
 - reShapeAllSys: sender
 {
-  int systemIndex, sn, systemCount = [syslist count];
-  System *s;
-  Staff *sp;
-  NSMutableArray *sl;
-  ProgressDisplay *reshapeProgress = [ProgressDisplay progressDisplayWithTitle: @"Reshaping system layout"];
-
-  for (systemIndex = 0; systemIndex < systemCount; systemIndex++)
-  {
-    [reshapeProgress setProgressRatio: 1.0 * systemIndex / systemCount];
-    s = [syslist objectAtIndex:systemIndex];
-    sl = s->staves;
-    sn = [sl count];
-    while (sn--)
-    {
-      sp = [sl objectAtIndex:sn];
-      if ([sp yOfTop] != [sp yOfTop])  /* check for NaN */
-      {
-        // sp->y = 500; // TODO this seems bogus in the extreme!
-	NSLog(@"  staff %d has NaN y\n", sn+1);
-	[sp recalc];
-      }
+    int systemIndex, systemCount = [syslist count];
+    Staff *sp;
+    ProgressDisplay *reshapeProgress = [ProgressDisplay progressDisplayWithTitle: @"Reshaping system layout"];
+    
+    for (systemIndex = 0; systemIndex < systemCount; systemIndex++) {
+	System *s = [syslist objectAtIndex: systemIndex];
+	int staveCount = [s numberOfStaves];
+	
+	[reshapeProgress setProgressRatio: 1.0 * systemIndex / systemCount];
+	while (staveCount--) {
+	    sp = [s getStaff: staveCount];
+	    if ([sp yOfTop] != [sp yOfTop])  /* check for NaN */
+	    {
+		// sp->y = 500; // TODO this seems bogus in the extreme!
+		NSLog(@"  staff %d has NaN y\n", staveCount + 1);
+		[sp recalc];
+	    }
+	}
+	[s reShape];
     }
-    [s reShape];
-  }
-  [reshapeProgress closeProgressDisplay];
-  [self dirty];
-  [self setNeedsDisplay:YES];
-  return self;
+    [reshapeProgress closeProgressDisplay];
+    [self dirty];
+    [self setNeedsDisplay: YES];
+    return self;
 }
 
 
@@ -1603,34 +1593,30 @@ extern char *typename[NUMTYPES];
 
 - hiddenAllSys: sender
 {
-  int i, j, k, kspl, ktpl;
-  System *t, *s = currentSystem;
-  NSMutableArray *tpl, *spl;
-  Staff *tp, *sp;
-  if (s == nil)
-  {
-    NSLog(@"Assertion failure in GVCommands");
-    return self;
-  }
-  spl = s->staves;
-  kspl = [spl count];
-  k = [syslist count];
-  for (i = 0; i < k; i++)
-  {
-    t = [syslist objectAtIndex:i];
-    if (t == s) continue;
-    tpl = t->staves;
-    ktpl = [tpl count];
-    if (ktpl != kspl) continue;
-    for (j = 0; j < ktpl; j++)
-    {
-      sp = [spl objectAtIndex:j];
-      tp = [tpl objectAtIndex:j];
-      tp->flags.hidden = sp->flags.hidden;
+    int i, j, k, kspl, ktpl;
+    System *t, *s = currentSystem;
+    Staff *tp, *sp;
+    
+    if (s == nil) {
+	NSLog(@"Assertion failure in GVCommands");
+	return self;
     }
-    [t recalc];
-  }
-  return [self paginate: self];
+    kspl = [s numberOfStaves];
+    k = [syslist count];
+    for (i = 0; i < k; i++) {
+	t = [syslist objectAtIndex:i];
+	if (t == s) 
+	    continue;
+	ktpl = [t numberOfStaves];
+	if (ktpl != kspl) continue;
+	for (j = 0; j < ktpl; j++) {
+	    sp = [s getStaff: j];
+	    tp = [t getStaff: j];
+	    tp->flags.hidden = sp->flags.hidden;
+	}
+	[t recalc];
+    }
+    return [self paginate: self];
 }
 
 
@@ -1745,10 +1731,10 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
   id p;
   sl = sys->staves;
   ol = sys->objs;
-  i = [sl count];
+  i = [sys numberOfStaves];
   while (i--)
   {
-    sp = [sl objectAtIndex:i];
+    sp = [sys getStaff: i];
     if (sp->flags.hidden)
     {
       [sl removeObjectAtIndex:i];
@@ -1925,10 +1911,10 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
     return self;
   }
   sys->flags.nstaves += [nsys numberOfStaves];
-  k = [nsys->staves count];
+  k = [nsys numberOfStaves];
   for (i = 0; i < k; i++)
   {
-    sp = [nsys->staves objectAtIndex:i];
+    sp = [nsys getStaff: i];
     [sys->staves addObject: sp];
     sp->mysys = sys;
   }
@@ -1959,19 +1945,19 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
 - unsetTablature: sender
 {
   int nsys, ns, i, j, k, n, cf=0, df=0;
-  NSMutableArray *al, *sl;
+  NSMutableArray *al;
   System *sys;
   Staff *sp;
   Tablature *p;
+  
   nsys = [syslist count];
   for (i = 0; i < nsys; i++)
   {
     sys = [syslist objectAtIndex:i];
-    sl = sys->staves;
     ns = [sys numberOfStaves];
     for (j = 0; j < ns; j++)
     {
-      sp = [sl objectAtIndex:j];
+      sp = [sys getStaff: j];
       al = sp->notes;
       k = [sp indexOfNoteAfter: [sys leftWhitespace]];
       n = [al count];
@@ -2007,7 +1993,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
 - setTablature: sender
 {
   int nsys, ns, i, j, k, n, cf=0, df=0;
-  NSMutableArray *al, *sl;
+  NSMutableArray *al;
   System *sys;
   Staff *sp;
   Tablature *p;
@@ -2015,11 +2001,10 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
   for (i = 0; i < nsys; i++)
   {
     sys = [syslist objectAtIndex:i];
-    sl = sys->staves;
     ns = [sys numberOfStaves];
     for (j = 0; j < ns; j++)
     {
-      sp = [sl objectAtIndex:j];
+      sp = [sys getStaff: j];
       al = sp->notes;
       k = [sp indexOfNoteAfter: [sys leftWhitespace]];
       n = [al count];
@@ -2057,7 +2042,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
 - upgradeNeumes
 {
   int nsys, ns, i, j, k/*, n */;
-  NSMutableArray *al, *sl;
+  NSMutableArray *al;
   System *sys;
   Staff *sp;
   Neume *p;
@@ -2066,12 +2051,11 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
   nsys = [syslist count];
   for (i = 0; i < nsys; i++)
   {
-    sys = [syslist objectAtIndex:i];
-    sl = sys->staves;
+    sys = [syslist objectAtIndex: i];
     ns = [sys numberOfStaves];
     for (j = 0; j < ns; j++)
     {
-      sp = [sl objectAtIndex:j];
+      sp = [sys getStaff: j];
       al = sp->notes;
       k = [al count]; 
       while (k--)
@@ -2096,46 +2080,46 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
 
 - upgradeParts
 {
-  int nsys, ns, i, j, k/*, n*/;
-  NSMutableArray *al, *sl, *pl = [[DrawApp sharedApplicationController] getPartlist];
-  CallPart *cp;
-  System *sys;
-  Staff *sp;
-  StaffObj *p;
+    int nsys, ns, i, j, k/*, n*/;
+    NSMutableArray *al, *pl = [[DrawApp sharedApplicationController] getPartlist];
+    CallPart *cp;
+    System *sys;
+    Staff *sp;
+    StaffObj *p;
 //  Tablature *t;
-  k = [pl count];
-  while (k--)
-  {
-    cp = [pl objectAtIndex:k];
-    if ((int) cp->instrument < 256)
+    k = [pl count];
+    while (k--)
     {
-        cp->instrument = [[NSString stringWithString:[instlist instNameForInt: (int) cp->instrument]] retain];
+	cp = [pl objectAtIndex:k];
+	if ((int) cp->instrument < 256)
+	{
+	    cp->instrument = [[NSString stringWithString:[instlist instNameForInt: (int) cp->instrument]] retain];
+	}
     }
-  }
-  nsys = [syslist count];
-  for (i = 0; i < nsys; i++)
-  {
-    sys = [syslist objectAtIndex:i];
-    sl = sys->staves;
-    ns = [sys numberOfStaves];
-    for (j = 0; j < ns; j++)
+    nsys = [syslist count];
+    for (i = 0; i < nsys; i++)
     {
-      sp = [sl objectAtIndex:j];
-        if (sp->part) [sp->part autorelease];
-      sp->part = nullPart; 
-      al = sp->notes;
-      k = [al count]; 
-      while (k--)
-      {
-        p = [al objectAtIndex:k];
-          if (p->part) [p->part autorelease];
-        p->part = nullPart; 
-      }
+	sys = [syslist objectAtIndex:i];
+	ns = [sys numberOfStaves];
+	for (j = 0; j < ns; j++)
+	{
+	    sp = [sys getStaff: j];
+	    if (sp->part)
+		[sp->part autorelease];
+	    sp->part = nullPart; 
+	    al = sp->notes;
+	    k = [al count]; 
+	    while (k--)
+	    {
+		p = [al objectAtIndex:k];
+		if (p->part) [p->part autorelease];
+		p->part = nullPart; 
+	    }
+	}
     }
-  }
-  [self dirty];
-  [self setNeedsDisplay:YES];
-  return self;
+    [self dirty];
+    [self setNeedsDisplay:YES];
+    return self;
 }
 
 
@@ -2149,22 +2133,22 @@ void setSplit(Hanger *h, int u, int f)
 - upgradeTies
 {
   int nsys, ns, i, j, k, n, hk, e;
-  NSMutableArray *al, *sl, *hl;
+  NSMutableArray *al, *hl;
   System *sys;
   Staff *sp;
   StaffObj *p;
   Tie *h, *hp;
   Hanger *nt;
   id nc=nil;
+  
   nsys = [syslist count];
   for (i = 0; i < nsys; i++)
   {
     sys = [syslist objectAtIndex:i];
-    sl = sys->staves;
     ns = [sys numberOfStaves];
     for (j = 0; j < ns; j++)
     {
-      sp = [sl objectAtIndex:j];
+      sp = [sys getStaff: j];
       al = sp->notes;
       k = 0;
       n = [al count];

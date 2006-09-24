@@ -41,7 +41,7 @@
 }
 
 
-+ (void)initialize;
++ (void) initialize;
 + (int) oldSizeCount;
 + getOldSizes: (float *) lm : (float *) rm : (float *) sh;
 + myInspector;
@@ -95,7 +95,7 @@
 - (float) getBracketX: (Bracket *) b : (int) sz;
 - linkobject: p;		/* put arg on objs list */
 - unlinkobject: p;		/* remove p from objs list */
-- (unsigned int)indexOfObject:s;	/* return index of given staff */
+- (unsigned int) indexOfObject: s;	/* return index of given staff */
 - (BOOL) relinknote : (StaffObj *) p;		/* relink note to sensible destination */
 
 // Staff manipulation.
@@ -105,7 +105,17 @@
  */
 - (int) numberOfStaves;
 - newStaff: (float) y;		/* put a new staff near y */
-- getstaff: (int) n;		/* return staff indexed by n */
+
+/*!
+  @brief Return an array of all staves.
+ */
+- (NSArray *) staves;
+
+/*!
+  @brief return staff indexed by n 
+ */
+- (Staff *) getStaff: (int) n;
+
 - getVisStaff: (int) n;		/* same, but nil if hidden */
 - lastStaff;
 - (int) whereIs: (Staff *) sp;		/* code for location of staff */
@@ -116,13 +126,13 @@
 
 
 - (int) whichMarker: (Graphic *) p;
-- (void)searchFor: (NSPoint) p :(NSMutableArray *)arr;	/* look for a hit in the system */
-- (void)dealloc;
+- (void) searchFor: (NSPoint) p :(NSMutableArray *)arr;	/* look for a hit in the system */
+- (void) dealloc;
 - draw: (NSRect) r nonSelectedOnly: (BOOL) nso;
 - drawHangers: (NSRect) r nonSelectedOnly: (BOOL) nso;
 - draw;
-- (id)initWithCoder:(NSCoder *)aDecoder;
-- (void)encodeWithCoder:(NSCoder *)aCoder;
+- (id) initWithCoder:(NSCoder *)aDecoder;
+- (void) encodeWithCoder:(NSCoder *)aCoder;
 - recalcObjs;
 
 /*!

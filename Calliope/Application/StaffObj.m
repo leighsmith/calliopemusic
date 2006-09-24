@@ -845,28 +845,17 @@ int protoVox;
     return self;
 }
 
-
-/* return whether a string is a blank verse */
-
-BOOL isBlank(unsigned char *s)
-{
-  unsigned char c;
-  if (s == NULL) return YES;
-  while (c = *s++) if (c != ' ') return NO;
-  return YES;
-}
-
-
 - (BOOL) hasAnyVerse
 {
-  Verse *v;
-  int k = [verses count];
-  while (k--)
-  {
-    v = [verses objectAtIndex:k];
-    if (!isBlank(v->data)) return YES;
-  }
-  return NO;
+    Verse *v;
+    int k = [verses count];
+    
+    while (k--) {
+	v = [verses objectAtIndex: k];
+	if (![v isBlank]) 
+	    return YES;
+    }
+    return NO;
 }
 
 
@@ -874,16 +863,18 @@ BOOL isBlank(unsigned char *s)
 
 - trimVerses
 {
-  Verse *v;
-  int k = [verses count];
-  while (k--)
-  {
-    v = [verses objectAtIndex:k];
-    if (!isBlank(v->data)) return self;
-    [verses removeObjectAtIndex:k];
-    if (selver >= k) selver = k - 1;
-  }
-  return self;
+    Verse *v;
+    int k = [verses count];
+    
+    while (k--) {
+	v = [verses objectAtIndex: k];
+	if (![v isBlank])
+	    return self;
+	[verses removeObjectAtIndex: k];
+	if (selver >= k) 
+	    selver = k - 1;
+    }
+    return self;
 }
 
 
@@ -940,26 +931,32 @@ BOOL isBlank(unsigned char *s)
 
 - (BOOL) hasVerseText: (int) i
 {
-  Verse *v;
-  if (verses == nil) return NO;
-  if ([verses count] <= i || i < 0) return NO;
-  v = [verses objectAtIndex:i];
-  if (v == nil) return NO;
-  if (v->data == NULL) return NO;
-  return(v->data[0] != '\0');
+    Verse *v;
+    
+    if (verses == nil) 
+	return NO;
+    if ([verses count] <= i || i < 0)
+	return NO;
+    v = [verses objectAtIndex: i];
+    if (v == nil) 
+	return NO;
+    return(![v isBlank]);
 }
-
 
 - (BOOL) continuesLine: (int) i
 {
-  Verse *v;
-  if (verses == nil) return NO;
-  if ([verses count] <= i || i < 0) return NO;
-  v = [verses objectAtIndex:i];
-  if (v == nil) return NO;
-  if (v->data == NULL) return NO;
-  if (v->data[0] == '\0') return NO;
-  return(v->data[0] == CONTLINE);
+    Verse *v;
+    
+    if (verses == nil) 
+	return NO;
+    if ([verses count] <= i || i < 0) 
+	return NO;
+    v = [verses objectAtIndex: i];
+    if (v == nil) 
+	return NO;
+    if ([v isBlank])
+	return NO;
+    return([[v string] characterAtIndex: 0] == CONTLINE);
 }
 
 
@@ -970,8 +967,7 @@ BOOL isBlank(unsigned char *s)
   if ([verses count] <= i || i < 0) return -1;
   v = [verses objectAtIndex:i];
   if (v == nil) return -1;
-  if (v->data == NULL) return -1;
-  if (v->data[0] == '\0') return -1;
+  if ([v isBlank]) return -1;
   return v->vFlags.hyphen;
 }
 
@@ -1062,17 +1058,15 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
     int k, r;
     Verse *v = nil;
     Staff *sp;
-    char *s;
     
 //  if (cs == NX_SYMBOLSET)
 //  if ([cc canBeConvertedToEncoding:NSSymbolStringEncoding])
-    if (![cc canBeConvertedToEncoding:NSNEXTSTEPStringEncoding])
-    {
-	if (verses == nil) return -1;
+    if (![cc canBeConvertedToEncoding:NSNEXTSTEPStringEncoding]) {
+	if (verses == nil) 
+	    return -1;
 	r = -1;
 	k = [verses count];
-	switch([cc characterAtIndex:0])
-	{
+	switch([cc characterAtIndex: 0]) {
 	    case NSUpArrowFunctionKey:
 		selver = [self incSelver: -1 : k];
 		r = 1;
@@ -1083,37 +1077,39 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
 		break;
 	    case NSLeftArrowFunctionKey:
 		if (selver < k && selver >= 0) v = [verses objectAtIndex:selver];
-		if (v != nil)
-		{
+		if (v != nil) {
 		    v->offset--;
 		    [v recalc];
 		}
-		    r = 1;
+		r = 1;
 		break;
 	    case NSRightArrowFunctionKey:
 		if (selver < k && selver >= 0) v = [verses objectAtIndex:selver];
-		if (v != nil)
-		{
+		if (v != nil) {
 		    v->offset++;
 		    [v recalc];
 		}
-		    r = 1;
+		r = 1;
 		break;
 	}
 	return r;
     }
     /* check if deleting a verse or character */
-    v=nil;
+    v = nil;
     k = [verses count];
-    if (*[cc cString] == 127)
-    {
-	if (verses == nil) { NSLog(@"keyDownString: verses = nil"); return 0; }
-	if (selver >= 0 && (selver < k))  v = [verses objectAtIndex:selver];
-	if (v == nil) { NSLog(@"keyDownString: v = nil"); return 0; }
+    if (*[cc cString] == 127) {
+	if (verses == nil) {
+	    NSLog(@"keyDownString: verses = nil"); 
+	    return 0; 
+	}
+	if (selver >= 0 && (selver < k))  
+	    v = [verses objectAtIndex: selver];
+	if (v == nil) {
+	    NSLog(@"keyDownString: v = nil");
+	    return 0;
+	}
 	
-	s = v->data;
-	if (s == NULL || strlen(s) == 0)
-	{
+	if ([v isBlank]) {
 	    [self unlinkverse: v];
 	    k = [verses count];
 	    if (selver >= k) selver = k - 1;
@@ -1136,14 +1132,17 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
 	if (selver >= 0 && selver < [verses count])
 	    v = [verses objectAtIndex:selver];
     }
-    if (v == nil || *[cc cString] == '\n' || *[cc cString] == '\r')
-    {
+    if (v == nil || *[cc cString] == '\n' || *[cc cString] == '\r') {
 	k = [verses count];
-	if (k + 1 >= MAXTEXT) { NSLog(@"k + 1 >= MAXTEXT"); return 0; }
+	if (k + 1 >= MAXTEXT) {
+	    NSLog(@"k + 1 >= MAXTEXT");
+	    return 0; 
+	}
 	v = [[Verse alloc] init];
 	[verses addObject: v];
 	v->note = self;
-	if (k == 0) [v keyDownString:cc];
+	if (k == 0) 
+	    [v keyDownString: cc];
 	[self setVerses];
 	v->gFlags.selected = 1;
 	selver = [verses indexOfObject:v];

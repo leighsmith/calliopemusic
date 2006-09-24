@@ -41,7 +41,7 @@ int subfor[4] = {2, 3, 2, 3};
 	  if (TYPEOF(sys) == STAFF) sys = ((Staff *) sys)->mysys;
 	  sn = [staffform intValue];
 	  sn = (sn <= 0) ? 0 : (sn - 1);
-	  nsp = [sys getstaff: sn];
+	  nsp = [sys getStaff: sn];
 	  if (nsp != nil) p->client = nsp;
 	  break;
         case TITLE:

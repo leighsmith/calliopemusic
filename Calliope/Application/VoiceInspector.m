@@ -16,62 +16,65 @@
 
 - selectBack: sender
 {
-  int n, i, nk, j;
-  Staff *sp;
-  StaffObj *q;
-  GraphicView *v = [DrawApp currentView];
-  System *sys = [[DrawApp sharedApplicationController] currentSystem];
-  NSMutableArray *sl, *nl;
-  if (sys == nil) return self;
-  [v deselectAll: v];
-  sl = sys->staves;
-  n = [sys numberOfStaves];
-  for (i = 0; i < n; i++)
-  {
-    sp = [sl objectAtIndex:i];
-    if (sp->flags.hidden) continue;
-    nl = sp->notes;
-    nk = [nl count];
-    for (j = 0; j < nk; j++)
-    {
-      q = [nl objectAtIndex:j];
-      if (q->isGraced == 2) [v selectObj: q];
+    int n, i, nk, j;
+    Staff *sp;
+    StaffObj *q;
+    GraphicView *v = [DrawApp currentView];
+    System *sys = [[DrawApp sharedApplicationController] currentSystem];
+    
+    if (sys == nil) 
+	return self;
+    [v deselectAll: v];
+    n = [sys numberOfStaves];
+    for (i = 0; i < n; i++) {
+	NSMutableArray *nl;
+
+	sp = [sys getStaff: i];
+	if (sp->flags.hidden) 
+	    continue;
+	nl = sp->notes;
+	nk = [nl count];
+	for (j = 0; j < nk; j++) {
+	    q = [nl objectAtIndex: j];
+	    if (q->isGraced == 2) 
+		[v selectObj: q];
+	}
     }
-  }
-  [v drawSelectionWith: NULL];
-  [v inspectSel: NO];
-  return self;
+    [v drawSelectionWith: NULL];
+    [v inspectSel: NO];
+    return self;
 }
 
 
 - selectVoice: sender
 {
-  int n, i, nk, j, vox;
-  Staff *sp;
-  StaffObj *q;
-  GraphicView *v = [DrawApp currentView];
-  System *sys = [[DrawApp sharedApplicationController] currentSystem];
-  NSMutableArray *sl, *nl;
-  if (sys == nil) return self;
-  vox = [[selAllForm cellAtIndex:0] intValue];
-  [v deselectAll: v];
-  sl = sys->staves;
-  n = [sys numberOfStaves];
-  for (i = 0; i < n; i++)
-  {
-    sp = [sl objectAtIndex:i];
-    if (sp->flags.hidden) continue;
-    nl = sp->notes;
-    nk = [nl count];
-    for (j = 0; j < nk; j++)
-    {
-      q = [nl objectAtIndex:j];
-      if (q->voice == vox) [v selectObj: q];
+    int n, i, nk, j, vox;
+    Staff *sp;
+    StaffObj *q;
+    GraphicView *v = [DrawApp currentView];
+    System *sys = [[DrawApp sharedApplicationController] currentSystem];
+    
+    if (sys == nil) 
+	return self;
+    vox = [[selAllForm cellAtIndex: 0] intValue];
+    [v deselectAll: v];
+    n = [sys numberOfStaves];
+    for (i = 0; i < n; i++) {
+	NSMutableArray *nl;
+
+	sp = [sys getStaff: i];
+	if (sp->flags.hidden) continue;
+	nl = sp->notes;
+	nk = [nl count];
+	for (j = 0; j < nk; j++) {
+	    q = [nl objectAtIndex: j];
+	    if (q->voice == vox)
+		[v selectObj: q];
+	}
     }
-  }
-  [v drawSelectionWith: NULL];
-  [v inspectSel: NO];
-  return self;
+    [v drawSelectionWith: NULL];
+    [v inspectSel: NO];
+    return self;
 }
 
 

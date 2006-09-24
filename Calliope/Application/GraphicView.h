@@ -148,7 +148,7 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
  */
 - (Page *) currentPage;
 
-- updateMargins: (float) h : (float) f : pi;
+- updateMarginsWithHeader: (float) h footer: (float) f printInfo: pi;
 
 /* First Responder */
 - (BOOL) acceptsFirstResponder;

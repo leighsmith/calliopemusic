@@ -121,8 +121,8 @@ static Bracket *proto;
         q->client2 = nil;
         return q;
     }
-    q->client1 = [sys->staves objectAtIndex:i];
-    q->client2 = [sys->staves objectAtIndex:j];
+    q->client1 = [sys getStaff: i];
+    q->client2 = [sys getStaff: j];
   }
   return q;
 }
@@ -209,7 +209,7 @@ static void displink(System *sys, int m)
   f1 = f2 = 0;
   while (i--)
   {
-    s = [sys getstaff: i];
+    s = [sys getStaff: i];
     if (s->flags.hidden) continue;
     y = [s yOfTop];
     if (y < ymin)

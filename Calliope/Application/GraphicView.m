@@ -112,47 +112,45 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
 
 - initClassVars
 {
-  void initScratchlist();
-  void initChanlist();
-  void initScrStylelist();
-  static BOOL registered = NO;
-  NSArray *sendTypes,*returnTypes;
-  NSArray *dragTypes;
-  
-  if (!KeyMotionDeltaDefault)
-  {
-      const char *value = [[[NSUserDefaults standardUserDefaults] objectForKey:@"KeyMotionDelta"] cString];
-      if (value) KeyMotionDeltaDefault = atof(value);
-      KeyMotionDeltaDefault = MAX(KeyMotionDeltaDefault, 1.0);
-  }
-  if (!registered)
-  {
-      registered = YES;
-      sendTypes = [NSArray arrayWithObjects:NSPostScriptPboardType,NSTIFFPboardType,DrawPboardType,nil];
-      returnTypes = [NSArray arrayWithObjects:NSPostScriptPboardType,NSTIFFPboardType,DrawPboardType,nil];
-      [NSApp registerServicesMenuSendTypes:sendTypes returnTypes:returnTypes];
-      dragTypes = [NSArray arrayWithObjects:NSFilenamesPboardType,NSPostScriptPboardType,NSTIFFPboardType,nil];
-      [self registerForDraggedTypes:dragTypes];
-  }
-//  paperSize = [[NSPrintInfo sharedPrintInfo] paperSize];
-  /*sb: not quite sure what purpose of previous line is. If the printinfo object is archived individually,
-      * there's no need to grab it from the archived graphicview like this.
-      */
-  if (slist) [slist autorelease];//sb: added cos might be done twice */
-  slist = [[NSMutableArray allocWithZone:[self zone]] init];
-  if (chanlist == nil) chanlist = [[self makeChanlist] retain];
-  if (partlist == nil)
-  {
-      partlist = [scratchlist retain];
-      initScratchlist();
-  }
-  if (stylelist == nil)
-  {
-      stylelist = [scrstylelist retain];
-      initScrStylelist();
-  }
-  scrolling = NO;
-  return self;
+    void initScratchlist();
+    void initChanlist();
+    void initScrStylelist();
+    static BOOL registered = NO;
+    NSArray *sendTypes, *returnTypes;
+    NSArray *dragTypes;
+    
+    if (!KeyMotionDeltaDefault) {
+	const char *value = [[[NSUserDefaults standardUserDefaults] objectForKey: @"KeyMotionDelta"] cString];
+	if (value) KeyMotionDeltaDefault = atof(value);
+	KeyMotionDeltaDefault = MAX(KeyMotionDeltaDefault, 1.0);
+    }
+    if (!registered) {
+	registered = YES;
+	sendTypes = [NSArray arrayWithObjects: NSPostScriptPboardType,NSTIFFPboardType,DrawPboardType,nil];
+	returnTypes = [NSArray arrayWithObjects: NSPostScriptPboardType,NSTIFFPboardType,DrawPboardType,nil];
+	[NSApp registerServicesMenuSendTypes: sendTypes returnTypes:returnTypes];
+	dragTypes = [NSArray arrayWithObjects: NSFilenamesPboardType,NSPostScriptPboardType,NSTIFFPboardType,nil];
+	[self registerForDraggedTypes: dragTypes];
+    }
+    //  paperSize = [[NSPrintInfo sharedPrintInfo] paperSize];
+    /*sb: not quite sure what purpose of previous line is. If the printinfo object is archived individually,
+	* there's no need to grab it from the archived graphicview like this.
+	*/
+    if (slist) 
+	[slist autorelease];//sb: added cos might be done twice */
+    slist = [[NSMutableArray allocWithZone: [self zone]] init];
+    if (chanlist == nil) 
+	chanlist = [[self makeChanlist] retain];
+    if (partlist == nil) {
+	partlist = [scratchlist retain];
+	initScratchlist();
+    }
+    if (stylelist == nil) {
+	stylelist = [scrstylelist retain];
+	initScrStylelist();
+    }
+    scrolling = NO;
+    return self;
 }
 
 
@@ -182,31 +180,40 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
 }
 
 /*
-    Kludge to get the model aspects of a GraphicView into another one
+ Kludge to get the model aspects of a GraphicView into another one.
+ Strictly speaking this isn't full initialisation.
+ It should become a NotationScore method, however.
 */
-
 - initWithGraphicView: (GraphicView *) v
 {
-    syslist       = [v->syslist retain];
-    pagelist      = [v->pagelist retain];
-    partlist      = [v->partlist retain];
-    chanlist      = [v->chanlist retain];
-    stylelist     = [v->stylelist retain];
-    currentSystem = [v->currentSystem retain];;
-    currentPage   = [v->currentPage retain];
-    
+    [syslist release];
+    syslist       = [v->syslist retain]; // Retain this since System hasn't implemented copyWithZone:
+    [pagelist release];
+    pagelist      = [v->pagelist copy];
+    [partlist release];
+    partlist      = [v->partlist copy];
+    [chanlist release];
+    chanlist      = [v->chanlist copy];
+    [stylelist release];
+    stylelist     = [v->stylelist copy];
+    [currentSystem release];
+    currentSystem = [v->currentSystem retain];   // Retain this since System hasn't implemented copyWithZone:
+    [currentPage release];
+    currentPage   = [v->currentPage copy];
+
     return self;
 }
 
-- (BOOL)isFlipped /*sb: added this to replace [self setFlipped:YES], above */
+/* sb: added this to replace [self setFlipped:YES], above */
+- (BOOL) isFlipped
 {
     return YES;
 }
 
 - setBackground: sender
 {
-    [self setNeedsDisplay:YES];
-  return self;
+    [self setNeedsDisplay: YES];
+    return self;
 }
 
 - (void)setFrameSize:(NSSize)newSize
@@ -853,7 +860,7 @@ extern char *typename[NUMTYPES];
     n = [sys numberOfStaves];
     while (n--)
     {
-      sp = [sys getstaff: n];
+      sp = [sys getStaff: n];
       if (sp->flags.hidden) continue;
       nl = sp->notes;
       k = [nl count];
@@ -2031,7 +2038,7 @@ static void drawHorz(float x, float y, float w, NSRect r)
 /* Archiver-related methods. */
 
 
-- updateMargins: (float) hb : (float) fb : pi
+- updateMarginsWithHeader: (float) hb footer: (float) fb printInfo: pi
 {
     System *s = [syslist objectAtIndex:0];
     Margin *m = [s checkMargin];
