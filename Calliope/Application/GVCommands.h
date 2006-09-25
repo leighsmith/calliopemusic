@@ -47,7 +47,7 @@
 - hiddenAllSys: sender;
 - setTablature: sender;
 - unsetTablature: sender;
-- delAll3rdStaves: sender; /* this is for my own use in converting old files */
+//- delAll3rdStaves: sender; /* this is for my own use in converting old files */
 - toggleStaffDisp: sender;
 - reShapeAllSys: sender;
 

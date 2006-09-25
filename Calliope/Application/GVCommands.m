@@ -1036,7 +1036,7 @@ static BOOL doToObject(Graphic *p, int c, int a)
     if (TYPEOF(sp) == STAFF)
     {
       sys = sp->mysys;
-      st = [sys->staves indexOfObject:sp];
+      st = [sys indexOfStaff: sp];
       j = [syslist indexOfObject:sys];
       for (i = j; i < k; i++)
       {
@@ -1263,7 +1263,7 @@ extern char *typename[NUMTYPES];
 
 
 /* For my own use only.  Removes tablature lines from old 3-staff editions */
-
+#if 0
 - delAll3rdStaves: sender
 {
   System *sys;
@@ -1305,7 +1305,7 @@ extern char *typename[NUMTYPES];
   [self firstPage: self];
   return self;
 }
-
+#endif
 
 #if 0
 
@@ -1722,41 +1722,6 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
   return self;
 }
 
-
-- delHiddenStaves: (System *) sys
-{
-  int i, j;
-  Staff *sp;
-  NSMutableArray *sl, *ol;
-  id p;
-  sl = sys->staves;
-  ol = sys->objs;
-  i = [sys numberOfStaves];
-  while (i--)
-  {
-    sp = [sys getStaff: i];
-    if (sp->flags.hidden)
-    {
-      [sl removeObjectAtIndex:i];
-      --(sys->flags.nstaves);
-      j = [ol count];
-      while (j--)
-      {
-	p = [ol objectAtIndex:j];
-	if (TYPEOF(p) == TEXTBOX && SUBTYPEOF(p) == STAFFHEAD) [p removeObj];
-	else if (TYPEOF(p) == BRACKET && SUBTYPEOF(p) != LINKAGE)
-	{
-	  if (sp == ((Bracket *)p)->client1 || sp == ((Bracket *)p)->client2)
-	    [p removeObj];
-	}
-      }
-      [sp release];
-    }
-  }
-  return self;
-}
-
-
 /*
   delete the hidden staves in a system.  Complication:
   must delete things that depend on the staff.  User Beware.
@@ -1771,7 +1736,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
     return nil;
   }
   if (!askAboutSys("You wish to delete all hidden staves from this system?", sys, self)) return nil;
-  [self delHiddenStaves: sys];
+  [sys deleteHiddenStaves];
   [self dirty];
   return self;
 }
@@ -1788,7 +1753,8 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
   }
   if (!askAboutSys("You wish to delete all hidden staves from ALL systems?", sys, self)) return nil;
   k = [syslist count];
-  while (k--) [self delHiddenStaves: [syslist objectAtIndex:k]];
+  while (k--) 
+      [[syslist objectAtIndex: k] deleteHiddenStaves];
   [self dirty];
   [self setNeedsDisplay:YES];
   return self;
@@ -1910,12 +1876,11 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
     NSLog(@"Assertion failure in GVCommands");
     return self;
   }
-  sys->flags.nstaves += [nsys numberOfStaves];
   k = [nsys numberOfStaves];
   for (i = 0; i < k; i++)
   {
     sp = [nsys getStaff: i];
-    [sys->staves addObject: sp];
+    [sys addStaff: sp];
     sp->mysys = sys;
   }
   k = [nsys->objs count];

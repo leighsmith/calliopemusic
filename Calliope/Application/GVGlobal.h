@@ -14,6 +14,6 @@
 - (NSMutableArray *) partList;
 
 - orderAllStaves: (char *) order;
-- orderCurrStaves: (System *) sys : (char *) order;
+- orderCurrStaves: (System *) sys by: (char *) order;
 
 @end

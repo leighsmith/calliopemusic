@@ -627,14 +627,14 @@ float textoff[2], baselines[2][MAXTEXT];
   int i, m = 0, s0, s1, s2;
   Bracket *p;
   i = [ol count];
-  s0 = [s->staves indexOfObject:self];
+  s0 = [s indexOfStaff: self];
   while (i--)
   {
     p = [ol objectAtIndex:i];
     if (TYPEOF(p) == BRACKET && SUBTYPEOF(p) != LINKAGE)
     {
-      s1 = [s->staves indexOfObject:p->client1];
-      s2 = [s->staves indexOfObject:p->client2];
+      s1 = [s indexOfStaff: p->client1];
+      s2 = [s indexOfStaff: p->client2];
       if (s1 < s2)
       {
         if (s0 < s1 || s2 < s0) continue;
@@ -835,7 +835,7 @@ float textoff[2], baselines[2][MAXTEXT];
 
 - (int) myIndex
 {
-  return [mysys indexOfObject:self];
+    return [mysys indexOfStaff: self];
 }
 
 
@@ -1452,7 +1452,7 @@ static void drawbarnum(int n, float x, float y, NSFont *f, int j, int eb, int mo
     }
     cstrokeline(th, 1);
     /* draw staff number marker */
-    DrawTextWithBaselineTies(bx + mysys->width + 8, [self yOfBottom], [NSString stringWithFormat: @"%d", [mysys->staves indexOfObject: self] + 1], fontdata[FONTSTMR], markmode[0]);
+    DrawTextWithBaselineTies(bx + mysys->width + 8, [self yOfBottom], [NSString stringWithFormat: @"%d", [mysys indexOfStaff: self] + 1], fontdata[FONTSTMR], markmode[0]);
     /* draw bar numbers */
     if ([mysys firststaff] == self || (flags.hasnums && [[DrawApp currentDocument] getPreferenceAsInt: BARNUMPLACE] == 2))
 	[self drawBarnumbers: m];

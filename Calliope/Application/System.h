@@ -8,11 +8,17 @@
 @class GraphicView;
 @class Page;
 
-@interface System : Graphic
+@interface System: Graphic
 {
+@private
+    /*! @var staves Array of staves */
+    NSMutableArray *staves;			
+    short pagenum;		/* system (actually page) number */
+    float barbase;		/* bar number baseline offset */
+    float height;		/* the height used in page balancing */
+    float headroom;		/* included in height */
 @public
     NSMutableArray *objs;			/* Array of random objects on this system */
-    NSMutableArray *staves;			/* Array of staves */
     GraphicView *view;			/* backreference to our GraphicView */
     Page *page;			/* backreference to our Page */
     struct
@@ -33,11 +39,6 @@
     float oldleft;		/* left margin changes while pagination (not cache: copy/paste) */
     float groupsep;		/* extra group separation */
     float expansion;		/* expansion factor (default 1.0) */
-@private
-    short pagenum;		/* system (actually page) number */
-    float barbase;		/* bar number baseline offset */
-    float height;		/* the height used in page balancing */
-    float headroom;		/* included in height */
 }
 
 
@@ -95,16 +96,24 @@
 - (float) getBracketX: (Bracket *) b : (int) sz;
 - linkobject: p;		/* put arg on objs list */
 - unlinkobject: p;		/* remove p from objs list */
-- (unsigned int) indexOfObject: s;	/* return index of given staff */
 - (BOOL) relinknote : (StaffObj *) p;		/* relink note to sensible destination */
 
 // Staff manipulation.
 
 /*!
+   @brief return index of given staff 
+ */
+- (unsigned int) indexOfStaff: (Staff *) s;
+
+/*!
   @brief Returns the number of staves (i.e Staff instances).
  */
 - (int) numberOfStaves;
-- newStaff: (float) y;		/* put a new staff near y */
+
+/*!
+  @brief put a new staff near y 
+ */
+- newStaff: (float) y;
 
 /*!
   @brief Return an array of all staves.
@@ -112,11 +121,30 @@
 - (NSArray *) staves;
 
 /*!
-  @brief return staff indexed by n 
+  @brief Return staff indexed by n 
  */
 - (Staff *) getStaff: (int) n;
 
-- getVisStaff: (int) n;		/* same, but nil if hidden */
+/*!
+   @brief Return staff indexed by n, but return nil if hidden 
+ */
+- getVisStaff: (int) n;
+
+/*!
+  @brief Deletes any staves which have been marked hidden.
+ */
+- (void) deleteHiddenStaves;
+
+/*!
+  @brief Appends the given staff to the current list of staves of this system.
+ */
+- (void) addStaff: (Staff *) newStaff;
+
+/*!
+  @brief Reorders the staves according to the index map.
+ */
+- (void) orderStavesBy: (char *) order;
+
 - lastStaff;
 - (int) whereIs: (Staff *) sp;		/* code for location of staff */
 - firststaff;			/* return first visible staff */

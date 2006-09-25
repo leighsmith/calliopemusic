@@ -291,7 +291,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
     float f=0.0, mm, mt, t, xt, tn, qt, dur, lt, fine, minstamp, lwhite;
     System *sys;
     Staff *sp;
-    NSMutableArray *nl, *hl, *sl, *tl;
+    NSMutableArray *nl, *hl, *tl;
     NSArray *channelList;
     NoteHead *h;
     GNote *q;
@@ -313,7 +313,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
     /* find out where to start */
     for (si = sj; si <= sk; si++)
     {
-        sys = [syslist objectAtIndex:si];
+        sys = [syslist objectAtIndex: si];
         lwhite = [sys leftWhitespace];
         n = [sys numberOfStaves];
         [sys  doStamp: n : lwhite];

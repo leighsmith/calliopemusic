@@ -113,8 +113,8 @@ static Bracket *proto;
   {
       unsigned i,j;
     s = ((Staff *)client1)->mysys;
-    i = [s->staves indexOfObject:client1];
-    j = [s->staves indexOfObject:client2];
+    i = [s indexOfStaff: client1];
+    j = [s indexOfStaff: client2];
     if (i == NSNotFound || j == NSNotFound) {
         NSLog(@"Bracket: can't find clients!\n");
         q->client1 = nil;

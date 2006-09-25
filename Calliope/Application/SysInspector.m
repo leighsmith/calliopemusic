@@ -1059,7 +1059,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
   }
   else if (a == NSAlertDefaultReturn)
   {
-    [v orderCurrStaves: sys : order];
+    [v orderCurrStaves: sys by: order];
   }
   [self setStaffButton: sys];
   busyFlag = NO;

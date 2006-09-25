@@ -238,7 +238,7 @@ static void addBarsRest(Staff *sp, System *sys, int n)
 	  staffmap[j] = esp;
 	  esp->mysys = esys;
 	  [self copyNotes: sp->notes : esp : epl];
-	  [esys->staves addObject: esp];
+	  [esys addStaff: esp];
 	  if (barsrest[j]) 
 	  {
 	    addBarsRest(esp, esys, barsrest[j]);
@@ -318,7 +318,7 @@ static void addBarsRest(Staff *sp, System *sys, int n)
 		    staffmap[j] = esp;
 		    esp->mysys = esys;
 		    [self copyNotes: sp->notes : esp : epl];
-		    [esys->staves addObject: esp];
+		    [esys addStaff: esp];
 		    if (barsrest[j]) 
 		    {
 			addBarsRest(esp, esys, barsrest[j]);
@@ -346,33 +346,20 @@ static void addBarsRest(Staff *sp, System *sys, int n)
     return self;
 }
 
-
-static void orderStaves(System *sys, char *order)
+- orderCurrStaves: (System *) sys by: (char *) order
 {
-    int j;
-    int sn = [sys numberOfStaves];
-    NSMutableArray *nsl = [[NSMutableArray alloc] init];
-    
-    for (j = 0; j < sn; j++) 
-	[nsl addObject: [sys getStaff: order[j]]];
-    sys->staves = nsl;
+    [sys orderStavesBy: order];
+    [sys recalc];
+    [self resetPage: currentPage];
+    return self;
 }
-
-
-- orderCurrStaves: (System *) sys : (char *) order
-{
-  orderStaves(sys, order);
-  [sys recalc];
-  [self resetPage: currentPage];
-  return self;
-}
-
 
 - orderAllStaves: (char *) order
 {
-  int i, nsys;
-  nsys = [syslist count];
-  for (i = 0; i < nsys; i++) orderStaves([syslist objectAtIndex:i], order);
+  int i, nsys = [syslist count];
+  
+  for (i = 0; i < nsys; i++) 
+      [[syslist objectAtIndex: i] orderStavesBy: order];
   [self recalcAllSys];
   [self balancePages];
   [self setNeedsDisplay:YES];

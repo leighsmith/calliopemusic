@@ -177,7 +177,7 @@
   }
   if (TYPEOF(self) == NOTE)
   {
-    GNote *q = self;
+    GNote *q = (GNote *) self;
     nl = q->headlist;
     k = [nl count];
     while (k--)

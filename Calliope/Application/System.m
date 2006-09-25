@@ -844,7 +844,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 
 - (int) numberOfStaves
 {
-    return flags.nstaves;
+    return flags.nstaves; // TODO should replace this with [staves count];
 }
 
 - newStaff: (float) ny
@@ -882,9 +882,53 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 }
 
 
-- (unsigned int)indexOfObject:s
+- (unsigned int) indexOfStaff: (Staff *) s
 {
-  return [staves indexOfObject:s];
+    return [staves indexOfObject: s];
+}
+
+- (void) deleteHiddenStaves
+{
+    int i, j;
+    
+    i = [self numberOfStaves];
+    while (i--) {
+	Staff *sp = [self getStaff: i];
+	
+	if (sp->flags.hidden) {
+	    [staves removeObjectAtIndex: i];
+	    --flags.nstaves;
+	    j = [objs count];
+	    while (j--) {
+		id p = [objs objectAtIndex: j];
+		
+		if (TYPEOF(p) == TEXTBOX && SUBTYPEOF(p) == STAFFHEAD) 
+		    [p removeObj];
+		else if (TYPEOF(p) == BRACKET && SUBTYPEOF(p) != LINKAGE) {
+		    if (sp == ((Bracket *)p)->client1 || sp == ((Bracket *)p)->client2)
+			[p removeObj];
+		}
+	    }
+	}
+    }
+}
+
+- (void) addStaff: (Staff *) newStaff
+{
+    [staves addObject: newStaff];
+    flags.nstaves++; // This should be eventually removed and just use -numberOfStaves
+}
+
+- (void) orderStavesBy: (char *) order
+{
+    int j;
+    int sn = [self numberOfStaves];
+    NSMutableArray *nsl = [[NSMutableArray alloc] init];
+    
+    for (j = 0; j < sn; j++) 
+	[nsl addObject: [self getStaff: order[j]]];
+    [staves release];
+    staves = nsl;
 }
 
 
