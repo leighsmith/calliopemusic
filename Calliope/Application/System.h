@@ -18,7 +18,7 @@
     float height;		/* the height used in page balancing */
     float headroom;		/* included in height */
 @public
-    NSMutableArray *nonStaffGraphics;			/* Array of random objects on this system */
+    NSMutableArray *nonStaffGraphics;			/* Array of random graphics on this system not attached to a staff */
     GraphicView *view;			/* backreference to our GraphicView */
     Page *page;			/* backreference to our Page */
     struct
@@ -32,7 +32,7 @@
 	unsigned int newbar : 1;	/* bar number changes sequence */
 	unsigned int newpage : 1;   /* page number changes sequence */
     } flags;
-    float width;			/* width within margins and indent*/
+    float width;			/* width within margins and indent */
     short barnum;			/* number of first measure on this staff */
     NSString *style;
     float lindent, rindent;	/* left and right indents */

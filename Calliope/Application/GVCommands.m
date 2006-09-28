@@ -1074,7 +1074,7 @@ char ch[8] = ".@#!.FSN";
   {
     sys = [syslist objectAtIndex:k];
     ns = [sys numberOfStaves];
-    if (ns != [sys numberOfStaves]) NSLog(@"System %d: count=%d, nstaves=%d\n", k, ns, [sys numberOfStaves]);
+    if (ns != [sys numberOfStaves]) NSLog(@"System %d: count=%d, number of staves=%d\n", k, ns, [sys numberOfStaves]);
   }
   NSLog(@"checking finished\n");
 #endif
@@ -1858,50 +1858,51 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
 
 - mergeSys: sender
 {
-  int i, k;
-  System *sys = currentSystem;
-  System *nsys;
-  Staff *sp;
-  Page *p1, *p2;
-  id p;
-  BOOL pag;
-  if (currentSystem  == nil)
-  {
-    NSLog(@"Assertion failure in GVCommands");
-    return self;
-  }
-  nsys = [self getSystem: currentSystem offsetBy: 1];
-  if (nsys == nil)
-  {
-    NSLog(@"Assertion failure in GVCommands");
-    return self;
-  }
-  k = [nsys numberOfStaves];
-  for (i = 0; i < k; i++)
-  {
-    sp = [nsys getStaff: i];
-    [sys addStaff: sp];
-    sp->mysys = sys;
-  }
-  k = [nsys->nonStaffGraphics count];
-  for (i = 0; i < k; i++) 
-  {
-    p = [nsys->nonStaffGraphics objectAtIndex:i];
-    if (TYPEOF(p) == RUNNER)
+    int i, k;
+    System *sys = currentSystem;
+    System *nsys;
+    Staff *sp;
+    Page *p1, *p2;
+    id p;
+    BOOL pag;
+    if (currentSystem  == nil)
     {
-      ((Runner *)p)->client = sys;
-      [sys->nonStaffGraphics addObject: p];
+	NSLog(@"Assertion failure in GVCommands");
+	return self;
     }
-    else if (TYPEOF(p) == TEXTBOX && SUBTYPEOF(p) == STAFFHEAD) [sys->nonStaffGraphics addObject: p];
-    else if (TYPEOF(p) == BRACKET && SUBTYPEOF(p) != LINKAGE) [sys->nonStaffGraphics addObject: p];
-  }
-  [sys recalc];
-  p1 = sys->page;
-  p2 = nsys->page;
-  pag = [self deleteThisSystem: nsys];
-  if (!pag) [self simplePaginate: sys afterAddingCount: 0 askIfLoose: YES];
-  [[DrawApp sharedApplicationController] inspectApp];
-  return self;
+    nsys = [self getSystem: currentSystem offsetBy: 1];
+    if (nsys == nil)
+    {
+	NSLog(@"Assertion failure in GVCommands");
+	return self;
+    }
+    k = [nsys numberOfStaves];
+    for (i = 0; i < k; i++)
+    {
+	sp = [nsys getStaff: i];
+	[sys addStaff: sp];
+	sp->mysys = sys;
+    }
+    k = [nsys->nonStaffGraphics count];
+    for (i = 0; i < k; i++) 
+    {
+	p = [nsys->nonStaffGraphics objectAtIndex:i];
+	if (TYPEOF(p) == RUNNER)
+	{
+	    ((Runner *)p)->client = sys;
+	    [sys linkobject: p];
+	}
+	else if (TYPEOF(p) == TEXTBOX && SUBTYPEOF(p) == STAFFHEAD) ||
+		(TYPEOF(p) == BRACKET && SUBTYPEOF(p) != LINKAGE) 
+		[sys linkobject: p];
+    }
+    [sys recalc];
+    p1 = sys->page;
+    p2 = nsys->page;
+    pag = [self deleteThisSystem: nsys];
+    if (!pag) [self simplePaginate: sys afterAddingCount: 0 askIfLoose: YES];
+    [[DrawApp sharedApplicationController] inspectApp];
+    return self;
 }
 
 
