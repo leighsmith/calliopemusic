@@ -3126,10 +3126,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(LOCAL_LIBRARY_DIR)/Frameworks",
-					"~/Sources/Music/Calliope/Application/CalliopePropertyListCoders",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_FAST_MATH = NO;
@@ -3194,10 +3191,7 @@
 		D8F249F909AD3F8D00B96D0D /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(LOCAL_LIBRARY_DIR)/Frameworks",
-					"~/Sources/Music/Calliope/Application/CalliopePropertyListCoders",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				HEADER_SEARCH_PATHS = (
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 					"~/Sources/Music/Calliope/Application",

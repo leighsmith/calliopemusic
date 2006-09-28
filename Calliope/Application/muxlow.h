@@ -40,7 +40,11 @@ int votesFor(NSFont *f, int i);
 int multVotes();
 NSFont *mostVotes();
 BOOL findEndpoints(NSMutableArray *l, id *n0, id *n1);
-float figHeight(unsigned char *s, float n);
+
+/*!
+  @brief Given a figure string and a line spacing, find height of figure.
+ */
+float figHeight(NSString *figureString, float lineSpacing);
 
 void getRegion(NSRect *region, const NSPoint *p1, const NSPoint *p2);
 void graphicBBox(NSRect *bbox, Graphic *g);

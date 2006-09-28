@@ -475,10 +475,12 @@ void clearMatrix(NSMatrix *p)
 
 /* given a figure string and a line spacing, find height of figure */
 
-float figHeight(unsigned char *s, float n)
+float figHeight(NSString *figureString, float lineSpacing)
 {
   unsigned char c;
-  float r = 0;
+  float heightOfFigure = 0;
+  const char *s = [figureString UTF8String];
+  
   while (c = *s++)
   {
     if (isedbrack(c))
@@ -490,22 +492,22 @@ float figHeight(unsigned char *s, float n)
     else if (c == '1')
     {
       if (*s != '\0') ++s;
-      r += n;
+      heightOfFigure += lineSpacing;
     }
-    else if (c == ' ') r += n;
+    else if (c == ' ') heightOfFigure += lineSpacing;
     else if (isaccident(c))
     {
       c = *s;
       if (c == '3')
       {
         ++s;
-        r += n;
+        heightOfFigure += lineSpacing;
       }
-      else if (c == '\0') r += n;
+      else if (c == '\0') heightOfFigure += lineSpacing;
     }
-    else r += n;
+    else heightOfFigure += lineSpacing;
   }
-  return r;
+  return heightOfFigure;
 }
 
 

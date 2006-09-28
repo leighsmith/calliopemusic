@@ -237,7 +237,7 @@ float textoff[2], baselines[2][MAXTEXT];
 	    if (ibl)
 	    {
 	      /* figures above are in the ascent */
-	      py = figHeight(v->data, t);
+	      py = figHeight([v string], t);
               if (py > texta[ibl][jbl]) { texta[ibl][jbl] = py; textau[ibl][jbl] = YES; }
               py = -fontDescent(f);
               if (py > textd[ibl][jbl]) { textd[ibl][jbl] = py; textdu[ibl][jbl] = YES; }
@@ -247,7 +247,7 @@ float textoff[2], baselines[2][MAXTEXT];
 	      /* figures below are in the descent  */
               py = t;
               if (py > texta[ibl][jbl]) { texta[ibl][jbl] = py; textau[ibl][jbl] = YES; }
-	      py = figHeight(v->data, t) - t;
+	      py = figHeight([v string], t) - t;
               if (py > textd[ibl][jbl]) { textd[ibl][jbl] = py; textdu[ibl][jbl] = YES; }
 	    }
 	  }
@@ -500,7 +500,7 @@ float textoff[2], baselines[2][MAXTEXT];
 }
 
 
-/* free objs first because some might point to staff objects */
+/* free nonStaffGraphics first because some might point to staff objects */
 - (void) dealloc
 {
     [part release];
@@ -623,7 +623,7 @@ float textoff[2], baselines[2][MAXTEXT];
 - (int) brackLevel
 {
   System *s = mysys;
-  NSMutableArray *ol = s->objs;
+  NSMutableArray *ol = s->nonStaffGraphics;
   int i, m = 0, s0, s1, s2;
   Bracket *p;
   i = [ol count];
@@ -653,7 +653,7 @@ float textoff[2], baselines[2][MAXTEXT];
 - (BOOL) atTopOf: (int) bt
 {
   System *s = mysys;
-  NSMutableArray *ol = s->objs;
+  NSMutableArray *ol = s->nonStaffGraphics;
   Bracket *p;
   int i = [ol count];
   while (i--)

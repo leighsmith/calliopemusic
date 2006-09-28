@@ -618,7 +618,7 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
 	for (j = firstSystem; j <= s1; j++)
 	{
 	    System *sys = [syslist objectAtIndex: j];
-	    ol = sys->objs;
+	    ol = sys->nonStaffGraphics;
 	    ok = [ol count];
 	    while (ok--) {
 		// Since Runners do not hold the back pointer to Page, all this does is assign Runners to Page.

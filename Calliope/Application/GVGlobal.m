@@ -85,7 +85,7 @@ static void makeLinkage(System *sys)
   Graphic *p, *t;
   Staff *sp1, *sp2;
   int i;
-  NSMutableArray *ol = osys->objs;
+  NSMutableArray *ol = osys->nonStaffGraphics;
   if ([nsys numberOfStaves] > 1) makeLinkage(nsys);
   else
   {

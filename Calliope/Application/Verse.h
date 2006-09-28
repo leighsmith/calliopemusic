@@ -41,7 +41,7 @@
     float pixlen;
     float baseline;
     id note;				/* a backpointer */
-// @private    
+@private    
     unsigned char *data;		/* the string TODO should be a NSString */
 }
 

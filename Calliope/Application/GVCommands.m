@@ -272,7 +272,7 @@ static NSString *stylescratch;
   for (i = j; i < k; i++)
   {
     sys = [syslist objectAtIndex:i];
-    ol = sys->objs;
+    ol = sys->nonStaffGraphics;
     ok = [ol count];
     while (ok--)
     {
@@ -1283,7 +1283,7 @@ extern char *typename[NUMTYPES];
     [sys->staves removeObjectAtIndex:2];
     ++r;
     --(sys->flags.nstaves);
-    ol = sys->objs;
+    ol = sys->nonStaffGraphics;
     j = [ol count];
     while (j--)
     {
@@ -1853,7 +1853,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
 
 /*
   Merge currentsys and the one following it into one big system.
-  Take care with objs, using only runners, staff headers, brackets.
+  Take care with nonStaffGraphics, using only runners, staff headers, brackets.
 */
 
 - mergeSys: sender
@@ -1883,17 +1883,17 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
     [sys addStaff: sp];
     sp->mysys = sys;
   }
-  k = [nsys->objs count];
+  k = [nsys->nonStaffGraphics count];
   for (i = 0; i < k; i++) 
   {
-    p = [nsys->objs objectAtIndex:i];
+    p = [nsys->nonStaffGraphics objectAtIndex:i];
     if (TYPEOF(p) == RUNNER)
     {
       ((Runner *)p)->client = sys;
-      [sys->objs addObject: p];
+      [sys->nonStaffGraphics addObject: p];
     }
-    else if (TYPEOF(p) == TEXTBOX && SUBTYPEOF(p) == STAFFHEAD) [sys->objs addObject: p];
-    else if (TYPEOF(p) == BRACKET && SUBTYPEOF(p) != LINKAGE) [sys->objs addObject: p];
+    else if (TYPEOF(p) == TEXTBOX && SUBTYPEOF(p) == STAFFHEAD) [sys->nonStaffGraphics addObject: p];
+    else if (TYPEOF(p) == BRACKET && SUBTYPEOF(p) != LINKAGE) [sys->nonStaffGraphics addObject: p];
   }
   [sys recalc];
   p1 = sys->page;

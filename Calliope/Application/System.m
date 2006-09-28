@@ -142,7 +142,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
     
     staveCount = flags.nstaves;
     numberOfVisibleStaves = 0;
-    titleOffset = titleRoom(objs);
+    titleOffset = titleRoom(nonStaffGraphics);
     y = yi;
     for (staveIndex = 0; staveIndex < staveCount; staveIndex++) {
 	Staff *staff = [staves objectAtIndex: staveIndex];
@@ -165,7 +165,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 		if (h > maxHeight) 
 		    maxHeight = h;
 	    }
-	    h = staffheadRoom(objs, staff);
+	    h = staffheadRoom(nonStaffGraphics, staff);
 	    if (h > maxHeight) 
 		maxHeight = h;
 	    h = [staff getHeadroom]; /* only valid because measureStaff sets vhigha */
@@ -221,15 +221,15 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 
 - recalcObjs
 {
-  int ns = [objs count];
-  while (ns--) [[objs objectAtIndex:ns] recalc];
+  int ns = [nonStaffGraphics count];
+  while (ns--) [[nonStaffGraphics objectAtIndex:ns] recalc];
   return self;
 }
 
 
 /*
   After the spacing between staves has been altered, it is necessary to recalc anything that
-  may span staves (bars, objs).  Even hidden staves because of adjust.
+  may span staves (bars, nonStaffGraphics).  Even hidden staves because of adjust.
 */
 
 - resetSpanners
@@ -287,8 +287,8 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   int k = [staves count];
   gFlags.morphed = 1;
   while (k--) [[staves objectAtIndex:k] mark];
-  k = [objs count];
-  while (k--) [[objs objectAtIndex:k] mark];
+  k = [nonStaffGraphics count];
+  while (k--) [[nonStaffGraphics objectAtIndex:k] mark];
   return self;
 }
 
@@ -300,8 +300,8 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   rindent -= dx;
   k = [staves count];
   while (k--) [[staves objectAtIndex:k] moveBy:dx :dy];
-  k = [objs count];
-  while (k--) [[objs objectAtIndex:k] moveBy:dx :dy];
+  k = [nonStaffGraphics count];
+  while (k--) [[nonStaffGraphics objectAtIndex:k] moveBy:dx :dy];
   [super moveBy:dx :dy];
 }
 
@@ -352,7 +352,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 	staffScale = 0.0;
 	page =  nil; /* backpointer -- no retain */
 	style = nullPart;
-	objs = [[NSMutableArray alloc] init];
+	nonStaffGraphics = [[NSMutableArray alloc] init];
 	staves = [[NSMutableArray arrayWithCapacity: n] retain];
 	while (n--) {
 	    Staff *aStaff = [[Staff alloc] init];
@@ -442,9 +442,9 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 	if (lastKeySignature != nil) 
 	    [sp linknote: [lastKeySignature newFrom]];
     }
-    systemObjectsCount = [objs count];
+    systemObjectsCount = [nonStaffGraphics count];
     while (systemObjectsCount--) {
-	id p = [objs objectAtIndex: systemObjectsCount];
+	id p = [nonStaffGraphics objectAtIndex: systemObjectsCount];
 	
 	if (TYPEOF(p) == BRACKET) 
 	    [newSystem linkobject: [(Bracket *) p newFrom: newSystem]];
@@ -471,7 +471,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   sys->height = height;
   sys->headroom = headroom;
   sys->style = style;
-  sys->objs = [[NSMutableArray alloc] init];
+  sys->nonStaffGraphics = [[NSMutableArray alloc] init];
   sys->staves = [[NSMutableArray alloc] init];
   return sys;
 }
@@ -526,7 +526,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
       if (![sp->part isEqualToString:nullPart])
     {
       t = [sp makeName: full];
-      [objs addObject: t];
+      [nonStaffGraphics addObject: t];
       [t recalc];
       [v selectObj: t];
     }
@@ -540,11 +540,11 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 - closeSystem
 {
   Graphic *p;
-  int k = [objs count];
+  int k = [nonStaffGraphics count];
   while (k--)
   {
-    p = [objs objectAtIndex:k];
-    if (TYPEOF(p) == MARGIN) [objs removeObjectAtIndex:k];
+    p = [nonStaffGraphics objectAtIndex:k];
+    if (TYPEOF(p) == MARGIN) [nonStaffGraphics removeObjectAtIndex:k];
   }
   return self;
 }
@@ -560,10 +560,10 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 - checkMargin
 {
   Margin *p;
-  int k = [objs count];
+  int k = [nonStaffGraphics count];
   while (k--)
   {
-    p = [objs objectAtIndex:k];
+    p = [nonStaffGraphics objectAtIndex:k];
     if (TYPEOF(p) == MARGIN) return p;
   }
   return nil;
@@ -675,10 +675,10 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 {
   int k;
   TextGraphic *p;
-  k = [objs count];
+  k = [nonStaffGraphics count];
   while (k--)
   {
-    p = [objs objectAtIndex:k];
+    p = [nonStaffGraphics objectAtIndex:k];
     if (TYPEOF(p) == TEXTBOX && SUBTYPEOF(p) == TITLE) return YES;
   }
   return NO;
@@ -733,11 +733,11 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 
 - (BOOL) hasLinkage
 {
-  int i = [objs count];
+  int i = [nonStaffGraphics count];
   Bracket *p;
   while (i--)
   {
-    p = [objs objectAtIndex:i];
+    p = [nonStaffGraphics objectAtIndex:i];
     if (p->gFlags.type == BRACKET && p->gFlags.subtype == LINKAGE) return YES;
   }
   return NO;
@@ -746,11 +746,11 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 
 - (BOOL) hasBracket: (Staff *) sp
 {
-  int i = [objs count];
+  int i = [nonStaffGraphics count];
   Bracket *p;
   while (i--)
   {
-    p = [objs objectAtIndex:i];
+    p = [nonStaffGraphics objectAtIndex:i];
     if (p->gFlags.type == BRACKET && p->gFlags.subtype != LINKAGE && (sp == p->client1 || sp == p->client2)) return YES;
   }
   return NO;
@@ -761,12 +761,12 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 {
   int k, i1, i2, i3, i4, t;
   Bracket *p;
-  k = [objs count];
+  k = [nonStaffGraphics count];
   i1 = [staves indexOfObject:sp1];
   i2 = [staves indexOfObject:sp2];
   while (k--)
   {
-    p = [objs objectAtIndex:k];
+    p = [nonStaffGraphics objectAtIndex:k];
     if (TYPEOF(p) == BRACKET && SUBTYPEOF(p) != LINKAGE)
     {
       i3 = [staves indexOfObject:p->client1];
@@ -821,19 +821,19 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 }
 
 
-/* put something on the objs list */
+/* put something on the nonStaffGraphics list */
 
 - linkobject: p
 {
-  [objs addObject: p];
+  [nonStaffGraphics addObject: p];
   return p;
 }
 
 
 - unlinkobject: p
 {
-    int theLocation = [objs indexOfObject:[[p retain] autorelease]];
-    if (theLocation != NSNotFound) [objs removeObjectAtIndex: theLocation];
+    int theLocation = [nonStaffGraphics indexOfObject:[[p retain] autorelease]];
+    if (theLocation != NSNotFound) [nonStaffGraphics removeObjectAtIndex: theLocation];
   return p;
 }
 
@@ -898,9 +898,9 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 	if (sp->flags.hidden) {
 	    [staves removeObjectAtIndex: i];
 	    --flags.nstaves;
-	    j = [objs count];
+	    j = [nonStaffGraphics count];
 	    while (j--) {
-		id p = [objs objectAtIndex: j];
+		id p = [nonStaffGraphics objectAtIndex: j];
 		
 		if (TYPEOF(p) == TEXTBOX && SUBTYPEOF(p) == STAFFHEAD) 
 		    [p removeObj];
@@ -1078,9 +1078,9 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 	if (s->flags.hidden) continue;
 	[s searchFor: p : arr];
     }
-    numOfObjects = [objs count];
+    numOfObjects = [nonStaffGraphics count];
     while (numOfObjects--) {
-	id q = [objs objectAtIndex: numOfObjects];
+	id q = [nonStaffGraphics objectAtIndex: numOfObjects];
 	
 	if ([q hit: p])
 	    if (![arr containsObject: q])
@@ -1090,13 +1090,13 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
     }
 }
 
-/* free objs first because some might point to staff objects */
+/* free nonStaffGraphics first because some might point to staff objects */
 - (void) dealloc
 {
     [style release];
     style = nil;
-    [objs release];
-    objs = nil;
+    [nonStaffGraphics release];
+    nonStaffGraphics = nil;
     [staves release];
     staves = nil;
     [super dealloc];
@@ -1104,8 +1104,8 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 
 - (NSString *) description
 {
-    return [NSString stringWithFormat: @"%@ Page=%p staves=%@ objs=%@", 
-	[super description], page, staves, objs];
+    return [NSString stringWithFormat: @"%@ Page=%p staves=%@ nonStaffGraphics=%@", 
+	[super description], page, staves, nonStaffGraphics];
 }
 
 /* return which marker a given obj is */
@@ -1113,10 +1113,10 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 - (int) whichMarker: (Graphic *) p
 {
   Graphic *q;
-  int j = 0, k = [objs count];
+  int j = 0, k = [nonStaffGraphics count];
   while (k--)
   {
-    q = [objs objectAtIndex:k];
+    q = [nonStaffGraphics objectAtIndex:k];
     if (TYPEOF(q) == RUNNER || TYPEOF(q) == MARGIN)
     {
       if (q == p) return j;
@@ -1132,7 +1132,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 */
 
 
-/* draw any subobjects (in this case, staves, objs, marker, bar numbers) */
+/* draw any subobjects (in this case, staves, nonStaffGraphics, marker, bar numbers) */
 
 - draw: (NSRect) r nonSelectedOnly: (BOOL) nso
 {
@@ -1141,9 +1141,9 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
     
     for (staveIndex = 0; staveIndex < flags.nstaves; staveIndex++) 
 	[[staves objectAtIndex: staveIndex] draw: r nonSelectedOnly: nso];
-    objectsCount = [objs count];
+    objectsCount = [nonStaffGraphics count];
     while (objectsCount--) 
-	[[objs objectAtIndex: objectsCount] draw: r nonSelectedOnly: nso];
+	[[nonStaffGraphics objectAtIndex: objectsCount] draw: r nonSelectedOnly: nso];
     // draw a box for access in different colours based on it's selection.
     crect(bounds.origin.x, bounds.origin.y, 8, 8, markmode[gFlags.selected]);
     if (flags.pgcontrol) 
@@ -1160,9 +1160,9 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
     
     for (i = 0; i < flags.nstaves; i++)
 	[[staves objectAtIndex:i] drawHangers: r nonSelectedOnly: nso];
-    i = [objs count];
+    i = [nonStaffGraphics count];
     while (i--)
-	[[objs objectAtIndex:i] drawHangers: r nonSelectedOnly: nso];
+	[[nonStaffGraphics objectAtIndex:i] drawHangers: r nonSelectedOnly: nso];
     return self;
 }
 
@@ -1244,7 +1244,7 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
     flags.newbar = b7;
     flags.newpage = b8;
     [aDecoder decodeValuesOfObjCTypes:"ssfffffffff", &pagenum, &barnum, &barbase, &width, &lindent, &rindent, &groupsep, &expansion, &height, &headroom, &oldleft];
-    [aDecoder decodeValuesOfObjCTypes:"@@@", &staves, &objs, &style];
+    [aDecoder decodeValuesOfObjCTypes:"@@@", &staves, &nonStaffGraphics, &style];
     view = [[aDecoder decodeObject] retain];
     page = [[aDecoder decodeObject] retain];
     return self;
@@ -1261,7 +1261,7 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
     flags.newbar = b7;
     flags.newpage = b8;
     [aDecoder decodeValuesOfObjCTypes:"ssfffffffff", &pagenum, &barnum, &barbase, &width, &lindent, &rindent, &groupsep, &expansion, &height, &headroom, &oldleft];
-    [aDecoder decodeValuesOfObjCTypes:"@@%", &staves, &objs, &oldstyle];
+    [aDecoder decodeValuesOfObjCTypes:"@@%", &staves, &nonStaffGraphics, &oldstyle];
     if (oldstyle) style = [[NSString stringWithCString:oldstyle] retain]; else style = nil;
     view = [[aDecoder decodeObject] retain];
     page = [[aDecoder decodeObject] retain];
@@ -1280,7 +1280,7 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
     flags.newpage = b8;
     [aDecoder decodeValuesOfObjCTypes:"ssfffffffff", &pagenum, &barnum, &barbase, &width, &lindent, &rindent, &groupsep, &expansion, &height, &headroom, &oldleft];
     [self updateNumbering];
-    [aDecoder decodeValuesOfObjCTypes:"@@%", &staves, &objs, &oldstyle];
+    [aDecoder decodeValuesOfObjCTypes:"@@%", &staves, &nonStaffGraphics, &oldstyle];
     if (oldstyle) style = [[NSString stringWithCString:oldstyle] retain]; else style = nil;
     view = [[aDecoder decodeObject] retain];
     page = [[aDecoder decodeObject] retain];
@@ -1296,7 +1296,7 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
     flags.disjoint = b6;
     [aDecoder decodeValuesOfObjCTypes:"ssffffffff", &pagenum, &barnum, &barbase, &width, &lindent, &rindent, &groupsep, &expansion, &height, &headroom];
     [self updateNumbering];
-    [aDecoder decodeValuesOfObjCTypes:"@@%", &staves, &objs, &oldstyle];
+    [aDecoder decodeValuesOfObjCTypes:"@@%", &staves, &nonStaffGraphics, &oldstyle];
     if (oldstyle) style = [[NSString stringWithCString:oldstyle] retain]; else style = nil;
     view = [[aDecoder decodeObject] retain];
     page = [[aDecoder decodeObject] retain];
@@ -1313,7 +1313,7 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
     flags.disjoint = b6;
     [aDecoder decodeValuesOfObjCTypes:"ssffffffff", &pagenum, &barnum, &barbase, &width, &lindent, &rindent, &groupsep, &expansion, &height, &headroom];
     [self updateNumbering];
-    [aDecoder decodeValuesOfObjCTypes:"@@", &staves, &objs];
+    [aDecoder decodeValuesOfObjCTypes:"@@", &staves, &nonStaffGraphics];
     view = [[aDecoder decodeObject] retain];
     page = [[aDecoder decodeObject] retain];
     return self;
@@ -1328,7 +1328,7 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
     flags.disjoint = b6;
     [aDecoder decodeValuesOfObjCTypes:"ssffffffff", &pagenum, &barnum, &barbase, &width, &lindent, &rindent, &groupsep, &expansion, &height, &headroom];
     [self updateNumbering];
-    [aDecoder decodeValuesOfObjCTypes:"@@", &staves, &objs];
+    [aDecoder decodeValuesOfObjCTypes:"@@", &staves, &nonStaffGraphics];
     view = [[aDecoder decodeObject] retain];
     return self;
   }
@@ -1341,7 +1341,7 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
     flags.equidist = b5;
     [aDecoder decodeValuesOfObjCTypes:"ssffffffff", &pagenum, &barnum, &barbase, &width, &lindent, &rindent, &groupsep, &expansion, &height, &headroom];
     [self updateNumbering];
-    [aDecoder decodeValuesOfObjCTypes:"@@", &staves, &objs];
+    [aDecoder decodeValuesOfObjCTypes:"@@", &staves, &nonStaffGraphics];
     view = [[aDecoder decodeObject] retain];
     return self;
   }
@@ -1354,7 +1354,7 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
     flags.equidist = b5;
     [aDecoder decodeValuesOfObjCTypes:"ssffffff", &pagenum, &barnum, &barbase, &width, &lindent, &rindent, &groupsep, &expansion];
     [self updateNumbering];
-    [aDecoder decodeValuesOfObjCTypes:"@@", &staves, &objs];
+    [aDecoder decodeValuesOfObjCTypes:"@@", &staves, &nonStaffGraphics];
     view = [[aDecoder decodeObject] retain];
     return self;
   }
@@ -1367,7 +1367,7 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
     flags.equidist = b5;
     [aDecoder decodeValuesOfObjCTypes:"ssfffff", &pagenum, &barnum, &width, &lindent, &rindent, &groupsep, &expansion];
     [self updateNumbering];
-    [aDecoder decodeValuesOfObjCTypes:"@@", &staves, &objs];
+    [aDecoder decodeValuesOfObjCTypes:"@@", &staves, &nonStaffGraphics];
     view = [[aDecoder decodeObject] retain];
     return self;
   }
@@ -1402,7 +1402,7 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
     [aDecoder decodeValuesOfObjCTypes:"ffc", &groupsep, &expansion, &b5];
     flags.equidist = b5;
   }
-  [aDecoder decodeValuesOfObjCTypes:"@@", &staves, &objs];
+  [aDecoder decodeValuesOfObjCTypes:"@@", &staves, &nonStaffGraphics];
   view = [[aDecoder decodeObject] retain];
   lindent *= (sheight / 32.0);
   return self;
@@ -1423,7 +1423,7 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
   b8 = flags.newpage;
   [aCoder encodeValuesOfObjCTypes:"cccccccc", &b1, &b2, &b3, &b4, &b5, &b6, &b7, &b8];
   [aCoder encodeValuesOfObjCTypes:"ssfffffffff", &pagenum, &barnum, &barbase, &width, &lindent, &rindent, &groupsep, &expansion, &height, &headroom, &oldleft];
-  [aCoder encodeValuesOfObjCTypes:"@@@", &staves, &objs, &style];
+  [aCoder encodeValuesOfObjCTypes:"@@@", &staves, &nonStaffGraphics, &style];
   [aCoder encodeConditionalObject:view];
   [aCoder encodeConditionalObject:page];
 }
@@ -1453,7 +1453,7 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
     [aCoder setFloat:oldleft forKey:@"oldleft"];
 
     [aCoder setObject:staves forKey:@"staves"];
-    [aCoder setObject:objs forKey:@"objs"];
+    [aCoder setObject:nonStaffGraphics forKey:@"objs"];
     [aCoder setString:style forKey:@"style"];
     [aCoder setObject:view forKey:@"view"]; /* should be conditional? */
     [aCoder setObject:view forKey:@"page"]; /* should be conditional? */

@@ -18,7 +18,7 @@
     float height;		/* the height used in page balancing */
     float headroom;		/* included in height */
 @public
-    NSMutableArray *objs;			/* Array of random objects on this system */
+    NSMutableArray *nonStaffGraphics;			/* Array of random objects on this system */
     GraphicView *view;			/* backreference to our GraphicView */
     Page *page;			/* backreference to our Page */
     struct
@@ -94,8 +94,8 @@
 - (BOOL) spanningBracket: (Staff *) sp1 : (Staff *) sp2;
 - (float) leftPlace;		/* x of first free space to left of system */
 - (float) getBracketX: (Bracket *) b : (int) sz;
-- linkobject: p;		/* put arg on objs list */
-- unlinkobject: p;		/* remove p from objs list */
+- linkobject: p;		/* put arg on nonStaffGraphics list */
+- unlinkobject: p;		/* remove p from nonStaffGraphics list */
 - (BOOL) relinknote : (StaffObj *) p;		/* relink note to sensible destination */
 
 // Staff manipulation.

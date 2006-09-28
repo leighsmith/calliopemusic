@@ -58,7 +58,7 @@ extern float staffthick[3][3];
 - (NSString *) string
 {
     if (data == NULL) return @"";
-    return [NSString stringWithCString: data]; 
+    return [NSString stringWithUTF8String: data]; 
 }
 
 - (int) length
@@ -394,74 +394,76 @@ static void drawext(float x1, float y, float x2, Staff *sp, int f, int m)
 
 /* display a figure below the y-line */
 
-- drawFigure: (unsigned char *) s : (float) x : (float) y : (Staff *) sp : (int) m
+- drawFigure: (NSString *) figureString atX: (float) x atY: (float) y ofStaff: (Staff *) sp inMode: (int) m
 {
-  float fy, cx, cy, nlead=0.0, centoffy;
-  unsigned char c, nc, a=0, ct[3];
-  NSFont *f = font;
-  NSFont *sf = musicFont[1][1];
-  ct[1] = ct[2] = '\0';
-  nlead = fontAscent(f);
-  centoffy = 0.5 * charFGH(f, '3') - charFURY(f, '3');
-  if (vFlags.above)
-  {
-    y -= figHeight(s, nlead) - nlead;
-  }
-  fy = y;
-  while (c = *s++)
-  {
-    if (c == '1')
+    float fy, cx, cy, nlead=0.0, centoffy;
+    unsigned char c, nc, a=0, ct[3];
+    NSFont *f = font;
+    NSFont *sf = musicFont[1][1];
+    const char *s = [figureString UTF8String];
+    
+    ct[1] = ct[2] = '\0';
+    nlead = fontAscent(f);
+    centoffy = 0.5 * charFGH(f, '3') - charFURY(f, '3');
+    if (vFlags.above)
     {
-      ct[0] = c;
-      if (*s != '\0') ct[1] = *s++;
-      centString(x, fy, (char *) ct, f, m);
-      fy += nlead;
-      ct[1] = ct[2] = '\0';
+	y -= figHeight(figureString, nlead) - nlead;
     }
-    else if (c == ' ')
+    fy = y;
+    while (c = *s++)
     {
-      fy += nlead;
+	if (c == '1')
+	{
+	    ct[0] = c;
+	    if (*s != '\0') ct[1] = *s++;
+	    centString(x, fy, (char *) ct, f, m);
+	    fy += nlead;
+	    ct[1] = ct[2] = '\0';
+	}
+	else if (c == ' ')
+	{
+	    fy += nlead;
+	}
+	else if (isaccident(c))
+	{
+	    if (c == '!') a = SF_natural;
+	    else if (c == '@') a = SF_flat;
+	    else if (c == '#') a = SF_sharp;
+	    nc = *s;
+	    cy = fy + centoffy;
+	    if (nc == '3')
+	    {
+		s++;
+		cx = x;
+		fy += nlead;
+	    }
+	    else if (nc == '\0')
+	    {
+		cx = x;
+		fy += nlead;
+	    }
+	    else cx = x - charFGW(f, *s);
+	    centxChar(cx, cy + charFCH(sf, a), a, sf, m);
+	}
+	else
+	{
+	    centxChar(x, fy, c, f, m);
+	    /* now look ahead to see if the next char is a + or / */
+	    nc = *s;
+	    if (nc == '+')
+	    {
+		drawCharacterInFont(x + charFCW(f, c), fy, nc, f, m);
+		++s;
+	    }
+	    else if (nc == '/')
+	    {
+		centxChar(x, fy, nc, f, m);
+		++s;
+	    }
+	    fy += nlead;
+	}
     }
-    else if (isaccident(c))
-    {
-      if (c == '!') a = SF_natural;
-      else if (c == '@') a = SF_flat;
-      else if (c == '#') a = SF_sharp;
-      nc = *s;
-      cy = fy + centoffy;
-      if (nc == '3')
-      {
-        s++;
-        cx = x;
-        fy += nlead;
-      }
-      else if (nc == '\0')
-      {
-        cx = x;
-	fy += nlead;
-      }
-      else cx = x - charFGW(f, *s);
-      centxChar(cx, cy + charFCH(sf, a), a, sf, m);
-    }
-    else
-    {
-      centxChar(x, fy, c, f, m);
-      /* now look ahead to see if the next char is a + or / */
-      nc = *s;
-      if (nc == '+')
-      {
-       drawCharacterInFont(x + charFCW(f, c), fy, nc, f, m);
-        ++s;
-      }
-      else if (nc == '/')
-      {
-        centxChar(x, fy, nc, f, m);
-        ++s;
-      }
-      fy += nlead;
-    }
-  }
-  return self;
+    return self;
 }
 
 
@@ -482,7 +484,7 @@ static void drawext(float x1, float y, float x2, Staff *sp, int f, int m)
   if (m && p->gFlags.selected && !p->gFlags.seldrag && p->selver == vFlags.num) [self traceBounds];
   if (data == NULL || *data == '\0') return self;
   bl = [sp yOfTop] + baseline;
-  if ([self isFigure]) return [self drawFigure: data : p->x : bl : sp : m];
+  if ([self isFigure]) return [self drawFigure: [self string] atX: p->x atY: bl ofStaff: sp inMode: m];
   if ([self isContinuation]) return [self drawContinuation: *data : p->x : bl : sp : m];
   cx = [self textLeft: p];
   CAcString(cx, bl, (char *) data, font, m);

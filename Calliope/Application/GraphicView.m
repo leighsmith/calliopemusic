@@ -892,7 +892,7 @@ extern char *typename[NUMTYPES];
         if (!(q->gFlags.selected) && CHECKBOX(q)) [self selectObj: q : 1];
       }
     }
-    nl = sys->objs;
+    nl = sys->nonStaffGraphics;
     j = [nl count];
     while (j--)
     {
