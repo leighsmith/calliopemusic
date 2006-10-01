@@ -1892,9 +1892,9 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
 	    ((Runner *)p)->client = sys;
 	    [sys linkobject: p];
 	}
-	else if (TYPEOF(p) == TEXTBOX && SUBTYPEOF(p) == STAFFHEAD) ||
-		(TYPEOF(p) == BRACKET && SUBTYPEOF(p) != LINKAGE) 
-		[sys linkobject: p];
+	else if ((TYPEOF(p) == TEXTBOX && SUBTYPEOF(p) == STAFFHEAD) ||
+		 (TYPEOF(p) == BRACKET && SUBTYPEOF(p) != LINKAGE)) 
+	    [sys linkobject: p];
     }
     [sys recalc];
     p1 = sys->page;
