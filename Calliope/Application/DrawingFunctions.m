@@ -450,15 +450,17 @@ void centxChar(float x, float y, int ch, NSFont *f, int mode)
 /* draw a string, in a given font, inserting baseline ties where needed. */
 void DrawTextWithBaselineTies(float x, float y, NSString *stringToDisplay, NSFont *textFont, int mode)
 {
+    float flipped_y = y - [textFont pointSize];  // the view is flipped, compensate the y direction by the point size of the font
+    
     if (NOPRINT(mode)) 
 	return;
-    
+
     if (mode) {
 	float tieCharacterWidth, tieCharacterHeight;
 	float fontPointSize = [textFont pointSize];
 	NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString: stringToDisplay];
 	NSRange wholeString = {0, [attributedText length]};
-	NSPoint textPoint = NSMakePoint(x, y);
+	NSPoint textPoint = NSMakePoint(x, flipped_y);
 
 	[attributedText addAttribute: NSFontAttributeName
 			       value: textFont
@@ -475,8 +477,8 @@ void DrawTextWithBaselineTies(float x, float y, NSString *stringToDisplay, NSFon
 	// For debugging.
 #if 1
 	NSLog(@"DrawTextWithBaselineTies(\"%@\", %f, %f) fontPointSize = %f", stringToDisplay, x, y, fontPointSize);
-	NSFrameRect(NSMakeRect(x, y, 20, fontPointSize));
-	NSFrameRect(NSMakeRect(x, y, 3, 3)); 
+	NSFrameRect(NSMakeRect(x, flipped_y, 20, fontPointSize));
+	NSFrameRect(NSMakeRect(x, flipped_y, 3, 3)); 
 #endif
 	
 #if 0
