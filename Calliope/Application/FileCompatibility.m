@@ -9,7 +9,7 @@
 /*
  * This is just a convenience method for reading old Calliope files that
  * have List classes archived in them.  It creates an NSMutableArray
- * out of the decoded elements of the List. It returns a NSMutableArray.
+ * out of the decoded elements of the List. It returns an autoreleased NSMutableArray.
  */
 - initWithCoder: (NSCoder *) aDecoder
 {
@@ -27,6 +27,7 @@
 	[aDecoder decodeArrayOfObjCType: "@" count: elementCount at: staticObjectArray];
 	
 	for (elementIndex = 0; elementIndex < elementCount; elementIndex++) {
+	    NSLog(@"Decoding %@\n", staticObjectArray[elementIndex]);
 	    [replacementForList addObject: staticObjectArray[elementIndex]];
 	}    
 	free(staticObjectArray);

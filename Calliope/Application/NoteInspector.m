@@ -117,10 +117,10 @@ static int mypartlist = -1;
   {
     case 0:
         i = popSelectionFor(instbutton) - 1;//sb: was midipopup
-        if (i >= 0) p->instrument = i + 1;//sb: FIXME something is very wrong here
+        if (i >= 0) [p setPatch: i + 1];  //sb: FIXME something is very wrong here
       break;
     case 1:
-      p->instrument = 0;
+	[p setPatch: 0];
         i = popSelectionFor(instbutton) - 1;//sb:  was instpopup
         if (i >= 0) {
             if (p->part) [p->part autorelease];
@@ -129,7 +129,7 @@ static int mypartlist = -1;
       break;
     case 2:
         if (p->part) [p->part autorelease];
-        p->instrument = 0;//sb: this is instrument from 'GNote', not from CallPart
+        [p setPatch: 0];//sb: this is instrument from 'GNote', not from CallPart
       p->part = nil;
       break;
   }
@@ -172,7 +172,7 @@ static int mypartlist = -1;
     p->voice = [[voiceform cellAtIndex:0] intValue];
     [self defineTuning: p];
     p->isGraced = [gracematrix selectedColumn];
-    p->showslash = ([slashswitch threeState] == 1);
+    [p setShowSlash: [slashswitch threeState] == 1];
   }
   return self;
 }
@@ -290,7 +290,8 @@ static void setBodyTypes(GNote *p, int t)
       i = [[objmatrix cellAtRow:1 column:0] threeState];
       if (i != 2) p->time.tight = i;
       i = [slashswitch threeState];
-      if (i != 2) p->showslash = i;
+      if (i != 2) 
+	[p setShowSlash: i == 1];
       [self defineTuning: p];
       [p reShape];
     }
@@ -329,7 +330,7 @@ static void setBodyTypes(GNote *p, int t)
     assay(14, getEditorial(p, p->gFlags.selend));
     assayAsAtom(15, [p getPart]);
     assay(16, [p getPatch]);
-    assay(17, p->showslash);
+    assay(17, [p showSlash]);
   }
   *num = n;
   return self;
@@ -415,7 +416,7 @@ static void setBodyTypes(GNote *p, int t)
   [[voiceform cellAtIndex:0] setIntValue:p->voice];
   [[verseform cellAtIndex:0] setIntValue:p->versepos];
   [gracematrix selectCellAtRow:0 column:p->isGraced];
-  [slashswitch setThreeState:p->showslash];
+  [slashswitch setThreeState: [p showSlash]];
   w = [p whereInstrument];
   [definebutton selectItemAtIndex:w + 1];
   if (w == 0)

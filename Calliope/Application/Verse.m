@@ -71,7 +71,7 @@ extern float staffthick[3][3];
 - (BOOL) isBlank
 {
     unsigned char c;
-    unsigned char *test_data = data;
+    char *test_data = data;
     
     if (data == NULL) return YES;
     while (c = *test_data++) 
@@ -136,7 +136,8 @@ extern float staffthick[3][3];
 - (BOOL) isFigure
 {
   unsigned char ch;
-  unsigned char *p = data;
+  char *p = data;
+  
   if (p == NULL) return NO;
   while (ch = *p++) if (!figurechar(ch)) return NO;
   return YES;
@@ -146,7 +147,7 @@ extern float staffthick[3][3];
 - (BOOL) isContinuation
 {
   unsigned char ch;
-  unsigned char *p = data;
+  char *p = data;
   if (p == NULL) return NO;
   ch = *p;
   return (ch == CONTHYPH || ch == CONTLINE);
@@ -196,13 +197,14 @@ static void sigwidthpix(unsigned char *s, NSFont *f, float *sw, float *w)
 - alignVerse
 {
   float vw, hw;
-  unsigned char *p, c;
+    char *p;
+    unsigned char c;
   if (data == NULL)
   {
     align = 0;
     return self;
   }
-  sigwidthpix(data, font, &hw, &pixlen);
+  sigwidthpix((unsigned char *) data, font, &hw, &pixlen);
   vw = 0.0;
   p = data;
   while (c = *p++)
@@ -274,13 +276,13 @@ static void sigwidthpix(unsigned char *s, NSFont *f, float *sw, float *w)
       f = YES;
       if (sl < 0)
       {
-        data = (unsigned char *) malloc(2);
+        data = (char *) malloc(2);
           data[0] = cst;
 	data[1] = '\0';
       }
       else
       {
-        data = (unsigned char *) realloc(data, sl + 2);
+        data = (char *) realloc(data, sl + 2);
           data[sl] = cst;
 	data[sl + 1] = '\0';
       }

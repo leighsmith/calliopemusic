@@ -1560,6 +1560,8 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
 	[aDecoder decodeValuesOfObjCTypes:"ff", &x, &y];
 	[part retain];
     }
+    [hangers retain];
+    [verses retain];
     return self;
 }
 

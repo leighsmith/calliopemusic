@@ -253,7 +253,7 @@ void lineupDots(GNote *np[], int k)
   for (n = 0; n < k; n++)
   {
     p = np[n];
-    p->dotdx = r + (mpx - p->x);
+      [p setDotOffset: r + (mpx - p->x)];
   }
 }
 

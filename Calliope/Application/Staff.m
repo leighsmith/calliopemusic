@@ -859,7 +859,7 @@ float textoff[2], baselines[2][MAXTEXT];
     p = [notes objectAtIndex:k];
       if (p->part) [p->part autorelease];
     p->part = nil;
-    if (TYPEOF(p) == NOTE) ((GNote *)p)->instrument = 0;//sb: instrument here is from GNote, not CallPart
+    if (TYPEOF(p) == NOTE) [(GNote *) p setPatch: 0];  //sb: instrument here is from GNote, not CallPart
     else if (TYPEOF(p) == TABLATURE) {
         id q = ((Tablature *)p)->tuning;
         if (q) {
@@ -1230,21 +1230,24 @@ float textoff[2], baselines[2][MAXTEXT];
 
 
 /* look along the staff for a hit on a staff object */
-
-- (void)searchFor: (NSPoint) p :(NSMutableArray *)arr
+// TODO should be renamed:
+// - (void) searchForPoint: (NSPoint) p inStaffObjects: (NSMutableArray *) arr
+- (void) searchFor: (NSPoint) p : (NSMutableArray *) arr
 {
-  id q;
-  int k = [notes count];
-  int i;
-  for (i = 0; i < k; i++)
-  {
-    q = [notes objectAtIndex:i];
-      if ([q hit: p])
-          if (![arr containsObject:q])
-              [arr addObject:q];
-      [q searchFor: p :arr];
-  }
-  return;
+    id q;
+    int k = [notes count];
+    int i;
+    
+    for (i = 0; i < k; i++) {
+	q = [notes objectAtIndex: i];
+	NSLog(@"searching for %@, before crashing\n", q); // GNote headlist is the problem.
+//	[q describeChordHeads];
+	if ([q hit: p])
+	    if (![arr containsObject: q])
+		[arr addObject: q];
+	[q searchFor: p : arr];
+    }
+    return;
 }
 
 
@@ -1494,164 +1497,161 @@ extern int needUpgrade;
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
-  struct oldflags f;
-  char b1, b2, b3, b4, b5, b6, b7, b8;
-  float textbl[8];
-  int v = [aDecoder versionForClassName:@"Staff"];
-  [super initWithCoder:aDecoder];
-/* NSLog(@"reading Staff v%d\n", v); */
-  barbase = 0;
-  flags.hasnums = 0;
-  if (v == 0)
-  {
-    [aDecoder decodeValuesOfObjCTypes:"scfffff", &f, &b8, &vhigha, &vhighb, &y, &pref1, &pref2];
-    flags.nlines = f.nlines;
-    flags.spacing = f.spacing;
-    flags.subtype = f.subtype;
-    gFlags.size = f.size;
-    flags.haspref = f.haspref;
-    flags.hidden = f.hidden;
-    topmarg = staffheads[flags.subtype];
-    needUpgrade |= 8;
-    botmarg = 0.0;
-    [aDecoder decodeArrayOfObjCType:"f" count:8 at:textbl];
-  }
-  else if (v == 1)
-  {
-    [aDecoder decodeValuesOfObjCTypes:"scffffff", &f, &b8, &vhigha, &vhighb, &y, &pref1, &pref2, &topmarg];
-    flags.nlines = f.nlines;
-    flags.spacing = f.spacing;
-    flags.subtype = f.subtype;
-    gFlags.size = f.size;
-    flags.haspref = f.haspref;
-    flags.hidden = f.hidden;
-    needUpgrade |= 8;
-    botmarg = 0.0;
-    [aDecoder decodeArrayOfObjCType:"f" count:8 at:textbl];
-  }
-  else if (v == 2)
-  {
-    [aDecoder decodeValuesOfObjCTypes:"cccccc", &b1, &b2, &b3, &b4, &b5, &b6];
-    flags.nlines = b1;
-    flags.spacing = b2;
-    flags.subtype = b3;
-    gFlags.size = b4;
-    flags.haspref = b5;
-    flags.hidden = b6;
-    needUpgrade |= 8;
-    [aDecoder decodeValuesOfObjCTypes:"cffffff", &b8, &vhigha, &vhighb, &y, &pref1, &pref2, &topmarg , &botmarg];
-    [aDecoder decodeArrayOfObjCType:"f" count:8 at:textbl];
-  }
-  else if (v == 3)
-  {
-    [aDecoder decodeValuesOfObjCTypes:"cccccccc", &b1, &b2, &b3, &b4, &b5, &b6, &b7, &b8];
-    flags.nlines = b1;
-    flags.spacing = b2;
-    flags.subtype = b3;
-    gFlags.size = b4;
-    flags.haspref = b5;
-    flags.hidden = b6;
-    flags.topfixed = b7;
-    needUpgrade |= 8;
-    [aDecoder decodeValuesOfObjCTypes:"fffffff", &vhigha, &vhighb, &y, &pref1, &pref2, &topmarg, &botmarg];
-    [aDecoder decodeArrayOfObjCType:"f" count:8 at:textbl];
-  }
-  else if (v == 4)
-  {
-    [aDecoder decodeValuesOfObjCTypes:"cccccccc", &b1, &b2, &b3, &b4, &b5, &b6, &b7, &b8];
-    flags.nlines = b1;
-    flags.spacing = b2;
-    flags.subtype = b3;
-    gFlags.size = b4;
-    flags.haspref = b5;
-    flags.hidden = b6;
-    flags.topfixed = b7;
-    needUpgrade |= 8;
-    [aDecoder decodeValuesOfObjCTypes:"fffffff", &vhigha, &vhighb, &y, &pref1, &pref2, &topmarg, &botmarg];
-  }
-  else if (v == 5)
-  {
-    [aDecoder decodeValuesOfObjCTypes:"cccccccc", &b1, &b2, &b3, &b4, &b5, &b6, &b7, &b8];
-    flags.nlines = b1;
-    flags.spacing = b2;
-    flags.subtype = b3;
-    gFlags.size = b4;
-    flags.haspref = b5;
-    flags.hidden = b6;
-    flags.topfixed = b7;
-    needUpgrade |= 8;
-    [aDecoder decodeValuesOfObjCTypes:"fffffffff", &vhigha, &vhighb, &voffa, &voffb, &y, &pref1, &pref2, &topmarg, &botmarg];
-  }
-  else if (v == 6)
-  {
-    [aDecoder decodeValuesOfObjCTypes:"ccccccc", &b1, &b2, &b3, &b5, &b6, &b7, &b8];
-    flags.nlines = b1;
-    flags.spacing = b2;
-    flags.subtype = b3;
-    flags.haspref = b5;
-    flags.hidden = b6;
-    flags.topfixed = b7;
-    {
-	// LMS this is very wrong, we need to put it into a temporary storage
-	char tempString[2] = {
-	    (char) b8, '\0'
-	};
-	part = [NSString stringWithCString: tempString];
+    struct oldflags f;
+    char b1, b2, b3, b4, b5, b6, b7, b8;
+    float textbl[8];
+    int v = [aDecoder versionForClassName: @"Staff"];
+    
+    [super initWithCoder: aDecoder];
+    NSLog(@"reading Staff v%d\n", v);
+    barbase = 0;
+    flags.hasnums = 0;
+    if (v == 0) {
+	[aDecoder decodeValuesOfObjCTypes:"scfffff", &f, &b8, &vhigha, &vhighb, &y, &pref1, &pref2];
+	flags.nlines = f.nlines;
+	flags.spacing = f.spacing;
+	flags.subtype = f.subtype;
+	gFlags.size = f.size;
+	flags.haspref = f.haspref;
+	flags.hidden = f.hidden;
+	topmarg = staffheads[flags.subtype];
+	needUpgrade |= 8;
+	botmarg = 0.0;
+	[aDecoder decodeArrayOfObjCType:"f" count:8 at:textbl];
     }
-    needUpgrade |= 8;
-    [aDecoder decodeValuesOfObjCTypes:"fffffffff", &vhigha, &vhighb, &voffa, &voffb, &y, &pref1, &pref2, &topmarg, &botmarg];
-  }
-  else if (v == 7)
-  {
-      char *p;
-    [aDecoder decodeValuesOfObjCTypes:"cccccc", &b1, &b2, &b3, &b5, &b6, &b7];
-    flags.nlines = b1;
-    flags.spacing = b2;
-    flags.subtype = b3;
-    flags.haspref = b5;
-    flags.hidden = b6;
-    flags.topfixed = b7;
-    [aDecoder decodeValuesOfObjCTypes:"fffffffff", &vhigha, &vhighb, &voffa, &voffb, &y, &pref1, &pref2, &topmarg, &botmarg];
-    [aDecoder decodeValuesOfObjCTypes:"%", &p];
-    if (p) part = [[NSString stringWithCString:p] retain]; else part = nil;
-  }
-  else if (v == 8)
-  {
-      char *p;
-    [aDecoder decodeValuesOfObjCTypes:"ccccccc", &b1, &b2, &b3, &b5, &b6, &b7, &b8];
-    flags.nlines = b1;
-    flags.spacing = b2;
-    flags.subtype = b3;
-    flags.haspref = b5;
-    flags.hidden = b6;
-    flags.topfixed = b7;
-    flags.hasnums = b8;
-    [aDecoder decodeValuesOfObjCTypes:"ffffffffff", &vhigha, &vhighb, &voffa, &voffb, &y, &pref1, &pref2, &topmarg, &botmarg, &barbase];
-    [aDecoder decodeValuesOfObjCTypes:"%", &p];
-    if (p) part = [[NSString stringWithCString:p] retain]; else part = nil;
-
-  }
-  else if (v == 9)
-    {
-      [aDecoder decodeValuesOfObjCTypes:"ccccccc", &b1, &b2, &b3, &b5, &b6, &b7, &b8];
-      flags.nlines = b1;
-      flags.spacing = b2;
-      flags.subtype = b3;
-      flags.haspref = b5;
-      flags.hidden = b6;
-      flags.topfixed = b7;
-      flags.hasnums = b8;
-      [aDecoder decodeValuesOfObjCTypes:"ffffffffff", &vhigha, &vhighb, &voffa, &voffb, &y, &pref1, &pref2, &topmarg, &botmarg, &barbase];
-      [aDecoder decodeValuesOfObjCTypes:"@", &part];
-      [aDecoder decodeValuesOfObjCTypes:"@", &notes];
+    else if (v == 1) {
+	[aDecoder decodeValuesOfObjCTypes:"scffffff", &f, &b8, &vhigha, &vhighb, &y, &pref1, &pref2, &topmarg];
+	flags.nlines = f.nlines;
+	flags.spacing = f.spacing;
+	flags.subtype = f.subtype;
+	gFlags.size = f.size;
+	flags.haspref = f.haspref;
+	flags.hidden = f.hidden;
+	needUpgrade |= 8;
+	botmarg = 0.0;
+	[aDecoder decodeArrayOfObjCType:"f" count:8 at:textbl];
     }
-
-  part = [self checkPart];
-  if (v < 9) {
-      [aDecoder decodeValuesOfObjCTypes:"@", &notes];
-  }
-  mysys = [[aDecoder decodeObject] retain];
-  return self;
+    else if (v == 2) {
+	[aDecoder decodeValuesOfObjCTypes:"cccccc", &b1, &b2, &b3, &b4, &b5, &b6];
+	flags.nlines = b1;
+	flags.spacing = b2;
+	flags.subtype = b3;
+	gFlags.size = b4;
+	flags.haspref = b5;
+	flags.hidden = b6;
+	needUpgrade |= 8;
+	[aDecoder decodeValuesOfObjCTypes:"cffffff", &b8, &vhigha, &vhighb, &y, &pref1, &pref2, &topmarg , &botmarg];
+	[aDecoder decodeArrayOfObjCType:"f" count:8 at:textbl];
+    }
+    else if (v == 3) {
+	[aDecoder decodeValuesOfObjCTypes:"cccccccc", &b1, &b2, &b3, &b4, &b5, &b6, &b7, &b8];
+	flags.nlines = b1;
+	flags.spacing = b2;
+	flags.subtype = b3;
+	gFlags.size = b4;
+	flags.haspref = b5;
+	flags.hidden = b6;
+	flags.topfixed = b7;
+	needUpgrade |= 8;
+	[aDecoder decodeValuesOfObjCTypes:"fffffff", &vhigha, &vhighb, &y, &pref1, &pref2, &topmarg, &botmarg];
+	[aDecoder decodeArrayOfObjCType:"f" count:8 at:textbl];
+    }
+    else if (v == 4) {
+	[aDecoder decodeValuesOfObjCTypes:"cccccccc", &b1, &b2, &b3, &b4, &b5, &b6, &b7, &b8];
+	flags.nlines = b1;
+	flags.spacing = b2;
+	flags.subtype = b3;
+	gFlags.size = b4;
+	flags.haspref = b5;
+	flags.hidden = b6;
+	flags.topfixed = b7;
+	needUpgrade |= 8;
+	[aDecoder decodeValuesOfObjCTypes:"fffffff", &vhigha, &vhighb, &y, &pref1, &pref2, &topmarg, &botmarg];
+    }
+    else if (v == 5) {
+	[aDecoder decodeValuesOfObjCTypes:"cccccccc", &b1, &b2, &b3, &b4, &b5, &b6, &b7, &b8];
+	flags.nlines = b1;
+	flags.spacing = b2;
+	flags.subtype = b3;
+	gFlags.size = b4;
+	flags.haspref = b5;
+	flags.hidden = b6;
+	flags.topfixed = b7;
+	needUpgrade |= 8;
+	[aDecoder decodeValuesOfObjCTypes:"fffffffff", &vhigha, &vhighb, &voffa, &voffb, &y, &pref1, &pref2, &topmarg, &botmarg];
+    }
+    else if (v == 6) {
+	[aDecoder decodeValuesOfObjCTypes:"ccccccc", &b1, &b2, &b3, &b5, &b6, &b7, &b8];
+	flags.nlines = b1;
+	flags.spacing = b2;
+	flags.subtype = b3;
+	flags.haspref = b5;
+	flags.hidden = b6;
+	flags.topfixed = b7;
+	{
+	    // LMS this is very wrong, we need to put it into a temporary storage
+	    char tempString[2] = {
+		(char) b8, '\0'
+	    };
+	    part = [NSString stringWithCString: tempString];
+	}
+	needUpgrade |= 8;
+	[aDecoder decodeValuesOfObjCTypes:"fffffffff", &vhigha, &vhighb, &voffa, &voffb, &y, &pref1, &pref2, &topmarg, &botmarg];
+    }
+    else if (v == 7) {
+	char *p;
+	[aDecoder decodeValuesOfObjCTypes:"cccccc", &b1, &b2, &b3, &b5, &b6, &b7];
+	flags.nlines = b1;
+	flags.spacing = b2;
+	flags.subtype = b3;
+	flags.haspref = b5;
+	flags.hidden = b6;
+	flags.topfixed = b7;
+	[aDecoder decodeValuesOfObjCTypes:"fffffffff", &vhigha, &vhighb, &voffa, &voffb, &y, &pref1, &pref2, &topmarg, &botmarg];
+	[aDecoder decodeValuesOfObjCTypes:"%", &p];
+	if (p) part = [[NSString stringWithCString:p] retain]; else part = nil;
+    }
+    else if (v == 8) {
+	char *p;
+	[aDecoder decodeValuesOfObjCTypes:"ccccccc", &b1, &b2, &b3, &b5, &b6, &b7, &b8];
+	flags.nlines = b1;
+	flags.spacing = b2;
+	flags.subtype = b3;
+	flags.haspref = b5;
+	flags.hidden = b6;
+	flags.topfixed = b7;
+	flags.hasnums = b8;
+	[aDecoder decodeValuesOfObjCTypes:"ffffffffff", &vhigha, &vhighb, &voffa, &voffb, &y, &pref1, &pref2, &topmarg, &botmarg, &barbase];
+	[aDecoder decodeValuesOfObjCTypes:"%", &p];
+	if (p) 
+	    part = [[NSString stringWithUTF8String: p] retain];
+	else 
+	    part = nil;
+	
+    }
+    else if (v == 9) {
+	[aDecoder decodeValuesOfObjCTypes:"ccccccc", &b1, &b2, &b3, &b5, &b6, &b7, &b8];
+	flags.nlines = b1;
+	flags.spacing = b2;
+	flags.subtype = b3;
+	flags.haspref = b5;
+	flags.hidden = b6;
+	flags.topfixed = b7;
+	flags.hasnums = b8;
+	[aDecoder decodeValuesOfObjCTypes:"ffffffffff", &vhigha, &vhighb, &voffa, &voffb, &y, &pref1, &pref2, &topmarg, &botmarg, &barbase];
+	[aDecoder decodeValuesOfObjCTypes:"@", &part];
+	[part retain];
+	[aDecoder decodeValuesOfObjCTypes:"@", &notes];
+	[notes retain];
+    }
+    
+    part = [self checkPart];
+    if (v < 9) {
+	[aDecoder decodeValuesOfObjCTypes:"@", &notes];
+	[notes retain];
+    }
+    mysys = [[aDecoder decodeObject] retain];
+    return self;
 }
 
 

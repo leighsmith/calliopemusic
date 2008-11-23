@@ -1066,55 +1066,54 @@ struct oldflags			/* for old Versions */
 
 /* some of the bits are caches, and need not be archived */
 
-- (id)initWithCoder:(NSCoder *)aDecoder
+- (id) initWithCoder: (NSCoder *) aDecoder
 {
-  struct oldflags f;
-  char b1, b2, b3, b4, b5, b6, v;
+    struct oldflags f;
+    char b1, b2, b3, b4, b5, b6, v;
 
-  bounds = [aDecoder decodeRect];
-  v = [aDecoder versionForClassName:@"Graphic"];
-  if (v == 0)
-  {
-    [aDecoder decodeValuesOfObjCTypes:"i", &f];
-    gFlags.locked = f.locked;
-    gFlags.invis = f.invis;
-    gFlags.size = f.size;
-    gFlags.type = f.type;
-    gFlags.subtype = f.subtype;
-  }
-  else if (v == 1)
-  {
-    [aDecoder decodeValuesOfObjCTypes:"cccccc", &b1, &b2, &b3, &b4, &b5, &b6];
-    gFlags.locked = b1;
-    gFlags.invis = b2;
-    gFlags.size = b3;
-    gFlags.type = b4;
-    gFlags.subtype = b5;
-  }
-  else if (v == 2)
-  {
-    [aDecoder decodeValuesOfObjCTypes:"@cccccc", &enclosures, &b1, &b2, &b3, &b4, &b5, &b6];
-    gFlags.locked = b1;
-    gFlags.invis = b2;
-    gFlags.size = b3;
-    gFlags.type = b4;
-    gFlags.subtype = b5;
-  }
-  else if (v == 3)
-  {
-    [aDecoder decodeValuesOfObjCTypes:"@cccccc", &enclosures, &b1, &b2, &b3, &b4, &b5, &b6];
-    gFlags.locked = b1;
-    gFlags.invis = b2;
-    gFlags.size = b3;
-    gFlags.type = b4;
-    gFlags.subtype = b5;
-  }
-  gFlags.selected = 0;
-  gFlags.seldrag = 0;
-  gFlags.morphed = 0;
-  gFlags.selend = 0;
-  gFlags.selbit = 0;
-  return self;
+    [self init];    // do any initialisation of the instance before we modify it with decoded data.
+    bounds = [aDecoder decodeRect];
+    v = [aDecoder versionForClassName: @"Graphic"];
+    if (v == 0) {
+	[aDecoder decodeValuesOfObjCTypes:"i", &f];
+	gFlags.locked = f.locked;
+	gFlags.invis = f.invis;
+	gFlags.size = f.size;
+	gFlags.type = f.type;
+	gFlags.subtype = f.subtype;
+    }
+    else if (v == 1) {
+	[aDecoder decodeValuesOfObjCTypes:"cccccc", &b1, &b2, &b3, &b4, &b5, &b6];
+	gFlags.locked = b1;
+	gFlags.invis = b2;
+	gFlags.size = b3;
+	gFlags.type = b4;
+	gFlags.subtype = b5;
+    }
+    else if (v == 2) {
+	[aDecoder decodeValuesOfObjCTypes:"@cccccc", &enclosures, &b1, &b2, &b3, &b4, &b5, &b6];
+	gFlags.locked = b1;
+	gFlags.invis = b2;
+	gFlags.size = b3;
+	gFlags.type = b4;
+	gFlags.subtype = b5;
+	[enclosures retain];
+    }
+    else if (v == 3) {
+	[aDecoder decodeValuesOfObjCTypes:"@cccccc", &enclosures, &b1, &b2, &b3, &b4, &b5, &b6];
+	gFlags.locked = b1;
+	gFlags.invis = b2;
+	gFlags.size = b3;
+	gFlags.type = b4;
+	gFlags.subtype = b5;
+	[enclosures retain];
+    }
+    gFlags.selected = 0;
+    gFlags.seldrag = 0;
+    gFlags.morphed = 0;
+    gFlags.selend = 0;
+    gFlags.selbit = 0;
+    return self;
 }
 
 

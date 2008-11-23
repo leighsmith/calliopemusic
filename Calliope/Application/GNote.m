@@ -82,7 +82,7 @@ unsigned char accifont[NUMHEADS][NUMACCS] =
     proto->voice = 0;
     proto->instrument = 0;
     proto->isGraced = 0;
-    proto->showslash = 0;
+    proto->showSlash = 0;
     (void)[GNote setVersion: 9];	/* class version, see read: */ /*sb: left at 9 */
   }
   return;
@@ -95,7 +95,7 @@ unsigned char accifont[NUMHEADS][NUMACCS] =
 }
 
 
-+  myInspector
++ myInspector
 {
   return [NoteInspector class];
 }
@@ -115,7 +115,7 @@ unsigned char accifont[NUMHEADS][NUMACCS] =
 	gFlags.type = NOTE;
 	dotdx = 0.0;
 	instrument = 0;
-	showslash = 0;	
+	showSlash = 0;	
     }
     return self;
 }
@@ -123,7 +123,8 @@ unsigned char accifont[NUMHEADS][NUMACCS] =
 
 - (NSString *) description
 {
-    return [NSString stringWithFormat: @"%@: x = %f, y = %f %@", [super description], x, y, [self describeChordHeads]];
+    // return [NSString stringWithFormat: @"%@: x = %f, y = %f %@", [super description], x, y, [self describeChordHeads]];
+    return [NSString stringWithFormat: @"%@: x = %f, y = %f", [super description], x, y];
 }
 
 
@@ -195,7 +196,7 @@ unsigned char accifont[NUMHEADS][NUMACCS] =
   time.body = i;
   voice = proto->voice;
   instrument = proto->instrument;
-  showslash = proto->showslash;
+  showSlash = proto->showSlash;
   isGraced = proto->isGraced;
   h = [headlist lastObject];
   h->myNote = self;
@@ -354,6 +355,25 @@ unsigned char accifont[NUMHEADS][NUMACCS] =
   return h->myY;
 }
 
+- (BOOL) showSlash
+{
+    return showSlash == 0;
+}
+
+- (void) setShowSlash: (BOOL) willShowSlash
+{
+    showSlash = willShowSlash;
+}
+
+- (void) setDotOffset: (float) dotOffset
+{
+    dotdx = dotOffset;
+}
+
+- (float) dotOffset
+{
+    return dotdx;
+}
 
 /*
   Return positions at extremities (a = whether to return above).
@@ -615,6 +635,10 @@ extern void getNumOct(int pos, int mc, int *num, int *oct);
   return [instlist soundForInstrument: [self getInstrument]];
 }
 
+- (void) setPatch: (unsigned char) newPatch
+{
+    instrument = newPatch;
+}
 
 - (int) whereInstrument
 {
@@ -889,7 +913,7 @@ extern int modeinvis[5];
   sl = time.stemlen;
   h = [headlist lastObject];
   drawstem(x, h->myY, sb, sl, sz, h->type, st, m);
-  if (showslash && isGraced == 1) drawgrace(x, h->myY, sb, sl, sz, h->type, st, m);
+  if (showSlash && isGraced == 1) drawgrace(x, h->myY, sb, sl, sz, h->type, st, m);
   return self;
 }
 
@@ -962,7 +986,7 @@ extern int modeinvis[5];
 	    sid = getShapeID(h->pos, ksym, knum, midc);
 	}
 	hw = halfwidth[sz][bt][body];
-	drawnote(sz, hw, x, h->myY, body, bt, st, sid, b, t->stemlen, t->nostem, (showslash && isGraced == 1), m);
+	drawnote(sz, hw, x, h->myY, body, bt, st, sid, b, t->stemlen, t->nostem, (showSlash && isGraced == 1), m);
 	if (h->accidental && h->accidoff < 0.0) drawacc(x, h, bt, sz, m);
 	if (t->dot) drawnotedot(sz, x + dotdx, h->myY, h->dotoff, [h->myNote getSpacing], bt, t->dot, 0, m);
     }
@@ -1000,7 +1024,7 @@ extern int modeinvis[5];
 		sb = body;
 	    }
 	    drawstem(x, h->myY, sb, dy, sz, bt, st, m);
-	    if (showslash && isGraced == 1) drawgrace(x, q->myY, sb, t->stemlen, sz, bt, st, m);
+	    if (showSlash && isGraced == 1) drawgrace(x, q->myY, sb, t->stemlen, sz, bt, st, m);
 	}
     }
     [self drawLedgerAt: hw size: sz mode: m];
@@ -1119,11 +1143,11 @@ extern void readTimeData2(NSCoder *s, struct timeinfo *t); /*sb; changed from NS
   int v = [aDecoder versionForClassName:@"GNote"];
   [super initWithCoder:aDecoder];
   instrument = 0;
-  showslash = 0;
+  showSlash = 0;
   if (v == 9)
   {
     headlist = [[aDecoder decodeObject] retain];
-    [aDecoder decodeValuesOfObjCTypes:"fcc", &dotdx, &instrument, &showslash];
+    [aDecoder decodeValuesOfObjCTypes:"fcc", &dotdx, &instrument, &showSlash];
   }
   else if (v == 8)
   {
@@ -1161,14 +1185,12 @@ extern void readTimeData2(NSCoder *s, struct timeinfo *t); /*sb; changed from NS
   else [self readOldFormats: aDecoder : v];
 
   { /*sb: this section came from the awake method */
-    NoteHead *h;
     int k = [headlist count];
-    while (k--)
-    {
-      h = [headlist objectAtIndex:k];
-      if (TYPEOF(h->myNote) != NOTE) h->myNote = self;
+    while (k--) {
+	NoteHead *h = [headlist objectAtIndex:k];
+	if (TYPEOF(h->myNote) != NOTE) 
+	    h->myNote = self;
     }
-//    return [super awake];
   }
   return self;
 }
@@ -1178,7 +1200,7 @@ extern void readTimeData2(NSCoder *s, struct timeinfo *t); /*sb; changed from NS
 {
   [super encodeWithCoder:aCoder];
   [aCoder encodeObject:headlist];
-  [aCoder encodeValuesOfObjCTypes:"fcc", &dotdx, &instrument, &showslash];
+  [aCoder encodeValuesOfObjCTypes:"fcc", &dotdx, &instrument, &showSlash];
 }
 
 - (void)encodeWithPropertyListCoder:(OAPropertyListCoder *)aCoder
@@ -1187,7 +1209,7 @@ extern void readTimeData2(NSCoder *s, struct timeinfo *t); /*sb; changed from NS
     [aCoder setObject:headlist forKey:@"headlist"];
     [aCoder setFloat:dotdx forKey:@"dotdx"];
     [aCoder setInteger:instrument forKey:@"inst"];
-    [aCoder setInteger:showslash forKey:@"slash"];
+    [aCoder setInteger:showSlash forKey:@"slash"];
 }
 
 

@@ -1,5 +1,6 @@
 /* $Id$ */
 #import <AppKit/AppKit.h>
+#import "Graphic.h"
 #import "GraphicView.h"
 #import "GVCommands.h"
 #import "GVSelection.h"

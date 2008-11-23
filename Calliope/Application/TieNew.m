@@ -310,9 +310,7 @@ static void orderXY(float *x, float *y)
 
 static float anyDotFor(GNote *p)
 {
-  float w = 0.0;
-  if (p->time.dot) w = p->dotdx;
-  return w;
+    return (p->time.dot) ? [p dotOffset] : 0.0;
 }
 
 
