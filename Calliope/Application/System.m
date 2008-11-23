@@ -140,7 +140,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
     unsigned int numberOfVisibleStaves;
     BOOL b = NO;
     
-    staveCount = flags.nstaves;
+    staveCount = [self numberOfStaves];
     numberOfVisibleStaves = 0;
     titleOffset = titleRoom(nonStaffGraphics);
     y = yi;
@@ -238,7 +238,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   Staff *sp;
   NSMutableArray *nl;
   StaffObj *p;
-  ns = flags.nstaves;
+  ns = [self numberOfStaves];
   while (ns--)
   {
     sp = [staves objectAtIndex:ns];
@@ -407,7 +407,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
     int systemObjectsCount;
     System *newSystem;
     
-    newSystem = [[System alloc] initWithStaveCount: flags.nstaves onGraphicView: view];
+    newSystem = [[System alloc] initWithStaveCount: [self numberOfStaves] onGraphicView: view];
     newSystem->page = page;
     newSystem->lindent = 0.0;
     newSystem->rindent = 0.0;
@@ -418,7 +418,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
     newSystem->headroom = headroom;
     newSystem->style = style;
     newSystem->staffScale = staffScale;
-    for (staffIndex = 0; staffIndex < flags.nstaves; staffIndex++) {
+    for (staffIndex = 0; staffIndex < [self numberOfStaves]; staffIndex++) {
 	Clef *lastClef;
 	KeySig *lastKeySignature;
 	Staff *sp = [newSystem getStaff:  staffIndex];
@@ -493,7 +493,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   sys->width = width;
   sys->headroom = headroom;
   sys->style = style;
-  for (i = 0; i < flags.nstaves; i++)
+  for (i = 0; i < [self numberOfStaves]; i++)
   {
     sp = [sys getStaff: i];
     op = [staves objectAtIndex:i];
@@ -852,7 +852,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
     Staff *sp = [self findOnlyStaff: ny];
     Staff *nsp = [[Staff alloc] init];
     int i = [staves indexOfObject: sp];
-    int n = flags.nstaves + 1;
+    int n = [self numberOfStaves] + 1;
     
     [nsp setSystem: self];
     if (ny > [sp yOfTop])
@@ -939,7 +939,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 
 - (int) whereIs: (Staff *) sp
 {
- return ([staves indexOfObject:sp] - (flags.nstaves >> 1));
+ return ([staves indexOfObject:sp] - ([self numberOfStaves] >> 1));
 }
  
 
@@ -992,7 +992,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 {
   int i, k;
   Staff *s;
-  k = flags.nstaves;
+  k = [self numberOfStaves];
   for (i = j; i < k; i++)
   {
     s = [staves objectAtIndex:i];
@@ -1016,7 +1016,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 {
   int k;
   Staff *s;
-  k = flags.nstaves;
+  k = [self numberOfStaves];
   while (k--)
   {
     s = [staves objectAtIndex:k];
@@ -1043,7 +1043,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   float dy, mindy;
   mindy = MAXFLOAT;
   ms = nil;
-  k = flags.nstaves;
+  k = [self numberOfStaves];
   while (k--)
   {
     s = [staves objectAtIndex:k];
@@ -1064,7 +1064,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 // TODO we should be returning an autoreleased NSArray rather than modifying one passed in.
 - (void) searchFor: (NSPoint) p : (NSMutableArray *) arr
 {
-    int numOfStaves = flags.nstaves;
+    int numOfStaves = [self numberOfStaves];
     int numOfObjects;
     
     if (NSPointInRect(p, bounds)) {
@@ -1073,6 +1073,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 	return;
     }
     while (numOfStaves--) {
+	// staves seems to already be released, causing an EXC_BAD_ACCESS.
 	Staff *s = [staves objectAtIndex: numOfStaves];
 	
 	if (s->flags.hidden) continue;
@@ -1080,6 +1081,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
     }
     numOfObjects = [nonStaffGraphics count];
     while (numOfObjects--) {
+	// Graphic *q?
 	id q = [nonStaffGraphics objectAtIndex: numOfObjects];
 	
 	if ([q hit: p])
@@ -1093,6 +1095,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 /* free nonStaffGraphics first because some might point to staff objects */
 - (void) dealloc
 {
+    NSLog(@"deallocating System %p\n", self);
     [style release];
     style = nil;
     [nonStaffGraphics release];
@@ -1139,7 +1142,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
     int staveIndex;
     int objectsCount;
     
-    for (staveIndex = 0; staveIndex < flags.nstaves; staveIndex++) 
+    for (staveIndex = 0; staveIndex < [self numberOfStaves]; staveIndex++) 
 	[[staves objectAtIndex: staveIndex] draw: r nonSelectedOnly: nso];
     objectsCount = [nonStaffGraphics count];
     while (objectsCount--) 
@@ -1158,7 +1161,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 {
     int i;
     
-    for (i = 0; i < flags.nstaves; i++)
+    for (i = 0; i < [self numberOfStaves]; i++)
 	[[staves objectAtIndex:i] drawHangers: r nonSelectedOnly: nso];
     i = [nonStaffGraphics count];
     while (i--)
@@ -1261,6 +1264,7 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
     flags.newbar = b7;
     flags.newpage = b8;
     [aDecoder decodeValuesOfObjCTypes:"ssfffffffff", &pagenum, &barnum, &barbase, &width, &lindent, &rindent, &groupsep, &expansion, &height, &headroom, &oldleft];
+    // TODO staves, nonStaffGraphics decoded without full initialisation, causing later crash?
     [aDecoder decodeValuesOfObjCTypes:"@@%", &staves, &nonStaffGraphics, &oldstyle];
     if (oldstyle) style = [[NSString stringWithCString:oldstyle] retain]; else style = nil;
     view = [[aDecoder decodeObject] retain];
@@ -1281,7 +1285,12 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
     [aDecoder decodeValuesOfObjCTypes:"ssfffffffff", &pagenum, &barnum, &barbase, &width, &lindent, &rindent, &groupsep, &expansion, &height, &headroom, &oldleft];
     [self updateNumbering];
     [aDecoder decodeValuesOfObjCTypes:"@@%", &staves, &nonStaffGraphics, &oldstyle];
-    if (oldstyle) style = [[NSString stringWithCString:oldstyle] retain]; else style = nil;
+    [staves retain];
+    [nonStaffGraphics retain];
+    if (oldstyle) 
+	style = [[NSString stringWithUTF8String: oldstyle] retain]; 
+      else
+	  style = nil;
     view = [[aDecoder decodeObject] retain];
     page = [[aDecoder decodeObject] retain];
     return self;
@@ -1413,7 +1422,7 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
 {
   char b1,b2, b3, b4, b5, b6, b7, b8;
   [super encodeWithCoder:aCoder];
-  b1 = flags.nstaves;
+  b1 = [self numberOfStaves];
   b2 = flags.syssep;
   b3 = flags.pgcontrol;
   b4 = flags.haslink;
@@ -1431,7 +1440,7 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
 {
 //    [super encodeWithPropertyListCoder:(OAPropertyListCoder *)aCoder];
 
-    [aCoder setInteger:flags.nstaves forKey:@"nstaves"];
+    [aCoder setInteger:[self numberOfStaves] forKey:@"nstaves"];
     [aCoder setInteger:flags.syssep forKey:@"syssep"];
     [aCoder setInteger:flags.pgcontrol forKey:@"pgcontrol"];
     [aCoder setInteger:flags.haslink forKey:@"haslink"];
