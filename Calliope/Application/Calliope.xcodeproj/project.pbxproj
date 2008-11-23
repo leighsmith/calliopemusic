@@ -3003,18 +3003,24 @@
 		D8F2446F09AD250900B96D0D /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				USER_HEADER_SEARCH_PATHS = "$(inherited) /usr/local/include";
 			};
 			name = Development;
 		};
 		D8F2447009AD250900B96D0D /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				USER_HEADER_SEARCH_PATHS = "$(inherited) /usr/local/include";
 			};
 			name = Deployment;
 		};
 		D8F2447109AD250900B96D0D /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				USER_HEADER_SEARCH_PATHS = "$(inherited) /usr/local/include";
 			};
 			name = Default;
 		};
