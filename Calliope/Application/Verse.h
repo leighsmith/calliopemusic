@@ -42,7 +42,7 @@
     float baseline;
     id note;				/* a backpointer */
 @private    
-    unsigned char *data;		/* the string TODO should be a NSString */
+    char *data;		/* the string TODO should be a NSString */
 }
 
 + (void)initialize;

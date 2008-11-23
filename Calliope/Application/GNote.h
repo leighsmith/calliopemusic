@@ -1,4 +1,4 @@
-/*! $Id:$ */
+/*! $Id$ */
 /*!
   @class GNote
   @brief The class responsible for representing and displaying musical notes.
@@ -8,21 +8,22 @@
 
 @interface GNote: TimedObj
 {
-@public
-    NSMutableArray *headlist;
+@private
+    unsigned char showSlash;
     float dotdx;
     unsigned char instrument;
-    unsigned char showslash;
+@public
+    NSMutableArray *headlist;
 }
 
-+ (void)initialize;
++ (void) initialize;
 + myInspector;
 + myPrototype;
 
 - init;
-- (void)dealloc;
+- (void) dealloc;
 - (BOOL) reCache: (float) sy : (int) ss;
-- (void)moveBy:(float)x :(float)y;
+- (void) moveBy: (float) x : (float) y;
 - reShape;
 - reDefault;
 - defaultStem: (BOOL) up;
@@ -36,9 +37,28 @@
 - (float) stemXoffLeft: (int) stype;
 - (float) stemXoffRight: (int) stype;
 - (float) stemYoff: (int) stype;
+
+- (BOOL) showSlash;
+
+- (void) setShowSlash: (BOOL) willShowSlash;
+
+- (void) setDotOffset: (float) dotOffset;
+
+- (float) dotOffset;
+
 - setStemTo: (float) s;
 - getKeyString: (int) mc : (char *) ks;
+
+/*!
+    Returns the instrument patch number.
+ */
 - (int) getPatch;
+
+/*!
+  Assigns the patch (currently doesn't increment it).
+ */
+- (void) setPatch: (unsigned char) newPatch;
+
 - (int) midPosOff;
 - (NSMutableArray *) tiedWith;
 - (int) accAtPos: (int) pos;
