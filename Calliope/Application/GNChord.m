@@ -86,7 +86,7 @@ static void putPos(Staff *sp, int pn, int u)
     
     for (headIndex = 0; headIndex < headCount; headIndex++) {
 	h = [headlist objectAtIndex: headIndex];
-	[listString appendString: [NSString stringWithFormat: @"(%d-%f) ", h->pos, h->myY]];
+	[listString appendString: [NSString stringWithFormat: @"(%d-%f) ", [h staffPosition], [h y]]];
     }
     [listString appendString: @")"];
     return listString;
@@ -99,8 +99,8 @@ static void putPos(Staff *sp, int pn, int u)
 {
   NoteHead *h;
   h = [headlist lastObject];
-  p = h->pos;
-  y = h->myY;
+  staffPosition = [h staffPosition];
+  y = [h y];
   return self;
 }
 
@@ -166,7 +166,7 @@ static void putPos(Staff *sp, int pn, int u)
 - resetSides
 {
   NSMutableArray *nl;
-  NoteHead *h;
+  NoteHead *noteHead;
   GNote *n, *on;
   int i, k, pp, opp, s;
   BOOL state;
@@ -177,11 +177,11 @@ static void putPos(Staff *sp, int pn, int u)
   on = nil;
   for (i = 0; i < k; i++)
   {
-    h = [nl objectAtIndex:i];
-    pp = h->pos;
-    n = h->myNote;
+    noteHead = [nl objectAtIndex:i];
+    pp = [noteHead staffPosition];
+    n = noteHead->myNote;
     s = (state && (ABS(pp - opp) <= 1) && (n == on));
-    h->side = s;
+    noteHead->side = s;
     opp = pp;
     on = n;
     state = !s;
@@ -199,7 +199,7 @@ static void putPos(Staff *sp, int pn, int u)
 
 void lineupDots(GNote *np[], int k)
 {
-  NoteHead *h;
+  NoteHead *noteHead;
   GNote *p;
   Staff *sp;
   NSMutableArray *nl;
@@ -223,9 +223,9 @@ void lineupDots(GNote *np[], int k)
     hk = [nl count]; 
     for (i = 0; i < hk; i++)
     {
-      h = [nl objectAtIndex:i];
-      j = h->pos;
-      sp = [h myStaff];
+      noteHead = [nl objectAtIndex:i];
+      j = [noteHead staffPosition];
+      sp = [noteHead myStaff];
       dy = 0;
       if (!(j & 1))
       {
@@ -240,13 +240,13 @@ void lineupDots(GNote *np[], int k)
         else
         {
           putPos(sp, j + dp, 0);
-          h->dotoff = dp + dy;
+          noteHead->dotoff = dp + dy;
 	  f = YES;
         }
       }
-      bt = h->type;
+      bt = noteHead->type;
       t = getdotx(sz, bt, 0, ti->body, b, ti->stemup);
-      if (h->side) t += halfwidth[sz][bt][ti->body] * offside[ti->stemup];
+      if ([noteHead side]) t += halfwidth[sz][bt][ti->body] * offside[ti->stemup];
       if (t > r) r = t;
     }
   }
@@ -292,8 +292,8 @@ void lineupDots(GNote *np[], int k)
 
 - resetStemlen
 {
-  NoteHead *h = [headlist lastObject];
-  time.stemlen = getstemlen(time.body, gFlags.size, stype[(int)h->type], time.stemup, h->pos, [self getSpacing]);
+  NoteHead *noteHead = [headlist lastObject];
+  time.stemlen = getstemlen(time.body, gFlags.size, stype[(int)noteHead->type], time.stemup, [noteHead staffPosition], [self getSpacing]);
   return self;
 }
 
@@ -317,33 +317,33 @@ extern unsigned char accifont[NUMHEADS][NUMACCS];
 
 static BOOL revSecond(NoteHead *p, float px, NoteHead *q, float qx)
 {
-  return (px < qx && q->accidental && q->accidoff == 0.0
-    && [p myStaff] == [q myStaff] && q->pos - p->pos == 1);
+  return (px < qx && [q accidental] && [q accidentalOffset] == 0.0
+    && [p myStaff] == [q myStaff] && [q staffPosition] - [p staffPosition] == 1);
 }
 
 
-/* return whether h's accidental is too close to a protruding notehead */
+/* return whether noteHead's accidental is too close to a protruding notehead */
 
 /* unused, flat, sharp, natural, d-flat, d-sharp, 2q-flat, 1q-flat, 2q-sharp, 1q-sharp */
 
 static char clearbot[NUMACCS] = {0, 2, 3, 3, 2, 3, 2, 2, 3, 3};
 static char cleartop[NUMACCS] = {0, -4, -3, -3, -4, -2, -4, -4, -3, -3};
 
-static BOOL hitsSide(float curx, NoteHead *h, NoteHead *nh[], float lbear[], int n)
+static BOOL hitsSide(float curx, NoteHead *noteHead, NoteHead *nh[], float lbear[], int n)
 {
   NoteHead *p;
   Staff *hs;
   int i, dp, cb, ct, hp;
-  cb = clearbot[(int)h->accidental];
-  ct = cleartop[(int)h->accidental];
-  hp = h->pos;
-  hs = [h myStaff];
+  cb = clearbot[(int)[noteHead accidental]];
+  ct = cleartop[(int)[noteHead accidental]];
+  hp = [noteHead staffPosition];
+  hs = [noteHead myStaff];
   for (i = 0; i < n; i++)
   {
     p = nh[i];
     if (curx > lbear[i] && [p myStaff] == hs)
     {
-      dp = p->pos - hp;
+      dp = [p staffPosition] - hp;
       if (0 <= dp && dp <= cb) return YES;
       if (dp <= 0 && dp >= ct) return YES;
     }
@@ -351,11 +351,11 @@ static BOOL hitsSide(float curx, NoteHead *h, NoteHead *nh[], float lbear[], int
   return NO;
 }
 
-static int nix(NoteHead *h, NoteHead *nh[], int hn)
+static int nix(NoteHead *noteHead, NoteHead *nh[], int hn)
 {
   while (hn--)
   {
-    if (h == nh[hn]) return hn;
+    if (noteHead == nh[hn]) return hn;
   }
   return 0;
 }
@@ -369,13 +369,13 @@ void lineupAccs(NoteHead *ah[], int an, NoteHead *nh[], GNote *note[], int hn)
   NSFont *f;
   Staff *lsp;
   GNote *p;
-  NoteHead *h, *g;
+  NoteHead *noteHead, *g;
   for (i = 0; i < hn; i++)
   {
     p = note[i];
     w = halfwidth[p->gFlags.size][0][p->time.body];
     lbear[i] = p->x;
-    if (!(p->time.stemup) && nh[i]->side) lbear[i] -= 3.0 * w; else lbear[i] -= w;
+    if (!(p->time.stemup) && [nh[i] side]) lbear[i] -= 3.0 * w; else lbear[i] -= w;
     accx = lbear[i] - accxoff[p->gFlags.size];
     if (accx < minb) minb = accx;
   }
@@ -391,8 +391,8 @@ void lineupAccs(NoteHead *ah[], int an, NoteHead *nh[], GNote *note[], int hn)
     didskip = 0;
     for ( ; (0 <= i && i < an); i += dp)
     {
-      h = ah[i];
-      if ([h myStaff] == lsp && ABS(h->pos - lpos) < 6)
+      noteHead = ah[i];
+      if ([noteHead myStaff] == lsp && ABS([noteHead staffPosition] - lpos) < 6)
       {
         didskip = 1;
 	continue;
@@ -400,28 +400,28 @@ void lineupAccs(NoteHead *ah[], int an, NoteHead *nh[], GNote *note[], int hn)
       if (i + 1 < an)
       {
         g =  ah[i + 1];
-	if (revSecond(h, lbear[nix(h, nh, hn)], g, lbear[nix(g, nh, hn)]))
+	if (revSecond(noteHead, lbear[nix(noteHead, nh, hn)], g, lbear[nix(g, nh, hn)]))
         {
           didskip = 1;
 	  continue;
         }
       }
-      if (hitsSide(curx, h, nh, lbear, hn))
+      if (hitsSide(curx, noteHead, nh, lbear, hn))
       {
         didskip = 1;
 	continue;
       }
-      p = note[nix(h, nh, hn)];
+      p = note[nix(noteHead, nh, hn)];
       sz = p->gFlags.size;
-      f = musicFont[accifont[(int)h->type][(int)h->accidental]][sz];
-      w = charFGW(f, accidents[(int)h->type][(int)h->accidental]);
+      f = musicFont[accifont[(int)noteHead->type][(int)[noteHead accidental]]][sz];
+      w = charFGW(f, accidents[(int)noteHead->type][(int)[noteHead accidental]]);
       if (w > ncw) ncw = w;
-      h->accidoff = (curx - w) - p->x;
+      [noteHead setAccidentalOffset: (curx - w) - p->x];
 /*
-NSLog(@"curx %f: pos[%d] set to: %f\n", curx, h->pos, h->accidoff);
+NSLog(@"curx %f: pos[%d] set to: %f\n", curx, [noteHead staffPosition], [noteHead accidentalOffset]);
 */
-      lpos = h->pos;
-      lsp = [h myStaff];
+      lpos = [noteHead staffPosition];
+      lsp = [noteHead myStaff];
       an--;
       if (i == an) lowest = 1;
       for (j = i; j < an; j++) ah[j] = ah[j + 1];
@@ -445,20 +445,20 @@ NSLog(@"curx %f: pos[%d] set to: %f\n", curx, h->pos, h->accidoff);
 
 - resetAccidentals
 {
-  NoteHead *h, *ah[MAXHEADS], *nh[MAXHEADS];
+  NoteHead *noteHead, *ah[MAXHEADS], *nh[MAXHEADS];
   GNote *note[MAXHEADS];
   int i, j, k, hk, n;
   hk = [headlist count];
   n = 0;
   for (i = 0; i < hk; i++)
   {
-    h = [headlist objectAtIndex:i];
-    nh[i] = h;
+    noteHead = [headlist objectAtIndex:i];
+    nh[i] = noteHead;
     note[i] = self;
-    if (h->accidental)
+    if ([noteHead accidental])
     {
-      ah[n++] = h;
-      h->accidoff = 0.0;
+      ah[n++] = noteHead;
+      [noteHead setAccidentalOffset: 0.0];
     }
   }
   if (n == 0) return self;
@@ -470,9 +470,9 @@ NSLog(@"curx %f: pos[%d] set to: %f\n", curx, h->pos, h->accidoff);
     for (i = 0; i < j; i++)
     {
       k--;
-      h = ah[i];
+      noteHead = ah[i];
       ah[i] = ah[k];
-      ah[k] = h;
+      ah[k] = noteHead;
     }
   }
   lineupAccs(ah, n, nh, note, hk);
@@ -486,20 +486,20 @@ NSLog(@"curx %f: pos[%d] set to: %f\n", curx, h->pos, h->accidoff);
   Now allows double-stopped unisons, so always succeeds.
 */
 
-- (BOOL) insertHead: (NoteHead *) h
+- (BOOL) insertHead: (NoteHead *) noteHead
 {
   int i, k;
   NoteHead *q;
-  float hy = h->myY;
+  float hy = [noteHead y];
   k = [headlist count];
   if (time.stemup)
   {
     for (i = 0; i < k; i++)
     {
       q = [headlist objectAtIndex:i];
-      if (q->myY < hy)
+      if ([q y] < hy)
       {
-        [headlist insertObject:h atIndex:i];
+        [headlist insertObject:noteHead atIndex:i];
         return YES;
       }
     }
@@ -509,14 +509,14 @@ NSLog(@"curx %f: pos[%d] set to: %f\n", curx, h->pos, h->accidoff);
     for (i = 0; i < k; i++)
     {
       q = [headlist objectAtIndex:i];
-      if (q->myY > hy)
+      if ([q y] > hy)
       {
-        [headlist insertObject:h atIndex:i];
+        [headlist insertObject:noteHead atIndex:i];
         return YES;
       }
     }
   }
-  [(NSMutableArray *)headlist addObject: h];
+  [(NSMutableArray *)headlist addObject: noteHead];
   return YES;
 }
 
@@ -559,17 +559,17 @@ NSLog(@"curx %f: pos[%d] set to: %f\n", curx, h->pos, h->accidoff);
 
 - (BOOL) newHeadOnStaff: (Staff *) sp atHeight: (float) ny accidental: (int) acc
 {
-    NoteHead *h;
+    NoteHead *noteHead;
     
     if ([headlist count] == MAXHEADS) return NO;
-    h = [[NoteHead alloc] init];
-    h->pos = [sp findPos: ny];
-    h->myY = [sp yOfPos: h->pos];
-    h->accidental = acc;
-    h->myNote = self;
-    h->type = gFlags.subtype;
-    [self insertHead: h];
-    gFlags.selend = [headlist indexOfObject:h];
+    noteHead = [[NoteHead alloc] init];
+    [noteHead setStaffPosition: [sp findPos: ny]];
+    [noteHead setCoordinateY: [sp yOfPos: [noteHead staffPosition]]];
+    [noteHead setAccidental: acc];
+    noteHead->myNote = self;
+    noteHead->type = gFlags.subtype;
+    [self insertHead: noteHead];
+    gFlags.selend = [headlist indexOfObject:noteHead];
     [self normaliseChord];
     [self recalc];
     [self setOwnHangers];
@@ -581,10 +581,10 @@ NSLog(@"curx %f: pos[%d] set to: %f\n", curx, h->pos, h->accidoff);
 
 - relinkHead: (int) i
 {
-    NoteHead *h = [[headlist objectAtIndex:i] retain];
+    NoteHead *noteHead = [[headlist objectAtIndex:i] retain];
     [headlist removeObjectAtIndex:i];
-  [self insertHead: h];
-  gFlags.selend = [headlist indexOfObject:h];
+  [self insertHead: noteHead];
+  gFlags.selend = [headlist indexOfObject:noteHead];
   [self normaliseChord];
   return self;
 }
@@ -640,7 +640,7 @@ extern float ledgedxs[3];
 {
   char ha[NUMSTAVES], hwsa[NUMSTAVES], lb[NUMSTAVES], lwsb[NUMSTAVES];
   Staff *sps[NUMSTAVES];
-  NoteHead *h;
+  NoteHead *noteHead;
   Staff *sp;
   int i, j, k, sn, hp, mp;
   float lx1, lx2, ly, dwsx;
@@ -658,14 +658,14 @@ extern float ledgedxs[3];
   k = [headlist count];
   for (i = 0; i < k; i++)
   {
-    h = [headlist objectAtIndex:i];
-    sp = [h myStaff];
+    noteHead = [headlist objectAtIndex:i];
+    sp = [noteHead myStaff];
     if (TYPEOF(sp) == STAFF)
     {
       sn = [sp myIndex];
       sps[sn] = sp;
-      hp = h->pos;
-      if (h->side)
+      hp = [noteHead staffPosition];
+      if ([noteHead side])
       {
         if (hp < hwsa[sn]) hwsa[sn] = hp;
         if (hp > lwsb[sn]) lwsb[sn] = hp;

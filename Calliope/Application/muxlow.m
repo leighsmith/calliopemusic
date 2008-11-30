@@ -953,7 +953,7 @@ int sfontid[3] = {FONTSON, FONTSSON, FONTHSON};
 
 void muxlowInit()
 {
-  int i, j, sz, stype, stemup;
+  int i, j, size, stype, stemup;
   float hw, dx, w, sdx, sdy, fdx=0.0;
   NSFont *f, *fh;
 //  nullPart = NXUniqueString("unassigned");
@@ -969,88 +969,88 @@ void muxlowInit()
   initTabTable();
   initScratchlist();
   initScrStylelist();
-  for (sz = 0; sz <= 2; sz++)
+  for (size = 0; size <= 2; size++)
   {
-    musicFont[0][sz] = fontdata[mfontid[sz]];
-    musicFont[1][sz] = fontdata[sfontid[sz]];
-    f = musicFont[1][sz];
+    musicFont[0][size] = fontdata[mfontid[size]];
+    musicFont[1][size] = fontdata[sfontid[size]];
+    f = musicFont[1][size];
     hw = charhalfFGW(f, bodies[0][0]);
-    dx = charFWX(f, SF_stemsp);
-    noteoffset[sz] = hw;
-    stemleft[0][sz] = -hw;
-    stemcentre[0][sz] = -hw + 0.5 * stemthicks[sz];
-    stemright[0][sz] = hw - dx;
-    stemleft[1][sz] =  -hw + dx;
-    stemcentre[1][sz] = -hw + dx + 0.5 * stemthicks[sz];
-    stemright[1][sz] = hw;
+    dx = DrawWidthOfCharacter(f, SF_stemsp);
+    noteoffset[size] = hw;
+    stemleft[0][size] = -hw;
+    stemcentre[0][size] = -hw + 0.5 * stemthicks[size];
+    stemright[0][size] = hw - dx;
+    stemleft[1][size] =  -hw + dx;
+    stemcentre[1][size] = -hw + dx + 0.5 * stemthicks[size];
+    stemright[1][size] = hw;
     for (i = 0; i < NUMHEADS; i++)
     {
       for (j = 0; j < 10; j++)
       {
-        fh = musicFont[headfont[i][j]][sz];
+        fh = musicFont[headfont[i][j]][size];
 	w = charFGW(fh, headchars[i][j]);
-        headwidth[sz][i][j] = w;
+        headwidth[size][i][j] = w;
 	hw = 0.5 * w;
-	halfwidth[sz][i][j] = hw;
+	halfwidth[size][i][j] = hw;
 	for (stype = 0; stype <= 1; stype++)
 	{
 	  for (stemup = 0; stemup <= 1; stemup++)
 	  {
 	    if (stype == 0)
             {
-              sdy = stemyoff[i] * pronature[sz];
+              sdy = stemyoff[i] * pronature[size];
               if (stemup)
               {
 	        sdy = -sdy;
                 if (j == 9)
 	        {
-	          sdx = hw - (0.5 * stemthicks[sz]);
+	          sdx = hw - (0.5 * stemthicks[size]);
 	        }
                 else if (stemxoff[i])
 	        {
-                  fdx = -hw + charFWX(f, SF_stemsp);
-	          sdx = fdx + 0.5 * stemthicks[sz];
+                  fdx = -hw + DrawWidthOfCharacter(f, SF_stemsp);
+	          sdx = fdx + 0.5 * stemthicks[size];
 	        }
 	        else
 	        {
 	          sdx = 0.0;
-	          fdx = -0.5 * stemthicks[sz];
+	          fdx = -0.5 * stemthicks[size];
 	        }
               }
               else
               {
                 if (j == 9)
 	        {
-                  sdx = -hw + 0.5 * stemthicks[sz];
+                  sdx = -hw + 0.5 * stemthicks[size];
 	        }
                 else if (stemxoff[i])
 	        {
                   fdx = -hw;
-                  sdx = fdx + 0.5 * stemthicks[sz];
+                  sdx = fdx + 0.5 * stemthicks[size];
 	        }
 	        else
 	        {
 	          sdx = 0.0;
-	          fdx = -0.5 * stemthicks[sz];
+	          fdx = -0.5 * stemthicks[size];
 	        }
               }
-	      flagdx[sz][i][j][stemup] = fdx;
+	      flagdx[size][i][j][stemup] = fdx;
             }
             else
             {
               if (stemup)
               {
-                sdx = (j == 9) ? hw - (0.5 * ostemthicks[sz]) : 0.0;
+                sdx = (j == 9) ? hw - (0.5 * ostemthicks[size]) : 0.0;
                 sdy = -hw;
               }
               else
               {
-                sdx = (j == 9) ? -hw + (0.5 * ostemthicks[sz]) : 0.0;
+                sdx = (j == 9) ? -hw + (0.5 * ostemthicks[size]) : 0.0;
                 sdy = hw;
               }
 	    }
-	    stemdx[sz][i][stype][j][stemup] = sdx;
-	    stemdy[sz][i][stype][j][stemup] = sdy;
+	    stemdx[size][i][stype][j][stemup] = sdx;
+	    stemdy[size][i][stype][j][stemup] = sdy;
 	  }
         }
       }
@@ -1177,7 +1177,7 @@ int tickval(int b, int d)
 
 /* calculate stem length */
 
-int getstemlen(int body, int sz, int style, int su, int p, int s)
+int getstemlen(int body, int sizeIndex, int style, int su, int p, int s)
 {
   int r=0;
   if (!(hasstem[body])) return(su ? -1 : 1);
@@ -1188,7 +1188,7 @@ int getstemlen(int body, int sz, int style, int su, int p, int s)
       if (p > 11) r = s * (p - 4);
       else
       {
-        r = (p <= 3) ? stemshorts[sz] : stemlens[0][sz];
+        r = (p <= 3) ? stemshorts[sizeIndex] : stemlens[0][sizeIndex];
 	if (hasflag[body] == 2) r += (3 - body) * s;
       }
     }
@@ -1199,16 +1199,16 @@ int getstemlen(int body, int sz, int style, int su, int p, int s)
       {
         if (hasflag[body])
 	{
-	  r = stemlens[0][sz] + (s >> 1);
+	  r = stemlens[0][sizeIndex] + (s >> 1);
 	  if (hasflag[body] == 2) r += (3 - body) * s;
 	}
-	else r = (p >= 5) ? stemshorts[sz] :  stemlens[0][sz];
+	else r = (p >= 5) ? stemshorts[sizeIndex] :  stemlens[0][sizeIndex];
       }
     }
   }
   else if (style == 1)
   {
-    r = stemlens[1][sz];
+    r = stemlens[1][sizeIndex];
     if (hasflag[body] == 2) r += (3 - body) * s;
   }
   return( su ? -r : r);
@@ -1220,12 +1220,12 @@ int getstemlen(int body, int sz, int style, int su, int p, int s)
 float ledgethicks[3] = {0.8, 0.6, 0.4};
 float ledgedxs[3] = {3.0, 2.0, 1.5};
 
-void drawledge(float x, float y, float dx, int sz, int p, int nlines, int spacing, int mode)
+void drawledge(float x, float y, float dx, int sizeIndex, int p, int nlines, int spacing, int mode)
 {
   int i;
   float ly;
   BOOL f = NO;
-  dx += ledgedxs[sz];
+  dx += ledgedxs[sizeIndex];
   if (p < -1)
   {
     for (i = -2; i >= p; i -= 2)
@@ -1244,7 +1244,7 @@ void drawledge(float x, float y, float dx, int sz, int p, int nlines, int spacin
       f = YES;
     }
   }
-  if (f) cstrokeline(ledgethicks[sz], mode);
+  if (f) cstrokeline(ledgethicks[sizeIndex], mode);
 }
 
 
@@ -1255,56 +1255,56 @@ void drawledge(float x, float y, float dx, int sz, int p, int nlines, int spacin
   font but isn't.
 */
 
-void drawgrace(float x, float y, int body, float sl, int sz, int btype, int stype, int dflag)
+void drawgrace(float x, float y, int body, float stemLength, int sizeIndex, int btype, int stype, int dflag)
 {
   float nx, dy, gy, dx;
-  int stemup = (sl < 0);
-  dy = halfwidth[sz][0][4];
-  gy = y + 0.5 * sl;
+  int stemup = (stemLength < 0);
+  dy = halfwidth[sizeIndex][0][4];
+  gy = y + 0.5 * stemLength;
   if (stemup)
   {
-    cline(x, gy + dy, x + 3 * dy, gy - 2 * dy, stemthicks[sz], dflag);
+    cline(x, gy + dy, x + 3 * dy, gy - 2 * dy, stemthicks[sizeIndex], dflag);
   }
   else
   {
-    nx = x + stemdx[sz][btype][stype][body][stemup];
+    nx = x + stemdx[sizeIndex][btype][stype][body][stemup];
     dx = 0.5 * dy;
-    cline(nx - dx, gy + dy, nx + 3 * dy - dx, gy - 2 * dy, stemthicks[sz], dflag);
+    cline(nx - dx, gy + dy, nx + 3 * dy - dx, gy - 2 * dy, stemthicks[sizeIndex], dflag);
   }
 }
 
 
-void drawstem(float x, float y, int body, float sl, int sz, int btype, int stype, int dflag)
+void drawstem(float x, float y, int body, float stemLength, int sizeIndex, int btype, int stype, int dflag)
 {
-  float nx, ny, dy = y + sl;
+  float nx, ny, dy = y + stemLength;
   float sdx, sdy, fdx;
-  int stemup = (sl < 0);
+  int stemup = (stemLength < 0);
   switch(stype)
   {
     case 0:
-        sdx = stemdx[sz][btype][stype][body][stemup];
-        sdy = stemdy[sz][btype][stype][body][stemup];
-        fdx = flagdx[sz][btype][body][stemup];
+        sdx = stemdx[sizeIndex][btype][stype][body][stemup];
+        sdy = stemdy[sizeIndex][btype][stype][body][stemup];
+        fdx = flagdx[sizeIndex][btype][body][stemup];
         nx = x + sdx;
         ny = y + sdy;
-        cline(nx, ny, nx, dy, stemthicks[sz], dflag);
+        cline(nx, ny, nx, dy, stemthicks[sizeIndex], dflag);
         if (hasflag[body])
       {
-        ny = mflagoff[sz][body];
+        ny = mflagoff[sizeIndex][body];
 	if (!stemup) ny = -ny;
-        drawCharacterInFont(x + fdx, dy + ny, mflag[(!stemup)][body], musicFont[0][sz], dflag);
+        drawCharacterInFont(x + fdx, dy + ny, mflag[(!stemup)][body], musicFont[0][sizeIndex], dflag);
       }
       break;
     case 1:
-      nx = x + stemdx[sz][btype][stype][body][stemup];
-      ny = y + stemdy[sz][btype][stype][body][stemup];
-      cline(nx, ny, nx, dy, ostemthicks[sz], dflag);
-      if (hasflag[body]) drawCharacterInFont(x, dy, oflag[(!stemup)][body], musicFont[0][sz], dflag);
+      nx = x + stemdx[sizeIndex][btype][stype][body][stemup];
+      ny = y + stemdy[sizeIndex][btype][stype][body][stemup];
+      cline(nx, ny, nx, dy, ostemthicks[sizeIndex], dflag);
+      if (hasflag[body]) drawCharacterInFont(x, dy, oflag[(!stemup)][body], musicFont[0][sizeIndex], dflag);
       break;
     case 2:
     case 3:
-      cline(x, y, x, dy, ostemthicks[sz], dflag);
-      drawCharacterInFont(x, dy, bodies[stype][body], musicFont[0][sz], dflag);
+      cline(x, y, x, dy, ostemthicks[sizeIndex], dflag);
+      drawCharacterInFont(x, dy, bodies[stype][body], musicFont[0][sizeIndex], dflag);
       break;
   }
 }
@@ -1328,34 +1328,34 @@ unsigned char dotchar[NUMHEADS] = {SF_dot, CH_dot, SF_dot, SF_dot, SF_dot, CH_do
 unsigned char dotfont[NUMHEADS] = {1, 0, 1, 1, 1, 0, 1};
 
 
-float getdotx(int sz, int btype, int stype, int body, int beamed, int stemup)
+float getdotx(int sizeIndex, int btype, int stype, int body, int beamed, int stemup)
 {
   int ch;
   NSFont *df, *bf;
   float dw, dx=0.0;
   ch = dotchar[btype];
-  df = musicFont[dotfont[btype]][sz];
+  df = musicFont[dotfont[btype]][sizeIndex];
   dw = charFGW(df, ch);
   switch (dotcode[stype][body])
   {
     case 0:
-      dx = halfwidth[sz][btype][body] + dw;
+      dx = halfwidth[sizeIndex][btype][body] + dw;
       break;
     case 1:
-      dx = 0.5 * stemthicks[sz] + dw;
+      dx = 0.5 * stemthicks[sizeIndex] + dw;
       break;
     case 2:
-      bf = musicFont[bodyfont[stype][body]][sz];
+      bf = musicFont[bodyfont[stype][body]][sizeIndex];
       dx = charFURX(bf, bodies[stype][body]) + 0.75 * dw;
       break;
     case 3:
-      dx = halfwidth[sz][btype][body];
-      if (!beamed && stemup) dx += charFURX(musicFont[0][sz], mflag[0][body]);
+      dx = halfwidth[sizeIndex][btype][body];
+      if (!beamed && stemup) dx += charFURX(musicFont[0][sizeIndex], mflag[0][body]);
       if (body == 4) dx -= 0.5 * dw;
       dx += dw;
       break;
     case 4:
-      bf = musicFont[bodyfont[stype][body]][sz];
+      bf = musicFont[bodyfont[stype][body]][sizeIndex];
       dx = charFURX(bf, bodies[stype][body]);
       break;
   }
@@ -1363,13 +1363,13 @@ float getdotx(int sz, int btype, int stype, int body, int beamed, int stemup)
 }
 
 
-void drawnotedot(int sz, float x, float y, float dy, float sp, int btype, int dot, int ed, int mode)
+void drawnotedot(int sizeIndex, float x, float y, float dy, float sp, int btype, int dot, int ed, int mode)
 {
   float di;
   int i, ch;
   NSFont *df;
   ch = dotchar[btype];
-  df = musicFont[dotfont[btype]][sz];
+  df = musicFont[dotfont[btype]][sizeIndex];
   di = 2.0 * charFGW(df, ch);
   if (dot == 3)
   {
@@ -1384,11 +1384,11 @@ void drawnotedot(int sz, float x, float y, float dy, float sp, int btype, int do
 }
 
 
-void drawdot(int sz, float hw, float x, float y, int body, int btype, int stype, int dot, int ed, int stemup, int b, int mode)
+void drawdot(int sizeIndex, float hw, float x, float y, int body, int btype, int stype, int dot, int ed, int stemup, int b, int mode)
 {
   if (dot == 0) return;
-  x += getdotx(sz, btype, stype, body, b, stemup);
-  drawnotedot(sz, x, y, 0, 0, btype, dot, ed, mode);
+  x += getdotx(sizeIndex, btype, stype, body, b, stemup);
+  drawnotedot(sizeIndex, x, y, 0, 0, btype, dot, ed, mode);
 }
 
 
@@ -1397,14 +1397,14 @@ void drawdot(int sz, float hw, float x, float y, int body, int btype, int stype,
 
 unsigned char rdotchar[2] = {CH_dot, SF_dot};
 
-void restdot(int sz, float dx, float x, float y, float dy, int dot, int code, int mode)
+void restdot(int sizeIndex, float dx, float x, float y, float dy, int dot, int code, int mode)
 {
   int i, ch;
   float di, dw;
   NSFont *f;
   if (dot == 0) return;
   ch = rdotchar[code];
-  f = musicFont[!code][sz];
+  f = musicFont[!code][sizeIndex];
   dw = charFGW(f, ch);
   x += dx + 1.75 * dw;
   di = 2.0 * dw;
@@ -1423,48 +1423,53 @@ BOOL centhead[NUMHEADS] = {1, 0, 1, 1, 1, 0, 1}; /* whether to offset head */
 
 int modeinvis[5] = {0, 2, 2, 2, 4};
 
-/* sid is defined only when bt == 6 */
+/* shapeID is defined only when bodyType == 6 */
 
-void drawhead(float x, float y, int bt, int body, int sid, int su, int sz, int m)
+void drawhead(float x, float y, int bodyType, int body, int shapeID, int su, int sizeIndex, int m)
 {
-  if (bt == 6) drawCharacterInFont(x, y, shapeheads[sid][body][!su], musicFont[shapefont[sid]][sz], m);
-  else if (bt == 4)
-  {
-    if (m != 0) return;
-    drawCharacterInFont(x, y, headchars[0][body], musicFont[headfont[0][body]][sz], 0);
-  }
-  else drawCharacterInFont(x, y, headchars[bt][body], musicFont[headfont[bt][body]][sz], m);
+    if (bodyType == 6)
+	drawCharacterInFont(x, y, shapeheads[shapeID][body][!su], musicFont[shapefont[shapeID]][sizeIndex], m);
+    else if (bodyType == 4) {
+	if (m != 0)
+	    return;
+	drawCharacterInFont(x, y, headchars[0][body], musicFont[headfont[0][body]][sizeIndex], 0);
+    }
+    else 
+	drawCharacterInFont(x, y, headchars[bodyType][body], musicFont[headfont[bodyType][body]][sizeIndex], m);
 }
 
-
-void drawnote(int sz, float hw, float x, float y, int body, int btype, int stype, int sid, int b, float sl, int nos, int g, int dflag)
+/*
+ Draws the note head, and the note stem at coordinates (x,y). Handles grace notes, beaming and lack of stems..
+ */
+void drawnote(int sizeIndex, float halfWidth, float x, float y, 
+	      int body, int bodyType, int stemType, int shapeID, BOOL isBeamed, float stemLength, BOOL hasNoStem, BOOL isGraceNote, int drawingMode)
 {
-  float nx;
-  BOOL quick = NO;
-  nx = x;
-  if (centhead[btype] || headchars[btype][body] == CH_longa) nx -= hw;
-  if (!nos && !b && !btype && !stype)
-  {
-    quick = YES;
-    if (fullbody[0][body] && TOLFLOATEQ(sl, -stemlens[0][sz], 0.5))
-      drawCharacterInFont(nx, y, fullbody[0][body], musicFont[1][sz], dflag);
-    else if (fullbody[1][body] && TOLFLOATEQ(sl, stemlens[0][sz], 0.5))
-      drawCharacterInFont(nx, y, fullbody[1][body], musicFont[1][sz], dflag);
-    else quick = NO;
-  }
-  if (quick)
-  {
-    if (g) drawgrace(x, y, body, sl, sz, btype, stype, dflag);
-  }
-  else
-  {
-      drawhead(nx, y, btype, body, sid, (sl < 0), sz, dflag);
-    if (!nos && !b && hasstem[body])
-    {
-      drawstem(x, y, body, sl, sz, btype, stype, dflag);
-      if (g) drawgrace(x, y, body, sl, sz, btype, stype, dflag);
+    BOOL quick = NO;
+    float nx = x;
+    
+    if (centhead[bodyType] || headchars[bodyType][body] == CH_longa)
+	nx -= halfWidth;
+    if (!hasNoStem && !isBeamed && !bodyType && !stemType) {
+	quick = YES;
+	if (fullbody[0][body] && TOLFLOATEQ(stemLength, -stemlens[0][sizeIndex], 0.5))
+	    drawCharacterInFont(nx, y, fullbody[0][body], musicFont[1][sizeIndex], drawingMode);
+	else if (fullbody[1][body] && TOLFLOATEQ(stemLength, stemlens[0][sizeIndex], 0.5))
+	    drawCharacterInFont(nx, y, fullbody[1][body], musicFont[1][sizeIndex], drawingMode);
+	else 
+	    quick = NO;
     }
-  }
+    if (quick) {
+	if (isGraceNote) 
+	    drawgrace(x, y, body, stemLength, sizeIndex, bodyType, stemType, drawingMode);
+    }
+    else {
+	drawhead(nx, y, bodyType, body, shapeID, (stemLength < 0), sizeIndex, drawingMode);
+	if (!hasNoStem && !isBeamed && hasstem[body]) {
+	    drawstem(x, y, body, stemLength, sizeIndex, bodyType, stemType, drawingMode);
+	    if (isGraceNote) 
+		drawgrace(x, y, body, stemLength, sizeIndex, bodyType, stemType, drawingMode);
+	}
+    }
 }
 
 
@@ -1473,13 +1478,14 @@ void drawnote(int sz, float hw, float x, float y, int body, int btype, int stype
   tablature, unequal note group, metronome marks, etc.
 */
 
-void csnote(float cx, float cy, float sl, int body, int dot, int sz, int btype, int stype, int m)
+void csnote(float cx, float cy, float stemLength, int body, int dot, int sizeIndex, int bodyType, int stemType, int m)
 {
-    float hw = halfwidth[sz][btype][body];
-    drawnote(sz, hw, cx, cy, body, btype, stype, 1, 0, sl, 0, 0, m);
-    if (dot)
-      {
-        if (btype == 4) cy += 0.5 * sl;
-        drawdot(sz, hw, cx, cy, body, btype, stype, dot, 0, (sl < 0), 0, m);
-      }
+    float hw = halfwidth[sizeIndex][bodyType][body];
+    
+    drawnote(sizeIndex, hw, cx, cy, body, bodyType, stemType, 1, 0, stemLength, FALSE, FALSE, m);
+    if (dot) {
+        if (bodyType == 4) 
+	    cy += 0.5 * stemLength;
+        drawdot(sizeIndex, hw, cx, cy, body, bodyType, stemType, dot, 0, (stemLength < 0), 0, m);
+    }
 }

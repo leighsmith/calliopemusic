@@ -319,12 +319,12 @@ static float anyDotFor(GNote *p)
 static float anyHeadFor(GNote *p, int n)
 {
   NSMutableArray *hl;
-  NoteHead *h;
+  NoteHead *noteHead;
   float w = 0.0;
   hl = p->headlist;
-  h = [hl objectAtIndex:n];
-  if (!(p->time.stemup) && h->side) w = -2.0 * halfwidth[(int)p->gFlags.size][(int)h->type][p->time.body];
-  if (h->accidoff < w) w = h->accidoff; 
+  noteHead = [hl objectAtIndex:n];
+  if (!(p->time.stemup) && [noteHead side]) w = -2.0 * halfwidth[(int)p->gFlags.size][(int)noteHead->type][p->time.body];
+  if ([noteHead accidentalOffset] < w) w = [noteHead accidentalOffset]; 
   return w;
 }
 
@@ -378,7 +378,7 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
   float dx, dy;
   GNote *p, *q;
   NSMutableArray *hl;
-  NoteHead *h;
+  NoteHead *noteHead;
   p = [client objectAtIndex:0];
   q = [client lastObject];
   sz = p->gFlags.size;
@@ -396,8 +396,8 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
         if (head1 + 1 == phk) a = p->time.stemup;
         else
         {
-          h = [hl objectAtIndex:head1];
-          a = (h->pos < 4);
+          noteHead = [hl objectAtIndex:head1];
+          a = ([noteHead staffPosition] < 4);
         }
       }
       dx = noteoffset[sz] + 0.5 * nature[sz];
@@ -572,7 +572,7 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
   findEndpoints(l, &m, &n);
   if (TYPEOF(n) == NOTE && TYPEOF(m) == NOTE)
   {
-    if (n->p == m->p)
+    if (n->staffPosition == m->staffPosition)
     {
       [(NSMutableArray *)client addObject: m];
       [(NSMutableArray *)client addObject: n];

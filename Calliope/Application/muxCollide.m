@@ -50,7 +50,7 @@ static void doStems(GNote *nn[], int k, int sn, float vcx[])
     if (hasflag[p->time.body] && !(p->time.nostem))
     {
       psu = p->time.stemup;
-      mp = p->p;
+      mp = p->staffPosition;
       for (j = 0; j < k; j++)
       {
 	if (i == j) continue;
@@ -64,23 +64,23 @@ static void doStems(GNote *nn[], int k, int sn, float vcx[])
 	    h = [hl objectAtIndex:hlk];
 	    if (psu)
 	    {
-	      if (h->pos < mp) mp = h->pos;
+	      if ([h staffPosition] < mp) mp = [h staffPosition];
 	    }
 	    else
 	    {
-	      if (h->pos > mp) mp = h->pos;
+	      if ([h staffPosition] > mp) mp = [h staffPosition];
 	    }
 	  }
 	}
       }
       if (psu)
       {
-        sl = ((p->p - mp) - stemheight[p->gFlags.size][p->time.body] - 0.5) * [p getSpacing];
+        sl = ((p->staffPosition - mp) - stemheight[p->gFlags.size][p->time.body] - 0.5) * [p getSpacing];
 	if (sl < p->time.stemlen) p->time.stemlen = sl;
       }
       else
       {
-        sl = ((mp - p->p) + stemheight[p->gFlags.size][p->time.body] + 0.5) * [p getSpacing];
+        sl = ((mp - p->staffPosition) + stemheight[p->gFlags.size][p->time.body] + 0.5) * [p getSpacing];
 	if (sl > p->time.stemlen) p->time.stemlen = sl;
       }
     }
@@ -112,10 +112,10 @@ static void doAccidentals(GNote *nn[], int k)
         nh[nheads] = h;
 	note[nheads++] = p;
       }
-      if (h->accidental && h->accidoff <= 0.0 && nacc < MAXACCS)
+      if ([h accidental] && [h accidentalOffset] <= 0.0 && nacc < MAXACCS)
       {
         ah[nacc++] = h;
-	h->accidoff = 0.0;
+	[h setAccidentalOffset:  0.0];
       }
     }
   }
@@ -127,7 +127,7 @@ static void doAccidentals(GNote *nn[], int k)
     {
       for (j = i - g; j >= 0; j -= g)
       {
-        if (ah[j]->pos > ah[j+g]->pos)
+        if ([ah[j] staffPosition] > [ah[j+g] staffPosition])
 	{
 	  h = ah[j];
 	  ah[j] = ah[j+g];
@@ -267,7 +267,7 @@ static char nestleCode(GNote *p, int pk, GNote *q, int qk)
       qh = [q->headlist objectAtIndex:j];
       if (ph->myNote != qh->myNote)  /* is this test ever NO? */
       {
-        dp = ph->pos - qh->pos;
+        dp = [ph staffPosition] - [qh staffPosition];
 	if (dp == 0) return (ps ? 6 : 1);
         else if (dp == -1) return pabove[ps][qs];
 	else if (dp == 1) return pbelow[ps][qs];
@@ -313,17 +313,17 @@ static float checkUnison(GNote *p, GNote *q)
   bu = q->time.stemup;
   g = [p->headlist objectAtIndex:0];
   h = [q->headlist objectAtIndex:0];
-  ea = (g->accidental == h->accidental);
+  ea = ([g accidental] == [h accidental]);
   if (au != bu /* && p->time.dot == q->time.dot */ && headgraf[p->time.body] == headgraf[q->time.body]) r = 0.0;
   else if (c = ustemcode[(hasstem[p->time.body] << 1) | hasstem[q->time.body]]) r = c * kern0(p, q);
   else r = uniscode[(ad << 1) | bd][(au << 1) | bu] * kern0(p, q);
   if (r < 0)
   {
-    if (ea && h->accidoff <= 0) g->accidoff = 1.0;
+    if (ea && [h accidentalOffset] <= 0) [g setAccidentalOffset: 1.0];
   }
   else
   {
-    if (ea && g->accidoff <= 0) h->accidoff = 1.0;
+    if (ea && [g accidentalOffset] <= 0) [h setAccidentalOffset: 1.0];
   }
   return r;
 }
@@ -419,8 +419,8 @@ void kernsim(int sn, int s1, int s2, NSMutableArray *nl, float vcx[])
       if (g != nil && g == [n[j] myChordGroup]) continue;
       if (nh[i] == 1 && nh[j] == 1) 
       {
-        pp = n[i]->p;
-        qp = n[j]->p;
+        pp = n[i]->staffPosition;
+        qp = n[j]->staffPosition;
 	dp = pp - qp;
 	if (dp == 0)
 	{

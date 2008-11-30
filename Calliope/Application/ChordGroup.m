@@ -335,15 +335,15 @@ extern unsigned char hasstem[10];
     q = [self getExtremeHead: 1];
     h = [self getExtremeHead: 0];
     sl = p->time.stemlen;
-    dy = q->myY - h->myY;
+    dy = [q y] - [h y];
     if (b) sb = 5;
     else
     {
       dy += sl;
       sb = body;
     }
-    drawstem(p->x, h->myY, sb, dy, sz, h->type, st, m);
-    if (p->isGraced == 1) drawgrace(p->x, q->myY, sb, sl, sz, q->type, st, m);
+    drawstem(p->x, [h y], sb, dy, sz, h->type, st, m);
+    if (p->isGraced == 1) drawgrace(p->x, [q y], sb, sl, sz, q->type, st, m);
   }
   return self;
 }

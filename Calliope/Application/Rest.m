@@ -84,7 +84,7 @@ static Rest *proto;
   Rest *r = [[Rest alloc] init];
   r->style = 2;
   r->numbars = n;
-  r->p = 4;
+  r->staffPosition = 4;
   return r;
 }
 
@@ -201,7 +201,7 @@ static Rest *proto;
   time.tight = proto->time.tight;
   isGraced = proto->isGraced;
   voice = proto->voice;
-  p = [self defaultPos];
+  staffPosition = [self defaultPos];
   [self resetStemlen];
   return self;
 }
@@ -211,14 +211,14 @@ static Rest *proto;
 {
     if (style <= 1) *fx = x - 0.5 * charFGW(musicFont[!style][gFlags.size], rests[(int)style][time.body]);
   else *fx = x;
-  *fy = [self yOfPos: p];
+  *fy = [self yOfPos: staffPosition];
   return YES;
 }
 
 
 - (BOOL) reCache: (float) sy : (int) ss
 {
-  float t = sy + ss * p;
+  float t = sy + ss * staffPosition;
   BOOL mod = NO;
   if (t != y)
   {
@@ -254,15 +254,15 @@ static Rest *proto;
         mp = [mystaff findPos: y];
 	if ((mp & 1) != ([self defaultPos] & 1))
 	{
-	  if (mp < p) --mp; else ++mp;
+	  if (mp < staffPosition) --mp; else ++mp;
 	}
-        p = mp;
+        staffPosition = mp;
         y = [mystaff yOfPos: mp];
       }
       else if (inv)
       {
-        p = [self defaultPos];
-        y = [mystaff yOfPos: p];
+        staffPosition = [self defaultPos];
+        y = [mystaff yOfPos: staffPosition];
       }
     }
     [self recalc];
@@ -283,12 +283,12 @@ static Rest *proto;
     if (isdigitchar(c))
     {
       time.body = c - '0';
-      p = [self defaultPos];
+      staffPosition = [self defaultPos];
       r = YES;
     }
     else if (c == 'd')
     {
-      p = [self defaultPos];
+      staffPosition = [self defaultPos];
       r = YES;
     }
   }
@@ -311,16 +311,16 @@ extern float staffthick[3][3];
   char num[6];
   sy = [self yOfPos: 0];
   cx = x - (4 * ss);
-  y1 = GETYSP(sy, ss, p);
+  y1 = GETYSP(sy, ss, staffPosition);
   wid = (8 * ss);
   crect(x, y1 - (ss - 1), wid, (2 * ss) - 1, m);
-  y1 = GETYSP(sy, ss, p - 2);
-  y2 = GETYSP(sy, ss, p + 2);
+  y1 = GETYSP(sy, ss, staffPosition - 2);
+  y2 = GETYSP(sy, ss, staffPosition + 2);
   cline(x, y1, x, y2, linethicks[sz], m);
   cline(x + wid, y1, x + wid, y2, linethicks[sz], m);
   sprintf(num, "%d", numbars);
   numy = (style == 3) ? 7 : -7;
-  centString(x + (4 * ss), GETYSP(sy, ss, p + numy), num, musicFont[1][sz], m);
+  centString(x + (4 * ss), GETYSP(sy, ss, staffPosition + numy), num, musicFont[1][sz], m);
   return self;
 }
 
@@ -339,14 +339,14 @@ extern float staffthick[3][3];
     case 6:
       f = musicFont[1][sz];
       c = 212;
-      y1 = [self yOfPos: p];
+      y1 = [self yOfPos: staffPosition];
       dx = 0.5 * charFGW(f, c);
       drawCharacterInFont(x - dx, y1, c, f, m);
       break;
     case 5:
       f = musicFont[1][sz];
       c = SF_r1;
-      y1 = [self yOfPos: p];
+      y1 = [self yOfPos: staffPosition];
       dx = 0.5 * charFGW(f, c);
       drawCharacterInFont(x - dx, y1, c, f, m);
       break;
@@ -354,12 +354,12 @@ extern float staffthick[3][3];
     case 1:
     f = musicFont[!style][sz];  /* might need to depend on body etc */
         c = rests[(int)style][time.body];
-    y1 = [self yOfPos: p];
+    y1 = [self yOfPos: staffPosition];
     dx = 0.5 * charFGW(f, c);
     drawCharacterInFont(x - dx, y1, c, f, m);
     if (hasledger[time.body] && style == 0 && TYPEOF(mystaff) == STAFF)
     {
-      tp = p + ledgeroff[time.body];
+      tp = staffPosition + ledgeroff[time.body];
       if (tp < 0 || tp > 9)
       {
         lx = ledgedxs[sz];
@@ -371,7 +371,7 @@ extern float staffthick[3][3];
     }
     if (time.dot)
     {
-        tp = p + dotoffs[(int)style][time.body];
+        tp = staffPosition + dotoffs[(int)style][time.body];
       if ((tp & 1) == 0) --tp;
       ly = [self yOfPos: tp];
       th = (time.dot == 3) ? [self getSpacing] * 2 : 0;
@@ -385,8 +385,8 @@ extern float staffthick[3][3];
     case 4:
       f = musicFont[1][sz];
       ss = getSpacing(mystaff);
-      y1 = [self yOfPos: p];
-      ly = [self yOfPos: p + 2];
+      y1 = [self yOfPos: staffPosition];
+      ly = [self yOfPos: staffPosition + 2];
       switch(numbars)
       {
         case 1:
@@ -453,8 +453,8 @@ extern float staffthick[3][3];
   if (v < 3) 
   {
     [aDecoder decodeValuesOfObjCTypes:"s", &numbars];
-    p = restoffs[gFlags.subtype & 1][time.body];
-    y = [self yOfPos: p];
+    staffPosition = restoffs[gFlags.subtype & 1][time.body];
+    y = [self yOfPos: staffPosition];
   }
   else if (v == 3) [aDecoder decodeValuesOfObjCTypes:"s", &numbars];
   else [aDecoder decodeValuesOfObjCTypes:"cs", &style, &numbars];

@@ -35,7 +35,7 @@ struct tabinfo
 - (BOOL) isBeamable;
 - (int) tabCount;
 - (float) noteEval: (BOOL) f;
-- (int) noteCode: (int) a;
+- (int) incrementNoteCodeBy: (int) a;
 - (int) getPatch;
 - (int)keyDownString:(NSString *)cc;
 - drawMode: (int) m;

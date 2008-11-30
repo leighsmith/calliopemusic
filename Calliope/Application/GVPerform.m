@@ -473,7 +473,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
                                 h = [hl objectAtIndex:k];
                                 if (h->type != 4)
                                 {
-                                    if (h->myNote == p) f = getNoteFreq(p, h->pos, h->accidental, mc, curracc, trn);
+                                    if (h->myNote == p) f = getNoteFreq(p, [h staffPosition], [h accidental], mc, curracc, trn);
                                     an = newNote(tn, f, dur);
                                     if (![inst isEqualToString: nullProgChange] && !noprogch) setInst(an, pat);
                                     addNote(v, k, ch, an);

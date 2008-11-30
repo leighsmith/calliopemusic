@@ -495,7 +495,7 @@ float fontsize[3] = { 12, 8, 6};
 	case 1:
           f = musicFont[1][sz];
           drawCharacterInFont(px, (above ? py : qy), 96, f, m);
-          cbrack(6, flags.position, px + charFWX(f, 96), py, qx, qy, 0, 0, sz, m);
+          cbrack(6, flags.position, px + DrawWidthOfCharacter(f, 96), py, qx, qy, 0, 0, sz, m);
 	  break;
 	case 2:
 	case 3:

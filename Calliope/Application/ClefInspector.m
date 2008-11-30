@@ -22,7 +22,7 @@
   Clef *p = [Clef myPrototype];
   p->keycentre = [keymatrix selectedRow];
   p->gFlags.subtype = [keymatrix selectedColumn];
-  p->p = (([linematrix selectedRow]) << 1);
+  p->staffPosition = (([linematrix selectedRow]) << 1);
   p->ottava = [ottavamatrix selectedRow] - 1;
   return self;
 }
@@ -49,7 +49,7 @@
       }
       p->keycentre = [keymatrix selectedRow];
       p->gFlags.subtype = [keymatrix selectedColumn];
-      p->p = (([linematrix selectedRow] - (5 - [p getLines])) << 1);
+      p->staffPosition = (([linematrix selectedRow] - (5 - [p getLines])) << 1);
       p->ottava = [ottavamatrix selectedRow] - 1;
       [p recalc];
       if (dotrans)
@@ -81,7 +81,7 @@
   Clef *p = [v canInspect: CLEF : &n];
   if (n == 0) return nil;
   [keymatrix selectCellAtRow:p->keycentre column:p->gFlags.subtype];
-  [linematrix selectCellAtRow:(p->p >> 1) column:0];
+  [linematrix selectCellAtRow:(p->staffPosition >> 1) column:0];
   [ottavamatrix selectCellAtRow:p->ottava + 1 column:0];
   [octavebutton selectItemAtIndex: 0];
   return self;
@@ -103,7 +103,7 @@ static char defline[3] = {2, 1, 3};
 {
   Clef *p = [Clef myPrototype];
   [keymatrix selectCellAtRow:p->keycentre column:p->gFlags.subtype];
-  [linematrix selectCellAtRow:(p->p >> 1) column:0];
+  [linematrix selectCellAtRow:(p->staffPosition >> 1) column:0];
   [ottavamatrix selectCellAtRow:p->ottava + 1 column:0];
   [octavebutton selectItemAtIndex: 0];
   return self;

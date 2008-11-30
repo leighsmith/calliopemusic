@@ -35,24 +35,59 @@ struct timeinfo
 
 
 - init;
-- (void)dealloc;
+- (void) dealloc;
 - (BOOL) performKey: (int) c;
 - (float) noteEval: (BOOL) f;
-- (int) noteCode: (int) a;
+
+/*!
+ Increments the note code by the given index and returns the new code. 
+ */
+- (int) incrementNoteCodeBy: (int) a;
+
+/*!
+ Returns the note code (identifier) of the timed object. 
+ */
+- (int) noteCode;
+
 - defaultStem: (BOOL) up;
 - (float) myStemBase;
 - (float) stemXoff: (int) stype;
 - (float) stemXoffLeft: (int) stype;
 - (float) stemXoffRight: (int) stype;
 - (float) stemYoff: (int) stype;
-- setStemTo: (float) s;
+
+/*!
+ Assigns the new stem length in points and determines whether the stem is up or down by the sign.
+ */
+- (void) setStemLengthTo: (float) newStemLength;
+
+/*!
+ Returns the stem length in points.
+ */
+- (float) stemLength;
+
+/*!
+ Returns if the timed object has a stem.
+ */
+- (BOOL) hasNoStem;
+
+/*!
+ Returns if the timed object's stem is up (or down).
+ */
+- (BOOL) stemIsUp;
+
+/*!
+ Returns if the timed object is dotted. TODO should be an enum.
+ */
+- (int) dottingCode;
+
 - (BOOL) validAboveBelow: (int) a;
 - (BOOL) isBeamable;
 - (BOOL) isBeamed;
 - (BOOL) hitBeamAt: (float *) x : (float *) y;
 - (BOOL) tupleStarts;
 - (BOOL) tupleEnds;
-- (id)initWithCoder:(NSCoder *)aDecoder;
-- (void)encodeWithCoder:(NSCoder *)aCoder;
+- (id)initWithCoder: (NSCoder *) aDecoder;
+- (void)encodeWithCoder: (NSCoder *) aCoder;
 
 @end

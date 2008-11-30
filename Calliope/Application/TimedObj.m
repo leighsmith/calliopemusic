@@ -79,9 +79,12 @@
 }
 
 
-/* return note code, possibly altered */
+- (int) noteCode
+{
+    return time.body;
+}
 
-- (int) noteCode: (int) i
+- (int) incrementNoteCodeBy: (int) i
 {
   int c = time.body + i;
   if (0 <= c && c <= 8) time.body = c;
@@ -106,11 +109,10 @@
 }
 
 
-- setStemTo: (float) s
+- (void) setStemLengthTo: (float) s
 {
   time.stemlen = s;
   time.stemup = (s < 0);
-  return self;
 }
 
 
@@ -136,6 +138,31 @@
 {
   return 0.0;
 }
+
+- (float) stemLength
+{
+    return time.stemlen;
+}
+
+- (BOOL) hasNoStem
+{
+    return time.nostem;
+}
+
+- (BOOL) stemIsUp
+{
+    return time.stemup;
+}
+
+/*!
+ Returns if the timed object is dotted. This might not be a bool.
+ */
+- (int) dottingCode
+{
+    return time.dot;
+}
+
+
 
 
 /*

@@ -25,7 +25,7 @@ static Metro *proto;
     proto->body[0] = 5;
     proto->dot[0] = 0;
     proto->ticks = 72;
-    proto->pos = -4;
+    [proto setStaffPosition: -4];
   }
   return;
 }
@@ -62,7 +62,7 @@ static Metro *proto;
   int i;
   Metro *p = [[Metro alloc] init];
   p->gFlags = gFlags;
-  p->pos = pos;
+  [p setStaffPosition: pos];
   p->ticks = ticks;
   for (i = 0; i < 2; i++)
   {
@@ -88,7 +88,7 @@ static Metro *proto;
   body[0] = proto->body[0];
   dot[0] = proto->dot[0];
   ticks = proto->ticks;
-  pos = proto->pos;
+  pos = [proto staffPosition];
   [client linkhanger: self];
   return self;
 }
@@ -130,6 +130,15 @@ static Metro *proto;
   return YES;
 }
 
+- (void) setStaffPosition: (int) positionOnStaff
+{
+    pos = positionOnStaff;
+}
+
+- (int) staffPosition
+{
+    return pos;
+}
 
 - drawMode: (int) m
 {

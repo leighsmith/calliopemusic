@@ -1,4 +1,4 @@
-/* $Id:$ */
+/* $Id$ */
 #import <Foundation/Foundation.h>
 #import "DrawingFunctions.h"
 #import "muxlow.h"
@@ -64,8 +64,8 @@ static char timecodes[3] = {4, 4, 5};
   [super proto: v : pt : sp : sys : g : i];
   if (TYPEOF(sp) == STAFF)
   {
-    p = [sp findPos: pt.y];
-    y = [sp yOfPos: p];
+    staffPosition = [sp findPos: pt.y];
+    y = [sp yOfPos: staffPosition];
   }
   gFlags.size = sp->gFlags.size;
   gFlags.subtype = proto->gFlags.subtype;
@@ -74,7 +74,7 @@ static char timecodes[3] = {4, 4, 5};
   stemside = proto->stemside;
   time.body = timecodes[i];
   time.dot = proto->time.dot;
-  time.stemlen = 20;
+  time.stemlen = 20; // TODO [self setStemLengthTo: 20];
   p1 = proto->p1;
   return self;
 }
@@ -83,7 +83,7 @@ static char timecodes[3] = {4, 4, 5};
 - (BOOL) reCache: (float) sy : (int) ss
 {
   float t;
-  t = sy + ss * p;
+  t = sy + ss * staffPosition;
   if (t == y) return NO;
   y = t;
   return YES;
@@ -101,8 +101,8 @@ static float squaretick[3] = {1.0, 1.0, 0.5};
 - (BOOL) getPos: (int) i : (int *) pos : (int *) d : (int *) m : (float *) t
 {
     if (i >= squarenum[(int)shape]) return NO;
-  if (i == 0) *pos = p;
-  else if (i == 1) *pos = p + p1;
+  if (i == 0) *pos = staffPosition;
+  else if (i == 1) *pos = staffPosition + p1;
   *d = 0;
   *m = 0;
   *t = squaretick[(int)shape] * tickval(time.body, 0);
@@ -123,7 +123,7 @@ static float squaretick[3] = {1.0, 1.0, 0.5};
     if (stemside)
     {
       m = YES;
-      [self setStemTo: ny - y];
+      [self setStemLengthTo: ny - y];
     }
   }
   else if (alt == 2)  /* CONTROL-move */
@@ -131,9 +131,9 @@ static float squaretick[3] = {1.0, 1.0, 0.5};
     if (TYPEOF(mystaff) == STAFF)
     {
       mp = [mystaff findPos: ny];
-      if (mp - p != p1)
+      if (mp - staffPosition != p1)
       {
-        p1 = mp - p;
+        p1 = mp - staffPosition;
 	m = YES;
       }
     }
@@ -146,8 +146,8 @@ static float squaretick[3] = {1.0, 1.0, 0.5};
     inv = [sys relinknote: self];
     if (TYPEOF(mystaff) == STAFF)
     {
-      p = [mystaff findPos: y];
-      y = [mystaff yOfPos: p];
+      staffPosition = [mystaff findPos: y];
+      y = [mystaff yOfPos: staffPosition];
     }
   }
   if (m)
@@ -220,7 +220,7 @@ static short mywidth[2] = {2, 4};
     case 2:  /* oblique */
       x1 = x;
       y1 = y - ss;
-      y2 = [self yOfPos: p + p1] - ss;
+      y2 = [self yOfPos: staffPosition + p1] - ss;
       dy = 2 * ss;
       w = ABS(y1 - y2) + 2 * ss;
       x2 = x1 + w;
@@ -230,8 +230,8 @@ static short mywidth[2] = {2, 4};
         s1 = y - ser;
 	s2 = y + ser;
         cline(x1, s1, x1, s2, lw, m);
-	s1 = [self yOfPos: p + p1] - ser;
-	s2 = [self yOfPos: p + p1] + ser;
+	s1 = [self yOfPos: staffPosition + p1] - ser;
+	s2 = [self yOfPos: staffPosition + p1] + ser;
         cline(x2, s1, x2, s2, lw, m);
       }
       break;
@@ -248,7 +248,7 @@ static short mywidth[2] = {2, 4};
   }
   if (time.dot)
   {
-    dp = p;
+    dp = staffPosition;
     if (shape == 2) dp += p1;
     if (!(dp & 1)) dp -= 1;
     x1 = x + w + nature[sz];
@@ -258,7 +258,7 @@ static short mywidth[2] = {2, 4};
   if (TYPEOF(sp) == STAFF)
   {
     h = 0.5 * w;
-    drawledge(x + h, [sp yOfTop], h, sz, p, sl, ss, m);
+    drawledge(x + h, [sp yOfTop], h, sz, staffPosition, sl, ss, m);
   }
   return self;
 }

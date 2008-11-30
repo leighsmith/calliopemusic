@@ -52,7 +52,7 @@ static TimeSig *proto;
   denom[0] = '\0';
   fnum = 1.0;
   fden = 1.0;
-  p = 4;
+  staffPosition = 4;
   return self;
 }
 
@@ -72,7 +72,7 @@ static TimeSig *proto;
 - (BOOL) getXY: (float *) fx : (float *) fy
 {
   *fx = x;
-  *fy = [self yOfPos: p];
+  *fy = [self yOfPos: staffPosition];
   return YES;
 }
 
@@ -85,7 +85,7 @@ static TimeSig *proto;
   strcpy(denom, proto->denom);
   fnum = proto->fnum;
   fden = proto->fden;
-  p = [self defaultPos];
+  staffPosition = [self defaultPos];
   return self;
 }
 
@@ -247,16 +247,16 @@ static short imperfdiv[4] = {4, 2, 6, 4};
       if (alt)
       {
         mp = [mystaff findPos: y];
-	if (mp != p)
+	if (mp != staffPosition)
 	{
-          p = mp;
+          staffPosition = mp;
           y = [mystaff yOfPos: mp];
 	}
       }
       else if (inv)
       {
-        p = [self defaultPos];
-	y = [mystaff yOfPos: p];
+        staffPosition = [self defaultPos];
+	y = [mystaff yOfPos: staffPosition];
       }
     }
     [self recalc];
@@ -271,7 +271,7 @@ static float fontsize[3] = { 16, 12, 8};
 - drawMode: (int) m
 {
   float x1, x2, w;
-  float cy = (TYPEOF(mystaff) == STAFF) ? [mystaff yOfPos: p] : y;
+  float cy = (TYPEOF(mystaff) == STAFF) ? [mystaff yOfPos: staffPosition] : y;
   BOOL punct = 1;
   static char linedy[3] = {12, 9, 6};
   int sz = gFlags.size;
@@ -338,7 +338,7 @@ static float fontsize[3] = { 16, 12, 8};
     [aDecoder decodeValuesOfObjCTypes:"cc", &dot, &line];
     [aDecoder decodeArrayOfObjCType:"c" count:FIELDSIZE at:numer];
     [aDecoder decodeArrayOfObjCType:"c" count:FIELDSIZE at:denom];
-    p = 4;
+    staffPosition = 4;
   }
   else if (v == 1)
   {

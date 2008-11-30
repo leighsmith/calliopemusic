@@ -69,7 +69,7 @@ static Clef *proto;
     proto = [self alloc];
     proto->gFlags.subtype = 0;
     proto->keycentre = 2;
-    proto->p = clefdefaultpos[(int)clefuid[2][0]];
+    proto->staffPosition = clefdefaultpos[(int)clefuid[2][0]];
     proto->ottava = 0;
   }
   return;
@@ -94,7 +94,7 @@ static Clef *proto;
   gFlags.type = CLEF;
   gFlags.subtype = 0;
   keycentre = 2;
-  p = [self defaultPos];
+  staffPosition = [self defaultPos];
   ottava = 0;
   return self;
 }
@@ -118,7 +118,7 @@ static Clef *proto;
   gFlags.subtype = proto->gFlags.subtype;
   keycentre = proto->keycentre;
   ottava = proto->ottava;
-  p = [self defaultPos];
+  staffPosition = [self defaultPos];
   return self;
 }
 
@@ -131,7 +131,7 @@ static Clef *proto;
   q->x = x;
   q->keycentre = keycentre;
   q->ottava = ottava;
-  q->p = p;
+  q->staffPosition = staffPosition;
   return q;
 }
 
@@ -139,7 +139,7 @@ static Clef *proto;
 - (BOOL) getXY: (float *) fx : (float *) fy
 {
   *fx = x;
-  *fy = [self yOfPos: p];
+  *fy = [self yOfPos: staffPosition];
   return YES;
 }
 
@@ -148,7 +148,7 @@ static Clef *proto;
 
 - (int) middleC
 {
-  return(clefmidc[(int)clefuid[(int)keycentre][(int)gFlags.subtype]] + clefottava[(int)ottava] + (p - [self defaultPos]));
+  return(clefmidc[(int)clefuid[(int)keycentre][(int)gFlags.subtype]] + clefottava[(int)ottava] + (staffPosition - [self defaultPos]));
 }
 
 - (BOOL) performKey: (int) c
@@ -158,7 +158,7 @@ static Clef *proto;
   if (isdigitchar(c))
   {
     i = c - '0';
-    p = (getLines(mystaff) - i) << 1;
+    staffPosition = (getLines(mystaff) - i) << 1;
     r = YES;
   }
   i = [@"CFGP" rangeOfString:[NSString stringWithFormat:@"%c", c]].location;
@@ -166,7 +166,7 @@ static Clef *proto;
   {
     gFlags.subtype = 0;
     keycentre = i;
-    p = [self defaultPos];
+    staffPosition = [self defaultPos];
     r = YES;
   }
   if (r)
@@ -197,17 +197,17 @@ static Clef *proto;
       if (alt)
       {
         mp = [mystaff findPos: y];
-	if ((p & 1) == (mp & 1))  /* move only by increments of 2 ss */
+	if ((staffPosition & 1) == (mp & 1))  /* move only by increments of 2 ss */
 	{
-	  am = (mp != p);
-          p = mp;
+	  am = (mp != staffPosition);
+          staffPosition = mp;
           y = [mystaff yOfPos: mp];
 	}
       }
       else if (inv)
       {
-        p = [self defaultPos];
-	y = [mystaff yOfPos: p];
+        staffPosition = [self defaultPos];
+	y = [mystaff yOfPos: staffPosition];
       }
     }
     [self recalc];
@@ -230,7 +230,7 @@ static Clef *proto;
   sz = gFlags.size;
   f = musicFont[cleffont[cid]][sz];
   if (TYPEOF(mystaff) == SYSTEM) cy =  y;
-  else cy = cleforigins[sz][cid] + [mystaff yOfPos: p];
+  else cy = cleforigins[sz][cid] + [mystaff yOfPos: staffPosition];
   drawCharacterInFont(x, cy, cs, f, m);
   if (ottava)
   {
@@ -252,7 +252,7 @@ static Clef *proto;
   if (v == 0)
   {
     [aDecoder decodeValuesOfObjCTypes:"ccc", &keycentre, &b1, &ottava];
-      p = b1 + clefdefaultpos[(int)clefuid[(int)keycentre][(int)gFlags.subtype]];
+      staffPosition = b1 + clefdefaultpos[(int)clefuid[(int)keycentre][(int)gFlags.subtype]];
   }
   else if (v == 1) [aDecoder decodeValuesOfObjCTypes:"cc", &keycentre, &ottava];
   return self;

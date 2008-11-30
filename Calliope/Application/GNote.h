@@ -6,6 +6,7 @@
 #import "winheaders.h"
 #import "TimedObj.h"
 
+// TODO should be renamed NoteGraphic
 @interface GNote: TimedObj
 {
 @private
@@ -46,7 +47,8 @@
 
 - (float) dotOffset;
 
-- setStemTo: (float) s;
+- (void) setStemLengthTo: (float) s;
+
 - getKeyString: (int) mc : (char *) ks;
 
 /*!
@@ -68,7 +70,12 @@
 - (BOOL) hit: (NSPoint) p;
 - (BOOL) hitBeamAt: (float *) px : (float *) py;
 - drawStem: (int) m;
-- drawMode: (int) m;
+
+/*!
+ Draws the note in the given drawing Mode.
+ */
+- drawMode: (int) drawingMode;
+
 - (id)initWithCoder:(NSCoder *)aDecoder;
 - (void)encodeWithCoder:(NSCoder *)aCoder;
 

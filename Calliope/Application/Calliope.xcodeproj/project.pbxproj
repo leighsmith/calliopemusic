@@ -939,9 +939,9 @@
 		D8B2119009BB5333002825FC /* CallDocIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CallDocIcon.icns; path = Images/CallDocIcon.icns; sourceTree = "<group>"; };
 		D8EC241409B9F8B500942A37 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MusicNotationDocument.nib; sourceTree = "<group>"; };
 		D8F2453709AD260300B96D0D /* MKPerformSndMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MKPerformSndMIDI.framework; path = /Library/Frameworks/MKPerformSndMIDI.framework; sourceTree = "<absolute>"; };
-		D8F247B109AD280C00B96D0D /* Info-CalliopePropertyListCoders.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Info-CalliopePropertyListCoders.plist"; sourceTree = "<group>"; };
+		D8F247B109AD280C00B96D0D /* Info-CalliopePropertyListCoders.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-CalliopePropertyListCoders.plist"; sourceTree = "<group>"; };
 		D8F247B509AD280C00B96D0D /* CalliopePropertyListCoders.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CalliopePropertyListCoders.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		D8F249FA09AD3F8D00B96D0D /* Info-Calliope.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Info-Calliope.plist"; sourceTree = "<group>"; };
+		D8F249FA09AD3F8D00B96D0D /* Info-Calliope.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-Calliope.plist"; sourceTree = "<group>"; };
 		D8F249FB09AD3F8D00B96D0D /* Calliope.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Calliope.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8FD922F0483CDC700A80164 /* Accent.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Accent.m; sourceTree = "<group>"; };
 		D8FD92310483CDC700A80164 /* AccentInspector.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = AccentInspector.m; sourceTree = "<group>"; };
@@ -2175,10 +2175,12 @@
 		D8FD971D0483CDC800A80164 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = D8F2446E09AD250900B96D0D /* Build configuration list for PBXProject "Calliope" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = D8FD92210483CDC700A80164 /* Calliope */;
 			productRefGroup = D8FD922C0483CDC700A80164 /* Products */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				D8F2478709AD280C00B96D0D /* CalliopePropertyListCoders (Framework) */,
 				D8F247BF09AD3F8C00B96D0D /* Calliope (Application) */,

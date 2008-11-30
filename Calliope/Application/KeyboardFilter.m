@@ -177,10 +177,11 @@ void posOfNote(int mc, char *ks, int n, int *pos, int *acc)
 
 static void setAccidental(GNote *p, int a)
 {
-  NoteHead *h;
-  if (![p->headlist count]) return;
-  h = [p->headlist objectAtIndex:0];
-  h->accidental = a;
+    NoteHead *h;
+    if (![p->headlist count]) 
+	return;
+    h = [p->headlist objectAtIndex: 0];
+    [h setAccidental: a];
 }
 
 

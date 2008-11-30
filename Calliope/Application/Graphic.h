@@ -113,7 +113,7 @@ extern id CrossCursor;
 - (BOOL)hitCorners:(const NSPoint)point;	/* adds corner information */
 - (float)hitDistance: (NSPoint) point;
 - (BOOL) changeVFont: (int) fid;
-- (int) noteCode: (int) a;
+- (int) incrementNoteCodeBy: (int) a;
 - (BOOL) hasEnclosures;
 
 /*!

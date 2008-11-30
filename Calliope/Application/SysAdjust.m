@@ -65,7 +65,7 @@ static float gracespace[10] =
 
 static float gracex(TimedObj *p)
 {
-  return (widthfactor * gracespace[[p noteCode: 0]] * pronature[p->gFlags.size]);
+    return (widthfactor * gracespace[[p noteCode]] * pronature[p->gFlags.size]);
 }
 
 

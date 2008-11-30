@@ -95,19 +95,20 @@ extern int noteNameNum(int i);
       while (hk--)
       {
         h = [hl objectAtIndex:hk];
-        if (acc = h->accidental)
+        if (acc = [h accidental]) // TODO should this be ==?
         {
-          pos = h->pos;
+          pos = [h staffPosition];
  	  a = oldnew[osd[noteNameNum(mc - pos)]][nsd[noteNameNum(mc - (pos + off))]];
 	  if (a != -1)
 	  {
-	    if (b = chooseacc[acc - 1][a]) h->accidental = b;
+	      if (b = chooseacc[acc - 1][a]) 
+		  [h setAccidental: b];
 	  }
         }
         if (off)
         {
-          h->pos += off;
-          h->myY = [self yOfPos: h->pos];
+	    [h setStaffPosition: [h staffPosition] + off];
+	    [h setCoordinateY: [self yOfPos: [h staffPosition]]];
 	}
       }
       [q resetChord];
@@ -141,9 +142,9 @@ extern int noteNameNum(int i);
       hk = [hl count];
       while (hk--)
       {
-        h = [hl objectAtIndex:hk];
-        h->pos += off;
-        h->myY = [self yOfPos: h->pos];
+	  h = [hl objectAtIndex:hk];
+	  [h setStaffPosition: [h staffPosition] + off];
+	  [h setCoordinateY: [self yOfPos: [h staffPosition]]];
       }
       [q resetChord];
     }

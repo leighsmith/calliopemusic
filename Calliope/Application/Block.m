@@ -27,7 +27,7 @@ static Block *proto;
       (void)[Block setVersion: 6];		/* class version, see read: */
     proto = [self alloc];
     proto->gFlags.subtype = 0;
-    proto->p = 4;
+    proto->staffPosition = 4;
     proto->width = 4;
     proto->height = 4;
   }
@@ -52,7 +52,7 @@ static Block *proto;
   [super init];
   gFlags.subtype = 0;
   gFlags.type = BLOCK;
-  p = 4;
+  staffPosition = 4;
   return self;
 }
 
@@ -78,7 +78,7 @@ static Block *proto;
 - (BOOL) reCache: (float) sy : (int) ss
 {
   float t;
-  t = sy + ss * p;
+  t = sy + ss * staffPosition;
   if (t == y) return NO;
   y = t;
   return YES;
@@ -100,7 +100,7 @@ static Block *proto;
       nx = pt.x;
       ny = pt.y;
       m = YES;
-      a = [mystaff findPos: ny] - p;
+      a = [mystaff findPos: ny] - staffPosition;
       if (a <= 0 || a > 127) return NO;
       b  = (nx - x) / getSpacing(mystaff);
       if (b <= 0 || b > 127) return NO;
@@ -117,15 +117,15 @@ static Block *proto;
       nx = dx + pt.x;
       ny = dy + pt.y;
       a = [mystaff findPos: ny];
-      if (a == p && x == nx) return NO;
-      p = a;
-      y = [mystaff yOfPos: p];
+      if (a == staffPosition && x == nx) return NO;
+      staffPosition = a;
+      y = [mystaff yOfPos: staffPosition];
       x = nx;
       m = YES;
     }
     else
     {
-      p = 0;
+      staffPosition = 0;
       x = nx;
       y = ny;
       m = YES;
@@ -164,7 +164,7 @@ static char blockledger[NUMBLOCKS] = {0, 1, 1, 1, 0, 0, 1};
     if (blockledger[t] && TYPEOF(s) == STAFF)
     {
       drawledge(x, [s yOfTop], charhalfFGW(bf, bc),
-                sz, p, s->flags.nlines, s->flags.spacing, m);
+                sz, staffPosition, s->flags.nlines, s->flags.spacing, m);
     }
   }
   return self;

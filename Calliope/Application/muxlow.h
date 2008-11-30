@@ -74,7 +74,11 @@ void drawdot(int sz, float hw, float x, float y, int dbody, int btype, int stype
 
 void restdot(int sz, float dx, float x, float y, float dy, int dot, int fcode, int mode);
 
-void drawnote(int sz, float hw, float x, float y, int body, int htype, int stype, int ton, int b, float sl, int nos, int g, int dflag);
+/*
+ Draws the note head, and the note stem at coordinates (x,y). Handles grace notes, beaming and lack of stems.
+ */
+void drawnote(int size, float halfWidth, float x, float y, 
+	      int body, int bodyType, int stemType, int shapeID, BOOL isBeamed, float stemLength, BOOL hasNoStem, BOOL isGraceNote, int drawingMode);
 
 int getstemlen(int body, int sz, int style, int sl, int p, int s);
 

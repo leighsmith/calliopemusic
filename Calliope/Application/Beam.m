@@ -108,8 +108,8 @@ int nbeams;
 {
   StaffObj *p = [a->client lastObject];
   StaffObj *q = [b->client objectAtIndex:0];
-  a->splitp = (q->p - p->p) / 2;
-  b->splitp = (p->p - q->p) / 2;
+  a->splitp = (q->staffPosition - p->staffPosition) / 2;
+  b->splitp = (p->staffPosition - q->staffPosition) / 2;
   return self;
 }
 
@@ -362,10 +362,10 @@ static int signof(float f)
     r = [client objectAtIndex:k];
     x = r->x + [r stemXoff: 0];
     y = m * (x - xc) + yc + uer + der;
-//    [r setStemTo: y - [r myStemBase]];
+//    [r setStemLengthTo: y - [r myStemBase]];
     ab = (y < [r yMean]);
     ry = [r wantsStemY: ab];
-    [r setStemTo: y - ry];
+    [r setStemLengthTo: y - ry];
 
   }
   return self;
@@ -427,7 +427,7 @@ static int signof(float f)
 {
   TimedObj *p;
   p = [client objectAtIndex:0];
-  [p setStemTo: beamedStem(p, minStem(p, p))];
+  [p setStemLengthTo: beamedStem(p, minStem(p, p))];
   return self;
 }
 
@@ -569,7 +569,7 @@ static int signof(float f)
     y = m * (x - x1) + y1;
     ab = (y < [r yMean]);
     ry = [r wantsStemY: ab];
-    [r setStemTo: y - ry];
+    [r setStemLengthTo: y - ry];
   }
   return self;
 }
@@ -841,7 +841,7 @@ static char nflg[NUMUNDER];
   if (hFlags.split == 2)
   {
     xa = [p xOfStaffEnd: 0];
-    ya = [p yOfPos: p->p + splitp] + [p stemYoff: 0] + p->time.stemlen;
+    ya = [p yOfPos: p->staffPosition + splitp] + [p stemYoff: 0] + p->time.stemlen;
     xb = p->x + [p stemXoffRight: 0];
     yb = [p myStemBase] + [p stemYoff: 0] + p->time.stemlen;
     ys = yb;
@@ -852,7 +852,7 @@ static char nflg[NUMUNDER];
     ya = [p myStemBase] + [p stemYoff: 0] + p->time.stemlen;
     ys = ya;
     xb = [p xOfStaffEnd: 1];
-    yb = [p yOfPos: p->p + splitp] + [p stemYoff: 0] + p->time.stemlen;
+    yb = [p yOfPos: p->staffPosition + splitp] + [p stemYoff: 0] + p->time.stemlen;
   }
   th = beamthick[sz];
   bsep = th + beamsep[sz];
@@ -945,7 +945,7 @@ int getHalfCode(TimedObj *r, int a, int k)
       ticks = 0.0;
     }
   }
-  dx = charFWX(musicFont[1][sz], SF_stemsp);
+  dx = DrawWidthOfCharacter(musicFont[1][sz], SF_stemsp);
   th = beamthick[sz];
   bsep = th + beamsep[sz];
   x1 = p->x + [p stemXoffLeft: 0];
@@ -1144,7 +1144,7 @@ int getHalfCode(TimedObj *r, int a, int k)
       ticks = 0.0;
     }
   }
-  dx = charFWX(musicFont[1][sz], SF_stemsp);
+  dx = DrawWidthOfCharacter(musicFont[1][sz], SF_stemsp);
   th = 0.5 * beamthick[sz];
   bsep = 1.2 * beamthick[sz];
   a = 0;

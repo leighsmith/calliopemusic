@@ -80,7 +80,7 @@ static char istimed[6] = {1, 1, 0, 0, 0, 1};
       if (i != 2) p->isGraced = i * 2;
       i = [[objmatrix cellAtRow:2 column:0] threeState];
       if (i != 2) p->time.tight = i;
-      if (setdef != 1000) p->p = [p defaultPos] + (p->p - setdef);
+      if (setdef != 1000) p->staffPosition = [p defaultPos] + (p->staffPosition - setdef);
       [p reShape];
     }
     [v endInspection: &b];

@@ -180,15 +180,15 @@ static int mypartlist = -1;
 
 void setAccidental(GNote *p, int se, int a, int e)
 {
-  int k, hk;
-  NoteHead *h;
-  hk = [p->headlist count];
-  if (hk == 1) k = 0;
-  else if (p == lastHit) k = se;
-  else return;
-  h = [p->headlist objectAtIndex:k];
-  h->accidental = a;
-  h->editorial = e;
+    int k, hk;
+    NoteHead *h;
+    hk = [p->headlist count];
+    if (hk == 1) k = 0;
+    else if (p == lastHit) k = se;
+    else return;
+    h = [p->headlist objectAtIndex:k];
+    [h setAccidental: a];
+    h->editorial = e;
 }
 
 
@@ -201,7 +201,7 @@ int getAccidental(GNote *p, int se)
   else if (p == lastHit) k = se;
   else return -1;
   h = [p->headlist objectAtIndex:k];
-  return h->accidental;
+  return [h accidental];
 }
 
 

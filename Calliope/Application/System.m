@@ -133,7 +133,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   Even hidden staves need to be processed, because their bounds are used for adjustment.
   Caller must recalcObjs and recalcBars after sysheight.
 */
-- (float) sysheight: (float) yi
+- (float) systemHeight: (float) verticalPositionOfSystem
 {
     int staveIndex, staveCount;
     float y, maxHeight, h, ss, titleOffset;
@@ -143,7 +143,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
     staveCount = [self numberOfStaves];
     numberOfVisibleStaves = 0;
     titleOffset = titleRoom(nonStaffGraphics);
-    y = yi;
+    y = verticalPositionOfSystem;
     for (staveIndex = 0; staveIndex < staveCount; staveIndex++) {
 	Staff *staff = [staves objectAtIndex: staveIndex];
 	
@@ -184,8 +184,8 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 	}
 	y += staff->vhighb;
     }
-    height = y - yi;
-    NSLog(@"Height of sys %d = %f\n", [self myIndex], height);
+    height = y - verticalPositionOfSystem;
+    NSLog(@"Height of sys %d = %f, start from %f\n", [self myIndex], height, verticalPositionOfSystem);
     return height;
 }
 
@@ -257,11 +257,11 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 
 - resetSys
 {
-    Staff *sp = [self firststaff];
+    Staff *topMostStaff = [self firststaff];
     
-    if (sp != nil) {
+    if (topMostStaff != nil) {
 	invalidEnabled = NO;		/* so that height is not smashed while we reset */
-	[self sysheight: [sp yOfTop]];	/* find compressed vertical format */
+	[self systemHeight: [topMostStaff yOfTop]];	/* find compressed vertical format */
 	[self alterSpacing];		/* apply any expansion */
 	[self resetSpanners];		/* update what is affected */
 	invalidEnabled = YES;		/* height now free to be smashed */
@@ -308,11 +308,11 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 
 - moveTo: (float) y
 {
-  Staff *sp = [self firststaff];
-  if (sp != nil)
+  Staff *topMostStaff = [self firststaff];
+  if (topMostStaff != nil)
   {
     [self mark];
-    [self moveBy:0.0 :(y + headroom) - [sp yOfTop]];
+    [self moveBy:0.0 :(y + headroom) - [topMostStaff yOfTop]];
   }
   return self;
 }

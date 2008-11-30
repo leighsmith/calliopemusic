@@ -748,7 +748,7 @@ static BOOL doToObject(Graphic *p, int c, int a)
       }
       break;
     case 9:
-      [p noteCode: a];
+      [p incrementNoteCodeBy: a];
       morph = 1;
       break;
     case 10:

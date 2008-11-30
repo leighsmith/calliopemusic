@@ -99,7 +99,7 @@ static Tablature *proto;
  
 - setstem: (int) m
 {
-  time.stemlen = getSpacing(mystaff) * 3.5;
+  time.stemlen = getSpacing(mystaff) * 3.5; // TODO [self setStemLengthTo: getSpacing(mystaff) * 3.5];
   return self;
 }
 
@@ -183,12 +183,12 @@ static Tablature *findPrevFlag(Tablature *t)
 }
 
 
-- (int) noteCode: (int) a
+- (int) incrementNoteCodeBy: (int) a
 {
   Tablature *t = self;
   while (t != nil)
   {
-    if (!(t->flags.prevtime)) return [super noteCode: a];
+    if (!(t->flags.prevtime)) return [super incrementNoteCodeBy: a];
     t = findPrevFlag(t);
   }
   return -1;

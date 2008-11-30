@@ -92,7 +92,7 @@ static NeumeNew *proto;
   time.factor = 1.0;
   x = n->x;
   y = n->y;
-  p = n->p;
+  staffPosition = n->staffPosition;
   verses = vl = n->verses;
   vk = [vl count];
   while (vk--)
@@ -145,8 +145,8 @@ static char neumenum[10] = {1, 1, -1, 2, 2, 2, 2, 3, 3, 1};
   [super proto: v : pt : sp : sys : g : i];
   if (TYPEOF(sp) == STAFF)
   {
-    p = [sp findPos: pt.y];
-    y = [sp yOfPos: p];
+    staffPosition = [sp findPos: pt.y];
+    y = [sp yOfPos: staffPosition];
   }
   gFlags.subtype = i;
   [self setNeume];
@@ -166,7 +166,7 @@ static char neumenum[10] = {1, 1, -1, 2, 2, 2, 2, 3, 3, 1};
 - (BOOL) reCache: (float) sy : (int) ss
 {
   float t;
-  t = sy + ss * p;
+  t = sy + ss * staffPosition;
   if (t == y) return NO;
   y = t;
   return YES;
@@ -206,15 +206,15 @@ static char neumenum[10] = {1, 1, -1, 2, 2, 2, 2, 3, 3, 1};
   {
     k = nFlags.num;
     if (i > k) return NO;
-    *pos = p + i;
+    *pos = staffPosition + i;
     *d = nFlags.dot & (1 << i);
     *m = nFlags.molle & (1 << i);
     return YES;
   }
   if (i >= neumenum[gFlags.subtype]) return NO;
-  if (i == 0) *pos = p;
-  else if (i == 1) *pos = p + p2;
-  else if (i == 2) *pos = p + p3;
+  if (i == 0) *pos = staffPosition;
+  else if (i == 1) *pos = staffPosition + p2;
+  else if (i == 2) *pos = staffPosition + p3;
   *d = nFlags.dot & (1 << i);
   *m = nFlags.molle & (1 << i);
   return YES;
@@ -328,20 +328,20 @@ extern id lastHit;
     if (ABS(ny - y) > 2.0) switch(gFlags.selend)
     {
       case 0:
-	op = p;
-        p = [mystaff findPos: ny];
-        y = [mystaff yOfPos: p];
-	m = (op != p);
-	p2 += op - p;
-	p3 += op - p;
+	op = staffPosition;
+        staffPosition = [mystaff findPos: ny];
+        y = [mystaff yOfPos: staffPosition];
+	m = (op != staffPosition);
+	p2 += op - staffPosition;
+	p3 += op - staffPosition;
         break;
       case 1:
-	op = [mystaff findPos: ny] - p;
+	op = [mystaff findPos: ny] - staffPosition;
 	m = (p2 != op);
 	p2 = op;
         break;
       case 2:
-	op = [mystaff findPos: ny] - p;
+	op = [mystaff findPos: ny] - staffPosition;
 	m = (p3 != op);
 	p3 = op;
         break;
@@ -357,10 +357,10 @@ extern id lastHit;
       inv = [sys relinknote: self];
       if (TYPEOF(mystaff) == STAFF)
       {
-        p = [mystaff findPos: y];
-        y = [mystaff yOfPos: p];
+        staffPosition = [mystaff findPos: y];
+        y = [mystaff yOfPos: staffPosition];
       }
-      else p = 0;
+      else staffPosition = 0;
     }
   }
   if (m)
@@ -475,10 +475,10 @@ static void punctadot(float du, int p, float y, float s, NSFont *f, int mode)
   switch(gFlags.subtype)
   {
     case PUNCTA: /* square puncta */
-      [self cpuncta: cx : cy : CH_punctsqu : 1 : p : cx : -1 : 1 : mx : f : sz : mode];
+      [self cpuncta: cx : cy : CH_punctsqu : 1 : staffPosition : cx : -1 : 1 : mx : f : sz : mode];
       break;
     case VIRGA: /* virga */
-      [self cpuncta: cx : cy : CH_punctsqu : 1 : p : cx : 1 : 1 : mx : f : sz : mode];
+      [self cpuncta: cx : cy : CH_punctsqu : 1 : staffPosition : cx : 1 : 1 : mx : f : sz : mode];
       x1 = cx + fw - stemHWidth[sz];
       cline(x1, cy, x1, cy + stemLength[sz], stemWidth[sz], mode);
       break;
@@ -488,7 +488,7 @@ static void punctadot(float du, int p, float y, float s, NSFont *f, int mode)
       pw = charFGW(f, CH_punctdia);
       for (i = 0; i <= nFlags.num; i++)
       {
-        ip = p + i;
+        ip = staffPosition + i;
         cy = [self yOfPos: ip];
         [self cpuncta: x1 : cy : CH_punctdia : j : ip : x1 : -1 : 0 : mx : f : sz : mode];
         if (nFlags.hepisema & j) if (hx1) hx2 = x1; else hx1 = hx2 = x1;
@@ -497,15 +497,15 @@ static void punctadot(float du, int p, float y, float s, NSFont *f, int mode)
       }
       if (nFlags.hepisema)
       {
-        y1 = [self hepiy: p : 1];
+        y1 = [self hepiy: staffPosition : 1];
         cline(hx1, y1, hx2 + fw, y1, stemWidth[sz], mode);
       }
       break;
     case PODATUS: /* podatus */
       i = (ABS(p2) <= 1);
       ch = (i) ? CH_podatusp : CH_podatus;
-      [self cpuncta: cx : cy : ch : 1 : p : -cx : -1 : -1 : mx : f : sz : mode];
-      ip = p + p2;
+      [self cpuncta: cx : cy : ch : 1 : staffPosition : -cx : -1 : -1 : mx : f : sz : mode];
+      ip = staffPosition + p2;
       y1 = [self yOfPos: ip];
       ch = (i) ? CH_punctsqup : CH_punctsqu;
         if (nFlags.halfSize) {
@@ -521,10 +521,10 @@ static void punctadot(float du, int p, float y, float s, NSFont *f, int mode)
       if (nFlags.hepisema & 1) hx1 = hx2 = cx;
       x0 = cx + stemHWidth[sz];
       cline(x0, cy, x0, cy + stemLength[sz], stemWidth[sz], mode);
-      ip = p + p2;
+      ip = staffPosition + p2;
       y1 = [self yOfPos: ip];
       x1 = cx + fw;
-      [self cpuncta: cx : cy : CH_punctsqu : 1 : p : x1 : 1 : 0 : mx : f : sz : mode];
+      [self cpuncta: cx : cy : CH_punctsqu : 1 : staffPosition : x1 : 1 : 0 : mx : f : sz : mode];
         if (nFlags.halfSize) {
           [self cpuncta: x1 : y1 : CH_punctsqu : 2 : ip : -x1 : -1 : 0 : mx : f2 : sz : mode];
           }
@@ -534,13 +534,13 @@ static void punctadot(float du, int p, float y, float s, NSFont *f, int mode)
       cline(x0, cy, x0, y1, stemWidth[sz], mode);
       if (nFlags.hepisema)
       {
-        y1 = [self hepiy: p : 1];
+        y1 = [self hepiy: staffPosition : 1];
         cline(hx1, y1, hx2 + fw, y1, stemWidth[sz], mode);
       }
       break;
     case EPIPHONUS: /* epiphonus */
-      [self cpuncta: cx : cy : CH_epiph1 : 1 : p : -cx : -1 : -1 : mx : f : sz : mode];
-      ip = p + p2;
+      [self cpuncta: cx : cy : CH_epiph1 : 1 : staffPosition : -cx : -1 : -1 : mx : f : sz : mode];
+      ip = staffPosition + p2;
       y1 = [self yOfPos: ip];
       x2 = cx + charFGW(f, CH_epiph1);
       x1 = x2 - stemHWidth[sz];
@@ -548,10 +548,10 @@ static void punctadot(float du, int p, float y, float s, NSFont *f, int mode)
       [self cpuncta: x2 : y1 : CH_epiph2 : 2 : ip : x2 : 1 : 1 : mx : f : sz : mode];
       break;
     case CEPHALICUS: /* cephalicus */
-      [self cpuncta: cx : cy : CH_cepha1 : 1 : p : cx : 1 : 1 : mx : f : sz : mode];
+      [self cpuncta: cx : cy : CH_cepha1 : 1 : staffPosition : cx : 1 : 1 : mx : f : sz : mode];
       x0 = cx + stemHWidth[sz];
       cline(x0, cy, x0, cy + stemLength[sz], stemWidth[sz], mode);
-      ip = p + p2;
+      ip = staffPosition + p2;
       y1 = [self yOfPos: ip];
       x2 = cx + charFGW(f, CH_cepha1);
       x1 = x2 - stemHWidth[sz];
@@ -562,14 +562,14 @@ static void punctadot(float du, int p, float y, float s, NSFont *f, int mode)
       x0 = cx + stemHWidth[sz];
       cline(x0, cy, x0, cy + stemLength[sz], stemWidth[sz], mode);
       x1 = cx + 2.0 * fw;
-      ip = p + p2;
+      ip = staffPosition + p2;
       y1 = [self yOfPos: ip];
       y3 = y1 - ((y1 - cy) / ((p2 - p3 == 1) ? 8.0 : 4.0));
       x0 = porrThick[sz];
       cslant(cx, cy - x0 - 1.0, x1, y3 - x0, (x0 * 2.0) + 1.0, mode);
       y2 = y1;
       cslant(x1, y3 - x0, x1 + fw, y1 - x0, (x0 * 2.0) + 1, mode);
-      ip = p + p3;
+      ip = staffPosition + p3;
       y1 = [self yOfPos: ip];
       ch = (p2 - p3 == 1) ? CH_punctsqup : CH_punctsqu;
         if (nFlags.halfSize) {
@@ -583,15 +583,15 @@ static void punctadot(float du, int p, float y, float s, NSFont *f, int mode)
       drawCharacterInFont(cx, cy, CH_molle, f, mode);
       break;
     case TORCULUS: /* torculus */
-      [self cpuncta: cx : cy : CH_punctsqu : 1 : p : -cx : -1 : 0 : mx : f : sz : mode];
+      [self cpuncta: cx : cy : CH_punctsqu : 1 : staffPosition : -cx : -1 : 0 : mx : f : sz : mode];
       if (nFlags.hepisema & 1) hx1 = hx2 = cx;
-      ip = p + p2;
+      ip = staffPosition + p2;
       y1 = [self yOfPos: ip];
       x1 = cx + fw;
       [self cpuncta: x1 : y1 : CH_punctsqu : 2 : ip : x1 : 1 : 0 : mx : f : sz : mode];
       if (nFlags.hepisema & 2) if (hx1) hx2 = x1; else hx1 = hx2 = x1;
       cline(cx + fw - stemWidth[sz], cy, x1, y1, stemWidth[sz], mode);
-      ip = p + p3;
+      ip = staffPosition + p3;
       y2 = [self yOfPos: ip];
       x2 = cx + 2.0 * fw;
         if (nFlags.halfSize) {
@@ -602,7 +602,7 @@ static void punctadot(float du, int p, float y, float s, NSFont *f, int mode)
       cline(x1 + fw - stemWidth[sz], y1, x2, y2, stemWidth[sz], mode);
       if (nFlags.hepisema)
       {
-        y1 = [self hepiy: p + p2 : 1];
+        y1 = [self hepiy: staffPosition + p2 : 1];
         cline(hx1, y1, hx2 + fw, y1, stemWidth[sz], mode);
       }
       break;

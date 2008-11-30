@@ -24,7 +24,7 @@
   float duration;		/* cache (not archived) */
   char tag;			/* cache (not archived) TRY NOT TO NEED THIS */
   char versepos;		/* how many verses above note */
-  char p;			/* staff position */
+  char staffPosition;		/* staff position */
   char selver;			/* selected verse */
   char isGraced;		/* 1 = graced object, 2 = backwards-timed */
   unsigned char voice;		/* voice number */

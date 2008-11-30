@@ -40,7 +40,7 @@
 #import "Runner.h"
 #import "CallPart.h"
 #import "Channel.h"
-#import "FlippedView.h"
+// #import "FlippedView.h"
 #import "FileCompatibility.h"
 
 extern NSString * DrawPasteType(NSArray *types);
@@ -85,7 +85,7 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
 {
     if (self == [GraphicView class]) {
 	[GraphicView setVersion: 7]; /* SB set this to 6 for List conversion, set to 7 now we move to XML property lists. */
-	PSInit();
+	DrawInit();
     }
 }
 
@@ -186,25 +186,30 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
 */
 - initWithGraphicView: (GraphicView *) v
 {
-    [syslist release];
+    // TODO Problem could be we are releasing already released ivars?
+    
+    // [syslist release];
     syslist       = [v->syslist retain]; // Retain this since System hasn't implemented copyWithZone:
-    [pagelist release];
+    // [pagelist release];
     pagelist      = [v->pagelist copy];
-    [partlist release];
+    // [partlist release];
     partlist      = [v->partlist copy];
-    [chanlist release];
+    // [chanlist release];
     chanlist      = [v->chanlist copy];
-    [stylelist release];
+    // [stylelist release];
     stylelist     = [v->stylelist copy];
-    [currentSystem release];
+    // [currentSystem release];
     currentSystem = [v->currentSystem retain];   // Retain this since System hasn't implemented copyWithZone:
-    [currentPage release];
+
+    // [currentPage release];
     currentPage   = [v->currentPage copy];
 
     return self;
 }
 
-/* sb: added this to replace [self setFlipped:YES], above */
+/* sb: added this to replace [self setFlipped:YES], above 
+ We therefore draw with the assumption that the origin is at the top-left of the view.
+ */
 - (BOOL) isFlipped
 {
     return YES;
@@ -216,7 +221,7 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
     return self;
 }
 
-- (void)setFrameSize:(NSSize)newSize
+- (void) setFrameSize: (NSSize) newSize
 /*
  * Overrides View's sizeTo:: so that the cacheImage is resized when
  * the View is resized.
@@ -225,7 +230,7 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
     NSRect frame = [self frame];
 
     if (newSize.width != frame.size.width || newSize.height != frame.size.height) {
-        [super setFrameSize:newSize];
+        [super setFrameSize: newSize];
 //        [self setNeedsDisplay:NO];
 //        [[self superview] setFrameSize:newSize];
     }
@@ -1349,6 +1354,7 @@ static void drawHorz(float x, float y, float w, NSRect r)
 	return;
     
     NSLog(@"GraphicView drawRect: (%f, %f, %f, %f)", rectToDrawWithin.origin.x, rectToDrawWithin.origin.y, rectToDrawWithin.size.width, rectToDrawWithin.size.height);
+    NSLog(@"view is flipped %d\n", [self isFlipped]);
     
     if ([self showMargins]) {
 	NSRect viewBounds = [self bounds];	
@@ -1494,7 +1500,7 @@ static void drawHorz(float x, float y, float w, NSRect r)
       [p proto: self : pt : sp : sp->mysys : nil : 5];
       p->time.body = tb;
       p->time.dot = 0;
-      p->p = [((Rest *)p) defaultPos];
+      p->staffPosition = [((Rest *)p) defaultPos];
       b = YES;
       break;
     default:
@@ -2149,6 +2155,7 @@ extern int needUpgrade;
     [self setFrameSize: NSMakeSize(ceil([self frame].size.width), ceil([self frame].size.height))];
     partlist = nil;
     stylelist = nil;
+    // TODO syslist is being decoded, but the System instances are not correctly initialised with -init!!
     switch(v) {
 	case 0:
 	    [aDecoder decodeValuesOfObjCTypes:"@@s", &syslist, &pagelist, &f];

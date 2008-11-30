@@ -133,7 +133,7 @@ int protoVox;
 
 - proto: (GraphicView *) v : (NSPoint) pt : (Staff *) sp : (System *) sys : (Graphic *) g : (int) i
 {
-  p = 0;
+  staffPosition = 0;
   selver = 0;
   x = pt.x;
   y = pt.y;
@@ -308,7 +308,7 @@ int protoVox;
 
 - (int) midPosOff
 {
-  return p - ([self getLines] - 1);
+  return staffPosition - ([self getLines] - 1);
 }
 
 
@@ -1519,27 +1519,27 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
     
     if (v < 2)
     {
-	[aDecoder decodeValuesOfObjCTypes:"@@ccff", &hangers, &verses, &p, &selver, &x, &y];
+	[aDecoder decodeValuesOfObjCTypes:"@@ccff", &hangers, &verses, &staffPosition, &selver, &x, &y];
 	voice = 0;
     }
     else if (v == 2)
     {
-	[aDecoder decodeValuesOfObjCTypes:"@@cccff", &hangers, &verses, &p, &selver, &isGraced, &x, &y];
+	[aDecoder decodeValuesOfObjCTypes:"@@cccff", &hangers, &verses, &staffPosition, &selver, &isGraced, &x, &y];
 	voice = 0;
     }
     else if (v == 3)
     {
-	[aDecoder decodeValuesOfObjCTypes:"@@ccccfff", &hangers, &verses, &p, &selver, &isGraced, &voice, &x, &y, &stamp];
+	[aDecoder decodeValuesOfObjCTypes:"@@ccccfff", &hangers, &verses, &staffPosition, &selver, &isGraced, &voice, &x, &y, &stamp];
     }
     else if (v == 4)
     {
-	[aDecoder decodeValuesOfObjCTypes:"ccccc", &p, &selver, &isGraced, &voice, &versepos];
+	[aDecoder decodeValuesOfObjCTypes:"ccccc", &staffPosition, &selver, &isGraced, &voice, &versepos];
 	[aDecoder decodeValuesOfObjCTypes:"@@", &hangers, &verses];
 	[aDecoder decodeValuesOfObjCTypes:"ff", &x, &y];
     }
     else if (v == 5)
     {
-	[aDecoder decodeValuesOfObjCTypes:"cccccc", &p, &selver, &isGraced, &voice, &versepos, &c1];
+	[aDecoder decodeValuesOfObjCTypes:"cccccc", &staffPosition, &selver, &isGraced, &voice, &versepos, &c1];
 	part = [NSString stringWithFormat: @"%d", c1];
 	[aDecoder decodeValuesOfObjCTypes:"@@", &hangers, &verses];
 	[aDecoder decodeValuesOfObjCTypes:"ff", &x, &y];
@@ -1547,7 +1547,7 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
     else if (v == 6)
     {
 	char *partChar;
-	[aDecoder decodeValuesOfObjCTypes:"ccccc", &p, &selver, &isGraced, &voice, &versepos];
+	[aDecoder decodeValuesOfObjCTypes:"ccccc", &staffPosition, &selver, &isGraced, &voice, &versepos];
 //    [aDecoder decodeValuesOfObjCTypes:"@@%", &hangers, &verses, &part];
 	[aDecoder decodeValuesOfObjCTypes:"@@%", &hangers, &verses, &partChar];
 	[aDecoder decodeValuesOfObjCTypes:"ff", &x, &y];
@@ -1555,7 +1555,7 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
     }
     else if (v == 7)
     {
-	[aDecoder decodeValuesOfObjCTypes:"ccccc", &p, &selver, &isGraced, &voice, &versepos];
+	[aDecoder decodeValuesOfObjCTypes:"ccccc", &staffPosition, &selver, &isGraced, &voice, &versepos];
 	[aDecoder decodeValuesOfObjCTypes:"@@@", &hangers, &verses, &part];
 	[aDecoder decodeValuesOfObjCTypes:"ff", &x, &y];
 	[part retain];
@@ -1570,7 +1570,7 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
 {
   [super encodeWithCoder:aCoder];
   [aCoder encodeConditionalObject:mystaff];
-  [aCoder encodeValuesOfObjCTypes:"ccccc", &p, &selver, &isGraced, &voice, &versepos];
+  [aCoder encodeValuesOfObjCTypes:"ccccc", &staffPosition, &selver, &isGraced, &voice, &versepos];
 //  [aCoder encodeValuesOfObjCTypes:"@@%", &hangers, &verses, &part];
   [aCoder encodeValuesOfObjCTypes:"@@@", &hangers, &verses, &part];
   [aCoder encodeValuesOfObjCTypes:"ff", &x, &y];
@@ -1580,7 +1580,7 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
 {
     [super encodeWithPropertyListCoder:(OAPropertyListCoder *)aCoder];
     [aCoder setObject:mystaff forKey:@"mystaff"];
-    [aCoder setInteger:p forKey:@"p"];
+    [aCoder setInteger:staffPosition forKey:@"p"];
     [aCoder setInteger:selver forKey:@"selver"];
     [aCoder setInteger:isGraced forKey:@"isGraced"];
     [aCoder setInteger:voice forKey:@"voice"];

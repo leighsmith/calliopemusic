@@ -178,7 +178,7 @@ static void sigwidthpix(unsigned char *s, NSFont *f, float *sw, float *w)
   if (s != NULL) while (c = *s++)
   {
     if (c == TIECHAR) sig = NO;
-    cw = charFWX(f, c);
+    cw = DrawWidthOfCharacter(f, c);
     n += cw;
     if (sig) sn += cw;
   }
@@ -338,7 +338,7 @@ static void drawrepeat(float x1, float x2, float y, NSFont *f, int just, int m)
       if (n > 1)
       {
         inc = dx / n;
-        x = x1 - charFWX(f, HYPHCHAR);
+        x = x1 - DrawWidthOfCharacter(f, HYPHCHAR);
       }
       break;
     case 2:
@@ -350,7 +350,7 @@ static void drawrepeat(float x1, float x2, float y, NSFont *f, int just, int m)
       break;
     case 3:
       inc = dx / n;
-      x = x1 - inc - charFWX(f, HYPHCHAR);
+      x = x1 - inc - DrawWidthOfCharacter(f, HYPHCHAR);
       ++n;
       break;
   }

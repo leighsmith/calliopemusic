@@ -185,7 +185,7 @@ int keySymValue(char *s)
   {
     ck = cl->keycentre;
     cf = cl->gFlags.subtype;
-    koff = cl->p - [cl defaultPos];
+    koff = cl->staffPosition - [cl defaultPos];
   }
   else
   {
@@ -204,7 +204,7 @@ int keySymValue(char *s)
   q->gFlags.subtype = gFlags.subtype;
   q->gFlags.size = gFlags.size;
   q->x = x;
-  q->p = p;
+  q->staffPosition = staffPosition;
   for (i = 0; i < 7; i++) q->keystr[i] = keystr[i];
   return q;
 }
@@ -235,7 +235,7 @@ int keySymValue(char *s)
 - (BOOL) getXY: (float *) fx : (float *) fy
 {
   *fx = x;
-  *fy = [self yOfPos: [self defaultPos] + p];
+  *fy = [self yOfPos: [self defaultPos] + staffPosition];
   return YES;
 }
 
@@ -362,15 +362,15 @@ int normkey[4] = {-1, 0, 1, -1};
       if (alt)
       {
         mp = [mystaff findPos: y] - dp;
-	if (mp != p)
+	if (mp != staffPosition)
 	{
-          p = mp;
+          staffPosition = mp;
           y = [mystaff yOfPos: mp + dp];
 	}
       }
       else if (inv)
       {
-	y = [mystaff yOfPos: p + dp];
+	y = [mystaff yOfPos: staffPosition + dp];
       }
     }
     [self recalc];
@@ -398,7 +398,7 @@ int whichfont[4] = {1, 0, 0, 1};
   {
     ck = cl->keycentre;
     cf = cl->gFlags.subtype;
-    koff = cl->p - [cl defaultPos];
+    koff = cl->staffPosition - [cl defaultPos];
     ss = sp->flags.spacing;
     bp = [sp posOfBottom];
   }
@@ -410,7 +410,7 @@ int whichfont[4] = {1, 0, 0, 1};
     ss = 4;
     bp = 8;
   }
-  bpos = clefcpos[(int)clefuid[ck][cf]] + koff + p;
+  bpos = clefcpos[(int)clefuid[ck][cf]] + koff + staffPosition;
   sy = (TYPEOF(sp) == STAFF) ? [sp yOfTop] : y;
   cx = x;
   f = musicFont[whichfont[gFlags.subtype]][sz];
@@ -511,13 +511,13 @@ int whichfont[4] = {1, 0, 0, 1};
   {
     [aDecoder decodeValuesOfObjCTypes:"cc", &keynum, &octave];
     [self upgradeKeystr: keynum : octave];
-    p = 0;
+    staffPosition = 0;
   }
   else if (v == 2)
   {
     [aDecoder decodeValuesOfObjCTypes:"ccc", &keynum, &octave, &b1];
     [self upgradeKeystr: keynum : octave];
-    p = b1;
+    staffPosition = b1;
   }
   else if (v == 3)
   {

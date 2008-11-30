@@ -180,8 +180,7 @@ extern int markmode[2];		/* markmode[selected] */
 
 extern NSFont *musicFont[2][3];
 extern NSFont *fontdata[NUMCALFONTS];
-extern float charFWX(NSFont *f, int ch);
-extern float charFWX(NSFont *f, int ch);
+extern float DrawWidthOfCharacter(NSFont *f, int ch);
 extern float charFLLY(NSFont *f, int ch);
 extern float charFURY(NSFont *f, int ch);
 extern float charFLLX(NSFont *f, int ch);
@@ -230,7 +229,7 @@ extern void clearMatrix(NSMatrix *p);
 
 float convertFrom(int u, float x, int r);
 float convertTo(int u, float x, int r);
-void PSInit();
+void DrawInit();
 void colorInit(int i, NSColor * c);
 extern void bbinit();
 extern NSRect getbb();

@@ -165,15 +165,13 @@ void colorInit(int i, NSColor * c)
     }
 }
 
-
-void PSInit()
+void DrawInit()
 {
     // Nowadays does nothing...
     PSWrapsInit();
 }
 
-
-float charFWX(NSFont *f, int ch)
+float DrawWidthOfCharacter(NSFont *f, int ch)
 {
 //    NSRect myRect;
 ////    NXFontMetrics *fm = [f metrics];
@@ -314,7 +312,7 @@ void unionrect(float x, float y, float w, float h)
  */
 
 /*
- unions the char BB into b
+ Forms a union of the character bounding box into b
  special handling of the baseline tie (faked by a descender)
  special handling of space (because bbox = 0)
  */
@@ -330,7 +328,7 @@ void unionCharBB(NSRect *b, float x, float y, int ch, NSFont *f)
     {
 	ch = 'x';
 //    cm = &(fm->charMetrics[fm->encoding[ch]]);
-	cm = [f boundingRectForGlyph:ch];
+	cm = [f boundingRectForGlyph: ch];
 	r.origin.x = x;
 //    r.origin.y = y - ps * cm->bbox[3];
 //    r.size.height = ps * (cm->bbox[3] - cm->bbox[1]);
@@ -341,7 +339,7 @@ void unionCharBB(NSRect *b, float x, float y, int ch, NSFont *f)
 	cm = [f boundingRectForGlyph:ch];
 //    r.size.width = ps * cm->xWidth;
 //    r.size.width = cm.size.width;
-	r.size.width = [f advancementForGlyph:ch].width;
+	r.size.width = DrawWidthOfCharacter(f, ch);
     }
     else
     {
@@ -391,7 +389,7 @@ void unionStringBB(NSRect *b, float x, float y, const char *s, NSFont *f, int j)
 	    ch = ' ';
 	    cm = [f boundingRectForGlyph:ch];
 //      r.size.width = cm.size.width;
-	    r.size.width = [f advancementForGlyph:ch].width;
+	    r.size.width = DrawWidthOfCharacter(f, ch);
 	}
 	else
 	{
@@ -410,7 +408,7 @@ void unionStringBB(NSRect *b, float x, float y, const char *s, NSFont *f, int j)
 	*b  = NSUnionRect(r , *b);
 //      x += ps * cm->xWidth;
 //      x += r.size.width;
-	x += [f advancementForGlyph:ch].width;
+	x += DrawWidthOfCharacter(f, ch);
     }
 }
 
@@ -423,7 +421,16 @@ void drawCharacterInFont(float x, float y, int ch, NSFont *f, int mode)
 	
 	s[0] = ch; s[1] = '\0';
 	NSLog(@"drawCharacterInFont '%c', (%f, %f) %@ mode %d", ch, x, y, f, mode);
-	CAcString(x, y, (const char *) s, f, mode);
+	// Debugging only
+	NSRect boundingRect = [f boundingRectForGlyph: (NSGlyph) ch];
+	NSLog(@"font bounding rectangle (%f,%f) -> (%f,%f)\n", 
+	      boundingRect.origin.x, boundingRect.origin.y, boundingRect.size.width, boundingRect.size.height);
+
+	// CAcString(x, y, (const char *) s, f, mode);
+	// TODO that we have to adjust the Sonata font by it's point size is completely beyond me. I have no idea why this is the case.
+	// the text fonts display fine, but the Sonata font is offset by it's point size. The only thing I can hypothesize is that the
+	// font metrics and origin of a non-text font confuses the drawing of NSAttributeString.
+	CAcString(x, y - [f pointSize] * 2, (const char *) s, f, mode);
     }
     else 
 	unionCharBB(&boundingBox, x, y, ch, f);
@@ -450,35 +457,45 @@ void centxChar(float x, float y, int ch, NSFont *f, int mode)
 /* draw a string, in a given font, inserting baseline ties where needed. */
 void DrawTextWithBaselineTies(float x, float y, NSString *stringToDisplay, NSFont *textFont, int mode)
 {
-    float flipped_y = y - [textFont pointSize];  // the view is flipped, compensate the y direction by the point size of the font
-    
+    // since the view is flipped, compensate the y direction by the height point size of the font. 
+//    float characterFontOrigin_y = y - [textFont pointSize];
+//    float characterFontOrigin_y = y - 16;  // fudged
+//    float characterFontOrigin_y = 0;  // fudged
+
+    float characterFontOrigin_y = y;  // TODO if we draw to the bottom of the font or from the top. 
+  
     if (NOPRINT(mode)) 
 	return;
 
     if (mode) {
-	float tieCharacterWidth, tieCharacterHeight;
 	float fontPointSize = [textFont pointSize];
+	float tieCharacterWidth = DrawWidthOfCharacter(textFont, TIECHAR);
+	float tieCharacterHeight = 0.1 * fontPointSize;
 	NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString: stringToDisplay];
 	NSRange wholeString = {0, [attributedText length]};
-	NSPoint textPoint = NSMakePoint(x, flipped_y);
+	NSPoint textPoint = NSMakePoint(x, characterFontOrigin_y);
+
+	NSLog(@"traits of font %@ = %x\n", textFont, [[NSFontManager sharedFontManager] traitsOfFont: textFont]);
 
 	[attributedText addAttribute: NSFontAttributeName
 			       value: textFont
 			       range: wholeString];
+	
 	[attributedText addAttribute: NSForegroundColorAttributeName
 			       value: modegray[mode]
 			       range: wholeString];
 	
-	[attributedText drawAtPoint: textPoint]; // must check which coordinate system used? not flipped?
+	// Problem must be Sonata.
+	[attributedText drawAtPoint: textPoint];
+//	[attributedText drawInRect: NSMakeRect(x, characterFontOrigin_y, 60, fontPointSize * 2)];
+//	[stringToDisplay drawAtPoint: textPoint 
+//		      withAttributes: [NSDictionary dictionaryWithObjectsAndKeys: 
 	
-	tieCharacterWidth = charFWX(textFont, TIECHAR);
-	tieCharacterHeight = 0.1 * fontPointSize;
-
 	// For debugging.
 #if 1
 	NSLog(@"DrawTextWithBaselineTies(\"%@\", %f, %f) fontPointSize = %f", stringToDisplay, x, y, fontPointSize);
-	NSFrameRect(NSMakeRect(x, flipped_y, 20, fontPointSize));
-	NSFrameRect(NSMakeRect(x, flipped_y, 3, 3)); 
+	NSFrameRect(NSMakeRect(x, characterFontOrigin_y, 20, fontPointSize)); // fix width, height matching font
+	NSFrameRect(NSMakeRect(x, characterFontOrigin_y, 3, 3)); // indicate upper corner
 #endif
 	
 #if 0
@@ -997,7 +1014,7 @@ static void cwaveh(float x0, float x1, float y, int sz, int m)
 {
     char buff[CHUNKSZ];
     NSFont *f = musicFont[1][sz];
-    float cw = charFWX(f, 126);
+    float cw = DrawWidthOfCharacter(f, 126);
     int i, n;
     n = ((x1 - x0) / cw) + 0.5;
     if (n < 1) n = 1;

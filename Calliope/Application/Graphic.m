@@ -1042,7 +1042,7 @@ extern int selMode;
 }
 
 
-- (int) noteCode: (int) a
+- (int) incrementNoteCodeBy: (int) a
 {
   return -1;
 }
