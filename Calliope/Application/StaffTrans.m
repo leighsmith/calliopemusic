@@ -68,7 +68,6 @@ extern int noteNameNum(int i);
 {
   Clef *r;
   GNote *q;
-  NSMutableArray *hl;
   NoteHead *h;
   short hk, off, mc, oks, nks, osd[7], nsd[7], j, k, acc, pos, a, b;
   BOOL f = NO;
@@ -90,11 +89,10 @@ extern int noteNameNum(int i);
     if (TYPEOF(q) == KEY) f = YES;
     else if (TYPEOF(q) == NOTE)
     {
-      hl = q->headlist;
-      hk = [hl count];
+      hk = [q numberOfNoteHeads];
       while (hk--)
       {
-        h = [hl objectAtIndex:hk];
+        h = [q noteHead: hk];
         if (acc = [h accidental]) // TODO should this be ==?
         {
           pos = [h staffPosition];
@@ -125,34 +123,31 @@ extern int noteNameNum(int i);
 
 - transClef: n : (int) off
 {
-  GNote *q;
-  NSMutableArray *hl;
-  NoteHead *h;
-  int j, k, hk;
-  BOOL f = NO;
-  k = [notes count];
-  j = [notes indexOfObject:n] + 1;
-  while (!f && j < k)
-  {
-    q = [notes objectAtIndex:j];
-    if (TYPEOF(q) == CLEF) f = YES;
-    else if (TYPEOF(q) == NOTE)
+    NoteHead *h;
+    int j, k, hk;
+    BOOL f = NO;
+    
+    k = [notes count];
+    j = [notes indexOfObject: n] + 1;
+    while (!f && j < k)
     {
-      hl = q->headlist;
-      hk = [hl count];
-      while (hk--)
-      {
-	  h = [hl objectAtIndex:hk];
-	  [h setStaffPosition: [h staffPosition] + off];
-	  [h setCoordinateY: [self yOfPos: [h staffPosition]]];
-      }
-      [q resetChord];
+	GNote *q = [notes objectAtIndex: j];
+	if (TYPEOF(q) == CLEF)
+	    f = YES;
+	else if (TYPEOF(q) == NOTE) {
+	    hk = [q numberOfNoteHeads];
+	    while (hk--) {
+		h = [q noteHead: hk];
+		[h setStaffPosition: [h staffPosition] + off];
+		[h setCoordinateY: [self yOfPos: [h staffPosition]]];
+	    }
+	    [q resetChord];
+	}
+	++j;
     }
-    ++j;
-  }
-  [self resizeNotes: 0];
-  [[self measureStaff] resetStaff: y];
-  return self;
+    [self resizeNotes: 0];
+    [[self measureStaff] resetStaff: y];
+    return self;
 }
 
 @end

@@ -297,19 +297,20 @@
 
 - getExtremeHead: (int) prox
 {
-  NoteHead *h;
-  GNote *p = [client objectAtIndex:0];
-  if (prox)
-  {
-    if (!p->time.stemup) p = [client lastObject];
-    h = [p->headlist lastObject];
-  }
-  else
-  {
-    if (p->time.stemup) p = [client lastObject];
-    h = [p->headlist objectAtIndex:0];
-  }
-  return h;
+    NoteHead *h;
+    GNote *p = [client objectAtIndex: 0];
+    
+    if (prox) {
+	if (!p->time.stemup) 
+	    p = [client lastObject];
+	h = [p noteHead: [p numberOfNoteHeads] - 1];
+    }
+    else {
+	if (p->time.stemup) 
+	    p = [client lastObject];
+	h = [p noteHead: 0];
+    }
+    return h;
 }
 
 

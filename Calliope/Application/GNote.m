@@ -6,7 +6,6 @@
 #import "NoteInspector.h"
 #import "GNChord.h"
 #import "GraphicView.h"
-#import "NoteHead.h"
 #import "Hanger.h"
 #import "ChordGroup.h"
 #import "Staff.h"
@@ -149,8 +148,8 @@ unsigned char accifont[NUMHEADS][NUMACCS] =
   return YES;
 }
 
-
-- (void)moveBy:(float)dx :(float)dy
+// - (void) moveByX: (float) dx andY: (float) dy
+- (void) moveBy: (float) dx :(float)dy
 {
   int k = [headlist count];
     id theObj;
@@ -162,12 +161,21 @@ unsigned char accifont[NUMHEADS][NUMACCS] =
     [super moveBy:dx :dy];
 }
 
-
+// - yOfNoteHead: (int) n
 - (float) headY: (int) n
 {
-  return [((NoteHead *) [headlist objectAtIndex:n]) y];
+    return [((NoteHead *) [headlist objectAtIndex: n]) y];
 }
 
+- (NoteHead *) noteHead: (int) noteHeadIndex
+{
+    return [headlist objectAtIndex: noteHeadIndex]; // is already autoreleased by objectAtIndex:
+}
+
+- (int) numberOfNoteHeads
+{
+    return [headlist count];
+}
 
 - (BOOL) defaultStemup: (System *) sys : (Staff *) sp
 {
@@ -545,11 +553,11 @@ extern unsigned char hasstem[10];
     return self;
 }
 
-
+// - setCurrentHeadToType: (int) a
 - setHead: (int) a
 {
     NoteHead *noteHead;
-    noteHead = [headlist objectAtIndex:SELHEADIX(gFlags.selend, [headlist count])];
+    noteHead = [headlist objectAtIndex: SELHEADIX(gFlags.selend, [headlist count])];
     noteHead->type = (noteHead->type == a) ? 0 : a;
     [self resetChord];
     return self;

@@ -205,11 +205,10 @@
   if (TYPEOF(self) == NOTE)
   {
     GNote *q = (GNote *) self;
-    nl = q->headlist;
-    k = [nl count];
+    k = [q numberOfNoteHeads];
     while (k--)
     {
-      nh = [nl objectAtIndex:k];
+      nh = [q noteHead: k];
       if (q != nh->myNote) return NO;
     }
   }

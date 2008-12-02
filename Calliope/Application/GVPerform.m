@@ -291,7 +291,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
     float f=0.0, mm, mt, t, xt, tn, qt, dur, lt, fine, minstamp, lwhite;
     System *sys;
     Staff *sp;
-    NSMutableArray *nl, *hl, *tl;
+    NSMutableArray *nl, *tl;
     NSArray *channelList;
     NoteHead *h;
     GNote *q;
@@ -466,11 +466,10 @@ static void addNote(int v, int k, int ch, MKNote *n)
                                     }
                                 }
                             }
-                            hl = ((GNote *)p)->headlist;
-                            k = [hl count];
+                            k = [(GNote *)p numberOfNoteHeads];
                             while (k--)
                             {
-                                h = [hl objectAtIndex:k];
+                                h = [(GNote *)p noteHead: k];
                                 if (h->type != 4)
                                 {
                                     if (h->myNote == p) f = getNoteFreq(p, [h staffPosition], [h accidental], mc, curracc, trn);

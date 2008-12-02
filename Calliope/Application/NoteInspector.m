@@ -182,11 +182,11 @@ void setAccidental(GNote *p, int se, int a, int e)
 {
     int k, hk;
     NoteHead *h;
-    hk = [p->headlist count];
+    hk = [p numberOfNoteHeads];
     if (hk == 1) k = 0;
     else if (p == lastHit) k = se;
     else return;
-    h = [p->headlist objectAtIndex:k];
+    h = [p noteHead: k];
     [h setAccidental: a];
     h->editorial = e;
 }
@@ -196,11 +196,11 @@ int getAccidental(GNote *p, int se)
 {
   int k, hk;
   NoteHead *h;
-  hk = [p->headlist count];
+  hk = [p numberOfNoteHeads];
   if (hk == 1) k = 0;
   else if (p == lastHit) k = se;
   else return -1;
-  h = [p->headlist objectAtIndex:k];
+  h = [p noteHead: k];
   return [h accidental];
 }
 
@@ -209,11 +209,11 @@ int getEditorial(GNote *p, int se)
 {
   int k, hk;
   NoteHead *h;
-  hk = [p->headlist count];
+  hk = [p numberOfNoteHeads];
   if (hk == 1) k = 0;
   else if (p == lastHit) k = se;
   else return -1;
-  h = [p->headlist objectAtIndex:k];
+  h = [p noteHead: k];
   return h->editorial;
 }
 
@@ -221,10 +221,10 @@ int getEditorial(GNote *p, int se)
 static void setBodyTypes(GNote *p, int t)
 {
   NoteHead *h;
-  int hk = [p->headlist count];
+  int hk = [p numberOfNoteHeads];
   while (hk--)
   {
-    h = [p->headlist objectAtIndex:hk];
+    h = [p noteHead: hk];
     h->type = t;
   }
   p->gFlags.subtype = t;

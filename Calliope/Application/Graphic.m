@@ -223,9 +223,9 @@ id CrossCursor = nil;	/* global since subclassers may need it */
   findEndpoints([v selectedGraphics], &p, &q);
   if (p == q) return NO;
   if (TYPEOF(p) != NOTE || TYPEOF(q) != NOTE) return NO;
-  k = [p->headlist count];
+  k = [p numberOfNoteHeads];
   if (k == 1) return NO;
-  if (k != [q->headlist count]) return NO;
+  if (k != [q numberOfNoteHeads]) return NO;
   t = [TieNew myPrototype];
   if (t->gFlags.subtype != TIEBOW) return NO;
   [v deselectAll: v];

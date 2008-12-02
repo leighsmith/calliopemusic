@@ -79,7 +79,7 @@ static void orderXY(float *x, float *y)
   }
   else if (TYPEOF(p) == NOTE)
   {
-    n = [((GNote *)p)->headlist count];
+    n = [((GNote *)p) numberOfNoteHeads];
       if (n == 0) NSLog(@"head1 has no notehead!\n");
     else if (head1 >= n)
     {
@@ -106,7 +106,7 @@ static void orderXY(float *x, float *y)
   }
   else if (TYPEOF(p) == NOTE)
   {
-    n = [((GNote *)p)->headlist count];
+    n = [((GNote *)p) numberOfNoteHeads];
       if (n == 0) NSLog(@"head2 has no notehead!\n");
     else if (head2 >= n)
     {
@@ -318,14 +318,14 @@ static float anyDotFor(GNote *p)
 
 static float anyHeadFor(GNote *p, int n)
 {
-  NSMutableArray *hl;
-  NoteHead *noteHead;
-  float w = 0.0;
-  hl = p->headlist;
-  noteHead = [hl objectAtIndex:n];
-  if (!(p->time.stemup) && [noteHead side]) w = -2.0 * halfwidth[(int)p->gFlags.size][(int)noteHead->type][p->time.body];
-  if ([noteHead accidentalOffset] < w) w = [noteHead accidentalOffset]; 
-  return w;
+    NoteHead *noteHead = [p noteHead: n];
+    float w = 0.0;
+
+    if (!(p->time.stemup) && [noteHead side]) 
+	w = -2.0 * halfwidth[(int)p->gFlags.size][(int)noteHead->type][p->time.body];
+    if ([noteHead accidentalOffset] < w)
+	w = [noteHead accidentalOffset]; 
+    return w;
 }
 
 
@@ -377,7 +377,6 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
   int t, sz, psu, qsu, a, phk;
   float dx, dy;
   GNote *p, *q;
-  NSMutableArray *hl;
   NoteHead *noteHead;
   p = [client objectAtIndex:0];
   q = [client lastObject];
@@ -386,17 +385,16 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
   dy = nature[sz];
   if (TYPEOF(p) == NOTE && TYPEOF(q) == NOTE)
   {
-    phk = [p->headlist count];
+    phk = [p numberOfNoteHeads];
     if (phk > 1)
     {
       if (head1 == 0) a = !p->time.stemup;
       else
       {
-        hl = p->headlist;
         if (head1 + 1 == phk) a = p->time.stemup;
         else
         {
-          noteHead = [hl objectAtIndex:head1];
+          noteHead = [p noteHead: head1];
           a = ([noteHead staffPosition] < 4);
         }
       }

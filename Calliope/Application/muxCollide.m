@@ -40,7 +40,6 @@ static void doStems(GNote *nn[], int k, int sn, float vcx[])
 {
   int i, j, mp, hlk, psu;
   float px, sl;
-  NSMutableArray *hl;
   NoteHead *h;
   GNote *p, *q;
   for (i = 0; i < k; i++)
@@ -57,11 +56,10 @@ static void doStems(GNote *nn[], int k, int sn, float vcx[])
 	q = nn[j];
         if (vcx[VOICEID(q->voice,sn)] >= px)
 	{
-	  hl = q->headlist;
-	  hlk = [hl count];
+	  hlk = [q numberOfNoteHeads];
 	  while (hlk--)
 	  {
-	    h = [hl objectAtIndex:hlk];
+	    h = [q noteHead: hlk];
 	    if (psu)
 	    {
 	      if ([h staffPosition] < mp) mp = [h staffPosition];
@@ -97,16 +95,15 @@ static void doAccidentals(GNote *nn[], int k)
 {
   NoteHead *nh[MAXACCS], *ah[MAXACCS], *h;
   GNote *p, *note[MAXACCS];
-  NSMutableArray *hl;
   int g, j, i, nk, nacc = 0, nheads = 0;
+    
   for (i = 0; i < k; i++)
   {
     p = nn[i];
-    hl = p->headlist;
-    nk = [hl count];
+    nk = [p numberOfNoteHeads];
     for (j = 0; j < nk; j++)
     {
-      h = [hl objectAtIndex:j];
+      h = [p noteHead: j];
       if (nheads < MAXACCS)
       {
         nh[nheads] = h;
@@ -261,10 +258,10 @@ static char nestleCode(GNote *p, int pk, GNote *q, int qk)
   if (ps == qs) return 1;
   for (i = 0; i < pk; i++)
   {
-    ph = [p->headlist objectAtIndex:i];
+    ph = [p noteHead: i];
     for (j = 0; j < qk; j++)
     {
-      qh = [q->headlist objectAtIndex:j];
+      qh = [q noteHead: j];
       if (ph->myNote != qh->myNote)  /* is this test ever NO? */
       {
         dp = [ph staffPosition] - [qh staffPosition];
@@ -311,8 +308,8 @@ static float checkUnison(GNote *p, GNote *q)
   au = p->time.stemup;
   bd = (q->time.dot != 0);
   bu = q->time.stemup;
-  g = [p->headlist objectAtIndex:0];
-  h = [q->headlist objectAtIndex:0];
+  g = [p noteHead: 0];
+  h = [q noteHead: 0];
   ea = ([g accidental] == [h accidental]);
   if (au != bu /* && p->time.dot == q->time.dot */ && headgraf[p->time.body] == headgraf[q->time.body]) r = 0.0;
   else if (c = ustemcode[(hasstem[p->time.body] << 1) | hasstem[q->time.body]]) r = c * kern0(p, q);
@@ -406,7 +403,7 @@ void kernsim(int sn, int s1, int s2, NSMutableArray *nl, float vcx[])
       if (nn < MAXNOTES)
       {
         n[nn] = p;
-	nh[nn++] = [p->headlist count];
+	nh[nn++] = [p numberOfNoteHeads];
       }
       if (p->time.dot && dnn < MAXNOTES) dn[dnn++] = p;
     }
