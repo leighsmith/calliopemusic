@@ -209,7 +209,7 @@
     while (k--)
     {
       nh = [q noteHead: k];
-      if (q != nh->myNote) return NO;
+      if (q != [nh myNote]) return NO;
     }
   }
   return YES;

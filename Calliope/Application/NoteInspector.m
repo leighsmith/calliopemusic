@@ -188,7 +188,7 @@ void setAccidental(GNote *p, int se, int a, int e)
     else return;
     h = [p noteHead: k];
     [h setAccidental: a];
-    h->editorial = e;
+    [h setIsAnEditorial: e];
 }
 
 
@@ -214,20 +214,20 @@ int getEditorial(GNote *p, int se)
   else if (p == lastHit) k = se;
   else return -1;
   h = [p noteHead: k];
-  return h->editorial;
+  return [h isAnEditorial];
 }
 
 
 static void setBodyTypes(GNote *p, int t)
 {
-  NoteHead *h;
-  int hk = [p numberOfNoteHeads];
-  while (hk--)
-  {
-    h = [p noteHead: hk];
-    h->type = t;
-  }
-  p->gFlags.subtype = t;
+    NoteHead *h;
+    int hk = [p numberOfNoteHeads];
+    
+    while (hk--) {
+	h = [p noteHead: hk];
+	[h setBodyType: t];
+    }
+    p->gFlags.subtype = t;
 }
 
 

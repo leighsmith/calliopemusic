@@ -41,7 +41,7 @@
     float	dy;
     NSEvent 	*event, *peek=nil;
     BOOL	scrolled = NO;
-    BOOL	wasTimerEvent = FALSE;
+    BOOL	wasTimerEvent = NO;
     
   /* if the Control key isn't down, show normal behavior */
     if (!([theEvent modifierFlags] & NSControlKeyMask)) {

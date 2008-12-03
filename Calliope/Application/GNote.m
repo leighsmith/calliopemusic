@@ -141,8 +141,9 @@ unsigned char accifont[NUMHEADS][NUMACCS] =
 {
   NoteHead *noteHead;
   float dx = 2.0 * nature[gFlags.size];
-  noteHead = [headlist objectAtIndex:SELHEADIX(gFlags.selend, [headlist count])];
-  if ([noteHead side]) dx = (time.stemup ? dx : -dx); else dx = 0.0;
+  noteHead = [headlist objectAtIndex: SELHEADIX(gFlags.selend, [headlist count])];
+  if ([noteHead isReverseSideOfStem]) 
+      dx = (time.stemup ? dx : -dx); else dx = 0.0;
   *fx = x + dx;
   *fy = [noteHead y];
   return YES;
@@ -216,8 +217,8 @@ TODO should be named
     showSlash = proto->showSlash;
     isGraced = proto->isGraced;
     noteHead = [headlist lastObject];
-    noteHead->myNote = self;
-    noteHead->type = gFlags.subtype;
+    [noteHead setNote: self];
+    [noteHead setBodyType: gFlags.subtype];
     if (TYPEOF(sp) == STAFF) {
 	staffPosition = [sp findPos: pt.y];
 	y = [sp yOfPos: staffPosition];
@@ -446,7 +447,7 @@ extern unsigned char hasstem[10];
     noteHead = [headlist lastObject];
     sy = [noteHead y];
     if (hasstem[time.body]) sy += time.stemlen;
-    pos = [noteHead->myNote posOfY: sy];
+    pos = [[noteHead myNote] posOfY: sy];
   }
   else
   {
@@ -469,7 +470,7 @@ extern unsigned char hasstem[10];
     {
       if ([self hasCrossingBeam])
       {
-        ya += getstemlen(time.body, gFlags.size, stype[(int)noteHead->type], time.stemup, [noteHead staffPosition], [noteHead->myNote getSpacing]);
+        ya += getstemlen(time.body, gFlags.size, stype[(int)[noteHead bodyType]], time.stemup, [noteHead staffPosition], [[noteHead myNote] getSpacing]);
       }
       else ya += time.stemlen;
     }
@@ -512,7 +513,7 @@ extern unsigned char hasstem[10];
   while (k--)
   {
     noteHead = [headlist objectAtIndex:k];
-    cpos = [noteHead->myNote getLines] - 1;
+    cpos = [[noteHead myNote] getLines] - 1;
     r += ([noteHead staffPosition] - cpos);
   }
   return r;
@@ -558,7 +559,7 @@ extern unsigned char hasstem[10];
 {
     NoteHead *noteHead;
     noteHead = [headlist objectAtIndex: SELHEADIX(gFlags.selend, [headlist count])];
-    noteHead->type = (noteHead->type == a) ? 0 : a;
+    [noteHead setBodyType: ([noteHead bodyType] == a) ? 0 : a];
     [self resetChord];
     return self;
 }
@@ -577,8 +578,7 @@ extern void getNumOct(int pos, int mc, int *num, int *oct);
     while (k--)
     {
         noteHead = [headlist objectAtIndex:k];
-        if ([noteHead accidental] && !(noteHead->editorial))
-        {
+        if ([noteHead accidental] && ![noteHead isAnEditorial]) {
             getNumOct([noteHead staffPosition], mc, &num, &oct);
             ks[num] = [noteHead accidental];
         }
@@ -763,7 +763,7 @@ static int getShapeID(int pos, int s, int n, int c)
 - (BOOL) moveHead: (NoteHead *) noteHead : (BOOL) locked : (float) dy : (System *) sys
 {
   float ny = dy + [noteHead y];
-  int np = [noteHead->myNote posOfY: ny];
+  int np = [[noteHead myNote] posOfY: ny];
   if ([noteHead staffPosition] != np)
   {
     [noteHead setStaffPosition: np];
@@ -826,7 +826,7 @@ static int getShapeID(int pos, int s, int n, int c)
   while (k--)
   {
     noteHead = [headlist objectAtIndex:k];
-    if ([noteHead side]) dx = (time.stemup ? tol : -tol) * 2.0; else dx = 0.0;
+    if ([noteHead isReverseSideOfStem]) dx = (time.stemup ? tol : -tol) * 2.0; else dx = 0.0;
     if (TOLFLOATEQ(pt.x, x + dx, tol) && TOLFLOATEQ(pt.y, [noteHead y], tol))
     {
       gFlags.selend = k;
@@ -848,7 +848,7 @@ static int getShapeID(int pos, int s, int n, int c)
   while (k--)
   {
       noteHead = [headlist objectAtIndex: k];
-      if ([noteHead side]) dx = (time.stemup ? tol : -tol) * 2.0; else dx = 0.0;
+      if ([noteHead isReverseSideOfStem]) dx = (time.stemup ? tol : -tol) * 2.0; else dx = 0.0;
       d = hypot(pt.x - (x + dx), pt.y - [noteHead y]);
       if (d < dmin) dmin = d;
   }
@@ -884,8 +884,8 @@ static int getShapeID(int pos, int s, int n, int c)
 - (float) stemYoff: (int) stype
 {
   NoteHead *noteHead = [headlist lastObject];
-  if ([noteHead side]) return 0.0;
-  if (noteHead->type == 4) return 0.0;
+  if ([noteHead isReverseSideOfStem]) return 0.0;
+  if ([noteHead bodyType] == 4) return 0.0;
   return stemdy[(int)gFlags.size][(int)gFlags.subtype][stype][time.body][time.stemup];
 }
 
@@ -899,13 +899,12 @@ static void drawacc(float x, NoteHead *noteHead, int ht, int size, int m)
   float dx;
   NSFont *f = musicFont[(int)accifont[ht][(int)[noteHead accidental]]][size];
   x += [noteHead accidentalOffset];
-  if (noteHead->editorial)
-  {
+  if ([noteHead isAnEditorial]) {
     dx = 0.5 * nature[size];
     x -= dx;
     r = NSZeroRect;
     unionCharBB(&r, x, [noteHead y], accidents[ht][(int)[noteHead accidental]], f);
-    cenclosure(noteHead->editorial - 1, r.origin.x - dx, r.origin.y - dx, r.origin.x + r.size.width + dx,
+    cenclosure([noteHead isAnEditorial] - 1, r.origin.x - dx, r.origin.y - dx, r.origin.x + r.size.width + dx,
                r.origin.y + r.size.height + dx, staffthick[0][size], 0, m);
   }
   drawCharacterInFont(x, [noteHead y], accidents[ht][(int)[noteHead accidental]], f, m);
@@ -928,8 +927,8 @@ extern int modeinvis[5];
   stemType = stype[gFlags.subtype];
   sl = time.stemlen;
   noteHead = [headlist lastObject];
-  drawstem(x, [noteHead y], sb, sl, size, noteHead->type, stemType, m);
-  if (showSlash && isGraced == 1) drawgrace(x, [noteHead y], sb, sl, size, noteHead->type, stemType, m);
+  drawstem(x, [noteHead y], sb, sl, size, [noteHead bodyType], stemType, m);
+  if (showSlash && isGraced == 1) drawgrace(x, [noteHead y], sb, sl, size, [noteHead bodyType], stemType, m);
   return self;
 }
 
@@ -938,35 +937,34 @@ extern int modeinvis[5];
     int k, bodyType, size, su, shapeID = 1;
     int ksym, knum, midc;
     float halfWidth=0.0, nx;
-    NSMutableArray *noteArray;
-    NoteHead *noteHead;
     BOOL gotsinfo = NO;
+    
     size = gFlags.size;
-    noteArray = headlist;
     su = time.stemup;
-    k = [noteArray count];
-    while (k--)
-  {
-    noteHead = [noteArray objectAtIndex:k];
-    bodyType = noteHead->type;
-    if (bodyType == 6)
-    {
-      if (!gotsinfo)
-      {
-        [self getKeyInfo: &ksym : &knum : &midc];
-        gotsinfo = YES;
-      }
-      shapeID = getShapeID([noteHead staffPosition], ksym, knum, midc);
+    k = [self numberOfNoteHeads];
+    while (k--) {
+	NoteHead *noteHead = [self noteHead: k];
+	
+	bodyType = [noteHead bodyType];
+	if (bodyType == 6) {
+	    if (!gotsinfo) {
+		[self getKeyInfo: &ksym : &knum : &midc];
+		gotsinfo = YES;
+	    }
+	    shapeID = getShapeID([noteHead staffPosition], ksym, knum, midc);
+	}
+	halfWidth = halfwidth[size][bodyType][time.body];
+	nx = x;
+	if (centhead[bodyType])
+	    nx -= halfWidth;
+	if ([noteHead isReverseSideOfStem])
+	    nx += halfWidth * offside[su];
+	drawhead(nx, [noteHead y], bodyType, time.body, shapeID, su, size, m);
+	if ([noteHead accidental] && [noteHead accidentalOffset] < 0.0) 
+	    drawacc(x, noteHead, bodyType, size, m);
+	if (time.dot)
+	    drawnotedot(size, x + dotdx, [noteHead y], [noteHead dotOffset], [[noteHead myNote] getSpacing], bodyType, time.dot, 0, m);
     }
-    halfWidth = halfwidth[size][bodyType][time.body];
-    nx = x;
-    if (centhead[bodyType]) nx -= halfWidth;
-    if ([noteHead side]) nx += halfWidth * offside[su];
-    drawhead(nx, [noteHead y], bodyType, time.body, shapeID, su, size, m);
-    if ([noteHead accidental] && [noteHead accidentalOffset] < 0.0) drawacc(x, noteHead, bodyType, size, m);
-    if (time.dot)
-	drawnotedot(size, x + dotdx, [noteHead y], noteHead->dotoff, [noteHead->myNote getSpacing], bodyType, time.dot, 0, m);
-  }
     [self drawLedgerAt: halfWidth size: size mode: m];
     return self;
 }
@@ -993,7 +991,7 @@ extern int modeinvis[5];
     stemup = t->stemup; // TODO should become: [self stemIsUp];
     if (numberOfNotes == 1) {
 	noteHead = q;
-	bodyType = noteHead->type;
+	bodyType = [noteHead bodyType];
 	if (bodyType == 6) {
 	    [self getKeyInfo: &ksym : &knum : &midc];
 	    shapeID = getShapeID([noteHead staffPosition], ksym, knum, midc);
@@ -1004,13 +1002,13 @@ extern int modeinvis[5];
 	if ([noteHead accidental] && [noteHead accidentalOffset] < 0.0)
 	    drawacc(x, noteHead, bodyType, size, drawingMode);
 	if (t->dot) // TODO should become: [self isDotted];
-	    drawnotedot(size, x + dotdx, [noteHead y], noteHead->dotoff, [noteHead->myNote getSpacing], bodyType, t->dot, 0, drawingMode);
+	    drawnotedot(size, x + dotdx, [noteHead y], [noteHead dotOffset], [[noteHead myNote] getSpacing], bodyType, t->dot, 0, drawingMode);
     }
     else {
 	int noteIndex = numberOfNotes;
 	while (noteIndex--) {
 	    noteHead = [noteArray objectAtIndex: noteIndex];
-	    bodyType = noteHead->type;
+	    bodyType = [noteHead bodyType];
 	    if (bodyType == 6) {
 		if (!gotsinfo) {
 		    [self getKeyInfo: &ksym : &knum : &midc];
@@ -1022,13 +1020,13 @@ extern int modeinvis[5];
 	    nx = x;
 	    if (centhead[bodyType]) 
 		nx -= halfWidth;
-	    if ([noteHead side]) 
+	    if ([noteHead isReverseSideOfStem]) 
 		nx += halfWidth * offside[(int)stemup];
 	    drawhead(nx, [noteHead y], bodyType, body, shapeID, stemup, size, drawingMode);
 	    if ([noteHead accidental] && [noteHead accidentalOffset] < 0.0) 
 		drawacc(x, noteHead, bodyType, size, drawingMode);
 	    if (t->dot)   // TODO should become: [self isDotted];
-		drawnotedot(size, x + dotdx, [noteHead y], noteHead->dotoff, [noteHead->myNote getSpacing], bodyType, t->dot, 0, drawingMode);
+		drawnotedot(size, x + dotdx, [noteHead y], [noteHead dotOffset], [[noteHead myNote] getSpacing], bodyType, t->dot, 0, drawingMode);
 	}
 	/* Note: noteHead will now be [noteArray objectAt: 0], with valid bodyType, f, halfWidth */
 	if (hasstem[body] && (!isBeamed || numberOfNotes > 1))	{
@@ -1136,16 +1134,16 @@ struct oldflags	/* from old format */
     stemType = stype[gFlags.subtype];
     headlist = [[NSMutableArray alloc] init];
     noteHead = [[NoteHead alloc] init];
-    noteHead->type = bodyType;
-    [noteHead setStaffPosition: staffPosition];
+      [noteHead setBodyType: bodyType];
+      [noteHead setStaffPosition: staffPosition];
       [noteHead setAccidental: acc];
       [noteHead setCoordinateY: y];
-    noteHead->myNote = self;
+      [noteHead setNote: self];
     ti = (!(gFlags.selected) && (figtime.body != 0)) ? &figtime : &time;
     f = musicFont[headfont[bodyType][ti->body]][size];
     halfWidth = halfwidth[size][bodyType][ti->body];
     [noteHead setAccidentalOffset: -halfWidth - charFGW(f, accidents[bodyType][(int)acc]) - 2.0];
-    noteHead->dotoff = (staffPosition & 1) ? 0 : -1;
+    [noteHead setDotOffset: (staffPosition & 1) ? 0 : -1];
     dotdx = getdotx(size, bodyType, 0, ti->body, [self isBeamed], ti->stemup);
     [(NSMutableArray *)headlist addObject: noteHead];
   }
@@ -1205,8 +1203,8 @@ extern void readTimeData2(NSCoder *s, struct timeinfo *t); /*sb; changed from NS
     int noteIndex = [headlist count];
     while (noteIndex--) {
 	NoteHead *noteHead = [headlist objectAtIndex:noteIndex];
-	if (TYPEOF(noteHead->myNote) != NOTE) 
-	    noteHead->myNote = self;
+	if (TYPEOF([noteHead myNote]) != NOTE) 
+	    [noteHead setNote: self];
     }
   }
   return self;

@@ -321,8 +321,8 @@ static float anyHeadFor(GNote *p, int n)
     NoteHead *noteHead = [p noteHead: n];
     float w = 0.0;
 
-    if (!(p->time.stemup) && [noteHead side]) 
-	w = -2.0 * halfwidth[(int)p->gFlags.size][(int)noteHead->type][p->time.body];
+    if (!(p->time.stemup) && [noteHead isReverseSideOfStem]) 
+	w = -2.0 * halfwidth[(int)p->gFlags.size][[noteHead bodyType]][p->time.body];
     if ([noteHead accidentalOffset] < w)
 	w = [noteHead accidentalOffset]; 
     return w;

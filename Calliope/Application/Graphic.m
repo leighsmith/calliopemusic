@@ -42,9 +42,9 @@
 
 id CrossCursor = nil;	/* global since subclassers may need it */
 
-#define stopTimer(timer) if (timer) { [NSEvent stopPeriodicEvents]; timer = FALSE; }
+#define stopTimer(timer) if (timer) { [NSEvent stopPeriodicEvents]; timer = NO; }
 
-#define startTimer(timer) if (!timer) { [NSEvent startPeriodicEventsAfterDelay:0.1 withPeriod:0.1]; timer = TRUE ; }
+#define startTimer(timer) if (!timer) { [NSEvent startPeriodicEventsAfterDelay:0.1 withPeriod:0.1]; timer = YES ; }
 
 
 + (Class) classFor: (int) t
@@ -871,7 +871,7 @@ extern int selMode;
     NSPoint p, last = {	0, 0 };
   id window = [view window];
   BOOL canScroll;
-  BOOL timer = FALSE;
+  BOOL timer = NO;
   NSRect b = NSZeroRect, visibleRect;
   [self getHandleBBox: &b];
   [view lockFocus];

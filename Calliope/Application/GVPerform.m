@@ -470,9 +470,9 @@ static void addNote(int v, int k, int ch, MKNote *n)
                             while (k--)
                             {
                                 h = [(GNote *)p noteHead: k];
-                                if (h->type != 4)
+                                if ([h bodyType] != 4)
                                 {
-                                    if (h->myNote == p) f = getNoteFreq(p, [h staffPosition], [h accidental], mc, curracc, trn);
+                                    if ([h myNote] == p) f = getNoteFreq(p, [h staffPosition], [h accidental], mc, curracc, trn);
                                     an = newNote(tn, f, dur);
                                     if (![inst isEqualToString: nullProgChange] && !noprogch) setInst(an, pat);
                                     addNote(v, k, ch, an);

@@ -1,6 +1,11 @@
+/* $Id$ */
+
 #import "winheaders.h"
 #import "Graphic.h"
+#import "Staff.h"
+@class GNote;
 
+// TODO perhaps factor out accidental handling into specific Accidental class.
 @interface NoteHead : NSObject
 {
 @private
@@ -12,25 +17,50 @@
     char accidental;
     // Offset from accidental?
     float accidoff;
-@public
-  char type;
-  char dotoff;
-  char editorial;
-  char side;
-  id myNote;
+    // Indicates that the accidental is an "editorial" accidental.
+    char editorial;
+    // is the note head on the wrong side of the stem? TODO should be a BOOL
+    char side;
+    // back reference to the GNote which references the note head.
+    GNote *myNote;
+    // The body type of the note head, describing it's shape.
+    char type;
+    // dot offset, seems to be only two values, 0 or -1?
+    char dotoff;
 }
 
 + (void) initialize;
 - init;
 - (void) dealloc;
 
+- (id) initWithCoder: (NSCoder *) aDecoder;
+- (void) encodeWithCoder: (NSCoder *) aCoder;
+
+
 - (void) moveBy: (float) x : (float) y;
 
 // - (Staff *) myStaff;
 - myStaff;
 
-- (id) initWithCoder: (NSCoder *) aDecoder;
-- (void) encodeWithCoder: (NSCoder *) aCoder;
+/*!
+  Returns the GNote instance that this NoteHead instance belongs to.
+ */
+- (GNote *) myNote;
+
+/*!
+ Assigns the note associated with this NoteHead.
+ */
+- (void) setNote: (GNote *) noteOfNoteHead;
+
+/*!
+ Returns the body type code.
+ */
+- (int) bodyType;
+
+/*!
+  Assigns the body type code.
+ */
+- (void) setBodyType: (int) newBodyType;
 
 /*!
  Returns the Y coordinate for displaying the note head.
@@ -41,6 +71,16 @@
  Assigns the Y coordinate for displaying the note head.
  */
 - (void) setCoordinateY: (float) newY;
+
+/*!
+  Returns the offset of the dot from the note head.
+ */
+- (int) dotOffset;
+
+/*!
+  Assigns the offset of the dot from the note head.
+ */
+- (void) setDotOffset: (int) newDotOffset;
 
 /*!
   Assigns the staff position (location on the staff) that the note head resides at.
@@ -73,8 +113,23 @@
 - (void) setAccidentalOffset: (float) newOffset;
 
 /*!
- Returns the side.
+  Returns YES if the accidental is an editorial accidental.
  */
-- (int) side;
+- (BOOL) isAnEditorial;
+
+/*!
+  Assigns if the accidental is an editorial accidental.
+ */
+- (void) setIsAnEditorial: (BOOL) yesOrNo;
+
+/*!
+ Returns if the note head sits on reverse side of the side.
+ */
+- (BOOL) isReverseSideOfStem;
+
+/*!
+  Assigns the side
+ */
+- (void) setReverseSideOfStem: (BOOL) yesOrNo;
 
 @end

@@ -584,7 +584,7 @@ extern char *typename[NUMTYPES];
   NSPoint p, last;
   NSRect sbounds, mybb, visrect,cachedRect;
   NSEvent *peek = nil;
-  BOOL timer = FALSE;
+  BOOL timer = NO;
   BOOL tracking = YES, alternate, m, first, canscroll;
   id window = [self window];
   alternate = alt;
@@ -633,8 +633,8 @@ extern char *typename[NUMTYPES];
 	if (!canscroll || NSContainsRect(visrect , sbounds))
 	{
           [self drawSelectionInstance];
-          if (timer != FALSE) [NSEvent stopPeriodicEvents];
-          timer = FALSE;
+          if (timer != NO) [NSEvent stopPeriodicEvents];
+          timer = NO;
 	}
 	first = NO;
         last = p;
@@ -659,7 +659,7 @@ extern char *typename[NUMTYPES];
           [self scrollPointToVisible: p];
           scrolling = NO;
           [self drawSelectionInstance];
-          if (!timer) { [NSEvent startPeriodicEventsAfterDelay:0.1 withPeriod:0.1]; timer = TRUE; }
+          if (!timer) { [NSEvent startPeriodicEventsAfterDelay:0.1 withPeriod:0.1]; timer = YES; }
       }
       /****** end of scrolling code ******/
       
@@ -680,8 +680,8 @@ extern char *typename[NUMTYPES];
   }
   
   /******* move has ended. Now clean up. *******/
-  if (canscroll && timer != FALSE) [NSEvent stopPeriodicEvents];
-  timer = FALSE;
+  if (canscroll && timer != NO) [NSEvent stopPeriodicEvents];
+  timer = NO;
   [self terminateMove];
 
   [self selectionHandBBox: &sbounds];
@@ -918,7 +918,7 @@ extern char *typename[NUMTYPES];
     NSWindow *window = [self window];
     NSRect cachedRect;
     
-    BOOL timer = FALSE;
+    BOOL timer = NO;
     p = start = [event locationInWindow];
     start = [self convertPoint: start fromView:nil];
     last = start;
@@ -934,7 +934,7 @@ extern char *typename[NUMTYPES];
     canscroll = !NSEqualRects(region , [self bounds]);
     if (canscroll && !timer) {
 	[NSEvent startPeriodicEventsAfterDelay:0.1 withPeriod:0.1];
-	timer = TRUE;
+	timer = YES;
     }
     while ([event type] != NSLeftMouseUp)
     {
@@ -992,7 +992,7 @@ extern char *typename[NUMTYPES];
     
     if (canscroll && timer) 
 	[NSEvent stopPeriodicEvents];
-    timer = FALSE;
+    timer = NO;
     /* now we do something with region */
     if (hasregion) {
 	if (grabflag) {

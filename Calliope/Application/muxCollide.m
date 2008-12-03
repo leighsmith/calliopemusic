@@ -262,7 +262,7 @@ static char nestleCode(GNote *p, int pk, GNote *q, int qk)
     for (j = 0; j < qk; j++)
     {
       qh = [q noteHead: j];
-      if (ph->myNote != qh->myNote)  /* is this test ever NO? */
+      if ([ph myNote] != [qh myNote])  /* is this test ever NO? */
       {
         dp = [ph staffPosition] - [qh staffPosition];
 	if (dp == 0) return (ps ? 6 : 1);

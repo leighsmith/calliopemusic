@@ -414,7 +414,7 @@ float fontsize[3] = { 12, 8, 6};
   int sz, above, sf, ss;
   NSFont *f, *ft;
   float px, py, qx, qy, th;
-  unsigned char buff[16];
+  char buff[16];
   /* assume client sorted by the time we arrive here */
   sz = gFlags.size;
   p = [client objectAtIndex:0];

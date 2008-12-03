@@ -165,28 +165,24 @@ static void putPos(Staff *sp, int pn, int u)
 
 - resetSides
 {
-  NSMutableArray *nl;
-  NoteHead *noteHead;
-  GNote *n, *on;
-  int i, k, pp, opp, s;
-  BOOL state;
-  nl = headlist;
-  k = [nl count];
-  state = 0;
-  opp = MAXINT;
-  on = nil;
-  for (i = 0; i < k; i++)
-  {
-    noteHead = [nl objectAtIndex:i];
-    pp = [noteHead staffPosition];
-    n = noteHead->myNote;
-    s = (state && (ABS(pp - opp) <= 1) && (n == on));
-    noteHead->side = s;
-    opp = pp;
-    on = n;
-    state = !s;
-  }
-  return self;
+    NSMutableArray *nl = headlist;
+    NoteHead *noteHead;
+    GNote *n, *on = nil;
+    int i, k = [nl count], noteHeadStaffPosition;
+    int oldNoteHeadStaffPosition = MAXINT, s;
+    BOOL state = NO;
+    
+    for (i = 0; i < k; i++) {
+	noteHead = [nl objectAtIndex: i];
+	noteHeadStaffPosition = [noteHead staffPosition];
+	n = [noteHead myNote];
+	s = (state && (ABS(noteHeadStaffPosition - oldNoteHeadStaffPosition) <= 1) && (n == on));
+	[noteHead setReverseSideOfStem: s];
+	oldNoteHeadStaffPosition = noteHeadStaffPosition;
+	on = n;
+	state = !s;
+    }
+    return self;
 }
 
 
@@ -236,17 +232,18 @@ void lineupDots(GNote *np[], int k)
       dp = 0;
       while (!f)
       {
-        if (hasPos(sp, j + dp)) dp += dir;
+        if (hasPos(sp, j + dp)) 
+	    dp += dir;
         else
         {
           putPos(sp, j + dp, 0);
-          noteHead->dotoff = dp + dy;
+	    [noteHead setDotOffset: dp + dy];
 	  f = YES;
         }
       }
-      bt = noteHead->type;
+      bt = [noteHead bodyType];
       t = getdotx(sz, bt, 0, ti->body, b, ti->stemup);
-      if ([noteHead side]) t += halfwidth[sz][bt][ti->body] * offside[ti->stemup];
+      if ([noteHead isReverseSideOfStem]) t += halfwidth[sz][bt][ti->body] * offside[ti->stemup];
       if (t > r) r = t;
     }
   }
@@ -293,7 +290,7 @@ void lineupDots(GNote *np[], int k)
 - resetStemlen
 {
   NoteHead *noteHead = [headlist lastObject];
-  time.stemlen = getstemlen(time.body, gFlags.size, stype[(int)noteHead->type], time.stemup, [noteHead staffPosition], [self getSpacing]);
+  time.stemlen = getstemlen(time.body, gFlags.size, stype[(int)[noteHead bodyType]], time.stemup, [noteHead staffPosition], [self getSpacing]);
   return self;
 }
 
@@ -375,7 +372,7 @@ void lineupAccs(NoteHead *ah[], int an, NoteHead *nh[], GNote *note[], int hn)
     p = note[i];
     w = halfwidth[p->gFlags.size][0][p->time.body];
     lbear[i] = p->x;
-    if (!(p->time.stemup) && [nh[i] side]) lbear[i] -= 3.0 * w; else lbear[i] -= w;
+    if (!(p->time.stemup) && [nh[i] isReverseSideOfStem]) lbear[i] -= 3.0 * w; else lbear[i] -= w;
     accx = lbear[i] - accxoff[p->gFlags.size];
     if (accx < minb) minb = accx;
   }
@@ -413,8 +410,8 @@ void lineupAccs(NoteHead *ah[], int an, NoteHead *nh[], GNote *note[], int hn)
       }
       p = note[nix(noteHead, nh, hn)];
       sz = p->gFlags.size;
-      f = musicFont[accifont[(int)noteHead->type][(int)[noteHead accidental]]][sz];
-      w = charFGW(f, accidents[(int)noteHead->type][(int)[noteHead accidental]]);
+      f = musicFont[accifont[(int)[noteHead bodyType]][(int)[noteHead accidental]]][sz];
+      w = charFGW(f, accidents[(int)[noteHead bodyType]][(int)[noteHead accidental]]);
       if (w > ncw) ncw = w;
       [noteHead setAccidentalOffset: (curx - w) - p->x];
 /*
@@ -566,8 +563,8 @@ NSLog(@"curx %f: pos[%d] set to: %f\n", curx, [noteHead staffPosition], [noteHea
     [noteHead setStaffPosition: [sp findPos: ny]];
     [noteHead setCoordinateY: [sp yOfPos: [noteHead staffPosition]]];
     [noteHead setAccidental: acc];
-    noteHead->myNote = self;
-    noteHead->type = gFlags.subtype;
+    [noteHead setNote: self];
+    [noteHead setBodyType: gFlags.subtype];
     [self insertHead: noteHead];
     gFlags.selend = [headlist indexOfObject:noteHead];
     [self normaliseChord];
@@ -665,7 +662,7 @@ extern float ledgedxs[3];
       sn = [sp myIndex];
       sps[sn] = sp;
       hp = [noteHead staffPosition];
-      if ([noteHead side])
+      if ([noteHead isReverseSideOfStem])
       {
         if (hp < hwsa[sn]) hwsa[sn] = hp;
         if (hp > lwsb[sn]) lwsb[sn] = hp;

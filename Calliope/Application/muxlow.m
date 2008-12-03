@@ -1482,7 +1482,7 @@ void csnote(float cx, float cy, float stemLength, int body, int dot, int sizeInd
 {
     float hw = halfwidth[sizeIndex][bodyType][body];
     
-    drawnote(sizeIndex, hw, cx, cy, body, bodyType, stemType, 1, 0, stemLength, FALSE, FALSE, m);
+    drawnote(sizeIndex, hw, cx, cy, body, bodyType, stemType, 1, 0, stemLength, NO, NO, m);
     if (dot) {
         if (bodyType == 4) 
 	    cy += 0.5 * stemLength;
