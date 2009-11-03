@@ -1,4 +1,4 @@
-/* $Id:$ */
+/* $Id$ */
 #import <AppKit/AppKit.h>
 #import <Foundation/Foundation.h>
 #import "Ligature.h"
@@ -441,8 +441,6 @@ static float braoffy[2] =  { 1.0, -1.0 };
 }
 
 
-static float dpattern[1];
-
 
 - drawMode: (int) m
 {
@@ -470,10 +468,7 @@ static float dpattern[1];
   }
   if (flags.dashed)
   {
-    dpattern[0] = nature[sz] * 2;
-    PSsetdash(dpattern, 1, 0.0);
-        // TODO [bezPath setLineDash: dpattern count: 1 phase: 0.0]; // but we need to know bezPath!
-
+    csetdash(YES, nature[sz] * 2);
   }
   th = 2.0 * staffthick[0][sz];
   switch (gFlags.subtype)
@@ -512,8 +507,8 @@ static float dpattern[1];
       PSresetorigin();
       break;
   }
-  if (flags.dashed) PSsetdash(dpattern, 0, 0.0);
-      // TODO [bezPath setLineDash: dpattern count: 0 phase: 0.0]; // but we need to know bezPath!
+  if (flags.dashed) 
+      csetdash(NO, 0.0);
 
   return self;
 }

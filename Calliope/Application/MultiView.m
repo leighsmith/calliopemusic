@@ -1,4 +1,4 @@
-/* $Id:$ */
+/* $Id$ */
 #import "MultiView.h"
 
 @implementation MultiView

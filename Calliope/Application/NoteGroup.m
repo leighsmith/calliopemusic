@@ -387,19 +387,14 @@ char corner[2][4] =
 
 static void doDashJog(float x, float y, float x1, int j, int a, int sz, int m)
 {
-  float dpattern[1], th, sw;
-  dpattern[0] = 3 * nature[sz];
-  th = staffthick[0][sz];
-  PSsetdash(dpattern, 1, 0.0);
-      // TODO [bezPath setLineDash: dpattern count: 1 phase: 0.0]; // but we need to know bezPath!
-
+  float th = staffthick[0][sz];
+    
+  csetdash(YES, nature[sz] * 3);
   cline(x, y, x1, y, th, m);
-  PSsetdash(dpattern, 0, 0.0);
-      // TODO [bezPath setLineDash: dpattern count: 0 phase: 0.0]; // but we need to know bezPath!
+  csetdash(NO, 0.0);
 
-  if (j)
-  {
-    sw = nature[sz] * (a ? 3 : -3);
+  if (j) {
+    float sw = nature[sz] * (a ? 3 : -3);
     cline(x1, y, x1, y + sw, th, m);
   }
 }

@@ -1,11 +1,5 @@
 #import <Foundation/Foundation.h>
 
-/* PSWrapsInit() sets up various definitions used by the main wraps */
-void PSWrapsInit( void )
-{
-    NSLog(@"Called PSWrapsInit(), needs implementation\n");
-}
-
 void PStie(float cx, float cy, float dy, float rh, float hw, float mh, float ln, float a)
 {
     NSLog(@"Called PStie(), needs implementation\n");

@@ -130,6 +130,8 @@ BOOL modeprint[] = {};
 
 NSRect boundingBox;	/* to accumulate the bounding box */
 
+// the length in points of the line segment used in dashed drawing. 0.0 for no dash pattern.
+float dashPattern = 0.0; 
 
 /* initialise the graphics stuff */
 void colorInit(int i, NSColor * c)
@@ -168,7 +170,6 @@ void colorInit(int i, NSColor * c)
 void DrawInit()
 {
     // Nowadays does nothing...
-    PSWrapsInit();
 }
 
 float DrawWidthOfCharacter(NSFont *f, int ch)
@@ -288,7 +289,7 @@ void unionpath()
     NSRect r;
     float llx, lly, urx, ury;
     
-    PSpathbbox(&llx, &lly, &urx, &ury);
+    PSpathbbox(&llx, &lly, &urx, &ury); // retrieve the current bounding box.
     NSLog(@"unionpath BB = %f %f %f %f\n", llx, lly, urx - llx, ury - lly);
     PSnewpath();
     /*  --llx; ++urx; --lly; ++ury; */
@@ -520,7 +521,7 @@ void DrawTextWithBaselineTies(float x, float y, NSString *stringToDisplay, NSFon
 #endif
     }
     else 
-	unionStringBB(&boundingBox, x, y, [stringToDisplay cString], textFont, 0);
+	unionStringBB(&boundingBox, x, y, [stringToDisplay UTF8String], textFont, 0);
 }
 
 //sb: changed the following from cString to CAcString to avoid confusion.
@@ -531,19 +532,27 @@ void CAcString(float x, float y, const char *s, NSFont *textFont, int mode)
 }
 
 // DrawCenteredText(float x, float y, NSString *s, NSFont *f, int mode)
-void centString(float x, float y, char *s, NSFont *f, int mode)
+void DrawCenteredText(float x, float y, char *s, NSFont *f, int mode)
 {
     CAcString(x - 0.5 * [f widthOfString: [NSString stringWithCString: s]], y, s, f, mode);
 }
 
-// DrawJustifiedText(float x, float y, NSString *s, NSFont *f, int j, int mode)
-void justString(float x, float y, char *s, NSFont *f, int j, int mode)
+void DrawJustifiedText(float x, float y, NSString *s, NSFont *textFont, int j, int mode)
 {
-    if (j == JCENTRE) x -= 0.5 * [f widthOfString: [NSString stringWithCString:s]];
-    else if (j == JRIGHT) x -= [f widthOfString: [NSString stringWithCString:s]];
-    CAcString(x, y, s, f, mode);
+    if (j == JCENTRE) 
+	x -= 0.5 * [textFont widthOfString: s];
+    else if (j == JRIGHT)
+	x -= [textFont widthOfString: s];
+    DrawTextWithBaselineTies(x, y, s, textFont, mode);
+
 }
 
+void csetdash(BOOL drawWithDash, float pattern)
+{
+    // Save the dash pattern
+    dashPattern = drawWithDash ? pattern : 0.0;
+    [linePath setLineDash: &dashPattern count: drawWithDash ? 1 : 0 phase: 0.0];
+}
 
 /* routines to draw a line. Three routines to: make, stroke, or make & stroke. 
 */
@@ -599,6 +608,8 @@ void crect(float x, float y, float w, float h, int mode)
     if (NOPRINT(mode)) 
 	return;
     
+    // TODO needs to enable dash drawing of the rectangle, perhaps with a NSRect outline?
+    // if(dashPattern != 0.0) [bezPathTBD setLineDash: &dashPattern count: 1 phase: 0.0];
     if (mode) {
 	[modegray[mode] set];
 	NSRectFill(NSMakeRect(x, y, w, h));
@@ -725,44 +736,18 @@ void ccircle(float x, float y, float r, float a1, float a2, float w, int mode)
     }
 }
 
-void PSellipse(float cx, float cy, float rx, float ry, float a1, float a2)
-{
-    NSLog(@"Called PSellipse(), needs implementation\n");
-    
-    /*
-     arc x y r ang1 ang2 arc - 
-     
-     appends a counterclockwise arc of a circle to the current path, possibly preceded by a straight line segment.
-     The arc has (x, y) as center, r as radius, ang1 the angle of a vector from (x, y) of length r to the first endpoint of the arc,
-     and ang2 the angle of a vector from (x, y) of length r to the second endpoint of the arc. 
-     */ 
-    
-    /*
-     defineps PSellipse(float cx, cy, rx, ry, a1, a2)
-     matrix currentmatrix
-     cx cy moveto
-     currentpoint translate
-     rx ry scale
-     newpath
-     0 0 1 a1 a2 arc
-     setmatrix
-     endps
-     */ 
-}
-
-
-/* draw (part of) an ellipse */
-void cellipse(float cx, float cy, float rx, float ry, float a1, float a2, float w, int mode)
+/* draw a full ellipse */
+void cellipse(float cx, float cy, float rx, float ry, float w, int mode)
 {
     if (NOPRINT(mode)) 
 	return;
     if (mode) {
-	NSBezierPath *ellipsePath = [NSBezierPath bezierPath];
+	NSRect enclosingRect = NSMakeRect(cx - rx, cy - ry, rx + rx, ry + ry);
+	NSBezierPath *ellipsePath = [NSBezierPath bezierPathWithOvalInRect: enclosingRect];
 	
-	PSellipse(cx, cy, rx, ry, a1, a2);
 	[modegray[mode] set];
-	PSsetlinewidth(w); // [ellipsePath setLineWith: w];
-	PSstroke(); // [ellipsePath stroke];
+	[ellipsePath setLineWidth: w];
+	[ellipsePath stroke];
     }
     else {
 	w *= 0.5;
@@ -828,7 +813,6 @@ void cbrace(float x0, float y0, float xn, float yn, float flourishThickness, int
     }
     else
     {
-	PSflattenpath();
 	// NSLog(@"cbrace(%f,...,%d)\n", x0, mode);
 	unionpath();
     }
@@ -856,13 +840,13 @@ void ccurve(float x0, float y0,
     [curvePath moveToPoint: fromPoint];
     [curvePath curveToPoint: toPoint controlPoint1: forwardControlPoint1 controlPoint2: forwardControlPoint2];
     if (dash) {
+	[curvePath setLineDash: &dashPattern count: 1 phase: 0.0];
 	if (mode) {
 	    [modegray[mode] set];
 	    [curvePath setLineWidth: th * 0.5];
 	    [curvePath stroke];
 	}
 	else {
-	    PSflattenpath();
 	    // NSLog(@"ccurve(dash)(%f,...,%d)\n", x0, mode);
 	    unionpath();
 	}
@@ -875,7 +859,6 @@ void ccurve(float x0, float y0,
 	[curvePath fill];
     }
     else {
-	PSflattenpath();
 	NSLog(@"ccurve(nodash)(%f,...,%d)", x0, mode);
 	unionpath();
     }
@@ -915,6 +898,7 @@ void cflat(float x0, float y0, float x1, float y1, float c1x, float c1y, float c
     [flatCurvePath curveToPoint: point1 controlPoint1: point2 controlPoint2: point3];
     if (dash)
     {
+	[flatCurvePath setLineDash: &dashPattern count: 1 phase: 0.0];
 	if (mode)
 	{
 	    [modegray[mode] set];
@@ -923,7 +907,6 @@ void cflat(float x0, float y0, float x1, float y1, float c1x, float c1y, float c
 	}
 	else
 	{
-	    PSflattenpath();
 	    NSLog(@"cflat(dash)(%f,...,%d)", x0, mode);
 	    unionpath();
 	}
@@ -957,7 +940,6 @@ void cflat(float x0, float y0, float x1, float y1, float c1x, float c1y, float c
     }
     else
     {
-	PSflattenpath();
 	NSLog(@"cflat(nodash)(%f,...,%d)", x0, mode);
 	unionpath();
     }
@@ -984,8 +966,10 @@ void ctie(float cx, float cy, float d, float h, float th, float a, float f, int 
 	if (mode)
 	{
 	    [modegray[mode] set];
-	    PSsetlinewidth(th);
-	    PSstroke();
+	    PSsetlinewidth(th); // 	[tiePath setLineWith: w];
+
+	    PSstroke(); // 	[tiePath stroke];
+
 	}
 	else unionpath();
     }
@@ -995,7 +979,7 @@ void ctie(float cx, float cy, float d, float h, float th, float a, float f, int 
 	if (mode)
 	{
 	    [modegray[mode] set];
-	    PSfill(); // [path fill];
+	    PSfill(); // [tiePath fill];
 	}
 	else
 	{
@@ -1095,7 +1079,6 @@ static void cflatbow(float px, float py, float qx, float qy, float th, int m)
 /* draw an orthogonal bracket */
 void cbrack(int i, int p, float px, float py, float qx, float qy, float th, float d, int sz, int m)
 {
-    float dpattern[1];
     float dx, dy, ry;
     switch(i)
     {
@@ -1231,8 +1214,7 @@ void cbrack(int i, int p, float px, float py, float qx, float qy, float th, floa
 	    }
 	    break;
 	case 5:  /* dashed line */
-	    dpattern[0] = d;
-	    PSsetdash(dpattern, 1, 0.0);
+	    csetdash(YES, d);
 	    // [bezPath setLineDash: dpattern count: 1 phase: 0.0];
 	    switch(p)
 	    {
@@ -1249,8 +1231,7 @@ void cbrack(int i, int p, float px, float py, float qx, float qy, float th, floa
 		    cline(qx, py, qx, qy, th, m);
 		    break;
 	    }
-		PSsetdash(dpattern, 0, 0.0);
-	        // TODO [bezPath setLineDash: dpattern count: 1 phase: 0.0]; // but we need to know bezPath!
+	    csetdash(NO, 0.0);
 
 	    break;
 	case 6:  /* wavy line */
@@ -1411,7 +1392,7 @@ void cenclosure(int i, float px, float py, float qx, float qy, float th, int sz,
 	    dy = 0.5 * (qy - py);
 	    rx = dx + px;
 	    ry = dy + py;
-	    cellipse(rx, ry, dx, dy, 0.0, 360.0, th, m);
+	    cellipse(rx, ry, dx, dy, th, m);
 	    break;
     }
 }

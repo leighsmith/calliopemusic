@@ -814,7 +814,6 @@ void drawEdmark(float x0, float y0, float x3, float y3, float x1, float y1, floa
 }
 
 
-static float dpattern[1];
 
 - drawMode: (int) m
 {
@@ -827,17 +826,14 @@ static float dpattern[1];
   }
   if (flags.dashed)
   {
-    dpattern[0] = nature[sz] * 2;
-    PSsetdash(dpattern, 1, 0.0);
-        // TODO [bezPath setLineDash: dpattern count: 1 phase: 0.0]; // but we need to know bezPath!
-
+    csetdash(YES, nature[sz] * 2);
   }
   th = nature[sz] * 0.5;
   if (flags.flat) cflat(x[0], y[0], x[1], y[1], con1.x, con1.y, con2.x, con2.y, th * 0.75, flags.dashed, m);
   else ccurve(x[0], y[0], x[1], y[1], x[2], y[2], x[3], y[3], x[4], y[4], x[5], y[5], th, flags.dashed, m);
   if (flags.ed) drawEdmark(x[0], y[0], x[1], y[1], x[2], y[2], x[3], y[3], sz, m);
-  if (flags.dashed) PSsetdash(dpattern, 0, 0.0);
-      // TODO [bezPath setLineDash: dpattern count: 1 phase: 0.0]; // but we need to know bezPath!
+  if (flags.dashed) 
+      csetdash(NO, 0.0);
 
   return self;
 }

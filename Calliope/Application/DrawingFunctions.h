@@ -246,10 +246,24 @@ void DrawTextWithBaselineTies(float x, float y, NSString *stringToDisplay, NSFon
 
 //sb: changed the following from cString to CAcString to avoid confusion.
 void CAcString(float x, float y, const char *s, NSFont *f, int mode);
-extern void centString(float x, float y, char *s, NSFont *f, int mode);
-extern void justString(float x, float y, char *s, NSFont *f, int j, int mode);
+
+/*!
+  @brief Draw text centered around the point x,y in the given font.
+ */
+extern void DrawCenteredText(float x, float y, char *s, NSFont *f, int mode);
+
+/*!
+  @brief Draw text justified.
+ */
+extern void DrawJustifiedText(float x, float y, NSString *s, NSFont *f, int j, int mode);
 extern void centChar(float x, float y, int ch, NSFont *f, int mode);
 extern void centxChar(float x, float y, int ch, NSFont *f, int mode);
+
+/*!
+  @brief Assigns the dash pattern (in number of points of the dash portion) to be used when drawing.
+  */
+void csetdash(BOOL drawWithDash, float pattern);
+
 extern void cstrokeline(float width, int mode);
 extern void cline(float x1, float y1, float x2, float y2, float width, int mode);
 extern void cmakeline(float x1, float y1, float x2, float y2, int mode);
@@ -262,7 +276,11 @@ extern void crect(float x, float y, float w, float h, int mode);
   @brief draw (part of) a circle centred on x and y.
  */
 void ccircle(float x, float y, float r, float a1, float a2, float w, int mode);
-extern void cellipse(float cx, float cy, float rx, float ry, float a1, float a2, float w, int mode);
+
+/*! 
+  @brief draw a full ellipse.
+ */
+void cellipse(float cx, float cy, float rx, float ry, float w, int mode);
 
 /*!
   @function cslant

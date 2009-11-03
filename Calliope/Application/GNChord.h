@@ -1,4 +1,4 @@
-/* $Id:$ */
+/* $Id$ */
 #import "winheaders.h"
 #import "GNote.h"
 #import "Staff.h"

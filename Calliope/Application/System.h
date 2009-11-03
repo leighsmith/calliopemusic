@@ -23,7 +23,7 @@
     Page *page;			/* backreference to our Page */
     struct
     {
-	unsigned int nstaves : 7;	/* number of staves */
+	unsigned int nstaves : 7;	/* number of staves */ // Can now be defined protected.
 	unsigned int pgcontrol : 3;	/* page break code */
 	unsigned int haslink : 1;	/* staff linkage bar NOT USED */
 	unsigned int equidist : 1;	/* make staff y-origins equidistant */

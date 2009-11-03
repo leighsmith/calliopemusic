@@ -279,8 +279,6 @@ static char defConst[NUMTIES] = {0, 0, 1, 0, 0, 1, 1, 0};
   t->gFlags.morphed = 0;
 }
 
-static float dpattern[1];
-
 - drawMode: (int) m
 {
     float x[2], y[2], dx=0.0, dy=0.0, cx, cy, d=0.0, h, v, a, th, cth=0.0, sth=0.0;
@@ -324,10 +322,7 @@ static float dpattern[1];
     }
     if (candash[style] && flags.dashed)
     {
-	dpattern[0] = nature[sz] * 2;
-	PSsetdash(dpattern, 1, 0.0);
-	    // TODO [bezPath setLineDash: dpattern count: 1 phase: 0.0]; // but we need to know bezPath!
-
+	csetdash(YES, nature[sz] * 2);
     }
     if (gFlags.selected && !gFlags.seldrag)
     {
@@ -404,8 +399,8 @@ static float dpattern[1];
 	    cstrokeline(th, m);
 	    break;
     }
-    if (candash[style] && flags.dashed) PSsetdash(dpattern, 0, 0.0);
-        // TODO [bezPath setLineDash: dpattern count: 0 phase: 0.0]; // but we need to know bezPath!
+    if (candash[style] && flags.dashed) 
+	csetdash(NO, 0.0);
 
     return self;
 }

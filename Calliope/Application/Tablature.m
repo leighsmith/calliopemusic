@@ -462,7 +462,7 @@ static char usesm[6] = {1, 1, 1, 1, 0, 0}; /* whether to use small size as norma
     }
     cy += charFURY(f, s[0]);
   }
-  centString(tx, cy, s, outf, m);
+  DrawCenteredText(tx, cy, s, outf, m);
   return self;
 }
 
@@ -531,7 +531,7 @@ static char usesm[6] = {1, 1, 1, 1, 0, 0}; /* whether to use small size as norma
     {
       s = timesfinger[flags.cipher][c + 2];
       cy = GETYSP(y, ss, pos) + charFCH(f, s[0]);
-      centString(x, cy, s, f, m);
+      DrawCenteredText(x, cy, s, f, m);
     }
     pos += (flags.direction) ? -2 : 2;
   }

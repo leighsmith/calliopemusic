@@ -182,8 +182,6 @@ void barthick(float x, float y1, float sth, float y2, float th, int m)
 }
 
 
-static float dpattern[1];
-
 static BOOL canbridge[16] = {1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1};
 
 static int invismode[8] = {0, 4, 4, 4, 4, 4, 4, 7};
@@ -238,9 +236,7 @@ static int invismode[8] = {0, 4, 4, 4, 4, 4, 4, 7};
   ss = s->flags.spacing;
   if (flags.dashed)
   {
-    dpattern[0] = nature[sz];
-    PSsetdash(dpattern, 1, 0.0);
-    // TODO [bezPath setLineDash: dpattern count: 1 phase: 0.0]; // but we need to know bezPath!
+    csetdash(YES, nature[sz]);
   }
   if (s->flags.nlines == 1 && !flags.bridge)
   {
@@ -309,8 +305,8 @@ static int invismode[8] = {0, 4, 4, 4, 4, 4, 4, 7};
       bardots(s->flags.nlines, x - (bs * 2.0) - f, [s yOfTop], ss, sz, m);
       break;
   }
-  if (flags.dashed) PSsetdash(dpattern, 0, 0.0);
-      // TODO [bezPath setLineDash: dpattern count: 0 phase: 0.0]; // but we need to know bezPath!
+  if (flags.dashed) 
+      csetdash(NO, 0.0);
 
   return self;
 }

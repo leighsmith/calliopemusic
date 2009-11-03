@@ -37,7 +37,7 @@
 
 - init;
 - (BOOL) needSplit: (float) s0 : (float) s1;
-- (void)dealloc;
+- (void) dealloc;
 - (int) whichEnd: (StaffObj *) p;
 - coordsForHandle: (int) h  asX: (float *) x  andY: (float *) y;
 - proto: (GraphicView *) v : (StaffObj *) p : (StaffObj *) q : (int) i;
@@ -45,12 +45,12 @@
 - setDefault: (int) t;
 - setHanger;
 - (BOOL) isClosed: (NSMutableArray *) l;
-- (void)removeObj;
+- (void) removeObj;
 - (BOOL) hit: (NSPoint) p;
 - (float) hitDistance: (NSPoint ) p;
 - (BOOL) move: (float) dx : (float) dy : (NSPoint) p : sys : (int) alt;
 - drawMode: (int) m;
-- (id)initWithCoder:(NSCoder *)aDecoder;
-- (void)encodeWithCoder:(NSCoder *)aCoder;
+- (id) initWithCoder: (NSCoder *) aDecoder;
+- (void) encodeWithCoder: (NSCoder *) aCoder;
 
 @end

@@ -320,7 +320,7 @@ extern float staffthick[3][3];
   cline(x + wid, y1, x + wid, y2, linethicks[sz], m);
   sprintf(num, "%d", numbars);
   numy = (style == 3) ? 7 : -7;
-  centString(x + (4 * ss), GETYSP(sy, ss, staffPosition + numy), num, musicFont[1][sz], m);
+  DrawCenteredText(x + (4 * ss), GETYSP(sy, ss, staffPosition + numy), num, musicFont[1][sz], m);
   return self;
 }
 

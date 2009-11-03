@@ -596,12 +596,12 @@ static float centreTime(NSMutableArray *nl)
     case 1:
       sprintf(tuple, "%d", uneq1);
       if (!flags.above) ty += charh;
-      centString(x, ty, tuple, fontdata[FONTSTMR], m);
+      DrawCenteredText(x, ty, tuple, fontdata[FONTSTMR], m);
       break;
     case 2:
       sprintf(tuple, "%d:%d", uneq1, uneq2);
       if (!flags.above) ty += charh;
-      centString(x, ty, tuple, fontdata[FONTSTMR], m);
+      DrawCenteredText(x, ty, tuple, fontdata[FONTSTMR], m);
       break;
    case 3:
       charh = stemlens[0][1];

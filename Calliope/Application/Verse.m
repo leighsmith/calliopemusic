@@ -418,7 +418,7 @@ static void drawext(float x1, float y, float x2, Staff *sp, int f, int m)
 	{
 	    ct[0] = c;
 	    if (*s != '\0') ct[1] = *s++;
-	    centString(x, fy, (char *) ct, f, m);
+	    DrawCenteredText(x, fy, (char *) ct, f, m);
 	    fy += nlead;
 	    ct[1] = ct[2] = '\0';
 	}

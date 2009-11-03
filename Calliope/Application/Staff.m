@@ -1319,20 +1319,19 @@ float textoff[2], baselines[2][MAXTEXT];
 
 /* display bar numbers */
 
-extern void unionStringBB(NSRect *bb, float x, float y, char *s, NSFont *f, int j);
+extern void unionStringBB(NSRect *bb, float x, float y, const char *s, NSFont *f, int j);
 extern void cenclosure(int i, float px, float py, float qx, float qy, float th, int sz, int m);
 
 
 static void drawbarnum(int n, float x, float y, NSFont *f, int j, int eb, int mode)
 {
-  char buf[8];
-  NSRect r;
-  sprintf(buf, "%d", n);
-  justString(x, y, buf, f, j, mode);
-  if (eb)
-  {
-    r = NSZeroRect;
-    unionStringBB(&r, x, y, buf, f, j);
+  NSString *formattedBarNumber = [NSString stringWithFormat: @"%d", n];
+ 
+  DrawJustifiedText(x, y, formattedBarNumber, f, j, mode);
+  if (eb) {
+    NSRect r = NSZeroRect;
+
+    unionStringBB(&r, x, y, [formattedBarNumber UTF8String], f, j);
     cenclosure(eb - 1, r.origin.x - 2, r.origin.y - 2, r.origin.x + r.size.width + 2, r.origin.y + r.size.height + 2, staffthick[0][0], 0, mode);
   }
 }

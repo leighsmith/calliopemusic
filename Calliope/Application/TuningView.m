@@ -276,7 +276,7 @@ static char accalter[3] = {0, -1, 1};
 	    for (i = 0; i < k; i++)
 	    {
 		c = [l objectAtIndex:i];
-		PSsetgray(grayval(i == lastsel));
+		PSsetgray(grayval(i == lastsel)); // set color to gray value from 0 (black) to 1 (white)
 		[self drawNote: -(c->pitch) - (7 * (c->oct - 4)) : c->acc : x : i];
 	    }
 	    for (i = 0; i < k; i++) {
