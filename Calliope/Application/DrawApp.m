@@ -68,7 +68,7 @@ DrawApp *sharedApplicationController = nil;
 static void jamFont(int nid, NSString *name, float size, NSString *fv)
 {
     int err = NO;
-    NSFont *f = fontdata[nid] = [NSFont fontWithName: name size: size];
+    NSFont *f = fontdata[nid] = [[NSFont fontWithName: name size: size] retain];
     
     if (f != nil)
     {
