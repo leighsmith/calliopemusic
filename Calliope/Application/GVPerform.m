@@ -819,7 +819,7 @@ char *ntypename[5] = {"dur", "on", "off", "update", "mute"};
     while ((par = MKNextParameter(n, s)) != MK_noPar)
     {
 	str = [n parAsString: par];
-	NSLog(@"  [%s:  %s]", [[MKNote parNameForTag: par] cString], [str cString]);
+	NSLog(@"  [%s:  %s]", [[MKNote parNameForTag: par] UTF8String], [str UTF8String]);
     }
     return self;
 }

@@ -369,8 +369,8 @@ void unionStringBB(NSRect *b, float x, float y, const char *s, NSFont *f, int j)
     NSRect cm;
     char ch;
     
-    if (j == JCENTRE) x -= 0.5 * [f widthOfString: [NSString stringWithCString: s]];
-    else if (j == JRIGHT) x -= [f widthOfString: [NSString stringWithCString: s]];
+    if (j == JCENTRE) x -= 0.5 * [f widthOfString: [NSString stringWithUTF8String: s]];
+    else if (j == JRIGHT) x -= [f widthOfString: [NSString stringWithUTF8String: s]];
     while (ch = *s++)
     {
 	if (ch == ' ')
@@ -524,17 +524,17 @@ void DrawTextWithBaselineTies(float x, float y, NSString *stringToDisplay, NSFon
 	unionStringBB(&boundingBox, x, y, [stringToDisplay UTF8String], textFont, 0);
 }
 
-//sb: changed the following from cString to CAcString to avoid confusion.
+//sb: changed the following from UTF8String to CAcString to avoid confusion.
 // TODO Should be eventually removed and replaced with a direct call to DrawTextWithBaselineTies
 void CAcString(float x, float y, const char *s, NSFont *textFont, int mode)
 {
-    DrawTextWithBaselineTies(x, y, [NSString stringWithCString: s], textFont, mode);
+    DrawTextWithBaselineTies(x, y, [NSString stringWithUTF8String: s], textFont, mode);
 }
 
 // DrawCenteredText(float x, float y, NSString *s, NSFont *f, int mode)
 void DrawCenteredText(float x, float y, char *s, NSFont *f, int mode)
 {
-    CAcString(x - 0.5 * [f widthOfString: [NSString stringWithCString: s]], y, s, f, mode);
+    CAcString(x - 0.5 * [f widthOfString: [NSString stringWithUTF8String: s]], y, s, f, mode);
 }
 
 void DrawJustifiedText(float x, float y, NSString *s, NSFont *textFont, int j, int mode)

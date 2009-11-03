@@ -656,7 +656,7 @@ static float centreTime(NSMutableArray *nl)
 
       case 1:
           w = [fontdata[FONTSTMR] widthOfString:@"33"];
-          if (gFlags.subtype < 3) w += [fontdata[FONTSTMR] widthOfString:[NSString stringWithCString:tuple]];
+          if (gFlags.subtype < 3) w += [fontdata[FONTSTMR] widthOfString:[NSString stringWithUTF8String:tuple]];
           w *= 0.5;
           if (flags.above) v = -v;
           cmakeline(px, py, px, py + v, m);

@@ -74,8 +74,8 @@ NSArray *TypesDrawExports(void)
         exportList = [[NSArray arrayWithObjects:DrawPboardType,NSPostScriptPboardType,NSTIFFPboardType,nil] retain];
 //	exportList = malloc((NUM_TYPES_DRAW_EXPORTS) * sizeof(NXAtom));
 //	exportList[0] = DrawPboardType;
-//	exportList[1] = [NSPostScriptPboardType cString];
-//	exportList[2] = [NSTIFFPboardType cString];
+//	exportList[1] = [NSPostScriptPboardType UTF8String];
+//	exportList[2] = [NSTIFFPboardType UTF8String];
     }
     return exportList;
 }

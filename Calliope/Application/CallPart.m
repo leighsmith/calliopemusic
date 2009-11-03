@@ -197,16 +197,16 @@ extern int needUpgrade;
   if (v == 0)
   {
       [aDecoder decodeValuesOfObjCTypes:"**ii", &n, &a, &instrument, &channel];
-      if (n) name = [[NSString stringWithCString:n] retain]; else name = nil;
-      if (a) abbrev = [[NSString stringWithCString:a] retain]; else abbrev = nil;
+      if (n) name = [[NSString stringWithUTF8String:n] retain]; else name = nil;
+      if (a) abbrev = [[NSString stringWithUTF8String:a] retain]; else abbrev = nil;
     needUpgrade |= 8;
   }
   else if (v == 1)
   {
       [aDecoder decodeValuesOfObjCTypes:"%*%i", &n, &a, &i, &channel];
-      if (n) name = [[NSString stringWithCString:n] retain]; else name = nil;
-      if (a) abbrev = [[NSString stringWithCString:a] retain]; else abbrev = nil;
-      if (i) instrument = [[NSString stringWithCString:i] retain]; else instrument = nil;
+      if (n) name = [[NSString stringWithUTF8String:n] retain]; else name = nil;
+      if (a) abbrev = [[NSString stringWithUTF8String:a] retain]; else abbrev = nil;
+      if (i) instrument = [[NSString stringWithUTF8String:i] retain]; else instrument = nil;
   }
   else if (v == 2)
     {

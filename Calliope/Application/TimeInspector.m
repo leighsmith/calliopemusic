@@ -25,9 +25,9 @@ BOOL enablepunct[8] = {YES, YES, YES, YES, NO, NO, NO, NO};
     p->dot = [[punctmatrix cellAtRow:0 column:0] state];
     p->line = [[punctmatrix cellAtRow:0 column:1] state];
   }
-  if (enablenum[i]) strcpy(p->numer, [[[numdenform cellAtIndex:0] stringValue] cString]);
-  if (enableden[i]) strcpy(p->denom, [[[numdenform cellAtIndex:1] stringValue] cString]);
-  if (enablered[i]) strcpy(p->reduc, [[[reducform cellAtIndex:0] stringValue] cString]);
+  if (enablenum[i]) strcpy(p->numer, [[[numdenform cellAtIndex:0] stringValue] UTF8String]);
+  if (enableden[i]) strcpy(p->denom, [[[numdenform cellAtIndex:1] stringValue] UTF8String]);
+  if (enablered[i]) strcpy(p->reduc, [[[reducform cellAtIndex:0] stringValue] UTF8String]);
   p->fnum = [[factorform cellAtIndex:0] floatValue];
   p->fden = [[factorform cellAtIndex:1] floatValue];
   return self;
@@ -80,9 +80,9 @@ BOOL enablepunct[8] = {YES, YES, YES, YES, NO, NO, NO, NO};
     [punctmatrix setState:p->dot atRow:0 column:0];
     [punctmatrix setState:p->line atRow:0 column:1];
   }
-  if (enablenum[i]) [[numdenform cellAtIndex:0] setStringValue:[NSString stringWithCString:p->numer]];
-  if (enableden[i]) [[numdenform cellAtIndex:1] setStringValue:[NSString stringWithCString:p->denom]];
-  if (enablered[i]) [[reducform cellAtIndex:0] setStringValue:[NSString stringWithCString:p->reduc]];
+  if (enablenum[i]) [[numdenform cellAtIndex:0] setStringValue:[NSString stringWithUTF8String:p->numer]];
+  if (enableden[i]) [[numdenform cellAtIndex:1] setStringValue:[NSString stringWithUTF8String:p->denom]];
+  if (enablered[i]) [[reducform cellAtIndex:0] setStringValue:[NSString stringWithUTF8String:p->reduc]];
   [[factorform cellAtIndex:0] setFloatValue:p->fnum];
   [[factorform cellAtIndex:1] setFloatValue:p->fden];
   return self;

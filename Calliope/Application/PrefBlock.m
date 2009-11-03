@@ -277,71 +277,71 @@
   if (v == 0)
   {
     [aDecoder decodeValuesOfObjCTypes:"*cccc", &p, &unitflag, &tabflag, &barplace, &barsurround];
-      if (p) pathname = [[NSString stringWithCString:p] retain]; else pathname = nil;
+      if (p) pathname = [[NSString stringWithUTF8String:p] retain]; else pathname = nil;
   }
   else if (v == 1)
   {
     [aDecoder decodeValuesOfObjCTypes:"*cccc", &p, &unitflag, &tabflag, &barplace, &barsurround];
     [aDecoder decodeValuesOfObjCTypes:"cc@@", &barnumfirst, &barnumlast, &barfont, &tabfont];
-    if (p) pathname = [[NSString stringWithCString:p] retain]; else pathname = nil;
+    if (p) pathname = [[NSString stringWithUTF8String:p] retain]; else pathname = nil;
   }
   else if (v == 2)
   {
     [aDecoder decodeValuesOfObjCTypes:"*cccc", &p, &unitflag, &tabflag, &barplace, &barsurround];
     [aDecoder decodeValuesOfObjCTypes:"cc@@@", &barnumfirst, &barnumlast, &barfont, &tabfont, &figfont];
-    if (p) pathname = [[NSString stringWithCString:p] retain]; else pathname = nil;
+    if (p) pathname = [[NSString stringWithUTF8String:p] retain]; else pathname = nil;
   }
   else if (v == 3)
   {
     [aDecoder decodeValuesOfObjCTypes:"*cccc", &p, &unitflag, &tabflag, &barplace, &barsurround];
     [aDecoder decodeValuesOfObjCTypes:"cc@@@@", &barnumfirst, &barnumlast, &barfont, &tabfont, &figfont, &texfont];
-    if (p) pathname = [[NSString stringWithCString:p] retain]; else pathname = nil;
+    if (p) pathname = [[NSString stringWithUTF8String:p] retain]; else pathname = nil;
   }
   else if (v == 4)
   {
     [aDecoder decodeValuesOfObjCTypes:"*ccccf", &p, &unitflag, &tabflag, &barplace, &barsurround, &staffheight];
     [aDecoder decodeValuesOfObjCTypes:"cc@@@@", &barnumfirst, &barnumlast, &barfont, &tabfont, &figfont, &texfont];
-    if (p) pathname = [[NSString stringWithCString:p] retain]; else pathname = nil;
+    if (p) pathname = [[NSString stringWithUTF8String:p] retain]; else pathname = nil;
   }
   else if (v == 5)
   {
     [aDecoder decodeValuesOfObjCTypes:"*ccccf", &p, &unitflag, &tabflag, &barplace, &barsurround, &staffheight];
     [aDecoder decodeValuesOfObjCTypes:"cc@@@@", &barnumfirst, &barnumlast, &barfont, &tabfont, &figfont, &texfont];
     [aDecoder decodeValueOfObjCType:"*" at:&s];
-    if (p) pathname = [[NSString stringWithCString:p] retain]; else pathname = nil;
-    if (s) stylepath = [[NSString stringWithCString:s] retain]; else stylepath = nil;
+    if (p) pathname = [[NSString stringWithUTF8String:p] retain]; else pathname = nil;
+    if (s) stylepath = [[NSString stringWithUTF8String:s] retain]; else stylepath = nil;
   }
   else if (v == 6)
   {
     [aDecoder decodeValuesOfObjCTypes:"*ccccf", &p, &unitflag, &tabflag, &barplace, &barsurround, &staffheight];
     [aDecoder decodeValuesOfObjCTypes:"cc@@@@", &barnumfirst, &barnumlast, &barfont, &tabfont, &figfont, &texfont];
     [aDecoder decodeValuesOfObjCTypes:"*ff", &s, &minsysgap, &maxbalgap];
-    if (p) pathname = [[NSString stringWithCString:p] retain]; else pathname = nil;
-    if (s) stylepath = [[NSString stringWithCString:s] retain]; else stylepath = nil;
+    if (p) pathname = [[NSString stringWithUTF8String:p] retain]; else pathname = nil;
+    if (s) stylepath = [[NSString stringWithUTF8String:s] retain]; else stylepath = nil;
   }
   else if (v == 7)
   {
     [aDecoder decodeValuesOfObjCTypes:"*cccccf", &p, &unitflag, &tabflag, &barplace, &barsurround, &usestyle, &staffheight];
     [aDecoder decodeValuesOfObjCTypes:"cc@@@@", &barnumfirst, &barnumlast, &barfont, &tabfont, &figfont, &texfont];
     [aDecoder decodeValuesOfObjCTypes:"*ff", &s, &minsysgap, &maxbalgap];
-    if (p) pathname = [[NSString stringWithCString:p] retain]; else pathname = nil;
-    if (s) stylepath = [[NSString stringWithCString:s] retain]; else stylepath = nil;
+    if (p) pathname = [[NSString stringWithUTF8String:p] retain]; else pathname = nil;
+    if (s) stylepath = [[NSString stringWithUTF8String:s] retain]; else stylepath = nil;
   }
   else if (v == 8)
   {
     [aDecoder decodeValuesOfObjCTypes:"*cccccf", &p, &unitflag, &tabflag, &barplace, &barsurround, &usestyle, &staffheight];
     [aDecoder decodeValuesOfObjCTypes:"cc@@@@@", &barnumfirst, &barnumlast, &barfont, &tabfont, &figfont, &texfont, &runfont];
     [aDecoder decodeValuesOfObjCTypes:"*ff", &s, &minsysgap, &maxbalgap];
-    if (p) pathname = [[NSString stringWithCString:p] retain]; else pathname = nil;
-    if (s) stylepath = [[NSString stringWithCString:s] retain]; else stylepath = nil;
+    if (p) pathname = [[NSString stringWithUTF8String:p] retain]; else pathname = nil;
+    if (s) stylepath = [[NSString stringWithUTF8String:s] retain]; else stylepath = nil;
   }
   else if (v == 9)
   {
     [aDecoder decodeValuesOfObjCTypes:"*cccccf", &p, &unitflag, &tabflag, &barplace, &barsurround, &usestyle, &staffheight];
     [aDecoder decodeValuesOfObjCTypes:"cc@@@@@", &barnumfirst, &barnumlast, &barfont, &tabfont, &figfont, &texfont, &runfont];
     [aDecoder decodeValuesOfObjCTypes:"*ffi", &s, &minsysgap, &maxbalgap, &barevery];
-    if (p) pathname = [[NSString stringWithCString:p] retain]; else pathname = nil;
-    if (s) stylepath = [[NSString stringWithCString:s] retain]; else stylepath = nil;
+    if (p) pathname = [[NSString stringWithUTF8String:p] retain]; else pathname = nil;
+    if (s) stylepath = [[NSString stringWithUTF8String:s] retain]; else stylepath = nil;
   }
   else if (v == 10)
   {

@@ -120,7 +120,7 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
     NSArray *dragTypes;
     
     if (!KeyMotionDeltaDefault) {
-	const char *value = [[[NSUserDefaults standardUserDefaults] objectForKey: @"KeyMotionDelta"] cString];
+	const char *value = [[[NSUserDefaults standardUserDefaults] objectForKey: @"KeyMotionDelta"] UTF8String];
 	if (value) KeyMotionDeltaDefault = atof(value);
 	KeyMotionDeltaDefault = MAX(KeyMotionDeltaDefault, 1.0);
     }
@@ -1406,7 +1406,7 @@ static void drawHorz(float x, float y, float w, NSRect r)
   while (k--)
   {
     p = [slist objectAtIndex:k];
-      if ([p performKey: *[c cString]]) /*sb: huh? was originally just performkey:c, but I needed to give an int */
+      if ([p performKey: *[c UTF8String]]) /*sb: huh? was originally just performkey:c, but I needed to give an int */
     {
       r = YES;
     }
@@ -1470,7 +1470,7 @@ static void drawHorz(float x, float y, float w, NSRect r)
   int cst;
   
 //#warning EventConversion: the 'characters' method of NSEvent replaces the '.data.key.charCode' field of NXEvent. Use 'charactersIgnoringModifiers' to get the chars that would have been generated regardless of modifier keys (except shift)
-  switch (cst = *[[event characters] cString])
+  switch (cst = *[[event characters] UTF8String])
   {
       case 'b': /* 2:   B */
       [self pressTool: BEAM withArgument: 0];
@@ -1536,7 +1536,7 @@ static void drawHorz(float x, float y, float w, NSRect r)
   int act = 0;
   Graphic *p;
 
-  if ([cc canBeConvertedToEncoding:NSNEXTSTEPStringEncoding]) cst = *[cc cString];
+  if ([cc canBeConvertedToEncoding:NSNEXTSTEPStringEncoding]) cst = *[cc UTF8String];
 //  if (cs == NX_ASCIISET && cc == 0x1B /* ESC */)
   if ([cc canBeConvertedToEncoding:NSNEXTSTEPStringEncoding] && cst == 0x1B /* ESC */)
   {

@@ -201,15 +201,15 @@ extern NSString *nullInstrument;
 //      [aDecoder decodeValuesOfObjCTypes:"**@cccc", &name, &abbrev, &tuning, &trans, &channel, &istab, &sound];
         [aDecoder decodeValuesOfObjCTypes:"**@cccc", &n, &a, &tuning, &trans, &channel, &istab, &sound];
 //    name = NXUniqueStringNoCopy(name);
-        if (n) name = [[NSString stringWithCString:n] retain]; else name = nil;
-        if (a) abbrev = [[NSString stringWithCString:a] retain]; else abbrev = nil;
+        if (n) name = [[NSString stringWithUTF8String:n] retain]; else name = nil;
+        if (a) abbrev = [[NSString stringWithUTF8String:a] retain]; else abbrev = nil;
       }
     else if (v == 1)
       {
 //      [aDecoder decodeValuesOfObjCTypes:"%*@cccc", &name, &abbrev, &tuning, &trans, &channel, &istab, &sound];
         [aDecoder decodeValuesOfObjCTypes:"%*@cccc", &n, &a, &tuning, &trans, &channel, &istab, &sound];
-        if (n) name = [[NSString stringWithCString:n] retain]; else name = nil;
-        if (a) abbrev = [[NSString stringWithCString:a] retain]; else abbrev = nil;
+        if (n) name = [[NSString stringWithUTF8String:n] retain]; else name = nil;
+        if (a) abbrev = [[NSString stringWithUTF8String:a] retain]; else abbrev = nil;
       }
     else if (v == 2)
       {

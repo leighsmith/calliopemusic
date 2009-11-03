@@ -184,7 +184,7 @@ static OpusDocument *documentInWindow(id window)
 {
     NSString *retval = [[[self class] currentDocument] directory];
     
-//    if (!retval || !*retval) retval = [[[NSOpenPanel openPanel] directory] cString];
+//    if (!retval || !*retval) retval = [[[NSOpenPanel openPanel] directory] UTF8String];
 //sb: changed the following to retrieve current directory from application rather than openpanel, which is no longer shared.
     if (!retval) retval = [[NSFileManager defaultManager] currentDirectoryPath];
     else if (![retval length]) retval = [[NSFileManager defaultManager] currentDirectoryPath];
@@ -613,7 +613,7 @@ static void handleMKError(NSString *msg)
 	    int fd = stderr->_file;
 	    char *str = "MusicKit Error: ";
 	    write(fd,str,strlen(str));
-	    write(fd,[msg cString],strlen([msg cString]));
+	    write(fd,[msg UTF8String],strlen([msg UTF8String]));
 	    str = "\n";
 	    write(fd,str,strlen(str));
     }
@@ -631,7 +631,7 @@ static void handleMKError(NSString *msg)
     {
 	for (j = 0; j < 16; j++)
 	{
-	    [[charmatrix cellAtRow:i column:j] setTitle:[NSString stringWithCString:s]];
+	    [[charmatrix cellAtRow:i column:j] setTitle:[NSString stringWithUTF8String:s]];
 	    s[0]++;
 	}
     }

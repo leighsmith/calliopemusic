@@ -1131,14 +1131,14 @@ extern char *typename[NUMTYPES];
     for (i = 0; i < ns; i++)
     {
       sp = [sys getStaff: i];
-      NSLog(@"  Staff %d [part=%s, y=%f]:\n", i+1, [sp->part cString], [sp yOfTop]);
+      NSLog(@"  Staff %d [part=%s, y=%f]:\n", i+1, [sp->part UTF8String], [sp yOfTop]);
       //[NXApp log: buf];
       nl = sp->notes;
       nn = [nl count];
       for (j = 0;j < nn; j++)
       {
         p = [nl objectAtIndex:j];
-        NSLog(@"    %d [%s]: %s x=%f, y=%f, stamp=%f, duration=%f\n", j, [p->part cString], typename[TYPEOF(p)], p->x, p->y, p->stamp, p->duration);
+        NSLog(@"    %d [%s]: %s x=%f, y=%f, stamp=%f, duration=%f\n", j, [p->part UTF8String], typename[TYPEOF(p)], p->x, p->y, p->stamp, p->duration);
         //[NXApp log: buf];
       }
     }
@@ -1673,7 +1673,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
   int i;
   [sys measureSys: &r];
   highlightBox(&r, v);
-  i = NSRunAlertPanel(@"Calliope", [NSString stringWithCString:s], @"YES", @"NO", nil);
+  i = NSRunAlertPanel(@"Calliope", [NSString stringWithUTF8String:s], @"YES", @"NO", nil);
   highlightBox(&r, v);
   return (i == NSAlertDefaultReturn);
 }

@@ -237,7 +237,7 @@ static char accalter[3] = {0, -1, 1};
 }
 
 
-#define grayval(_x) ((_x) ? NSDarkGray : NSBlack)
+#define grayval(_x) ((_x))
 
 - (void) drawRect: (NSRect) r
 {
@@ -252,7 +252,7 @@ static char accalter[3] = {0, -1, 1};
     
     [[NSColor whiteColor] set];
     NSRectFill(NSMakeRect(x, y, w, h));
-    PSgsave();
+    // PSgsave();
     [[NSColor blackColor] set];
 
     /* staff lines */
@@ -276,7 +276,10 @@ static char accalter[3] = {0, -1, 1};
 	    for (i = 0; i < k; i++)
 	    {
 		c = [l objectAtIndex:i];
-		PSsetgray(grayval(i == lastsel)); // set color to gray value from 0 (black) to 1 (white)
+		if(i == lastsel) // set color to gray value from 0 (black) to 1 (white)
+		    [[NSColor darkGrayColor] set];
+		else 
+		    [[NSColor blackColor] set]; 
 		[self drawNote: -(c->pitch) - (7 * (c->oct - 4)) : c->acc : x : i];
 	    }
 	    for (i = 0; i < k; i++) {
@@ -295,7 +298,7 @@ static char accalter[3] = {0, -1, 1};
 	DrawTextWithBaselineTies(x + 1 * XOFF, CAPTIONBASE, @"Written", systemFont, 1 /* bogus! */);
 	DrawTextWithBaselineTies(x + 4 * XOFF, CAPTIONBASE, @"Sounds", systemFont, 1 /* bogus! */);
     }
-    PSgrestore();
+    // PSgrestore();
 }
 
 

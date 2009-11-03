@@ -1266,7 +1266,7 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
     [aDecoder decodeValuesOfObjCTypes:"ssfffffffff", &pagenum, &barnum, &barbase, &width, &lindent, &rindent, &groupsep, &expansion, &height, &headroom, &oldleft];
     // TODO staves, nonStaffGraphics decoded without full initialisation, causing later crash?
     [aDecoder decodeValuesOfObjCTypes:"@@%", &staves, &nonStaffGraphics, &oldstyle];
-    if (oldstyle) style = [[NSString stringWithCString:oldstyle] retain]; else style = nil;
+    if (oldstyle) style = [[NSString stringWithUTF8String:oldstyle] retain]; else style = nil;
     view = [[aDecoder decodeObject] retain];
     page = [[aDecoder decodeObject] retain];
     return self;
@@ -1306,7 +1306,7 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
     [aDecoder decodeValuesOfObjCTypes:"ssffffffff", &pagenum, &barnum, &barbase, &width, &lindent, &rindent, &groupsep, &expansion, &height, &headroom];
     [self updateNumbering];
     [aDecoder decodeValuesOfObjCTypes:"@@%", &staves, &nonStaffGraphics, &oldstyle];
-    if (oldstyle) style = [[NSString stringWithCString:oldstyle] retain]; else style = nil;
+    if (oldstyle) style = [[NSString stringWithUTF8String:oldstyle] retain]; else style = nil;
     view = [[aDecoder decodeObject] retain];
     page = [[aDecoder decodeObject] retain];
     return self;

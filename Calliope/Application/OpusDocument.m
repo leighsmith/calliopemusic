@@ -176,7 +176,7 @@ static id createWindowFor(GraphicView* view, NSRect *r, NSString *fS)
 	    printInfo = [[ts decodeObject] retain];
 	    prefInfo = [[ts decodeObject] retain];
 	    [ts decodeValueOfObjCType:"*" at: &s];
-	    frameString = [[NSString stringWithCString: s] retain]; //sb: was strcpy(frameString, s);
+	    frameString = [[NSString stringWithUTF8String: s] retain]; //sb: was strcpy(frameString, s);
 	    free(s);
 	    archiveView = [[ts decodeObject] retain];
 	    prefInfo->staffheight = staffheight;
@@ -196,7 +196,7 @@ static id createWindowFor(GraphicView* view, NSRect *r, NSString *fS)
 		NSLog(@"Check width %g height %g\n",checkSize.width, checkSize.height);
 	    }
 	    [ts decodeValueOfObjCType:"*" at:&s];
-	    frameString = [[NSString stringWithCString: s] retain]; //sb: was strcpy(frameString, s);
+	    frameString = [[NSString stringWithUTF8String: s] retain]; //sb: was strcpy(frameString, s);
 	    free(s);
 	    archiveView = [[ts decodeObject] retain];
 	}
@@ -598,7 +598,7 @@ extern int needUpgrade;
 
 if (haveSavedDocument) {
     while (types && *types)
-	if ([[NSString stringWithCString:*types] isEqualToString:NSFilenamesPboardType])
+	if ([[NSString stringWithUTF8String:*types] isEqualToString:NSFilenamesPboardType])
 	    break;
 	else types++;
     if (types && *types) {
@@ -607,7 +607,7 @@ if (haveSavedDocument) {
 	    if (save == NSAlertDefaultReturn) [self save];
 	}
 	[pboard declareTypes:[NSArray arrayWithObject:NSFilenamesPboardType] owner:self];
-	[pboard writeType:NSFilenamesPboardType data:[[self filename] cString] length:[[self filename] length]+1];
+	[pboard writeType:NSFilenamesPboardType data:[[self filename] UTF8String] length:[[self filename] length]+1];
 	return self;
     }
 }
@@ -937,7 +937,7 @@ return nil;
 	}
     }
     [documentWindow endEditingFor:self];
-//    stream = NXMapFile([[self filename] cString], NX_READONLY);
+//    stream = NXMapFile([[self filename] UTF8String], NX_READONLY);
     stream = [NSData dataWithContentsOfMappedFile:[self filename]];
     if (stream && [self loadDocument: stream])
     {
@@ -977,7 +977,7 @@ return nil;
 	case 0:
 	    return self;
 	case 1:
-	    file = [[DrawApp currentDocument] askForFile: [NSString stringWithCString:typeExts[type]]];
+	    file = [[DrawApp currentDocument] askForFile: [NSString stringWithUTF8String:typeExts[type]]];
 	    if (file)
 	    {
 		s = [self dataWithEPSInsideRect:*region];
@@ -985,7 +985,7 @@ return nil;
 	    }
 		break;
 	case 2:
-	    file = [[DrawApp currentDocument] askForFile: [NSString stringWithCString:typeExts[type]]];
+	    file = [[DrawApp currentDocument] askForFile: [NSString stringWithUTF8String:typeExts[type]]];
 	    if (file)
 	    {
 		[self lockFocus];

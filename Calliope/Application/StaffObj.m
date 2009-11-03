@@ -1097,7 +1097,7 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
     /* check if deleting a verse or character */
     v = nil;
     k = [verses count];
-    if (*[cc cString] == 127) {
+    if (*[cc UTF8String] == 127) {
 	if (verses == nil) {
 	    NSLog(@"keyDownString: verses = nil"); 
 	    return 0; 
@@ -1132,7 +1132,7 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
 	if (selver >= 0 && selver < [verses count])
 	    v = [verses objectAtIndex:selver];
     }
-    if (v == nil || *[cc cString] == '\n' || *[cc cString] == '\r') {
+    if (v == nil || *[cc UTF8String] == '\n' || *[cc UTF8String] == '\r') {
 	k = [verses count];
 	if (k + 1 >= MAXTEXT) {
 	    NSLog(@"k + 1 >= MAXTEXT");
@@ -1551,7 +1551,7 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
 //    [aDecoder decodeValuesOfObjCTypes:"@@%", &hangers, &verses, &part];
 	[aDecoder decodeValuesOfObjCTypes:"@@%", &hangers, &verses, &partChar];
 	[aDecoder decodeValuesOfObjCTypes:"ff", &x, &y];
-	if (partChar) part = [[NSString stringWithCString:partChar] retain]; else part = nil;
+	if (partChar) part = [[NSString stringWithUTF8String:partChar] retain]; else part = nil;
     }
     else if (v == 7)
     {

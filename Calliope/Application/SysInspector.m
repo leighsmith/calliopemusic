@@ -711,7 +711,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
   NSString *ci,*si;
   Staff *sp;
   NSButtonCell *cell = [staffmatrix cellAtRow:i column:0];
-  if (atoi([[cell title] cString]) != i + 1)
+  if (atoi([[cell title] UTF8String]) != i + 1)
   {
       [[staffmatrix cellAtRow:i column:0] setTitle:[NSString stringWithFormat:@"%d",i+1]];
   }
@@ -1047,7 +1047,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
   if (a == NSAlertOtherReturn) return self;
   busyFlag = YES;
   n = [[staffmatrix cells] count];
-  for (i = 0; i < n; i++) order[i] = atoi([[[staffmatrix cellAtRow:i column:0] title] cString]) - 1;
+  for (i = 0; i < n; i++) order[i] = atoi([[[staffmatrix cellAtRow:i column:0] title] UTF8String]) - 1;
   if (a == NSAlertAlternateReturn)
   {
     if (![v sysSameShape])

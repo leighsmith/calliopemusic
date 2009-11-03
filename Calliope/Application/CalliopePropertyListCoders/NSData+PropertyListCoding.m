@@ -33,7 +33,7 @@ static char rcsid[] = "Copyright 1997 by M. Onyschuk and Associates Inc. All Rig
   NSZone		 *z = [self zone];
 
   int			 i, length = [aCoder integerForKey:@"length"];
-  const unsigned char	 *bytes = [[aCoder stringForKey:@"bytes"] cString];
+  const unsigned char	 *bytes = [[aCoder stringForKey:@"bytes"] UTF8String];
 
   unsigned char	 *dehexBytes = NSZoneMalloc(z, sizeof(unsigned char) * length);
 

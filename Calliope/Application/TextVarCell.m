@@ -23,7 +23,7 @@
     [super addAttribute:(NSString *)name
                           value:(id)value
                   range:(NSRange)aRange];
-    NSLog(@"Range location %d length %d name %s\n",aRange.location,aRange.length,[name cString]);
+    NSLog(@"Range location %d length %d name %s\n",aRange.location,aRange.length,[name UTF8String]);
 }
 @end
 
@@ -250,7 +250,7 @@ return NO;
     NSFont *f;
     NSPoint pt;
     
-    PSgsave();
+    // PSgsave();
     pt = cellFrame.origin;
     pt.y += cellFrame.size.height;
     if (runnerStatus) {
@@ -264,7 +264,7 @@ return NO;
     else {
 	[images[(int)type] compositeToPoint:pt operation:NSCompositeSourceOver];
     }
-    PSgrestore();
+    // PSgrestore();
 }
 
 

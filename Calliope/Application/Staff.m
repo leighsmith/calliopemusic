@@ -1592,7 +1592,7 @@ extern int needUpgrade;
 	    char tempString[2] = {
 		(char) b8, '\0'
 	    };
-	    part = [NSString stringWithCString: tempString];
+	    part = [NSString stringWithUTF8String: tempString];
 	}
 	needUpgrade |= 8;
 	[aDecoder decodeValuesOfObjCTypes:"fffffffff", &vhigha, &vhighb, &voffa, &voffb, &y, &pref1, &pref2, &topmarg, &botmarg];
@@ -1608,7 +1608,7 @@ extern int needUpgrade;
 	flags.topfixed = b7;
 	[aDecoder decodeValuesOfObjCTypes:"fffffffff", &vhigha, &vhighb, &voffa, &voffb, &y, &pref1, &pref2, &topmarg, &botmarg];
 	[aDecoder decodeValuesOfObjCTypes:"%", &p];
-	if (p) part = [[NSString stringWithCString:p] retain]; else part = nil;
+	if (p) part = [[NSString stringWithUTF8String:p] retain]; else part = nil;
     }
     else if (v == 8) {
 	char *p;

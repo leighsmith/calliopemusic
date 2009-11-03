@@ -285,7 +285,7 @@ struct oldflags		/* for old version */
       NSMutableData *results = [NSMutableData dataWithCapacity:length+1];
       int start;
       int foundCells = 0;
-      NSString *trickyScan = [NSString stringWithCString:" }\12\254"];
+      NSString *trickyScan = [NSString stringWithUTF8String:" }\12\254"];
       [aDecoder decodeArrayOfObjCType:"c" count:length at:olddata];
       olddata[length] = '\0';
       /*need to do the following:
@@ -296,7 +296,7 @@ struct oldflags		/* for old version */
           * place data into 'data', as attributed string
           * replace all occurrances of text 'TextVarCelln' with real cells.
        */
-      theScanner = [NSScanner scannerWithString:[NSString stringWithCString:olddata]];
+      theScanner = [NSScanner scannerWithString:[NSString stringWithUTF8String:olddata]];
       [theScanner setCharactersToBeSkipped:[NSCharacterSet characterSetWithCharactersInString:@""]];
       
       while ([theScanner isAtEnd] == NO) {
@@ -311,11 +311,11 @@ struct oldflags		/* for old version */
             {
               foundCells++;
               resultString = [NSString stringWithFormat:@"%@<>TextVarCell<>%d<>",tempString,indexOfCell];
-              [results appendBytes:[resultString cString] length:[resultString length]];
+              [results appendBytes:[resultString UTF8String] length:[resultString length]];
             }
           else {
               resultString = [[theScanner string] substringFromIndex:start];
-              [results appendBytes:[resultString cString] length:[resultString length]];
+              [results appendBytes:[resultString UTF8String] length:[resultString length]];
               break;
           }
       }

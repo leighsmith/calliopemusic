@@ -823,7 +823,7 @@ static int signof(float f)
 
 static TimedObj *toj[NUMUNDER];
 static char sup[NUMUNDER];
-static char brk[NUMUNDER];
+static char beamBreak[NUMUNDER];
 static char flg[NUMUNDER];
 static char acc[NUMUNDER];
 static float stemy[NUMUNDER];
@@ -896,8 +896,8 @@ int getHalfCode(TimedObj *r, int a, int k)
   int code, d;
   if (a == 0) code = 1;			/* left end */
   else if (a == k) code = 2;		/* right end */
-  else if (brk[a]) code = 1;		/* end after break */
-  else if (brk[a + 1]) code = 2;	/* end before break */
+  else if (beamBreak[a]) code = 1;	/* end after break */
+  else if (beamBreak[a + 1]) code = 2;	/* end before break */
   else if ([r tupleStarts]) code = 1;	/* end starts tuple */
   else if ([r tupleEnds]) code = 2;	/* end ends tuple */
   else					/* single in middle */
@@ -929,7 +929,7 @@ int getHalfCode(TimedObj *r, int a, int k)
   k = [client count];
   for (i = 0; i < k; i++)
   {
-    brk[i] = 0; /* init here because set i+1 below */
+    beamBreak[i] = 0; /* init here because set i+1 below */
     acc[i] = 0;
   }
   broke = (flags.broken) ? tickval(flags.body, flags.dot) : 0.0;
@@ -941,7 +941,7 @@ int getHalfCode(TimedObj *r, int a, int k)
     ticks += [r noteEval: NO];
     if (flags.broken && TOLFLOATEQ(ticks, broke, 0.1))
     {
-      if (i < k) brk[i + 1] = 1;
+      if (i < k) beamBreak[i + 1] = 1;
       ticks = 0.0;
     }
   }
@@ -990,7 +990,7 @@ int getHalfCode(TimedObj *r, int a, int k)
     while (a < k && !flg[a]) ++a;
     if (a == k) break;
     b = a + 1;
-    while (b < k && flg[b] && !brk[b]) ++b;
+    while (b < k && flg[b] && !beamBreak[b]) ++b;
     --b;
     if (a == b)				/* boundary condition: half beam */
     {
@@ -1130,7 +1130,7 @@ int getHalfCode(TimedObj *r, int a, int k)
   k = [client count];
   for (i = 0; i < k; i++)
   {
-    brk[i] = 0; /* init here because set i+1 below */
+    beamBreak[i] = 0; /* init here because set i+1 below */
     acc[i] = 0;
   }
   for (i = 0; i < k; i++)
@@ -1140,7 +1140,7 @@ int getHalfCode(TimedObj *r, int a, int k)
     ticks += [r noteEval: NO];
     if (flags.broken && TOLFLOATEQ(ticks, broke, 0.1))
     {
-      if (i < k) brk[i + 1] = 1;
+      if (i < k) beamBreak[i + 1] = 1;
       ticks = 0.0;
     }
   }
@@ -1155,7 +1155,7 @@ int getHalfCode(TimedObj *r, int a, int k)
     while (a < k && !flg[a]) ++a;
     if (a == k) break;
     b = a + 1;
-    while (b < k && flg[b] && !brk[b]) ++b;
+    while (b < k && flg[b] && !beamBreak[b]) ++b;
     --b;
     if (a == b)				/* boundary condition: half beam */
     {

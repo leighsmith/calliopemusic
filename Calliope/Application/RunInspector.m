@@ -69,7 +69,7 @@ extern int justcode[4];
         if (theAtt) {
             theFont = [anObj attribute:NSFontAttributeName atIndex:theRange.location + i effectiveRange:NULL];
 //            NSLog(@"font of cell at %d is %s\n",theRange.location + i,
-//                   [[theFont displayName] cString]);
+//                   [[theFont displayName] UTF8String]);
             if (theFont) [(TextVarCell *)[theAtt attachmentCell] setFont:theFont];
             /* previous line assumes that once set, a font cannot be removed, only changed.
 		This assumes that any time the text around it changes, the cell will receive an explicit font change too.*/
@@ -231,7 +231,7 @@ inRect:(NSRect)cellFrame
                                                     longestEffectiveRange:&aRange
                                                            inRange:oldRange];
         if (aRange.location + aRange.length < oldRange.location + oldRange.length) isMult = YES;
-//        NSLog(@"isMult: %d font: %s\n",isMult,[[theFont displayName] cString]);
+//        NSLog(@"isMult: %d font: %s\n",isMult,[[theFont displayName] UTF8String]);
         [[NSFontManager sharedFontManager] setSelectedFont:theFont isMultiple:isMult];
     }
 }

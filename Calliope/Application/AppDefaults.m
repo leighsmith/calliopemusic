@@ -19,7 +19,7 @@ BOOL isBool(NSString *s)
 {
   if (!s) return NO;
     if (![s length]) return NO;
-  switch (*[s cString])
+  switch (*[s UTF8String])
   {
     case '1': case 'T': case 't': case 'Y': case 'y': return YES;
     default: return NO;

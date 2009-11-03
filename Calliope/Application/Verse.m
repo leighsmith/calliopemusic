@@ -237,7 +237,7 @@ static void sigwidthpix(unsigned char *s, NSFont *f, float *sw, float *w)
 - (int)keyDownString:(NSString *)cc
 {
   int sl;
-    int cst = *[cc cString];
+    int cst = *[cc UTF8String];
   StaffObj *p = nil;
   GNote *n = note;
   Verse *v;
@@ -590,7 +590,7 @@ struct oldflags		/* for old versions */
     data[len] = '\0';
     [aDecoder decodeArrayOfObjCType:"c" count:flen at:fn];
     fn[flen] = '\0';
-    font = [NSFont fontWithName: [NSString stringWithCString:fn] size: fs];
+    font = [NSFont fontWithName: [NSString stringWithUTF8String:fn] size: fs];
     note = [[aDecoder decodeObject] retain];
   }
   else if (v == 1)

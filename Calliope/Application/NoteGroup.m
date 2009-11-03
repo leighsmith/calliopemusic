@@ -375,9 +375,9 @@ char corner[2][4] =
 //  if (cs == NX_SYMBOLSET) return -1;
     if (![cc canBeConvertedToEncoding:NSASCIIStringEncoding]) return -1;
     if ([cc isEqualToString:@"|"]) flags.bit0 ^= 1;
-  else if (isdigitchar(*[cc cString]))
+  else if (isdigitchar(*[cc UTF8String]))
   {
-      mark[0] = *[cc cString];
+      mark[0] = *[cc UTF8String];
     mark[1] = '.';
     mark[2] = '\0';
   }
@@ -438,7 +438,7 @@ float fontsize[3] = { 12, 8, 6};
           buff[0] = 165;
           buff[1] = '\0';
           CAcString(px, py + 0.5 * charFGH(f, 165), buff, f, m);
-          doDashJog(px + nature[sz] + [f widthOfString: [NSString stringWithCString: buff]], py, qx, (sf == 0), (flags.position == 0), sz, m);
+          doDashJog(px + nature[sz] + [f widthOfString: [NSString stringWithUTF8String: buff]], py, qx, (sf == 0), (flags.position == 0), sz, m);
 	  break;
 	case 2:
 	case 3:
@@ -457,7 +457,7 @@ float fontsize[3] = { 12, 8, 6};
           buff[1] = 176;
           buff[2] = '\0';
           CAcString(px, py + 0.5 * charFGH(f, 165), buff, f, m);
-          doDashJog(px + nature[sz] + [f widthOfString: [NSString stringWithCString: buff]], py, qx, (sf == 0), (flags.position == 0), sz, m);
+          doDashJog(px + nature[sz] + [f widthOfString: [NSString stringWithUTF8String: buff]], py, qx, (sf == 0), (flags.position == 0), sz, m);
           break;
 	case 2:
 	case 3:

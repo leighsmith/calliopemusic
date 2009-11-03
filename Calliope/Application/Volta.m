@@ -95,7 +95,7 @@ extern float barwidth[3][3];
     int cst;
     if (![cc canBeConvertedToEncoding:NSASCIIStringEncoding]) return -1;
 //  if (cs == NX_SYMBOLSET) return -1;
-    cst = *[cc cString];
+    cst = *[cc UTF8String];
     if (cst == '|') gFlags.subtype ^= 1;
     else if (isdigitchar(cst)) mark[0] = cst;
   else return -1;

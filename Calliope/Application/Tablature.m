@@ -294,7 +294,7 @@ static char tabpos[2][15] =
 - (int)keyDownString:(NSString *)cc
 {
   int i, n, nl;
-    int cst = *[cc cString];
+    int cst = *[cc UTF8String];
     if (gFlags.selend == 7) return [super keyDownString:cc];
 //  if (cs == NX_ASCIISET)
   if ([cc canBeConvertedToEncoding:NSASCIIStringEncoding])
@@ -668,7 +668,7 @@ static char newhead[2][4] =
     flags.typeface = b5;
     flags.online = b6;
     flags.prevtime = b7;
-    if (t) tuning = [[NSString stringWithCString:t] retain];
+    if (t) tuning = [[NSString stringWithUTF8String:t] retain];
   }
   else if (v == 6)
   {
