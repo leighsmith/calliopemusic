@@ -1,3 +1,4 @@
+/* $Id$ */
 #import "winheaders.h"
 #import "Hanger.h"
 

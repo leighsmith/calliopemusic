@@ -2106,7 +2106,7 @@ void setSplit(Hanger *h, int u, int f)
   StaffObj *p;
   Tie *h, *hp;
   Hanger *nt;
-  id nc=nil;
+  Class nc = nil;
   
   nsys = [syslist count];
   for (i = 0; i < nsys; i++)

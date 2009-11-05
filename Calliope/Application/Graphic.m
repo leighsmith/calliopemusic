@@ -19,7 +19,6 @@
 #import "Block.h"
 #import "TextGraphic.h"
 #import "Beam.h"
-#import "Tie.h"
 #import "TieNew.h"
 #import "Metro.h"
 #import "NeumeNew.h"

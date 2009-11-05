@@ -1,3 +1,4 @@
+/* $Id$ */
 #import "winheaders.h"
 #import "Hanger.h"
 #import "Volta.h"
@@ -16,7 +17,7 @@
 #define GROUPDECRES 13
 #define GROUPVOLTA 15
 
-@interface NoteGroup:Hanger
+@interface NoteGroup: Hanger
 {
 @public
   struct

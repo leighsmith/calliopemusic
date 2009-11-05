@@ -380,6 +380,13 @@
   return NO;
 }
 
+/*
+ For upgrading old format. The upgrading is done in the subclasses.
+ */
+- proto: (Tie *) t1 : (Tie *) t2
+{
+    return self;
+}
 
 /* archiving */
 

@@ -1,7 +1,10 @@
+/* $Id$ */
 #import "winheaders.h"
 #import "Graphic.h"
 //#import "TimedObj.h"
 #import <CalliopePropertyListCoders/OAPropertyListCoders.h>
+
+@class Tie; // Needed for Tie upgrade code.
 
 @interface Hanger:Graphic
 {
@@ -38,6 +41,12 @@
 - removeGroup;
 - sortNotes: (NSMutableArray *) l; 		/* a general service for some hangers */
 - (BOOL) move: (float) dx : (float) dy : (NSPoint) p : sys : (int) alt;
+
+/*
+ Declared for subclasses to override.
+ */
+- proto: (Tie *) t1 : (Tie *) t2;
+
 - (void)encodeWithCoder:(NSCoder *)aCoder;
 - (id)initWithCoder:(NSCoder *)aDecoder;
 /*sb added following: */

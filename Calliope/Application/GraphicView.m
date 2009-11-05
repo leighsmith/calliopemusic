@@ -24,7 +24,6 @@
 #import "GNChord.h"
 #import "Beam.h"
 #import "Margin.h"
-#import "Tie.h"
 #import "Tablature.h"
 #import "Bracket.h"
 #import "Rest.h"

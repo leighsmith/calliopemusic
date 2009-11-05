@@ -1,3 +1,4 @@
+/* $Id$ */
 #import <Foundation/NSArray.h>
 #import <AppKit/NSFont.h>
 #import <AppKit/NSFontManager.h>
@@ -13,7 +14,6 @@
 #import "SysInspector.h"
 #import "StaffObj.h"
 #import "TimedObj.h"
-#import "Tie.h"
 #import "muxlow.h"
 #import "DrawingFunctions.h"
 

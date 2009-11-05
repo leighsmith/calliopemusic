@@ -24,11 +24,14 @@ char enablePlace[NUMTIES] = {1, 0, 0, 1, 1, 1, 1, 1};
 
 char enableConst[NUMTIES] = {0, 1, 1, 1, 1, 1, 1, 1};
 
+#if 0 // removed since these functions are only used in drawMode: and that is removed since the class is deprecated for upgrade only.
+
 /* whether subtype needs dx, dy, d, sin, cos */
 
 static char needtheta[NUMTIES] = { 1, 0, 0, 0, 1, 1, 1, 1};
 
 static char candash[NUMTIES] = { 1, 1, 0, 1, 1, 1, 1, 1};
+#endif
 
 static Tie *proto;
 
@@ -56,8 +59,8 @@ static Tie *proto;
 }
 
 
+#if 0 // removed since these functions are only used in drawMode: and that is removed since the class is deprecated for upgrade only.
 /* default depth of curve as a function of chordlength */
-
 static float getdepth(float d)
 {
   d *= 0.25;
@@ -80,7 +83,7 @@ static void orderXY(float *x, float *y)
     y[1] = t;
   }
 }
-
+#endif
 
 - init
 {
@@ -281,6 +284,7 @@ static char defConst[NUMTIES] = {0, 0, 1, 0, 0, 1, 1, 0};
 
 - drawMode: (int) m
 {
+#if 0 // This class is now deprecated and solely for converting to TieNew.
     float x[2], y[2], dx=0.0, dy=0.0, cx, cy, d=0.0, h, v, a, th, cth=0.0, sth=0.0;
     int e, b = 0;
     int sz = gFlags.size;
@@ -401,7 +405,8 @@ static char defConst[NUMTIES] = {0, 0, 1, 0, 0, 1, 1, 0};
     }
     if (candash[style] && flags.dashed) 
 	csetdash(NO, 0.0);
-
+#endif
+    
     return self;
 }
 

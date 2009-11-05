@@ -939,7 +939,7 @@ void cflat(float x0, float y0, float x1, float y1, float c1x, float c1y, float c
     }
 }
 
-#if 1
+#if 0
 /*
  This goes when Tie goes.
  */
