@@ -187,13 +187,15 @@ static id createWindowFor(GraphicView* view, NSRect *r, NSString *fS)
 	    NSSize checkSize;
 	    printInfo = [[ts decodeObject] retain];
 	    prefInfo= [[ts decodeObject] retain];
-	    NSLog(@"Paper width %g height %g\n",[NSPrintInfo sizeForPaperName:[printInfo paperName]].width,[NSPrintInfo sizeForPaperName:[printInfo paperName]].height);
+	    NSLog(@"Paper width %g height %g\n",
+		  [[printInfo printer] pageSizeForPaper: [printInfo paperName]].width, 
+		  [[printInfo printer] pageSizeForPaper: [printInfo paperName]].height);
 	    checkSize = [printInfo paperSize];
 	    if (NSEqualSizes(checkSize,NSZeroSize)) {
-		checkSize = [NSPrintInfo sizeForPaperName:[printInfo paperName]];
-		[printInfo setPaperSize:checkSize];
+		checkSize = [[printInfo printer] pageSizeForPaper: [printInfo paperName]];
+		[printInfo setPaperSize: checkSize];
 		checkSize = [printInfo paperSize];
-		NSLog(@"Check width %g height %g\n",checkSize.width, checkSize.height);
+		NSLog(@"Check width %g height %g\n", checkSize.width, checkSize.height);
 	    }
 	    [ts decodeValueOfObjCType:"*" at:&s];
 	    frameString = [[NSString stringWithUTF8String: s] retain]; //sb: was strcpy(frameString, s);

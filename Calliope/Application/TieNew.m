@@ -125,7 +125,7 @@ static void orderXY(float *x, float *y)
 
 - (NSString *) description
 {
-    return [NSString stringWithFormat: @"%@ type %d, head1=%d, head2=%d, clients=%d\n", super, gFlags.subtype, head1, head2, [client count]];
+    return [NSString stringWithFormat: @"%@ type %d, head1=%d, head2=%d, clients=%d\n", [super description], gFlags.subtype, head1, head2, [client count]];
 }
 
 - init

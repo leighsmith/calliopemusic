@@ -268,8 +268,8 @@ static void displink(System *sys, int m)
     case BRACK:
       f = musicFont[1][sz];
       crect(x, y1, brackwidth[sz], y2 - y1, m);
-      drawCharacterInFont(x, y1, SF_topbrack, f, m);
-      drawCharacterInFont(x, y2, SF_botbrack, f, m);
+      DrawCharacterInFont(x, y1, SF_topbrack, f, m);
+      DrawCharacterInFont(x, y2, SF_botbrack, f, m);
       break;
     case BRACE:
       dy = nature[sz];

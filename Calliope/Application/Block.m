@@ -159,7 +159,7 @@ static char blockledger[NUMBLOCKS] = {0, 1, 1, 1, 0, 0, 1};
     sz = gFlags.size;
       bf = musicFont[(int)blockfont[t]][sz];
     bc = blockchar[t];
-    drawCharacterInFont(x, y, bc, bf, m);
+    DrawCharacterInFont(x, y, bc, bf, m);
     s = mystaff;
     if (blockledger[t] && TYPEOF(s) == STAFF)
     {

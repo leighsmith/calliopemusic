@@ -154,7 +154,7 @@
 
 
 - (int) whichMarker: (Graphic *) p;
-- (void) searchFor: (NSPoint) p :(NSMutableArray *)arr;	/* look for a hit in the system */
+- (void) searchFor: (NSPoint) p inObjects: (NSMutableArray *) arr;	/* look for a hit in the system */
 - (void) dealloc;
 - draw: (NSRect) r nonSelectedOnly: (BOOL) nso;
 - drawHangers: (NSRect) r nonSelectedOnly: (BOOL) nso;

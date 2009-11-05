@@ -115,7 +115,7 @@
 - (int) hangerAcc;
 - (BOOL) hangerAccSticks;
 - (int) hangerOtt;
-- (void)searchFor: (NSPoint) p :(NSMutableArray *)arr;
+- (void) searchFor: (NSPoint) p inObjects: (NSMutableArray *) arr;
 - (BOOL) hasAnyVerse;
 - trimVerses;
 - recalcVerses;

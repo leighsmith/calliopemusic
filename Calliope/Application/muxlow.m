@@ -1292,19 +1292,19 @@ void drawstem(float x, float y, int body, float stemLength, int sizeIndex, int b
       {
         ny = mflagoff[sizeIndex][body];
 	if (!stemup) ny = -ny;
-        drawCharacterInFont(x + fdx, dy + ny, mflag[(!stemup)][body], musicFont[0][sizeIndex], dflag);
+        DrawCharacterInFont(x + fdx, dy + ny, mflag[(!stemup)][body], musicFont[0][sizeIndex], dflag);
       }
       break;
     case 1:
       nx = x + stemdx[sizeIndex][btype][stype][body][stemup];
       ny = y + stemdy[sizeIndex][btype][stype][body][stemup];
       cline(nx, ny, nx, dy, ostemthicks[sizeIndex], dflag);
-      if (hasflag[body]) drawCharacterInFont(x, dy, oflag[(!stemup)][body], musicFont[0][sizeIndex], dflag);
+      if (hasflag[body]) DrawCharacterInFont(x, dy, oflag[(!stemup)][body], musicFont[0][sizeIndex], dflag);
       break;
     case 2:
     case 3:
       cline(x, y, x, dy, ostemthicks[sizeIndex], dflag);
-      drawCharacterInFont(x, dy, bodies[stype][body], musicFont[0][sizeIndex], dflag);
+      DrawCharacterInFont(x, dy, bodies[stype][body], musicFont[0][sizeIndex], dflag);
       break;
   }
 }
@@ -1373,13 +1373,13 @@ void drawnotedot(int sizeIndex, float x, float y, float dy, float sp, int btype,
   di = 2.0 * charFGW(df, ch);
   if (dot == 3)
   {
-    drawCharacterInFont(x, y + (dy * sp), ch, df, mode);
-    drawCharacterInFont(x, y + ((dy + 2) * sp), ch, df, mode);
+    DrawCharacterInFont(x, y + (dy * sp), ch, df, mode);
+    DrawCharacterInFont(x, y + ((dy + 2) * sp), ch, df, mode);
   }
   else
   {
     y += (dy * sp);
-    for (i = 0; i < dot; i++) drawCharacterInFont(x + (di * i), y, ch, df, mode);
+    for (i = 0; i < dot; i++) DrawCharacterInFont(x + (di * i), y, ch, df, mode);
   }
 }
 
@@ -1410,10 +1410,10 @@ void restdot(int sizeIndex, float dx, float x, float y, float dy, int dot, int c
   di = 2.0 * dw;
   if (dot == 3)
   {
-    drawCharacterInFont(x, y, ch, f, mode);
-    drawCharacterInFont(x, y + dy, ch, f, mode);
+    DrawCharacterInFont(x, y, ch, f, mode);
+    DrawCharacterInFont(x, y + dy, ch, f, mode);
   }
-  else for (i = 0; i < dot; i++) drawCharacterInFont(x + (di * i), y, ch, f, mode);
+  else for (i = 0; i < dot; i++) DrawCharacterInFont(x + (di * i), y, ch, f, mode);
 }
 
 
@@ -1428,14 +1428,14 @@ int modeinvis[5] = {0, 2, 2, 2, 4};
 void drawhead(float x, float y, int bodyType, int body, int shapeID, int su, int sizeIndex, int m)
 {
     if (bodyType == 6)
-	drawCharacterInFont(x, y, shapeheads[shapeID][body][!su], musicFont[shapefont[shapeID]][sizeIndex], m);
+	DrawCharacterInFont(x, y, shapeheads[shapeID][body][!su], musicFont[shapefont[shapeID]][sizeIndex], m);
     else if (bodyType == 4) {
 	if (m != 0)
 	    return;
-	drawCharacterInFont(x, y, headchars[0][body], musicFont[headfont[0][body]][sizeIndex], 0);
+	DrawCharacterInFont(x, y, headchars[0][body], musicFont[headfont[0][body]][sizeIndex], 0);
     }
     else 
-	drawCharacterInFont(x, y, headchars[bodyType][body], musicFont[headfont[bodyType][body]][sizeIndex], m);
+	DrawCharacterInFont(x, y, headchars[bodyType][body], musicFont[headfont[bodyType][body]][sizeIndex], m);
 }
 
 /*
@@ -1452,9 +1452,9 @@ void drawnote(int sizeIndex, float halfWidth, float x, float y,
     if (!hasNoStem && !isBeamed && !bodyType && !stemType) {
 	quick = YES;
 	if (fullbody[0][body] && TOLFLOATEQ(stemLength, -stemlens[0][sizeIndex], 0.5))
-	    drawCharacterInFont(nx, y, fullbody[0][body], musicFont[1][sizeIndex], drawingMode);
+	    DrawCharacterInFont(nx, y, fullbody[0][body], musicFont[1][sizeIndex], drawingMode);
 	else if (fullbody[1][body] && TOLFLOATEQ(stemLength, stemlens[0][sizeIndex], 0.5))
-	    drawCharacterInFont(nx, y, fullbody[1][body], musicFont[1][sizeIndex], drawingMode);
+	    DrawCharacterInFont(nx, y, fullbody[1][body], musicFont[1][sizeIndex], drawingMode);
 	else 
 	    quick = NO;
     }

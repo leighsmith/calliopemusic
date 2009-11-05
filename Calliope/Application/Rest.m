@@ -341,14 +341,14 @@ extern float staffthick[3][3];
       c = 212;
       y1 = [self yOfPos: staffPosition];
       dx = 0.5 * charFGW(f, c);
-      drawCharacterInFont(x - dx, y1, c, f, m);
+      DrawCharacterInFont(x - dx, y1, c, f, m);
       break;
     case 5:
       f = musicFont[1][sz];
       c = SF_r1;
       y1 = [self yOfPos: staffPosition];
       dx = 0.5 * charFGW(f, c);
-      drawCharacterInFont(x - dx, y1, c, f, m);
+      DrawCharacterInFont(x - dx, y1, c, f, m);
       break;
     case 0:
     case 1:
@@ -356,7 +356,7 @@ extern float staffthick[3][3];
         c = rests[(int)style][time.body];
     y1 = [self yOfPos: staffPosition];
     dx = 0.5 * charFGW(f, c);
-    drawCharacterInFont(x - dx, y1, c, f, m);
+    DrawCharacterInFont(x - dx, y1, c, f, m);
     if (hasledger[time.body] && style == 0 && TYPEOF(mystaff) == STAFF)
     {
       tp = staffPosition + ledgeroff[time.body];
@@ -391,51 +391,51 @@ extern float staffthick[3][3];
       {
         case 1:
           c = rests[0][7];
-	  drawCharacterInFont(x - 0.5 * charFGW(f, c), y1, c, f, m);
+	  DrawCharacterInFont(x - 0.5 * charFGW(f, c), y1, c, f, m);
 	  break;
         case 2:
           c = rests[0][8];
-	  drawCharacterInFont(x - 0.5 * charFGW(f, c), y1, c, f, m);
+	  DrawCharacterInFont(x - 0.5 * charFGW(f, c), y1, c, f, m);
 	  break;
         case 3:
           c = rests[0][7];
-	  drawCharacterInFont(x + 2 * ss, y1, c, f, m);
+	  DrawCharacterInFont(x + 2 * ss, y1, c, f, m);
           c = rests[0][8];
-	  drawCharacterInFont(x - 3 * ss, y1, c, f, m);
+	  DrawCharacterInFont(x - 3 * ss, y1, c, f, m);
 	  break;
         case 4:
           c = rests[0][8];
 	  lx = x - 0.5 * charFGW(f, c);
-	  drawCharacterInFont(lx, y1, c, f, m);
-	  drawCharacterInFont(lx, ly, c, f, m);
+	  DrawCharacterInFont(lx, y1, c, f, m);
+	  DrawCharacterInFont(lx, ly, c, f, m);
 	  break;
         case 5:
           c = rests[0][7];
-	  drawCharacterInFont(x + 2 * ss, y1, c, f, m);
+	  DrawCharacterInFont(x + 2 * ss, y1, c, f, m);
           c = rests[0][8];
-	  drawCharacterInFont(x - 3 * ss, y1, c, f, m);
-	  drawCharacterInFont(x - 3 * ss, ly, c, f, m);
+	  DrawCharacterInFont(x - 3 * ss, y1, c, f, m);
+	  DrawCharacterInFont(x - 3 * ss, ly, c, f, m);
 	  break;
         case 6:
           c = rests[0][8];
-	  drawCharacterInFont(x + 2 * ss, y1, c, f, m);
-	  drawCharacterInFont(x - 3 * ss, y1, c, f, m);
-	  drawCharacterInFont(x - 3 * ss, ly, c, f, m);
+	  DrawCharacterInFont(x + 2 * ss, y1, c, f, m);
+	  DrawCharacterInFont(x - 3 * ss, y1, c, f, m);
+	  DrawCharacterInFont(x - 3 * ss, ly, c, f, m);
 	  break;
         case 7:
           c = rests[0][7];
-	  drawCharacterInFont(x + 3 * ss, y1, c, f, m);
+	  DrawCharacterInFont(x + 3 * ss, y1, c, f, m);
           c = rests[0][8];
-	  drawCharacterInFont(x - 0.5 * charFGW(f, c), [self yOfPos: 4], c, f, m);
-	  drawCharacterInFont(x - 4 * ss, y1, c, f, m);
-	  drawCharacterInFont(x - 4 * ss, ly, c, f, m);
+	  DrawCharacterInFont(x - 0.5 * charFGW(f, c), [self yOfPos: 4], c, f, m);
+	  DrawCharacterInFont(x - 4 * ss, y1, c, f, m);
+	  DrawCharacterInFont(x - 4 * ss, ly, c, f, m);
 	  break;
         case 8:
           c = rests[0][8];
-	  drawCharacterInFont(x + 2 * ss, y1, c, f, m);
-	  drawCharacterInFont(x + 2 * ss, ly, c, f, m);
-	  drawCharacterInFont(x - 3 * ss, y1, c, f, m);
-	  drawCharacterInFont(x - 3 * ss, ly, c, f, m);
+	  DrawCharacterInFont(x + 2 * ss, y1, c, f, m);
+	  DrawCharacterInFont(x + 2 * ss, ly, c, f, m);
+	  DrawCharacterInFont(x - 3 * ss, y1, c, f, m);
+	  DrawCharacterInFont(x - 3 * ss, ly, c, f, m);
 	  break;
 	default:
 	  [self numberMult: sz : ss : m];

@@ -65,7 +65,7 @@ static unsigned char accidents[6] =
 	dy = p * NAT + GAP;
     nx = x + i * XOFF - 0.5 * charFGW(f, 'w');
     // TODO draw mode needs correcting, currently kludged.
-    drawCharacterInFont(nx, my + dy, 'w', f, 1 /* bogus! */);
+    DrawCharacterInFont(nx, my + dy, 'w', f, 1 /* bogus! */);
     
     /* then ledger lines */
     if (p == 0) {
@@ -81,7 +81,7 @@ static unsigned char accidents[6] =
     }
     /* then accidental */
     if (a) {
-	drawCharacterInFont(nx - charFGW(f, ch) - (0.5 * NAT), my + dy, accidents[a], f, 1 /* bogus! */);
+	DrawCharacterInFont(nx - charFGW(f, ch) - (0.5 * NAT), my + dy, accidents[a], f, 1 /* bogus! */);
     }
     return self;
 }
@@ -262,8 +262,8 @@ static char accalter[3] = {0, -1, 1};
 	NSRectFill(NSMakeRect(x, my - GAP - sd, w, 0.5));
     }
     /* clefs */
-    drawCharacterInFont(x + NAT, my - GAP - (2 * NAT), '&', f, 1 /* bogus! */);
-    drawCharacterInFont(x + NAT, my + GAP + (10 * NAT), '?', f, 1 /* bogus! */);
+    DrawCharacterInFont(x + NAT, my - GAP - (2 * NAT), '&', f, 1 /* bogus! */);
+    DrawCharacterInFont(x + NAT, my + GAP + (10 * NAT), '?', f, 1 /* bogus! */);
 
     /* notes */
     x = XOFF + SIGOFF;

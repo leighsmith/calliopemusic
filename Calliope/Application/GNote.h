@@ -12,13 +12,13 @@
 @interface GNote: TimedObj
 {
 @private
-    // Whether the note is attached to a slash.
+    /*! Whether the note is attached to a slash. */
     unsigned char showSlash;
-    // Offset of dot from the note heads.
+    /*! Offset of dot from the note heads. */
     float dotdx;
-    // Array of NoteHeads comprising this GNote.
+    /*! Array of NoteHeads comprising this GNote. */
     NSMutableArray *headlist;
-    // Instrument handle playing the note.
+    /*! Instrument handle playing the note. */
     unsigned char instrument;
 }
 
@@ -96,6 +96,10 @@
 - (BOOL)selectMember: (NSMutableArray *) sl : (int) d :(int)active;
 - myChordGroup;
 - (BOOL) move: (float) dx : (float) dy : (NSPoint) p : (System *) sys : (int) alt;
+
+/*!
+  @brief Returns YES if this instance contains the given point.
+ */
 - (BOOL) hit: (NSPoint) p;
 - (BOOL) hitBeamAt: (float *) px : (float *) py;
 - drawStem: (int) m;

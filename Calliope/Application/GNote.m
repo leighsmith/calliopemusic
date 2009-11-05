@@ -136,7 +136,7 @@ unsigned char accifont[NUMHEADS][NUMACCS] =
 
 
 /* override to provide for Chord.  */
-
+// - getX: (float *) fx andY: (float *) fy
 - (BOOL) getXY: (float *) fx : (float *) fy
 {
   NoteHead *noteHead;
@@ -194,11 +194,11 @@ unsigned char accifont[NUMHEADS][NUMACCS] =
 /*
 TODO should be named
 - noteInView: (GraphicView *) v 
-	fromPoint: (NSPoint) pt 
-         onStaff: (Staff *) sp 
-        inSystem: (System *) sys 
-    graphic: (Graphic *) g 
-     : (int) i;
+   fromPoint: (NSPoint) pt 
+     onStaff: (Staff *) sp 
+    inSystem: (System *) sys 
+ withGraphic: (Graphic *) g 
+    withBody: (int) i;
 */
 - proto: (GraphicView *) v : (NSPoint) pt : (Staff *) sp : (System *) sys : (Graphic *) g : (int) i;
 {
@@ -244,6 +244,7 @@ TODO should be named
 {
   NSRect b;
   ChordGroup *q;
+    
   [super recalc];
   if ([self isBeamed]) return self;
   q = [self myChordGroup];
@@ -252,7 +253,7 @@ TODO should be named
     bbinit();
     [self drawStem: 0];
     b = getbb();
-    bounds  = NSUnionRect(b , bounds);
+    bounds = NSUnionRect(b, bounds);
   }
   return self;
 }
@@ -266,6 +267,7 @@ TODO should be named
   float t=0.0;
   NoteHead *noteHead;
   BOOL mod=NO;
+    
   k = [headlist count];
   for (i = 0; i < k; i++)
   {
@@ -296,6 +298,7 @@ TODO should be named
 {
   int k, np, dp;
   NoteHead *noteHead;
+    
   np = [self posOfY: y];
   dp = np - staffPosition;
   if (dp == 0) return self;
@@ -353,6 +356,7 @@ TODO should be named
 - (void) setStemLengthTo: (float) s
 {
   BOOL up = (s < 0);
+    
   if (up != time.stemup)
   {
     time.stemup = up;
@@ -368,6 +372,7 @@ TODO should be named
 - (float) wantsStemY: (int) a
 {
   NoteHead *noteHead;
+    
   noteHead = (time.stemup == a) ? [headlist lastObject] : [headlist objectAtIndex:0];
   return [noteHead y];
 }
@@ -421,7 +426,8 @@ extern unsigned char hasstem[10];
 - posRange: (int *) pl : (int *) ph
 {
   int t0, t1;
-    t0 = [((NoteHead *)[headlist objectAtIndex:0]) staffPosition];
+    
+    t0 = [((NoteHead *)[headlist objectAtIndex: 0]) staffPosition];
     t1 = [((NoteHead *)[headlist lastObject]) staffPosition];
   if (t0 < t1)
   {
@@ -442,6 +448,7 @@ extern unsigned char hasstem[10];
   int pos;
   NoteHead *noteHead;
   float sy;
+    
   if (time.stemup == a)
   {
     noteHead = [headlist lastObject];
@@ -462,6 +469,7 @@ extern unsigned char hasstem[10];
 {
   float ya, ye;
   NoteHead *noteHead;
+    
   if (time.stemup == a)
   {
     noteHead = [headlist lastObject];
@@ -489,6 +497,7 @@ extern unsigned char hasstem[10];
 {
   float ya;
   NoteHead *noteHead;
+    
   if (time.stemup == a)
   {
     noteHead = [headlist lastObject];
@@ -508,6 +517,7 @@ extern unsigned char hasstem[10];
 {
   int k, r, cpos;
   NoteHead *noteHead;
+    
   r = 0;
   k = [headlist count];
   while (k--)
@@ -524,6 +534,7 @@ extern unsigned char hasstem[10];
 {
     Hanger *q;
     int k = [hangers count];
+    
     while (k--)
     {
         q = [hangers objectAtIndex:k];
@@ -533,9 +544,10 @@ extern unsigned char hasstem[10];
 }
 
 
-- (BOOL)selectMe: (NSMutableArray *) sl : (int) d :(int)active
+- (BOOL) selectMe: (NSMutableArray *) sl : (int) d : (int) active
 {
     ChordGroup *q = [self myChordGroup];
+    
     return (q == nil) ?  [super selectMe: sl : d :active] : [q selectGroup: sl : d :active];
 }
 
@@ -548,6 +560,7 @@ extern unsigned char hasstem[10];
 - setAccidental: (int) a
 {
     NoteHead *noteHead;
+    
     noteHead = [headlist objectAtIndex:SELHEADIX(gFlags.selend, [headlist count])];
     [noteHead setAccidental: ([noteHead accidental] == a) ? 0 : a];
     [self resetChord];
@@ -558,6 +571,7 @@ extern unsigned char hasstem[10];
 - setHead: (int) a
 {
     NoteHead *noteHead;
+    
     noteHead = [headlist objectAtIndex: SELHEADIX(gFlags.selend, [headlist count])];
     [noteHead setBodyType: ([noteHead bodyType] == a) ? 0 : a];
     [self resetChord];
@@ -573,6 +587,7 @@ extern void getNumOct(int pos, int mc, int *num, int *oct);
 {
     int i, k, num, oct, acc;
     NoteHead *noteHead;
+    
     for (i = 0; i < 7; i++) ks[i] = 0;
     k = [headlist count];
     while (k--)
@@ -599,6 +614,7 @@ extern void getNumOct(int pos, int mc, int *num, int *oct);
   NSMutableArray *noteArray, *r;
   GNote *q;
   int nk, k = [hangers count];
+    
   r = nil;
   while (k--)
   {
@@ -635,6 +651,7 @@ extern void getNumOct(int pos, int mc, int *num, int *oct);
 {
   int k;
   NoteHead *noteHead;
+    
   k = [headlist count];
   while (k--)
   {
@@ -764,6 +781,7 @@ static int getShapeID(int pos, int s, int n, int c)
 {
   float ny = dy + [noteHead y];
   int np = [[noteHead myNote] posOfY: ny];
+    
   if ([noteHead staffPosition] != np)
   {
     [noteHead setStaffPosition: np];
@@ -785,6 +803,7 @@ static int getShapeID(int pos, int s, int n, int c)
   float ny = dy + pt.y;
   BOOL m = NO, inv;
   BOOL lk = gFlags.locked;
+    
   i = gFlags.selend;
   noteHead = [headlist objectAtIndex:i];
   if ([self posOfY: ny] == [noteHead staffPosition] && ABS(nx - x) < 3.0) return NO;
@@ -819,36 +838,34 @@ static int getShapeID(int pos, int s, int n, int c)
 
 - (BOOL) hit: (NSPoint) pt
 {
-  int k;
-  NoteHead *noteHead;
-  float dx, tol = nature[gFlags.size];
-  k = [headlist count];
-  while (k--)
-  {
-    noteHead = [headlist objectAtIndex:k];
-    if ([noteHead isReverseSideOfStem]) dx = (time.stemup ? tol : -tol) * 2.0; else dx = 0.0;
-    if (TOLFLOATEQ(pt.x, x + dx, tol) && TOLFLOATEQ(pt.y, [noteHead y], tol))
-    {
-      gFlags.selend = k;
-      lastHit = self;
-      return YES;
+    float tolerance = nature[gFlags.size];
+    int k = [headlist count];
+    
+    while (k--) {
+	NoteHead *noteHead = [headlist objectAtIndex: k];
+	float dx = [noteHead isReverseSideOfStem] ? (time.stemup ? tolerance : -tolerance) * 2.0 : 0.0;
+
+	if (TOLFLOATEQ(pt.x, x + dx, tolerance) && TOLFLOATEQ(pt.y, [noteHead y], tolerance)) {
+	    gFlags.selend = k;
+	    lastHit = self;
+	    return YES;
+	}
     }
-  }
-  return NO;
+    return NO;
 }
 
 - (float) hitDistance: (NSPoint) pt
 {
   int k;
-  float d, dmin;
+  float d, dmin = MAXFLOAT;
   NoteHead *noteHead;
-  float dx, tol = nature[gFlags.size];
-  dmin = MAXFLOAT;
+  float dx, tolerance = nature[gFlags.size];
+    
   k = [headlist count];
   while (k--)
   {
       noteHead = [headlist objectAtIndex: k];
-      if ([noteHead isReverseSideOfStem]) dx = (time.stemup ? tol : -tol) * 2.0; else dx = 0.0;
+      if ([noteHead isReverseSideOfStem]) dx = (time.stemup ? tolerance : -tolerance) * 2.0; else dx = 0.0;
       d = hypot(pt.x - (x + dx), pt.y - [noteHead y]);
       if (d < dmin) dmin = d;
   }
@@ -859,8 +876,8 @@ static int getShapeID(int pos, int s, int n, int c)
 - (BOOL) hitBeamAt: (float *) px : (float *) py
 {
     *px = x + stemdx[(int)gFlags.size][(int)gFlags.subtype][0][(int)time.body][(int)time.stemup];
-  *py = y + time.stemlen;
-  return YES;
+    *py = y + time.stemlen;
+    return YES;
 }
 
 
@@ -884,6 +901,7 @@ static int getShapeID(int pos, int s, int n, int c)
 - (float) stemYoff: (int) stype
 {
   NoteHead *noteHead = [headlist lastObject];
+    
   if ([noteHead isReverseSideOfStem]) return 0.0;
   if ([noteHead bodyType] == 4) return 0.0;
   return stemdy[(int)gFlags.size][(int)gFlags.subtype][stype][time.body][time.stemup];
@@ -898,6 +916,7 @@ static void drawacc(float x, NoteHead *noteHead, int ht, int size, int m)
   NSRect r;
   float dx;
   NSFont *f = musicFont[(int)accifont[ht][(int)[noteHead accidental]]][size];
+    
   x += [noteHead accidentalOffset];
   if ([noteHead isAnEditorial]) {
     dx = 0.5 * nature[size];
@@ -907,7 +926,7 @@ static void drawacc(float x, NoteHead *noteHead, int ht, int size, int m)
     cenclosure([noteHead isAnEditorial] - 1, r.origin.x - dx, r.origin.y - dx, r.origin.x + r.size.width + dx,
                r.origin.y + r.size.height + dx, staffthick[0][size], 0, m);
   }
-  drawCharacterInFont(x, [noteHead y], accidents[ht][(int)[noteHead accidental]], f, m);
+  DrawCharacterInFont(x, [noteHead y], accidents[ht][(int)[noteHead accidental]], f, m);
 }
 
 
@@ -922,6 +941,7 @@ extern int modeinvis[5];
   NoteHead *noteHead;
   int sb, stemType, size;
   float sl;
+    
   sb = time.body;
   size = gFlags.size;
   stemType = stype[gFlags.subtype];
@@ -1069,6 +1089,8 @@ struct oldflags	/* from old format */
   float sl;
   NoteHead *noteHead;
   char b1, b2, b3, b4, b5, b6, b7, acc=0, edacc;
+   
+  NSLog(@"Reading old GNote format v%d\n", v);
   if (v == 0)
   {
     [s decodeValuesOfObjCTypes:"ssf", &flags, &t, &sl];
@@ -1156,12 +1178,14 @@ extern void readTimeData2(NSCoder *s, struct timeinfo *t); /*sb; changed from NS
 {
   struct timeinfo figtime;
   int v = [aDecoder versionForClassName:@"GNote"];
+    
   [super initWithCoder:aDecoder];
   instrument = 0;
   showSlash = 0;
   if (v == 9)
   {
     headlist = [[aDecoder decodeObject] retain];
+      NSLog(@"headlist = %@, retainCount = %d\n", headlist, [headlist retainCount]);
     [aDecoder decodeValuesOfObjCTypes:"fcc", &dotdx, &instrument, &showSlash];
   }
   else if (v == 8)
@@ -1218,13 +1242,13 @@ extern void readTimeData2(NSCoder *s, struct timeinfo *t); /*sb; changed from NS
   [aCoder encodeValuesOfObjCTypes:"fcc", &dotdx, &instrument, &showSlash];
 }
 
-- (void)encodeWithPropertyListCoder:(OAPropertyListCoder *)aCoder
+- (void) encodeWithPropertyListCoder: (OAPropertyListCoder *) aCoder
 {
-    [super encodeWithPropertyListCoder:(OAPropertyListCoder *)aCoder];
-    [aCoder setObject:headlist forKey:@"headlist"];
-    [aCoder setFloat:dotdx forKey:@"dotdx"];
-    [aCoder setInteger:instrument forKey:@"inst"];
-    [aCoder setInteger:showSlash forKey:@"slash"];
+    [super encodeWithPropertyListCoder: (OAPropertyListCoder *) aCoder];
+    [aCoder setObject: headlist forKey: @"headlist"];
+    [aCoder setFloat: dotdx forKey: @"dotdx"];
+    [aCoder setInteger: instrument forKey: @"inst"];
+    [aCoder setInteger: showSlash forKey: @"slash"];
 }
 
 

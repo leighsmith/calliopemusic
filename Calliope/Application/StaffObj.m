@@ -887,19 +887,18 @@ int protoVox;
 
 
 /* note that a hit on a verse returns the staff obj */
-
-- (void)searchFor: (NSPoint) pt :(NSMutableArray *)arr
+- (void) searchFor: (NSPoint) pt inObjects: (NSMutableArray *) arr
 {
   id q = nil;
   int k = [hangers count];
-  [super searchFor: pt :arr];
+  [super searchFor: pt inObjects: arr];
   while (k--)
   {
     q = [hangers objectAtIndex:k];
     if ([q hit: pt])
         if (![arr containsObject:q])
             [arr addObject:q];
-    [q searchFor: pt :arr];
+    [q searchFor: pt inObjects: arr];
   }
   k = [verses count];
   while (k--)
@@ -914,7 +913,7 @@ int protoVox;
         if (![arr containsObject:q])
             [arr addObject:q];
       }
-        [q searchFor: pt :arr];
+        [q searchFor: pt inObjects: arr];
     }
   }
   return;

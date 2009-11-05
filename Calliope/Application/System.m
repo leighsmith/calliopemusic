@@ -1062,7 +1062,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 
 /* look in the system for a hit on any object (and obj's enclosures) */
 // TODO we should be returning an autoreleased NSArray rather than modifying one passed in.
-- (void) searchFor: (NSPoint) p : (NSMutableArray *) arr
+- (void) searchFor: (NSPoint) p inObjects: (NSMutableArray *) arr
 {
     int numOfStaves = [self numberOfStaves];
     int numOfObjects;
@@ -1077,7 +1077,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 	Staff *s = [staves objectAtIndex: numOfStaves];
 	
 	if (s->flags.hidden) continue;
-	[s searchFor: p : arr];
+	[s searchFor: p inObjects: arr];
     }
     numOfObjects = [nonStaffGraphics count];
     while (numOfObjects--) {
@@ -1088,7 +1088,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 	    if (![arr containsObject: q])
 		[arr addObject: q];
 	
-	[q searchFor: p :arr];  /* does enclosures */
+	[q searchFor: p inObjects: arr];  /* does enclosures */
     }
 }
 

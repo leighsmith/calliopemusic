@@ -765,7 +765,7 @@ id CrossCursor = nil;	/* global since subclassers may need it */
 }
 
 
-- (void)searchFor: (NSPoint) pt :(NSMutableArray *)arr
+- (void) searchFor: (NSPoint) pt inObjects: (NSMutableArray *) arr
 {
   Enclosure *q;
   int k = [enclosures count];

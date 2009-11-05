@@ -237,7 +237,7 @@ extern NSRect getbb();
 /*!
   @brief draw a character in font f. 
  */
-void drawCharacterInFont(float x, float y, int ch, NSFont *f, int mode);
+void DrawCharacterInFont(float x, float y, int ch, NSFont *f, int mode);
 
 /*!
   @brief Draw a string, in a given font, inserting baseline ties where needed. 

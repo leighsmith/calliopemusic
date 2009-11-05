@@ -100,7 +100,7 @@ extern id CrossCursor;
 - centerAt: (const NSPoint) p;
 - sizeTo: (const NSSize *) size;
 - (void)setSize:(int)ds;
-- (void)searchFor: (NSPoint) pt : (NSMutableArray *)arr;
+- (void)searchFor: (NSPoint) pt inObjects: (NSMutableArray *)arr;
 
 /* Archiving (must be overridden by subclasses with instance variables) */
 

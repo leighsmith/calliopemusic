@@ -808,7 +808,7 @@ extern char *typename[NUMTYPES];
     while (systemIndex <= [currentPage bottomSystemNumber] && (systemIndex <= theCount)) {
 	System *sys = [syslist objectAtIndex: systemIndex];
 	
-	[sys searchFor: p : l];
+	[sys searchFor: p inObjects: l];
 	if ([l count] > 0) 
 	    break;
 	++systemIndex;

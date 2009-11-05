@@ -446,6 +446,7 @@ extern int needUpgrade;
   struct oldflags f;
   int v = [aDecoder versionForClassName:@"Tie"];
   [super initWithCoder:aDecoder];
+  NSLog(@"Decoding Tie v%d object instance, should be upgraded to TieNew\n", v);
   needUpgrade |= 1;
   partner = [[aDecoder decodeObject] retain];
   offset = [aDecoder decodePoint];

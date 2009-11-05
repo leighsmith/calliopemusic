@@ -415,7 +415,7 @@ static void punctadot(float du, int p, float y, float s, NSFont *f, int mode)
     dy = s;
   }
   if (!(p & 1)) y += dy;
-  drawCharacterInFont(x + 1.5 * charFGW(f,CH_punctsqu), y, CH_dot, f, mode);
+  DrawCharacterInFont(x + 1.5 * charFGW(f,CH_punctsqu), y, CH_dot, f, mode);
 }
 
 
@@ -425,13 +425,13 @@ static void punctadot(float du, int p, float y, float s, NSFont *f, int mode)
   float hw;
   if (nFlags.quilisma & n) c = CH_quilisma;
   hw = charhalfFGW(f, c);
-  drawCharacterInFont(px, py, c, f, mode);
+  DrawCharacterInFont(px, py, c, f, mode);
   ss = getSpacing(mystaff);
   if (TYPEOF(mystaff) == STAFF)
   {
     drawledge(px + hw, [self yOfPos: 0], hw, 0, ip, [self getLines], ss, mode);
   }
-  if (mu && nFlags.molle & n) drawCharacterInFont(mu, py, CH_molle, f, mode);
+  if (mu && nFlags.molle & n) DrawCharacterInFont(mu, py, CH_molle, f, mode);
   if (du && nFlags.dot & n) punctadot(du, ip, [self yOfPos: ip], ss, f, mode);
   if (vu && nFlags.vepisema & n)
   {
@@ -580,7 +580,7 @@ static void punctadot(float du, int p, float y, float s, NSFont *f, int mode)
       cline(x1, y2, x1, y1, stemWidth[sz], mode);
       break;
     case MOLLE: /* molle */
-      drawCharacterInFont(cx, cy, CH_molle, f, mode);
+      DrawCharacterInFont(cx, cy, CH_molle, f, mode);
       break;
     case TORCULUS: /* torculus */
       [self cpuncta: cx : cy : CH_punctsqu : 1 : staffPosition : -cx : -1 : 0 : mx : f : sz : mode];

@@ -284,17 +284,11 @@ NSRect getbb()
 
 
 /* unions the current path (then does a newpath) into boundingBox */
-void unionpath()
+static void unionpath(NSBezierPath *currentPath)
 {
-    NSRect r;
-    float llx, lly, urx, ury;
+    NSRect currentPathBoundingBox = [currentPath bounds];
     
-    PSpathbbox(&llx, &lly, &urx, &ury); // retrieve the current bounding box.
-    NSLog(@"unionpath BB = %f %f %f %f\n", llx, lly, urx - llx, ury - lly);
-    PSnewpath();
-    /*  --llx; ++urx; --lly; ++ury; */
-    r = NSMakeRect(llx, lly, urx - llx, ury - lly);
-    boundingBox  = NSUnionRect(r, boundingBox);
+    boundingBox  = NSUnionRect(currentPathBoundingBox, boundingBox);
 }
 
 
@@ -367,7 +361,7 @@ void unionStringBB(NSRect *b, float x, float y, const char *s, NSFont *f, int j)
 //  float ps = [f pointSize];
 //  NXCharMetrics *cm;
     NSRect cm;
-    char ch;
+    int ch;
     
     if (j == JCENTRE) x -= 0.5 * [f widthOfString: [NSString stringWithUTF8String: s]];
     else if (j == JRIGHT) x -= [f widthOfString: [NSString stringWithUTF8String: s]];
@@ -413,28 +407,28 @@ void unionStringBB(NSRect *b, float x, float y, const char *s, NSFont *f, int j)
     }
 }
 
-
-/* draw a character in font f. */
-void drawCharacterInFont(float x, float y, int ch, NSFont *f, int mode)
+/* draw a character in font textFont. */
+void DrawCharacterInFont(float x, float y, int ch, NSFont *textFont, int mode)
 {
     if (mode) {
 	char s[2];
 	
 	s[0] = ch; s[1] = '\0';
-	NSLog(@"drawCharacterInFont '%c', (%f, %f) %@ mode %d", ch, x, y, f, mode);
+	NSLog(@"DrawCharacterInFont '%c', (%f, %f) %@ mode %d", ch, x, y, textFont, mode);
 	// Debugging only
-	NSRect boundingRect = [f boundingRectForGlyph: (NSGlyph) ch];
+	NSRect boundingRect = [textFont boundingRectForGlyph: (NSGlyph) ch];
 	NSLog(@"font bounding rectangle (%f,%f) -> (%f,%f)\n", 
 	      boundingRect.origin.x, boundingRect.origin.y, boundingRect.size.width, boundingRect.size.height);
 
-	// CAcString(x, y, (const char *) s, f, mode);
+	// DrawTextWithBaselineTies(x, y, [NSString stringWithCString: s encoding: NSNEXTSTEPStringEncoding], textFont, mode);
 	// TODO that we have to adjust the Sonata font by it's point size is completely beyond me. I have no idea why this is the case.
 	// the text fonts display fine, but the Sonata font is offset by it's point size. The only thing I can hypothesize is that the
 	// font metrics and origin of a non-text font confuses the drawing of NSAttributeString.
-	CAcString(x, y - [f pointSize] * 2, (const char *) s, f, mode);
+	// Should be NSSymbolStringEncoding, but certain characters don't convert properly like 0x9a?
+	DrawTextWithBaselineTies(x, y - [textFont pointSize] * 2, [NSString stringWithCString: s encoding: NSNEXTSTEPStringEncoding], textFont, mode);
     }
     else 
-	unionCharBB(&boundingBox, x, y, ch, f);
+	unionCharBB(&boundingBox, x, y, ch, textFont);
 }
 
 /* draw a character centred on x and y */
@@ -443,7 +437,7 @@ void centChar(float x, float y, int ch, NSFont *f, int mode)
 {
     if (NOPRINT(mode)) 
 	return;
-    drawCharacterInFont(x - charFCW(f, ch), y + charFCH(f, ch), ch, f, mode);
+    DrawCharacterInFont(x - charFCW(f, ch), y + charFCH(f, ch), ch, f, mode);
 }
 
 /* draw a character centred on x only */
@@ -452,7 +446,7 @@ void centxChar(float x, float y, int ch, NSFont *f, int mode)
 {
     if (NOPRINT(mode)) 
 	return;
-    drawCharacterInFont(x - charFCW(f, ch), y, ch, f, mode);
+    DrawCharacterInFont(x - charFCW(f, ch), y, ch, f, mode);
 }
 
 /* draw a string, in a given font, inserting baseline ties where needed. */
@@ -588,7 +582,7 @@ void cstrokeline(float width, int mode)
     [linePath stroke];
     
     if(!mode) {
-	unionpath();
+	unionpath(linePath);
     }
     
     [linePath release];
@@ -689,7 +683,7 @@ void cslant(float x1, float y1, float x2, float y2, float dy, int mode)
     else {
 	[slantedPath stroke];
 	NSLog(@"cslant(%f,...,%d)", x1, mode);
-	unionpath();
+	unionpath(slantedPath);
     }
 }
 
@@ -711,7 +705,7 @@ void coutslant(float x1, float y1, float x2, float y2, float dy, float lineWidth
     else {
 	[slantedPath stroke]; // was PSstrokepath();
 	NSLog(@"coutslant(%f,...,%d)", x1, mode);
-	unionpath();
+	unionpath(slantedPath);
     }
 }
 
@@ -814,7 +808,7 @@ void cbrace(float x0, float y0, float xn, float yn, float flourishThickness, int
     else
     {
 	// NSLog(@"cbrace(%f,...,%d)\n", x0, mode);
-	unionpath();
+	unionpath(bracePath);
     }
 }
 
@@ -848,7 +842,7 @@ void ccurve(float x0, float y0,
 	}
 	else {
 	    // NSLog(@"ccurve(dash)(%f,...,%d)\n", x0, mode);
-	    unionpath();
+	    unionpath(curvePath);
 	}
 	return;
     }
@@ -860,7 +854,7 @@ void ccurve(float x0, float y0,
     }
     else {
 	NSLog(@"ccurve(nodash)(%f,...,%d)", x0, mode);
-	unionpath();
+	unionpath(curvePath);
     }
 }
 
@@ -908,7 +902,7 @@ void cflat(float x0, float y0, float x1, float y1, float c1x, float c1y, float c
 	else
 	{
 	    NSLog(@"cflat(dash)(%f,...,%d)", x0, mode);
-	    unionpath();
+	    unionpath(flatCurvePath);
 	}
 	return;
     }
@@ -941,7 +935,7 @@ void cflat(float x0, float y0, float x1, float y1, float c1x, float c1y, float c
     else
     {
 	NSLog(@"cflat(nodash)(%f,...,%d)", x0, mode);
-	unionpath();
+	unionpath(flatCurvePath);
     }
 }
 
@@ -971,7 +965,7 @@ void ctie(float cx, float cy, float d, float h, float th, float a, float f, int 
 	    PSstroke(); // 	[tiePath stroke];
 
 	}
-	else unionpath();
+	else unionpath(nil);
     }
     else
     {
@@ -983,7 +977,7 @@ void ctie(float cx, float cy, float d, float h, float th, float a, float f, int 
 	}
 	else
 	{
-	    unionpath();
+	    unionpath(nil);
 	}
     }
     PSgrestore();
@@ -1028,7 +1022,7 @@ static void cwavev(float x, float y0, float y1, int sz, int m)
     if (n < 1) n = 1;
     while (n--)
     {
-	drawCharacterInFont(x, y1, 103, f, m);
+	DrawCharacterInFont(x, y1, 103, f, m);
 	y1 -= ch;
     }
 }

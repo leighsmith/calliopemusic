@@ -1230,9 +1230,7 @@ float textoff[2], baselines[2][MAXTEXT];
 
 
 /* look along the staff for a hit on a staff object */
-// TODO should be renamed:
-// - (void) searchForPoint: (NSPoint) p inStaffObjects: (NSMutableArray *) arr
-- (void) searchFor: (NSPoint) p : (NSMutableArray *) arr
+- (void) searchFor: (NSPoint) p inObjects: (NSMutableArray *) arr
 {
     id q;
     int k = [notes count];
@@ -1245,7 +1243,7 @@ float textoff[2], baselines[2][MAXTEXT];
 	if ([q hit: p])
 	    if (![arr containsObject: q])
 		[arr addObject: q];
-	[q searchFor: p : arr];
+	[q searchFor: p inObjects: arr];
     }
     return;
 }

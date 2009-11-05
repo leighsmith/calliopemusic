@@ -98,3 +98,109 @@
 */
 
 @end
+
+// Yet to fully implement
+#if 0
+// call with
+[NSUnarchiver decodeClassName: @"Tie" asClassName: @"TieDecodeFaker"];
+
+@implementation TieDecodeFaker
+
+- (id) initWithCoder: (NSCoder *) aDecoder
+{
+  char r1, r2, r3, r4, r5, r6, r7, r8, r9;
+  struct oldflags f;
+  int v = [aDecoder versionForClassName:@"Tie"];
+  // Create a version of TieNew initialised with the parameters retrieved from the old Tie class.
+  TieNew *newTieNew = [[TieNew alloc] init];
+
+  NSLog(@"Decoding Tie v%d object instance, should be upgraded to TieNew\n", v);
+  headnum = 0;
+  if (v == 0)
+  {
+    [aDecoder decodeValuesOfObjCTypes:"fccccc", &depth, &r1, &r2, &r3, &r4, &r5];
+    flags.fixed = r3;
+    flags.place = 0;
+    flags.above = r1;
+    flags.same = r5;
+    flags.ed = r2;
+    flags.usedepth = r4;
+    flags.master = 1;
+  }
+  else if (v == 1)
+  {
+    [aDecoder decodeValuesOfObjCTypes:"fs", &depth, &f];
+    flags.fixed = f.fixed;
+    flags.place = f.place;
+    flags.above = f.above;
+    flags.same = f.same;
+    flags.ed = f.ed;
+    flags.usedepth = f.usedepth;
+    flags.master = f.master;
+  }
+  else if (v == 2)
+  {
+    [aDecoder decodeValuesOfObjCTypes:"fccccccc", &depth, &r1, &r2, &r3, &r4, &r5, &r6, &r7];
+    flags.fixed = r1;
+    flags.place = r2;
+    flags.above = r3;
+    flags.same = r4;
+    flags.ed = r5;
+    flags.usedepth = r6;
+    flags.master = r7;
+  }
+  else if (v == 3)
+  {
+    [aDecoder decodeValuesOfObjCTypes:"fcccccccc", &depth, &headnum, &r1, &r2, &r3, &r4, &r5, &r6, &r7];
+    flags.fixed = r1;
+    flags.place = r2;
+    flags.above = r3;
+    flags.same = r4;
+    flags.ed = r5;
+    flags.usedepth = r6;
+    flags.master = r7;
+    if (headnum > 0) headnum--;
+  }
+  else if (v == 4)
+  {
+    [aDecoder decodeValuesOfObjCTypes:"fcccccccc", &depth, &headnum, &r1, &r2, &r3, &r4, &r5, &r6, &r7];
+    flags.fixed = r1;
+    flags.place = r2;
+    flags.above = r3;
+    flags.same = r4;
+    flags.ed = r5;
+    flags.usedepth = r6;
+    flags.master = r7;
+  }
+  else if (v == 5)
+  {
+    [aDecoder decodeValuesOfObjCTypes:"fccccccccc", &depth, &headnum, &r1, &r2, &r3, &r4, &r5, &r6, &r7, &r8];
+    flags.fixed = r1;
+    if (r2 > 1) r2 -= 2;  /* change of format: now all are 0 or 1 */
+    flags.place = r2;
+    flags.above = r3;
+    flags.same = r4;
+    flags.ed = r5;
+    flags.usedepth = r6;
+    flags.master = r7;
+    flags.horvert = r8;
+  }
+  else if (v == 6)
+  {
+    [aDecoder decodeValuesOfObjCTypes:"ffcccccccccc", &depth, &flatness, &headnum, &r1, &r2, &r3, &r4, &r5, &r6, &r7, &r8, &r9];
+    flags.fixed = r1;
+    flags.place = r2;
+    flags.above = r3;
+    flags.same = r4;
+    flags.ed = r5;
+    flags.usedepth = r6;
+    flags.master = r7;
+    flags.horvert = r8;
+    flags.dashed = r9;
+  }
+  return self;
+}
+
+@end
+
+#endif

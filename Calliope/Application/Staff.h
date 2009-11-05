@@ -108,7 +108,7 @@
 - hideVerse: (int) n;
 - (int) firstClefCentre;
 - packLeft;
-- (void)searchFor: (NSPoint) p :(NSMutableArray *)l;
+- (void) searchFor: (NSPoint) p inObjects: (NSMutableArray *) l;
 - resizeNotes: (int) ds;
 - (BOOL) allRests;
 - (int) countRests;

@@ -366,7 +366,7 @@ float tyoff[2][5] =
     if (signs[j].place == 4)
     {
       ch = signs[j].upsign;
-      drawCharacterInFont(x, y, ch, f, m);
+      DrawCharacterInFont(x, y, ch, f, m);
       x += charFGW(f, ch) - dx;
     }
   }

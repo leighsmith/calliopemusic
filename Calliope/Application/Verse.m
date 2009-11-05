@@ -454,7 +454,7 @@ static void drawext(float x1, float y, float x2, Staff *sp, int f, int m)
 	    nc = *s;
 	    if (nc == '+')
 	    {
-		drawCharacterInFont(x + charFCW(f, c), fy, nc, f, m);
+		DrawCharacterInFont(x + charFCW(f, c), fy, nc, f, m);
 		++s;
 	    }
 	    else if (nc == '/')
@@ -528,7 +528,7 @@ static void drawext(float x1, float y, float x2, Staff *sp, int f, int m)
       drawext(cx + pixlen, bl, ex, sp, 1, m);
       break;
     case 3:
-      drawCharacterInFont(cx + pixlen + 2, bl, HYPHCHAR, font, m);
+      DrawCharacterInFont(cx + pixlen + 2, bl, HYPHCHAR, font, m);
       break;
     case 4:
       ex = cx + pixlen + 2;
@@ -536,7 +536,7 @@ static void drawext(float x1, float y, float x2, Staff *sp, int f, int m)
       break;
     case 5:
       ex = cx - charFGW(font, HYPHCHAR) - 2;
-      drawCharacterInFont(ex, bl, HYPHCHAR, font, m);
+      DrawCharacterInFont(ex, bl, HYPHCHAR, font, m);
       break;
     case 6:
       ex = cx - charFGW(font, '_') - 2;

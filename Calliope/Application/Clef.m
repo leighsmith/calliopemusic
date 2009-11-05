@@ -231,7 +231,7 @@ static Clef *proto;
   f = musicFont[cleffont[cid]][sz];
   if (TYPEOF(mystaff) == SYSTEM) cy =  y;
   else cy = cleforigins[sz][cid] + [mystaff yOfPos: staffPosition];
-  drawCharacterInFont(x, cy, cs, f, m);
+  DrawCharacterInFont(x, cy, cs, f, m);
   if (ottava)
   {
     cx = x + charhalfFGW(f, cs);
