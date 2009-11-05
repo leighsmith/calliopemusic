@@ -35,7 +35,7 @@
   StaffObj *p;
   NSMutableArray *nl, *vl;
   Verse *v;
-  k = flags.nstaves;
+  k = [self numberOfStaves];
   while (k--)
   {
     sp = [staves objectAtIndex:k];
@@ -64,7 +64,7 @@
 - hideVerse: (int) n
 {
   int k;
-  k = flags.nstaves;
+  k = [self numberOfStaves];
   while (k--) [[staves objectAtIndex:k] hideVerse: n];
   return self;
 }
@@ -84,7 +84,7 @@
   Staff *sp;
   StaffObj *p;
   NSMutableArray *nl;
-  k = flags.nstaves;
+  k = [self numberOfStaves];
   dx = newLeft - oldLeft;
   while (k--)
   {
@@ -113,7 +113,7 @@
   NSMutableArray *vl, *nl;
   Verse *v;
   r = NO;
-  n = flags.nstaves;
+  n = [self numberOfStaves];
   for (i = 0; i < n; i++)
   {
     sp = [staves objectAtIndex:i];
@@ -167,7 +167,7 @@
   NSMutableArray *vl, *nl;
   Verse *v;
   initVotes();
-  n = flags.nstaves;
+  n = [self numberOfStaves];
   for (i = 0; i < n; i++)
   {
     sp = [staves objectAtIndex:i];
@@ -265,7 +265,7 @@
   NSMutableArray *nl, *hl;
   StaffObj *p;
   Hanger *h;
-  ns = flags.nstaves;
+  ns = [self numberOfStaves];
   lmx = [self leftWhitespace];
   nums = 0;
   for (i = 0; i < ns; i++)
@@ -334,7 +334,7 @@
   StaffObj *p;
   BOOL createdSystem;
   
-  ns = flags.nstaves;
+  ns = [self numberOfStaves];
   lmx = [self leftWhitespace];
   /* first find all the bar boundaries. */
   for (i = 0; i < ns; i++)
@@ -436,7 +436,7 @@
     StaffObj *p;
     BOOL b;
     
-    ns = flags.nstaves;
+    ns = [self numberOfStaves];
     /* find next system */
     sysl = [view allSystems];
     ds = [sysl indexOfObject: self];
@@ -521,7 +521,7 @@
     char sFlag, bFlag;
     float lwhite = [self leftWhitespace];
     
-    ns = flags.nstaves;
+    ns = [self numberOfStaves];
     for (i = 0; i < ns; i++) prev[i] = [view lastObject: self : i : BARLINE : YES];
     xoff = 0.0;
     for (i = 0; i < ns; i++)
@@ -584,7 +584,7 @@
   sumsep = 0.0;
   maxsep = MINFLOAT;
   maxy = 0.0;
-  k = flags.nstaves;
+  k = [self numberOfStaves];
   ns = -1;
   for (i = 0; i < k; i++)
   {

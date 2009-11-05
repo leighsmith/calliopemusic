@@ -13,17 +13,17 @@
 @private
     /*! @var staves Array of staves */
     NSMutableArray *staves;			
-    short pagenum;		/* system (actually page) number */
-    float barbase;		/* bar number baseline offset */
-    float height;		/* the height used in page balancing */
-    float headroom;		/* included in height */
+    short pagenum;		/*!< system (actually page) number */
+    float barbase;		/*!< bar number baseline offset */
+    float height;		/*!< the height used in page balancing */
+    float headroom;		/*!< included in height */
 @public
-    NSMutableArray *nonStaffGraphics;			/* Array of random graphics on this system not attached to a staff */
+    NSMutableArray *nonStaffGraphics;   /*!< Array of random graphics on this system not attached to a staff */
     GraphicView *view;			/* backreference to our GraphicView */
     Page *page;			/* backreference to our Page */
     struct
     {
-	unsigned int nstaves : 7;	/* number of staves */ // Can now be defined protected.
+	unsigned int nstaves : 7;	/* number of staves */ // Can now be defined protected. ideally derive from [staves count] or [self numberOfStaves]
 	unsigned int pgcontrol : 3;	/* page break code */
 	unsigned int haslink : 1;	/* staff linkage bar NOT USED */
 	unsigned int equidist : 1;	/* make staff y-origins equidistant */

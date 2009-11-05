@@ -1361,7 +1361,7 @@ static void tidyends(NSMutableArray *staves, int n, int ul, float lmx, int ur, f
   int nix[NUMSTAVES];
   NSMutableArray *nl[NUMSTAVES];
   Staff *sp;
-  int k, n = flags.nstaves;
+  int k, n = [self numberOfStaves];
   k = n;
   while (k--)
   {
@@ -1384,7 +1384,7 @@ static void tidyends(NSMutableArray *staves, int n, int ul, float lmx, int ur, f
 - (float) optAdjust
 {
   float f, err, t, lmx, rmx;
-  int n = flags.nstaves, i = 0;
+  int n = [self numberOfStaves], i = 0;
   lmx = [self leftWhitespace];
   rmx = lmx + width;
   adjust(staves, n, lmx);
@@ -1416,7 +1416,7 @@ static void tidyends(NSMutableArray *staves, int n, int ul, float lmx, int ur, f
 
 - userAdjust: (BOOL) s
 {
-    int n = flags.nstaves;
+    int n = [self numberOfStaves];
   float err = 0.0;
   float lmx = [self leftWhitespace];
   spacefactor = 1.0;
@@ -1446,7 +1446,7 @@ static void tidyends(NSMutableArray *staves, int n, int ul, float lmx, int ur, f
 
 - adjustOnly
 {
-  int n = flags.nstaves;
+  int n = [self numberOfStaves];
   float err = 0.0;
   float lmx = [self leftWhitespace];
   spacefactor = 1.0;
@@ -1462,7 +1462,7 @@ static void tidyends(NSMutableArray *staves, int n, int ul, float lmx, int ur, f
 
 - separateOnly
 {
-  int n = flags.nstaves;
+  int n = [self numberOfStaves];
   float err = 0.0;
   float lmx = [self leftWhitespace];
   spacefactor = 1.0;
