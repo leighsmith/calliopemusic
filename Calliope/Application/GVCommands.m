@@ -393,7 +393,7 @@ static NSString *stylescratch;
 	      t = bart[j];
 	      c = noteFromTicks(t);
 	      r->time.body = c;
-	      r->time.dot = dotsFromTicks(t, c);
+	      [r setDottingCode: dotsFromTicks(t, c)];
 	      r->style = 5;
 	    }
 	    numrests[v] = numvox[v] = 0;
@@ -1936,14 +1936,14 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
 	  if (p->flags.prevtime)
           {
 	    p->time.body = cf;
-	    p->time.dot = df;
+	    [p setDottingCode: df];
 	    p->flags.prevtime = 0;
 	    [p recalc];
           }
           else
           {
             cf = p->time.body;
-            df = p->time.dot;
+            df = [p dottingCode];
           }
 	}
 	++k;
@@ -1984,7 +1984,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
           if (p->gFlags.subtype) cf = -1;
           else if (!(p->flags.prevtime))
           {
-            if (cf == p->time.body && df == p->time.dot && [p tabCount] > 0 && ![p isBeamed])
+            if (cf == p->time.body && df == [p dottingCode] && [p tabCount] > 0 && ![p isBeamed])
             {
               p->flags.prevtime = 1;
 	      [p recalc];
@@ -1992,7 +1992,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
             else
             {
               cf = p->time.body;
-              df = p->time.dot;
+              df = [p dottingCode];
             }
           }
 	}

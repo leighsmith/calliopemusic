@@ -253,7 +253,7 @@ static Accent *proto;
 {
   int top, i, k = ACCSIGNS;
   StaffObj *p = client;
-  top = updir[(TYPEOF(p) == NOTE && ((TimedObj *)p)->time.stemup)][gFlags.subtype];
+  top = updir[(TYPEOF(p) == NOTE && [(TimedObj *)p stemIsUp])][gFlags.subtype];
   while (k--)
   {
     i = signs[(int) sign[k]].alter;
@@ -327,7 +327,7 @@ float tyoff[2][5] =
       bh = 0.5 * nature[sz];
       pb = p->time.body;
       dx = halfwidth[sz][0][pb];
-      sd = p->time.stemup ? -1 : 1;
+      sd = [p stemIsUp] ? -1 : 1;
       th = bh * sd;
       jmp = 2 * bh * sd;
       x0 = p->x - dx;
@@ -392,7 +392,7 @@ float tyoff[2][5] =
   fr = (xoff != 0.0 || yoff != 0.0);
   x = p->x + xoff;
   dir = 2 * getSpacing(staff);
-  top = updir[(TYPEOF(p) == NOTE && ((TimedObj *)p)->time.stemup)][gFlags.subtype];
+  top = updir[(TYPEOF(p) == NOTE && [((TimedObj *)p) stemIsUp])][gFlags.subtype];
   if (top)
   {
     dir = -dir;

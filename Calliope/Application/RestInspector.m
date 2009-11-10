@@ -67,7 +67,7 @@ static char istimed[6] = {1, 1, 0, 0, 0, 1};
         if (p->time.body != seltime) setdef = [p defaultPos];
         p->time.body = seltime;
         p->numbars = 0;
-        p->time.dot = seldot;
+        [p setDottingCode: seldot];
       }
       if (!istimed[selstyle])
       {
@@ -105,7 +105,7 @@ static char istimed[6] = {1, 1, 0, 0, 0, 1};
     assay(1, (p->isGraced & 2));
     assay(2, p->time.tight);
     assay(3, p->time.body);
-    assay(4, p->time.dot);
+    assay(4, [p dottingCode]);
     assay(5, p->style);
     assay(6, p->voice);
     assay(7, istimed[(int)p->style]);

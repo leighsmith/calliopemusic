@@ -229,7 +229,7 @@ extern void setkeysig(KeySig *p, char *key);
 	  if (acc) setAccidental(q, acc);
           [sp linknote: q];
 	  q->time.body = tb;
-	  q->time.dot = td;
+	  [q setDottingCode: td];
 	  q->stamp = [n timeTag];
 	  pencil[i] = q;
 	  lastHit = q;
@@ -255,7 +255,7 @@ extern void setkeysig(KeySig *p, char *key);
           t = MINIMTICK * (mm / 60.0) * dur;
           c = noteFromTicks(t);
 	  q->time.body = c;
-	  q->time.dot = dotsFromTicks(t, c);
+	  [q setDottingCode: dotsFromTicks(t, c)];
 	}
 	lastHit = q;
 	if (q == cbase) cbase = nil;

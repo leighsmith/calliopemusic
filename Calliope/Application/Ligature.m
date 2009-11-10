@@ -185,13 +185,13 @@ static float braoffy[2] =  { 1.0, -1.0 };
   dy = nature[sz];
   if (!(hFlags.split & 2))
   {
-    if (TYPEOF(p) == NOTE) t = (p->time.stemup << 1) | a; else t = 1;
+    if (TYPEOF(p) == NOTE) t = ([p stemIsUp] << 1) | a; else t = 1;
     off1.x = braoffx[0][t] * dx;
     off1.y = ([p yAboveBelow: a] - p->y) + braoffy[a] * dy;
   }
   if (!(hFlags.split & 1))
   {
-    if (TYPEOF(q) == NOTE) t = (q->time.stemup << 1) | a; else t = 1;
+    if (TYPEOF(q) == NOTE) t = ([q stemIsUp] << 1) | a; else t = 1;
     off2.x = braoffx[1][t] * dx;
     off2.y = ([q yAboveBelow: a] - q->y) + braoffy[a] * dy;
   }

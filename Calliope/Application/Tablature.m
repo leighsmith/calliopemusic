@@ -656,7 +656,7 @@ static char newhead[2][4] =
   }
   else if (v == 5)
   {
-      char *t;
+      char *t = NULL;
     [aDecoder decodeValuesOfObjCTypes:"cccccc", &b2, &b3, &b4, &b5, &b6, &b7];
     [aDecoder decodeValuesOfObjCTypes:"ccc", &diapason, &diafret, &selnote];
 //    [aDecoder decodeValuesOfObjCTypes:"%", &tuning];

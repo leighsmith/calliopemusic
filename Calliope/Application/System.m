@@ -1231,7 +1231,7 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
   int v;
   char b1, b2, b3, b4, b5=0, b6=0, b7=0, b8=0;
   struct oldflags f;
-  char *oldstyle;
+  char *oldstyle = NULL;
   
   [super initWithCoder:aDecoder];
   v = [aDecoder versionForClassName:@"System"];

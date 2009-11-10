@@ -74,8 +74,8 @@ unsigned char accifont[NUMHEADS][NUMACCS] =
     proto = [GNote alloc];
     proto->gFlags.subtype = 0;
     proto->gFlags.locked = 0;
-    proto->time.stemup = 1;
-    proto->time.stemfix = 0;
+    [proto setStemIsUp: YES];
+    [proto setStemIsFixed: NO];
     proto->time.tight = 0;
     proto->time.nostem = 0;
     proto->voice = 0;
@@ -123,6 +123,7 @@ unsigned char accifont[NUMHEADS][NUMACCS] =
 - (NSString *) description
 {
     // return [NSString stringWithFormat: @"%@: x = %f, y = %f %@", [super description], x, y, [self describeChordHeads]];
+    // return [NSString stringWithFormat: @"%@: x = %f, y = %f %@", [super description], x, y, headlist];
     return [NSString stringWithFormat: @"%@: x = %f, y = %f", [super description], x, y];
 }
 
@@ -143,7 +144,7 @@ unsigned char accifont[NUMHEADS][NUMACCS] =
   float dx = 2.0 * nature[gFlags.size];
   noteHead = [headlist objectAtIndex: SELHEADIX(gFlags.selend, [headlist count])];
   if ([noteHead isReverseSideOfStem]) 
-      dx = (time.stemup ? dx : -dx); else dx = 0.0;
+      dx = ([self stemIsUp] ? dx : -dx); else dx = 0.0;
   *fx = x + dx;
   *fy = [noteHead y];
   return YES;
@@ -181,7 +182,9 @@ unsigned char accifont[NUMHEADS][NUMACCS] =
 - (BOOL) defaultStemup: (System *) sys : (Staff *) sp
 {
   int cpos;
-  if (time.stemfix) return(time.stemup);
+    
+  if ([self stemIsFixed])
+      return([self stemIsUp]);
   cpos = getLines(sp) - 1;
   if (staffPosition < cpos) return(NO);
   if (staffPosition > cpos) return(YES);
@@ -207,8 +210,8 @@ TODO should be named
     [super proto: v : pt : sp : sys : g : i];
     gFlags.subtype = proto->gFlags.subtype;
     gFlags.locked = proto->gFlags.locked;
-    time.stemup = proto->time.stemup;
-    time.stemfix = proto->time.stemfix;
+    [self setStemIsUp: [proto stemIsUp]];
+    [self setStemIsFixed: [proto stemIsFixed]];
     time.tight = proto->time.tight;
     time.nostem = proto->time.nostem;
     time.body = i;
@@ -224,14 +227,14 @@ TODO should be named
 	y = [sp yOfPos: staffPosition];
 	[noteHead setStaffPosition: staffPosition];
 	[noteHead setCoordinateY: y];
-	if (!time.stemfix) 
-	    time.stemup = [self defaultStemup: sys : sp];
+	if (![self stemIsFixed]) 
+	    [self setStemIsUp: [self defaultStemup: sys : sp]];
     }
     else {
 	[noteHead setStaffPosition: staffPosition];
 	[noteHead setCoordinateY: y];
-	if (!time.stemfix) 
-	    time.stemup = 1;
+	if (![self stemIsFixed]) 
+	    [self setStemIsUp: YES];
     }
     [self resetStemlen];
     return self;
@@ -335,9 +338,9 @@ TODO should be named
 
 - defaultStem: (BOOL) up
 {
-  if (up != time.stemup)
+  if (up != [self stemIsUp])
   {
-    time.stemup = up;
+    [self setStemIsUp: up];
     [self reverseHeads];
     [self resetStemlen];
     [self reshapeChord];
@@ -357,9 +360,9 @@ TODO should be named
 {
   BOOL up = (s < 0);
     
-  if (up != time.stemup)
+  if (up != [self stemIsUp])
   {
-    time.stemup = up;
+    [self setStemIsUp: up];
     [self reverseHeads];
     [self reshapeChord];
   }
@@ -373,7 +376,7 @@ TODO should be named
 {
   NoteHead *noteHead;
     
-  noteHead = (time.stemup == a) ? [headlist lastObject] : [headlist objectAtIndex:0];
+  noteHead = ([self stemIsUp] == a) ? [headlist lastObject] : [headlist objectAtIndex:0];
   return [noteHead y];
 }
 
@@ -449,7 +452,7 @@ extern unsigned char hasstem[10];
   NoteHead *noteHead;
   float sy;
     
-  if (time.stemup == a)
+  if ([self stemIsUp] == a)
   {
     noteHead = [headlist lastObject];
     sy = [noteHead y];
@@ -470,7 +473,7 @@ extern unsigned char hasstem[10];
   float ya, ye;
   NoteHead *noteHead;
     
-  if (time.stemup == a)
+  if ([self stemIsUp] == a)
   {
     noteHead = [headlist lastObject];
     ya = [noteHead y];
@@ -478,7 +481,7 @@ extern unsigned char hasstem[10];
     {
       if ([self hasCrossingBeam])
       {
-        ya += getstemlen(time.body, gFlags.size, stype[(int)[noteHead bodyType]], time.stemup, [noteHead staffPosition], [[noteHead myNote] getSpacing]);
+        ya += getstemlen(time.body, gFlags.size, stype[(int)[noteHead bodyType]], [self stemIsUp], [noteHead staffPosition], [[noteHead myNote] getSpacing]);
       }
       else ya += time.stemlen;
     }
@@ -498,7 +501,7 @@ extern unsigned char hasstem[10];
   float ya;
   NoteHead *noteHead;
     
-  if (time.stemup == a)
+  if ([self stemIsUp] == a)
   {
     noteHead = [headlist lastObject];
     ya = [noteHead y];
@@ -843,7 +846,7 @@ static int getShapeID(int pos, int s, int n, int c)
     
     while (k--) {
 	NoteHead *noteHead = [headlist objectAtIndex: k];
-	float dx = [noteHead isReverseSideOfStem] ? (time.stemup ? tolerance : -tolerance) * 2.0 : 0.0;
+	float dx = [noteHead isReverseSideOfStem] ? ([self stemIsUp] ? tolerance : -tolerance) * 2.0 : 0.0;
 
 	if (TOLFLOATEQ(pt.x, x + dx, tolerance) && TOLFLOATEQ(pt.y, [noteHead y], tolerance)) {
 	    gFlags.selend = k;
@@ -865,7 +868,7 @@ static int getShapeID(int pos, int s, int n, int c)
   while (k--)
   {
       noteHead = [headlist objectAtIndex: k];
-      if ([noteHead isReverseSideOfStem]) dx = (time.stemup ? tolerance : -tolerance) * 2.0; else dx = 0.0;
+      if ([noteHead isReverseSideOfStem]) dx = ([self stemIsUp] ? tolerance : -tolerance) * 2.0; else dx = 0.0;
       d = hypot(pt.x - (x + dx), pt.y - [noteHead y]);
       if (d < dmin) dmin = d;
   }
@@ -875,7 +878,7 @@ static int getShapeID(int pos, int s, int n, int c)
 
 - (BOOL) hitBeamAt: (float *) px : (float *) py
 {
-    *px = x + stemdx[(int)gFlags.size][(int)gFlags.subtype][0][(int)time.body][(int)time.stemup];
+    *px = x + stemdx[(int)gFlags.size][(int)gFlags.subtype][0][(int)time.body][(int)[self stemIsUp]];
     *py = y + time.stemlen;
     return YES;
 }
@@ -883,18 +886,18 @@ static int getShapeID(int pos, int s, int n, int c)
 
 - (float) stemXoff: (int) stype
 {
-    return stemdx[(int)gFlags.size][(int)gFlags.subtype][stype][time.body][time.stemup];
+    return stemdx[(int)gFlags.size][(int)gFlags.subtype][stype][time.body][[self stemIsUp]];
 }
 
 - (float) stemXoffLeft: (int) stype
 {
-    return stemdx[(int)gFlags.size][(int)gFlags.subtype][stype][time.body][time.stemup] -  0.5 * stemthicks[gFlags.size];
+    return stemdx[(int)gFlags.size][(int)gFlags.subtype][stype][time.body][[self stemIsUp]] -  0.5 * stemthicks[gFlags.size];
 }
 
 
 - (float) stemXoffRight: (int) stype
 {
-    return stemdx[(int)gFlags.size][(int)gFlags.subtype][stype][time.body][time.stemup] +  0.5 * stemthicks[gFlags.size];
+    return stemdx[(int)gFlags.size][(int)gFlags.subtype][stype][time.body][[self stemIsUp]] +  0.5 * stemthicks[gFlags.size];
 }
 
 
@@ -904,7 +907,7 @@ static int getShapeID(int pos, int s, int n, int c)
     
   if ([noteHead isReverseSideOfStem]) return 0.0;
   if ([noteHead bodyType] == 4) return 0.0;
-  return stemdy[(int)gFlags.size][(int)gFlags.subtype][stype][time.body][time.stemup];
+  return stemdy[(int)gFlags.size][(int)gFlags.subtype][stype][time.body][[self stemIsUp]];
 }
 
 
@@ -960,7 +963,7 @@ extern int modeinvis[5];
     BOOL gotsinfo = NO;
     
     size = gFlags.size;
-    su = time.stemup;
+    su = [self stemIsUp];
     k = [self numberOfNoteHeads];
     while (k--) {
 	NoteHead *noteHead = [self noteHead: k];
@@ -1008,7 +1011,7 @@ extern int modeinvis[5];
     q = [noteArray lastObject];
     body = t->body; // TODO should become: [self noteCode];
     numberOfNotes = [noteArray count];
-    stemup = t->stemup; // TODO should become: [self stemIsUp];
+    stemup = [self stemIsUp];
     if (numberOfNotes == 1) {
 	noteHead = q;
 	bodyType = [noteHead bodyType];
@@ -1179,14 +1182,15 @@ extern void readTimeData2(NSCoder *s, struct timeinfo *t); /*sb; changed from NS
   struct timeinfo figtime;
   int v = [aDecoder versionForClassName:@"GNote"];
     
+    // NSLog(@"Before decoding GNote v%d superclass %p\n", v, super);
   [super initWithCoder:aDecoder];
   instrument = 0;
   showSlash = 0;
-  if (v == 9)
-  {
-    headlist = [[aDecoder decodeObject] retain];
+  if (v == 9) {
+      NSLog(@"before GNote %p decoding headlist\n", self);
+      headlist = [[aDecoder decodeObject] retain];
       NSLog(@"headlist = %@, retainCount = %d\n", headlist, [headlist retainCount]);
-    [aDecoder decodeValuesOfObjCTypes:"fcc", &dotdx, &instrument, &showSlash];
+     [aDecoder decodeValuesOfObjCTypes:"fcc", &dotdx, &instrument, &showSlash];
   }
   else if (v == 8)
   {

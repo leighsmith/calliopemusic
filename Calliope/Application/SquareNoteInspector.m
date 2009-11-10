@@ -18,7 +18,7 @@
 {
   SquareNote *p = [SquareNote myPrototype];
   p->time.body = [timematrix selectedColumn];
-  p->time.dot = [dotmatrix selectedColumn];
+  [p setDottingCode: [dotmatrix selectedColumn]];
   p->shape = [shapematrix selectedColumn];
   p->colour = [colourmatrix selectedColumn];
   p->stemside = [stemmatrix selectedColumn];
@@ -48,7 +48,7 @@
       if (seltime >= 0)
       {
 	p->time.body = seltime;
-	p->time.dot = seldot;
+	[p setDottingCode: seldot];
       }
       if (selshape >= 0) p->shape = selshape;
       if (selcol >= 0) p->colour = selcol;
@@ -78,7 +78,7 @@
     assay(1, p->colour);
     assay(2, p->stemside);
     assay(3, p->time.body);
-    assay(4, p->time.dot);
+    assay(4, [p dottingCode]);
     assay(5, p->gFlags.subtype);
   }
   *num = n;
@@ -119,7 +119,7 @@
   [colourmatrix selectCellAtRow:0 column:p->colour];
   [stemmatrix selectCellAtRow:0 column:p->stemside];
   [timematrix selectCellAtRow:0 column:p->time.body];
-  [dotmatrix selectCellAtRow:0 column:p->time.dot];
+  [dotmatrix selectCellAtRow:0 column:[p dottingCode]];
   [desmatrix selectCellAtRow:0 column:p->gFlags.subtype];
   return self;
 }

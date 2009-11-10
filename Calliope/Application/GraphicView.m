@@ -1498,7 +1498,7 @@ static void drawHorz(float x, float y, float w, NSRect r)
       p = [Graphic graphicOfType: REST];
       [p proto: self : pt : sp : sp->mysys : nil : 5];
       p->time.body = tb;
-      p->time.dot = 0;
+      [p setDottingCode: 0];
       p->staffPosition = [((Rest *)p) defaultPos];
       b = YES;
       break;

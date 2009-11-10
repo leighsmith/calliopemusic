@@ -230,7 +230,7 @@ static float minStem(TimedObj *p, TimedObj *r)
   float ry = (MINSTEMLEN * ss);
   float ly, rb;
   rb = [r myStemBase];
-  if (r->time.stemup)
+  if ([r stemIsUp])
   {
     ly = [r yOfBottomLine];
     if (rb - ry > ly) ry = rb - ly;
@@ -240,7 +240,7 @@ static float minStem(TimedObj *p, TimedObj *r)
     ly = [r yOfTopLine];
     if (rb + ry < ly) ry = ly - rb;
   }
-  if (p->time.stemup == r->time.stemup) ry += beamsThick(r->gFlags.size, CROTCHET - r->time.body);
+  if ([p stemIsUp] == [r stemIsUp]) ry += beamsThick(r->gFlags.size, CROTCHET - r->time.body);
   else if (r->time.body < p->time.body) ry += beamsThick(r->gFlags.size, p->time.body - r->time.body);
   return ry;
 }
@@ -249,7 +249,7 @@ static float minStem(TimedObj *p, TimedObj *r)
 static float minStemLen(TimedObj *p, TimedObj *r)
 {
   float ms = minStem(p, r);
-  return r->time.stemup ? -ms : ms;
+  return [r stemIsUp] ? -ms : ms;
 }
 
 
@@ -334,7 +334,7 @@ static int signof(float f)
   while (k--)
   {
     r = [client objectAtIndex:k];
-    su = r->time.stemup;
+    su = [r stemIsUp];
     x = r->x + [r stemXoff: 0];
     y = m * (x - xc) + yc;
     ry = [r myStemBase] + minStemLen(p, r);
@@ -387,7 +387,7 @@ static int signof(float f)
     x = r->x + [r stemXoff: 0];
     y = [r myStemBase] + minStemLen(p, r);
 // NSLog(@"note %d minstem %f\n", k, minStemLen(p, r));
-    if (r->time.stemup)
+    if ([r stemIsUp])
     {
       if (y < y1)
       {
@@ -459,7 +459,7 @@ static int signof(float f)
   dx = x2 - x1;
   if (dx <= 2.0) return self;
   sz = p->gFlags.size;
-  pup = p->time.stemup;
+  pup = [p stemIsUp];
   if (f == 3) return [self setMixed: p : q];
   if (f == 0)
   {
@@ -602,15 +602,16 @@ static int signof(float f)
   TimedObj *p;
   int nfix = 0, nup = 0, ndn = 0;
   int k = [client count];
+    
   while (k--)
   {
-    p = [client objectAtIndex:k];
+    p = [client objectAtIndex: k];
     if (TYPEOF(p) == NOTE)
     {
-      if (p->time.stemfix)
+      if ([p stemIsFixed])
       {
         ++nfix;
-        if (p->time.stemup) ++nup; else ++ndn;
+        if ([p stemIsUp]) ++nup; else ++ndn;
       }
     }
   }
@@ -668,18 +669,18 @@ static int signof(float f)
     {
       if (b == 0)
       {
-        p->time.stemfix = 0;
+	[p setStemIsFixed: NO];
         [p defaultStem: ([p midPosOff] >= 0)];
       }
       else if (b < 3)
       {
-        p->time.stemfix = 1;
+	[p setStemIsFixed: YES];
         [p defaultStem: (b - 1)];
       }
       else if (b == 3) 
       {
-        p->time.stemfix = 1;
-        [p defaultStem: p->time.stemup];
+	[p setStemIsFixed: YES];
+        [p defaultStem: [p stemIsUp]];
       }
     }
   }
@@ -837,7 +838,7 @@ static char nflg[NUMUNDER];
 {
   int i, n, su;
     float xa=0.0, ya=0.0, xb=0.0, yb=0.0, y1, y2, ymax=0.0, th, bsep, bth, ys=0.0;//sb: innited values
-  su = p->time.stemup;
+  su = [p stemIsUp];
   if (hFlags.split == 2)
   {
     xa = [p xOfStaffEnd: 0];
@@ -908,7 +909,7 @@ int getHalfCode(TimedObj *r, int a, int k)
     else				/* ambiguous: resolve towards dots */
     {
       s = toj[a - 1];
-      code = oppCode[(s->time.dot > 0)];  	/* else flag to right */
+      code = oppCode[([s dottingCode] > 0)];  	/* else flag to right */
     }
   }
   if (r->time.oppflag) code = oppCode[code];	/* in case reverse it */
@@ -937,7 +938,7 @@ int getHalfCode(TimedObj *r, int a, int k)
   {
     toj[i] = r = [client objectAtIndex:i];
     flg[i] = nflg[i] = df - r->time.body;
-    sup[i] = r->time.stemup;
+    sup[i] = [r stemIsUp];
     ticks += [r noteEval: NO];
     if (flags.broken && TOLFLOATEQ(ticks, broke, 0.1))
     {
@@ -1196,7 +1197,7 @@ int getHalfCode(TimedObj *r, int a, int k)
     x = r->x;
     y = [r myStemBase] - r->time.stemlen;
     cline(x, y, x, y - tabstemlens[sz], stemthicks[sz], dflag);
-    if (r->time.dot) restdot(smallersz[sz], 0.0, x, y, 0, r->time.dot, 0, dflag);
+    if ([r dottingCode]) restdot(smallersz[sz], 0.0, x, y, 0, [r dottingCode], 0, dflag);
   }
   return self;
 }
@@ -1228,7 +1229,7 @@ static void drawTremolo(int n, TimedObj *a, TimedObj *b, float ytrem, int sz, in
       cline(x1, [a myStemBase] + [a stemYoff: 0], x1, y1, stemthicks[sz], dflag);
       cline(x2, [b myStemBase] + [b stemYoff: 0], x2, y2, stemthicks[sz], dflag);
     }
-    pup = a->time.stemup;
+    pup = [a stemIsUp];
   }
   else
   {
@@ -1282,7 +1283,7 @@ static void drawTremolo(int n, TimedObj *a, TimedObj *b, float ytrem, int sz, in
 - drawBeamGrace: (TimedObj *) p : (TimedObj *) q : (int) sz : (int) dflag
 {
   float bsep = beamthick[sz] + beamsep[sz];
-  int pup = p->time.stemup;
+  int pup = [p stemIsUp];
   float x1 = p->x + [p stemXoffLeft: 0];
   float x2 = q->x + [q stemXoffRight: 0];
   float y1 = [p myStemBase] + p->time.stemlen;

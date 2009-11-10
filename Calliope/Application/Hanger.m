@@ -335,6 +335,15 @@
   return self;
 }
 
+// This is an abstract method that should never actually run, all subclasses should override this.
+- (BOOL) coordsForHandle: (int) handle asX: (float *) x andY: (float *) y
+{
+    NSLog(@"Hanger abstract -coordsForHandle: %d messaged, returning coords = [0,0]\n", handle);
+    *x = 0.0;
+    *y = 0.0;
+    return NO;
+}
+
 /* many hangers use this generic hit */
 
 - (BOOL) hit: (NSPoint) p : (int) j : (int) k

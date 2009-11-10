@@ -73,7 +73,7 @@ static char timecodes[3] = {4, 4, 5};
   colour = proto->colour;
   stemside = proto->stemside;
   time.body = timecodes[i];
-  time.dot = proto->time.dot;
+  time.dot = [proto dottingCode];
   time.stemlen = 20; // TODO [self setStemLengthTo: 20];
   p1 = proto->p1;
   return self;

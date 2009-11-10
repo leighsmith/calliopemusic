@@ -310,7 +310,7 @@ static void orderXY(float *x, float *y)
 
 static float anyDotFor(GNote *p)
 {
-    return (p->time.dot) ? [p dotOffset] : 0.0;
+    return ([p dottingCode]) ? [p dotOffset] : 0.0;
 }
 
 
@@ -321,7 +321,7 @@ static float anyHeadFor(GNote *p, int n)
     NoteHead *noteHead = [p noteHead: n];
     float w = 0.0;
 
-    if (!(p->time.stemup) && [noteHead isReverseSideOfStem]) 
+    if (!([p stemIsUp]) && [noteHead isReverseSideOfStem]) 
 	w = -2.0 * halfwidth[(int)p->gFlags.size][[noteHead bodyType]][p->time.body];
     if ([noteHead accidentalOffset] < w)
 	w = [noteHead accidentalOffset]; 
@@ -388,10 +388,10 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
     phk = [p numberOfNoteHeads];
     if (phk > 1)
     {
-      if (head1 == 0) a = !p->time.stemup;
+      if (head1 == 0) a = ![p stemIsUp];
       else
       {
-        if (head1 + 1 == phk) a = p->time.stemup;
+        if (head1 + 1 == phk) a = [p stemIsUp];
         else
         {
           noteHead = [p noteHead: head1];
@@ -408,8 +408,8 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
     }
     else
     {
-      psu = p->time.stemup;
-      qsu = q->time.stemup;
+      psu = [p stemIsUp];
+      qsu = [q stemIsUp];
       t = (psu << 2) | (qsu << 1) | flags.place;
       off1.x = tieoffx[0][t] * dx;
       off1.y = tieoffy[0][t] * dy;
@@ -424,7 +424,7 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
   {
     if (TYPEOF(p) == NOTE)
     {
-      psu = qsu = p->time.stemup;
+      psu = qsu = [p stemIsUp];
       t = (psu << 2) | (qsu << 1) | flags.place;
       a = tiedir[t];
       off1.x = tieoffx[0][t] * dx;
@@ -439,7 +439,7 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
     }
     if (TYPEOF(q) == NOTE)
     {
-      psu = qsu = q->time.stemup;
+      psu = qsu = [q stemIsUp];
       t = (psu << 2) | (qsu << 1) | flags.place;
       a = tiedir[t];
       off2.x = tieoffx[1][t] * dx;
@@ -480,7 +480,7 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
   float ex, ey;
   if (TYPEOF(p) == NOTE)
   {
-    if (a == p->time.stemup)
+    if (a == [p stemIsUp])
     {
       [p hitBeamAt: &ex : &ey];
       *ox = ex - p->x;

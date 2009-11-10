@@ -77,9 +77,29 @@ struct timeinfo
 - (BOOL) stemIsUp;
 
 /*!
+  Assigns that the timed object's stem is up (YES), or down (NO).
+ */
+- (void) setStemIsUp: (BOOL) yesOrNo;
+
+/*!
+  Returns if the timed object's stem is fixed or free to be changed up or down.
+ */
+- (BOOL) stemIsFixed;
+
+/*!
+  Assigns if the timed object's stem is fixed or free to be changed up or down.
+ */
+- (void) setStemIsFixed: (BOOL) yesOrNo;
+
+/*!
  Returns if the timed object is dotted. TODO should be an enum.
  */
 - (int) dottingCode;
+
+/*!
+ Assigns that the timed object is dotted. TODO should be an enum.
+ */
+- (void) setDottingCode: (int) newDottingCode;
 
 - (BOOL) validAboveBelow: (int) a;
 - (BOOL) isBeamable;

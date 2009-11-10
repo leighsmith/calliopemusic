@@ -193,9 +193,9 @@ extern NSString *nullInstrument;
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
-    int v;
-    char * n,*a;
-    v = [aDecoder versionForClassName:@"CallInst"];
+    int v = [aDecoder versionForClassName:@"CallInst"];
+    char *n, *a;
+    
     if (v == 0)
       {
 //      [aDecoder decodeValuesOfObjCTypes:"**@cccc", &name, &abbrev, &tuning, &trans, &channel, &istab, &sound];

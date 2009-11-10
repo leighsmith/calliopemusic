@@ -161,7 +161,7 @@ static Rest *proto;
 
 - resetStemlen
 {
-  time.stemlen = getstemlen(QUAVER, gFlags.size, 0, time.stemup, 4, getSpacing(mystaff));
+  time.stemlen = getstemlen(QUAVER, gFlags.size, 0, [self stemIsUp], 4, getSpacing(mystaff));
   return self;
 }
 
@@ -170,7 +170,8 @@ static Rest *proto;
 
 - defaultStem: (BOOL) up
 {
-  if (up != time.stemup) time.stemup = up;
+  if (up != [self stemIsUp]) 
+      [self setStemIsUp: up];
   [self resetStemlen];
   [self recalc];
   return self;

@@ -211,9 +211,10 @@ void lineupDots(GNote *np[], int k)
     if (x > mpx) mpx = x;
     sz = p->gFlags.size;
     ti =  &(p->time);
-    dir = (ti->stemup ? -2 : 2);
+    dir = ([p stemIsUp] ? -2 : 2);
     dys = -1;
-    if (!(ti->stemup) && ti->stemfix) dys = 1;
+    if (!([p stemIsUp]) && [p stemIsFixed])
+	dys = 1;
     b = [p isBeamed];
     nl = p->headlist;
     hk = [nl count]; 
@@ -242,8 +243,8 @@ void lineupDots(GNote *np[], int k)
         }
       }
       bt = [noteHead bodyType];
-      t = getdotx(sz, bt, 0, ti->body, b, ti->stemup);
-      if ([noteHead isReverseSideOfStem]) t += halfwidth[sz][bt][ti->body] * offside[ti->stemup];
+      t = getdotx(sz, bt, 0, ti->body, b, [p stemIsUp]);
+	if ([noteHead isReverseSideOfStem]) t += halfwidth[sz][bt][ti->body] * offside[[p stemIsUp] ? 1: 0];
       if (t > r) r = t;
     }
   }
@@ -268,17 +269,19 @@ void lineupDots(GNote *np[], int k)
 
 - resetStemdir: (int) m
 {
-  int s;
-  if (time.stemfix) return self;
-  s = [self midPosOff];
-  if (m == 0 && s == 0) return self;
-  if (time.stemup != (s > 0))
-  {
-    time.stemup = (s > 0);
-    time.stemlen = -time.stemlen;
-    [self reverseHeads];
-  }
-  return self;
+    int s;
+    
+    if ([self stemIsFixed])
+	return self;
+    s = [self midPosOff];
+    if (m == 0 && s == 0) 
+	return self;
+    if ([self stemIsUp] != (s > 0)) {
+	[self setStemIsUp: (s > 0)];
+	time.stemlen = -time.stemlen;
+	[self reverseHeads];
+    }
+    return self;
 }
 
 
@@ -290,7 +293,7 @@ void lineupDots(GNote *np[], int k)
 - resetStemlen
 {
   NoteHead *noteHead = [headlist lastObject];
-  time.stemlen = getstemlen(time.body, gFlags.size, stype[(int)[noteHead bodyType]], time.stemup, [noteHead staffPosition], [self getSpacing]);
+  time.stemlen = getstemlen(time.body, gFlags.size, stype[(int)[noteHead bodyType]], [self stemIsUp], [noteHead staffPosition], [self getSpacing]);
   return self;
 }
 
@@ -299,7 +302,7 @@ void lineupDots(GNote *np[], int k)
 
 - resetStemlenUsing: (int) pos
 {
-  time.stemlen = getstemlen(time.body, gFlags.size, 0, time.stemup, pos, [self getSpacing]);
+  time.stemlen = getstemlen(time.body, gFlags.size, 0, [self stemIsUp], pos, [self getSpacing]);
   return self;
 }
 
@@ -372,7 +375,7 @@ void lineupAccs(NoteHead *ah[], int an, NoteHead *nh[], GNote *note[], int hn)
     p = note[i];
     w = halfwidth[p->gFlags.size][0][p->time.body];
     lbear[i] = p->x;
-    if (!(p->time.stemup) && [nh[i] isReverseSideOfStem]) lbear[i] -= 3.0 * w; else lbear[i] -= w;
+    if (!([p stemIsUp]) && [nh[i] isReverseSideOfStem]) lbear[i] -= 3.0 * w; else lbear[i] -= w;
     accx = lbear[i] - accxoff[p->gFlags.size];
     if (accx < minb) minb = accx;
   }
@@ -459,8 +462,8 @@ NSLog(@"curx %f: pos[%d] set to: %f\n", curx, [noteHead staffPosition], [noteHea
     }
   }
   if (n == 0) return self;
-  /* reverse list if stemup */
-  if (time.stemup)
+  /* reverse list if stem is up */
+  if ([self stemIsUp])
   {
     j = n / 2;
     k = n;
@@ -489,7 +492,7 @@ NSLog(@"curx %f: pos[%d] set to: %f\n", curx, [noteHead staffPosition], [noteHea
   NoteHead *q;
   float hy = [noteHead y];
   k = [headlist count];
-  if (time.stemup)
+  if ([self stemIsUp])
   {
     for (i = 0; i < k; i++)
     {
@@ -684,7 +687,7 @@ extern float ledgedxs[3];
       {
         ly = [sp yOfTop] + (int) sp->flags.spacing * j;
 	dwsx = (hwsa[i] < -1 && j >= hwsa[i] ? dx : 0.0);
-        if (time.stemup)
+        if ([self stemIsUp])
 	{
 	  lx1 = x - dx;
 	  lx2 = x + dx + dwsx;
@@ -706,7 +709,7 @@ extern float ledgedxs[3];
       {
         ly = [sp yOfTop] + (int) sp->flags.spacing * j;
 	dwsx = (lwsb[i] > 9 && j <= lwsb[i] ? dx : 0.0);
-        if (time.stemup)
+        if ([self stemIsUp])
 	{
 	  lx1 = x - dx;
 	  lx2 = x + dx + dwsx;

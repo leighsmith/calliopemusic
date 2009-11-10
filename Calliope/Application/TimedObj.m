@@ -22,17 +22,19 @@
 
 - init
 {
-  [super init];
-  time.body = 0;
-  time.dot = 0;
-  time.tight = 0;
-  time.stemup = 0;
-  time.stemfix = 0;
-  time.nostem = 0;
-  time.oppflag = 0;
-  time.stemlen = 0.0;
-  time.factor = 1.0;
-  return self;
+    self = [super init];
+    if (self != nil) {
+	time.body = 0;
+	time.dot = 0;
+	time.tight = 0;
+	[self setStemIsUp: NO];
+	[self setStemIsFixed: NO];
+	time.nostem = 0;
+	time.oppflag = 0;
+	time.stemlen = 0.0;
+	time.factor = 1.0;
+    }
+    return self;
 }
 
 
@@ -100,19 +102,18 @@
 
 - defaultStem: (BOOL) up
 {
-  if (up != time.stemup)
-  {
-    time.stemlen = -(time.stemlen);
-    time.stemup = !(time.stemup);
-  }
-  return self;
+    if (up != [self stemIsUp]) {
+	time.stemlen = -(time.stemlen);
+	[self setStemIsUp: ![self stemIsUp]];
+    }
+    return self;
 }
 
 
 - (void) setStemLengthTo: (float) s
 {
-  time.stemlen = s;
-  time.stemup = (s < 0);
+    time.stemlen = s;
+    [self setStemIsUp: (s < 0)];
 }
 
 
@@ -151,7 +152,22 @@
 
 - (BOOL) stemIsUp
 {
-    return time.stemup;
+    return time.stemup == 1;
+}
+
+- (void) setStemIsUp: (BOOL) yesOrNo
+{
+    time.stemup = yesOrNo ? 1 : 0;
+}
+
+- (BOOL) stemIsFixed
+{
+    return time.stemfix == 1;
+}
+
+- (void) setStemIsFixed: (BOOL) yesOrNo
+{
+    time.stemfix = yesOrNo ? 1 : 0;
 }
 
 /*!
@@ -162,8 +178,13 @@
     return time.dot;
 }
 
-
-
+/*!
+ Assigns that the timed object is dotted. TODO should be an enum.
+ */
+- (void) setDottingCode: (int) newDottingCode
+{
+    time.dot = newDottingCode;
+}
 
 /*
   Returns whether the yAboveBelow is to be used.  Do not use stemlengths
@@ -219,7 +240,7 @@
 
 - (BOOL) validAboveBelow: (int) a
 {
-  if (a != time.stemup) return YES;
+  if (a != [self stemIsUp]) return YES;
   if (TYPEOF(mystaff) != STAFF) return NO;
   return [self checkRemoteNotes: a : [mystaff yOfTop]];
 }
@@ -362,40 +383,44 @@ void writeTimeData5(NSCoder *s, struct timeinfo *t) /*sb: changed from NSArchive
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
-  struct oldtimeinfo t;
-  float sl;
-  char b1, b2, b3, v;
-  [super initWithCoder:aDecoder];
-  time.nostem = 0;
-  time.oppflag = 0;
-  time.factor = 1.0;
-  v = [aDecoder versionForClassName:@"TimedObj"];
-  if (v == 0)
-  {
-    [aDecoder decodeValuesOfObjCTypes:"sf", &t, &sl];
-    time.body = t.body;
-    time.dot = t.dot;
-    time.tight = 0;
-    time.stemup = (sl < 0);
-    time.stemfix = 0;
-    time.stemlen = sl;
-  }
-  else if (v == 1)
-  {
-    [aDecoder decodeValuesOfObjCTypes:"cccf", &b1, &b2, &b3, &sl];
-    time.body = b1;
-    time.dot = b2;
-    time.tight = b3;
-    time.stemup = (sl < 0);
-    time.stemfix = 0;
-    time.stemlen = sl;
-  }
-  else if (v == 2) readTimeData2(aDecoder, &time);
-  else if (v == 3) readTimeData3(aDecoder, &time);
-  else if (v == 4) readTimeData4(aDecoder, &time);
-  else if (v == 5) readTimeData5(aDecoder, &time);
-  if (!mystaff) NSLog(@"TimedObj %p has nil mystaff\n",self);
-  return self;
+    struct oldtimeinfo t;
+    float sl;
+    char b1, b2, b3, v;
+    
+    [super initWithCoder: aDecoder];
+    time.nostem = 0;
+    time.oppflag = 0;
+    time.factor = 1.0;
+    v = [aDecoder versionForClassName:@"TimedObj"];
+    if (v == 0) {
+	[aDecoder decodeValuesOfObjCTypes:"sf", &t, &sl];
+	time.body = t.body;
+	time.dot = t.dot;
+	time.tight = 0;
+	[self setStemIsUp: (sl < 0)];
+	[self setStemIsFixed: NO];
+	time.stemlen = sl;
+    }
+    else if (v == 1) {
+	[aDecoder decodeValuesOfObjCTypes:"cccf", &b1, &b2, &b3, &sl];
+	time.body = b1;
+	time.dot = b2;
+	time.tight = b3;
+	[self setStemIsUp: (sl < 0)];
+	[self setStemIsFixed: NO];
+	time.stemlen = sl;
+    }
+    else if (v == 2) 
+	readTimeData2(aDecoder, &time);
+    else if (v == 3) 
+	readTimeData3(aDecoder, &time);
+    else if (v == 4) 
+	readTimeData4(aDecoder, &time);
+    else if (v == 5) 
+	readTimeData5(aDecoder, &time);
+    if (!mystaff) 
+	NSLog(@"TimedObj %p has nil mystaff\n",self);
+    return self;
 }
 
 
@@ -407,16 +432,16 @@ void writeTimeData5(NSCoder *s, struct timeinfo *t) /*sb: changed from NSArchive
 
 - (void)encodeWithPropertyListCoder:(OAPropertyListCoder *)aCoder
 {
-    [super encodeWithPropertyListCoder:(OAPropertyListCoder *)aCoder];
-    [aCoder setInteger:time.body forKey:@"body"];
-    [aCoder setInteger:time.dot forKey:@"dot"];
-    [aCoder setInteger:time.tight forKey:@"tight"];
-    [aCoder setInteger:time.stemup forKey:@"stemup"];
-    [aCoder setInteger:time.stemfix forKey:@"stemfix"];
-    [aCoder setInteger:time.nostem forKey:@"nostem"];
-    [aCoder setInteger:time.oppflag forKey:@"oppflag"];
-    [aCoder setFloat:time.stemlen forKey:@"stemlen"];
-    [aCoder setFloat:time.factor forKey:@"factor"];
+    [super encodeWithPropertyListCoder: (OAPropertyListCoder *) aCoder];
+    [aCoder setInteger: time.body forKey: @"body"];
+    [aCoder setInteger: [self dottingCode] forKey: @"dot"];
+    [aCoder setInteger: time.tight forKey: @"tight"];
+    [aCoder setInteger: [self stemIsUp] forKey: @"stemup"];
+    [aCoder setInteger: [self stemIsFixed] forKey: @"stemfix"];
+    [aCoder setInteger: time.nostem forKey: @"nostem"];
+    [aCoder setInteger: time.oppflag forKey:@"oppflag"];
+    [aCoder setFloat: time.stemlen forKey:@"stemlen"];
+    [aCoder setFloat: time.factor forKey:@"factor"];
 }
 
 

@@ -1,6 +1,9 @@
 /* $Id$ */
 #import "winheaders.h"
 #import "Hanger.h"
+// #import "Staff.h"
+
+@class StaffObj;
 
 /* TIE gFlags.subtype */
 
@@ -61,6 +64,10 @@ extern char mapTieSubtype[NUMTIES];
 - (BOOL) hit: (NSPoint) p;
 - (BOOL) move: (float) dx : (float) dy : (NSPoint) p : sys : (int) alt;
 - (void)setSize:(int)ds;
+
+// Declare the old form of proto to distinguish it from the later form used in Graphic.
+- proto: (GraphicView *) v : (NSPoint) pt : (StaffObj *) n0 : (StaffObj *) n1 : (Graphic *) g : (int) i;
+
 - drawMode: (int) m;
 - draw;
 - (id)initWithCoder:(NSCoder *)aDecoder;

@@ -1596,7 +1596,7 @@ extern int needUpgrade;
 	[aDecoder decodeValuesOfObjCTypes:"fffffffff", &vhigha, &vhighb, &voffa, &voffb, &y, &pref1, &pref2, &topmarg, &botmarg];
     }
     else if (v == 7) {
-	char *p;
+	char *p = NULL;
 	[aDecoder decodeValuesOfObjCTypes:"cccccc", &b1, &b2, &b3, &b5, &b6, &b7];
 	flags.nlines = b1;
 	flags.spacing = b2;
@@ -1609,7 +1609,7 @@ extern int needUpgrade;
 	if (p) part = [[NSString stringWithUTF8String:p] retain]; else part = nil;
     }
     else if (v == 8) {
-	char *p;
+	char *p = NULL;
 	[aDecoder decodeValuesOfObjCTypes:"ccccccc", &b1, &b2, &b3, &b5, &b6, &b7, &b8];
 	flags.nlines = b1;
 	flags.spacing = b2;

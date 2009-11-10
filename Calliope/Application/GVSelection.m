@@ -329,7 +329,7 @@ extern float ctimex(float d);
     {
 	*x = t->x + ctimex([t noteEval: NO]) * 8;
 	*tb = t->time.body;
-	*td = t->time.dot;
+	*td = [t dottingCode];
     }
     else
     {
@@ -351,7 +351,7 @@ extern float ctimex(float d);
 		t = (TimedObj *) p;
 		*x = t->x + ctimex([t noteEval: NO]) * 8;
 		*tb = t->time.body;
-		*td = t->time.dot;
+		*td = [t dottingCode];
 	    }
 	    else
 	    {

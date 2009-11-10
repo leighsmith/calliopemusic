@@ -165,8 +165,8 @@ static int mypartlist = -1;
   {
     p->gFlags.subtype = [[stylematrix selectedCell] tag];
     p->gFlags.locked = ([[objmatrix cellAtRow:0 column:0] threeState] == 1);
-    p->time.stemup = ![stemmatrix selectedColumn];
-    p->time.stemfix = ([fixswitch threeState] == 1);
+    [p setStemIsUp: ![stemmatrix selectedColumn]];
+    [p setStemIsFixed: ([fixswitch threeState] == 1)];
     p->time.tight = [[objmatrix cellAtRow:1 column:0] threeState];
     p->time.nostem = ([nostemswitch threeState] == 1);
     p->voice = [[voiceform cellAtIndex:0] intValue];
@@ -256,7 +256,7 @@ static void setBodyTypes(GNote *p, int t)
       if (seltime >= 0)
       {
 	p->time.body = seltime;
-	p->time.dot = seldot;
+	[p setDottingCode: seldot];
       }
       if (selacc >= 0)
       {
@@ -268,14 +268,15 @@ static void setBodyTypes(GNote *p, int t)
       if (selstem >= 0)
       {
       
-        if (selstem == p->time.stemup)
+        if (selstem == [p stemIsUp])
         {
-	  p->time.stemup = !(p->time.stemup);
+	  [p setStemIsUp: ![p stemIsUp]];
 	  [p reverseHeads];
 	  [p resetStemlen];
         }
           i = [fixswitch threeState];
-        if (i != 2) p->time.stemfix = i;
+        if (i != 2) 
+	    [p setStemIsFixed: i];
       }
       i = [[voiceform cellAtIndex:0] intValue];
       if ([voiceform indexOfSelectedItem] == 0) p->voice = i;
@@ -316,10 +317,10 @@ static void setBodyTypes(GNote *p, int t)
     ++n;
     assay(0, p->gFlags.locked);
     assay(1, p->time.tight);
-    assay(2, p->time.stemfix);
+    assay(2, [p stemIsFixed]);
     assay(3, p->isGraced);
     assay(5, p->time.body);
-    assay(6, p->time.dot);
+    assay(6, [p dottingCode]);
     assay(7, p->gFlags.subtype);
     assay(8, getAccidental(p, p->gFlags.selend));
     assay(9, (p->time.stemlen > 0));
@@ -405,20 +406,21 @@ static void setBodyTypes(GNote *p, int t)
 {
   int w;
   GNote *p = [GNote myPrototype];
-  [timematrix selectCellAtRow:0 column:n];
-  [dotmatrix selectCellAtRow:0 column:0];
-  [stylematrix selectCellWithTag:p->gFlags.subtype];
-  [stemmatrix selectCellAtRow:0 column:!(p->time.stemup)];
-  [nostemswitch setThreeState:p->time.nostem];
-  [fixswitch setThreeState:p->time.stemfix];
-  [[objmatrix cellAtRow:0 column:0] setThreeState:p->gFlags.locked];
-  [[objmatrix cellAtRow:1 column:0] setThreeState:p->time.tight];
-  [[voiceform cellAtIndex:0] setIntValue:p->voice];
-  [[verseform cellAtIndex:0] setIntValue:p->versepos];
-  [gracematrix selectCellAtRow:0 column:p->isGraced];
+    
+  [timematrix selectCellAtRow: 0 column: n];
+  [dotmatrix selectCellAtRow: 0 column: 0];
+  [stylematrix selectCellWithTag: p->gFlags.subtype];
+  [stemmatrix selectCellAtRow: 0 column: !([p stemIsUp])];
+  [nostemswitch setThreeState: p->time.nostem];
+  [fixswitch setThreeState: [p stemIsFixed]];
+  [[objmatrix cellAtRow: 0 column: 0] setThreeState: p->gFlags.locked];
+  [[objmatrix cellAtRow: 1 column: 0] setThreeState: p->time.tight];
+  [[voiceform cellAtIndex: 0] setIntValue: p->voice];
+  [[verseform cellAtIndex: 0] setIntValue: p->versepos];
+  [gracematrix selectCellAtRow: 0 column: p->isGraced];
   [slashswitch setThreeState: [p showSlash]];
   w = [p whereInstrument];
-  [definebutton selectItemAtIndex:w + 1];
+  [definebutton selectItemAtIndex: w + 1];
   if (w == 0)
   {
       selectPopFor(instbutton, instbutton, [p getPatch]);//sb: was (midipopup, instbutton, [p getPatch])

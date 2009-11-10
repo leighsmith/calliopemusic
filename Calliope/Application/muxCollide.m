@@ -48,7 +48,7 @@ static void doStems(GNote *nn[], int k, int sn, float vcx[])
     px = vcx[VOICEID(p->voice,sn)];
     if (hasflag[p->time.body] && !(p->time.nostem))
     {
-      psu = p->time.stemup;
+      psu = [p stemIsUp];
       mp = p->staffPosition;
       for (j = 0; j < k; j++)
       {
@@ -151,7 +151,7 @@ static char clearcode[4][4] =
 static BOOL clearPair(GNote *a, GNote *b)
 {
   return (clearcode[(hasstem[a->time.body] << 1) | hasstem[b->time.body]]
-  				[(a->time.stemup << 1) | b->time.stemup]);
+  				[([a stemIsUp] << 1) | [b stemIsUp]]);
 }
 
 
@@ -253,8 +253,8 @@ static char nestleCode(GNote *p, int pk, GNote *q, int qk)
 {
   int i, j, dp;
   NoteHead *ph, *qh;
-  unsigned char ps = p->time.stemup;
-  unsigned char qs = q->time.stemup;
+  unsigned char ps = [p stemIsUp];
+  unsigned char qs = [q stemIsUp];
   if (ps == qs) return 1;
   for (i = 0; i < pk; i++)
   {
@@ -304,14 +304,14 @@ static float checkUnison(GNote *p, GNote *q)
   char ad, bd, au, bu, c, ea;
   float r;
   NoteHead *g, *h;
-  ad = (p->time.dot != 0);
-  au = p->time.stemup;
-  bd = (q->time.dot != 0);
-  bu = q->time.stemup;
+  ad = ([p dottingCode] != 0);
+  au = [p stemIsUp];
+  bd = ([q dottingCode] != 0);
+  bu = [q stemIsUp];
   g = [p noteHead: 0];
   h = [q noteHead: 0];
   ea = ([g accidental] == [h accidental]);
-  if (au != bu /* && p->time.dot == q->time.dot */ && headgraf[p->time.body] == headgraf[q->time.body]) r = 0.0;
+  if (au != bu /* && [p dottingCode] == [q dottingCode] */ && headgraf[p->time.body] == headgraf[q->time.body]) r = 0.0;
   else if (c = ustemcode[(hasstem[p->time.body] << 1) | hasstem[q->time.body]]) r = c * kern0(p, q);
   else r = uniscode[(ad << 1) | bd][(au << 1) | bu] * kern0(p, q);
   if (r < 0)
@@ -354,8 +354,8 @@ static char astmcode[4][8] =
 static int kernPairCode(GNote *a, GNote *b, int dp)
 {
   unsigned char ad, bd, as, bs, c;
-  ad = (a->time.dot != 0);
-  bd = (b->time.dot != 0);
+  ad = ([a dottingCode] != 0);
+  bd = ([b dottingCode] != 0);
   as = hasstem[a->time.body];
   bs = hasstem[b->time.body];
   c = ((as << 1) | bs);
@@ -366,18 +366,18 @@ static int kernPairCode(GNote *a, GNote *b, int dp)
 // NSLog(@"kernPairCode(b%d, b%d) nst[%d][%d] = %d\n", a->time.body, b->time.body, ad, (dp == 1), c);
       break;
     case 1:  /* only b stemmed */
-      bs = b->time.stemup;
+      bs = [b stemIsUp];
       c = bstmcode[(ad << 1) | bd][(bs << 2) | dp];
 // NSLog(@"kernPairCode(b%d, b%d) bst[%d][%d] = %d\n", a->time.body, b->time.body, (ad << 1) | bd, (bs << 2) | dp, c);
       break;
     case 2:  /* only a stemmed */
-      as = a->time.stemup;
+      as = [a stemIsUp];
       c = astmcode[(ad << 1) | bd][(as << 2) | dp];
 // NSLog(@"kernPairCode(b%d, b%d) ast[%d][%d] = %d\n", a->time.body, b->time.body, (ad << 1) | bd, (as << 2) | dp, c);
       break;
     case 3:  /* both stemmed */
-      as = a->time.stemup;
-      bs = b->time.stemup;
+      as = [a stemIsUp];
+      bs = [b stemIsUp];
       c = paircode[(ad << 1) | bd][(as << 3) | (bs << 2) | dp];
 // NSLog(@"kernPairCode(b%d, b%d) pc[%d][%d] = %d\n", a->time.body, b->time.body, (ad << 1) | bd, (as << 3) | (bs << 2) | dp, c);
   }
@@ -405,7 +405,7 @@ void kernsim(int sn, int s1, int s2, NSMutableArray *nl, float vcx[])
         n[nn] = p;
 	nh[nn++] = [p numberOfNoteHeads];
       }
-      if (p->time.dot && dnn < MAXNOTES) dn[dnn++] = p;
+      if ([p dottingCode] && dnn < MAXNOTES) dn[dnn++] = p;
     }
   }
   for (i = 0; i < nn - 1; i++)

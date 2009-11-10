@@ -87,7 +87,7 @@ static Tuple *proto;
   while (k--)
   {
     p = [client objectAtIndex:k];
-    s += tickval(p->time.body, p->time.dot);
+    s += tickval(p->time.body, [p dottingCode]);
   }
   return s;
 }
@@ -147,7 +147,7 @@ static float braoffy[2][2] =
   while (k--)
   {
     p = [client objectAtIndex: k];
-    if (p->time.stemup) ++su ; else ++sd;
+    if ([p stemIsUp]) ++su ; else ++sd;
   }
   return (su > sd);
 }
@@ -160,8 +160,8 @@ static float braoffy[2][2] =
   if (sn) [super sortNotes: client];
   p = [client objectAtIndex:0];
   q = [client lastObject];
-  pup = p->time.stemup;
-  qup = q->time.stemup;
+  pup = [p stemIsUp];
+  qup = [q stemIsUp];
   sz = p->gFlags.size;
   switch(flags.localiga)
   {

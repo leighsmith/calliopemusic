@@ -39,7 +39,7 @@
   a = [halfSizeSwitch intValue];
   if (a < 2) p->nFlags.halfSize = a;
   p->time.body = [bodymatrix selectedColumn];
-  p->time.dot = [dotmatrix selectedColumn];
+  [p setDottingCode: [dotmatrix selectedColumn]];
   return self;
 }
 
@@ -95,8 +95,10 @@
       j = [bodymatrix selectedColumn];
       if (j >= 0) p->time.body = j;
       j = [dotmatrix selectedColumn];
-      if (j >= 0) p->time.dot = j;
-      if (n) [p setNeume];
+      if (j >= 0) 
+	  [p setDottingCode: j];
+      if (n) 
+	  [p setNeume];
       [p reShape];
     }
     [v endInspection: &bb];
@@ -129,7 +131,7 @@
     assay(25, p->gFlags.subtype);//sb was 20...
     assay(26, p->nFlags.num);
     assay(27, p->time.body);
-    assay(28, p->time.dot);
+    assay(28, [p dottingCode]);
     assay(29, p->nFlags.halfSize);
   }
   *num = n;
@@ -180,7 +182,7 @@
   [typematrix selectCellWithTag:p->gFlags.subtype];
   if (p->gFlags.subtype == PUNCTINC) [incmatrix selectCellAtRow:0 column:p->nFlags.num]; else clearMatrix(incmatrix);
   [bodymatrix selectCellAtRow:0 column:p->time.body];
-  [dotmatrix selectCellAtRow:0 column:p->time.dot];
+  [dotmatrix selectCellAtRow:0 column:[p dottingCode]];
   [halfSizeSwitch setState: p->nFlags.halfSize];
   return self;
 }

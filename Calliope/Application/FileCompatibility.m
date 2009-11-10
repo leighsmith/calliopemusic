@@ -17,9 +17,12 @@
     NSMutableArray *replacementForList;
     
     [aDecoder decodeValuesOfObjCTypes: "i", &elementCount];
-    NSLog(@"decoding List with %d elements", elementCount);
+    NSLog(@"decoding List with %d elements into NSMutableArray", elementCount);
     
-    replacementForList = [NSMutableArray arrayWithCapacity: elementCount];
+    // We seem to need an extra retain here, even though a retain is issued on the array when it is returned.
+    // So currently, no we don't return an autoreleased array
+    // replacementForList = [NSMutableArray arrayWithCapacity: elementCount];
+    replacementForList = [[NSMutableArray arrayWithCapacity: elementCount] retain];
     if(elementCount > 0) { // it seems it's possible to encode zero length Lists?
 	id *staticObjectArray = (id *) malloc(sizeof(id) * elementCount);
 	unsigned int elementIndex;
@@ -27,13 +30,12 @@
 	[aDecoder decodeArrayOfObjCType: "@" count: elementCount at: staticObjectArray];
 	
 	for (elementIndex = 0; elementIndex < elementCount; elementIndex++) {
-	    NSLog(@"Decoding %@\n", staticObjectArray[elementIndex]);
+	    NSLog(@"Decoding %@ retain count %d\n", staticObjectArray[elementIndex], [staticObjectArray[elementIndex] retainCount]);
 	    [replacementForList addObject: staticObjectArray[elementIndex]];
 	}    
 	free(staticObjectArray);
     }
-
-    // should these be retained or should the receiving decoder do this?
+    // NSLog(@"replacementForList %p\n", replacementForList);
     return replacementForList;
 }
 
@@ -66,7 +68,7 @@
 {
     float floatParam;
     char stringParam1[80], stringParam2[80];
-    unsigned char dataParam[80];
+    unsigned char dataParam[80]; // TODO need to verify this should be an array and not a pointer.
     
     // [super initWithCoder:aDecoder];
     [aDecoder decodeValuesOfObjCTypes:"%fss", &dataParam, &floatParam, &stringParam1, &stringParam2];

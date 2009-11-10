@@ -183,7 +183,7 @@ int tuneIndex(int n)
       if (i >= 0)
       {
 	p->time.body = i;
-	p->time.dot = j;
+	[p setDottingCode: j];
       }
       if ([strumbutton state]) p->gFlags.subtype = 1 + [strummatrix selectedColumn];
       else
@@ -224,7 +224,7 @@ int tuneIndex(int n)
     assay(0, p->gFlags.subtype);
     assay(1, p->flags.prevtime);
     assay(2, p->time.body);
-    assay(3, p->time.dot);
+    assay(3, [p dottingCode]);
     assay(5, p->flags.body);
     assay(6, p->flags.direction);
     assay(7, p->flags.cipher);

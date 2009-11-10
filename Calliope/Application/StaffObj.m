@@ -1545,7 +1545,7 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
     }
     else if (v == 6)
     {
-	char *partChar;
+	char *partChar = NULL;
 	[aDecoder decodeValuesOfObjCTypes:"ccccc", &staffPosition, &selver, &isGraced, &voice, &versepos];
 //    [aDecoder decodeValuesOfObjCTypes:"@@%", &hangers, &verses, &part];
 	[aDecoder decodeValuesOfObjCTypes:"@@%", &hangers, &verses, &partChar];

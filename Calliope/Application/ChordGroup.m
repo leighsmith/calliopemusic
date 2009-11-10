@@ -75,7 +75,7 @@
 - (GNote *) myProximal
 {
   GNote *p = [client objectAtIndex:0];
-  if (p->time.stemup) return p;
+  if ([p stemIsUp]) return p;
   return [client lastObject];
 }
 
@@ -133,18 +133,18 @@
   q = [nl lastObject];
   if ([p isBeamed])
   {
-    if (!p->time.stemup) return nil;
+    if (![p stemIsUp]) return nil;
     bp = p;
   }
   else if ([q isBeamed])
   {
-    if (q->time.stemup) return nil;
+    if ([q stemIsUp]) return nil;
     bp = q;
   }
   else if ([self isBeamed]) return nil;
   if (bp != nil) return bp;
-  else if (!p->time.stemup) return q;
-  else if (q->time.stemup) return p;
+  else if (![p stemIsUp]) return q;
+  else if ([q stemIsUp]) return p;
   else return p;
 }
 
@@ -155,15 +155,16 @@
   int k, sk = [client count];
   k = sk;
   p = [self pickProximal: client];
-  p->time.stemfix = 1;
+
+  [p setStemIsFixed: YES];
   while (k--)
   {
     q = [client objectAtIndex:k];
     if (q != p)
     {
       q->x = p->x;
-      q->time.stemup = p->time.stemup;
-      q->time.stemfix = 1;
+      [q setStemIsUp: [p stemIsUp]];
+      [q setStemIsFixed: YES];
       q->gFlags.locked = p->gFlags.locked;
     }
     [q resetChord];
@@ -301,12 +302,12 @@
     GNote *p = [client objectAtIndex: 0];
     
     if (prox) {
-	if (!p->time.stemup) 
+	if (![p stemIsUp]) 
 	    p = [client lastObject];
 	h = [p noteHead: [p numberOfNoteHeads] - 1];
     }
     else {
-	if (p->time.stemup) 
+	if ([p stemIsUp]) 
 	    p = [client lastObject];
 	h = [p noteHead: 0];
     }
