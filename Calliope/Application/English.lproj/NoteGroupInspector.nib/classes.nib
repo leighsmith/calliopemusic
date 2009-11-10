@@ -1,19 +1,127 @@
-{
-    IBClasses = (
-        {
-            CLASS = DrawApp; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {inspector = id; }; 
-            SUPERCLASS = NSApplication; 
-        }, 
-        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
-        {
-            ACTIONS = {set = id; setChoice = id; setProto = id; }; 
-            CLASS = NoteGroupInspector; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {freematrix = id; hdtlmatrix = id; typematrix = id; }; 
-            SUPERCLASS = NSPanel; 
-        }
-    ); 
-    IBVersion = 1; 
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IBClasses</key>
+	<array>
+		<dict>
+			<key>CLASS</key>
+			<string>NSObject</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>FirstResponder</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>help</key>
+				<string>id</string>
+				<key>info</key>
+				<string>id</string>
+				<key>orderAppDefPanel</key>
+				<string>id</string>
+				<key>orderCastInspector</key>
+				<string>id</string>
+				<key>orderPlayInspector</key>
+				<string>id</string>
+				<key>orderPreferencePanel</key>
+				<string>id</string>
+				<key>orderTabTuner</key>
+				<string>id</string>
+				<key>orderVoiceInspector</key>
+				<string>id</string>
+				<key>print</key>
+				<string>id</string>
+				<key>setCurrentTool</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>DrawApp</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>MenuBar</key>
+				<string>id</string>
+				<key>appdefaults</key>
+				<string>id</string>
+				<key>castInspector</key>
+				<string>id</string>
+				<key>charmatrix</key>
+				<string>NSMatrix</string>
+				<key>fontAccMatrix</key>
+				<string>id</string>
+				<key>fontAccessory</key>
+				<string>id</string>
+				<key>infoPanel</key>
+				<string>id</string>
+				<key>inspector</key>
+				<string>id</string>
+				<key>insplist</key>
+				<string>id</string>
+				<key>laybarInspector</key>
+				<string>id</string>
+				<key>laybarform</key>
+				<string>id</string>
+				<key>perfInspector</key>
+				<string>id</string>
+				<key>preferences</key>
+				<string>id</string>
+				<key>tabTuner</key>
+				<string>id</string>
+				<key>tempoSlider</key>
+				<string>id</string>
+				<key>tempoText</key>
+				<string>id</string>
+				<key>toneTools</key>
+				<string>id</string>
+				<key>tools</key>
+				<string>NSMatrix</string>
+				<key>toolsH</key>
+				<string>NSMatrix</string>
+				<key>version</key>
+				<string>id</string>
+				<key>voiceInspector</key>
+				<string>id</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>set</key>
+				<string>id</string>
+				<key>setChoice</key>
+				<string>id</string>
+				<key>setProto</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>NoteGroupInspector</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>freematrix</key>
+				<string>id</string>
+				<key>hdtlmatrix</key>
+				<string>id</string>
+				<key>typematrix</key>
+				<string>id</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSPanel</string>
+		</dict>
+	</array>
+	<key>IBVersion</key>
+	<string>1</string>
+</dict>
+</plist>
