@@ -25,13 +25,13 @@
     self = [super init];
     if (self != nil) {
 	time.body = 0;
-	time.dot = 0;
+	[self setDottingCode: 0];
 	time.tight = 0;
 	[self setStemIsUp: NO];
 	[self setStemIsFixed: NO];
 	time.nostem = 0;
 	time.oppflag = 0;
-	time.stemlen = 0.0;
+	[self setStemLengthTo: 0.0];
 	time.factor = 1.0;
     }
     return self;
@@ -54,7 +54,7 @@
   }
   else if (c == '.')
   {
-    time.dot = (time.dot == 1) ? 0 : 1;
+    [self setDottingCode: ([self dottingCode] == 1) ? 0 : 1];
     r = YES;
   }
   else if (c == '=')
@@ -75,7 +75,7 @@
 
 - (float) noteEval: (BOOL) f
 {
-  float a = tickNest(hangers, tickval(time.body, time.dot));
+  float a = tickNest(hangers, tickval(time.body, [self dottingCode]));
   if (time.factor != 0) a *= time.factor;
   return a;
 }
@@ -103,7 +103,7 @@
 - defaultStem: (BOOL) up
 {
     if (up != [self stemIsUp]) {
-	time.stemlen = -(time.stemlen);
+	[self setStemLengthTo: -[self stemLength]];
 	[self setStemIsUp: ![self stemIsUp]];
     }
     return self;
@@ -381,7 +381,7 @@ void writeTimeData5(NSCoder *s, struct timeinfo *t) /*sb: changed from NSArchive
 }
 
 
-- (id)initWithCoder:(NSCoder *)aDecoder
+- (id) initWithCoder: (NSCoder *) aDecoder
 {
     struct oldtimeinfo t;
     float sl;
@@ -391,24 +391,24 @@ void writeTimeData5(NSCoder *s, struct timeinfo *t) /*sb: changed from NSArchive
     time.nostem = 0;
     time.oppflag = 0;
     time.factor = 1.0;
-    v = [aDecoder versionForClassName:@"TimedObj"];
+    v = [aDecoder versionForClassName: @"TimedObj"];
     if (v == 0) {
-	[aDecoder decodeValuesOfObjCTypes:"sf", &t, &sl];
+	[aDecoder decodeValuesOfObjCTypes: "sf", &t, &sl];
 	time.body = t.body;
-	time.dot = t.dot;
+	[self setDottingCode: t.dot];
 	time.tight = 0;
 	[self setStemIsUp: (sl < 0)];
 	[self setStemIsFixed: NO];
-	time.stemlen = sl;
+	[self setStemLengthTo: sl];
     }
     else if (v == 1) {
-	[aDecoder decodeValuesOfObjCTypes:"cccf", &b1, &b2, &b3, &sl];
+	[aDecoder decodeValuesOfObjCTypes: "cccf", &b1, &b2, &b3, &sl];
 	time.body = b1;
-	time.dot = b2;
+	[self setDottingCode: b2];
 	time.tight = b3;
 	[self setStemIsUp: (sl < 0)];
 	[self setStemIsFixed: NO];
-	time.stemlen = sl;
+	[self setStemLengthTo: sl];
     }
     else if (v == 2) 
 	readTimeData2(aDecoder, &time);
@@ -419,7 +419,7 @@ void writeTimeData5(NSCoder *s, struct timeinfo *t) /*sb: changed from NSArchive
     else if (v == 5) 
 	readTimeData5(aDecoder, &time);
     if (!mystaff) 
-	NSLog(@"TimedObj %p has nil mystaff\n",self);
+	NSLog(@"TimedObj %p has nil mystaff\n", self);
     return self;
 }
 
@@ -438,10 +438,10 @@ void writeTimeData5(NSCoder *s, struct timeinfo *t) /*sb: changed from NSArchive
     [aCoder setInteger: time.tight forKey: @"tight"];
     [aCoder setInteger: [self stemIsUp] forKey: @"stemup"];
     [aCoder setInteger: [self stemIsFixed] forKey: @"stemfix"];
-    [aCoder setInteger: time.nostem forKey: @"nostem"];
-    [aCoder setInteger: time.oppflag forKey:@"oppflag"];
-    [aCoder setFloat: time.stemlen forKey:@"stemlen"];
-    [aCoder setFloat: time.factor forKey:@"factor"];
+    [aCoder setInteger: [self hasNoStem] forKey: @"nostem"];
+    [aCoder setInteger: time.oppflag forKey: @"oppflag"];
+    [aCoder setFloat: [self stemLength] forKey: @"stemlen"];
+    [aCoder setFloat: time.factor forKey: @"factor"];
 }
 
 

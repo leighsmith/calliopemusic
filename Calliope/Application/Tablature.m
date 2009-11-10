@@ -545,7 +545,7 @@ static char usesm[6] = {1, 1, 1, 1, 0, 0}; /* whether to use small size as norma
     if (ambig[b][df]) b = usebo[b][df];
     if (usesm[b]) dsz = smallersz[sz];
     dh = btype[b];
-    csnote(x, cy, c, df, time.dot, dsz, dh, stype[b], m);
+    csnote(x, cy, c, df, [self dottingCode], dsz, dh, stype[b], m);
   }
   if (diapason > 0 && diapason < NUMDIAP) [self drawDiapason: x : y : n : ss : sz : f : [doc getPreferenceAsFont: TABFONT] : m];
   return self;

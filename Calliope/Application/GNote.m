@@ -985,8 +985,8 @@ extern int modeinvis[5];
 	drawhead(nx, [noteHead y], bodyType, time.body, shapeID, su, size, m);
 	if ([noteHead accidental] && [noteHead accidentalOffset] < 0.0) 
 	    drawacc(x, noteHead, bodyType, size, m);
-	if (time.dot)
-	    drawnotedot(size, x + dotdx, [noteHead y], [noteHead dotOffset], [[noteHead myNote] getSpacing], bodyType, time.dot, 0, m);
+	if ([self dottingCode])
+	    drawnotedot(size, x + dotdx, [noteHead y], [noteHead dotOffset], [[noteHead myNote] getSpacing], bodyType, [self dottingCode], 0, m);
     }
     [self drawLedgerAt: halfWidth size: size mode: m];
     return self;

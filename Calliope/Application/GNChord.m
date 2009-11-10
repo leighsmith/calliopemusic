@@ -258,10 +258,11 @@ void lineupDots(GNote *np[], int k)
 
 - resetDots
 {
-  dotdx = 0.0;
-  if (time.dot == 0) return self;
-  lineupDots(&self, 1);
-  return self;
+    dotdx = 0.0;
+    if ([self dottingCode] == 0)
+	return self;
+    lineupDots(&self, 1);
+    return self;
 }
 
 

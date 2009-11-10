@@ -40,7 +40,7 @@ static SquareNote *proto;
   gFlags.type = SQUARENOTE;
   gFlags.subtype = 0;
   time.body = 4;
-  time.dot = 0;
+  [self setDottingCode: 0];
   shape = 0;
   colour = 0;
   stemside = 0;
@@ -73,7 +73,7 @@ static char timecodes[3] = {4, 4, 5};
   colour = proto->colour;
   stemside = proto->stemside;
   time.body = timecodes[i];
-  time.dot = [proto dottingCode];
+  [self setDottingCode: [proto dottingCode]];
   time.stemlen = 20; // TODO [self setStemLengthTo: 20];
   p1 = proto->p1;
   return self;
@@ -246,14 +246,14 @@ static short mywidth[2] = {2, 4};
     }
     cline(x1, y1, x1, y1 + time.stemlen, lw, m);
   }
-  if (time.dot)
+  if ([self dottingCode])
   {
     dp = staffPosition;
     if (shape == 2) dp += p1;
     if (!(dp & 1)) dp -= 1;
     x1 = x + w + nature[sz];
     y1 = [self yOfPos: dp];
-    drawnotedot(sz, x1, y1, 0, 0, 1, time.dot, 0, m);
+    drawnotedot(sz, x1, y1, 0, 0, 1, [self dottingCode], 0, m);
   }
   if (TYPEOF(sp) == STAFF)
   {

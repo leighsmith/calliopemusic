@@ -370,13 +370,13 @@ extern float staffthick[3][3];
         cline(x - dx - lx, ly, x + dx + lx, ly, th, m);
       }
     }
-    if (time.dot)
+    if ([self dottingCode])
     {
         tp = staffPosition + dotoffs[(int)style][time.body];
       if ((tp & 1) == 0) --tp;
       ly = [self yOfPos: tp];
-      th = (time.dot == 3) ? [self getSpacing] * 2 : 0;
-      restdot(sz, charFURX(f, c), x - dx, ly, th, time.dot, style, m);
+      th = ([self dottingCode] == 3) ? [self getSpacing] * 2 : 0;
+      restdot(sz, charFURX(f, c), x - dx, ly, th, [self dottingCode], style, m);
     }
       break;
     case 2:

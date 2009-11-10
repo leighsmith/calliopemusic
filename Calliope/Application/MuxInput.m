@@ -749,12 +749,12 @@ static char textsubtype[6] = {0, LABEL, STAFFHEAD, 0, TITLE, 0};
       if (i != 0)
       {
         ((GNote *)p)->time.body = i + 1;
-        ((GNote *)p)->time.dot = (ks >> 3) & 1;
+        [((GNote *)p) setDottingCode: (ks >> 3) & 1];
       }
       else
       {
         ((GNote *)p)->time.body = r + 1;
-        ((GNote *)p)->time.dot = u;
+        [((GNote *)p) setDottingCode: u];
       }
       ((GNote *)p)->time.stemlen = s;
       ((GNote *)p)->time.stemup = (s < 0);
@@ -774,7 +774,7 @@ static char textsubtype[6] = {0, LABEL, STAFFHEAD, 0, TITLE, 0};
       setprops(p, kn);
       ((Rest *)p)->time.body = r + 1;
       ((Rest *)p)->numbars = s;
-      ((Rest *)p)->time.dot = u;
+      [((Rest *)p) setDottingCode: u];
       ((Graphic *)p)->gFlags.subtype = g;
       setstaff(p, x1, 0, [p defaultPos]);
       /* ((Rest *)p)->p = restoffs[g & 1][r + 1]; */
@@ -789,7 +789,7 @@ static char textsubtype[6] = {0, LABEL, STAFFHEAD, 0, TITLE, 0};
       setprops(p, (g >> 8) & 0xFF);
       setstaff(p, x1, 0, 0);
       if (t != 7) ((Tablature *)p)->time.body = t + 1;
-      ((Tablature *)p)->time.dot = u & 1;
+      [((Tablature *)p) setDottingCode: u & 1];
       ((Tablature *)p)->flags.online = (u >> 1) & 1;
       ((Tablature *)p)->flags.body = tabbodymap[(u >> 2) & 3];
       ((Tablature *)p)->flags.typeface = 0;
@@ -821,7 +821,7 @@ static char textsubtype[6] = {0, LABEL, STAFFHEAD, 0, TITLE, 0};
           ++typecount[REST];
           ((Rest *)p)->time.body = s + 1;
           ((Rest *)p)->numbars = 0;
-          ((Rest *)p)->time.dot = t;
+          [((Rest *)p) setDottingCode: t];
           ((Graphic *)p)->gFlags.subtype = u;
       setstaff(p, x1, 0, [p defaultPos]);
 	  g = 0;

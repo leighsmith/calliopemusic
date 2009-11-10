@@ -328,6 +328,7 @@ extern unsigned char hasstem[10];
   int sb, body, st, sz;
   float dy, sl;
   BOOL b = [self isBeamed];
+
   p = [self myProximal];
   body = p->time.body;
   sz = p->gFlags.size;
@@ -336,7 +337,7 @@ extern unsigned char hasstem[10];
   {
     q = [self getExtremeHead: 1];
     h = [self getExtremeHead: 0];
-    sl = p->time.stemlen;
+    sl = [p stemLength];
     dy = [q y] - [h y];
     if (b) sb = 5;
     else
