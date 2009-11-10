@@ -1,7 +1,6 @@
 
 #import "CalliopeThreeStateButton.h"
 #import "CalliopeThreeStateButtonCell.h"
-#import <InterfaceBuilder/InterfaceBuilder.h>
 
 static id threeStateCellClass = nil;
 
