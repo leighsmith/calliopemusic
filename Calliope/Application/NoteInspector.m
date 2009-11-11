@@ -323,7 +323,7 @@ static void setBodyTypes(GNote *p, int t)
     assay(6, [p dottingCode]);
     assay(7, p->gFlags.subtype);
     assay(8, getAccidental(p, p->gFlags.selend));
-    assay(9, (p->time.stemlen > 0));
+    assay(9, ([p stemLength] > 0));
     assay(10, p->voice);
     assay(11, [p whereInstrument]);
     assay(12, p->time.nostem);

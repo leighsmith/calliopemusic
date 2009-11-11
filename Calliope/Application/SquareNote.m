@@ -74,7 +74,7 @@ static char timecodes[3] = {4, 4, 5};
   stemside = proto->stemside;
   time.body = timecodes[i];
   [self setDottingCode: [proto dottingCode]];
-  time.stemlen = 20; // TODO [self setStemLengthTo: 20];
+  [self setStemLengthTo: 20];
   p1 = proto->p1;
   return self;
 }
@@ -244,7 +244,7 @@ static short mywidth[2] = {2, 4};
       x1 += w;
       y1 = y2;
     }
-    cline(x1, y1, x1, y1 + time.stemlen, lw, m);
+    cline(x1, y1, x1, y1 + [self stemLength], lw, m);
   }
   if ([self dottingCode])
   {

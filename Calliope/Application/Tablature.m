@@ -99,7 +99,7 @@ static Tablature *proto;
  
 - setstem: (int) m
 {
-  time.stemlen = getSpacing(mystaff) * 3.5; // TODO [self setStemLengthTo: getSpacing(mystaff) * 3.5];
+  [self setStemLengthTo: getSpacing(mystaff) * 3.5];
   return self;
 }
 
@@ -281,7 +281,7 @@ static char tabpos[2][15] =
 - (BOOL) hitBeamAt: (float *) px : (float *) py
 {
   *px = x;
-  *py = y - time.stemlen - tabstemlens[gFlags.size];
+  *py = y - [self stemLength] - tabstemlens[gFlags.size];
   return YES;
 }
 
@@ -538,7 +538,7 @@ static char usesm[6] = {1, 1, 1, 1, 0, 0}; /* whether to use small size as norma
   if (!flags.prevtime && ![self isBeamed])
   {
     c = -tabstemlens[sz];
-    cy = y - time.stemlen;
+    cy = y - [self stemLength];
     dsz = sz;
     df = time.body - [doc getPreferenceAsInt: TABCROTCHET];
     b = flags.body;

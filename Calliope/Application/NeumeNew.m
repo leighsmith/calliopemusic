@@ -49,62 +49,65 @@ static NeumeNew *proto;
 
 - init
 {
-  [super init];
-  gFlags.type = NEUMENEW;
-  nFlags.dot = 0;
-  nFlags.hepisema = 0;
-  nFlags.vepisema = 0;
-  nFlags.molle = 0;
-  nFlags.num = 0;
-  time.body = 4;
-  time.dot = 0;
-  return self;
+    self = [super init];
+    if(self != nil) {
+	gFlags.type = NEUMENEW;
+	nFlags.dot = 0;
+	nFlags.hepisema = 0;
+	nFlags.vepisema = 0;
+	nFlags.molle = 0;
+	nFlags.num = 0;
+	time.body = 4;
+	[self setDottingCode: 0];
+    }
+    return self;
 }
 
 
-- (void)dealloc
+- (void) dealloc
 {
-  { [super dealloc]; return; };
+    [super dealloc];
 }
 
 
 - upgradeFrom: (Neume *) n
 {
-  NSMutableArray *vl;
-  int vk;
-  Verse *v;
-  nFlags.dot = n->nFlags.dot;
-  nFlags.vepisema = n->nFlags.vepisema;
-  nFlags.hepisema = n->nFlags.hepisema;
-  nFlags.quilisma = n->nFlags.quilisma;
-  nFlags.molle = n->nFlags.molle;
-  nFlags.num = n->nFlags.num;
-  nFlags.halfSize = 0;
-  p2 = n->p2;
-  p3 = n->p3;
-  time.body = 4;
-  time.dot = 0;
-  time.tight = 0;
-  [self setStemIsUp: NO];
-  [self setStemIsFixed: NO];
-  time.nostem = 0;
-  time.stemlen = 0;
-  time.factor = 1.0;
-  x = n->x;
-  y = n->y;
-  staffPosition = n->staffPosition;
-  verses = vl = n->verses;
-  vk = [vl count];
-  while (vk--)
-  {
-    v = [vl objectAtIndex:vk];
-    v->note = self;
-  }
-  mystaff = n->mystaff;
-  bounds = n->bounds;
-  gFlags = n->gFlags;
-  gFlags.type = NEUMENEW;
-  return self;
+    NSMutableArray *vl;
+    int vk;
+    Verse *v;
+    
+    nFlags.dot = n->nFlags.dot;
+    nFlags.vepisema = n->nFlags.vepisema;
+    nFlags.hepisema = n->nFlags.hepisema;
+    nFlags.quilisma = n->nFlags.quilisma;
+    nFlags.molle = n->nFlags.molle;
+    nFlags.num = n->nFlags.num;
+    nFlags.halfSize = 0;
+    p2 = n->p2;
+    p3 = n->p3;
+    time.body = 4;
+    [self setDottingCode: 0];
+    time.tight = 0;
+    [self setStemIsUp: NO];
+    [self setStemIsFixed: NO];
+    time.nostem = 0;
+    [self setStemLengthTo: 0];
+    time.factor = 1.0;
+    x = n->x;
+    y = n->y;
+    staffPosition = n->staffPosition;
+    verses = vl = n->verses;
+    vk = [vl count];
+    while (vk--)
+    {
+	v = [vl objectAtIndex:vk];
+	v->note = self;
+    }
+    mystaff = n->mystaff;
+    bounds = n->bounds;
+    gFlags = n->gFlags;
+    gFlags.type = NEUMENEW;
+    return self;
 }
 
 
@@ -179,7 +182,7 @@ static char neumenum[10] = {1, 1, -1, 2, 2, 2, 2, 3, 3, 1};
 {
   int i, b;
   float r;
-  float v = tickval(time.body, time.dot);
+  float v = tickval(time.body, [self dottingCode]);
   int k = neumenum[gFlags.subtype];
   if (k < 0) k = nFlags.num + 1;
   r = k * v;
@@ -201,7 +204,7 @@ static char neumenum[10] = {1, 1, -1, 2, 2, 2, 2, 3, 3, 1};
 - (BOOL) getPos: (int) i : (int *) pos : (int *) d : (int *) m : (float *) t
 {
   int k;
-  *t = tickval(time.body, time.dot);
+  *t = tickval(time.body, [self dottingCode]);
   if (gFlags.subtype == PUNCTINC)
   {
     k = nFlags.num;

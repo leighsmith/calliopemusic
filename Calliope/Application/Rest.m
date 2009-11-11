@@ -155,13 +155,13 @@ static Rest *proto;
 - (BOOL) hitBeamAt: (float *) px : (float *) py
 {
   *px = x;
-  *py = y + time.stemlen;
+  *py = y + [self stemLength];
   return YES;
 }
 
 - resetStemlen
 {
-  time.stemlen = getstemlen(QUAVER, gFlags.size, 0, [self stemIsUp], 4, getSpacing(mystaff));
+  [self setStemLengthTo: getstemlen(QUAVER, gFlags.size, 0, [self stemIsUp], 4, getSpacing(mystaff))];
   return self;
 }
 

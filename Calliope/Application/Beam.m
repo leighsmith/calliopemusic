@@ -256,7 +256,7 @@ static float minStemLen(TimedObj *p, TimedObj *r)
 
 static float beamedStem(TimedObj *p, float min)
 {
-  float f = p->time.stemlen;
+  float f = [p stemLength];
   return (f < 0) ? MIN(f, -min) : MAX(f, min);
 }
 
@@ -557,8 +557,8 @@ static int signof(float f)
   if (flags.horiz) y1 = y2 = y1 + y2;
   else
     {
-      if (y1 == 0.0) y1 = [p myStemBase] + p->time.stemlen;
-      if (y2 == 0.0) y2 = [q myStemBase] + q->time.stemlen;
+      if (y1 == 0.0) y1 = [p myStemBase] + [p stemLength];
+      if (y2 == 0.0) y2 = [q myStemBase] + [q stemLength];
     }
   m = (y2 - y1) / dx;
   k = [client count];
@@ -842,18 +842,18 @@ static char nflg[NUMUNDER];
   if (hFlags.split == 2)
   {
     xa = [p xOfStaffEnd: 0];
-    ya = [p yOfPos: p->staffPosition + splitp] + [p stemYoff: 0] + p->time.stemlen;
+    ya = [p yOfPos: p->staffPosition + splitp] + [p stemYoff: 0] + [p stemLength];
     xb = p->x + [p stemXoffRight: 0];
-    yb = [p myStemBase] + [p stemYoff: 0] + p->time.stemlen;
+    yb = [p myStemBase] + [p stemYoff: 0] + [p stemLength];
     ys = yb;
   }
   else if (hFlags.split == 1)
   {
     xa = p->x + [p stemXoffLeft: 0];
-    ya = [p myStemBase] + [p stemYoff: 0] + p->time.stemlen;
+    ya = [p myStemBase] + [p stemYoff: 0] + [p stemLength];
     ys = ya;
     xb = [p xOfStaffEnd: 1];
-    yb = [p yOfPos: p->staffPosition + splitp] + [p stemYoff: 0] + p->time.stemlen;
+    yb = [p yOfPos: p->staffPosition + splitp] + [p stemYoff: 0] + [p stemLength];
   }
   th = beamthick[sz];
   bsep = th + beamsep[sz];
@@ -950,9 +950,9 @@ int getHalfCode(TimedObj *r, int a, int k)
   th = beamthick[sz];
   bsep = th + beamsep[sz];
   x1 = p->x + [p stemXoffLeft: 0];
-  y1 = [p myStemBase] + p->time.stemlen;
+  y1 = [p myStemBase] + [p stemLength];
   x2 = q->x + [q stemXoffRight: 0];
-  y2 = [q myStemBase] + q->time.stemlen;
+  y2 = [q myStemBase] + [q stemLength];
   m = (y2 - y1) / (x2 - x1);
   a = 0;
   lev = 0;
@@ -1180,7 +1180,7 @@ int getHalfCode(TimedObj *r, int a, int k)
       xa = r->x;
       xb = s->x;
     }
-    ya = [r myStemBase] - r->time.stemlen - tabstemlens[sz] + lev * bsep;
+    ya = [r myStemBase] - [r stemLength] - tabstemlens[sz] + lev * bsep;
     crect(xa, ya, xb - xa, th, dflag);
     for (i = a; i <= b; i++) --flg[i];
     a = b + 1;
@@ -1195,7 +1195,7 @@ int getHalfCode(TimedObj *r, int a, int k)
   {
     r = toj[i];
     x = r->x;
-    y = [r myStemBase] - r->time.stemlen;
+    y = [r myStemBase] - [r stemLength];
     cline(x, y, x, y - tabstemlens[sz], stemthicks[sz], dflag);
     if ([r dottingCode]) restdot(smallersz[sz], 0.0, x, y, 0, [r dottingCode], 0, dflag);
   }
@@ -1222,8 +1222,8 @@ static void drawTremolo(int n, TimedObj *a, TimedObj *b, float ytrem, int sz, in
   x2 = b->x + [b stemXoffRight: 0];
   if (hasstem[at])
   {
-    y1 = [a myStemBase] + a->time.stemlen;
-    y2 = [b myStemBase] + b->time.stemlen;
+    y1 = [a myStemBase] + [a stemLength];
+    y2 = [b myStemBase] + [b stemLength];
     if (ytrem < 0)
     {
       cline(x1, [a myStemBase] + [a stemYoff: 0], x1, y1, stemthicks[sz], dflag);
@@ -1286,11 +1286,11 @@ static void drawTremolo(int n, TimedObj *a, TimedObj *b, float ytrem, int sz, in
   int pup = [p stemIsUp];
   float x1 = p->x + [p stemXoffLeft: 0];
   float x2 = q->x + [q stemXoffRight: 0];
-  float y1 = [p myStemBase] + p->time.stemlen;
-  float y2 = [q myStemBase] + q->time.stemlen;
+  float y1 = [p myStemBase] + [p stemLength];
+  float y2 = [q myStemBase] + [q stemLength];
   float m = (y2 - y1) / (x2 - x1);
   float x = p->x - (pup ? 1.0 : 1.5) * bsep;
-  float y =  y1 - 0.5 * p->time.stemlen;
+  float y =  y1 - 0.5 * [p stemLength];
   float x3 = x1 + 0.5 * (x2 - x1);
   float y3 = (m * (x3 - x1) + y1) + (pup ? -bsep : bsep);
   cline(x, y, x3 , y3, stemthicks[sz], dflag);

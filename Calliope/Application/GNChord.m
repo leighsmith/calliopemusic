@@ -279,7 +279,7 @@ void lineupDots(GNote *np[], int k)
 	return self;
     if ([self stemIsUp] != (s > 0)) {
 	[self setStemIsUp: (s > 0)];
-	time.stemlen = -time.stemlen;
+	[self setStemLengthTo: -[self stemLength]];
 	[self reverseHeads];
     }
     return self;
@@ -294,7 +294,7 @@ void lineupDots(GNote *np[], int k)
 - resetStemlen
 {
   NoteHead *noteHead = [headlist lastObject];
-  time.stemlen = getstemlen(time.body, gFlags.size, stype[(int)[noteHead bodyType]], [self stemIsUp], [noteHead staffPosition], [self getSpacing]);
+  [self setStemLengthTo: getstemlen(time.body, gFlags.size, stype[(int)[noteHead bodyType]], [self stemIsUp], [noteHead staffPosition], [self getSpacing])];
   return self;
 }
 
@@ -303,7 +303,7 @@ void lineupDots(GNote *np[], int k)
 
 - resetStemlenUsing: (int) pos
 {
-  time.stemlen = getstemlen(time.body, gFlags.size, 0, [self stemIsUp], pos, [self getSpacing]);
+  [self setStemLengthTo: getstemlen(time.body, gFlags.size, 0, [self stemIsUp], pos, [self getSpacing])];
   return self;
 }
 

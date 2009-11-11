@@ -15,6 +15,8 @@
 		D87D0FEA09AE7AF100784ACC /* OAPropertyListArchiver.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD96E80483CDC800A80164 /* OAPropertyListArchiver.h */; };
 		D8B2119109BB5333002825FC /* CallAppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = D8B2118F09BB5333002825FC /* CallAppIcon.icns */; };
 		D8B2119209BB5333002825FC /* CallDocIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = D8B2119009BB5333002825FC /* CallDocIcon.icns */; };
+		D8EBF5F210AA057800290469 /* gloria.tiff in Resources */ = {isa = PBXBuildFile; fileRef = D8EBF5F110AA057800290469 /* gloria.tiff */; };
+		D8EBF5F710AA060B00290469 /* GNote.h in Headers */ = {isa = PBXBuildFile; fileRef = D8EBF5F610AA060B00290469 /* GNote.h */; };
 		D8EC241509B9F8B500942A37 /* MusicNotationDocument.nib in Resources */ = {isa = PBXBuildFile; fileRef = D8EC241309B9F8B500942A37 /* MusicNotationDocument.nib */; };
 		D8F2478909AD280C00B96D0D /* NSObject+ErrorHandling.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD96D60483CDC800A80164 /* NSObject+ErrorHandling.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8F2478A09AD280C00B96D0D /* NSMutableString+PropertyListCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD96D80483CDC800A80164 /* NSMutableString+PropertyListCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -937,6 +939,8 @@
 		D8A8F7C50483DD1B00A80164 /* template5.opus */ = {isa = PBXFileReference; lastKnownFileType = file; name = template5.opus; path = Templates/template5.opus; sourceTree = "<group>"; };
 		D8B2118F09BB5333002825FC /* CallAppIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CallAppIcon.icns; path = Images/CallAppIcon.icns; sourceTree = "<group>"; };
 		D8B2119009BB5333002825FC /* CallDocIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CallDocIcon.icns; path = Images/CallDocIcon.icns; sourceTree = "<group>"; };
+		D8EBF5F110AA057800290469 /* gloria.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = gloria.tiff; path = Images/gloria.tiff; sourceTree = "<group>"; };
+		D8EBF5F610AA060B00290469 /* GNote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GNote.h; sourceTree = "<group>"; };
 		D8EC241409B9F8B500942A37 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MusicNotationDocument.nib; sourceTree = "<group>"; };
 		D8F2453709AD260300B96D0D /* MKPerformSndMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MKPerformSndMIDI.framework; path = /Library/Frameworks/MKPerformSndMIDI.framework; sourceTree = "<absolute>"; };
 		D8F247B109AD280C00B96D0D /* Info-CalliopePropertyListCoders.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-CalliopePropertyListCoders.plist"; sourceTree = "<group>"; };
@@ -1484,6 +1488,7 @@
 				D8FD93D60483CDC800A80164 /* FileCompatibility.h */,
 				D8FD93D80483CDC800A80164 /* FlippedView.h */,
 				D8FD933C0483CDC800A80164 /* GNChord.h */,
+				D8EBF5F610AA060B00290469 /* GNote.h */,
 				D8FD93400483CDC800A80164 /* Graphic.h */,
 				D8FD93420483CDC800A80164 /* GraphicView.h */,
 				D8FD93440483CDC800A80164 /* GVCommands.h */,
@@ -1702,6 +1707,7 @@
 				D8A8F5AA0483D9D200A80164 /* fermatatool.tiff */,
 				D8A8F5AB0483D9D200A80164 /* flat.tiff */,
 				D8A8F5AC0483D9D200A80164 /* flatButt.tiff */,
+				D8EBF5F110AA057800290469 /* gloria.tiff */,
 				D8A8F5AD0483D9D200A80164 /* grp8.tiff */,
 				D8A8F5AE0483D9D200A80164 /* guide4.tiff */,
 				D8A8F5AF0483D9D200A80164 /* harmon.tiff */,
@@ -2119,6 +2125,7 @@
 				D87D0FDC09AE6ED200784ACC /* muxCollide.h in Headers */,
 				D87D0FE909AE7AE800784ACC /* OAPropertyListCoder.h in Headers */,
 				D87D0FEA09AE7AF100784ACC /* OAPropertyListArchiver.h in Headers */,
+				D8EBF5F710AA060B00290469 /* GNote.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2529,6 +2536,7 @@
 				D8EC241509B9F8B500942A37 /* MusicNotationDocument.nib in Resources */,
 				D8B2119109BB5333002825FC /* CallAppIcon.icns in Resources */,
 				D8B2119209BB5333002825FC /* CallDocIcon.icns in Resources */,
+				D8EBF5F210AA057800290469 /* gloria.tiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

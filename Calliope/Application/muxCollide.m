@@ -73,13 +73,15 @@ static void doStems(GNote *nn[], int k, int sn, float vcx[])
       }
       if (psu)
       {
-        sl = ((p->staffPosition - mp) - stemheight[p->gFlags.size][p->time.body] - 0.5) * [p getSpacing];
-	if (sl < p->time.stemlen) p->time.stemlen = sl;
+          sl = ((p->staffPosition - mp) - stemheight[p->gFlags.size][p->time.body] - 0.5) * [p getSpacing];
+	  if (sl < [p stemLength]) 
+	      [p setStemLengthTo: sl];
       }
       else
       {
         sl = ((mp - p->staffPosition) + stemheight[p->gFlags.size][p->time.body] + 0.5) * [p getSpacing];
-	if (sl > p->time.stemlen) p->time.stemlen = sl;
+	if (sl > [p stemLength])
+	    [p setStemLengthTo: sl];
       }
     }
   } 

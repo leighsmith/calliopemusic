@@ -366,17 +366,16 @@ TODO should be named
     [self reverseHeads];
     [self reshapeChord];
   }
-  time.stemlen = s;
+  [super setStemLengthTo: s];
   [self recalc];
 }
 
 /* return the stem base */
-
 - (float) wantsStemY: (int) a
 {
   NoteHead *noteHead;
     
-  noteHead = ([self stemIsUp] == a) ? [headlist lastObject] : [headlist objectAtIndex:0];
+  noteHead = ([self stemIsUp] == a) ? [headlist lastObject] : [headlist objectAtIndex: 0];
   return [noteHead y];
 }
 
@@ -412,17 +411,17 @@ extern unsigned char hasstem[10];
 
 - (float) yMean
 {
-  int i, k;
+  int i, numOfNoteHeads;
   NoteHead *noteHead;
-  float r;
-  r = 0.0;
-  k = [headlist count];
-  for (i = 0; i < k; i++)
+  float sum = 0.0;
+    
+  numOfNoteHeads = [headlist count];
+  for (i = 0; i < numOfNoteHeads; i++)
   {
     noteHead = [headlist objectAtIndex:i];
-    r += [noteHead y];
+    sum += [noteHead y];
   }
-  return r / k;
+  return sum / numOfNoteHeads;
 }
 
 
@@ -456,7 +455,7 @@ extern unsigned char hasstem[10];
   {
     noteHead = [headlist lastObject];
     sy = [noteHead y];
-    if (hasstem[time.body]) sy += time.stemlen;
+    if (hasstem[time.body]) sy += [self stemLength];
     pos = [[noteHead myNote] posOfY: sy];
   }
   else
@@ -483,7 +482,7 @@ extern unsigned char hasstem[10];
       {
         ya += getstemlen(time.body, gFlags.size, stype[(int)[noteHead bodyType]], [self stemIsUp], [noteHead staffPosition], [[noteHead myNote] getSpacing]);
       }
-      else ya += time.stemlen;
+      else ya += [self stemLength];
     }
   }
   else
@@ -505,7 +504,7 @@ extern unsigned char hasstem[10];
   {
     noteHead = [headlist lastObject];
     ya = [noteHead y];
-    if (hasstem[time.body]) ya += time.stemlen;
+    if (hasstem[time.body]) ya += [self stemLength];
   }
   else
   {
@@ -879,7 +878,7 @@ static int getShapeID(int pos, int s, int n, int c)
 - (BOOL) hitBeamAt: (float *) px : (float *) py
 {
     *px = x + stemdx[(int)gFlags.size][(int)gFlags.subtype][0][(int)time.body][(int)[self stemIsUp]];
-    *py = y + time.stemlen;
+    *py = y + [self stemLength];
     return YES;
 }
 
@@ -948,7 +947,7 @@ extern int modeinvis[5];
   sb = time.body;
   size = gFlags.size;
   stemType = stype[gFlags.subtype];
-  sl = time.stemlen;
+  sl = [self stemLength];
   noteHead = [headlist lastObject];
   drawstem(x, [noteHead y], sb, sl, size, [noteHead bodyType], stemType, m);
   if (showSlash && isGraced == 1) drawgrace(x, [noteHead y], sb, sl, size, [noteHead bodyType], stemType, m);
