@@ -147,22 +147,22 @@ void bardots(int nl, float x, float y, int spacing, int sz, int m)
     i = 1;
     while (i < nl)
     {
-      centChar(x, y + spacing * i, SF_dot, f,  m);
+      DrawCharacterCenteredInFont(x, y + spacing * i, SF_dot, f,  m);
       i += 2;
     }
   }
   else if (nl & 1)
   {
     nl--;
-    centChar(x, y + spacing * (nl - 1), SF_dot, f, m);
-    centChar(x, y + spacing * (nl + 1), SF_dot, f, m);
+    DrawCharacterCenteredInFont(x, y + spacing * (nl - 1), SF_dot, f, m);
+    DrawCharacterCenteredInFont(x, y + spacing * (nl + 1), SF_dot, f, m);
   }
   else
   {
     nl--;
-    centChar(x, y + spacing * nl, SF_dot, f, m);
-    centChar(x, y + spacing * (nl - 2), SF_dot, f, m);
-    centChar(x, y + spacing * (nl + 2), SF_dot, f, m);
+    DrawCharacterCenteredInFont(x, y + spacing * nl, SF_dot, f, m);
+    DrawCharacterCenteredInFont(x, y + spacing * (nl - 2), SF_dot, f, m);
+    DrawCharacterCenteredInFont(x, y + spacing * (nl + 2), SF_dot, f, m);
   }
 }
 

@@ -250,14 +250,22 @@ void CAcString(float x, float y, const char *s, NSFont *f, int mode);
 /*!
   @brief Draw text centered around the point x,y in the given font.
  */
-extern void DrawCenteredText(float x, float y, char *s, NSFont *f, int mode);
+extern void DrawCenteredText(float x, float y, NSString *s, NSFont *f, int mode);
 
 /*!
   @brief Draw text justified.
  */
 extern void DrawJustifiedText(float x, float y, NSString *s, NSFont *f, int j, int mode);
-extern void centChar(float x, float y, int ch, NSFont *f, int mode);
-extern void centxChar(float x, float y, int ch, NSFont *f, int mode);
+
+/*!
+ @brief draw a character centred on x and y.
+ */
+extern void DrawCharacterCenteredInFont(float x, float y, int ch, NSFont *f, int mode);
+
+/*!
+ @brief draw a character centred on x only 
+ */
+extern void DrawCharacterCenteredOnXInFont(float x, float y, int ch, NSFont *f, int mode);
 
 /*!
   @brief Assigns the dash pattern (in number of points of the dash portion) to be used when drawing.
@@ -318,7 +326,7 @@ void ccurve(float x0, float y0, float x3, float y3, float x1, float y1, float x2
  */ 
 void cflat(float x0, float y0, float x1, float y1, float c1x, float c1y, float c2x, float c2y, float th, int dash, int m);
 
-#if 1 // obsolete
+#if 0 // obsolete
 /*!
   @function ctie
  */ 

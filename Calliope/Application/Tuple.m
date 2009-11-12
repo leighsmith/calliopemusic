@@ -546,139 +546,142 @@ static float centreTime(NSMutableArray *nl)
 
 - drawMode: (int) m
 {
-  StaffObj *p, *q;
+    StaffObj *p, *q;
     GraphicView *gv = nil;
-  int sz;
-  float dx, dy, v, th, w, x, y, ty = 0.0, charh, px, py, qx, qy; //sb: initted ty
-  char tuple[16];
-  char brack;
-  /* assume client sorted by the time we arrive here */
-  sz = gFlags.size;
-  p = [client objectAtIndex:0];
-  q = [client lastObject];
-  px = p->x + x1;
-  py = p->y + y1 + vtrim1;
-  qx = q->x + x2;
-  qy = q->y + y2 + vtrim2;
-  dx = qx - px;
-  dy = qy - py;
-  if (ABS(dx) < 1.0) return self;
-  if (gFlags.selected && !gFlags.seldrag)
-  {
-    chandle(px, py, m);
-    chandle(qx, qy, m);
-  }
-  charh = charFGH(fontdata[FONTSTMR], '3');
-  if (gFlags.subtype == 1 && flags.centre && [client count] > 2) x = centreTime(client);
-  else x = px + 0.5 * dx;
-  y = (dy / dx) * (x - px) + py;
-  switch(flags.formliga)
-  {
-    case 1:
-        ty = 3.0 * nature[sz];
-      break;
-    case 0:
-    case 2:
-    case 3:
-    case 5:
-      ty = nature[sz];
-      break;
-    case 4:
-      ty = charh + nature[sz];
-      break;   
-  }
-  ty = y + (flags.above ? -ty : ty);
-  switch(gFlags.subtype)
-  {
-    case 0:
-        /* reserved */
-        break;
-    case 1:
-      sprintf(tuple, "%d", uneq1);
-      if (!flags.above) ty += charh;
-      DrawCenteredText(x, ty, tuple, fontdata[FONTSTMR], m);
-      break;
-    case 2:
-      sprintf(tuple, "%d:%d", uneq1, uneq2);
-      if (!flags.above) ty += charh;
-      DrawCenteredText(x, ty, tuple, fontdata[FONTSTMR], m);
-      break;
-   case 3:
-      charh = stemlens[0][1];
-      csnote(x, ty, (flags.above ? -charh : charh), body, dot, 1, 0, 0, m);
-      break;
-  }
-  brack = 0;
-  v = 2.0 * nature[sz];
-  switch(flags.formliga)
-  {
-    case 0:
-      /* no liga: draw a grey (invisible) marker */
-      if (!gFlags.selected) m = 5;
-        brack = 1;
-      break;
-    case 1:
-      break;
-    case 2:
-        brack = 1;
-      break;
-    case 3:
-      ty = 0.0;
-        charh += 2.0 * nature[sz];
-        if (charh > v) ty = charh - v;
-        if (flags.above) ty = -ty;
-        py += ty;
-        qy += ty;
-        break;
-      case 4:
-        brack = 2;
-        break;
-      case 5:
-        ty = 0.0;
-          charh += nature[sz];
-          if (charh > v) ty = charh - v;
-          if (flags.above) ty = -ty;
-          py += ty;
-          qy += ty;
-          brack = 2;
-          break;   
-  }
-  th = staffthick[0][sz];
-  switch (brack)
-  {
-      case 0:
-        if (flags.above) v = -v;
-        cmakeline(px, py, px, py + v, m);
-        cmakeline(px, py + v, qx, qy + v, m);
-        cmakeline(qx, qy + v, qx, qy, m);
-        cstrokeline(th, m);
-        break;
-
-      case 1:
-          w = [fontdata[FONTSTMR] widthOfString:@"33"];
-          if (gFlags.subtype < 3) w += [fontdata[FONTSTMR] widthOfString:[NSString stringWithUTF8String:tuple]];
-          w *= 0.5;
-          if (flags.above) v = -v;
-          cmakeline(px, py, px, py + v, m);
-          y = (dy / dx) * (x - w - px) + py;
-          cmakeline(px, py + v, x - w, y + v, m);
-          cmakeline(qx, qy, qx, qy + v, m);
-          y = (dy / dx) * (x + w - px) + py;
-          cmakeline(qx, qy + v, x + w, y + v, m);
-          if (m == 5)
-          {
-              gv = (GraphicView *)[DrawApp currentView];
-            [gv lockFocus];
-          }
-          cstrokeline(th, m);
-          if (m == 5) [gv unlockFocus];
-              break;
-
-      case 2:
-          [self drawBow: flags.above : charh : px : py : qx : qy : m];
-          break;
-  }
-  return self;
+    int sz;
+    float dx, dy, v, th, w, x, y, ty = 0.0, charh, px, py, qx, qy; //sb: initted ty
+    NSString *tuple;
+    char brack;
+    
+    /* assume client sorted by the time we arrive here */
+    sz = gFlags.size;
+    p = [client objectAtIndex:0];
+    q = [client lastObject];
+    px = p->x + x1;
+    py = p->y + y1 + vtrim1;
+    qx = q->x + x2;
+    qy = q->y + y2 + vtrim2;
+    dx = qx - px;
+    dy = qy - py;
+    if (ABS(dx) < 1.0) return self;
+    if (gFlags.selected && !gFlags.seldrag)
+    {
+	chandle(px, py, m);
+	chandle(qx, qy, m);
+    }
+    charh = charFGH(fontdata[FONTSTMR], '3');
+    if (gFlags.subtype == 1 && flags.centre && [client count] > 2) x = centreTime(client);
+    else x = px + 0.5 * dx;
+    y = (dy / dx) * (x - px) + py;
+    switch(flags.formliga)
+    {
+	case 1:
+	    ty = 3.0 * nature[sz];
+	    break;
+	case 0:
+	case 2:
+	case 3:
+	case 5:
+	    ty = nature[sz];
+	    break;
+	case 4:
+	    ty = charh + nature[sz];
+	    break;   
+    }
+    ty = y + (flags.above ? -ty : ty);
+    switch(gFlags.subtype)
+    {
+	case 0:
+	    /* reserved */
+	    break;
+	case 1:
+	    tuple = [NSString stringWithFormat: @"%d", uneq1];
+	    if (!flags.above) 
+		ty += charh;
+	    DrawCenteredText(x, ty, tuple, fontdata[FONTSTMR], m);
+	    break;
+	case 2:
+	    tuple = [NSString stringWithFormat: @"%d:%d", uneq1, uneq2];
+	    if (!flags.above) 
+		ty += charh;
+	    DrawCenteredText(x, ty, tuple, fontdata[FONTSTMR], m);
+	    break;
+	case 3:
+	    charh = stemlens[0][1];
+	    csnote(x, ty, (flags.above ? -charh : charh), body, dot, 1, 0, 0, m);
+	    break;
+    }
+    brack = 0;
+    v = 2.0 * nature[sz];
+    switch(flags.formliga)
+    {
+	case 0:
+	    /* no liga: draw a grey (invisible) marker */
+	    if (!gFlags.selected) m = 5;
+	    brack = 1;
+	    break;
+	case 1:
+	    break;
+	case 2:
+	    brack = 1;
+	    break;
+	case 3:
+	    ty = 0.0;
+	    charh += 2.0 * nature[sz];
+	    if (charh > v) ty = charh - v;
+	    if (flags.above) ty = -ty;
+	    py += ty;
+	    qy += ty;
+	    break;
+	case 4:
+	    brack = 2;
+	    break;
+	case 5:
+	    ty = 0.0;
+	    charh += nature[sz];
+	    if (charh > v) ty = charh - v;
+	    if (flags.above) ty = -ty;
+	    py += ty;
+	    qy += ty;
+	    brack = 2;
+	    break;   
+    }
+    th = staffthick[0][sz];
+    switch (brack)
+    {
+	case 0:
+	    if (flags.above) v = -v;
+	    cmakeline(px, py, px, py + v, m);
+	    cmakeline(px, py + v, qx, qy + v, m);
+	    cmakeline(qx, qy + v, qx, qy, m);
+	    cstrokeline(th, m);
+	    break;
+	    
+	case 1:
+	    w = [fontdata[FONTSTMR] widthOfString:@"33"];
+	    if (gFlags.subtype < 3) w += [fontdata[FONTSTMR] widthOfString: tuple];
+	    w *= 0.5;
+	    if (flags.above) v = -v;
+	    cmakeline(px, py, px, py + v, m);
+	    y = (dy / dx) * (x - w - px) + py;
+	    cmakeline(px, py + v, x - w, y + v, m);
+	    cmakeline(qx, qy, qx, qy + v, m);
+	    y = (dy / dx) * (x + w - px) + py;
+	    cmakeline(qx, qy + v, x + w, y + v, m);
+	    if (m == 5)
+	    {
+		gv = (GraphicView *)[DrawApp currentView];
+		[gv lockFocus];
+	    }
+	    cstrokeline(th, m);
+	    if (m == 5) [gv unlockFocus];
+	    break;
+	    
+	case 2:
+	    [self drawBow: flags.above : charh : px : py : qx : qy : m];
+	    break;
+    }
+    return self;
 }
 
 

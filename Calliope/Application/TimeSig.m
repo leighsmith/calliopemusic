@@ -276,6 +276,10 @@ static float fontsize[3] = { 16, 12, 8};
   static char linedy[3] = {12, 9, 6};
   int sz = gFlags.size;
   NSFont *f = musicFont[1][sz], *ft;
+  // TODO perhaps this should be with Symbol encoding, not UTF8?
+  NSString *numeratorString = [NSString stringWithUTF8String: numer];
+  NSString *denominatorString = [NSString stringWithUTF8String: denom];
+    
   switch(gFlags.subtype)
   {
     case 0:
@@ -285,26 +289,26 @@ static float fontsize[3] = { 16, 12, 8};
       ccircle(x, cy, getSpacing(mystaff) * 2, 50, 310, linethicks[sz], m);
       break;
     case 2:
-      centChar(x, cy, SF_comm, f, m);
+      DrawCharacterCenteredInFont(x, cy, SF_comm, f, m);
       break;
     case 3:
-      centChar(x, cy, CH_rcomm, musicFont[0][sz], m);
+      DrawCharacterCenteredInFont(x, cy, CH_rcomm, musicFont[0][sz], m);
       break;
     case 4:
-      DrawCenteredText(x, cy, numer, f, m);
+      DrawCenteredText(x, cy, numeratorString, f, m);
       punct = 0;
       break;
     case 5:
-      DrawCenteredText(x, cy + charFLLY(f, numer[0]) - 1, numer, f, m);
-      DrawCenteredText(x, cy + charFURY(f, numer[0]) + 2, denom, f, m);
+      DrawCenteredText(x, cy + charFLLY(f, numer[0]) - 1, numeratorString, f, m);
+      DrawCenteredText(x, cy + charFURY(f, numer[0]) + 2, denominatorString, f, m);
       punct = 0;
       break;
     case 6:
-      DrawCenteredText(x, cy + charFLLY(f, numer[0]) - 1, numer, f, m);
-      DrawCenteredText(x, cy + charFURY(f, numer[0]) + 2, denom, f, m);
+      DrawCenteredText(x, cy + charFLLY(f, numer[0]) - 1, numeratorString, f, m);
+      DrawCenteredText(x, cy + charFURY(f, numer[0]) + 2, denominatorString, f, m);
         ft = [NSFont fontWithName: @"Symbol" size: fontsize[sz] / [[DrawApp currentDocument] staffScale]];
-      x1 = [f widthOfString:[NSString stringWithUTF8String:numer]];
-      x2 = [f widthOfString:[NSString stringWithUTF8String:denom]];
+      x1 = [f widthOfString: numeratorString];
+      x2 = [f widthOfString: denominatorString];
       w = (x1 > x2) ? x1 : x2;
       x1 = x + 0.5 * w + 2;
       DrawCharacterInFont(x1, cy + 0.5 * charFGH(ft, 0264), 0264, ft, m);
@@ -321,7 +325,7 @@ static float fontsize[3] = { 16, 12, 8};
   }
   if (punct)
   {
-    if (dot) centChar(x, cy, SF_dot, f, m);
+    if (dot) DrawCharacterCenteredInFont(x, cy, SF_dot, f, m);
     if (line) cline(x, cy - linedy[sz], x, cy + linedy[sz], linethicks[sz], m);
   }
   return self;

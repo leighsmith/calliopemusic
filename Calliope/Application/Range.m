@@ -99,8 +99,8 @@ char ranfont[3] = {1, 0, 0};
   f = musicFont[(int)ranfont[(int)gFlags.subtype]][sz];
   y2 = GETYSP(y, ss, p2);
   x2 = x + slant * ss;
-  centChar(x, y1, ch, f, m);
-  centChar(x2, y2, ch, f, m);
+  DrawCharacterCenteredInFont(x, y1, ch, f, m);
+  DrawCharacterCenteredInFont(x2, y2, ch, f, m);
   if (TYPEOF(sp) == STAFF)
   {
     hw = charhalfFGW(f, ch);

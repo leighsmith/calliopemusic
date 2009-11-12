@@ -307,22 +307,23 @@ extern float staffthick[3][3];
 
 - numberMult: (int) sz : (int) ss: (int) m
 {
-  float sy, y1, y2, cx, wid;
-  int numy;
-  char num[6];
-  sy = [self yOfPos: 0];
-  cx = x - (4 * ss);
-  y1 = GETYSP(sy, ss, staffPosition);
-  wid = (8 * ss);
-  crect(x, y1 - (ss - 1), wid, (2 * ss) - 1, m);
-  y1 = GETYSP(sy, ss, staffPosition - 2);
-  y2 = GETYSP(sy, ss, staffPosition + 2);
-  cline(x, y1, x, y2, linethicks[sz], m);
-  cline(x + wid, y1, x + wid, y2, linethicks[sz], m);
-  sprintf(num, "%d", numbars);
-  numy = (style == 3) ? 7 : -7;
-  DrawCenteredText(x + (4 * ss), GETYSP(sy, ss, staffPosition + numy), num, musicFont[1][sz], m);
-  return self;
+    float sy, y1, y2, cx, wid;
+    int numy;
+    NSString *numberString;
+    
+    sy = [self yOfPos: 0];
+    cx = x - (4 * ss);
+    y1 = GETYSP(sy, ss, staffPosition);
+    wid = (8 * ss);
+    crect(x, y1 - (ss - 1), wid, (2 * ss) - 1, m);
+    y1 = GETYSP(sy, ss, staffPosition - 2);
+    y2 = GETYSP(sy, ss, staffPosition + 2);
+    cline(x, y1, x, y2, linethicks[sz], m);
+    cline(x + wid, y1, x + wid, y2, linethicks[sz], m);
+    numberString = [NSString stringWithFormat: @"%d", numbars];
+    numy = (style == 3) ? 7 : -7;
+    DrawCenteredText(x + (4 * ss), GETYSP(sy, ss, staffPosition + numy), numberString, musicFont[1][sz], m);
+    return self;
 }
 
 

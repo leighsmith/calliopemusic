@@ -391,79 +391,84 @@ static char usesm[6] = {1, 1, 1, 1, 0, 0}; /* whether to use small size as norma
 
 - drawDiapason: (float) tx : (float) ty : (int) n : (int) ss : (int) sz : (NSFont *) f : (NSFont *) ft : (int) m
 {
-  float cy, lh;
-  int k, dig, pos, ledge = 0;
-  char *s;
-  NSFont *outf;
-  dig = flags.cipher;
-  if (flags.typeface == 0)
-  {
-    outf = ft;
-    if (dig == 0)
+    float cy, lh;
+    int k, dig, pos, ledge = 0;
+    NSString *s;
+    NSFont *outf;
+    
+    dig = flags.cipher;
+    if (flags.typeface == 0)
     {
-        if (diapason >= 5) s = timesdiap[0][(int)diapason];
-      else
-      {
-          ledge = diapason - 1;
-        s = timesfinger[0][diafret + 2];
-      }
+	outf = ft;
+	if (dig == 0)
+	{
+	    if (diapason >= 5) 
+		s = [NSString stringWithUTF8String: timesdiap[0][(int)diapason]];
+	    else
+	    {
+		ledge = diapason - 1;
+		s = [NSString stringWithUTF8String: timesfinger[0][diafret + 2]];
+	    }
+	}
+	else
+	{
+	    if (diafret > 0)
+	    {
+		s = [NSString stringWithUTF8String: timesfinger[1][diafret + 2]];
+	    }
+	    else
+	    {
+		s = [NSString stringWithUTF8String: timesdiap[1][(int)diapason]];
+	    }
+	}
     }
     else
     {
-      if (diafret > 0)
-      {
-        s = timesfinger[1][diafret + 2];
-      }
-      else
-      {
-          s = timesdiap[1][(int)diapason];
-      }
+	outf = f;
+	if (dig == 0)
+	{
+	    if (diapason >= 5) 
+		s = [NSString stringWithUTF8String: olddiap[0][(int)diapason]];
+	    else
+	    {
+		ledge = diapason - 1;
+		s = [NSString stringWithUTF8String: timesfinger[0][diafret + 2]];
+	    }     
+	}
+	else
+	{
+	    if (diapason == 1 && diafret >= 0) 
+		s = [NSString stringWithUTF8String: timesfinger[1][diafret + 2]];
+	    else 
+		s = [NSString stringWithUTF8String: olddiap[1][(int)diapason]];
+	}
     }
-  }
-  else
-  {
-      outf = f;
-    if (dig == 0)
+    if (flags.direction)
     {
-        if (diapason >= 5) s = olddiap[0][(int)diapason];
-      else
-      {
-          ledge = diapason - 1;
-          s = timesfinger[0][diafret + 2];
-      }     
+	pos = 0;
+	if (flags.online) pos = -1;
+	cy = GETYSP(ty, ss, pos) + charFLLY(f, [s characterAtIndex: 0]) - 2;
     }
     else
     {
-      if (diapason == 1 && diafret >= 0) s = timesfinger[1][diafret + 2];
-        else s = olddiap[1][(int)diapason];
+	pos = ((n - 1) << 1) + 1;
+	if (flags.online) ++pos;
+	cy = GETYSP(ty, ss, pos);
+	if (ledge > 0)
+	{
+	    lh = charFGH(musicFont[0][sz], CH_tabledger);
+	    cy += lh;
+	    for (k = 0; k < ledge; k++)
+	    {
+		DrawCharacterCenteredOnXInFont(tx, cy, CH_tabledger, musicFont[0][sz], m);
+		cy += lh;
+	    }
+	    cy -= lh;
+	}
+	cy += charFURY(f, [s characterAtIndex: 0]);
     }
-  }
-  if (flags.direction)
-  {
-    pos = 0;
-    if (flags.online) pos = -1;
-    cy = GETYSP(ty, ss, pos) + charFLLY(f, s[0]) - 2;
-  }
-  else
-  {
-      pos = ((n - 1) << 1) + 1;
-    if (flags.online) ++pos;
-    cy = GETYSP(ty, ss, pos);
-    if (ledge > 0)
-    {
-      lh = charFGH(musicFont[0][sz], CH_tabledger);
-      cy += lh;
-      for (k = 0; k < ledge; k++)
-      {
-        centxChar(tx, cy, CH_tabledger, musicFont[0][sz], m);
-        cy += lh;
-      }
-      cy -= lh;
-    }
-    cy += charFURY(f, s[0]);
-  }
-  DrawCenteredText(tx, cy, s, outf, m);
-  return self;
+    DrawCenteredText(tx, cy, s, outf, m);
+    return self;
 }
 
 
@@ -474,7 +479,6 @@ static char usesm[6] = {1, 1, 1, 1, 0, 0}; /* whether to use small size as norma
   OpusDocument *doc;
   int b, n, ss, sz, dsz, i, pos, c, dh, df;
   float cy;
-  char *s;
   sz = gFlags.size;
   sp = mystaff;
   if (TYPEOF(sp) != STAFF)
@@ -503,8 +507,8 @@ static char usesm[6] = {1, 1, 1, 1, 0, 0}; /* whether to use small size as norma
     if (flags.direction && gFlags.selend == 6) pos = (flags.online) ? -2 : -1;
     cy = GETYSP(y, ss, pos);
     f = fontdata[FONTSTMR];
-    centChar(x - 6, cy, '(', f, m);
-    centChar(x + 8, cy, ')', f, m);
+    DrawCharacterCenteredInFont(x - 6, cy, '(', f, m);
+    DrawCharacterCenteredInFont(x + 8, cy, ')', f, m);
   }
   if (m == 0 && [self isBeamed] && [self tabCount] == 0)
   {
@@ -529,9 +533,9 @@ static char usesm[6] = {1, 1, 1, 1, 0, 0}; /* whether to use small size as norma
     c = chord[i];
     if (c >= 0 && c < NUMFRET)
     {
-      s = timesfinger[flags.cipher][c + 2];
-      cy = GETYSP(y, ss, pos) + charFCH(f, s[0]);
-      DrawCenteredText(x, cy, s, f, m);
+	NSString *s = [NSString stringWithUTF8String: timesfinger[flags.cipher][c + 2]];
+	cy = GETYSP(y, ss, pos) + charFCH(f, [s characterAtIndex: 0]);
+	DrawCenteredText(x, cy, s, f, m);
     }
     pos += (flags.direction) ? -2 : 2;
   }

@@ -357,7 +357,7 @@ static void drawrepeat(float x1, float x2, float y, NSFont *f, int just, int m)
   while (n--)
   {
     x += inc;
-    centxChar(x, y, HYPHCHAR, f, m);
+    DrawCharacterCenteredOnXInFont(x, y, HYPHCHAR, f, m);
   }
 }
 
@@ -418,7 +418,8 @@ static void drawext(float x1, float y, float x2, Staff *sp, int f, int m)
 	{
 	    ct[0] = c;
 	    if (*s != '\0') ct[1] = *s++;
-	    DrawCenteredText(x, fy, (char *) ct, f, m);
+	    // TODO we should convert to a full NSString operation.
+	    DrawCenteredText(x, fy, [NSString stringWithUTF8String: (char *) ct], f, m);
 	    fy += nlead;
 	    ct[1] = ct[2] = '\0';
 	}
@@ -445,11 +446,11 @@ static void drawext(float x1, float y, float x2, Staff *sp, int f, int m)
 		fy += nlead;
 	    }
 	    else cx = x - charFGW(f, *s);
-	    centxChar(cx, cy + charFCH(sf, a), a, sf, m);
+	    DrawCharacterCenteredOnXInFont(cx, cy + charFCH(sf, a), a, sf, m);
 	}
 	else
 	{
-	    centxChar(x, fy, c, f, m);
+	    DrawCharacterCenteredOnXInFont(x, fy, c, f, m);
 	    /* now look ahead to see if the next char is a + or / */
 	    nc = *s;
 	    if (nc == '+')
@@ -459,7 +460,7 @@ static void drawext(float x1, float y, float x2, Staff *sp, int f, int m)
 	    }
 	    else if (nc == '/')
 	    {
-		centxChar(x, fy, nc, f, m);
+		DrawCharacterCenteredOnXInFont(x, fy, nc, f, m);
 		++s;
 	    }
 	    fy += nlead;
@@ -498,7 +499,7 @@ static void drawext(float x1, float y, float x2, Staff *sp, int f, int m)
     {
       ex = [sp firstTimedBefore: p];
       mx = 2.0 * charFGW(font, HYPHCHAR);
-      if (cx - ex < mx) centxChar(cx - mx, bl, HYPHCHAR, font, m);
+      if (cx - ex < mx) DrawCharacterCenteredOnXInFont(cx - mx, bl, HYPHCHAR, font, m);
       else drawrepeat(ex, cx, bl, font, 2, m);
     }
     else if (h == 2 && [sp vocalBefore: p : vFlags.num])

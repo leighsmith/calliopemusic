@@ -412,28 +412,31 @@ void DrawCharacterInFont(float x, float y, int ch, NSFont *textFont, int mode)
 {
     if (mode) {
 	char s[2];
+	NSString *encodedString;
 	
 	s[0] = ch; s[1] = '\0';
-	NSLog(@"DrawCharacterInFont '%c', (%f, %f) %@ mode %d", ch, x, y, textFont, mode);
+	NSLog(@"DrawCharacterInFont '%c' (%d), (%f, %f) %@ mode %d", ch, ch, x, y, textFont, mode);
 	// Debugging only
 	NSRect boundingRect = [textFont boundingRectForGlyph: (NSGlyph) ch];
 	NSLog(@"font bounding rectangle (%f,%f) -> (%f,%f)\n", 
 	      boundingRect.origin.x, boundingRect.origin.y, boundingRect.size.width, boundingRect.size.height);
 
-	// DrawTextWithBaselineTies(x, y, [NSString stringWithCString: s encoding: NSNEXTSTEPStringEncoding], textFont, mode);
+	// Should be NSSymbolStringEncoding, but certain characters don't convert properly like 0x9a?
+	// NSNEXTSTEPStringEncoding. Ultimately we need to recode to unicode.
+	encodedString = [NSString stringWithCString: s encoding: NSMacOSRomanStringEncoding];
+
+	// DrawTextWithBaselineTies(x, y, encodedString, textFont, mode);
 	// TODO that we have to adjust the Sonata font by it's point size is completely beyond me. I have no idea why this is the case.
 	// the text fonts display fine, but the Sonata font is offset by it's point size. The only thing I can hypothesize is that the
 	// font metrics and origin of a non-text font confuses the drawing of NSAttributeString.
-	// Should be NSSymbolStringEncoding, but certain characters don't convert properly like 0x9a?
-	DrawTextWithBaselineTies(x, y - [textFont pointSize] * 2, [NSString stringWithCString: s encoding: NSNEXTSTEPStringEncoding], textFont, mode);
+	DrawTextWithBaselineTies(x, y - [textFont pointSize] * 2, encodedString, textFont, mode);
     }
     else 
 	unionCharBB(&boundingBox, x, y, ch, textFont);
 }
 
 /* draw a character centred on x and y */
-// DrawCharacterCenteredInFont
-void centChar(float x, float y, int ch, NSFont *f, int mode)
+void DrawCharacterCenteredInFont(float x, float y, int ch, NSFont *f, int mode)
 {
     if (NOPRINT(mode)) 
 	return;
@@ -441,8 +444,7 @@ void centChar(float x, float y, int ch, NSFont *f, int mode)
 }
 
 /* draw a character centred on x only */
-// DrawCharacterCenteredOnXInFont
-void centxChar(float x, float y, int ch, NSFont *f, int mode)
+void DrawCharacterCenteredOnXInFont(float x, float y, int ch, NSFont *f, int mode)
 {
     if (NOPRINT(mode)) 
 	return;
@@ -487,7 +489,7 @@ void DrawTextWithBaselineTies(float x, float y, NSString *stringToDisplay, NSFon
 //		      withAttributes: [NSDictionary dictionaryWithObjectsAndKeys: 
 	
 	// For debugging.
-#if 1
+#if 0
 	NSLog(@"DrawTextWithBaselineTies(\"%@\", %f, %f) fontPointSize = %f", stringToDisplay, x, y, fontPointSize);
 	NSFrameRect(NSMakeRect(x, characterFontOrigin_y, 20, fontPointSize)); // fix width, height matching font
 	NSFrameRect(NSMakeRect(x, characterFontOrigin_y, 3, 3)); // indicate upper corner
@@ -518,17 +520,16 @@ void DrawTextWithBaselineTies(float x, float y, NSString *stringToDisplay, NSFon
 	unionStringBB(&boundingBox, x, y, [stringToDisplay UTF8String], textFont, 0);
 }
 
-//sb: changed the following from UTF8String to CAcString to avoid confusion.
+//sb: changed the following from cString to CAcString to avoid confusion.
 // TODO Should be eventually removed and replaced with a direct call to DrawTextWithBaselineTies
 void CAcString(float x, float y, const char *s, NSFont *textFont, int mode)
 {
     DrawTextWithBaselineTies(x, y, [NSString stringWithUTF8String: s], textFont, mode);
 }
 
-// DrawCenteredText(float x, float y, NSString *s, NSFont *f, int mode)
-void DrawCenteredText(float x, float y, char *s, NSFont *f, int mode)
+void DrawCenteredText(float x, float y, NSString *s, NSFont *textFont, int mode)
 {
-    CAcString(x - 0.5 * [f widthOfString: [NSString stringWithUTF8String: s]], y, s, f, mode);
+    DrawTextWithBaselineTies(x - 0.5 * [textFont widthOfString: s], y, s, textFont, mode);
 }
 
 void DrawJustifiedText(float x, float y, NSString *s, NSFont *textFont, int j, int mode)
@@ -538,7 +539,6 @@ void DrawJustifiedText(float x, float y, NSString *s, NSFont *textFont, int j, i
     else if (j == JRIGHT)
 	x -= [textFont widthOfString: s];
     DrawTextWithBaselineTies(x, y, s, textFont, mode);
-
 }
 
 void csetdash(BOOL drawWithDash, float pattern)

@@ -152,7 +152,7 @@ static Metro *proto;
     x = ((StaffObj *)client)->x;
     y = [sp yOfPos: pos];
     dx = charFGW(f, '=');
-    centxChar(x, y, '=', f, m);
+    DrawCharacterCenteredOnXInFont(x, y, '=', f, m);
     nx = dx * (2.0 + dot[0] * 0.5);
     dy = charFCH(f, '=');
     csnote(x - nx, y - dy, -stemshorts[sz], body[0], dot[0], sz, 0, 0, m);

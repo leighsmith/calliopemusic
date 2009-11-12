@@ -434,12 +434,12 @@ float tyoff[2][5] =
         if (!fr && y < sy) y = sy;
 	y += charFURY(f, ch);
       }
-      centxChar(x, y, ch, f, m);
+      DrawCharacterCenteredOnXInFont(x, y, ch, f, m);
       if (top) y -= charFGH(f, ch); else y += charFGH(f, ch);
     }
     else
     {
-      centChar(x, y, ch, f, m);
+      DrawCharacterCenteredInFont(x, y, ch, f, m);
     }
     if (1)
     {

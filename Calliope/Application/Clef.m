@@ -238,7 +238,7 @@ static Clef *proto;
     f8 = musicFont[1][(int)smallersz[sz]];
     if (ottava == -1) cy += charFLLY(f8, SF_ital8) - charFURY(f, cs) - 0.5 * nature[sz];
     else cy += 0.5 * nature[sz] - charFLLY(f, cs) + charFURY(f8, SF_ital8);
-    centxChar(cx, cy, SF_ital8, f8, m);
+    DrawCharacterCenteredOnXInFont(cx, cy, SF_ital8, f8, m);
   }
   return self;
 }
