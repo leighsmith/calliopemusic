@@ -2,7 +2,7 @@
   Routines for performing using the MusicKit.
 */
 
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "GraphicView.h"
 #import "GVFormat.h"
@@ -302,7 +302,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
     MKScore *as;
     MKSynthInstrument *synth;
     MKPartPerformer *partPerformer;
-    PlayInspector *pi = [[DrawApp sharedApplicationController] thePlayInspector];
+    PlayInspector *pi = [[CalliopeAppController sharedApplicationController] thePlayInspector];
     struct performer *perf;
     id p, an;
     char curracc[7], keysig[7], keytmp[7];
@@ -621,7 +621,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
             [an setPar: MK_tempo toDouble: [pi getTempo]];
             [as setInfoNote: an];
             [an release];
-            fname = [[DrawApp currentDocument] filename];
+            fname = [[CalliopeAppController currentDocument] filename];
             if ([[fname pathExtension] length])
                 fname = [[fname stringByDeletingPathExtension] stringByAppendingPathExtension:@"score"];
             oldname = [fname stringByAppendingString:@"~"];
@@ -635,7 +635,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
             break;
         case 4: /* write a MIDI file */
             as = [[MKScore alloc] init];
-            channelList = [[DrawApp sharedApplicationController] getChanlist];
+            channelList = [[CalliopeAppController sharedApplicationController] getChanlist];
             i = 16;
             while (i--) ((Channel *)[channelList objectAtIndex:i])->flag = 0;
             for (i = 0; i < numParts; i++)
@@ -685,7 +685,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
             [an setPar: MK_tempo toDouble: [pi getTempo]];
             [as setInfoNote: an];
             [an release];
-            fname = [[DrawApp currentDocument] filename];
+            fname = [[CalliopeAppController currentDocument] filename];
             if ([[fname pathExtension] length])
                 fname = [[fname stringByDeletingPathExtension] stringByAppendingPathExtension:@"midi"];
             oldname = [fname stringByAppendingString:@"~"];
@@ -707,7 +707,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
             [midi acceptSys: MK_sysStart];
             [midi acceptSys: MK_sysContinue];
             [midi acceptSys: MK_sysStop];
-            channelList = [[DrawApp sharedApplicationController] getChanlist];
+            channelList = [[CalliopeAppController sharedApplicationController] getChanlist];
             i = 16;
             while (i--) ((Channel *)[channelList objectAtIndex:i])->flag = 0;
                 an = [[MKNote alloc] init];
@@ -793,7 +793,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
 	return self;
     }
     [self flowTimeSig: [syslist objectAtIndex:j]];
-    [[DrawApp sharedApplicationController] thePlayView: self];
+    [[CalliopeAppController sharedApplicationController] thePlayView: self];
     [self play: i : j : selonly : noprogch];
     return self;
 }
@@ -801,7 +801,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
 
 - clickStop
 {
-    [MKConductor sendMsgToApplicationThreadSel: @selector(clickStopButton) to: [[DrawApp sharedApplicationController] thePlayInspector] argCount: 0];
+    [MKConductor sendMsgToApplicationThreadSel: @selector(clickStopButton) to: [[CalliopeAppController sharedApplicationController] thePlayInspector] argCount: 0];
     return self;
 }
 

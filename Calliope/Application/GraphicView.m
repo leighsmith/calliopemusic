@@ -13,7 +13,7 @@
 #import "SysCommands.h"
 #import "SysInspector.h"
 #import "SysAdjust.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "ImageGraphic.h"
 #import "TextGraphic.h"
@@ -1066,7 +1066,7 @@ extern char *typename[NUMTYPES];
     [self reDraw: g]; /* g's marker */
     [self reDraw: s]; /* old marker */
   }
-  [[DrawApp sharedApplicationController] inspectClass: [SysInspector class] loadInspector: command];
+  [[CalliopeAppController sharedApplicationController] inspectClass: [SysInspector class] loadInspector: command];
   return self;
 }
 
@@ -1152,7 +1152,7 @@ extern struct toolData toolCodes[NUMTOOLS];
     tool = toolCodes[currentTool].type;
     if (tool && (control || command || alternate))
     {
-	[[DrawApp sharedApplicationController] resetTool];
+	[[CalliopeAppController sharedApplicationController] resetTool];
 	return;
     }
     p = [event locationInWindow];
@@ -1212,8 +1212,8 @@ extern struct toolData toolCodes[NUMTOOLS];
 	[self deselectAll: self];
 	[[self findSys: p.y] newStaff: p.y];
 	[self balanceOrAsk: currentPage : 0 askIfLoose: NO];
-	[[DrawApp sharedApplicationController] resetTool];
-	[[DrawApp sharedApplicationController] inspectClass: [SysInspector class] loadInspector: NO];
+	[[CalliopeAppController sharedApplicationController] resetTool];
+	[[CalliopeAppController sharedApplicationController] inspectClass: [SysInspector class] loadInspector: NO];
 	trymove = nil;
     }
     else if (tool) 
@@ -1291,7 +1291,7 @@ extern struct toolData toolCodes[NUMTOOLS];
 	    sys = [(StaffObj *)g mySystem];
 	    if (sys != currentSystem) [self selectCurSys: sys : NO];
 	}
-	[[DrawApp sharedApplicationController] inspectAppWithMe: g loadInspector: command : fontseltype];
+	[[CalliopeAppController sharedApplicationController] inspectAppWithMe: g loadInspector: command : fontseltype];
 	i = g->gFlags.selend;
 	if ([g isResizable] && i == 7)
 	{
@@ -1301,7 +1301,7 @@ extern struct toolData toolCodes[NUMTOOLS];
 	}
 	else if ([g isEditable] && !alternate && (i != 7 && i != 4))
 	{
-	    [[DrawApp sharedApplicationController] resetTool];
+	    [[CalliopeAppController sharedApplicationController] resetTool];
 	    [(TextGraphic *)g edit: event in: self];
 	    trymove = nil;
 	}
@@ -1414,7 +1414,7 @@ static void drawHorz(float x, float y, float w, NSRect r)
   {
     [self dirty];
     [self drawSelectionWith: &b];
-    [[DrawApp sharedApplicationController] inspectApp];
+    [[CalliopeAppController sharedApplicationController] inspectApp];
   }
   return r;
 }
@@ -1451,7 +1451,7 @@ static void drawHorz(float x, float y, float w, NSRect r)
     [self selectObj: g];
     [self drawSelectionWith: NULL];
     if (!ISAVOCAL(g)) NSLog(@"handleTab: is not a vocal");
-    [[DrawApp sharedApplicationController] inspectApp];
+    [[CalliopeAppController sharedApplicationController] inspectApp];
     return YES;
   }
   return NO;
@@ -1515,7 +1515,7 @@ static void drawHorz(float x, float y, float w, NSRect r)
     [self deselectAll: self];
     [self selectObj: p];
     [self drawSelectionWith: NULL];
-    [[DrawApp sharedApplicationController] inspectApp];
+    [[CalliopeAppController sharedApplicationController] inspectApp];
   }
   return r;
 }
@@ -1545,7 +1545,7 @@ static void drawHorz(float x, float y, float w, NSRect r)
       escapedTool = currentTool;
       t = 0;
     }
-    [[DrawApp sharedApplicationController] resetToolTo: t];
+    [[CalliopeAppController sharedApplicationController] resetToolTo: t];
     return;
   }
   if ([slist count] == 0) {[super keyDown:event]; return;}
@@ -1591,7 +1591,7 @@ static void drawHorz(float x, float y, float w, NSRect r)
     {
       [self dirty];
       [self drawSelectionWith: &b];
-      [[DrawApp sharedApplicationController] inspectAppWithMe: p loadInspector: NO : 0];
+      [[CalliopeAppController sharedApplicationController] inspectAppWithMe: p loadInspector: NO : 0];
     }
     else if (act < 0) [super keyDown:event];
   }
@@ -1774,7 +1774,7 @@ static void drawHorz(float x, float y, float w, NSRect r)
     {
       [self cache: sb];
     }
-    [[DrawApp sharedApplicationController] inspectApp];
+    [[CalliopeAppController sharedApplicationController] inspectApp];
     [[self window] flushWindow];
   }
 }
@@ -1825,7 +1825,7 @@ static void drawHorz(float x, float y, float w, NSRect r)
     [self scaleUnitSquareToSize:NSMakeSize(w, h)];
 
     currentScale = s;
-    return [[DrawApp currentDocument] changeSize: ceil([self frame].size.width * w)
+    return [[CalliopeAppController currentDocument] changeSize: ceil([self frame].size.width * w)
                                               : ceil([self frame].size.height * h)
                                               : (NSPoint)thePoint];
 }
@@ -1860,7 +1860,7 @@ static void drawHorz(float x, float y, float w, NSRect r)
 - (float) rulerScale
 {
     // TODO should be retrieving the paperSize from currentDocument or it should be set here.
-    //   [[DrawApp currentDocument] paperSize];
+    //   [[CalliopeAppController currentDocument] paperSize];
     return [self bounds].size.width / paperSize.width / currentScale;
 }
 

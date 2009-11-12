@@ -3,7 +3,7 @@
 #import "GVCommands.h"
 #import "GVGlobal.h"
 #import "OpusDocument.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "GVPasteboard.h"
 #import "System.h"
 #import "Staff.h"
@@ -196,7 +196,7 @@ static void addBarsRest(Staff *sp, System *sys, int n)
   [epl addObject: [[CallPart alloc] init: nullPart : nil : 1 : nullInstrument]];
   for (i = 0; i < NUMSTAVES; i++) barsrest[i] = 0;
   nsys = [syslist count];
-  doc = [[DrawApp currentDocument] newFrom];
+  doc = [[CalliopeAppController currentDocument] newFrom];
   v = [doc graphicView];
   [[v window] disableFlushWindow];
   for (i = 0; i < nsys; i++)
@@ -290,7 +290,7 @@ static void addBarsRest(Staff *sp, System *sys, int n)
     [self deselectAll: self];
     for (i = 0; i < NUMSTAVES; i++) barsrest[i] = 0;
     nsys = [syslist count];
-    doc = [[DrawApp currentDocument] newFrom];
+    doc = [[CalliopeAppController currentDocument] newFrom];
     v = [doc graphicView];
     [[v window] disableFlushWindow];
     for (i = 0; i < nsys; i++) {

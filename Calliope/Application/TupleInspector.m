@@ -1,6 +1,6 @@
 #import "TupleInspector.h"
 #import "Tuple.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "GraphicView.h"
 #import "GVSelection.h"
@@ -82,7 +82,7 @@
 {
   NSRect b;
   NSMutableArray *sl;
-  GraphicView *v = [DrawApp currentView];
+  GraphicView *v = [CalliopeAppController currentView];
   Tuple *p;
   int k;
   if ([v startInspection: TUPLE : &b : &sl])
@@ -164,7 +164,7 @@ static char enabled[3][4] =
 - setChoice: sender
 {
     int c;
-    Tuple *p = [(GraphicView *)[DrawApp currentView] canInspect: TUPLE];
+    Tuple *p = [[CalliopeAppController currentView] canInspect: TUPLE];
   if (p == nil) return self;
   c = [uneqmatrix selectedRow];
   [self setEnabledFor: c];
@@ -184,7 +184,7 @@ static char enabled[3][4] =
 
 - preset
 {
-    Tuple *p = [(GraphicView *)[DrawApp currentView] canInspect: TUPLE];
+    Tuple *p = [[CalliopeAppController currentView] canInspect: TUPLE];
   if (p == nil || p->style != 0) return self;
   [self setEnabledFor: p->gFlags.subtype - 1];
   [self updatePanel: p];

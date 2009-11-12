@@ -16,8 +16,7 @@
 #import <CalliopePropertyListCoders/OAPropertyListCoders.h>
 #import "OpusDocument.h"
 
-// TODO This should be renamed CalliopeAppController
-@interface DrawApp : NSObject
+@interface CalliopeAppController : NSObject
 {
     IBOutlet NSMatrix *tools;			/* the vertical Tool Palette matrix */
     IBOutlet NSMatrix *toolsH;			/* the horizontal Tool Palette matrix */
@@ -27,7 +26,7 @@
     id fontAccessory;
     id fontAccMatrix;
     id inspector;		/* inspectors loaded into here */
-    id insplist;		/*    but collected here */
+    NSMutableArray *insplist;		/*    but collected here */
     id laybarInspector;
     id perfInspector;
     id toneTools;
@@ -60,7 +59,7 @@ extern int partlistflag;
 
 - selectFontSelection: (int) i;
 
-+ (DrawApp *) sharedApplicationController;
++ (CalliopeAppController *) sharedApplicationController;
 
 + (OpusDocument *) currentDocument;
 + (GraphicView *) currentView;

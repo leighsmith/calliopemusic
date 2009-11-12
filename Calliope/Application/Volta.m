@@ -4,7 +4,7 @@
 #import "TimedObj.h"
 #import "GraphicView.h"
 #import "System.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "Staff.h"
 #import <Foundation/NSArray.h>
 

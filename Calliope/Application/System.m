@@ -9,7 +9,7 @@
 #import "GVSelection.h"
 #import "SysCommands.h"
 #import "OpusDocument.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "Staff.h"
 #import "StaffObj.h"
 #import "Bracket.h"
@@ -641,7 +641,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 
 - recalc
 {
-    //   TODO [[DrawApp currentDocument] paperSize];
+    //   TODO [[CalliopeAppController currentDocument] paperSize];
     width = ((paperSize.width - lindent - rindent) / staffScale) - ([self leftMargin] + [self rightMargin]);
     return [self resetSys];
 }

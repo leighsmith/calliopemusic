@@ -5,7 +5,7 @@
 */
 
 #import "KeyboardFilter.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "GraphicView.h"
 #import "GVPerform.h"
@@ -197,8 +197,8 @@ extern void setkeysig(KeySig *p, char *key);
   GNote *q;
   NSPoint pt;
   Staff *sp;
-  OpusDocument *doc = [DrawApp currentDocument];
-  PlayInspector *player = [[DrawApp sharedApplicationController] thePlayInspector];
+  OpusDocument *doc = [CalliopeAppController currentDocument];
+  PlayInspector *player = [[CalliopeAppController sharedApplicationController] thePlayInspector];
   
   if (doc) v = [doc graphicView]; else return self;
   i = [n noteTag] & 127;

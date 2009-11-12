@@ -1,6 +1,6 @@
 #import "BeamInspector.h"
 #import "Beam.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "GraphicView.h"
 #import "MultiView.h"
@@ -15,7 +15,7 @@
 
 - setView: (int) i
 {
-Beam *p = [(GraphicView *)[DrawApp currentView] canInspect: BEAM];
+Beam *p = [[CalliopeAppController currentView] canInspect: BEAM];
   if (p == nil) return [multiview replaceView: blankview];
   switch(i)
   {
@@ -39,7 +39,7 @@ Beam *p = [(GraphicView *)[DrawApp currentView] canInspect: BEAM];
 
 - setPanel: (int) i
 {
-Beam *p = [(GraphicView *)[DrawApp currentView] canInspect: BEAM];
+Beam *p = [[CalliopeAppController currentView] canInspect: BEAM];
   if (p == nil) return self;
   switch(i)
   {
@@ -87,7 +87,7 @@ Beam *p = [(GraphicView *)[DrawApp currentView] canInspect: BEAM];
   Beam *p;
   if ([brokebutton state])
   {
-  p = [(GraphicView *)[DrawApp currentView] canInspect: BEAM];
+  p = [[CalliopeAppController currentView] canInspect: BEAM];
     [timematrix selectCellAtRow:0 column:p->flags.body - 1];
     [dotmatrix selectCellAtRow:0 column:p->flags.dot];
   }
@@ -143,7 +143,7 @@ Beam *p = [(GraphicView *)[DrawApp currentView] canInspect: BEAM];
 {
   NSRect b;
   NSMutableArray *sl;
-  GraphicView *v = [DrawApp currentView];
+  GraphicView *v = [CalliopeAppController currentView];
   Beam *p;
   int k;
   if ([v startInspection: BEAM : &b : &sl])

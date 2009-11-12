@@ -12,7 +12,7 @@
 #import "NoteGroup.h"
 #import "TieNew.h"
 #import "System.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "Staff.h"
 
 @implementation Tie

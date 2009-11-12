@@ -4,7 +4,7 @@
 #import "GraphicView.h"
 #import "GVSelection.h"
 #import "OpusDocument.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import <AppKit/NSMatrix.h>
 #import <Foundation/NSArray.h>
 #import "DrawingFunctions.h"
@@ -25,7 +25,7 @@
 {
   NSRect b;
   Enclosure *p;
-  id sl, v = [DrawApp currentView];
+  id sl, v = [CalliopeAppController currentView];
   int k;
   if ([v startInspection: ENCLOSURE : &b : &sl])
   {
@@ -45,7 +45,7 @@
 - preset
 {
   int n;
-  GraphicView *v = [DrawApp currentView];
+  GraphicView *v = [CalliopeAppController currentView];
   Enclosure *p = [v canInspect: ENCLOSURE : &n];
   if (n)
   {

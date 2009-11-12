@@ -1,6 +1,6 @@
 #import "TieInspector.h"
 #import "TieNew.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "GraphicView.h"
 #import "GVSelection.h"
@@ -41,7 +41,7 @@
 {
   NSRect b;
   TieNew *p;
-  id sl, v = [DrawApp currentView];
+  id sl, v = [CalliopeAppController currentView];
   int k;
   if ([v startInspection: TIENEW : &b : &sl])
   {
@@ -89,7 +89,7 @@
 
 - preset
 {
-    TieNew *p = [(GraphicView *)[DrawApp currentView] canInspect: TIENEW];
+    TieNew *p = [[CalliopeAppController currentView] canInspect: TIENEW];
   if (p != nil) [self preset: p];
   return self;
 }
@@ -108,7 +108,7 @@
 
 - setImageFrameStyle:sender
 {
-    TieNew *p = [(GraphicView *)[DrawApp currentView] canInspect: TIENEW];
+    TieNew *p = [[CalliopeAppController currentView] canInspect: TIENEW];
   if (p == nil) return self;
   [p setDefault: [[stylematrix selectedCell] tag]];
   [fixmatrix selectCellAtRow:0 column:p->flags.fixed];

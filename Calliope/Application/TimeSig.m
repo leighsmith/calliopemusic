@@ -4,7 +4,7 @@
 #import "Staff.h"
 #import "StaffObj.h"
 #import "System.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "DrawingFunctions.h"
 #import "muxlow.h"
@@ -306,7 +306,7 @@ static float fontsize[3] = { 16, 12, 8};
     case 6:
       DrawCenteredText(x, cy + charFLLY(f, numer[0]) - 1, numeratorString, f, m);
       DrawCenteredText(x, cy + charFURY(f, numer[0]) + 2, denominatorString, f, m);
-        ft = [NSFont fontWithName: @"Symbol" size: fontsize[sz] / [[DrawApp currentDocument] staffScale]];
+        ft = [NSFont fontWithName: @"Symbol" size: fontsize[sz] / [[CalliopeAppController currentDocument] staffScale]];
       x1 = [f widthOfString: numeratorString];
       x2 = [f widthOfString: denominatorString];
       w = (x1 > x2) ? x1 : x2;

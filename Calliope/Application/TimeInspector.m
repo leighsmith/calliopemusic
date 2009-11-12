@@ -1,6 +1,6 @@
 #import "TimeInspector.h"
 #import "OpusDocument.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "GraphicView.h"
 #import "GVSelection.h"
 #import "TimeSig.h"
@@ -44,7 +44,7 @@ BOOL enablepunct[8] = {YES, YES, YES, YES, NO, NO, NO, NO};
 {
   NSRect b;
   TimeSig *p;
-  id sl, v = [DrawApp currentView];
+  id sl, v = [CalliopeAppController currentView];
   int k;
   if ([v startInspection: TIMESIG : &b : &sl])
   {
@@ -92,7 +92,7 @@ BOOL enablepunct[8] = {YES, YES, YES, YES, NO, NO, NO, NO};
 - preset
 {
   int n;
-  TimeSig *p = [[DrawApp currentView] canInspect: TIMESIG : &n];
+  TimeSig *p = [[CalliopeAppController currentView] canInspect: TIMESIG : &n];
   if (n == 0) return nil;
   [self updatePanel: p];
   [self update: self];

@@ -8,7 +8,7 @@
 #import "GNote.h"
 #import "GraphicView.h"
 #import "GVSelection.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "System.h"
 #import "Staff.h"
@@ -472,7 +472,7 @@ float fontsize[3] = { 12, 8, 6};
         case 0:
 	case 1:
           f = musicFont[1][sz];
-            ft = [NSFont fontWithName:@"Times-Italic" size:fontsize[sz] / [[DrawApp currentDocument] staffScale]];
+            ft = [NSFont fontWithName:@"Times-Italic" size:fontsize[sz] / [[CalliopeAppController currentDocument] staffScale]];
           CAcString(px, py + 0.5 * charFGH(ft, '8'), "coll' 8", ft, m);
           doDashJog(px + nature[sz] + [ft widthOfString:@"coll' 8"], py, qx, (sf == 0), (flags.position == 0), sz, m);
           break;

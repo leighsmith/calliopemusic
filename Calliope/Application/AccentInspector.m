@@ -3,7 +3,7 @@
 
 #import "AccentInspector.h"
 #import "Accent.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "GraphicView.h"
 #import "GVSelection.h"
@@ -33,7 +33,7 @@
 {
   NSRect b;
   Accent *p;
-  id sl, v = [DrawApp currentView];
+  id sl, v = [CalliopeAppController currentView];
   int k, n, s;
   if ([v startInspection: ACCENT : &b : &sl])
   {
@@ -76,7 +76,7 @@
 
 - preset
 {
-  Accent *p = [(GraphicView *)[DrawApp currentView] canInspect: ACCENT];
+  Accent *p = [[CalliopeAppController currentView] canInspect: ACCENT];
   if (p != nil) [self updatePanel: p];
   return self;
 }
@@ -92,7 +92,7 @@
 {
   NSRect b;
   Accent *p;
-  id sl, v = [DrawApp currentView];
+  id sl, v = [CalliopeAppController currentView];
   int k;
   if ([v startInspection: ACCENT : &b : &sl])
   {
@@ -114,7 +114,7 @@
 
 - setnumber:sender
 {
-  Accent *p = [(GraphicView *)[DrawApp currentView] canInspect: ACCENT];
+  Accent *p = [[CalliopeAppController currentView] canInspect: ACCENT];
   if (p != nil)
   {
     [typematrix selectCellWithTag:p->sign[[nummatrix selectedColumn]]];

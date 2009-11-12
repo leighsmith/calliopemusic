@@ -1,6 +1,6 @@
 #import "SquareNoteInspector.h"
 #import "SquareNote.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "GraphicView.h"
 #import "GVSelection.h"
@@ -31,7 +31,7 @@
 {
   NSRect b;
   SquareNote *p;
-  id sl, v = [DrawApp currentView];
+  id sl, v = [CalliopeAppController currentView];
   int k, selshape, selcol, selstem, seltime, seldot, seldes;
   if ([v startInspection: SQUARENOTE : &b : &sl])
   {
@@ -90,7 +90,7 @@
 - updatePanel
 {
   int num;
-  GraphicView *v = [DrawApp currentView];
+  GraphicView *v = [CalliopeAppController currentView];
   [self assayList: [v selectedGraphics] : &num];
   if (num == 0) return nil;
   clearMatrix(timematrix);

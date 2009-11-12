@@ -8,7 +8,7 @@
 #import "GNote.h"
 #import "GraphicView.h"
 #import "GVSelection.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "System.h"
 #import "Staff.h"

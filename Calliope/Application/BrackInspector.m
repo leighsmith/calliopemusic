@@ -3,7 +3,7 @@
 
 #import "BrackInspector.h"
 #import "Bracket.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "GraphicView.h"
 #import "GVSelection.h"
@@ -40,7 +40,7 @@
   NSRect b;
   Bracket *p;
   System *s;
-  id sl, v = [DrawApp currentView];
+  id sl, v = [CalliopeAppController currentView];
   int k, t;
   BOOL ok;
   if ([v startInspection: BRACKET : &b : &sl])
@@ -84,7 +84,7 @@
 
 - preset
 {
-  Bracket *p = [[DrawApp currentView] canInspect: BRACKET];
+  Bracket *p = [[CalliopeAppController currentView] canInspect: BRACKET];
   if (p != nil)
   {
     [typematrix selectCellAtRow:0 column:2 - p->gFlags.subtype];

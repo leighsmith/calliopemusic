@@ -6,7 +6,7 @@
 #import "GVSelection.h"
 #import "GVFormat.h"
 #import "GVCommands.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "System.h"
 #import "SysAdjust.h"
@@ -117,7 +117,7 @@ extern int fontflag;
   while (t--) flag[t] = NO;
   if (g != nil)
   {
-    [[DrawApp sharedApplicationController] inspectMe: g loadInspector: launch];
+    [[CalliopeAppController sharedApplicationController] inspectMe: g loadInspector: launch];
     flag[TYPEOF(g)] = YES;
   }
   i = [slist count];
@@ -128,7 +128,7 @@ extern int fontflag;
     if (!flag[t])
     {
       flag[t] = YES;
-      [[DrawApp sharedApplicationController] inspectMe: p loadInspector: launch];
+      [[CalliopeAppController sharedApplicationController] inspectMe: p loadInspector: launch];
     }
   }
   return self;
@@ -137,7 +137,7 @@ extern int fontflag;
 
 - inspectSel: (BOOL) launch
 {
-  return [[DrawApp sharedApplicationController] inspectAppWithMe: nil loadInspector: (BOOL) launch : 0];
+  return [[CalliopeAppController sharedApplicationController] inspectAppWithMe: nil loadInspector: (BOOL) launch : 0];
 }
 
 
@@ -445,8 +445,8 @@ extern float ctimex(float d);
 	case 0:
 	    if (fontflag != ff)
 	    {
-		// TODO LMS should be replaced, removing DrawApp
-		// [[DrawApp sharedApplicationController] selectFontSelection: ff];
+		// TODO LMS should be replaced, removing CalliopeAppController
+		// [[CalliopeAppController sharedApplicationController] selectFontSelection: ff];
 		fontflag = ff;
 	    }
 	    fs = ff;
@@ -463,14 +463,14 @@ extern float ctimex(float d);
 	case 0:
 	case 1:
 	    selectedFont = [self mostCommonOutOfTotalVerseFonts: &numberOfVerseFonts];
-	    if (selectedFont == nil) selectedFont = [[DrawApp currentDocument] getPreferenceAsFont: TEXFONT];
+	    if (selectedFont == nil) selectedFont = [[CalliopeAppController currentDocument] getPreferenceAsFont: TEXFONT];
 		[sharedFontManager setSelectedFont:selectedFont isMultiple:(numberOfVerseFonts > 0)];
 	    break;
 	case 3:
 	    if (currentSystem)
 	    {
 		selectedFont = [currentSystem getVFont : -1 : &numberOfVerseFonts];
-		if (selectedFont == nil) selectedFont = [[DrawApp currentDocument] getPreferenceAsFont: TEXFONT];
+		if (selectedFont == nil) selectedFont = [[CalliopeAppController currentDocument] getPreferenceAsFont: TEXFONT];
 		[sharedFontManager setSelectedFont:selectedFont isMultiple:(numberOfVerseFonts > 0)];
 	    }
 	    break;
@@ -484,7 +484,7 @@ extern float ctimex(float d);
 		    if (TYPEOF(sys) == SYSTEM)
 		    {
 			selectedFont = [sys getVFont : p->selver : &numberOfVerseFonts];
-			if (selectedFont == nil) selectedFont = [[DrawApp currentDocument] getPreferenceAsFont: TEXFONT];
+			if (selectedFont == nil) selectedFont = [[CalliopeAppController currentDocument] getPreferenceAsFont: TEXFONT];
 			[sharedFontManager setSelectedFont:selectedFont isMultiple:(numberOfVerseFonts > 0)];
 		    }
 		}

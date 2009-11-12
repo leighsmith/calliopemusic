@@ -8,7 +8,7 @@
 #import "GVCommands.h"
 #import "GVGlobal.h"
 #import "OpusDocument.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "Staff.h"
 #import "System.h"
 #import "Page.h"
@@ -138,7 +138,7 @@ static BOOL busyFlag = 0;  /* so that inspector is not inspected because of a ca
   System *st;
   NSString *n;
   int i = [[stybrowser matrixInColumn: 0] selectedRow];
-  if (i < 0 || i > [[[DrawApp sharedApplicationController] getStylelist] count])
+  if (i < 0 || i > [[[CalliopeAppController sharedApplicationController] getStylelist] count])
   {
     if (t != NULL) [stytext setStringValue:@""];
     [self enableButtons: 1 : 0 : 0 : 0 : 0 : 0];
@@ -146,7 +146,7 @@ static BOOL busyFlag = 0;  /* so that inspector is not inspected because of a ca
   else
   {
     if (t != nil) [stytext setStringValue:t];
-    st = [[[DrawApp sharedApplicationController] getStylelist] objectAtIndex:i];
+    st = [[[CalliopeAppController sharedApplicationController] getStylelist] objectAtIndex:i];
     n = [stytext stringValue];
     if (![st->style isEqualToString: n])
     {
@@ -175,8 +175,8 @@ static BOOL busyFlag = 0;  /* so that inspector is not inspected because of a ca
   {
     case -1:
     case 0:
-        conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
-//      [[[DrawApp sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
+        conv = [[CalliopeAppController sharedApplicationController] pointToCurrentUnitFactor];
+//      [[[CalliopeAppController sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
       [[indentleft cellAtIndex:0] setFloatValue:sys->lindent * conv];
       [[indentright cellAtIndex:0] setFloatValue:sys->rindent * conv];
       break;
@@ -234,7 +234,7 @@ static BOOL busyFlag = 0;  /* so that inspector is not inspected because of a ca
 
 - loadDataFor: (int) bt
 {
-  System *sys = [[DrawApp sharedApplicationController] currentSystem];
+  System *sys = [[CalliopeAppController sharedApplicationController] currentSystem];
   if (sys != nil) [self loadDataFor: sys : bt];
   return self;
 }
@@ -243,7 +243,7 @@ static BOOL busyFlag = 0;  /* so that inspector is not inspected because of a ca
 - setView: (int) i
 {
   if ([NSView focusView] == multiview) [multiview unlockFocus];
-  if (![[DrawApp sharedApplicationController] currentSystem])
+  if (![[CalliopeAppController sharedApplicationController] currentSystem])
   {
     if (multiview != nodocview) [multiview replaceView: nodocview];
     return self;
@@ -285,7 +285,7 @@ static BOOL busyFlag = 0;  /* so that inspector is not inspected because of a ca
 
 - changeStaffView: sender
 {
-  System *sys = [[DrawApp sharedApplicationController] currentSystem];
+  System *sys = [[CalliopeAppController sharedApplicationController] currentSystem];
   if (sys != nil) [self pickstaff: self];
   switch([staffnumbutton indexOfSelectedItem])
   {
@@ -310,7 +310,7 @@ static BOOL busyFlag = 0;  /* so that inspector is not inspected because of a ca
   if (mypartlist == partlistflag) return self;
   [partbutton removeAllItems];
   [partbutton addItemWithTitle:@"multiple selection"];
-  pl = [[DrawApp sharedApplicationController] getPartlist];
+  pl = [[CalliopeAppController sharedApplicationController] getPartlist];
   k = [pl count];
   for (i = 0; i < k; i++) [partbutton addItemWithTitle:[pl partNameForInt: i]];
   mypartlist = partlistflag;
@@ -320,7 +320,7 @@ static BOOL busyFlag = 0;  /* so that inspector is not inspected because of a ca
 
 - setSystemPart
 {
-  GraphicView *v = [DrawApp currentView];
+  GraphicView *v = [CalliopeAppController currentView];
   System *sys = [v currentSystem];
   Staff *sp;
   if (sys == nil) return self;
@@ -415,8 +415,8 @@ static BOOL busyFlag = 0;  /* so that inspector is not inspected because of a ca
   switch([mainPopup indexOfSelectedItem])
   {
     case 0:
-        conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
-//      [[[DrawApp sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&f];
+        conv = [[CalliopeAppController sharedApplicationController] pointToCurrentUnitFactor];
+//      [[[CalliopeAppController sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&f];
       lind = [[indentleft cellAtIndex:0] floatValue] / conv;
       if (lind < -72 || lind > 72*5)
       {
@@ -486,7 +486,7 @@ static BOOL busyFlag = 0;  /* so that inspector is not inspected because of a ca
 {
   float conv;
   BOOL change = NO;
-  System *sys = [[DrawApp sharedApplicationController] currentSystem];
+  System *sys = [[CalliopeAppController sharedApplicationController] currentSystem];
   if (sys == nil)
   {
     if (![setButton isEnabled]) [setButton setEnabled:YES];
@@ -496,8 +496,8 @@ static BOOL busyFlag = 0;  /* so that inspector is not inspected because of a ca
   switch([mainPopup indexOfSelectedItem])
   {
     case 0:
-        conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
-//      [[[DrawApp sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
+        conv = [[CalliopeAppController sharedApplicationController] pointToCurrentUnitFactor];
+//      [[[CalliopeAppController sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
       if (!change) change = (sys->lindent != [[indentleft cellAtIndex:0] floatValue] / conv);
       if (!change) change = (sys->rindent != [[indentright cellAtIndex:0] floatValue] / conv);
       break;
@@ -808,7 +808,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
 
 - set: sender
 {
-  GraphicView *v = [DrawApp currentView];
+  GraphicView *v = [CalliopeAppController currentView];
   System *sys;
   int i, j, n;
   if (v == nil)
@@ -903,7 +903,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
 
 - pickstaff: sender
 {
-  System *sys = [[DrawApp sharedApplicationController] currentSystem];
+  System *sys = [[CalliopeAppController sharedApplicationController] currentSystem];
   if (sys != nil) [self inspStaff: sys : [self assayStaves: sys]];
   return self;
 }
@@ -919,7 +919,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
 {
     int sn;
     System *sys;
-    OpusDocument *doc = [DrawApp currentDocument];
+    OpusDocument *doc = [CalliopeAppController currentDocument];
     GraphicView *v;
     sn = [nstavestext intValue];
     if (doc == nil)
@@ -950,7 +950,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
 
 - preset
 {
-  System *sys = [[DrawApp sharedApplicationController] currentSystem];
+  System *sys = [[CalliopeAppController sharedApplicationController] currentSystem];
   if (sys == nil)
   {
     [nstavestext setEditable:YES];
@@ -998,7 +998,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
 
 - revert: sender
 {
-  System *sys = [[DrawApp sharedApplicationController] currentSystem];
+  System *sys = [[CalliopeAppController sharedApplicationController] currentSystem];
     [self loadDataFor: sys : [mainPopup indexOfSelectedItem]];
   if ([revertButton isEnabled]) [revertButton setEnabled:NO];
   if ([setButton isEnabled]) [setButton setEnabled:NO];
@@ -1012,7 +1012,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
 {
   int i, k = 0, n;
   char wantstaff[NUMSTAVES];
-  GraphicView *v = [DrawApp currentView];
+  GraphicView *v = [CalliopeAppController currentView];
   if (![v sysSameShape])
   {
     NSRunAlertPanel(@"Extraction", @"Systems not same size", @"OK", nil, nil, NULL);
@@ -1040,9 +1040,9 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
 - hitOrder: sender
 {
   int a, i, n;
-  System *sys = [[DrawApp sharedApplicationController] currentSystem];
+  System *sys = [[CalliopeAppController sharedApplicationController] currentSystem];
   char order[NUMSTAVES];
-  GraphicView *v = [DrawApp currentView];
+  GraphicView *v = [CalliopeAppController currentView];
   a = NSRunAlertPanel(@"Order Staves", @"Which systems to modify?", @"Current", @"All", @"Cancel");
   if (a == NSAlertOtherReturn) return self;
   busyFlag = YES;
@@ -1074,14 +1074,14 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
 - hitBrowser: sender
 {
   int i = [[stybrowser matrixInColumn: 0] selectedRow];
-  return [self styleButtons: [[[DrawApp sharedApplicationController] getStylelist] styleNameForInt: i]];
+  return [self styleButtons: [[[CalliopeAppController sharedApplicationController] getStylelist] styleNameForInt: i]];
 }
 
 
 - (System *) newEntry: (NSString *) n
 {
   System *p, *sys;
-  NSMutableArray *sl = [[DrawApp sharedApplicationController] getStylelist];
+  NSMutableArray *sl = [[CalliopeAppController sharedApplicationController] getStylelist];
   int k = [sl count];
   while (k--)
   {
@@ -1092,7 +1092,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
       return nil;
     }
   }
-  sys = [[DrawApp sharedApplicationController] currentSystem];
+  sys = [[CalliopeAppController sharedApplicationController] currentSystem];
   if (sys == nil)
   {
     NSRunAlertPanel(@"System Style", @"No current system", @"OK", nil, nil);
@@ -1115,11 +1115,11 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
 
   if ([self newEntry: s] != nil)
   {
-    [[[DrawApp sharedApplicationController] getStylelist] sortStylelist];
+    [[[CalliopeAppController sharedApplicationController] getStylelist] sortStylelist];
     [stybrowser loadColumnZero];
     [stybrowser setPath:s];
     [self styleButtons: s];
-    [(GraphicView *)[DrawApp currentView] dirty];
+    [[CalliopeAppController currentView] dirty];
   }
   return self;
 }
@@ -1129,19 +1129,19 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
 {
   int i;
     NSString *buf;
-    System *st, *sys = [[DrawApp sharedApplicationController] currentSystem];
+    System *st, *sys = [[CalliopeAppController sharedApplicationController] currentSystem];
   if (sys == nil)
   {
     NSLog(@"Assertion failure in SysInspector");
     return self;
   }
   i = [[stybrowser matrixInColumn: 0] selectedRow];
-  if (i < 0 || i >= [[[DrawApp sharedApplicationController] getStylelist] count])
+  if (i < 0 || i >= [[[CalliopeAppController sharedApplicationController] getStylelist] count])
   {
     NSLog(@"Assertion failure in SysInspector");
     return self;
   }
-  st = [[[DrawApp sharedApplicationController] getStylelist] objectAtIndex:i];
+  st = [[[CalliopeAppController sharedApplicationController] getStylelist] objectAtIndex:i];
   if (st == nil)
   {
     NSLog(@"Assertion failure in SysInspector");
@@ -1161,9 +1161,9 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
   if (NSRunAlertPanel(@"Calliope", buf, @"YES", @"NO", nil) != NSAlertDefaultReturn) return self;
   [sys copyStyleTo: st];
   busyFlag = YES;
-  [(GraphicView *)[DrawApp currentView] flushStyle: st];
+  [[CalliopeAppController currentView] flushStyle: st];
   busyFlag = NO;
-  [(GraphicView *)[DrawApp currentView] dirty];
+  [[CalliopeAppController currentView] dirty];
   return self;
 }
 
@@ -1174,7 +1174,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
     System *st, *p;
   NSString *a;
   NSString *n;
-  NSMutableArray *sl = [[DrawApp sharedApplicationController] getStylelist];
+  NSMutableArray *sl = [[CalliopeAppController sharedApplicationController] getStylelist];
   int i, k;
   i = [[stybrowser matrixInColumn: 0] selectedRow];
   if (i < 0 || i >= [sl count])
@@ -1204,15 +1204,15 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
       }
     }
     a = n;
-    [(GraphicView *)[DrawApp currentView] renameStyle: st->style : [a retain]];
+    [[CalliopeAppController currentView] renameStyle: st->style : [a retain]];
     [st->style autorelease];
     st->style = [a retain];
-    [[[DrawApp sharedApplicationController] getStylelist] sortStylelist];
+    [[[CalliopeAppController sharedApplicationController] getStylelist] sortStylelist];
     [stybrowser loadColumnZero];
     [stybrowser setPath:[a retain]];
     [self styleButtons: nil];
   }
-  [(GraphicView *)[DrawApp currentView] dirty];
+  [[CalliopeAppController currentView] dirty];
   return self;
 }
 
@@ -1221,19 +1221,19 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
 {
   System *st;
   int i;
-  GraphicView *v = [DrawApp currentView];
+  GraphicView *v = [CalliopeAppController currentView];
   if (v == nil)
   {
     NSLog(@"Assertion failure in SysInspector");
     return self;
   }
   i = [[stybrowser matrixInColumn: 0] selectedRow];
-  if (i < 0 || i >= [[[DrawApp sharedApplicationController] getStylelist] count])
+  if (i < 0 || i >= [[[CalliopeAppController sharedApplicationController] getStylelist] count])
   {
     NSLog(@"Assertion failure in SysInspector");
     return self;
   }
-  st = [[[DrawApp sharedApplicationController] getStylelist] objectAtIndex:i];
+  st = [[[CalliopeAppController sharedApplicationController] getStylelist] objectAtIndex:i];
   if (st == nil)
   {
     NSLog(@"Assertion failure in SysInspector");
@@ -1251,7 +1251,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
 {
   int i;
   float ss, lm;
-  GraphicView *v = [DrawApp currentView];
+  GraphicView *v = [CalliopeAppController currentView];
   System *st, *sys = [v currentSystem];
   
   if (sys == nil)
@@ -1260,12 +1260,12 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
     return self;
   }
   i = [[stybrowser matrixInColumn: 0] selectedRow];
-  if (i < 0 || i >= [[[DrawApp sharedApplicationController] getStylelist] count])
+  if (i < 0 || i >= [[[CalliopeAppController sharedApplicationController] getStylelist] count])
   {
     NSLog(@"Assertion failure in SysInspector");
     return self;
   }
-  st = [[[DrawApp sharedApplicationController] getStylelist] objectAtIndex:i];
+  st = [[[CalliopeAppController sharedApplicationController] getStylelist] objectAtIndex:i];
   if (st == nil)
   {
     NSLog(@"Assertion failure in SysInspector");
@@ -1279,7 +1279,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
   busyFlag = YES;
   if (sys->lindent != st->lindent)
   {
-    ss = [[DrawApp currentDocument] staffScale];
+    ss = [[CalliopeAppController currentDocument] staffScale];
     lm = [sys leftMargin];
     [sys shuffleNotes: lm + (sys->lindent / ss) : lm + (st->lindent / ss)];
   }
@@ -1304,14 +1304,14 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
     return self;
   }
   buf = [NSString stringWithFormat:@"Are you sure you want to delete style '%@'?",
-      [[[DrawApp sharedApplicationController] getStylelist] styleNameForInt: i]];
+      [[[CalliopeAppController sharedApplicationController] getStylelist] styleNameForInt: i]];
   if (NSRunAlertPanel(@"Calliope", buf, @"YES", @"NO", nil) != NSAlertDefaultReturn)
       return self;
-  [[[DrawApp sharedApplicationController] getStylelist] removeObjectAtIndex:i];
+  [[[CalliopeAppController sharedApplicationController] getStylelist] removeObjectAtIndex:i];
   [stybrowser loadColumnZero];
   [stybrowser setPath:@""];
   [self styleButtons: @""];
-  [(GraphicView *)[DrawApp currentView] dirty];
+  [[CalliopeAppController currentView] dirty];
   return self;
 }
 
@@ -1337,14 +1337,14 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
 
 - (int)browser:(NSBrowser *)sender numberOfRowsInColumn:(int)col
 {
-  return [[[DrawApp sharedApplicationController] getStylelist] count];
+  return [[[CalliopeAppController sharedApplicationController] getStylelist] count];
 }
 
 
 - (void)browser:(NSBrowser *)sender willDisplayCell:(id)cell atRow:(int)row column:(int)col
 {
   if (col != 0) return;
-  [cell setStringValue:[[[DrawApp sharedApplicationController] getStylelist] styleNameForInt: row]];
+  [cell setStringValue:[[[CalliopeAppController sharedApplicationController] getStylelist] styleNameForInt: row]];
   [cell setLeaf:YES];
   [cell setEnabled:YES];
 }

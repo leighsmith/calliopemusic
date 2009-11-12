@@ -1,7 +1,7 @@
 /* $Id$ */
 #import "AppDefaults.h"
 #import "MultiView.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "GraphicView.h"
 #import "DrawingFunctions.h"
@@ -175,7 +175,7 @@ static NSString *colorString(int i, NSColor * c)
         colorInit(4, [invwell color]);
         colorInit(5, [t1well color]);
         colorInit(6, [t2well color]);
-        [[DrawApp currentView] setNeedsDisplay:YES];
+        [[CalliopeAppController currentView] setNeedsDisplay:YES];
         [newDefaults setObject:colorString(0, [backwell color]) forKey:@"BackgroundColor"];
         [newDefaults setObject:colorString(1, [inkwell color]) forKey:@"InkColor"];
         [newDefaults setObject:colorString(2, [markwell color]) forKey:@"MarkerColor"];
@@ -341,7 +341,7 @@ BOOL writeToFile(NSString *f)
     else if (![fn length]) i=1;
     if (i)
   {
-    savepanel = [[DrawApp sharedApplicationController] savePanel: @"inst"];
+    savepanel = [[CalliopeAppController sharedApplicationController] savePanel: @"inst"];
     if ([savepanel runModal] == NSCancelButton) return self;
     fn = [savepanel filename];
     [instpathtext setStringValue:fn];

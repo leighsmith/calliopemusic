@@ -6,7 +6,7 @@
 #import "GVCommands.h"
 #import "GVSelection.h"
 #import "System.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "DrawingFunctions.h"
 #import "muxlow.h"
@@ -23,14 +23,14 @@ NSString *unitname[4] =
 {
     int n;
     float conv;
-    GraphicView *v = [DrawApp currentView];
+    GraphicView *v = [CalliopeAppController currentView];
     Margin *margin = [v canInspect: MARGIN : &n];
     Page *page = [v currentPage];
     
     if (n == 0)
 	return nil;
-    conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
-//  [[[DrawApp sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
+    conv = [[CalliopeAppController sharedApplicationController] pointToCurrentUnitFactor];
+//  [[[CalliopeAppController sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
     [[lbindform cellAtIndex: 0] setFloatValue: conv * [margin marginOfType: MarginLeftEvenBinding]];
     [[lbindform cellAtIndex: 1] setFloatValue: conv * [margin marginOfType: MarginLeftOddBinding]];
     [[rbindform cellAtIndex: 0] setFloatValue: conv * [margin marginOfType: MarginRightEvenBinding]];
@@ -41,7 +41,7 @@ NSString *unitname[4] =
     [[vertmargform cellAtIndex: 1] setFloatValue: conv * [margin topMargin]];
     [[vertmargform cellAtIndex: 2] setFloatValue: conv * [margin bottomMargin]];
     [[vertmargform cellAtIndex: 3] setFloatValue: conv * [margin footerBase]];
-    [unitcell setStringValue: [[DrawApp sharedApplicationController] unitString]];
+    [unitcell setStringValue: [[CalliopeAppController sharedApplicationController] unitString]];
     [formatbutton selectItemAtIndex: [page format]];
     [[alignmatrix cellAtRow: 0 column: 0] setState: [page alignToTopSystem]];
     [[alignmatrix cellAtRow: 1 column: 0] setState: [page alignToBottomSystem]];
@@ -56,7 +56,7 @@ NSString *unitname[4] =
     float f, conv;
     BOOL didChange = NO;
     System *sys;
-    GraphicView *v = [DrawApp currentView];
+    GraphicView *v = [CalliopeAppController currentView];
     Margin *margin = [v canInspect: MARGIN : &n];
     Page *page = [v currentPage];
 
@@ -70,8 +70,8 @@ NSString *unitname[4] =
 	[page setAlignToTopSystem];
     if ([[alignmatrix cellAtRow: 1 column: 0] state])
 	[page setAlignToBottomSystem];
-    conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
-    // [[[DrawApp sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
+    conv = [[CalliopeAppController sharedApplicationController] pointToCurrentUnitFactor];
+    // [[[CalliopeAppController sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
     f = [[lbindform cellAtIndex: 0] floatValue] / conv;
     UPDATE(MarginLeftEvenBinding, f);
     f = [[lbindform cellAtIndex: 1] floatValue] / conv;    

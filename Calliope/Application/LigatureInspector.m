@@ -1,6 +1,6 @@
 #import "LigatureInspector.h"
 #import "Ligature.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "GraphicView.h"
 #import "GVSelection.h"
@@ -40,7 +40,7 @@
 {
   NSRect b;
   Ligature *p;
-  id sl, v = [DrawApp currentView];
+  id sl, v = [CalliopeAppController currentView];
   int k;
   if ([v startInspection: LIGATURE : &b : &sl])
   {
@@ -60,7 +60,7 @@
 
 - preset
 {
-    Ligature *p = [(GraphicView *)[DrawApp currentView] canInspect: LIGATURE];
+    Ligature *p = [[CalliopeAppController currentView] canInspect: LIGATURE];
   if (p == nil) return self;
   [stylematrix selectCellWithTag:p->gFlags.subtype];
   [edbutton setState:p->flags.ed];

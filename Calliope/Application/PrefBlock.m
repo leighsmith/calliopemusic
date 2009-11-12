@@ -1,4 +1,4 @@
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "PrefBlock.h"
 #import "GVPerform.h"
@@ -254,7 +254,7 @@
 - (BOOL) checkStyleFromFile: (GraphicView *) v
 {
   if (!usestyle) return YES;
-  return [[[DrawApp sharedApplicationController] thePreferences] getStyleFromFile: stylepath : v];
+  return [[[CalliopeAppController sharedApplicationController] thePreferences] getStyleFromFile: stylepath : v];
 }
 
 

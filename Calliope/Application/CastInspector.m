@@ -3,7 +3,7 @@
 
 #import "CastInspector.h"
 #import "GraphicView.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "GraphicView.h"
 #import "GVSelection.h"
@@ -39,7 +39,7 @@
 - newEntry: (NSString *) n
 {
   CallPart *p;
-  NSMutableArray *pl = [[DrawApp sharedApplicationController] getPartlist];
+  NSMutableArray *pl = [[CalliopeAppController sharedApplicationController] getPartlist];
   int k = [pl count];
   while (k--)
   {
@@ -83,13 +83,13 @@
   if (r)
   {
     partlistflag++;
-    [[[DrawApp sharedApplicationController] getPartlist] sortPartlist];
+    [[[CalliopeAppController sharedApplicationController] getPartlist] sortPartlist];
     [partbrowser reloadColumn:0];
     [partbrowser setPath:s];
     [delbutton setEnabled:1];
     [modbutton setEnabled:1];
     [parttext setStringValue:s];
-    [(GraphicView *)[DrawApp currentView] dirty];
+    [[CalliopeAppController currentView] dirty];
   }
   return self;
 }
@@ -100,7 +100,7 @@
   CallPart *p;
   NSString *a;
   NSString *s = [parttext stringValue];
-  NSMutableArray *pl = [[DrawApp sharedApplicationController] getPartlist];
+  NSMutableArray *pl = [[CalliopeAppController sharedApplicationController] getPartlist];
   int i, part;
   if (s == nil) NSLog(@"CastInspector setModify s == nil");
   else if (![s length]) NSLog(@"CastInspector setModify s empty");
@@ -113,10 +113,10 @@
       else a = [instlist instNameForInt: i];
     [p update: s : [[partform cellAtIndex:0] stringValue] : [[partform cellAtIndex:1] intValue] : a];
     partlistflag++;
-    [[[DrawApp sharedApplicationController] getPartlist] sortPartlist];
+    [[[CalliopeAppController sharedApplicationController] getPartlist] sortPartlist];
     [partbrowser reloadColumn:0];
     [partbrowser setPath:s];
-    [(GraphicView *)[DrawApp currentView] dirty];
+    [[CalliopeAppController currentView] dirty];
   }
   return self;
 }
@@ -131,12 +131,12 @@
     NSLog(@"CastInspector hitRemove part < 0");
     return self;
   }
-  [[[DrawApp sharedApplicationController] getPartlist] removeObjectAtIndex:part];
+  [[[CalliopeAppController sharedApplicationController] getPartlist] removeObjectAtIndex:part];
   partlistflag++;
   [partbrowser reloadColumn:0];
   [partbrowser setPath:@""];
   [self enableButtons: 0 : 0 : 0];
-  [(GraphicView *)[DrawApp currentView] dirty];
+  [[CalliopeAppController currentView] dirty];
   [parttext setStringValue:@""];
   return self;
 }
@@ -151,7 +151,7 @@
   CallPart *p;
   NSString *n;
   int i = [[partbrowser matrixInColumn: 0] selectedRow];
-  if (i < 0 || i > [[[DrawApp sharedApplicationController] getPartlist] count])
+  if (i < 0 || i > [[[CalliopeAppController sharedApplicationController] getPartlist] count])
   {
     if (t != nil)
         if ([t length]) [parttext setStringValue:@""];
@@ -161,7 +161,7 @@
   {
     if (t != nil)
         if ([t length]) [parttext setStringValue:t];
-    p = [[[DrawApp sharedApplicationController] getPartlist] objectAtIndex:i];
+    p = [[[CalliopeAppController sharedApplicationController] getPartlist] objectAtIndex:i];
     n = [parttext stringValue];
     if (![p->name isEqualToString: n])
     {
@@ -192,12 +192,12 @@
   NSString *n;
   [partbrowser loadColumnZero];
   [instbrowser loadColumnZero];
-  d = [DrawApp currentDocument];
+  d = [CalliopeAppController currentDocument];
   if (d == nil) return self;
   v = [d graphicView];
   if (v == nil) return self;
   sl = [v selectedGraphics];
-  pl = [[DrawApp sharedApplicationController] getPartlist];
+  pl = [[CalliopeAppController sharedApplicationController] getPartlist];
   k = [sl count];
   n = nil;
   mult = 0;
@@ -232,7 +232,7 @@
 - browserHit: sender
 {
   int i = [[partbrowser matrixInColumn: 0] selectedRow];
-  return [self setPanel: [[[DrawApp sharedApplicationController] getPartlist] partNameForInt: i]];
+  return [self setPanel: [[[CalliopeAppController sharedApplicationController] getPartlist] partNameForInt: i]];
 }
 
 
@@ -240,12 +240,12 @@
 {
   int j, n;
   CallPart *cp;
-  GraphicView *v = [DrawApp currentView];
+  GraphicView *v = [CalliopeAppController currentView];
   NSMutableArray *pl, *xl;
   NSMatrix *m;
   NSCell *c;
   xl = [[NSMutableArray alloc] init];
-  pl = [[DrawApp sharedApplicationController] getPartlist];
+  pl = [[CalliopeAppController sharedApplicationController] getPartlist];
   m = [partbrowser matrixInColumn: 0];
   n = [[m cells] count];
   for (j = 0; j < n; j++)
@@ -283,7 +283,7 @@
   NSMutableArray *pl;
   if (sender == partbrowser)
   {
-    pl = [[DrawApp sharedApplicationController] getPartlist];
+    pl = [[CalliopeAppController sharedApplicationController] getPartlist];
     return [pl count];
   }
   return [instlist count];  
@@ -296,7 +296,7 @@
   if (col != 0) return;
   if (sender == partbrowser)
   {
-    pl = [[DrawApp sharedApplicationController] getPartlist];
+    pl = [[CalliopeAppController sharedApplicationController] getPartlist];
     [cell setStringValue:[pl partNameForInt: row]];
     [cell setLeaf:YES];
   }

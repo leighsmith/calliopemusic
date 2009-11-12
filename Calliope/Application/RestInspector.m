@@ -1,6 +1,6 @@
 #import "RestInspector.h"
 #import "Rest.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "GraphicView.h"
 #import "GVSelection.h"
@@ -35,7 +35,7 @@ static char istimed[6] = {1, 1, 0, 0, 0, 1};
 {
   NSRect b;
   Rest *p;
-  id sl, v = [DrawApp currentView];
+  id sl, v = [CalliopeAppController currentView];
   int i, k, selstyle, seltime, seldot, nb = 0, setdef;
   if ([choicematrix selectedRow] == 0)
   {
@@ -121,7 +121,7 @@ static char istimed[6] = {1, 1, 0, 0, 0, 1};
 - updatePanel
 {
   int a, c, num;
-  GraphicView *v = [DrawApp currentView];
+  GraphicView *v = [CalliopeAppController currentView];
   [self assayList: [v selectedGraphics] : &num];
   if (num == 0) return nil;
   for (a = 0; a < 3; a++)

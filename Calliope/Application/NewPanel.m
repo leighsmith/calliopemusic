@@ -4,7 +4,7 @@
 #import "System.h"
 #import "SysInspector.h"
 #import "OpusDocument.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "DrawingFunctions.h"
 #import <AppKit/AppKit.h>
 
@@ -72,12 +72,12 @@
     fname = [NSString stringWithFormat:@"template%d",i];
       if (path = [[NSBundle mainBundle] pathForResource:fname ofType:FILE_EXT])
     {
-        // doc = [[DrawApp sharedApplicationController] openCopyOf: path reDirect: @"~"];
+        // doc = [[CalliopeAppController sharedApplicationController] openCopyOf: path reDirect: @"~"];
     }
     if (!doc) NSRunAlertPanel(@"Calliope", @"Cannot find template document", @"OK", nil, nil);
   }
   [self close];
-  if ([inspbutton state]) [[DrawApp sharedApplicationController] inspectClass: [SysInspector class] loadInspector: YES];
+  if ([inspbutton state]) [[CalliopeAppController sharedApplicationController] inspectClass: [SysInspector class] loadInspector: YES];
   return self;
 }
 

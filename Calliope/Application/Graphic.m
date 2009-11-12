@@ -23,7 +23,7 @@
 #import "Metro.h"
 #import "NeumeNew.h"
 #import "Accent.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "Runner.h"
 #import "Tuple.h"
 #import "NoteGroup.h"
@@ -194,11 +194,12 @@ id CrossCursor = nil;	/* global since subclassers may need it */
       [sys linkobject: g];
       break;
     case 2:
+      // Staff -linknote: expects a StaffObj which is a subclass of Graphic.
       [sp linknote: g];
       break;
     case 3:
       [sys linkobject: g];
-      [[DrawApp sharedApplicationController] resetTool];
+      [[CalliopeAppController sharedApplicationController] resetTool];
       break;
   }
   [g reShape];

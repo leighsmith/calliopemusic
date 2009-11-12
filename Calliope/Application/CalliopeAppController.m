@@ -1,7 +1,7 @@
 /* $Id$ */
 #import <AppKit/AppKit.h>
 #import <MusicKit/MusicKit.h>
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "GraphicView.h"
 #import "GVFormat.h"
 #import "GVGlobal.h"
@@ -50,12 +50,12 @@ GraphicView *playView = nil;
 
 extern int fontflag;
 
-@implementation DrawApp
+@implementation CalliopeAppController
 
 NSModalSession alertSession;
 
 // Allows returning a Singleton.
-DrawApp *sharedApplicationController = nil;
+CalliopeAppController *sharedApplicationController = nil;
 
 /*
  * setAutoupdate:YES means that updateWindows will be called after
@@ -158,7 +158,7 @@ static OpusDocument *documentInWindow(id window)
 }
 
 
-+ (DrawApp *) sharedApplicationController
++ (CalliopeAppController *) sharedApplicationController
 {
     return sharedApplicationController;
 }
@@ -506,7 +506,7 @@ float unitFactor[4] =
 	if (!p) 
 	    NSLog(@"Cannot get named object %@\n", buff);
 	else 
-	    [(NSMutableArray *)insplist addObject: p];
+	    [insplist addObject: p];
     }
     return p;
 }

@@ -1,6 +1,6 @@
 #import "GraphicView.h"
 #import "TextVarCell.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import <AppKit/NSTextView.h>
 #import <AppKit/NSFont.h>
@@ -51,7 +51,7 @@
 
     NSLog(@"font found at %d, %p\n",i,theFont);
     if (theFont) return theFont;
-  return [[DrawApp currentDocument] getPreferenceAsFont: RUNFONT];
+  return [[CalliopeAppController currentDocument] getPreferenceAsFont: RUNFONT];
 }
 
 
@@ -117,7 +117,7 @@ NSString *imfiles[NUMVARTYPES] =
 
     switch (type) {
     case 0:
-	return [NSString stringWithFormat: @"%d", [[[DrawApp currentView] currentPage] pageNumber]];
+	return [NSString stringWithFormat: @"%d", [[[CalliopeAppController currentView] currentPage] pageNumber]];
     case 1:
 	return [now descriptionWithCalendarFormat:@"%d"];
     case 2:
@@ -131,7 +131,7 @@ NSString *imfiles[NUMVARTYPES] =
     case 6:
 	return NSUserName();
     case 7:
-	return [[DrawApp currentDocument] filename];
+	return [[CalliopeAppController currentDocument] filename];
     default:
 	NSLog(@"TextVarCell getVarString type < 0, > 7?\n");
 	return @"";

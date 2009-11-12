@@ -1,6 +1,6 @@
 #import "TabInspector.h"
 #import "Tablature.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "GraphicView.h"
 #import "GVSelection.h"
@@ -66,7 +66,7 @@ int tuneIndex(int n)
       k = [tunepopup count];
       while (k--) [tunepopup removeItemAtIndex:k];
           [tunepopup addItemWithTitle:@"multiple selection"];
-      pl = [[DrawApp sharedApplicationController] getPartlist];
+      pl = [[CalliopeAppController sharedApplicationController] getPartlist];
       k = [pl count];
         for (i = 0; i < k; i++) [tunepopup addItemWithTitle:[pl partNameForInt: i]];
       mypartlist = partlistflag;
@@ -160,7 +160,7 @@ int tuneIndex(int n)
 {
   NSRect b;
   Tablature *p;
-  id sl, v = [DrawApp currentView];
+  id sl, v = [CalliopeAppController currentView];
   int s, i, j, k, num, t;
   if ([v startInspection: TABLATURE : &b : &sl : &num])
   {
@@ -251,7 +251,7 @@ void setMatrix(int a, int num, int rv, int cv, NSMatrix *m)
 - updatePanel
 {
   int b, num;
-  GraphicView *v = [DrawApp currentView];
+  GraphicView *v = [CalliopeAppController currentView];
   [self assayList: [v selectedGraphics] : &num];
   if (num == 0) return nil;
   if (ALLSAME(0, num)) /* strum */
@@ -391,7 +391,7 @@ NSString *partNameHavingInst(NSString *i)
 {
   int j, k;
   CallPart *cp;
-  NSMutableArray *pl = [[DrawApp sharedApplicationController] getPartlist];
+  NSMutableArray *pl = [[CalliopeAppController sharedApplicationController] getPartlist];
   k = [pl count];
   for (j = 0; j < k; j++)
   {
@@ -405,7 +405,7 @@ NSString *partNameHavingInst(NSString *i)
 {
   int num, w;
   NSMutableArray *pl;
-  GraphicView *v = [DrawApp currentView];
+  GraphicView *v = [CalliopeAppController currentView];
   [self constructTuning];
   if (v == nil) return self;
   w = [definebutton indexOfSelectedItem] - 1;
@@ -428,7 +428,7 @@ NSString *partNameHavingInst(NSString *i)
     {
       if (ALLSAMEATOM(15, num))
       {
-        pl = [[DrawApp sharedApplicationController] getPartlist];
+        pl = [[CalliopeAppController sharedApplicationController] getPartlist];
         selectPopNameFor(tunepopup, tunebutton, [pl instrumentForPart: ALLVALATOM(15)]);
       }
       else selectPopFor(tunepopup, tunebutton, 0);

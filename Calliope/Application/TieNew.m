@@ -10,7 +10,7 @@
 #import "GraphicView.h"
 #import "GVSelection.h"
 #import "System.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "Staff.h"
 /* sb: moved import from middle of file: */
 #import "Tie.h"

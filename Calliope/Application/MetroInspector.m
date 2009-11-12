@@ -1,6 +1,6 @@
 #import "MetroInspector.h"
 #import "Metro.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "GraphicView.h"
 #import "GVSelection.h"
@@ -35,7 +35,7 @@
 {
   NSRect b;
   Metro *p;
-  id sl, v = [DrawApp currentView];
+  id sl, v = [CalliopeAppController currentView];
   int k;
   if ([v startInspection: METRO : &b : &sl])
   {
@@ -71,7 +71,7 @@
 
 - hitNote2:sender
 {
-    Metro *p = [(GraphicView *)[DrawApp currentView] canInspect: METRO];
+    Metro *p = [[CalliopeAppController currentView] canInspect: METRO];
     if (p)
       {
         if ([typematrix selectedRow]) {
@@ -85,7 +85,7 @@
 
 - preset
 {
-    Metro *p = [(GraphicView *)[DrawApp currentView] canInspect: METRO];
+    Metro *p = [[CalliopeAppController currentView] canInspect: METRO];
   if (p)
   {
     [note1matrix selectCellAtRow:0 column:p->body[0]];
@@ -108,7 +108,7 @@
 
 - setChoice: sender
 {
-    Metro *p = [(GraphicView *)[DrawApp currentView] canInspect: METRO];
+    Metro *p = [[CalliopeAppController currentView] canInspect: METRO];
   if (p) [self updatePanel: p];
   return self;
 }

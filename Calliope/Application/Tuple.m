@@ -10,7 +10,7 @@
 #import "GNote.h"
 #import "GraphicView.h"
 #import "GVSelection.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "System.h"
 #import "Staff.h"
@@ -670,7 +670,7 @@ static float centreTime(NSMutableArray *nl)
 	    cmakeline(qx, qy + v, x + w, y + v, m);
 	    if (m == 5)
 	    {
-		gv = (GraphicView *)[DrawApp currentView];
+		gv = [CalliopeAppController currentView];
 		[gv lockFocus];
 	    }
 	    cstrokeline(th, m);

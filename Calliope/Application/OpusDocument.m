@@ -3,7 +3,7 @@
 #import <Foundation/NSArray.h>
 #import <CalliopePropertyListCoders/OAPropertyListCoders.h>
 #import "OpusDocument.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "GraphicView.h"
 #import "GVFormat.h"
 #import "GVSelection.h"
@@ -846,15 +846,15 @@ return nil;
     //this forces the page layout panel to use the units that we have defined in Calliope app preferences
     NSString * tempUnit = [[[NSUserDefaults standardUserDefaults] stringForKey:@"NSMeasurementUnit"] retain];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"NSMeasurementUnit"];
-    [[NSUserDefaults standardUserDefaults] setObject:[[DrawApp sharedApplicationController] unitString]
+    [[NSUserDefaults standardUserDefaults] setObject:[[CalliopeAppController sharedApplicationController] unitString]
                                               forKey:@"NSMeasurementUnit"];
-    pl = [[DrawApp sharedApplicationController] newPageLayout];
+    pl = [[CalliopeAppController sharedApplicationController] newPageLayout];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"NSMeasurementUnit"];
     if (tempUnit)
         [[NSUserDefaults standardUserDefaults] setObject:tempUnit
                                                   forKey:@"NSMeasurementUnit"];
 #else
-    pl = [[DrawApp sharedApplicationController] pageLayout];
+    pl = [[CalliopeAppController sharedApplicationController] pageLayout];
 #endif
     if ([pl runModalWithPrintInfo:printInfo] == NSOKButton)
     {
@@ -875,7 +875,7 @@ return nil;
         }
 	[view dirty];
     }
-    [[DrawApp sharedApplicationController] inspectPreferences: NO];
+    [[CalliopeAppController sharedApplicationController] inspectPreferences: NO];
 }
 
 - (IBAction) setScale: (id) sender
@@ -979,7 +979,7 @@ return nil;
 	case 0:
 	    return self;
 	case 1:
-	    file = [[DrawApp currentDocument] askForFile: [NSString stringWithUTF8String:typeExts[type]]];
+	    file = [[CalliopeAppController currentDocument] askForFile: [NSString stringWithUTF8String:typeExts[type]]];
 	    if (file)
 	    {
 		s = [self dataWithEPSInsideRect:*region];
@@ -987,7 +987,7 @@ return nil;
 	    }
 		break;
 	case 2:
-	    file = [[DrawApp currentDocument] askForFile: [NSString stringWithUTF8String:typeExts[type]]];
+	    file = [[CalliopeAppController currentDocument] askForFile: [NSString stringWithUTF8String:typeExts[type]]];
 	    if (file)
 	    {
 		[self lockFocus];
@@ -1116,7 +1116,7 @@ return nil;
     }
     
     if (!directory && !newDirectory) 
-	directory = @"."; // LMS TODO [[[DrawApp sharedApplicationController] currentDirectory] retain];
+	directory = @"."; // LMS TODO [[[CalliopeAppController sharedApplicationController] currentDirectory] retain];
     else {
         if (newDirectory) {
             if (directory) [directory autorelease];
@@ -1263,7 +1263,7 @@ return nil;
     }
     documentWindow = nil;
     view = nil;
-    [[DrawApp sharedApplicationController] inspectApp];
+    [[CalliopeAppController sharedApplicationController] inspectApp];
 //#warning PrintingConversion:  '[NSPrintInfo setSharedPrintInfo:<arg1>]' used to be '[<obj> setPrintInfo:<arg1>]'.  This might want to be [[NSPrintOperation setCurrentOperation:nil] printInfo] or possibly [[PageLayout new] runModalWithPrintInfo:nil]
 //#warning SB I can't set this to nil. Maybe get the app object to look after a default NSPrintInfo object.
 //  [NSPrintInfo setSharedPrintInfo:nil];
@@ -1301,8 +1301,8 @@ return nil;
     */
 //    [NSPrintInfo setSharedPrintInfo:printInfo];
     [self resetCursor];
-    // [[DrawApp sharedApplicationController] presetPrefsPanel]; // TODO should be [DrawApp presetPrefsPanel]; eventually DrawApp should just become a preferences controller.
-    // [[DrawApp sharedApplicationController] inspectApp]; // TODO must rewrite.
+    // [[CalliopeAppController sharedApplicationController] presetPrefsPanel]; // TODO should be [CalliopeAppController presetPrefsPanel]; eventually CalliopeAppController should just become a preferences controller.
+    // [[CalliopeAppController sharedApplicationController] inspectApp]; // TODO must rewrite.
     //++partlistflag;
 }
 
@@ -1431,11 +1431,11 @@ return nil;
  * Makes the graphic view the first responder if there isn't one or if
  * no tool is selected (the cursor is the normal one).
  */
-// TODO this plus the tool code from DrawApp should be factored into their own class.
+// TODO this plus the tool code from CalliopeAppController should be factored into their own class.
 - resetCursor
 {
     id fr;
-    NSCursor *cursor = [DrawApp cursor];
+    NSCursor *cursor = [CalliopeAppController cursor];
     
 //  id scrollview = [documentWindow contentView];
     [scrollView setDocumentCursor:cursor];

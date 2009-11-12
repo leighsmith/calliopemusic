@@ -1,5 +1,5 @@
 #import "VoiceInspector.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "GraphicView.h"
 #import "GVSelection.h"
@@ -19,8 +19,8 @@
     int n, i, nk, j;
     Staff *sp;
     StaffObj *q;
-    GraphicView *v = [DrawApp currentView];
-    System *sys = [[DrawApp sharedApplicationController] currentSystem];
+    GraphicView *v = [CalliopeAppController currentView];
+    System *sys = [[CalliopeAppController sharedApplicationController] currentSystem];
     
     if (sys == nil) 
 	return self;
@@ -51,8 +51,8 @@
     int n, i, nk, j, vox;
     Staff *sp;
     StaffObj *q;
-    GraphicView *v = [DrawApp currentView];
-    System *sys = [[DrawApp sharedApplicationController] currentSystem];
+    GraphicView *v = [CalliopeAppController currentView];
+    System *sys = [[CalliopeAppController sharedApplicationController] currentSystem];
     
     if (sys == nil) 
 	return self;
@@ -82,7 +82,7 @@
 {
   StaffObj *p;
   int k, vox;
-  GraphicView *v = [DrawApp currentView];
+  GraphicView *v = [CalliopeAppController currentView];
   NSMutableArray *sl = [v selectedGraphics];
   vox = [[selectForm cellAtIndex:0] intValue];
   k = [sl count];
@@ -98,7 +98,7 @@
 - preset
 {
   int num;
-  StaffObj *p = [[DrawApp currentView] canInspectTypeCode: TC_TIMEDOBJ : &num];
+  StaffObj *p = [[CalliopeAppController currentView] canInspectTypeCode: TC_TIMEDOBJ : &num];
   if (num == 1)
   {
     [[selectForm cellAtIndex:0] setIntValue:p->voice];

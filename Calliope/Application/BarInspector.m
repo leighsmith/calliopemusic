@@ -4,7 +4,7 @@
 #import "GVSelection.h"
 #import "GVCommands.h"
 #import "OpusDocument.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "Staff.h"
 #import "System.h"
 #import <AppKit/NSMatrix.h>
@@ -59,7 +59,7 @@
 {
   NSRect b;
   Barline *p;
-  id sl, v = [DrawApp currentView];
+  id sl, v = [CalliopeAppController currentView];
   int k;
   int r = 0;
   if ([v startInspection: BARLINE : &b : &sl])
@@ -110,7 +110,7 @@
 - preset
 {
   int num, a;
-  GraphicView *v = [DrawApp currentView];
+  GraphicView *v = [CalliopeAppController currentView];
   [self assayList: [v selectedGraphics] : &num];
   if (num == 0) return self;
   for (a = 0; a <= 4; a++)

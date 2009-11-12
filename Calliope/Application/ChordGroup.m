@@ -8,7 +8,7 @@
 #import "NoteHead.h"
 #import "GraphicView.h"
 #import "GVSelection.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import <AppKit/NSApplication.h>
 #import <AppKit/NSGraphics.h>

@@ -1,6 +1,6 @@
 #import "RangeInspector.h"
 #import "Range.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "GraphicView.h"
 #import "GVSelection.h"
@@ -29,7 +29,7 @@
 {
   NSRect b;
   Range *p;
-  id sl, v = [DrawApp currentView];
+  id sl, v = [CalliopeAppController currentView];
   int k;
   if ([v startInspection: RANGE : &b : &sl])
   {
@@ -56,7 +56,7 @@
 - preset
 {
   int n;
-  GraphicView *v = [DrawApp currentView];
+  GraphicView *v = [CalliopeAppController currentView];
   Range *p = [v canInspect: RANGE : &n];
   if (n == 0) return nil;
   [self updatePanel: p];

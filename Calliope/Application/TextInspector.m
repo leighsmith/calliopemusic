@@ -1,6 +1,6 @@
 #import "TextInspector.h"
 #import "TextGraphic.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "GraphicView.h"
 #import "GVSelection.h"
@@ -22,10 +22,10 @@ int subfor[4] = {2, 3, 2, 3};
   System *sys;
   float conv;
   NSMutableArray *sl;
-  GraphicView *v = [DrawApp currentView];
+  GraphicView *v = [CalliopeAppController currentView];
   int k, num, sn;
-  conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
-//  [[[DrawApp sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
+  conv = [[CalliopeAppController sharedApplicationController] pointToCurrentUnitFactor];
+//  [[[CalliopeAppController sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
   if ([v startInspection: TEXTBOX : &b : &sl :&num])
   {
     k = [sl count];
@@ -74,7 +74,7 @@ int subfor[4] = {2, 3, 2, 3};
 
 - insertVar: sender
 {
-  GraphicView *v = [DrawApp currentView];
+  GraphicView *v = [CalliopeAppController currentView];
   NSRect b;
   TextGraphic *p;
   NSMutableArray *sl;
@@ -124,7 +124,7 @@ int rownum[4] = {0, 0, 0, 1};
   int num;
   float conv;
   TextGraphic *p;
-  GraphicView *v = [DrawApp currentView];
+  GraphicView *v = [CalliopeAppController currentView];
   [self assayList: [v selectedGraphics] : &num];
   if (num == 0) return nil;
   if (ALLSAME(0, num)) [typematrix selectCellAtRow:rownum[ALLVAL(0)] column:0];
@@ -134,11 +134,11 @@ int rownum[4] = {0, 0, 0, 1};
   if (ALLVAL(0) == TITLE && num == 1)
   {
       p = [v canInspect: TEXTBOX : &num];
-      conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
-//    [[[DrawApp sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
+      conv = [[CalliopeAppController sharedApplicationController] pointToCurrentUnitFactor];
+//    [[[CalliopeAppController sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
     [[marginform cellAtIndex:0] setFloatValue:p->baseline * conv];
     [marginform setEnabled:YES];
-    [marginunits setStringValue:[[DrawApp sharedApplicationController] unitString]];
+    [marginunits setStringValue:[[CalliopeAppController sharedApplicationController] unitString]];
   }
   else
   {

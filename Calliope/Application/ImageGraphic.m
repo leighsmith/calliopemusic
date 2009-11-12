@@ -4,7 +4,7 @@
 #import "StaffObj.h"
 #import "Staff.h"
 #import "System.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "DrawingFunctions.h"
 #import <AppKit/AppKit.h>
@@ -73,7 +73,7 @@
     [image setDataRetained:YES];
     gFlags.subtype = isAlphaOk;
     bounds.size = baseSize;
-    baseScale = f = [[DrawApp currentDocument] staffScale];
+    baseScale = f = [[CalliopeAppController currentDocument] staffScale];
     bounds.size.width = baseSize.width / f;
     bounds.size.height = baseSize.height / f;
   }
@@ -98,7 +98,7 @@
     [image setDataRetained:YES];
     gFlags.subtype = 0;
     bounds.size = baseSize;
-    baseScale = f = [[DrawApp currentDocument] staffScale];
+    baseScale = f = [[CalliopeAppController currentDocument] staffScale];
     bounds.size.width = baseSize.width / f;
     bounds.size.height = baseSize.height / f;
     q = client = [v isSelTypeCode: TC_STAFFOBJ : &n];
@@ -124,7 +124,7 @@
     [image setDataRetained:YES];
     gFlags.subtype = 0;
     bounds.size = baseSize;
-    baseScale = f = [[DrawApp currentDocument] staffScale];
+    baseScale = f = [[CalliopeAppController currentDocument] staffScale];
     bounds.size.width = baseSize.width / f;
     bounds.size.height = baseSize.height / f;
     client = nil;
@@ -152,7 +152,7 @@
 - boundsDidChange
 {
   float f;
-  baseScale = f = [[DrawApp currentDocument] staffScale];
+  baseScale = f = [[CalliopeAppController currentDocument] staffScale];
   baseSize.width = f * bounds.size.width;
   baseSize.height = f * bounds.size.height;
   return self;
@@ -286,7 +286,7 @@ extern NSColor * backShade;
   if (bounds.size.width < 1.0 || bounds.size.height < 1.0) return self;
   if (image)
   {
-    doc = [DrawApp currentDocument];
+    doc = [CalliopeAppController currentDocument];
     f =  [doc viewScale] * ([doc staffScale] / baseScale);
     s.width = f * baseSize.width;
     s.height = f * baseSize.height;

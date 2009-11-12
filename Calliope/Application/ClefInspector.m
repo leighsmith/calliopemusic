@@ -4,7 +4,7 @@
 #import "ClefInspector.h"
 #import "Clef.h"
 #import "StaffTrans.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "GraphicView.h"
 #import "GVSelection.h"
@@ -32,7 +32,7 @@
 {
   NSRect b, tb;
   Clef *p;
-  id sl, v = [DrawApp currentView];
+  id sl, v = [CalliopeAppController currentView];
   int i, k, mc=0, off;
   BOOL dotrans;
   if ([v startInspection: CLEF : &b : &sl])
@@ -77,7 +77,7 @@
 - preset
 {
   int n;
-  GraphicView *v = [DrawApp currentView];
+  GraphicView *v = [CalliopeAppController currentView];
   Clef *p = [v canInspect: CLEF : &n];
   if (n == 0) return nil;
   [keymatrix selectCellAtRow:p->keycentre column:p->gFlags.subtype];

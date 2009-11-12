@@ -1,6 +1,6 @@
 #import "NoteGroupInspector.h"
 #import "NoteGroup.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "GraphicView.h"
 #import "GVSelection.h"
@@ -75,7 +75,7 @@ char typeEnabled[NUMNOTEGROUPS][4] =
 {
   NSRect b;
   NSMutableArray *sl;
-  GraphicView *v = [DrawApp currentView];
+  GraphicView *v = [CalliopeAppController currentView];
   NoteGroup *p;
   int k;
   if ([v startInspection: GROUP : &b : &sl])
@@ -123,7 +123,7 @@ char typeEnabled[NUMNOTEGROUPS][4] =
 
 - preset
 {
-    NoteGroup *p = [(GraphicView *)[DrawApp currentView] canInspect: GROUP];
+    NoteGroup *p = [[CalliopeAppController currentView] canInspect: GROUP];
   if (p == nil) return self;
   return [self updatePanel: p];
 }

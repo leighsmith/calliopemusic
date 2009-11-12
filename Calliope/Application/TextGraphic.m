@@ -6,7 +6,7 @@
 #import "System.h"
 #import "Staff.h"
 #import "StaffObj.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "Page.h"
 #import "DrawingFunctions.h"
@@ -148,7 +148,7 @@ static NSTextView *drawText = nil;
 {
   float h = -(offset.y);
   if (h < 0) h = 0;
-  if (gFlags.subtype == TITLE && baseline) h += baseline / [[DrawApp currentDocument] staffScale];
+  if (gFlags.subtype == TITLE && baseline) h += baseline / [[CalliopeAppController currentDocument] staffScale];
   return h;
 }
 

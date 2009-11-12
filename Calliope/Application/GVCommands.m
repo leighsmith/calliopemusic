@@ -27,7 +27,7 @@
 #import "NeumeNew.h"
 #import "NoteGroup.h"
 #import "Ligature.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "TextGraphic.h"
 #import "Page.h"
 #import "Tablature.h"
@@ -179,7 +179,7 @@ static NSString *stylescratch;
 - pasteStyle: sender
 {
   float ss, lm;
-  System *sys = [[[DrawApp sharedApplicationController] getStylelist] styleSysForName: stylescratch];
+  System *sys = [[[CalliopeAppController sharedApplicationController] getStylelist] styleSysForName: stylescratch];
   if (sys == nil)
   {
     NSLog(@"Assertion failure in GVCommands");
@@ -192,14 +192,14 @@ static NSString *stylescratch;
   }
   if (sys->lindent != currentSystem->lindent)
   {
-    ss = [[DrawApp currentDocument] staffScale];
+    ss = [[CalliopeAppController currentDocument] staffScale];
     lm = [currentSystem leftMargin];
     [currentSystem shuffleNotes: lm + (currentSystem->lindent / ss) : lm + (sys->lindent / ss)];
   }
   [sys copyStyleTo: currentSystem];
   [currentSystem recalc];
   [self paginate: self];
-  [[DrawApp sharedApplicationController] inspectClass: [SysInspector class] loadInspector: NO];
+  [[CalliopeAppController sharedApplicationController] inspectClass: [SysInspector class] loadInspector: NO];
   [self dirty];
   return self;
 }
@@ -222,7 +222,7 @@ static NSString *stylescratch;
       b = YES;
       if (sys->lindent != st->lindent)
       {
-        ss = [[DrawApp currentDocument] staffScale];
+        ss = [[CalliopeAppController currentDocument] staffScale];
         lm = [sys leftMargin];
         [sys shuffleNotes: lm + (sys->lindent / ss) : lm + (st->lindent / ss)];
       }
@@ -242,7 +242,7 @@ static NSString *stylescratch;
 - clearNumbering: sender
 {
   int i, j, k;
-  System *sys = [[DrawApp sharedApplicationController] currentSystem];
+  System *sys = [[CalliopeAppController sharedApplicationController] currentSystem];
   j = [syslist indexOfObject:sys];
   k = [syslist count];
   for (i = j; i < k; i++)
@@ -262,7 +262,7 @@ static NSString *stylescratch;
   Graphic *p;
   int i, j, k, ok;
   NSMutableArray *ol;
-  System *sys = [[DrawApp sharedApplicationController] currentSystem];
+  System *sys = [[CalliopeAppController sharedApplicationController] currentSystem];
   j = [syslist indexOfObject:sys];
   if (j == 0)
   {
@@ -321,13 +321,13 @@ static NSString *stylescratch;
 
 - copyParts: sender
 {
-  return [self copyPartsFrom: [[DrawApp sharedApplicationController] currentSystem]];
+  return [self copyPartsFrom: [[CalliopeAppController sharedApplicationController] currentSystem]];
 }
 
 
 - pasteParts: sender
 {
-  return [self pastePartsTo: [[DrawApp sharedApplicationController] currentSystem]];
+  return [self pastePartsTo: [[CalliopeAppController sharedApplicationController] currentSystem]];
 }
 
 
@@ -336,7 +336,7 @@ static NSString *stylescratch;
 - flushParts: sender
 {
   int i, j, k;
-  System *sys = [[DrawApp sharedApplicationController] currentSystem];
+  System *sys = [[CalliopeAppController sharedApplicationController] currentSystem];
   [self copyParts: self];
   j = [syslist indexOfObject:sys];
   k = [syslist count];
@@ -639,7 +639,7 @@ extern char *typename[NUMTYPES];
   [self deselectAll: self];
   [currentSystem recalcObjs];
   [self selectObj: p];
-  [[DrawApp sharedApplicationController] inspectMe: p loadInspector: YES];
+  [[CalliopeAppController sharedApplicationController] inspectMe: p loadInspector: YES];
   return self;
 }
 
@@ -679,13 +679,13 @@ extern char *typename[NUMTYPES];
 	newMargin = [previousMargin copy];
     else 
 	newMargin = [[Margin alloc] init];
-    [newMargin setStaffScale: [[DrawApp currentDocument] staffScale]];
+    [newMargin setStaffScale: [[CalliopeAppController currentDocument] staffScale]];
     [newMargin setClient: currentSystem];
     [currentSystem linkobject: newMargin];
     [self deselectAll: self];
     [currentSystem recalcObjs];
     [self selectObj: newMargin];
-    [[DrawApp sharedApplicationController] inspectMe: newMargin loadInspector: YES];
+    [[CalliopeAppController sharedApplicationController] inspectMe: newMargin loadInspector: YES];
     return self;
 }
 
@@ -699,7 +699,7 @@ extern char *typename[NUMTYPES];
   }
   else
   {
-    [[DrawApp sharedApplicationController] inspectClass: [SysInspector class] loadInspector: YES];
+    [[CalliopeAppController sharedApplicationController] inspectClass: [SysInspector class] loadInspector: YES];
     [self setFontSelection: 3 : 0];
   }
   return self;
@@ -1051,7 +1051,7 @@ static BOOL doToObject(Graphic *p, int c, int a)
 	}
       }
       [self setNeedsDisplay:YES];
-      [[DrawApp sharedApplicationController] inspectApp];
+      [[CalliopeAppController sharedApplicationController] inspectApp];
       return self;
     }
   }
@@ -1152,7 +1152,7 @@ extern char *typename[NUMTYPES];
 //  System *sys;
   int n, nsys;
   nsys = [syslist count];
-  n = [[DrawApp sharedApplicationController] getLayBarNumber];
+  n = [[CalliopeAppController sharedApplicationController] getLayBarNumber];
   if (n < 0 || n > nsys)
   {
     NSLog(@"Assertion failure in GVCommands");
@@ -1183,10 +1183,10 @@ extern char *typename[NUMTYPES];
  * [[PageLayout new] printInfo]. */
 /* sb: I think this is ok (1999). I'll leave it to the currentDocument to decide
  * where to get the info from (shared or not */
-  r = [[DrawApp currentDocument] paperSize];
+  r = [[CalliopeAppController currentDocument] paperSize];
   sys = [syslist objectAtIndex:s];
   lox = 0;
-  hix = r.width / [[DrawApp currentDocument] staffScale];
+  hix = r.width / [[CalliopeAppController currentDocument] staffScale];
   k = [sys numberOfStaves];
   for (i = 0; i < k; i++)
   {
@@ -1456,7 +1456,7 @@ extern char *typename[NUMTYPES];
     [self setFontSelection: 1 : 0];
     [self simplePaginate: sys afterAddingCount: 1 askIfLoose: NO];
     // TODO if we are going to display an inspector it should be from a controller.
-    // [[DrawApp sharedApplicationController] inspectClass: [SysInspector class] loadInspector: NO];
+    // [[CalliopeAppController sharedApplicationController] inspectClass: [SysInspector class] loadInspector: NO];
     return [self dirty];
 }
 
@@ -1505,7 +1505,7 @@ extern char *typename[NUMTYPES];
   if (currentSystem == nil) NSLog(@"Assertion failure in GVCommands");
   else
   {
-    n = [[DrawApp sharedApplicationController] getLayBarNumber];
+    n = [[CalliopeAppController sharedApplicationController] getLayBarNumber];
     [currentSystem layBars: n : &r];
     [self cache: r];
     [[self window] flushWindow];
@@ -1718,7 +1718,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
   if (askAboutSys("You wish to delete this system?", sys, self))
   {
     [self deleteThisSystem: currentSystem];
-    [[DrawApp sharedApplicationController] inspectApp];
+    [[CalliopeAppController sharedApplicationController] inspectApp];
   }
   return self;
 }
@@ -1806,7 +1806,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
   [self copySys: sender];
   [self deleteThisSystem: currentSystem];
   if (m) [self paginate: self];
-  [[DrawApp sharedApplicationController] inspectApp];
+  [[CalliopeAppController sharedApplicationController] inspectApp];
   return self;
 }
 
@@ -1846,7 +1846,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
   }
   [self paginate: self];
   [self selectSystemAsCurrent: sys];
-  [[DrawApp sharedApplicationController] inspectApp];
+  [[CalliopeAppController sharedApplicationController] inspectApp];
   [self setNeedsDisplay:YES];
   return self;
 }
@@ -1902,7 +1902,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
     p2 = nsys->page;
     pag = [self deleteThisSystem: nsys];
     if (!pag) [self simplePaginate: sys afterAddingCount: 0 askIfLoose: YES];
-    [[DrawApp sharedApplicationController] inspectApp];
+    [[CalliopeAppController sharedApplicationController] inspectApp];
     return self;
 }
 
@@ -2048,7 +2048,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
 - upgradeParts
 {
     int nsys, ns, i, j, k/*, n*/;
-    NSMutableArray *al, *pl = [[DrawApp sharedApplicationController] getPartlist];
+    NSMutableArray *al, *pl = [[CalliopeAppController sharedApplicationController] getPartlist];
     CallPart *cp;
     System *sys;
     Staff *sp;

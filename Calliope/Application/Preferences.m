@@ -1,7 +1,7 @@
 /*! $Id$ */
 #import <AppKit/AppKit.h>
 #import "Preferences.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "GVCommands.h"
 #import "GVFormat.h"
@@ -48,8 +48,8 @@ static float shmm[8] =		/* staff height in mm given rastral number  */
 {
   float h, r, conv;
   r = [heightreal floatValue];
-  conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
-//  [[[DrawApp sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
+  conv = [[CalliopeAppController sharedApplicationController] pointToCurrentUnitFactor];
+//  [[[CalliopeAppController sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
   h = [rasheightcell floatValue] / conv; 
   if (r < 1 || h < 1)
   {
@@ -78,7 +78,7 @@ static float shmm[8] =		/* staff height in mm given rastral number  */
 
 - setView: (int) i
 {
-  if (![[DrawApp sharedApplicationController] currentSystem])
+  if (![[CalliopeAppController sharedApplicationController] currentSystem])
   {
     [multiview replaceView: nodocview];
     return self;
@@ -155,13 +155,13 @@ static void setFieldName(NSFont *fnt, id fld)
       currblock->texfont = p->texfont;
       break;
     case 5:
-        conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
-//      [[[DrawApp sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
+        conv = [[CalliopeAppController sharedApplicationController] pointToCurrentUnitFactor];
+//      [[[CalliopeAppController sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
       [rasheightcell setFloatValue:p->staffheight * conv];
         [self setRastralNumber: p->staffheight / PTPMM];
 //sb: FIXME. I don't know what to do with the following, as I don't use doc-based units any more.
-        currblock->unitflag = [[DrawApp sharedApplicationController] unitNum];
-      [rasunits setStringValue:[[DrawApp sharedApplicationController] unitString]];
+        currblock->unitflag = [[CalliopeAppController sharedApplicationController] unitNum];
+      [rasunits setStringValue:[[CalliopeAppController sharedApplicationController] unitString]];
       break;
     case 6:
       [[layoutform cellAtIndex:0] setFloatValue:p->minsysgap];
@@ -235,8 +235,8 @@ static void setFieldName(NSFont *fnt, id fld)
       p->texfont = currblock->texfont;
       break;
     case 5:
-        conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
-//      [[[DrawApp sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
+        conv = [[CalliopeAppController sharedApplicationController] pointToCurrentUnitFactor];
+//      [[[CalliopeAppController sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
       p->staffheight = [rasheightcell floatValue] / conv;
       p->unitflag = currblock->unitflag;
       break;
@@ -278,8 +278,8 @@ static void setFieldName(NSFont *fnt, id fld)
   switch(i)
   {
     case 5:
-        conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
-//      [[[DrawApp sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
+        conv = [[CalliopeAppController sharedApplicationController] pointToCurrentUnitFactor];
+//      [[[CalliopeAppController sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
       f = [rasheightcell floatValue] / conv;
       r = (f > 8 && f < 288);
       break;
@@ -298,7 +298,7 @@ static void setFieldName(NSFont *fnt, id fld)
 {
   float conv;
   BOOL change = NO;
-  PrefBlock *p = [[DrawApp currentDocument] documentPreferences];
+  PrefBlock *p = [[CalliopeAppController currentDocument] documentPreferences];
   switch([mainPopup indexOfSelectedItem])
   {
     case 0:
@@ -323,8 +323,8 @@ static void setFieldName(NSFont *fnt, id fld)
       if (!change) change = (currblock->texfont != p->texfont);
       break;
     case 5:
-        conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
-//      [[[DrawApp sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
+        conv = [[CalliopeAppController sharedApplicationController] pointToCurrentUnitFactor];
+//      [[[CalliopeAppController sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
       if (!change) change = (([rasheightcell floatValue] / conv) != p->staffheight);
       if (!change) change = (currblock->unitflag != p->unitflag);
       break;
@@ -358,7 +358,7 @@ static void setFieldName(NSFont *fnt, id fld)
 - hitChoice: sender
 {
     int i = [mainPopup indexOfSelectedItem];
-  [self setPanel: i : [[DrawApp currentDocument] documentPreferences]];
+  [self setPanel: i : [[CalliopeAppController currentDocument] documentPreferences]];
   [self setView: i];
   return self;
 }
@@ -367,12 +367,12 @@ static void setFieldName(NSFont *fnt, id fld)
 - changeRastral: sender
 {
   float conv, f;
-    conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
-//  [[[DrawApp sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
+    conv = [[CalliopeAppController sharedApplicationController] pointToCurrentUnitFactor];
+//  [[[CalliopeAppController sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
   f = shmm[ [sender selectedColumn] ] * 2.834646;
   [rasheightcell setFloatValue:f * conv];
-  currblock->unitflag = [[DrawApp sharedApplicationController] unitNum];
-  [rasunits setStringValue:[[DrawApp sharedApplicationController] unitString]];
+  currblock->unitflag = [[CalliopeAppController sharedApplicationController] unitNum];
+  [rasunits setStringValue:[[CalliopeAppController sharedApplicationController] unitString]];
   [self hitCalc: self];
   if (![revertButton isEnabled]) [revertButton setEnabled:YES];
   if (![setButton isEnabled]) [setButton setEnabled:YES];
@@ -384,8 +384,8 @@ static void setFieldName(NSFont *fnt, id fld)
 - hitHeight: sender
 {
     float conv;
-    conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
-//  [[[DrawApp sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
+    conv = [[CalliopeAppController sharedApplicationController] pointToCurrentUnitFactor];
+//  [[[CalliopeAppController sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
     [self setRastralNumber: ([rasheightcell floatValue] / conv) / PTPMM];
     [self hitCalc: self];
     [self set: sender];
@@ -469,7 +469,7 @@ NSFontManager *fm = [NSFontManager sharedFontManager];
 
 - set:sender
 {
-  OpusDocument *d = [DrawApp currentDocument];
+  OpusDocument *d = [CalliopeAppController currentDocument];
   GraphicView *v = [d graphicView];
   PrefBlock *p = [d documentPreferences];
   float oss, nss, w, h;
@@ -514,7 +514,7 @@ NSFontManager *fm = [NSFontManager sharedFontManager];
 - preset
 {
   int i;
-  OpusDocument *d = [DrawApp currentDocument];
+  OpusDocument *d = [CalliopeAppController currentDocument];
   PrefBlock *p = [d documentPreferences];
   if (!p)
   {
@@ -531,7 +531,7 @@ NSFontManager *fm = [NSFontManager sharedFontManager];
 - reflectSelection
 {
   int i;
-  OpusDocument *d = [DrawApp currentDocument];
+  OpusDocument *d = [CalliopeAppController currentDocument];
   PrefBlock *p = [d documentPreferences];
   if (p)
   {
@@ -597,7 +597,7 @@ BOOL writeStyleFile(NSString *f)
   OpusDocument *doc;
   GraphicView *v;
   if (![f length]) return NO;
-  doc = [DrawApp currentDocument];
+  doc = [CalliopeAppController currentDocument];
   if (doc == nil) return NO;
   v = [doc graphicView];
   if (v == nil) return NO;
@@ -621,7 +621,7 @@ BOOL writeStyleFile(NSString *f)
   NSString *file=nil;
   NSArray *ext = [NSArray arrayWithObject:@"callstyle"];
   id openpanel;
-  PrefBlock *p = [[DrawApp currentDocument] documentPreferences];
+  PrefBlock *p = [[CalliopeAppController currentDocument] documentPreferences];
   if (p == nil)
   {
     NSRunAlertPanel(@"Preferences", @"No Document is Open", @"OK", nil, nil);
@@ -640,13 +640,13 @@ BOOL writeStyleFile(NSString *f)
       if (![setButton isEnabled]) [setButton setEnabled:YES];
     }
   }
-  if (![self getStyleFromFile:file  : [DrawApp currentView]])
+  if (![self getStyleFromFile:file  : [CalliopeAppController currentView]])
   {
     NSRunAlertPanel(@"Preferences", @"Cannot Open Style Sheet", @"OK", nil, nil);
   }
   else
   {
-    [[DrawApp currentView] dirty];
+    [[CalliopeAppController currentView] dirty];
   }
   return self;
 }
@@ -656,7 +656,7 @@ BOOL writeStyleFile(NSString *f)
 {
   id savepanel;
   NSString *fn;
-  PrefBlock *p = [[DrawApp currentDocument] documentPreferences];
+  PrefBlock *p = [[CalliopeAppController currentDocument] documentPreferences];
   int i=0;
   if (p == nil)
   {
@@ -668,7 +668,7 @@ BOOL writeStyleFile(NSString *f)
     else if (![fn length]) i = 1;
     if (i)
   {
-    savepanel = [[DrawApp sharedApplicationController] savePanel: @"callstyle"];
+    savepanel = [[CalliopeAppController sharedApplicationController] savePanel: @"callstyle"];
     if (![savepanel runModal]) return self;
     fn = [savepanel filename];
     [styletext setStringValue:fn];
@@ -682,7 +682,7 @@ BOOL writeStyleFile(NSString *f)
   }
   else
   {
-    [[DrawApp currentView] dirty];
+    [[CalliopeAppController currentView] dirty];
   }
   return self;
 }
@@ -715,7 +715,7 @@ BOOL writeStyleFile(NSString *f)
       else
       {
           [self setPanel: [mainPopup indexOfSelectedItem] : p];
-	[[DrawApp currentDocument] setDocumentPreferences: p];
+	[[CalliopeAppController currentDocument] setDocumentPreferences: p];
       }
     }
   }
@@ -729,7 +729,7 @@ BOOL writeStyleFile(NSString *f)
 {
   id savepanel;
   NSString *fn;
-  PrefBlock *p = [[DrawApp currentDocument] documentPreferences];
+  PrefBlock *p = [[CalliopeAppController currentDocument] documentPreferences];
   int i=0;
   if (p == nil)
   {
@@ -741,7 +741,7 @@ BOOL writeStyleFile(NSString *f)
 
     if (i)
   {
-    savepanel = [[DrawApp sharedApplicationController] savePanel: @"callpref"];
+    savepanel = [[CalliopeAppController sharedApplicationController] savePanel: @"callpref"];
     if (![savepanel runModal]) return self;
     fn = [savepanel filename];
     [pathfield setStringValue:fn];
@@ -759,7 +759,7 @@ BOOL writeStyleFile(NSString *f)
 
 - revert: sender
 {
-  PrefBlock *q, *p = [[DrawApp currentDocument] documentPreferences];
+  PrefBlock *q, *p = [[CalliopeAppController currentDocument] documentPreferences];
     int i = 0;
     if ([mainPopup indexOfSelectedItem] < 3)
   {
@@ -787,7 +787,7 @@ BOOL writeStyleFile(NSString *f)
   else
   {
       [self setPanel: [mainPopup indexOfSelectedItem] : q];
-    [[DrawApp currentDocument] setDocumentPreferences: q];
+    [[CalliopeAppController currentDocument] setDocumentPreferences: q];
   }
   return self;
 }
@@ -801,8 +801,8 @@ BOOL writeStyleFile(NSString *f)
     float conv;
     if ([theText superview] == rasheightcell)
     {
-        conv = [[DrawApp sharedApplicationController] pointToCurrentUnitFactor];
-//        [[[DrawApp sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
+        conv = [[CalliopeAppController sharedApplicationController] pointToCurrentUnitFactor];
+//        [[[CalliopeAppController sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
         [self setRastralNumber: ([rasheightcell floatValue] / conv) / PTPMM];
     }
     else [self dataChanged: [theText superview]];

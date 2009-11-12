@@ -1,6 +1,6 @@
 #import "LayBarInspector.h"
 #import <AppKit/NSApplication.h>
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 
 @implementation LayBarInspector
 

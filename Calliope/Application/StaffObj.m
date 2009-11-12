@@ -8,7 +8,7 @@
 #import "Accent.h"
 #import "KeySig.h"
 #import "Clef.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "GVSelection.h"
 #import "GVFormat.h"
@@ -426,7 +426,7 @@ int protoVox;
 {
   if (part == nil) return [mystaff getInstrument];
   if (part == nullPart) return [mystaff getInstrument];
-  return [[[DrawApp sharedApplicationController] getPartlist] instrumentForPart: part];
+  return [[[CalliopeAppController sharedApplicationController] getPartlist] instrumentForPart: part];
 }
 
 
@@ -448,7 +448,7 @@ int protoVox;
 {
   if (part == nil) return [mystaff getChannel];
   if (part == nullPart) [mystaff getChannel];
-  return [[[DrawApp sharedApplicationController] getPartlist] channelForPart: part];
+  return [[[CalliopeAppController sharedApplicationController] getPartlist] channelForPart: part];
 }
 
 
@@ -461,7 +461,7 @@ int protoVox;
   CallInst *ci;
   Staff *sp;
   float ty;
-  cp = [[[DrawApp sharedApplicationController] getPartlist] partNamed: n];
+  cp = [[[CalliopeAppController sharedApplicationController] getPartlist] partNamed: n];
   if (cp == nil) return nil;
   switch(i)
   {
@@ -495,7 +495,7 @@ int protoVox;
   if ([sp yOfTop] < ty) ty = [sp yOfTop];
   t->offset.y = (ty - 10) - y;
   [self linkhanger: t];
-  [t initFromString: s : [[DrawApp currentDocument] getPreferenceAsFont: TEXFONT]];
+  [t initFromString: s : [[CalliopeAppController currentDocument] getPreferenceAsFont: TEXFONT]];
   t->offset.x = -(t->bounds.size.width + 8);
   t->offset.y -= (t->bounds.size.height);
   return t;
@@ -1163,7 +1163,7 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
         if ([verses count] > selver && selver >= 0) v = [verses objectAtIndex:selver];
     }
     if (v != nil) r = v->font;
-    else r = [[DrawApp currentDocument] getPreferenceAsFont: TEXFONT];
+    else r = [[CalliopeAppController currentDocument] getPreferenceAsFont: TEXFONT];
     return r;
 }
 

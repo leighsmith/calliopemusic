@@ -1,6 +1,6 @@
 #import "KeyInspector.h"
 #import "KeySig.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "StaffTrans.h"
 #import "OpusDocument.h"
 #import "GraphicView.h"
@@ -67,7 +67,7 @@ NSImage *keyimages[4];
   int i, j, k;
   NSRect b, tb;
   KeySig *p;
-  id sl, v = [DrawApp currentView];
+  id sl, v = [CalliopeAppController currentView];
   int sk, okn=0;
   BOOL dotrans;
   if ([v startInspection: KEY : &b : &sl])
@@ -134,7 +134,7 @@ NSImage *keyimages[4];
 - preset
 {
   int n;
-  GraphicView *v = [DrawApp currentView];
+  GraphicView *v = [CalliopeAppController currentView];
   KeySig *p = [v canInspect: KEY : &n];
   if (n == 0) return nil;
   [self updatePanel: p];

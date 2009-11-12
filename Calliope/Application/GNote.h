@@ -14,7 +14,7 @@
 @private
     /*! Whether the note is attached to a slash. */
     unsigned char showSlash;
-    /*! Offset of dot from the note heads. */
+    /*! Horizontal offset of dot from the note heads. */
     float dotdx;
     /*! Array of NoteHeads comprising this GNote. */
     NSMutableArray *headlist;

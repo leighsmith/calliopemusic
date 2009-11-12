@@ -3,7 +3,7 @@
 #import "GraphicView.h"
 #import "GVSelection.h"
 #import "OpusDocument.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import <AppKit/NSMatrix.h>
 #import <AppKit/NSForm.h>
 #import <Foundation/NSArray.h>
@@ -45,7 +45,7 @@
 {
   NSRect b;
   Block *p;
-  id sl, v = [DrawApp currentView];
+  id sl, v = [CalliopeAppController currentView];
   int k;
   if ([v startInspection: BLOCK : &b : &sl])
   {
@@ -85,7 +85,7 @@
 - updatePanel
 {
   int n;
-  GraphicView *v = [DrawApp currentView];
+  GraphicView *v = [CalliopeAppController currentView];
   [self assayList: [v selectedGraphics] : &n];
   if (n == 0) return self;
   [[sizeform cellAtIndex:0] setStringValue:@""];

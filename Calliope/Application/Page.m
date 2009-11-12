@@ -7,7 +7,7 @@
 #import "GVFormat.h"
 #import "DrawingFunctions.h"
 #import "muxlow.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 
 @implementation Page
@@ -252,7 +252,7 @@ static void drawSlants(float x, float y, float hw, float th)
 		continue;
 	    if (p->flags.nextpage && hfinfo[i]) 
 		continue;
-	    //   TODO [[DrawApp currentDocument] paperSize];
+	    //   TODO [[CalliopeAppController currentDocument] paperSize];
 	    [p renderMe: r : p->data : paperSize : self];
 	}	
     }

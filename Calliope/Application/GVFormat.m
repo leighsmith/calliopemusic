@@ -8,7 +8,7 @@
 #import "GVFormat.h"
 #import "GVCommands.h"
 #import "GVSelection.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "GraphicView.h"
 #import "Staff.h"
@@ -355,7 +355,7 @@
         [[self window] endEditingFor: self];
         [self setNeedsDisplay: YES];
         [self resetPageFields];
-        // [[DrawApp sharedApplicationController] inspectApp]; // TODO LMS disabled to get things running.
+        // [[CalliopeAppController sharedApplicationController] inspectApp]; // TODO LMS disabled to get things running.
         return self;
     }
     else
@@ -486,7 +486,7 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
   PageFormat pc;
   BOOL lastp, firstp;
   
-  defsep = [[DrawApp currentDocument] getPreferenceAsFloat: MAXBALGAP];
+  defsep = [[CalliopeAppController currentDocument] getPreferenceAsFloat: MAXBALGAP];
   sumheights = 0.0;
   for (i = [p topSystemNumber]; i <= [p bottomSystemNumber]; i++) sumheights += [[syslist objectAtIndex:i] myHeight];
   sumheights -= [self alignShave: p];
@@ -692,7 +692,7 @@ outOfTotalSystems: (int) numsys
     numberOfSystemsOnPage = firstSystem = 0;
     p = 1;
     pheight = [self bounds].size.height;
-    sheight = [[DrawApp currentDocument] getPreferenceAsFloat: MINSYSGAP];
+    sheight = [[CalliopeAppController currentDocument] getPreferenceAsFloat: MINSYSGAP];
     sh = 0.0;
     if (pagelist != nil) 
 	[pagelist autorelease];

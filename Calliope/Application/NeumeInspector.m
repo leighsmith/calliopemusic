@@ -1,6 +1,6 @@
 #import "NeumeInspector.h"
 #import "NeumeNew.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "GraphicView.h"
 #import "GVSelection.h"
@@ -54,7 +54,7 @@
 {
   NSRect bb;
   NeumeNew *p;
-  id sl, v = [DrawApp currentView];
+  id sl, v = [CalliopeAppController currentView];
   int a, b, j, k, n = 0, seltype;
   if ([v startInspection: NEUMENEW : &bb : &sl])
   {
@@ -142,7 +142,7 @@
 - updatePanel
 {
   int a, i, j, num, v;
-  GraphicView *gv = [DrawApp currentView];
+  GraphicView *gv = [CalliopeAppController currentView];
   [self assayList: [gv selectedGraphics] : &num];
   if (num == 0) return nil;
   for (i = 0; i <= 4; i++) for (j = 0; j <= 4; j++)

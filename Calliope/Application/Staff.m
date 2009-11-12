@@ -11,7 +11,7 @@
 #import "GNote.h"
 #import "Tablature.h"
 #import "Bracket.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "GVFormat.h"
 #import "Page.h"
@@ -421,7 +421,7 @@ float textoff[2], baselines[2][MAXTEXT];
   if (full) s = part;
     else
   {
-    cp = [[[DrawApp sharedApplicationController] getPartlist] partNamed: part];
+    cp = [[[CalliopeAppController sharedApplicationController] getPartlist] partNamed: part];
     if (cp == nil) return nil;
     s = cp->abbrev;
   }
@@ -432,7 +432,7 @@ float textoff[2], baselines[2][MAXTEXT];
   t->just = 0;
   t->horizpos = 7;
   t->client = self;
-  [t initFromString: s : [[DrawApp currentDocument] getPreferenceAsFont: TEXFONT]];
+  [t initFromString: s : [[CalliopeAppController currentDocument] getPreferenceAsFont: TEXFONT]];
   return t;
 }
 
@@ -518,13 +518,13 @@ float textoff[2], baselines[2][MAXTEXT];
 
 - (NSString *) getInstrument
 {
-  return [[[DrawApp sharedApplicationController] getPartlist] instrumentForPart: part];
+  return [[[CalliopeAppController sharedApplicationController] getPartlist] instrumentForPart: part];
 }
 
 
 - (int) getChannel
 {
-  return [[[DrawApp sharedApplicationController] getPartlist] channelForPart: part];
+  return [[[CalliopeAppController sharedApplicationController] getPartlist] channelForPart: part];
 }
 
 
@@ -1346,7 +1346,7 @@ static void drawbarnum(int n, float x, float y, NSFont *f, int j, int eb, int mo
   Barline *p;
   OpusDocument *doc;
   /* if (gFlags.type == 2) return self; */
-  doc = [DrawApp currentDocument];
+  doc = [CalliopeAppController currentDocument];
   s = mysys;
   if ([s myIndex] == 0 && ![doc getPreferenceAsInt: BARNUMFIRST]) return self;
   if ([s lastSystem] && ![doc getPreferenceAsInt: BARNUMLAST]) return self;
@@ -1454,7 +1454,7 @@ static void drawbarnum(int n, float x, float y, NSFont *f, int j, int eb, int mo
     /* draw staff number marker */
     DrawTextWithBaselineTies(bx + mysys->width + 8, [self yOfBottom], [NSString stringWithFormat: @"%d", [mysys indexOfStaff: self] + 1], fontdata[FONTSTMR], markmode[0]);
     /* draw bar numbers */
-    if ([mysys firststaff] == self || (flags.hasnums && [[DrawApp currentDocument] getPreferenceAsInt: BARNUMPLACE] == 2))
+    if ([mysys firststaff] == self || (flags.hasnums && [[CalliopeAppController currentDocument] getPreferenceAsInt: BARNUMPLACE] == 2))
 	[self drawBarnumbers: m];
 #if 0   // diagnostic
     dy = y - vhigha;

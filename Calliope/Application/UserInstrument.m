@@ -3,7 +3,7 @@
   should happen during a performance, such as tempo changes and page turning
 */
 
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "GraphicView.h"
 #import "GVFormat.h"
@@ -30,21 +30,21 @@
 {
     if ([n isParPresent: [MKNote parTagForName: @"CAL_setTempo"]])
     {
-	PlayInspector *pi = [[DrawApp sharedApplicationController] thePlayInspector];
+	PlayInspector *pi = [[CalliopeAppController sharedApplicationController] thePlayInspector];
 	float t = [n parAsDouble: [MKNote parTagForName: @"CAL_setTempo"]];
 	[[MKConductor defaultConductor] setTempo: t];
 	[MKConductor sendMsgToApplicationThreadSel: @selector(setTempo:) to: pi argCount: 1 , (int) t];
     }
     if ([n isParPresent: [MKNote parTagForName: @"CAL_changeTempo"]])
     {
-	PlayInspector *pi = [[DrawApp sharedApplicationController] thePlayInspector];
+	PlayInspector *pi = [[CalliopeAppController sharedApplicationController] thePlayInspector];
         float t = [n parAsDouble: [MKNote parTagForName: @"CAL_changeTempo"]] * [[MKConductor defaultConductor] tempo];
         [[MKConductor defaultConductor] setTempo: t];
         [MKConductor sendMsgToApplicationThreadSel: @selector(setTempo:) to: pi argCount: 1 , (int) t];
     }
     else if ([n isParPresent: [MKNote parTagForName: @"CAL_page"]])
     {
-	GraphicView *v = [[DrawApp sharedApplicationController] thePlayView];
+	GraphicView *v = [[CalliopeAppController sharedApplicationController] thePlayView];
         if (v != nil) [MKConductor sendMsgToApplicationThreadSel: @selector(gotoPage:usingIndexMethod:) to: v argCount: 2 , [n parAsInt: [MKNote parTagForName: @"CAL_page"]] , 2];
     }
     return self;

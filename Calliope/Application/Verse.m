@@ -6,7 +6,7 @@
 #import "System.h"
 #import "GraphicView.h"
 #import "GVFormat.h"
-#import "DrawApp.h"
+#import "CalliopeAppController.h"
 #import "OpusDocument.h"
 #import "DrawingFunctions.h"
 #import "muxlow.h"
@@ -288,8 +288,8 @@ static void sigwidthpix(unsigned char *s, NSFont *f, float *sw, float *w)
       }
       if (sl <= 0)
       {
-        if ([self isFigure]) font = [[DrawApp currentDocument] getPreferenceAsFont: FIGFONT];
-	else font = [[DrawApp currentDocument] getPreferenceAsFont: TEXFONT];
+        if ([self isFigure]) font = [[CalliopeAppController currentDocument] getPreferenceAsFont: FIGFONT];
+	else font = [[CalliopeAppController currentDocument] getPreferenceAsFont: TEXFONT];
       }
       if (cst == CONTHYPH) vFlags.hyphen = 1;
         else if (cst == CONTLINE) vFlags.hyphen = 2;
