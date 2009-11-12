@@ -1,4 +1,9 @@
-/* $Id$ */
+/*!
+  $Id$ 
+
+  @class Hanger
+  @brief
+ */
 #import "winheaders.h"
 #import "Graphic.h"
 //#import "TimedObj.h"

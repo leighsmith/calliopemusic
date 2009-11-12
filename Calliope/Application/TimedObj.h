@@ -1,3 +1,12 @@
+/*!
+  $Id$
+
+  @class TimedObj
+  @brief Represents staff objects which have a time associated with them.
+
+  In addition to describing staff objects which have a time associated with
+  them, TimedObj also contains note stem descriptions.
+ */
 #import "winheaders.h"
 #import "StaffObj.h"
 
@@ -27,7 +36,7 @@ struct timeinfo
 };
 
 
-@interface TimedObj:StaffObj
+@interface TimedObj: StaffObj
 {
 @public
   struct timeinfo time;

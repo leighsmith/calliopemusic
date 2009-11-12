@@ -1,4 +1,12 @@
-/* $Id$ */
+/*!
+  $Id$ 
+
+  @class System
+  @brief A System groups a collection of staves to be performed simultaneously.
+
+  Typically each stave in a system is for a different instrument, or hand,
+  in the case of a keyboard instrument.
+ */
 #import "winheaders.h"
 #import <Foundation/NSArray.h>
 #import "Graphic.h"
@@ -19,26 +27,26 @@
     float headroom;		/*!< included in height */
 @public
     NSMutableArray *nonStaffGraphics;   /*!< Array of random graphics on this system not attached to a staff */
-    GraphicView *view;			/* backreference to our GraphicView */
-    Page *page;			/* backreference to our Page */
+    GraphicView *view;			/*!< backreference to our GraphicView */
+    Page *page;			/*!< backreference to our Page */
     struct
     {
 	unsigned int nstaves : 7;	/* number of staves */ // Can now be defined protected. ideally derive from [staves count] or [self numberOfStaves]
-	unsigned int pgcontrol : 3;	/* page break code */
-	unsigned int haslink : 1;	/* staff linkage bar NOT USED */
-	unsigned int equidist : 1;	/* make staff y-origins equidistant */
-	unsigned int disjoint : 1;	/* polymetric format with noncoinciding bars */
-	unsigned int syssep : 2;	/* to show system separator */
-	unsigned int newbar : 1;	/* bar number changes sequence */
-	unsigned int newpage : 1;   /* page number changes sequence */
+	unsigned int pgcontrol : 3;	/*!< page break code */
+	unsigned int haslink : 1;	/*!< staff linkage bar NOT USED */
+	unsigned int equidist : 1;	/*!< make staff y-origins equidistant */
+	unsigned int disjoint : 1;	/*!< polymetric format with noncoinciding bars */
+	unsigned int syssep : 2;	/*!< to show system separator */
+	unsigned int newbar : 1;	/*!< bar number changes sequence */
+	unsigned int newpage : 1;   /*!< page number changes sequence */
     } flags;
-    float width;			/* width within margins and indent */
-    short barnum;			/* number of first measure on this staff */
+    float width;			/*!< width within margins and indent */
+    short barnum;			/*!< number of first measure on this staff */
     NSString *style;
-    float lindent, rindent;	/* left and right indents */
-    float oldleft;		/* left margin changes while pagination (not cache: copy/paste) */
-    float groupsep;		/* extra group separation */
-    float expansion;		/* expansion factor (default 1.0) */
+    float lindent, rindent;	/*!< left and right indents */
+    float oldleft;		/*!< left margin changes while pagination (not cache: copy/paste) */
+    float groupsep;		/*!< extra group separation */
+    float expansion;		/*!< expansion factor (default 1.0) */
 }
 
 

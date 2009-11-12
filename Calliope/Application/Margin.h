@@ -1,9 +1,10 @@
-/* $Id$ */
-
 /*!
-  @class Margin
+  $Id$
 
-  @discussion Margins are drawn as markers.
+  @class Margin
+  @brief Represents the margin space between Systems and the edge of the paper.
+
+  Margins are drawn as markers.
  */
  
 #import "winheaders.h"

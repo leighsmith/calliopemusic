@@ -1,4 +1,9 @@
-/* $Id$ */
+/*!
+  $Id$ 
+
+  @class NoteHead
+  @brief Represents the note head in it's various forms, including it's position.
+ */
 
 #import "winheaders.h"
 #import "Graphic.h"
@@ -9,23 +14,23 @@
 @interface NoteHead : NSObject
 {
 @private
-    // staff position.
+    /*! staff position. */
     char pos;
-    // The y position, relative to the page?
+    /*! The y position, relative to the page? */
     float myY;
-    // The accidental code.
+    /*! The accidental code. */
     char accidental;
-    // Offset from accidental?
+    /*! Offset from accidental? */
     float accidoff;
-    // Indicates that the accidental is an "editorial" accidental.
+    /*! Indicates that the accidental is an "editorial" accidental. */
     char editorial;
-    // is the note head on the wrong side of the stem? TODO should be a BOOL
+    /*! is the note head on the wrong side of the stem? TODO should be a BOOL. */
     char side;
-    // back reference to the GNote which references the note head.
+    /*! back reference to the GNote which references the note head. */
     GNote *myNote;
-    // The body type of the note head, describing it's shape.
+    /*! The body type of the note head, describing it's shape. */
     char type;
-    // dot offset, seems to be only two values, 0 or -1?
+    /*! dot offset, seems to be only two values, 0 or -1? */
     char dotoff;
 }
 

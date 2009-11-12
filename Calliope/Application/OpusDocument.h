@@ -1,9 +1,9 @@
-/* $Id$ */
-
 /*!
-  @class OpusDocument
+  $Id$
 
-  This class is used to keep track of an Opus (Calliope) notation document.
+  @class OpusDocument
+  @brief This class is used to keep track of an Opus (Calliope .opus) notation document.
+
   It acts as a Controller in the Model-View-Controller design pattern troika.
   In particular, it is responsible for managing document saved state, responsible for
   retrieving and saving documents to persistent store (load/saving files) and acting as
@@ -75,8 +75,7 @@
 }
 
 /*!
-  @method loadDataRepresentation:ofType: 
-  @discussion Loads a file of the type given by aType from the NSData instance data.
+  @brief Loads a file of the type given by aType from the NSData instance data.
   @result Returns YES if it is able to load a Calliope data file of type aType.
  */
 - (BOOL) loadDataRepresentation: (NSData *) data ofType: (NSString *) aType;
@@ -86,8 +85,7 @@
 + (void)initialize;
 
 /*!
-  @method dataRepresentationOfType:
-  @abstract Generates a NSData representation of the type given by docType.
+  @brief Generates a NSData representation of the type given by docType.
   @param docType The document type.
   @result Returns an NSData instance containing an XML encoded property list.
  */

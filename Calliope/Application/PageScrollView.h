@@ -1,4 +1,8 @@
-/* $Id$ */
+/*!
+  $Id$ 
+  @class PageScrollView
+  @brief Manages the scrolling of a Page.
+ */
 #import "winheaders.h"
 #import <AppKit/AppKit.h>
 

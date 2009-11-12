@@ -1,8 +1,10 @@
-/*! $Id$ */
 /*!
+  $Id$
+
   @class GNote
-  @brief The class responsible for representing and displaying musical notes. 
-  @description A Note consists of a number of NoteHeads.
+  @brief The class responsible for representing and displaying musical notes.
+
+  A Note consists of a number of NoteHeads.
  */
 #import "winheaders.h"
 #import "TimedObj.h"

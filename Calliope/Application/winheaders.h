@@ -1,4 +1,4 @@
-#ifdef WIN32
+#if defined (WIN32)
 #import <stdio.h>
 #import <fcntl.h>
 #import <Winsock.h>

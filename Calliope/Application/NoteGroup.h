@@ -1,4 +1,8 @@
-/* $Id$ */
+/*!
+  $Id$ 
+  @class NoteGroup
+  @brief 
+ */
 #import "winheaders.h"
 #import "Hanger.h"
 #import "Volta.h"

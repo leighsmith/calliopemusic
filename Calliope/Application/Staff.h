@@ -1,6 +1,8 @@
-/* 
+/*! 
   $Id$ 
 
+  @class Staff
+  @brief Represents a single staff, several of which are combined in a System.
   See COPYING for license usage.
  */
 #import "winheaders.h"
@@ -9,7 +11,6 @@
 #import "Graphic.h"
 #import "StaffObj.h"
 #import "TextGraphic.h"
-
 #import "System.h"
 
 #define MAXTEXT 16

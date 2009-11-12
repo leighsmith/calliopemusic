@@ -1,4 +1,9 @@
-/* $Id$ */
+/*!
+  $Id$ 
+
+  @class Runner
+  @brief Represents the text which runs along the header or footer of each page.
+ */
 
 #import "winheaders.h"
 #import "Graphic.h"

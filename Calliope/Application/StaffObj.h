@@ -1,4 +1,12 @@
-/* $Id$ */
+/*!
+  $Id$ 
+
+  @class StaffObj
+  @brief Describes Graphic objects which reside on a Staff.
+
+  Even though only timed and voiced objects know about parts, voices and stamps,
+  they are stored for all staff objects for various reasons.
+ */
 #import "winheaders.h"
 #import <AppKit/AppKit.h>
 #import <Foundation/Foundation.h>
@@ -8,11 +16,6 @@
 #import "Hanger.h"
 #import "NoteGroup.h"
 
-
-/*
-  even though only timed and voiced objects know about parts, voices and stamps,
-  they are stored for all staff objects for various reasons.
-*/
 
 @interface StaffObj: Graphic
 {

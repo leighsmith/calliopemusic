@@ -1,10 +1,15 @@
-/*
- * This class is used primarily to handle the opening of new documents
- * and other application-wide activity (such as responding to messages from
- * the tool palette).  It listens for requests from the Workspace Manager
- * to open a draw-format file as well as target/action messages from the
- * New and Open... menu items.  It also keeps the menus in sync by
- * fielding the menu items' updateActions.
+/*!
+  $Id$
+
+  @class CalliopeAppController
+  @brief Handles opening of new documents and other application wide activity.
+
+  This class is used primarily to handle the opening of new documents
+  and other application-wide activity (such as responding to messages from
+  the tool palette).  It listens for requests from the Workspace Manager
+  to open a draw-format file as well as target/action messages from the
+  New and Open... menu items.  It also keeps the menus in sync by
+  fielding the menu items' updateActions.
  */
 #import "winheaders.h"
 #import <AppKit/NSApplication.h>

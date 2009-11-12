@@ -1,15 +1,14 @@
-/* $Id$ */
-
 /*!
+  $Id$
+
   @class GraphicView
   @brief The GraphicView class is the visual representation of a single page of a OpusDocument (which holds several pages).
 
- TODO should become ScorePageView
- Probably there should be a NotationScore which should hold the array of systems and Graphics as the model,
- and ScorePageView which should be displaying a single Page (which should be renamed ScorePage).
+  TODO should be renamed ScorePageView.
+  Probably there should be a NotationScore which should hold the array of Graphics as the model,
+  and ScorePageView which should be displaying a single Page (which should be renamed ScorePage).
  
-  It overrides the NSView methods related to drawing and event handling
-  and allows manipulation of Graphic objects.
+  It overrides the NSView methods related to drawing and event handling and allows manipulation of Graphic objects.
   Moving is accomplished using instance drawing.
  */
 
@@ -182,13 +181,11 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
 - (BOOL) scrollPointToVisible: (NSPoint) point;
 
 /*!
-  @method setDelegate:
   @param newDelegate The new object to receive notification messages.
  */
 - (void) setDelegate: (id) newDelegate;
 
 /*!
-  @method delegate
   @result Returns the object that receives notification messages.
  */
 - (id) delegate;

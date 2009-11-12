@@ -1,3 +1,9 @@
+/*!
+  $Id$ 
+
+  @class 
+  @brief
+*/
 #import "winheaders.h"
 #import "Hanger.h"
 #import "GraphicView.h"

@@ -1,4 +1,9 @@
-/* $Id$ */
+/*!
+  $Id$ 
+
+  @class Graphic
+  @brief Describes a selectable, coloured graphical object.
+ */
 #import "winheaders.h"
 #import <Foundation/Foundation.h>
 #import <AppKit/AppKit.h>

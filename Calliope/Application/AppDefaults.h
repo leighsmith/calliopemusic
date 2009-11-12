@@ -1,4 +1,8 @@
-/* $Id$ */
+/*!
+  $Id$ 
+  @class AppDefaults
+  @brief Controller for the application preferences.
+ */
 #import "winheaders.h"
 #import <AppKit/AppKit.h>
 
