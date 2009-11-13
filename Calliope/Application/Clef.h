@@ -1,3 +1,9 @@
+/*!
+  $Id$
+ 
+  @class Clef
+  @brief Represents a clef identifying the pitch structure of the staff.
+ */
 #import "winheaders.h"
 #import "StaffObj.h"
 

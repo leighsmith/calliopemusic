@@ -25,10 +25,10 @@
     float barbase;		/*!< bar number baseline offset */
     float height;		/*!< the height used in page balancing */
     float headroom;		/*!< included in height */
+    Page *page;			/*!< backreference to our Page */
 @public
     NSMutableArray *nonStaffGraphics;   /*!< Array of random graphics on this system not attached to a staff */
     GraphicView *view;			/*!< backreference to our GraphicView */
-    Page *page;			/*!< backreference to our Page */
     struct
     {
 	unsigned int nstaves : 7;	/* number of staves */ // Can now be defined protected. ideally derive from [staves count] or [self numberOfStaves]
@@ -185,5 +185,15 @@
   @brief Assigns the page number this System is on.
  */
 - (void) setPageNumber: (int) newPageNumber;
+
+/*!
+  @brief Assigns the Page this System is on.
+*/
+- (void) setPage: newPage;
+
+/*!
+  @brief Returns the Page this System is on.
+*/
+- (Page *) page;
 
 @end

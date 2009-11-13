@@ -1682,9 +1682,10 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
 - (BOOL) deleteThisSystem: (System *) sys
 {
   int i;
-  Page *p = sys->page;
+  Page *p = [sys page];
   BOOL r = NO, m = NO;
   int theLocation;
+    
   i = (sys == [syslist lastObject]) ? -1 : 1;
   [self selectSystemAsCurrent: [self getSystem: sys offsetBy: i]];
   m = ([sys checkMargin] != nil);
@@ -1831,7 +1832,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
     {
       ++n;
       ns->view = self;
-      ns->page = sys->page;
+      [ns setPage: [sys page]];
       [ns closeSystem];
       [self insertSystem: ns afterSystem: sys];
       if (ns->oldleft != [ns leftMargin]) [ns shuffleNotes: ns->oldleft : [ns leftMargin]];
@@ -1898,8 +1899,8 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
 	    [sys linkobject: p];
     }
     [sys recalc];
-    p1 = sys->page;
-    p2 = nsys->page;
+    p1 = [sys page];
+    p2 = [nsys page];
     pag = [self deleteThisSystem: nsys];
     if (!pag) [self simplePaginate: sys afterAddingCount: 0 askIfLoose: YES];
     [[CalliopeAppController sharedApplicationController] inspectApp];

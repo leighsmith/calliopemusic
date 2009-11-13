@@ -1,3 +1,9 @@
+/*!
+  $Id$
+ 
+  @class Barlne
+  @brief Represents the bar lines on a staff. 
+ */
 #import "winheaders.h"
 #import "StaffObj.h"
 #import "GraphicView.h"

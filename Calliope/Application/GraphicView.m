@@ -2196,7 +2196,8 @@ extern int needUpgrade;
 		NSLog(@"NOTICE: corrected nil view found in unarchived system = %d\n", k);
 		s->view = self;
 	    }
-	    if (s->page == 0) s->page = [self myPage: s];
+	    if ([s page] == 0)
+		[s setPage: [self myPage: s]];
 	    if (s->gFlags.type == 0)
 	    {
 		NSLog(@"NOTICE: corrected nil type found in unarchived system = %d", k);

@@ -1,7 +1,12 @@
+/*!
+ $Id$
+ 
+ @class Beam
+ @brief
+ */
 #import "winheaders.h"
 #import "Hanger.h"
 #import "Staff.h"
-
 
 @interface Beam: Hanger
 {

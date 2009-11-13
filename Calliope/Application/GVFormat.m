@@ -246,11 +246,12 @@
 
 - sysOffAndPageNum: (System *) sys : (int *) sn : (int *) pn
 {
-  int i = [syslist indexOfObject:sys];
-  Page *p = sys->page;
-  *sn = i - [p topSystemNumber] + 1;
-  *pn = [p pageNumber];
-  return self;
+    int i = [syslist indexOfObject:sys];
+    Page *p = [sys page];
+    
+    *sn = i - [p topSystemNumber] + 1;
+    *pn = [p pageNumber];
+    return self;
 }
 
 
@@ -258,8 +259,7 @@
 
 - (int) findPageOff: (StaffObj *) p
 {
-  return [pagelist indexOfObject:((System *)[p mySystem])->page]
-          - [pagelist indexOfObject:currentPage];
+    return [pagelist indexOfObject: [[p mySystem] page]] - [pagelist indexOfObject: currentPage];
 }
 
 
@@ -630,28 +630,24 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
     return self;
 }
 
-// what is "done" when we doPage? Actually we assign systems to pages.
-// Should be in the model.
-- (id) doPage: (int) p 
-  fromFirstSystem: (int) firstSystem
-       forSystems: (int) numberOfSystemsOnPage 
-		 : (float) sh 
-		 : (float) him 
-      usingMargin: (Margin *) newMargin 
-outOfTotalSystems: (int) numsys
+// createPageNumber: assigns Systems to a Page.
+// TODO Should be in the model, not the view.
+- (id) createPageNumber: (int) pageNumber 
+	fromFirstSystem: (int) firstSystem
+	     forSystems: (int) numberOfSystemsOnPage 
+	   withinHeight: (float) him 
+	    usingMargin: (Margin *) newMargin 
 {
     int systemIndex, lastSystem = firstSystem + numberOfSystemsOnPage - 1;
-    Page *pg = [[Page alloc] initWithPageNumber: p topSystemNumber: firstSystem bottomSystemNumber: lastSystem];
+    Page *pg = [[Page alloc] initWithPageNumber: pageNumber topSystemNumber: firstSystem bottomSystemNumber: lastSystem];
     
     [pg setMargin: newMargin];
     [pg setFillHeight: him];
-    for (systemIndex = firstSystem; systemIndex <= lastSystem; systemIndex++)
-    {
+    for (systemIndex = firstSystem; systemIndex <= lastSystem; systemIndex++) {
 	System *sys = [syslist objectAtIndex: systemIndex];
-	sys->page = pg;
+	[sys setPage: pg];
     }
     [pagelist addObject: pg];
-    // [pageProgress setProgressRatio: 1.0 * lastSystem / numsys];
     return self;
 }
 
@@ -662,6 +658,7 @@ outOfTotalSystems: (int) numsys
     [self saveSysLeftMargin];
     [self renumSystems];
 ->  [self doPaginate] (will set progress ratio).
+ // [pageProgress setProgressRatio: 1.0 * lastSystem / numsys];
     [self renumPages];
     [self setRunnerTables];
     [self shuffleIfNeeded];
@@ -675,7 +672,7 @@ outOfTotalSystems: (int) numsys
 
 - doPaginate
 {
-    int i, systemCount, p, numberOfSystemsOnPage, firstSystem;
+    int i, systemCount, pageNumber, numberOfSystemsOnPage, firstSystem;
     float h=0.0, sh, him = 0.0, pheight, sheight;
     Margin *newMargin = nil;
     System *sys;
@@ -690,34 +687,33 @@ outOfTotalSystems: (int) numsys
 	return nil;
     }
     numberOfSystemsOnPage = firstSystem = 0;
-    p = 1;
+    pageNumber = 1;
     pheight = [self bounds].size.height;
     sheight = [[CalliopeAppController currentDocument] getPreferenceAsFloat: MINSYSGAP];
     sh = 0.0;
     if (pagelist != nil) 
-	[pagelist autorelease];
+	[pagelist release];
     pagelist = [[NSMutableArray allocWithZone:[self zone]] init];
     for (i = 0; i < systemCount; i++)
     {
 	sys = [syslist objectAtIndex:i];
-	if (sys->flags.newpage) p = [sys pageNumber];
+	if (sys->flags.newpage) 
+	    pageNumber = [sys pageNumber];
 	h = [sys myHeight];
 	newMargin = [sys checkMargin];
 	if (newMargin)
 	{
 	    if (numberOfSystemsOnPage > 0)
 	    {
-		[self doPage: p 
-	     fromFirstSystem: firstSystem 
-		  forSystems: numberOfSystemsOnPage 
-			    : sh 
-			    : him 
-		 usingMargin: newMargin 
-	   outOfTotalSystems: systemCount];
+		[self createPageNumber: pageNumber 
+		       fromFirstSystem: firstSystem 
+			    forSystems: numberOfSystemsOnPage 
+			  withinHeight: him 
+			   usingMargin: newMargin];
 		sh = h;
 		firstSystem = i;
 		numberOfSystemsOnPage = 1;
-		++p;
+		++pageNumber;
 	    }
 	    else
 	    {
@@ -730,17 +726,15 @@ outOfTotalSystems: (int) numsys
 	{
 	    if (numberOfSystemsOnPage == 1 && h > him) 
 		NSLog(@"System overflows page %d", [sys pageNumber]);
-	    [self doPage: p 
-	 fromFirstSystem: firstSystem 
-	      forSystems: numberOfSystemsOnPage 
-			: sh 
-			: him 
-	     usingMargin: newMargin 
-       outOfTotalSystems: systemCount];
+	    [self createPageNumber: pageNumber 
+		   fromFirstSystem: firstSystem 
+			forSystems: numberOfSystemsOnPage 
+		      withinHeight: him 
+		       usingMargin: newMargin];
 	    sh = h;
 	    firstSystem = i;
 	    numberOfSystemsOnPage = 1;
-	    ++p;
+	    ++pageNumber;
 	}
 	else
 	{
@@ -752,13 +746,11 @@ outOfTotalSystems: (int) numsys
     {
 	if (numberOfSystemsOnPage == 1 && h > him) 
 	    NSLog(@"System overflows page %d", [sys pageNumber]);
-	[self doPage: p 
-     fromFirstSystem: firstSystem 
-	  forSystems: numberOfSystemsOnPage 
-		    : sh 
-		    : him 
-	 usingMargin: newMargin 
-   outOfTotalSystems: systemCount];
+	[self createPageNumber: pageNumber 
+	       fromFirstSystem: firstSystem 
+		    forSystems: numberOfSystemsOnPage 
+		  withinHeight: him 
+		   usingMargin: newMargin];
     }
     return self;
 }
@@ -1010,12 +1002,13 @@ outOfTotalSystems: (int) numsys
 
 - resetPagesOn:  (System *) s1 : (System *) s2
 {
-  Page *p1, *p2;
-  p1 = s1->page;
-  [self  balanceSystems: p1];
-  p2 = s2->page;
-  if (p1 != p2) [self  balanceSystems: p2];
-  return self;
+    Page *p1 = [s1 page];
+    Page *p2 = [s2 page];
+
+    [self balanceSystems: p1];
+    if (p1 != p2) 
+	[self balanceSystems: p2];
+    return self;
 }
 
 
@@ -1051,7 +1044,7 @@ outOfTotalSystems: (int) numsys
 // TODO should become addSystems: (int) i duplicatingSystem: (System *) sys askIfLoose: (BOOL) askIfLoose
 - simplePaginate: (System *) sys afterAddingCount: (int) i askIfLoose: (BOOL) f
 {
-    Page *p = sys->page;
+    Page *p = [sys page];
     
     if (p == nil)
     {

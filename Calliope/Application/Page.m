@@ -38,6 +38,7 @@ extern NSSize paperSize;
 	num = n;
 	alignment = 0;
 	format = PGAUTO;
+	margin = [[Margin alloc] init];
     }
     return self;
 }
@@ -192,6 +193,7 @@ extern NSSize paperSize;
 
 - (void) setMargin: (Margin *) newMargin
 {
+    [margin release];
     margin = [newMargin retain];
 }
 

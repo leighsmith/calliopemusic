@@ -27,16 +27,13 @@
 #define SIZEBOX 8	/* size of proxy box */
 
 // TODO these should be removed, they create unnecessary binding between classes.
+// TODO could retrieve paper size from [CalliopeAppController currentDocument] or from Page.
 extern NSSize paperSize;
 extern float brackwidth[3];
 
 NSImage *markpage;
 
 @implementation System
-
-/*
-
-*/
 
 static int invalidEnabled = 1;
 
@@ -390,7 +387,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 	
 	[currentMargin setClient: self];
 	[self linkobject: currentMargin];
-	page = cursys->page;	
+	page = [cursys page];	
     }
     [self recalc];
     return self;
@@ -408,7 +405,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
     System *newSystem;
     
     newSystem = [[System alloc] initWithStaveCount: [self numberOfStaves] onGraphicView: view];
-    newSystem->page = page;
+    [newSystem setPage: page];
     newSystem->lindent = 0.0;
     newSystem->rindent = 0.0;
     newSystem->expansion = 1.0;
@@ -457,23 +454,23 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 
 - newExtraction: (GraphicView *) v : (int) sn
 {
-  System *sys = [[System alloc] init];
-  sys->gFlags.type = SYSTEM;
-  sys->flags = flags;
-  sys->flags.nstaves = sn;
-  sys->view = v;
-  sys->page = nil;
-  sys->lindent = lindent;
-  sys->rindent = rindent;
-  sys->expansion = expansion;
-  sys->groupsep = groupsep;
-  sys->barbase = barbase;
-  sys->height = height;
-  sys->headroom = headroom;
-  sys->style = style;
-  sys->nonStaffGraphics = [[NSMutableArray alloc] init];
-  sys->staves = [[NSMutableArray alloc] init];
-  return sys;
+    System *sys = [[System alloc] init];
+    sys->gFlags.type = SYSTEM;
+    sys->flags = flags;
+    sys->flags.nstaves = sn;
+    sys->view = v;
+    [sys setPage: nil];
+    sys->lindent = lindent;
+    sys->rindent = rindent;
+    sys->expansion = expansion;
+    sys->groupsep = groupsep;
+    sys->barbase = barbase;
+    sys->height = height;
+    sys->headroom = headroom;
+    sys->style = style;
+    sys->nonStaffGraphics = [[NSMutableArray alloc] init];
+    sys->staves = [[NSMutableArray alloc] init];
+    return sys;
 }
 
 
@@ -1171,13 +1168,38 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 
 
 /* draw system-specific */
-
 - draw
 {
   return self;
 }
 
+- (float) headroom
+{
+    return headroom;
+}
 
+- (int) pageNumber
+{
+    // TODO should become return [page pageNumber];
+    return pagenum;
+}
+
+- (void) setPageNumber: (int) newPageNumber
+{
+    // Should become [page setPageNumber: newPageNumber];
+    pagenum = newPageNumber;
+}
+
+- (void) setPage: newPage
+{
+    [page release];
+    page = [newPage retain];
+}
+
+- (Page *) page
+{
+    return [[page retain] autorelease];
+}
 
 /*
   Archiving Methods
@@ -1466,23 +1488,6 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
     [aCoder setString:style forKey:@"style"];
     [aCoder setObject:view forKey:@"view"]; /* should be conditional? */
     [aCoder setObject:view forKey:@"page"]; /* should be conditional? */
-}
-
-- (float) headroom
-{
-    return headroom;
-}
-
-- (int) pageNumber
-{
-    // TODO should become return [page pageNumber];
-    return pagenum;
-}
-
-- (void) setPageNumber: (int) newPageNumber
-{
-    // Should become [page setPageNumber: newPageNumber];
-    pagenum = newPageNumber;
 }
 
 @end
