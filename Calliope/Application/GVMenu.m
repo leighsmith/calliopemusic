@@ -73,10 +73,10 @@ extern NSString * DrawPasteType(NSArray *types);
         if (ISATIMEDOBJ(p) && ((TimedObj *)p)->time.tight) return YES;
 	break;
       case 9:
-        if (TYPEOF(p) == NOTE && [((GNote *)p) myChordGroup] == nil) return YES;
+        if ([p graphicType] == NOTE && [((GNote *)p) myChordGroup] == nil) return YES;
 	break;
       case 10:
-        if (TYPEOF(p) == NOTE && [((GNote *)p) myChordGroup] != nil) return YES;
+        if ([p graphicType] == NOTE && [((GNote *)p) myChordGroup] != nil) return YES;
         break;
       case 11:
       case 12:

@@ -757,7 +757,7 @@ void graphicListBBoxEx(NSRect *b, NSMutableArray *l, Graphic *ex)
   }
 }
 
-#define ISVOLTA(p) (TYPEOF(p) == GROUP && SUBTYPEOF(p) == GROUPVOLTA)
+#define ISVOLTA(p) ([p graphicType] == GROUP && SUBTYPEOF(p) == GROUPVOLTA)
 
 void graphicListBBoxExVolta(NSRect *b, NSMutableArray *l)
 {
@@ -1064,7 +1064,7 @@ void muxlowInit()
 int getSpacing(Staff *s)
 {
   if (s == nil) return 4;
-  else if (TYPEOF(s) == STAFF) return s->flags.spacing;
+  else if ([s graphicType] == STAFF) return s->flags.spacing;
   else return 4;
 }
 
@@ -1072,7 +1072,7 @@ int getSpacing(Staff *s)
 int getLines(Staff *s)
 {
   if (s == nil) return 5;
-  else if (TYPEOF(s) == STAFF) return s->flags.nlines;
+  else if ([s graphicType] == STAFF) return s->flags.nlines;
   else return 5;
 }
 

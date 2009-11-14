@@ -46,7 +46,7 @@ id CrossCursor = nil;	/* global since subclassers may need it */
 #define startTimer(timer) if (!timer) { [NSEvent startPeriodicEventsAfterDelay:0.1 withPeriod:0.1]; timer = YES ; }
 
 
-+ (Class) classFor: (int) t
++ (Class) classFor: (GraphicType) t
 {
   id obj;
   
@@ -133,8 +133,7 @@ id CrossCursor = nil;	/* global since subclassers may need it */
   return obj;
 }
 
-
-+ (Graphic *) graphicOfType: (int) typeCode
++ (Graphic *) graphicOfType: (GraphicType) typeCode
 {
     Graphic *obj = nil;
     Class GraphicSubclass = [self classFor: typeCode];
@@ -147,10 +146,11 @@ id CrossCursor = nil;	/* global since subclassers may need it */
 }
 
 
-+ getInspector: (int) t
++ getInspector: (GraphicType) t
 {
-  id c = [self classFor: t];
-  return (c == nil) ? nil : [c myInspector];
+    id c = [self classFor: t];
+    
+    return (c == nil) ? nil : [c myInspector];
 }
 
 
@@ -206,6 +206,17 @@ id CrossCursor = nil;	/* global since subclassers may need it */
   return g;
 }
 
+- (void) setTypeOfGraphic: (GraphicType) graphicType
+{
+    gFlags.type = graphicType;
+}
+
+- (GraphicType) graphicType
+{
+    return gFlags.type;
+}
+
+
 // The work is done by subclasses.
 - presetHanger
 {
@@ -222,7 +233,7 @@ id CrossCursor = nil;	/* global since subclassers may need it */
   int i, j, k = 0;
   findEndpoints([v selectedGraphics], &p, &q);
   if (p == q) return NO;
-  if (TYPEOF(p) != NOTE || TYPEOF(q) != NOTE) return NO;
+  if ([p graphicType] != NOTE || [q graphicType] != NOTE) return NO;
   k = [p numberOfNoteHeads];
   if (k == 1) return NO;
   if (k != [q numberOfNoteHeads]) return NO;
@@ -292,7 +303,7 @@ id CrossCursor = nil;	/* global since subclassers may need it */
     return r;
 }
 
-+ (BOOL) canCreateGraphicOfType: (int) typeCode asMemberOfView: (GraphicView *) v withArgument: (int) arg 
++ (BOOL) canCreateGraphicOfType: (GraphicType) typeCode asMemberOfView: (GraphicView *) v withArgument: (int) arg 
 {
     NSMutableArray *a;
     int i;
@@ -365,9 +376,10 @@ id CrossCursor = nil;	/* global since subclassers may need it */
 	gFlags.locked = 0;
 	gFlags.invis = 0;
 	gFlags.size = 0;
-	gFlags.type = 0;
+	[self setTypeOfGraphic: 0];
 	gFlags.subtype = 0;
-	enclosures = nil;	
+	enclosures = nil;
+	staffScale = 1.0;
     }
     return self;
 }
@@ -415,6 +427,15 @@ id CrossCursor = nil;	/* global since subclassers may need it */
   return [self recalc];
 }
 
+- (void) setStaffScale: (float) newStaffScale
+{
+    staffScale = newStaffScale;
+}
+
+- (float) staffScale
+{
+    return staffScale;
+}
 
 /* this reached only if not handled by a subclass */
 
@@ -641,7 +662,7 @@ id CrossCursor = nil;	/* global since subclassers may need it */
   while (k--)
   {
     h = [enclosures objectAtIndex:k];
-    if (h->gFlags.morphed && TYPEOF(h) == t)
+    if (h->gFlags.morphed && [h graphicType] == t)
     {
       [h setHanger];
       h->gFlags.morphed = 0;
@@ -658,7 +679,7 @@ id CrossCursor = nil;	/* global since subclassers may need it */
   while (k--)
   {
     h = [enclosures objectAtIndex:k];
-    if (h->gFlags.morphed && TYPEOF(h) != t)
+    if (h->gFlags.morphed && [h graphicType] != t)
     {
       [h setHanger];
       h->gFlags.morphed = 0;
@@ -809,7 +830,7 @@ id CrossCursor = nil;	/* global since subclassers may need it */
 	[self drawVerses: rect nonSelectedOnly: nso];
     if (nso && gFlags.selected) 
 	return nil;
-    if (TYPEOF(self) == ENCLOSURE) {
+    if ([self graphicType] == ENCLOSURE) {
 	NSRect box;
 	
 	[(Enclosure *)self getHandleBBox: &box];
@@ -1079,7 +1100,7 @@ struct oldflags			/* for old Versions */
 	gFlags.locked = f.locked;
 	gFlags.invis = f.invis;
 	gFlags.size = f.size;
-	gFlags.type = f.type;
+	[self setTypeOfGraphic: f.type];
 	gFlags.subtype = f.subtype;
     }
     else if (v == 1) {
@@ -1087,7 +1108,7 @@ struct oldflags			/* for old Versions */
 	gFlags.locked = b1;
 	gFlags.invis = b2;
 	gFlags.size = b3;
-	gFlags.type = b4;
+	[self setTypeOfGraphic: b4];
 	gFlags.subtype = b5;
     }
     else if (v == 2) {
@@ -1095,7 +1116,7 @@ struct oldflags			/* for old Versions */
 	gFlags.locked = b1;
 	gFlags.invis = b2;
 	gFlags.size = b3;
-	gFlags.type = b4;
+	[self setTypeOfGraphic: b4];
 	gFlags.subtype = b5;
 	[enclosures retain];
     }
@@ -1104,7 +1125,7 @@ struct oldflags			/* for old Versions */
 	gFlags.locked = b1;
 	gFlags.invis = b2;
 	gFlags.size = b3;
-	gFlags.type = b4;
+	[self setTypeOfGraphic: b4];
 	gFlags.subtype = b5;
 	[enclosures retain];
     }
@@ -1141,6 +1162,7 @@ struct oldflags			/* for old Versions */
     [aCoder setInteger:gFlags.size forKey:@"size"];
     [aCoder setInteger:gFlags.type forKey:@"type"];
     [aCoder setInteger:gFlags.subtype forKey:@"subtype"];
+    [aCoder setFloat: staffScale forKey: @"staffScale"];
 }
 
 

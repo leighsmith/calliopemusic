@@ -203,7 +203,7 @@
   while (k--)
   {
     h = [hangers objectAtIndex:k];
-    if (TYPEOF(h) == BEAM)
+    if ([h graphicType] == BEAM)
     {
       nl = h->client;
       nk = [nl count];
@@ -211,7 +211,7 @@
       {
         n = [nl objectAtIndex:nk];
 	nsp = n->mystaff;
-	if (TYPEOF(nsp) != STAFF) return NO;
+	if ([nsp graphicType] != STAFF) return NO;
 	if (a)
 	{
 	  if ([nsp yOfTop] < sy) return NO;
@@ -223,7 +223,7 @@
       }
     }
   }
-  if (TYPEOF(self) == NOTE)
+  if ([self graphicType] == NOTE)
   {
     GNote *q = (GNote *) self;
     k = [q numberOfNoteHeads];
@@ -241,7 +241,7 @@
 - (BOOL) validAboveBelow: (int) a
 {
   if (a != [self stemIsUp]) return YES;
-  if (TYPEOF(mystaff) != STAFF) return NO;
+  if ([mystaff graphicType] != STAFF) return NO;
   return [self checkRemoteNotes: a : [mystaff yOfTop]];
 }
 
@@ -261,7 +261,7 @@
   while (k--)
   {
     h = [hangers objectAtIndex:k];
-    if (TYPEOF(h) == BEAM) return YES;
+    if ([h graphicType] == BEAM) return YES;
   }
   return NO;
 }
@@ -284,7 +284,7 @@
   while (hk--)
   {
     h = [hangers objectAtIndex:hk];
-    if (TYPEOF(h) == TUPLE && self == [h->client objectAtIndex:0]) return YES;
+    if ([h graphicType] == TUPLE && self == [h->client objectAtIndex:0]) return YES;
   }
   return NO;
 }
@@ -297,7 +297,7 @@
   while (hk--)
   {
     h = [hangers objectAtIndex:hk];
-    if (TYPEOF(h) == TUPLE && self == [h->client lastObject]) return YES;
+    if ([h graphicType] == TUPLE && self == [h->client lastObject]) return YES;
   }
   return NO;
 }

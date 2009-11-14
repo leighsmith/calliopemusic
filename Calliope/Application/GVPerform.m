@@ -406,7 +406,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
                     }
                     [player[0].part addNote: an];
                 }
-                if (!ISINVIS(p)) switch (TYPEOF(p)) {
+                if (!ISINVIS(p)) switch ([p graphicType]) {
                     case CLEF:
                         mc = [p middleC];
                         break;

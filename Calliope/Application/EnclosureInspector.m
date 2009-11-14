@@ -30,7 +30,7 @@
   if ([v startInspection: ENCLOSURE : &b : &sl])
   {
     k = [sl count];
-    while (k--) if ((p = [sl objectAtIndex:k]) && TYPEOF(p) == ENCLOSURE)
+    while (k--) if ((p = [sl objectAtIndex:k]) && [p graphicType] == ENCLOSURE)
     {
       p->gFlags.subtype = [typematrix selectedColumn];
       p->gFlags.locked = [fixmatrix selectedColumn];

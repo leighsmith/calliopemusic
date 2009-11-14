@@ -46,7 +46,7 @@
   if ([v startInspection: BRACKET : &b : &sl])
   {
     k = [sl count];
-    while (k--) if ((p = [sl objectAtIndex:k]) && TYPEOF(p) == BRACKET)
+    while (k--) if ((p = [sl objectAtIndex:k]) && [p graphicType] == BRACKET)
     {
       t = 2 - [typematrix selectedColumn];
       s = [p mySystem];

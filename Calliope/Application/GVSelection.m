@@ -55,7 +55,7 @@ extern int fontflag;
   while (k--)
   {
     p = [slist objectAtIndex:k];
-    if (TYPEOF(p) == type)
+    if ([p graphicType] == type)
     {
       ++n;
       if (n == 1) q = p;
@@ -118,13 +118,13 @@ extern int fontflag;
   if (g != nil)
   {
     [[CalliopeAppController sharedApplicationController] inspectMe: g loadInspector: launch];
-    flag[TYPEOF(g)] = YES;
+    flag[[g graphicType]] = YES;
   }
   i = [slist count];
   while (i--)
   {
     p = [slist objectAtIndex:i];
-    t = TYPEOF(p);
+    t = [p graphicType];
     if (!flag[t])
     {
       flag[t] = YES;
@@ -221,7 +221,7 @@ extern int fontflag;
   while (k--)
   {
     p = [slist objectAtIndex:k];
-    if (TYPEOF(p) == type) return p;
+    if ([p graphicType] == type) return p;
   }
   return nil;
 }
@@ -234,7 +234,7 @@ extern int fontflag;
   while (k--)
   {
     p = [slist objectAtIndex:k];
-    if (typecode[TYPEOF(p)] & tc)
+    if (typecode[[p graphicType]] & tc)
     {
       ++n;
       if (n == 1) q = p;
@@ -481,7 +481,7 @@ extern float ctimex(float d);
 		if (numberOfVerseFonts == 1)
 		{
 		    sys = [p mySystem];
-		    if (TYPEOF(sys) == SYSTEM)
+		    if ([sys graphicType] == SYSTEM)
 		    {
 			selectedFont = [sys getVFont : p->selver : &numberOfVerseFonts];
 			if (selectedFont == nil) selectedFont = [[CalliopeAppController currentDocument] getPreferenceAsFont: TEXFONT];

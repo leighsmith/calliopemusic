@@ -43,7 +43,7 @@
     seldes =  [desmatrix selectedColumn];
     if (seltime >= 0 && seldot < 0) seldot = 0;
     k = [sl count];
-    while (k--) if ((p = [sl objectAtIndex:k]) && TYPEOF(p) == SQUARENOTE)
+    while (k--) if ((p = [sl objectAtIndex:k]) && [p graphicType] == SQUARENOTE)
     {
       if (seltime >= 0)
       {
@@ -71,7 +71,7 @@
   k = [sl count];
   initassay();
   n = 0;
-  while (k--) if ((p = [sl objectAtIndex:k]) && TYPEOF(p) == SQUARENOTE)
+  while (k--) if ((p = [sl objectAtIndex:k]) && [p graphicType] == SQUARENOTE)
   {
     ++n;
     assay(0, p->shape);

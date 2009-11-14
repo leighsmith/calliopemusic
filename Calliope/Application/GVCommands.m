@@ -278,7 +278,7 @@ static NSString *stylescratch;
     while (ok--)
     {
       p = [ol objectAtIndex:ok];
-      if (TYPEOF(p) == MARGIN) [ol removeObjectAtIndex:ok];
+      if ([p graphicType] == MARGIN) [ol removeObjectAtIndex:ok];
     }
   }
   return [self paginate: self];
@@ -372,18 +372,18 @@ static NSString *stylescratch;
       for (n = 0; n < k; n++)
       {
         p = [nl objectAtIndex:n];
-	if (TYPEOF(p) == TIMESIG) bart[j] = [((TimeSig *)p) myBarLength];
+	if ([p graphicType] == TIMESIG) bart[j] = [((TimeSig *)p) myBarLength];
         else if (ISATIMEDOBJ(p))
 	{
  	  v = p->voice;
-          if (TYPEOF(p) == REST)
+          if ([p graphicType] == REST)
           {
 	    rests[v] = (Rest *)p;
 	    numrests[v]++;
           }
 	  else numvox[v]++;
 	}
-	else if (TYPEOF(p) == BARLINE)
+	else if ([p graphicType] == BARLINE)
         {
           for (v = 0; v < NUMVOICES; v++)
 	  {
@@ -448,7 +448,7 @@ static NSString *stylescratch;
       for (n = ni; n < k; n++)
       {
         p = [nl objectAtIndex:n];
-	if (TYPEOF(p) == TIMESIG)
+	if ([p graphicType] == TIMESIG)
 	{
 	  if (barf[j])
 	  {
@@ -461,7 +461,7 @@ static NSString *stylescratch;
 	    nsig[j]++;
 	  }
 	}
-        else if (TYPEOF(p) == BARLINE)
+        else if ([p graphicType] == BARLINE)
 	{
 	  barf[j] = YES;
 	  t = p->stamp - bt;
@@ -501,7 +501,7 @@ extern char *typename[NUMTYPES];
   while (k--)
   {
     p = [slist objectAtIndex:k];
-    if (TYPEOF(p) == NOTE)
+    if ([p graphicType] == NOTE)
     {
       q = [p myChordGroup];
       if (q != nil) [q removeObj];
@@ -615,7 +615,7 @@ extern char *typename[NUMTYPES];
     if (ISASTAFFOBJ(p))
     {
       sp = p->mystaff;
-      if (TYPEOF(sp) == STAFF) [sp hideVerse: p->selver];
+      if ([sp graphicType] == STAFF) [sp hideVerse: p->selver];
     }
   }
   [self resetPage: currentPage];
@@ -799,7 +799,7 @@ static BOOL doToObject(Graphic *p, int c, int a)
     if (ISASTAFFOBJ(p))
     {
       sp = p->mystaff;
-      if (TYPEOF(sp) == STAFF && sp->gFlags.morphed == 0)
+      if ([sp graphicType] == STAFF && sp->gFlags.morphed == 0)
       {
         sp->gFlags.morphed = 1;
 	[sp packLeft];
@@ -814,7 +814,7 @@ static BOOL doToObject(Graphic *p, int c, int a)
     if (ISASTAFFOBJ(p))
     {
       sp = p->mystaff;
-      if (TYPEOF(sp) == STAFF) sp->gFlags.morphed = 0;
+      if ([sp graphicType] == STAFF) sp->gFlags.morphed = 0;
     }
   }
   [self dirty];
@@ -887,7 +887,7 @@ static BOOL doToObject(Graphic *p, int c, int a)
       if (num == 1)
       {
         sys = [p mySystem];
-	if (TYPEOF(sys) == SYSTEM)
+	if ([sys graphicType] == SYSTEM)
         {
           [sys changeVFont: p->selver : f];
 	  [self balancePage: self];
@@ -1034,7 +1034,7 @@ static BOOL doToObject(Graphic *p, int c, int a)
   if (ISASTAFFOBJ(p))
   {
     sp = p->mystaff;
-    if (TYPEOF(sp) == STAFF)
+    if ([sp graphicType] == STAFF)
     {
       sys = sp->mysys;
       st = [sys indexOfStaff: sp];
@@ -1102,7 +1102,7 @@ char ch[8] = ".@#!.FSN";
   while (k--)
   {
     p = [nl objectAtIndex:k];
-      buf = [NSString stringWithFormat:@"  %s\n", typename[TYPEOF(p)]];
+      buf = [NSString stringWithFormat:@"  %s\n", typename[[p graphicType]]];
     NSLog(buf);
   }
   return self;
@@ -1138,7 +1138,7 @@ extern char *typename[NUMTYPES];
       for (j = 0;j < nn; j++)
       {
         p = [nl objectAtIndex:j];
-        NSLog(@"    %d [%s]: %s x=%f, y=%f, stamp=%f, duration=%f\n", j, [p->part UTF8String], typename[TYPEOF(p)], p->x, p->y, p->stamp, p->duration);
+        NSLog(@"    %d [%s]: %s x=%f, y=%f, stamp=%f, duration=%f\n", j, [p->part UTF8String], typename[[p graphicType]], p->x, p->y, p->stamp, p->duration);
         //[NXApp log: buf];
       }
     }
@@ -1198,12 +1198,12 @@ extern char *typename[NUMTYPES];
       p = [nl objectAtIndex:nk];
       if (p->x != p->x)
       {
-        NSLog(@"deleting NaN-x object of type %d at y = %f, %dth obj on sys %d staff %d (org1)\n", TYPEOF(p), p->y, nk, s + 1, i + 1);
+        NSLog(@"deleting NaN-x object of type %d at y = %f, %dth obj on sys %d staff %d (org1)\n", [p graphicType], p->y, nk, s + 1, i + 1);
 	[p removeObj];
       }
       else if (p->x < lox || p->x > hix)
       {
-        NSLog(@"deleting off screen object of type %d at x = %f, y = %f, %dth obj on sys %d staff %d (org1)\n", TYPEOF(p), p->x, p->y, nk, s + 1, i + 1);
+        NSLog(@"deleting off screen object of type %d at x = %f, y = %f, %dth obj on sys %d staff %d (org1)\n", [p graphicType], p->x, p->y, nk, s + 1, i + 1);
 	[p removeObj];
       }
     }
@@ -1289,11 +1289,11 @@ extern char *typename[NUMTYPES];
     while (j--)
     {
       p = [ol objectAtIndex:j];
-      if (TYPEOF(p) == TEXTBOX && SUBTYPEOF(p) == STAFFHEAD)
+      if ([p graphicType] == TEXTBOX && SUBTYPEOF(p) == STAFFHEAD)
       {
         if (sp == ((TextGraphic *)p)->client) [p removeObj];
       }
-      else if (TYPEOF(p) == BRACKET && SUBTYPEOF(p) != LINKAGE)
+      else if ([p graphicType] == BRACKET && SUBTYPEOF(p) != LINKAGE)
       {
 	if (sp == ((Bracket *)p)->client1 || sp == ((Bracket *)p)->client2)
 	  [p removeObj];
@@ -1828,7 +1828,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
   for (i = 0; i < k; i++)
   {
     ns = [pl objectAtIndex:i];
-    if (TYPEOF(ns) == SYSTEM)
+    if ([ns graphicType] == SYSTEM)
     {
       ++n;
       ns->view = self;
@@ -1889,13 +1889,13 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
     for (i = 0; i < k; i++) 
     {
 	p = [nsys->nonStaffGraphics objectAtIndex:i];
-	if (TYPEOF(p) == RUNNER)
+	if ([p graphicType] == RUNNER)
 	{
 	    ((Runner *)p)->client = sys;
 	    [sys linkobject: p];
 	}
-	else if ((TYPEOF(p) == TEXTBOX && SUBTYPEOF(p) == STAFFHEAD) ||
-		 (TYPEOF(p) == BRACKET && SUBTYPEOF(p) != LINKAGE)) 
+	else if (([p graphicType] == TEXTBOX && SUBTYPEOF(p) == STAFFHEAD) ||
+		 ([p graphicType] == BRACKET && SUBTYPEOF(p) != LINKAGE)) 
 	    [sys linkobject: p];
     }
     [sys recalc];
@@ -1932,7 +1932,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
       while (k < n)
       {
         p = [al objectAtIndex:k];
-        if (TYPEOF(p) == TABLATURE && !(p->gFlags.subtype))
+        if ([p graphicType] == TABLATURE && !(p->gFlags.subtype))
         {
 	  if (p->flags.prevtime)
           {
@@ -1979,8 +1979,8 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
       while (k < n)
       {
         p = [al objectAtIndex:k];
-        if (TYPEOF(p) == BARLINE) cf = -1;
-        else if (TYPEOF(p) == TABLATURE)
+        if ([p graphicType] == BARLINE) cf = -1;
+        else if ([p graphicType] == TABLATURE)
         {
           if (p->gFlags.subtype) cf = -1;
           else if (!(p->flags.prevtime))
@@ -2029,7 +2029,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
       while (k--)
       {
         p = [al objectAtIndex:k];
-	if (TYPEOF(p) == NEUME)
+	if ([p graphicType] == NEUME)
 	{
 	  np = [[NeumeNew alloc] init];
 	  [np upgradeFrom: p];
@@ -2128,13 +2128,13 @@ void setSplit(Hanger *h, int u, int f)
 	while (hk--)
 	{
 	  h = [hl objectAtIndex:hk];
-	  if (TYPEOF(h) == VOLTA)
+	  if ([h graphicType] == VOLTA)
 	  {
             nt = [[NoteGroup alloc] init];
               [(NoteGroup *)nt proto: (Volta *)h];
 	    [h removeObj];
 	  }
-	  else if (TYPEOF(h) == TIE)
+	  else if ([h graphicType] == TIE)
 	  {
 	    if (!h->flags.master) continue;
 	    switch(h->gFlags.subtype)

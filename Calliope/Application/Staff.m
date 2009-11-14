@@ -66,7 +66,7 @@ int staffspace[3][3] =
 {
     self = [super init];
     if(self != nil) {
-	gFlags.type = STAFF;
+	[self setTypeOfGraphic: STAFF];
 	flags.subtype = 0;
 	flags.nlines = 5;
 	flags.spacing = staffspace[0][0];
@@ -631,7 +631,7 @@ float textoff[2], baselines[2][MAXTEXT];
   while (i--)
   {
     p = [ol objectAtIndex:i];
-    if (TYPEOF(p) == BRACKET && SUBTYPEOF(p) != LINKAGE)
+    if ([p graphicType] == BRACKET && SUBTYPEOF(p) != LINKAGE)
     {
       s1 = [s indexOfStaff: p->client1];
       s2 = [s indexOfStaff: p->client2];
@@ -659,7 +659,7 @@ float textoff[2], baselines[2][MAXTEXT];
   while (i--)
   {
     p = [ol objectAtIndex:i];
-    if (TYPEOF(p) == BRACKET && SUBTYPEOF(p) == bt && [p atTop: self]) return YES;
+    if ([p graphicType] == BRACKET && SUBTYPEOF(p) == bt && [p atTop: self]) return YES;
   }
   return NO;
 }
@@ -727,7 +727,7 @@ float textoff[2], baselines[2][MAXTEXT];
     if (i == -1) NSLog(@"SYSTEM ERROR: StaffObj not found by skipSig\n");
     while (i < k && ISASIGBLOCK(p))
     {
-      if (TYPEOF(p) == CLEF)
+      if ([p graphicType] == CLEF)
       {
         if (fc == YES && p->gFlags.size != gFlags.size) break;
         fc = YES;
@@ -754,7 +754,7 @@ float textoff[2], baselines[2][MAXTEXT];
   {
     p = [notes objectAtIndex:i];
     if (!(ISASIGBLOCK(p))) return i;
-    if (TYPEOF(p) == CLEF)
+    if ([p graphicType] == CLEF)
     {
       if (fc == YES && p->gFlags.size != gFlags.size) return i;
       fc = YES;
@@ -859,8 +859,8 @@ float textoff[2], baselines[2][MAXTEXT];
     p = [notes objectAtIndex:k];
       if (p->part) [p->part autorelease];
     p->part = nil;
-    if (TYPEOF(p) == NOTE) [(GNote *) p setPatch: 0];  //sb: instrument here is from GNote, not CallPart
-    else if (TYPEOF(p) == TABLATURE) {
+    if ([p graphicType] == NOTE) [(GNote *) p setPatch: 0];  //sb: instrument here is from GNote, not CallPart
+    else if ([p graphicType] == TABLATURE) {
         id q = ((Tablature *)p)->tuning;
         if (q) {
             [q release];
@@ -1155,7 +1155,7 @@ float textoff[2], baselines[2][MAXTEXT];
   for (i = 0; i < k; i++)
   {
     q = [notes objectAtIndex:i];
-    switch(TYPEOF(q))
+    switch([q graphicType])
     {
       case CLEF:
         mc = [(Clef *)q middleC];
@@ -1190,13 +1190,13 @@ float textoff[2], baselines[2][MAXTEXT];
   for (i = j; i < k; i++)
   {
     p = [notes objectAtIndex:i];
-    if (TYPEOF(p) == CLEF) return p->keycentre;
+    if ([p graphicType] == CLEF) return p->keycentre;
   }
   /* else try before indent */
   for (i = 0; i < j; i++)
   {
     p = [notes objectAtIndex:i];
-    if (TYPEOF(p) == CLEF) return p->keycentre;
+    if ([p graphicType] == CLEF) return p->keycentre;
   }
   /* else give up */
   return -1;
@@ -1258,7 +1258,7 @@ float textoff[2], baselines[2][MAXTEXT];
   for (j = i + 1; j < k; j++)
   {
     p = [notes objectAtIndex:j];
-    if (TYPEOF(p) == BARLINE && !(p->gFlags.invis)) return NO;
+    if ([p graphicType] == BARLINE && !(p->gFlags.invis)) return NO;
   }
   return YES;
 }
@@ -1288,7 +1288,7 @@ float textoff[2], baselines[2][MAXTEXT];
   for (i = j; i < k; i++)
   {
     p = [notes objectAtIndex:i];
-    if (TYPEOF(p) == BARLINE || TYPEOF(p) == REST) b += [p barCount];
+    if ([p graphicType] == BARLINE || [p graphicType] == REST) b += [p barCount];
   }
   return b;
 }
@@ -1304,7 +1304,7 @@ float textoff[2], baselines[2][MAXTEXT];
   while (k--)
   {
     p = [notes objectAtIndex:k];
-    if (TYPEOF(p) == BARLINE) return ([p barCount] == 0);
+    if ([p graphicType] == BARLINE) return ([p barCount] == 0);
   }
   return b;
 }
@@ -1387,7 +1387,7 @@ static void drawbarnum(int n, float x, float y, NSFont *f, int j, int eb, int mo
       while (i < k)
       {
         p = [notes objectAtIndex:i];
-        if (TYPEOF(p) == BARLINE)
+        if ([p graphicType] == BARLINE)
         {
           b += [p barCount];
 	  if (p->flags.nonumber == 2 || (b % m == 0 && p->flags.nonumber != 1 && ![self isLastBar: i]))
@@ -1395,7 +1395,7 @@ static void drawbarnum(int n, float x, float y, NSFont *f, int j, int eb, int mo
             drawbarnum(b, p->x, by, f, JLEFT, eb, mode);
           }
         }
-        else if (TYPEOF(p) == REST) b += [p barCount];
+        else if ([p graphicType] == REST) b += [p barCount];
         ++i;
       }
       break;

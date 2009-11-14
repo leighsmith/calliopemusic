@@ -66,7 +66,7 @@ int runnerStatus = 0;
 {
     self = [super init];
     if(self != nil) {
-	gFlags.type = RUNNER;
+	[self setTypeOfGraphic: RUNNER];
 	flags.onceonly = 0;
 	flags.nextpage = 0;
 	flags.horizpos = 0;
@@ -74,18 +74,18 @@ int runnerStatus = 0;
 	flags.oddpage = 0;
 	flags.vertpos = 0;
 	flags.just = 0;
-	length = 0;
-	data = nil;	
+	richText = nil;	
     }
     return self;
 }
 
 
-- (void)dealloc
+- (void) dealloc
 {
-  if (data) [data release];
-  [super dealloc];
-  return;
+    if (richText)
+	[richText release];
+    richText = nil;
+    [super dealloc];
 }
 
 
@@ -117,8 +117,7 @@ int runnerStatus = 0;
   newRunner->gFlags = gFlags;
   newRunner->bounds = bounds;
   newRunner->flags = flags;
-  newRunner->data = [data copy];
-  newRunner->length = length;
+  newRunner->richText = [richText copy];
   return newRunner;
 }
 
@@ -133,7 +132,7 @@ seem to change size correctly, hence various transforms.
 
 extern int selMode;
 
-- renderMe: (NSRect) r : (NSAttributedString *) stream : (NSSize) ps : (Page *) pg
+- (void) renderInRect: (NSRect) r text: (NSAttributedString *) stream paperSize: (NSSize) ps onPage: (Page *) pg
 {
   System *sys = client;
   NSRect fb, vb, fo;
@@ -201,9 +200,23 @@ extern int selMode;
   }
   [myText scaleUnitSquareToSize:NSMakeSize(f, f)];
   runnerStatus = 0;
-  return self;
 }
 
+- (void) renderTextInRect: (NSRect) r paperSize: (NSSize) ps onPage: (Page *) pg
+{
+    [self renderInRect: r text: richText paperSize: ps onPage: pg];
+}
+
+- (void) setRunnerText: (NSAttributedString *) textString
+{
+    [richText release];
+    richText = [textString retain];
+}
+
+- (NSAttributedString *) runnerText
+{
+    return [[richText retain] autorelease];
+}
 
 - (BOOL) move: (float) dx : (float) dy : (NSPoint) p : sys : (int) alt
 {
@@ -253,6 +266,8 @@ struct oldflags		/* for old version */
   int indexOfCell,j;
   NSScanner *theScanner;
   NSFont *theFont;
+  int length;
+    
   [super initWithCoder:aDecoder];
   v = [aDecoder versionForClassName:@"Runner"];
   client = [[aDecoder decodeObject] retain];
@@ -293,7 +308,7 @@ struct oldflags		/* for old version */
           * print the 'anything' into newdata, followed by new identifying string
           * repeat as necessary
           *
-          * place data into 'data', as attributed string
+          * place data into 'richText', as attributed string
           * replace all occurrances of text 'TextVarCelln' with real cells.
        */
       theScanner = [NSScanner scannerWithString:[NSString stringWithUTF8String:olddata]];
@@ -319,7 +334,7 @@ struct oldflags		/* for old version */
               break;
           }
       }
-      data = [[NSMutableAttributedString alloc] initWithRTF:results documentAttributes:NULL];
+      richText = [[NSMutableAttributedString alloc] initWithRTF:results documentAttributes:NULL];
       free(olddata);
       for (j=0;j<foundCells;j++) {
           int rangeStart;
@@ -328,7 +343,7 @@ struct oldflags		/* for old version */
           NSAttributedString *theAttrString;
           NSFileWrapper *theWrapper;
           NSTextAttachment *theAttachment;
-          theScanner = [NSScanner scannerWithString:[data string]];
+          theScanner = [NSScanner scannerWithString:[richText string]];
           [theScanner setCharactersToBeSkipped:[NSCharacterSet characterSetWithCharactersInString:@""]];
 
           [theScanner scanUpToString:@"<>TextVarCell<>" intoString:NULL];
@@ -343,21 +358,21 @@ struct oldflags		/* for old version */
           [theWrapper setPreferredFilename:@"UNTITLED"];
           theAttachment = [[NSTextAttachment alloc] initWithFileWrapper:theWrapper];
           [v setAttachment:theAttachment];
-          theFont = [data attribute:NSFontAttributeName atIndex:rangeStart effectiveRange:NULL];
+          theFont = [richText attribute:NSFontAttributeName atIndex:rangeStart effectiveRange:NULL];
           if (theFont) [(TextVarCell *)v setFont:theFont];
 
           [theAttachment setAttachmentCell:v];
           theAttrString = [NSAttributedString attributedStringWithAttachment:theAttachment];
 
-          [data beginEditing];
-          [data replaceCharactersInRange:NSMakeRange(rangeStart,18) withAttributedString:theAttrString];
-          [data addAttribute:NSFontAttributeName value:theFont range:NSMakeRange(rangeStart,1)];
-          [data endEditing];
+          [richText beginEditing];
+          [richText replaceCharactersInRange:NSMakeRange(rangeStart,18) withAttributedString:theAttrString];
+          [richText addAttribute:NSFontAttributeName value:theFont range:NSMakeRange(rangeStart,1)];
+          [richText endEditing];
       }
 //      NSLog(@"%s\n",(char *)[results bytes]);
   }
   else {
-      data = [[aDecoder decodeObject] retain];
+      richText = [[aDecoder decodeObject] retain];
   }
   return self;
 }
@@ -366,6 +381,8 @@ struct oldflags		/* for old version */
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
   char b1, b2, b3, b4, b5, b6, b7;
+  int length = 0;
+    
   [super encodeWithCoder:aCoder];
   [aCoder encodeConditionalObject:client];
   b1 = flags.onceonly;
@@ -376,8 +393,8 @@ struct oldflags		/* for old version */
   b6 = flags.vertpos;
   b7 = flags.just;
   [aCoder encodeValuesOfObjCTypes:"ccccccci", &b1, &b2, &b3, &b4, &b5, &b6, &b7, &length];
-//  [aCoder encodeArrayOfObjCType:"c" count:length at:data];
-  [aCoder encodeObject:data];
+//  [aCoder encodeArrayOfObjCType:"c" count:length at:richText];
+  [aCoder encodeObject:richText];
 }
 
 - (void)encodeWithPropertyListCoder:(OAPropertyListCoder *)aCoder
@@ -391,8 +408,7 @@ struct oldflags		/* for old version */
     [aCoder setInteger:flags.oddpage forKey:@"oddpage"];
     [aCoder setInteger:flags.vertpos forKey:@"vertpos"];
     [aCoder setInteger:flags.just forKey:@"just"];
-    [aCoder setInteger:length forKey:@"length"];
-    [aCoder setObject:data forKey:@"data"];
+    [aCoder setObject:richText forKey:@"richText"];
 }
 
 

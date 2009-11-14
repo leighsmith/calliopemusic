@@ -196,7 +196,7 @@ int protoVox;
   while (j < k && !f)
   {
     q = [nl objectAtIndex:j];
-    if (TYPEOF(q) == t) f = YES;
+    if ([q graphicType] == t) f = YES;
     else
     {
       graphicBBox(&qb, q);
@@ -749,7 +749,7 @@ int protoVox;
   while (k--)
   {
     q = [hangers objectAtIndex:k];
-    if (TYPEOF(q) == METRO) return q;
+    if ([q graphicType] == METRO) return q;
   }
   return nil;
 }
@@ -762,7 +762,7 @@ int protoVox;
   while (k--)
   {
     q = [hangers objectAtIndex:k];
-    if (TYPEOF(q) == GROUP && SUBTYPEOF(q) == GROUPVOLTA && q != v) return YES;
+    if ([q graphicType] == GROUP && SUBTYPEOF(q) == GROUPVOLTA && q != v) return YES;
   }
   return NO;
 }
@@ -775,7 +775,7 @@ int protoVox;
   while (k--)
   {
     b = [hangers objectAtIndex:k];
-    if (TYPEOF(b) == BEAM && [b isCrossingBeam]) return YES;
+    if ([b graphicType] == BEAM && [b isCrossingBeam]) return YES;
   }
   return NO;
 }
@@ -792,7 +792,7 @@ int protoVox;
   while (k--)
   {
     q = [hangers objectAtIndex:k];
-    if (TYPEOF(q) == ACCENT)
+    if ([q graphicType] == ACCENT)
     {
       s = [q hasAccidental];
       if (s) return s;
@@ -811,7 +811,7 @@ int protoVox;
   while (k--)
   {
     q = [hangers objectAtIndex: k];
-    if (TYPEOF(q) == ACCENT && q->accstick) return YES;
+    if ([q graphicType] == ACCENT && q->accstick) return YES;
   }
   return NO;
 }
@@ -828,7 +828,7 @@ int protoVox;
   while (k--)
   {
     q = [hangers objectAtIndex:k];
-    if (TYPEOF(q) == ACCENT)
+    if ([q graphicType] == ACCENT)
     {
       s = [q hasOttava];
       if (s) return s;
@@ -1337,7 +1337,7 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
   while (k--)
   {
     h = [hangers objectAtIndex:k];
-    if (h->gFlags.morphed && TYPEOF(h) == t)
+    if (h->gFlags.morphed && [h graphicType] == t)
     {
       [h setHanger];
       h->gFlags.morphed = 0;
@@ -1356,7 +1356,7 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
   while (k--)
   {
     h = [hangers objectAtIndex:k];
-    if (h->gFlags.morphed && TYPEOF(h) != t)
+    if (h->gFlags.morphed && [h graphicType] != t)
     {
       [h setHanger];
       h->gFlags.morphed = 0;
@@ -1388,7 +1388,7 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
   while (k--)
   {
     h = [hangers objectAtIndex:k];
-    if (TYPEOF(h) == BEAM)
+    if ([h graphicType] == BEAM)
     {
       [h setHanger];
       [h setOwnHangers];
@@ -1398,7 +1398,7 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
   while (k--)
   {
     h = [hangers objectAtIndex:k];
-    if (TYPEOF(h) != BEAM)
+    if ([h graphicType] != BEAM)
     {
       [h setHanger];
       [h setOwnHangers];
@@ -1511,7 +1511,7 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
     part = nil;
     
     mystaff = [[aDecoder decodeObject] retain];
-    if (TYPEOF(mystaff) != STAFF) {
+    if ([mystaff graphicType] != STAFF) {
 	NSLog(@"mystaff != STAFF, need to convert!");
 	// TODO I think earlier versions can decode this as System, not a Staff. Need to handle accordingly and based on file version number.
     }

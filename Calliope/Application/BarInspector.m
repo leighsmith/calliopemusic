@@ -65,7 +65,7 @@
   if ([v startInspection: BARLINE : &b : &sl])
   {
     k = [sl count];
-    while (k--) if ((p = [sl objectAtIndex:k]) && TYPEOF(p) == BARLINE)
+    while (k--) if ((p = [sl objectAtIndex:k]) && [p graphicType] == BARLINE)
     {
       r |= [self setClient: p];
       [p recalc];
@@ -89,7 +89,7 @@
   k = [sl count];
   initassay();
   n = 0;
-  while (k--) if ((p = [sl objectAtIndex:k]) && TYPEOF(p) == BARLINE)
+  while (k--) if ((p = [sl objectAtIndex:k]) && [p graphicType] == BARLINE)
   {
     ++n;
     assay(0, p->flags.staff);

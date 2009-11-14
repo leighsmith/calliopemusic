@@ -1,3 +1,9 @@
+/*!
+  $Id$ 
+
+  @class Ruler
+  @brief 
+ */
 #import <AppKit/NSView.h>
 #import <AppKit/NSFont.h>
 
@@ -10,12 +16,12 @@
     BOOL notHidden;
 }
 
-+ (float)width;
++ (float) width;
 
-- showPosition:(float)lp :(float)hp;
+- showPosition: (float) lp : (float) hp;
 - hidePosition;
 
-- (void)setFont:(NSFont *)aFont;
-- (void)drawRect:(NSRect)rect;
+- (void) setFont: (NSFont *) aFont;
+- (void) drawRect: (NSRect) rect;
 
 @end

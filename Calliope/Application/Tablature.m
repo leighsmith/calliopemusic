@@ -51,7 +51,7 @@ static Tablature *proto;
 {
   int i;
   [super init];
-  gFlags.type = TABLATURE;
+  [self setTypeOfGraphic: TABLATURE];
   gFlags.subtype = 0;
   flags = proto->flags;
   tuning = nil;
@@ -90,7 +90,7 @@ static Tablature *proto;
 - recalc
 {
   [super recalc];
-  if (TYPEOF(mystaff) == STAFF) y = [mystaff yOfTop];
+  if ([mystaff graphicType] == STAFF) y = [mystaff yOfTop];
   return self; 
 }
 
@@ -159,13 +159,13 @@ static Tablature *findPrevFlag(Tablature *t)
   Tablature *u;
   NSMutableArray *nl;
   Staff *sp = t->mystaff;
-  if (TYPEOF(sp) != STAFF) return nil;
+  if ([sp graphicType] != STAFF) return nil;
   nl = sp->notes;
   i = [nl indexOfObject:t];
   while (i--)
   {
     u = [nl objectAtIndex:i];
-    if (TYPEOF(u) == TABLATURE && !(u->flags.prevtime)) return u;
+    if ([u graphicType] == TABLATURE && !(u->flags.prevtime)) return u;
   }
   return nil;
 }
@@ -236,7 +236,7 @@ static char tabpos[2][15] =
 {
   int i, j, n;
   gFlags.selend = 0;
-  if (TYPEOF(mystaff) == SYSTEM)
+  if ([mystaff graphicType] == SYSTEM)
   {
     if (NSPointInRect(pt , bounds))
     {
@@ -337,7 +337,7 @@ static char tabpos[2][15] =
       n = gFlags.selend;
       if (flags.direction)
       {
-        if (TYPEOF(mystaff) == STAFF) nl = mystaff->flags.nlines;
+        if ([mystaff graphicType] == STAFF) nl = mystaff->flags.nlines;
         else
         {
 	    NSLog(@"Tablature -keyDownString: mystaff != STAFF");
@@ -481,7 +481,7 @@ static char usesm[6] = {1, 1, 1, 1, 0, 0}; /* whether to use small size as norma
   float cy;
   sz = gFlags.size;
   sp = mystaff;
-  if (TYPEOF(sp) != STAFF)
+  if ([sp graphicType] != STAFF)
   {
     n = 0;
     ss = 6;

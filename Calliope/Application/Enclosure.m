@@ -42,7 +42,7 @@ static Enclosure *proto;
 - init
 {
   [super init];
-  gFlags.type = ENCLOSURE;
+  [self setTypeOfGraphic: ENCLOSURE];
   notes = nil;
   return self;
 }

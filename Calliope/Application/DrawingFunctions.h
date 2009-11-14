@@ -27,42 +27,6 @@
 #define FONTSMUS 15		/* our id for small music font */
 #define FONTHMUS 16		/* our id for half-sized music font */
 
-/* gFlags.type */
-typedef enum {
-    VERSE = 0,
-    BRACKET = 1,
-    BARLINE = 2,
-    TIMESIG = 3,
-    NOTE = 4,
-    REST = 5,
-    CLEF = 6,
-    KEY = 7,
-    RANGE = 8,
-    TABLATURE = 9,
-    TEXTBOX = 10,
-    BLOCK = 11,
-    BEAM = 12,
-    TIE = 13,
-    METRO = 14,
-    ACCENT = 15,
-    TUPLE = 16,
-    NEUME = 17,
-    STAFF = 18,
-    SYSTEM = 19,
-    RUNNER = 20,
-    VOLTA = 21,
-    GROUP = 22,
-    ENCLOSURE = 23,
-    SQUARENOTE = 24,
-    CHORDGROUP = 25,
-    TIENEW = 26,
-    LIGATURE = 27,
-    NEUMENEW = 28,
-    MARGIN = 29,
-    IMAGE = 30,
-    NUMTYPES = 31
-} GraphicType;
-
 /* type codes index array of short bitcodes */
 
 #define TC_HANGER   1
@@ -75,15 +39,15 @@ typedef enum {
 #define TC_VOICED 128
 #define TC_TWIN 256
 
-#define ISAHANGER(p) (typecode[TYPEOF(p)] & TC_HANGER)
-#define ISASTAFFOBJ(p) (typecode[TYPEOF(p)] & TC_STAFFOBJ)
-#define ISATIMEDOBJ(p) (typecode[TYPEOF(p)] & TC_TIMEDOBJ)
-#define ISASIG(p) (typecode[TYPEOF(p)] & TC_SIG)
-#define ISABLOCKSYM(p) (typecode[TYPEOF(p)] & TC_BLOCKSYM)
-#define ISASIGBLOCK(p) (typecode[TYPEOF(p)] & TC_SIGBLOCK)
-#define ISAVOCAL(p) (typecode[TYPEOF(p)] & TC_SOUNDS)
-#define HASAVOICE(p) (typecode[TYPEOF(p)] & TC_VOICED)
-#define ISATWIN(p) (typecode[TYPEOF(p)] & TC_TWIN)
+#define ISAHANGER(p) (typecode[[p graphicType]] & TC_HANGER)
+#define ISASTAFFOBJ(p) (typecode[[p graphicType]] & TC_STAFFOBJ)
+#define ISATIMEDOBJ(p) (typecode[[p graphicType]] & TC_TIMEDOBJ)
+#define ISASIG(p) (typecode[[p graphicType]] & TC_SIG)
+#define ISABLOCKSYM(p) (typecode[[p graphicType]] & TC_BLOCKSYM)
+#define ISASIGBLOCK(p) (typecode[[p graphicType]] & TC_SIGBLOCK)
+#define ISAVOCAL(p) (typecode[[p graphicType]] & TC_SOUNDS)
+#define HASAVOICE(p) (typecode[[p graphicType]] & TC_VOICED)
+#define ISATWIN(p) (typecode[[p graphicType]] & TC_TWIN)
 
 
 /*
@@ -192,7 +156,7 @@ extern float charFCH(NSFont *f, int ch);
 extern float charhalfFGW(NSFont *f, int ch);
 
 
-extern short typecode[NUMTYPES];
+extern short typecode[];
 extern char nature[3];
 extern float pronature[3];
 extern char smallersz[3];

@@ -73,9 +73,9 @@ NSImage *keyimages[4];
   if ([v startInspection: KEY : &b : &sl])
   {
     sk = [sl count];
-    while (sk--) if ((p = [sl objectAtIndex:sk]) && TYPEOF(p) == KEY)
+    while (sk--) if ((p = [sl objectAtIndex:sk]) && [p graphicType] == KEY)
     {
-      dotrans = ([transswitch state] && (TYPEOF(p->mystaff) == STAFF));
+      dotrans = ([transswitch state] && ([p->mystaff graphicType] == STAFF));
       if (dotrans)
       {
         tb = p->bounds;

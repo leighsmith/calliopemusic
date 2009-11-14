@@ -139,7 +139,7 @@ static void putPos(Staff *sp, int pn, int u)
     while (k--)
     {
       t = [nl objectAtIndex:k];
-      if (TYPEOF(t) == TIENEW)
+      if ([t graphicType] == TIENEW)
       {
           e = [t whichEnd: self];
           if (e == 2)
@@ -604,7 +604,7 @@ NSLog(@"curx %f: pos[%d] set to: %f\n", curx, [noteHead staffPosition], [noteHea
     while (k--)
     {
       t = [hangers objectAtIndex:k];
-      if (TYPEOF(t) == TIENEW)
+      if ([t graphicType] == TIENEW)
       {
           e = [t whichEnd: self];
           if (e == 2)
@@ -661,7 +661,7 @@ extern float ledgedxs[3];
   {
     noteHead = [headlist objectAtIndex:i];
     sp = [noteHead myStaff];
-    if (TYPEOF(sp) == STAFF)
+    if ([sp graphicType] == STAFF)
     {
       sn = [sp myIndex];
       sps[sn] = sp;

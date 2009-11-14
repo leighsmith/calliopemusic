@@ -88,7 +88,7 @@ static void orderXY(float *x, float *y)
 - init
 {
   [super init];
-  gFlags.type = TIE;
+  [self setTypeOfGraphic: TIE];
   gFlags.subtype = TIEBOW;
   headnum = 0;
   flatness = 0.0;

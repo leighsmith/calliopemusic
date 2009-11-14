@@ -54,7 +54,7 @@ static char istimed[6] = {1, 1, 0, 0, 0, 1};
     if (seltime >= 0 && seldot < 0) seldot = 0;
     if (!nb) [[numbarsform cellAtIndex:0] setIntValue:0];
     k = [sl count];
-    while (k--) if ((p = [sl objectAtIndex:k]) && TYPEOF(p) == REST)
+    while (k--) if ((p = [sl objectAtIndex:k]) && [p graphicType] == REST)
     {
       setdef = 1000;
       if (selstyle >= 0)
@@ -98,7 +98,7 @@ static char istimed[6] = {1, 1, 0, 0, 0, 1};
   k = [sl count];
   initassay();
   n = 0;
-  while (k--) if ((p = [sl objectAtIndex:k]) && TYPEOF(p) == REST)
+  while (k--) if ((p = [sl objectAtIndex:k]) && [p graphicType] == REST)
   {
     ++n;
     assay(0, p->gFlags.locked);

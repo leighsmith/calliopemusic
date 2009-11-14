@@ -91,7 +91,7 @@
     else
     {
       k = [sl count];
-      while (k--) if ((p = [sl objectAtIndex:k]) && TYPEOF(p) == TUPLE && p->style == 0)
+      while (k--) if ((p = [sl objectAtIndex:k]) && [p graphicType] == TUPLE && p->style == 0)
       {
 	[self setClient: p];
         [p ligaDir: [hdtlmatrix selectedColumn]]; /* does the recalc */

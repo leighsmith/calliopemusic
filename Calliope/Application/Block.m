@@ -51,7 +51,7 @@ static Block *proto;
 {
   [super init];
   gFlags.subtype = 0;
-  gFlags.type = BLOCK;
+  [self setTypeOfGraphic: BLOCK];
   staffPosition = 4;
   return self;
 }
@@ -95,7 +95,7 @@ static Block *proto;
   BOOL m = NO;
   if (alt)
   {
-    if (TYPEOF(mystaff) == STAFF)
+    if ([mystaff graphicType] == STAFF)
     {
       nx = pt.x;
       ny = pt.y;
@@ -112,7 +112,7 @@ static Block *proto;
   }
   else
   {
-    if (TYPEOF(mystaff) == STAFF)
+    if ([mystaff graphicType] == STAFF)
     {
       nx = dx + pt.x;
       ny = dy + pt.y;
@@ -161,7 +161,7 @@ static char blockledger[NUMBLOCKS] = {0, 1, 1, 1, 0, 0, 1};
     bc = blockchar[t];
     DrawCharacterInFont(x, y, bc, bf, m);
     s = mystaff;
-    if (blockledger[t] && TYPEOF(s) == STAFF)
+    if (blockledger[t] && [s graphicType] == STAFF)
     {
       drawledge(x, [s yOfTop], charhalfFGW(bf, bc),
                 sz, staffPosition, s->flags.nlines, s->flags.spacing, m);

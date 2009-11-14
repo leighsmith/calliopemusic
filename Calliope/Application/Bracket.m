@@ -22,16 +22,14 @@ float brackwidth[3] = {4.8, 0.75 * 4.8, 0.5 * 4.8};
 static Bracket *proto;
 
 
-+ (void)initialize
++ (void) initialize
 {
-  if (self == [Bracket class])
-  {
-      (void)[Bracket setVersion: 0];		/* class version, see read: */
-    proto = [Bracket alloc];
-    proto->gFlags.subtype = BRACK;
-    proto->level = 0;
-  }
-  return;
+    if (self == [Bracket class]) {
+	[Bracket setVersion: 0];		/* class version, see read: */
+	proto = [Bracket alloc];
+	proto->gFlags.subtype = BRACK;
+	proto->level = 0;
+    }
 }
 
 
@@ -49,11 +47,13 @@ static Bracket *proto;
 
 - init
 {
-  [super init];
-  gFlags.type = BRACKET;
-  gFlags.subtype = LINKAGE;
-  client1 = client2 = nil;
-  level = 0;
+    self = [super init];
+    if(self != nil) {
+	[self setTypeOfGraphic: BRACKET];
+	gFlags.subtype = LINKAGE;
+	client1 = client2 = nil;
+	level = 0;	
+    }
   return self;
 }
 
@@ -77,7 +77,7 @@ static Bracket *proto;
   if ([sys hasLinkage])
   {
     gFlags.subtype = proto->gFlags.subtype;
-    if (TYPEOF(sp) == SYSTEM) sp = [sys findOnlyStaff: pt.y];
+    if ([sp graphicType] == SYSTEM) sp = [sys findOnlyStaff: pt.y];
     client1 = client2 = sp;
     level = [sp brackLevel] + 1;
   }

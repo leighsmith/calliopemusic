@@ -35,7 +35,7 @@ static Range *proto;
 - init
 {
   [super init];
-  gFlags.type = RANGE;
+  [self setTypeOfGraphic: RANGE];
   gFlags.subtype = 0;
   p1 = 8;
   p2 = 0;
@@ -64,7 +64,7 @@ static Range *proto;
 - recalc
 {
   [super recalc];
-  if (TYPEOF(mystaff) == STAFF) y = [mystaff yOfTop];
+  if ([mystaff graphicType] == STAFF) y = [mystaff yOfTop];
   return self; 
 }
 
@@ -81,7 +81,7 @@ char ranfont[3] = {1, 0, 0};
   unsigned char ch;
   NSFont *f;
   Staff *sp = mystaff;
-  if (TYPEOF(sp) == STAFF)
+  if ([sp graphicType] == STAFF)
   {
     ss = sp->flags.spacing;
     nl = sp->flags.nlines;
@@ -101,7 +101,7 @@ char ranfont[3] = {1, 0, 0};
   x2 = x + slant * ss;
   DrawCharacterCenteredInFont(x, y1, ch, f, m);
   DrawCharacterCenteredInFont(x2, y2, ch, f, m);
-  if (TYPEOF(sp) == STAFF)
+  if ([sp graphicType] == STAFF)
   {
     hw = charhalfFGW(f, ch);
     drawledge(x2, y, hw, sz, p2, nl, ss, m);

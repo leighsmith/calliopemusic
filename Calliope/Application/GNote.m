@@ -111,7 +111,7 @@ unsigned char accifont[NUMHEADS][NUMACCS] =
 	[h release];
 	gFlags.subtype = 0;
 	staffPosition = 0;
-	gFlags.type = NOTE;
+	[self setTypeOfGraphic: NOTE];
 	dotdx = 0.0;
 	instrument = 0;
 	showSlash = 0;	
@@ -222,7 +222,7 @@ TODO should be named
     noteHead = [headlist lastObject];
     [noteHead setNote: self];
     [noteHead setBodyType: gFlags.subtype];
-    if (TYPEOF(sp) == STAFF) {
+    if ([sp graphicType] == STAFF) {
 	staffPosition = [sp findPos: pt.y];
 	y = [sp yOfPos: staffPosition];
 	[noteHead setStaffPosition: staffPosition];
@@ -540,7 +540,7 @@ extern unsigned char hasstem[10];
     while (k--)
     {
         q = [hangers objectAtIndex:k];
-        if (TYPEOF(q) == CHORDGROUP) return q;
+        if ([q graphicType] == CHORDGROUP) return q;
     }
     return nil;
 }
@@ -621,14 +621,14 @@ extern void getNumOct(int pos, int mc, int *num, int *oct);
   while (k--)
   {
     noteHead = [hangers objectAtIndex:k];
-    if (TYPEOF(noteHead) == TIENEW)
+    if ([noteHead graphicType] == TIENEW)
     {
       noteArray = noteHead->client;
       nk = [noteArray count];
       while (nk--)
       {
         q = [noteArray objectAtIndex:nk];
-	if (TYPEOF(q) == NOTE && q != self)
+	if ([q graphicType] == NOTE && q != self)
 	{
 	  if (q->staffPosition != staffPosition)
 	  {
@@ -1230,7 +1230,7 @@ extern void readTimeData2(NSCoder *s, struct timeinfo *t); /*sb; changed from NS
     int noteIndex = [headlist count];
     while (noteIndex--) {
 	NoteHead *noteHead = [headlist objectAtIndex:noteIndex];
-	if (TYPEOF([noteHead myNote]) != NOTE) 
+	if ([[noteHead myNote] graphicType] != NOTE) 
 	    [noteHead setNote: self];
     }
   }

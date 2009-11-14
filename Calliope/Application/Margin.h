@@ -27,6 +27,7 @@ typedef enum {
 
 @interface Margin: Graphic
 {
+@private
     float margin[10];
     id client;			/* a System */
 }
@@ -35,16 +36,6 @@ typedef enum {
 + myInspector;
 - init;
 - (void) removeObj;
-
-/*!
-  @brief Assigns the scale of the staff to the margin.
- */
-- (void) setStaffScale: (float) newStaffScale;
-
-/*!
-  @brief Returns the current scale of the staff.
- */
-- (float) staffScale;
 
 /*!
   @brief Assigns the client to the margin.

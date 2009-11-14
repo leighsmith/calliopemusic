@@ -50,7 +50,7 @@ static NoteGroup *proto;
 {
   int i;
   [super init];
-  gFlags.type = GROUP;
+  [self setTypeOfGraphic: GROUP];
   client = nil;
   flags.fixed = 0;
   flags.position = 0;

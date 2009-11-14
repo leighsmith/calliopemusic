@@ -400,7 +400,7 @@ void kernsim(int sn, int s1, int s2, NSMutableArray *nl, float vcx[])
     p = [nl objectAtIndex:i];
     v = VOICEID(p->voice, sn);
     vcx[v] = 0.0;
-    if (TYPEOF(p) == NOTE && !ISINVIS(p))
+    if ([p graphicType] == NOTE && !ISINVIS(p))
     {
       if (nn < MAXNOTES)
       {

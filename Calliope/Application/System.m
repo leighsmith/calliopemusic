@@ -47,7 +47,7 @@ static float titleRoom(NSMutableArray *o)
   while (k--)
   {
     p = [o objectAtIndex:k];
-    if (TYPEOF(p) == TEXTBOX && SUBTYPEOF(p) == TITLE)
+    if ([p graphicType] == TEXTBOX && SUBTYPEOF(p) == TITLE)
     {
       h = [p topMargin];
       if (h > mh) mh = h;
@@ -66,7 +66,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   while (k--)
   {
     p = [o objectAtIndex:k];
-    if (TYPEOF(p) == TEXTBOX && SUBTYPEOF(p) == STAFFHEAD && ((TextGraphic *)p)->client == sp)
+    if ([p graphicType] == TEXTBOX && SUBTYPEOF(p) == STAFFHEAD && ((TextGraphic *)p)->client == sp)
     {
       h = [p topMargin];
       if (h > mh) mh = h;
@@ -244,7 +244,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
     while (nn--)
     {
       p = [nl objectAtIndex:nn];
-      if (TYPEOF(p) == BARLINE) [p recalc];
+      if ([p graphicType] == BARLINE) [p recalc];
     }
   }
   [self recalcObjs];
@@ -333,7 +333,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 {
     self = [super init];
     if(self != nil) {
-	gFlags.type = SYSTEM;
+	[self setTypeOfGraphic: SYSTEM];
 	view = v; /* backpointer -- no retain */
 	flags.nstaves = n;
 	pagenum = barnum = 0;
@@ -346,7 +346,6 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 	expansion = 1.0;
 	groupsep = 0.0;
 	height = 0;
-	staffScale = 0.0;
 	page =  nil; /* backpointer -- no retain */
 	style = nullPart;
 	nonStaffGraphics = [[NSMutableArray alloc] init];
@@ -376,7 +375,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
     if (cursys == nil) {
 	Margin *margin = [[Margin alloc] init];
 	
-	[margin setStaffScale: staffScale]; // TODO [margin ]
+	[margin setStaffScale: staffScale];
 	[margin setClient: self];
 	[self linkobject: margin];
 	[margin release];
@@ -414,7 +413,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
     newSystem->height = height;
     newSystem->headroom = headroom;
     newSystem->style = style;
-    newSystem->staffScale = staffScale;
+    newSystem->staffScale = staffScale; // TODO this is copied at the wrong abstraction level, it needs to be the superclass copy.
     for (staffIndex = 0; staffIndex < [self numberOfStaves]; staffIndex++) {
 	Clef *lastClef;
 	KeySig *lastKeySignature;
@@ -443,7 +442,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
     while (systemObjectsCount--) {
 	id p = [nonStaffGraphics objectAtIndex: systemObjectsCount];
 	
-	if (TYPEOF(p) == BRACKET) 
+	if ([p graphicType] == BRACKET) 
 	    [newSystem linkobject: [(Bracket *) p newFrom: newSystem]];
     }
     [newSystem initsys];
@@ -455,7 +454,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 - newExtraction: (GraphicView *) v : (int) sn
 {
     System *sys = [[System alloc] init];
-    sys->gFlags.type = SYSTEM;
+    [sys setTypeOfGraphic: SYSTEM];
     sys->flags = flags;
     sys->flags.nstaves = sn;
     sys->view = v;
@@ -541,7 +540,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   while (k--)
   {
     p = [nonStaffGraphics objectAtIndex:k];
-    if (TYPEOF(p) == MARGIN) [nonStaffGraphics removeObjectAtIndex:k];
+    if ([p graphicType] == MARGIN) [nonStaffGraphics removeObjectAtIndex:k];
   }
   return self;
 }
@@ -561,7 +560,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   while (k--)
   {
     p = [nonStaffGraphics objectAtIndex:k];
-    if (TYPEOF(p) == MARGIN) return p;
+    if ([p graphicType] == MARGIN) return p;
   }
   return nil;
 }
@@ -676,7 +675,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   while (k--)
   {
     p = [nonStaffGraphics objectAtIndex:k];
-    if (TYPEOF(p) == TEXTBOX && SUBTYPEOF(p) == TITLE) return YES;
+    if ([p graphicType] == TEXTBOX && SUBTYPEOF(p) == TITLE) return YES;
   }
   return NO;
 }
@@ -764,7 +763,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   while (k--)
   {
     p = [nonStaffGraphics objectAtIndex:k];
-    if (TYPEOF(p) == BRACKET && SUBTYPEOF(p) != LINKAGE)
+    if ([p graphicType] == BRACKET && SUBTYPEOF(p) != LINKAGE)
     {
       i3 = [staves indexOfObject:p->client1];
       i4 = [staves indexOfObject:p->client2];
@@ -899,9 +898,9 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 	    while (j--) {
 		id p = [nonStaffGraphics objectAtIndex: j];
 		
-		if (TYPEOF(p) == TEXTBOX && SUBTYPEOF(p) == STAFFHEAD) 
+		if ([p graphicType] == TEXTBOX && SUBTYPEOF(p) == STAFFHEAD) 
 		    [p removeObj];
-		else if (TYPEOF(p) == BRACKET && SUBTYPEOF(p) != LINKAGE) {
+		else if ([p graphicType] == BRACKET && SUBTYPEOF(p) != LINKAGE) {
 		    if (sp == ((Bracket *)p)->client1 || sp == ((Bracket *)p)->client2)
 			[p removeObj];
 		}
@@ -970,7 +969,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   }
   sp = [self findOnlyStaff: p->y];
   inv = (sp != ms);
-  if (TYPEOF(ms) == SYSTEM)
+  if ([ms graphicType] == SYSTEM)
   {
     [sp staffRelink: [(System *) ms unlinkobject: p]];
   }
@@ -1117,7 +1116,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   while (k--)
   {
     q = [nonStaffGraphics objectAtIndex:k];
-    if (TYPEOF(q) == RUNNER || TYPEOF(q) == MARGIN)
+    if ([q graphicType] == RUNNER || [q graphicType] == MARGIN)
     {
       if (q == p) return j;
       ++j;

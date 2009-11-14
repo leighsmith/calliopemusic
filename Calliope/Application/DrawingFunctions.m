@@ -23,6 +23,7 @@
 
 #import <AppKit/AppKit.h>
 #import "DrawingFunctions.h"
+#import "Graphic.h" // for NUMTYPES declaration.
 
 
 #define BRANGLE   (30.0)  /* bracket tilt = BRANGLE * aspect ratio */

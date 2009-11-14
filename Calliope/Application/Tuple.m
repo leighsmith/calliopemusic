@@ -46,7 +46,7 @@ static Tuple *proto;
 - init
 {
   [super init];
-  gFlags.type = TUPLE;
+  [self setTypeOfGraphic: TUPLE];
   gFlags.subtype = 1;
   client = nil;
   flags.formliga = 0;
@@ -326,7 +326,7 @@ static float braoffy[2][2] =
   if (k == 1)
   {
     b = [l objectAtIndex:0];
-    if (TYPEOF(b) == BEAM)
+    if ([b graphicType] == BEAM)
     {
       client = [[NSMutableArray alloc] init];
       bl = b->client;

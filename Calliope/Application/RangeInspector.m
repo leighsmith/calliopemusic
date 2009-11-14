@@ -34,7 +34,7 @@
   if ([v startInspection: RANGE : &b : &sl])
   {
     k = [sl count];
-    while (k--) if ((p = [sl objectAtIndex:k]) && TYPEOF(p) == RANGE)
+    while (k--) if ((p = [sl objectAtIndex:k]) && [p graphicType] == RANGE)
     {
       [self setClient: p];
       [p recalc];

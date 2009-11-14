@@ -39,15 +39,16 @@ typedef enum {
 @interface Page: NSObject
 {
     // TODO These are both currently public. They are only accessed by GraphicView, GVCommands, GVFormat, GVPerform.
-
-@public;
+@public
     short topsys;
     short botsys;
 @private
+    /*! @var paperSize The size of the paper for this page. Enables varying size pages */
+    NSSize paperSize;
+    /*! @var headfoot Array of headers and footers, arranged for odd and even pages */
     Runner *headfoot[12];
-    char hfinfo[12];	    // can probably be removed if headfoot just checks for nil values.
     int num;			/*!< @var num The displayed paged number. */
-    float fillheight;		/*!< sums to page height (as screened) */
+    float fillheight;		/*!< @var fillheight sums to page height (as screened) */
     Margin *margin;		/*!< @var margin The margins for this page. */
     /*! @var format The current method page is formatted */
     PageFormat format;
@@ -56,9 +57,17 @@ typedef enum {
 }
 
 /*!
+  @brief assigns the default paper size to use when decoding old files.
+ 
+  Note that this is only used in the decoding, the paper size for each instance is assigned with
+  -initWithPageNumber:topSystemNumber:bottomSystemNumber:paperSize:.
+ */
++ (void) setDefaultPaperSize: (NSSize) newDefaultPaperSize;
+
+/*!
   @brief Initialises the page to a given page number and indexes to it's associated systems.
  */
-- initWithPageNumber: (int) n topSystemNumber: (int) s0 bottomSystemNumber: (int) s1;
+- initWithPageNumber: (int) n topSystemNumber: (int) s0 bottomSystemNumber: (int) s1 paperSize: (NSSize) paperSize; 
 
 /*!
   @brief Returns the system number at the top of the page.

@@ -143,7 +143,7 @@ int keySymValue(char *s)
 {
   int i;
   [super init];
-  gFlags.type = KEY;
+  [self setTypeOfGraphic: KEY];
   gFlags.subtype = 3;
   for (i = 0; i < 7; i++) keystr[i] = 0;
   keystr[6] = 1;
@@ -181,7 +181,7 @@ int keySymValue(char *s)
 {
   int ck, cf, koff;
   Clef *cl;
-  if (TYPEOF(mystaff) == STAFF && (cl = [mystaff findClef: self]) != nil)
+  if ([mystaff graphicType] == STAFF && (cl = [mystaff findClef: self]) != nil)
   {
     ck = cl->keycentre;
     cf = cl->gFlags.subtype;
@@ -356,7 +356,7 @@ int normkey[4] = {-1, 0, 1, -1};
     x = nx;
     y = ny;
     inv = [sys relinknote: self];
-    if (TYPEOF(mystaff) == STAFF)
+    if ([mystaff graphicType] == STAFF)
     {
       dp = [self defaultPos];
       if (alt)
@@ -394,7 +394,7 @@ int whichfont[4] = {1, 0, 0, 1};
   int sz = gFlags.size;
   NSFont *f;
   sp = mystaff;
-  if (TYPEOF(sp) == STAFF && (cl = [sp findClef: self]) != nil)
+  if ([sp graphicType] == STAFF && (cl = [sp findClef: self]) != nil)
   {
     ck = cl->keycentre;
     cf = cl->gFlags.subtype;
@@ -411,7 +411,7 @@ int whichfont[4] = {1, 0, 0, 1};
     bp = 8;
   }
   bpos = clefcpos[(int)clefuid[ck][cf]] + koff + staffPosition;
-  sy = (TYPEOF(sp) == STAFF) ? [sp yOfTop] : y;
+  sy = ([sp graphicType] == STAFF) ? [sp yOfTop] : y;
   cx = x;
   f = musicFont[whichfont[gFlags.subtype]][sz];
     /* scan sharps, then flats. Works for conventional and mixed */
@@ -433,12 +433,12 @@ int whichfont[4] = {1, 0, 0, 1};
             if (ip > bp) ip -= (bp - 1);
           }
           DrawCharacterInFont(cx, GETYSP(sy, ss, ip), symch, f, m);
-          if (TYPEOF(sp) == STAFF) drawledge(cx + hw, sy, hw, sz, ip, sp->flags.nlines, ss, m);
+          if ([sp graphicType] == STAFF) drawledge(cx + hw, sy, hw, sz, ip, sp->flags.nlines, ss, m);
           if (keystr[j] & 4)
           {
             if (ip < (bp / 2)) ip += (bp - 1); else ip -= (bp - 1);
             DrawCharacterInFont(cx, GETYSP(sy, ss, ip), symch, f, m);
-            if (TYPEOF(sp) == STAFF) drawledge(cx + hw, sy, hw, sz, ip, sp->flags.nlines, ss, m);
+            if ([sp graphicType] == STAFF) drawledge(cx + hw, sy, hw, sz, ip, sp->flags.nlines, ss, m);
           }
           cx += charFGW(f, symch) + 0.7;
         }

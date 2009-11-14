@@ -45,7 +45,7 @@ static Barline *proto;
 - init
 {
   [super init];
-  gFlags.type = BARLINE;
+  [self setTypeOfGraphic: BARLINE];
   flags.editorial = 0;
   flags.staff = 1;
   flags.bridge = 0;
@@ -194,7 +194,7 @@ static int invismode[8] = {0, 4, 4, 4, 4, 4, 4, 7};
   int sz = gFlags.size;
   Staff *s1, *s;
   s = mystaff;
-  if (TYPEOF(s) == SYSTEM)
+  if ([s graphicType] == SYSTEM)
   {
     barline(x, y, 0.0, (y + DRAGSIZE), barwidth[0][gFlags.size], m);
     return self;

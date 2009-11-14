@@ -1,3 +1,4 @@
+/* $Id$ */
 #import "ImageGraphic.h"
 #import "GraphicView.h"
 #import "GVSelection.h"
@@ -22,7 +23,7 @@
 {
   if (self == [ImageGraphic class])
   {
-      (void)[ImageGraphic setVersion: 0];
+      [ImageGraphic setVersion: 0];
   }
   return;
 }
@@ -49,7 +50,7 @@
 - init
 {
   [super init];
-  gFlags.type = IMAGE;
+  [self setTypeOfGraphic: IMAGE];
   xoff = yoff = 0.0;
   client = nil;
   return self;

@@ -45,7 +45,7 @@
   if ([v startInspection: LIGATURE : &b : &sl])
   {
     k = [sl count];
-    while (k--) if ((p = [sl objectAtIndex:k]) && TYPEOF(p) == LIGATURE)
+    while (k--) if ((p = [sl objectAtIndex:k]) && [p graphicType] == LIGATURE)
     {
       [self setClient: p];
       [p setHanger];

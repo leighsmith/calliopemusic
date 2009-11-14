@@ -135,10 +135,8 @@ extern int justcode[4];
     i = [[typematrix cellAtRow:1 column:1] state];
     UPDATE(p->flags.oddpage, i);
     if (b) [sys->view setRunnerTables];
-    if (p->data) [p->data release];
-    p->data = [[[scroller documentView] textStorage] mutableCopy];
+    [p setRunnerText: [[[scroller documentView] textStorage] mutableCopy]];
     /*[[[scroller documentView] RTFDFromRange:NSMakeRange(0, [[[scroller documentView] string] length])] retain]; */
-    p->length = 0;/*sb: redundant */
     /* [self close]; */
     [sys->view dirty];
     [sys->view setNeedsDisplay:YES];
@@ -149,33 +147,36 @@ extern int justcode[4];
 
 - preset
 {
-  NSTextView *tv;
+    NSTextView *tv;
     int n;
     GraphicView *v = [CalliopeAppController currentView];
     Runner *p = [v canInspect: RUNNER : &n];
-    if (n == 0) return nil;
-  [headfootmatrix selectCellAtRow:p->flags.vertpos column:0];
-  [placematrix selectCellAtRow:0 column:p->flags.horizpos];
-  [alignmatrix selectCellAtRow:0 column:p->flags.just];
-  [typematrix setState:p->flags.onceonly atRow:0 column:0];
-  [typematrix setState:p->flags.nextpage atRow:1 column:0];
-  [typematrix setState:p->flags.evenpage atRow:0 column:1];
-  [typematrix setState:p->flags.oddpage atRow:1 column:1];
-  tv = [scroller documentView];
-  if (!(p->data))
-  {
-    [tv setString:@""];
-    [tv setFont:[[CalliopeAppController currentDocument] getPreferenceAsFont: RUNFONT]];
-  }
-  else
-  {
-      [[tv textStorage] beginEditing];
-      [[tv textStorage] replaceCharactersInRange:NSMakeRange(0, [[tv string] length]) withAttributedString:p->data];
-      [[tv textStorage] endEditing];
-  }
-  [tv setDelegate:self];
-  return self;
+    
+    if (n == 0) 
+	return nil;
+    [headfootmatrix selectCellAtRow: p->flags.vertpos column: 0];
+    [placematrix selectCellAtRow: 0 column: p->flags.horizpos];
+    [alignmatrix selectCellAtRow: 0 column: p->flags.just];
+    [typematrix setState: p->flags.onceonly atRow: 0 column: 0];
+    [typematrix setState: p->flags.nextpage atRow: 1 column: 0];
+    [typematrix setState: p->flags.evenpage atRow: 0 column: 1];
+    [typematrix setState: p->flags.oddpage  atRow: 1 column: 1];
+    tv = [scroller documentView];
+    if (![p runnerText])
+    {
+	[tv setString: @""];
+	[tv setFont: [[CalliopeAppController currentDocument] getPreferenceAsFont: RUNFONT]];
+    }
+    else
+    {
+	[[tv textStorage] beginEditing];
+	[[tv textStorage] replaceCharactersInRange: NSMakeRange(0, [[tv string] length]) withAttributedString: [p runnerText]];
+	[[tv textStorage] endEditing];
+    }
+    [tv setDelegate: self];
+    return self;
 }
+
 /*sb: added this so we can see which runner the inspector is referring to.
  * used so that when a runner is deleted, it checks to see if the inspector is inspecting
  * it, and if so, orders out the inspector.

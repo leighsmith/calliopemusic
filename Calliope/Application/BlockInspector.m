@@ -50,7 +50,7 @@
   if ([v startInspection: BLOCK : &b : &sl])
   {
     k = [sl count];
-    while (k--) if ((p = [sl objectAtIndex:k]) && TYPEOF(p) == BLOCK)
+    while (k--) if ((p = [sl objectAtIndex:k]) && [p graphicType] == BLOCK)
     {
       [self setClient: p];
       [p reShape];
@@ -70,7 +70,7 @@
   k = [sl count];
   initassay();
   n = 0;
-  while (k--) if ((p = [sl objectAtIndex:k]) && TYPEOF(p) == BLOCK)
+  while (k--) if ((p = [sl objectAtIndex:k]) && [p graphicType] == BLOCK)
   {
     ++n;
     assay(0, p->gFlags.subtype);

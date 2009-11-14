@@ -180,6 +180,7 @@ static id createWindowFor(GraphicView* view, NSRect *r, NSString *fS)
 	    free(s);
 	    archiveView = [[ts decodeObject] retain];
 	    prefInfo->staffheight = staffheight;
+	    [Page setDefaultPaperSize: [self paperSize]]; // assign the default paper size when decoding old formats.
 	    [archiveView updateMarginsWithHeader: headerbase footer: footerbase printInfo: printInfo];
 	}
 	else if (version == 2)
@@ -200,6 +201,7 @@ static id createWindowFor(GraphicView* view, NSRect *r, NSString *fS)
 	    [ts decodeValueOfObjCType:"*" at:&s];
 	    frameString = [[NSString stringWithUTF8String: s] retain]; //sb: was strcpy(frameString, s);
 	    free(s);
+	    [Page setDefaultPaperSize: [self paperSize]]; // assign the default paper size when decoding old formats.
 	    archiveView = [[ts decodeObject] retain];
 	}
 	else if (version == DOC_VERSION)
@@ -209,6 +211,7 @@ static id createWindowFor(GraphicView* view, NSRect *r, NSString *fS)
 	    prefInfo = [[ts decodeObject] retain];
 	    newS = [ts decodeObject];
 	    frameString = [newS retain]; //sb: was strcpy(frameString, s);
+	    [Page setDefaultPaperSize: [self paperSize]]; // assign the default paper size when decoding old formats.
 	    archiveView = [[ts decodeObject] retain];
 	}
 	else retval = NO;
@@ -893,7 +896,7 @@ return nil;
     System *newSystem = [[System alloc] initWithStaveCount: numOfStaves onGraphicView: view];
 
     [newSystem setStaffScale: [self staffScale]];
-    [newSystem initsys];  // initWithSystem: [view currentSystem]
+    [newSystem initsys];  // [newSystem initWithSystem: [view currentSystem]];
     if (numOfStaves > 1) 
 	[newSystem installLink]; // to what?
     [view addSystem: newSystem];

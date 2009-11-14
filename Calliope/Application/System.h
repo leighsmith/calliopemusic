@@ -84,10 +84,6 @@
 - (float) leftWhitespace;
 - (float) rightIndent;
 
-/*!
-  @brief Assigns the staff scale.
- */
-- (void) setStaffScale: (float) newStaffScale;
 - makeNames: (BOOL) full : (GraphicView *) v;
 - checkMargin;
 - recalc;

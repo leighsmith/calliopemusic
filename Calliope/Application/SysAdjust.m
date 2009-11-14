@@ -97,7 +97,7 @@ static float adjustSigIx(int start, NSMutableArray *nl[], int nix[], int n, floa
         if ([nl[i] count] == nix[i]) continue;//sb
       p = [nl[i] objectAtIndex:nix[i]];
       if (p == nil) continue;
-      j = sigorder[TYPEOF(p)];
+      j = sigorder[[p graphicType]];
       if (j < mj) mj = j;
     }
     if (mj == 9) break;
@@ -106,7 +106,7 @@ static float adjustSigIx(int start, NSMutableArray *nl[], int nix[], int n, floa
         if ([nl[i] count] == nix[i]) continue;//sb
       p = [nl[i] objectAtIndex:nix[i]];
       if (p == nil) continue;
-      t = TYPEOF(p);
+      t = [p graphicType];
       if (mj == sigorder[t])
       {
         r = YES;
@@ -256,18 +256,18 @@ static void adjchant(NSMutableArray *staves, float lmx)
     tbx = tax = 0.0;
     v = [p hasAnyVerse];
     if (v) [p verseWidths: &tbx : &tax];
-    b = (TYPEOF(p) == BARLINE);
+    b = ([p graphicType] == BARLINE);
     pad = 0;
     if (b) pad = CHABARPAD;
 //    else if (v) pad = MINPAD;
-//    else if (TYPEOF(p) == NEUMENEW && SUBTYPEOF(p) == PUNCTINC) pad = 0;
+//    else if ([p graphicType] == NEUMENEW && SUBTYPEOF(p) == PUNCTINC) pad = 0;
 //    else pad = CHAMINPAD;
     if (cx - pad - bx < rx) cx = rx + bx + pad;
     if (v && cx - tbx < trx) cx = trx + tbx;
     MOVE(p, cx);
     rx = cx + ax;
     if (b) rx += CHABARPAD;
-    else if (TYPEOF(p) == NEUMENEW && ((NeumeNew *)p)->nFlags.dot) rx += 2;
+    else if ([p graphicType] == NEUMENEW && ((NeumeNew *)p)->nFlags.dot) rx += 2;
     if (v && cx + tax > trx) trx = cx + tax;
     if (b) cx = MAX(rx, trx);
     ++nix[0];
@@ -321,7 +321,7 @@ static void insertEvent(StaffObj *p, NSMutableArray *el)
     for (j = 0; j < k; j++)
     {
       p = [nl objectAtIndex:j];
-      if (TYPEOF(p) == BARLINE)
+      if ([p graphicType] == BARLINE)
       {
         if (s == b)
 	{
@@ -389,7 +389,7 @@ static void insertEvent(StaffObj *p, NSMutableArray *el)
           if (thread[th] == nil) thread[th] = [[NSMutableArray alloc] init];
           insertEvent(p, thread[th]);
         }
-        else if (TYPEOF(p) == BARLINE)
+        else if ([p graphicType] == BARLINE)
 	{
 	  p->stamp = 0;
 	  hasbars[i]++;
@@ -425,7 +425,7 @@ static void insertEvent(StaffObj *p, NSMutableArray *el)
 	  ticks[i] += t;
   	  barevents[i]++;
 	}
-	if (TYPEOF(p) == REST) barrests[i]++;
+	if ([p graphicType] == REST) barrests[i]++;
 	allbars = NO;
         nix[i]++;
       }
@@ -518,7 +518,7 @@ static void insertEvent(StaffObj *p, NSMutableArray *el)
 	    vt[th] += p->duration;
           }
         }
-        else if (TYPEOF(p) == BARLINE)
+        else if ([p graphicType] == BARLINE)
         {
 	  ++hasbars[i];
           maxt = 0;
@@ -535,7 +535,7 @@ static void insertEvent(StaffObj *p, NSMutableArray *el)
       while (j--)
       {
         p = [nl objectAtIndex:j];
-	if (TYPEOF(p) == BARLINE)
+	if ([p graphicType] == BARLINE)
 	{
 	  maxt = p->stamp;
 	  for (v = 0; v < NUMVOICES; v++) vt[v] = maxt;
@@ -595,7 +595,7 @@ NSLog(@"s%d:", i);
 for (j = 0; j < k; j++)
 {
   p = [nl objectAtIndex:j];
-  if (TYPEOF(p) == BARLINE) NSLog(@" |");
+  if ([p graphicType] == BARLINE) NSLog(@" |");
   else if (ISATIMEDOBJ(p)) NSLog(@"  (%d,%3.0f)", p->voice, p->stamp);
   else NSLog(@" @");
 }
@@ -678,7 +678,7 @@ static void adjust(NSMutableArray *staves, int n, float lmx)
         if (nix[i] < nk[i])
         {
             p = [nl[i] objectAtIndex:nix[i]];
-	  if (TYPEOF(p) == BARLINE)
+	  if ([p graphicType] == BARLINE)
 	  {
 	    if (simstart[i] >= 0) fmark[i] = 1;
 	    else
@@ -730,7 +730,7 @@ static void adjust(NSMutableArray *staves, int n, float lmx)
 	  }
 	  else
 	  {
-            NSRunAlertPanel(@"Adjust", @"Skip type %d on staff %d", @"OK", nil, nil, TYPEOF(p), i);
+            NSRunAlertPanel(@"Adjust", @"Skip type %d on staff %d", @"OK", nil, nil, [p graphicType], i);
 	    ++nix[i];
 	  }
 	}
@@ -917,7 +917,7 @@ static float stretch(BOOL adj, NSMutableArray *staves, int n, float lmx, float r
         p = [nl objectAtIndex:j];
         f = ISASIGBLOCK(p);
       }
-      if (!f && TYPEOF(p) == BARLINE)
+      if (!f && [p graphicType] == BARLINE)
       {
         sigend[k] = j;
 	if (p->stamp > maxt) maxt = p->stamp;
@@ -1071,7 +1071,7 @@ static float separate(NSMutableArray *staves, int n, float lmx)
         if (nix[i] < nk[i])
         {
 	  p = [nl[i] objectAtIndex:nix[i]];
-	  if (TYPEOF(p) == BARLINE)
+	  if ([p graphicType] == BARLINE)
 	  {
 	    if (simstart[i] >= 0) fmark[i] = 1;
 	    else
@@ -1280,14 +1280,14 @@ static void adjrests(NSMutableArray *staves, int n, float lmx)
       if (ISATIMEDOBJ(p))
       {
  	v = VOICEID(p->voice, i);
-        if (TYPEOF(p) == REST)
+        if ([p graphicType] == REST)
         {
 	  rests[v] = p;
 	  numrests[v]++;
         }
 	else numvox[v]++;
       }
-      else if (TYPEOF(p) == BARLINE)
+      else if ([p graphicType] == BARLINE)
       {
         x = 0.5 * (LEFTBOUND(p) - bx) + bx;
         for (v = 0; v < NUMTHREADS; v++)
@@ -1322,7 +1322,7 @@ static void tidyends(NSMutableArray *staves, int n, int ul, float lmx, int ur, f
     nk = [nl count];
     if (nk < 2) continue;
     p = [nl lastObject];
-    if (TYPEOF(p) != BARLINE) return;
+    if ([p graphicType] != BARLINE) return;
   }
   for (i = 0; i < n; i++)
   {
@@ -1334,7 +1334,7 @@ static void tidyends(NSMutableArray *staves, int n, int ul, float lmx, int ur, f
     if (ul)
     {
         p = [nl objectAtIndex:0];//sb: ok
-      if (TYPEOF(p) == BARLINE)
+      if ([p graphicType] == BARLINE)
       {
         nx = lmx + LEFTBEARING(p);
 	MOVE(p, nx);
@@ -1343,7 +1343,7 @@ static void tidyends(NSMutableArray *staves, int n, int ul, float lmx, int ur, f
     if (ur)
     {
         p = [nl lastObject];//sb: ok
-      if (TYPEOF(p) == BARLINE)
+      if ([p graphicType] == BARLINE)
       {
         nx = rmx - RIGHTBEARING(p);
 	MOVE(p, nx);

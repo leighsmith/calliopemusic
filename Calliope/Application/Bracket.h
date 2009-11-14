@@ -1,3 +1,10 @@
+/*!
+ $Id$ 
+ 
+ @class Bracket
+ @brief Represents a bracket drawn on a System or a Staff.
+ */
+
 #import "winheaders.h"
 #import "Graphic.h"
 #import "Staff.h"
@@ -10,28 +17,28 @@
 #define BRACE 2
 
 
-@interface Bracket:Graphic
+@interface Bracket: Graphic
 {
 @public
   char level;			
   id client1, client2;		/* clients (can be nil or Staff or System) */
 }
 
-+ (void)initialize;
++ (void) initialize;
 + myInspector;
 + myPrototype;
 
 - init;
 - newFrom: (System *) sys;
-- (void)dealloc;
-- (void)removeObj;
+- (void) dealloc;
+- (void) removeObj;
 - mySystem;
 - (BOOL) atBottom: (Staff *) s;
 - (BOOL) atTop: (Staff *) s;
 - (BOOL) move: (float) dx : (float) dy : (NSPoint) p : sys : (int) alt;
 - drawMode: (int) m;
-- (id)initWithCoder:(NSCoder *)aDecoder;
-- (void)encodeWithCoder:(NSCoder *)aCoder;
+- (id) initWithCoder: (NSCoder *) aDecoder;
+- (void) encodeWithCoder: (NSCoder *) aCoder;
 
 @end
 

@@ -152,7 +152,7 @@ Beam *p = [[CalliopeAppController currentView] canInspect: BEAM];
     else
     {
       k = [sl count];
-      while (k--) if ((p = [sl objectAtIndex:k]) && TYPEOF(p) == BEAM)
+      while (k--) if ((p = [sl objectAtIndex:k]) && [p graphicType] == BEAM)
       {
 	[self setClient: p];
 	[p setBeamDir: [freematrix selectedColumn]]; /* does reset and recalc */

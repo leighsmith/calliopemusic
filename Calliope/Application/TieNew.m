@@ -77,7 +77,7 @@ static void orderXY(float *x, float *y)
     head1 = 0;
       NSLog(@"head1 has index < 0. Fixed.\n");
   }
-  else if (TYPEOF(p) == NOTE)
+  else if ([p graphicType] == NOTE)
   {
     n = [((GNote *)p) numberOfNoteHeads];
       if (n == 0) NSLog(@"head1 has no notehead!\n");
@@ -104,7 +104,7 @@ static void orderXY(float *x, float *y)
     head2 = 0;
       NSLog(@"head2 has index < 0. Fixed.\n");
   }
-  else if (TYPEOF(p) == NOTE)
+  else if ([p graphicType] == NOTE)
   {
     n = [((GNote *)p) numberOfNoteHeads];
       if (n == 0) NSLog(@"head2 has no notehead!\n");
@@ -131,7 +131,7 @@ static void orderXY(float *x, float *y)
 - init
 {
   [super init];
-  gFlags.type = TIENEW;
+  [self setTypeOfGraphic: TIENEW];
   gFlags.subtype = TIEBOWNEW;
   client = nil;
   head1 = head2 = 0;
@@ -383,7 +383,7 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
   sz = p->gFlags.size;
   dx = noteoffset[sz] * 2.0;
   dy = nature[sz];
-  if (TYPEOF(p) == NOTE && TYPEOF(q) == NOTE)
+  if ([p graphicType] == NOTE && [q graphicType] == NOTE)
   {
     phk = [p numberOfNoteHeads];
     if (phk > 1)
@@ -422,7 +422,7 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
   }
   else 
   {
-    if (TYPEOF(p) == NOTE)
+    if ([p graphicType] == NOTE)
     {
       psu = qsu = [p stemIsUp];
       t = (psu << 2) | (qsu << 1) | flags.place;
@@ -437,7 +437,7 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
       off1.x = 0.0;
       off1.y = ([p boundAboveBelow: a] - p->y) + sluroffy[a] * dy;
     }
-    if (TYPEOF(q) == NOTE)
+    if ([q graphicType] == NOTE)
     {
       psu = qsu = [q stemIsUp];
       t = (psu << 2) | (qsu << 1) | flags.place;
@@ -478,7 +478,7 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
 - setSlurFor: (TimedObj *) p : (int) a : (int) h : (float) dy : (float *) ox : (float *) oy
 {
   float ex, ey;
-  if (TYPEOF(p) == NOTE)
+  if ([p graphicType] == NOTE)
   {
     if (a == [p stemIsUp])
     {
@@ -568,7 +568,7 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
   st = i;
   k = [l count];
   findEndpoints(l, &m, &n);
-  if (TYPEOF(n) == NOTE && TYPEOF(m) == NOTE)
+  if ([n graphicType] == NOTE && [m graphicType] == NOTE)
   {
     if (n->staffPosition == m->staffPosition)
     {

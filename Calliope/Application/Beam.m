@@ -66,7 +66,7 @@ int nbeams;
 {
     self = [super init];
     if (self != nil) {
-	gFlags.type = BEAM;
+	[self setTypeOfGraphic: BEAM];
 	client = nil;
 	flags.broken = 0;
 	flags.taper = 0;
@@ -162,7 +162,7 @@ int nbeams;
   {
     q = [client objectAtIndex:k];
     [q linkhanger: self];
-    if (TYPEOF(q) == NOTE) [(GNote *) q resetChord];
+    if ([q graphicType] == NOTE) [(GNote *) q resetChord];
     [q recalc];
   }
   return self;
@@ -193,7 +193,7 @@ int nbeams;
   {
     q = [client objectAtIndex:k];
     [q linkhanger: self];
-    if (TYPEOF(q) == NOTE) [(GNote *) q resetChord];
+    if ([q graphicType] == NOTE) [(GNote *) q resetChord];
     [q recalc];
   }
   return self;
@@ -452,7 +452,7 @@ static int signof(float f)
   if (kn == 1) return [self setSplit: f];
   if (sn) [super sortNotes: client];
   p = [client objectAtIndex:0];
-  if (TYPEOF(p) == TABLATURE) return self;
+  if ([p graphicType] == TABLATURE) return self;
   q = [client lastObject];
   x1 = p->x + [p stemXoffLeft: 0];
   x2 = q->x + [q stemXoffRight: 0];
@@ -548,7 +548,7 @@ static int signof(float f)
   float m, x1, x2, dx, x, y, ry;
   int k, ab;
   p = [client objectAtIndex:0];
-  if (TYPEOF(p) == TABLATURE) return self;
+  if ([p graphicType] == TABLATURE) return self;
   q = [client lastObject];
   x1 = p->x + [p stemXoff: 0];
   x2 = q->x + [q stemXoff: 0];
@@ -606,7 +606,7 @@ static int signof(float f)
   while (k--)
   {
     p = [client objectAtIndex: k];
-    if (TYPEOF(p) == NOTE)
+    if ([p graphicType] == NOTE)
     {
       if ([p stemIsFixed])
       {
@@ -646,7 +646,7 @@ static int signof(float f)
   while (i--)
   {
     p = [client objectAtIndex:i];
-    if (TYPEOF(p) == NOTE && p->isGraced == 1) ++g;
+    if ([p graphicType] == NOTE && p->isGraced == 1) ++g;
   }
   return (g == k);
 }
@@ -665,7 +665,7 @@ static int signof(float f)
   while (k--)
   {
     p = [client objectAtIndex:k];
-    if (TYPEOF(p) == NOTE)
+    if ([p graphicType] == NOTE)
     {
       if (b == 0)
       {
@@ -874,7 +874,7 @@ static char nflg[NUMUNDER];
     cslant(xa, y1, xb, y2, bth, dflag);
     ymax = y1 + bsep;
   }
-  if (TYPEOF(p) == NOTE)
+  if ([p graphicType] == NOTE)
   {
     xa = p->x + [p stemXoff: 0];
     cline(xa, [p myStemBase], xa, ys, stemthicks[sz], dflag);
@@ -1109,7 +1109,7 @@ int getHalfCode(TimedObj *r, int a, int k)
   for (i = 0; i < k; i++)
   {
     r = toj[i];
-    if (TYPEOF(r) == NOTE)
+    if ([r graphicType] == NOTE)
     {
       x = r->x + [r stemXoff: 0];
       cline(x, [r myStemBase] + [r stemYoff: 0], x, stemy[i], stemthicks[sz], dflag);
@@ -1329,7 +1329,7 @@ static void drawTremolo(int n, TimedObj *a, TimedObj *b, float ytrem, int sz, in
     q = [client lastObject];
     if (TOLFLOATEQ(p->x, q->x, 2.0))
 	return self;
-    if (TYPEOF(p) == TABLATURE) {
+    if ([p graphicType] == TABLATURE) {
 	return [self drawTabBeams: CROTCHET + 1 + [[CalliopeAppController currentDocument] getPreferenceAsInt: TABCROTCHET] : p : q : sz : m];
     }
     else if (p->time.body < CROTCHET) {

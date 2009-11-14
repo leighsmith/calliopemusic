@@ -502,7 +502,7 @@ extern char *typename[NUMTYPES];
 	    [self selectObj: g];
 	    didstob = YES;
 	}
-	else if (ISAHANGER(g) || TYPEOF(g) == TEXTBOX || TYPEOF(g) == ENCLOSURE)
+	else if (ISAHANGER(g) || [g graphicType] == TEXTBOX || [g graphicType] == ENCLOSURE)
 	{
 	    if (k == 1 && sk > 0) didhang |= [g linkPaste: self : slcopy];
 	}
@@ -563,7 +563,7 @@ extern char *typename[NUMTYPES];
       [self selectObj: g];
       didstob = YES;
     }
-    else if (ISAHANGER(g) || TYPEOF(g) == TEXTBOX || TYPEOF(g) == ENCLOSURE)
+    else if (ISAHANGER(g) || [g graphicType] == TEXTBOX || [g graphicType] == ENCLOSURE)
     {
       if (k == 1 && [sl count] == 1) didhang |= [g linkPaste: self : sl];
     }

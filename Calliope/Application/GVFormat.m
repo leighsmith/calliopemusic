@@ -33,6 +33,9 @@
 
 @implementation GraphicView(GVFormat)
 
+// This shouldn't be an extern, it should be an ivar, but other categories of GraphicView already are using this as an extern, 
+// so we keep it for now.
+extern NSSize paperSize;
 
 /*
   Various system handling routines.
@@ -128,7 +131,7 @@
     while (j--)
     {
       p = [nl objectAtIndex:j];
-      if (TYPEOF(p) == t) return p;
+      if ([p graphicType] == t) return p;
     }
     if (!all) return nil;
   }
@@ -144,7 +147,7 @@
   int sn, i, v;
   StaffObj *q, *r;
   sp = p->mystaff;
-  if (TYPEOF(p->mystaff) == SYSTEM) return nil;
+  if ([p->mystaff graphicType] == SYSTEM) return nil;
   v = p->voice;
   sn = [sp myIndex];
   r = p;
@@ -175,7 +178,7 @@
   int sn, i, k, v;
   StaffObj *q, *r;
   sp = p->mystaff;
-  if (TYPEOF(p->mystaff) == SYSTEM) return nil;
+  if ([p->mystaff graphicType] == SYSTEM) return nil;
   v = p->voice;
   sn = [sp myIndex];
   r = p;
@@ -608,7 +611,7 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
     {
 	pg = [pagelist objectAtIndex: pageIndex];
 	if(lp == nil)
-	    pg = [[Page alloc] initWithPageNumber: 0 topSystemNumber: 0 bottomSystemNumber: 0];
+	    pg = [[Page alloc] initWithPageNumber: 0 topSystemNumber: 0 bottomSystemNumber: 0 paperSize: paperSize];
 	else {
 	    // otherwise what is wanted is assigning parameters from the previous to current. */
 	    pg = [lp copy];
@@ -639,7 +642,10 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
 	    usingMargin: (Margin *) newMargin 
 {
     int systemIndex, lastSystem = firstSystem + numberOfSystemsOnPage - 1;
-    Page *pg = [[Page alloc] initWithPageNumber: pageNumber topSystemNumber: firstSystem bottomSystemNumber: lastSystem];
+    Page *pg = [[Page alloc] initWithPageNumber: pageNumber 
+			        topSystemNumber: firstSystem
+			     bottomSystemNumber: lastSystem
+			              paperSize: paperSize];
     
     [pg setMargin: newMargin];
     [pg setFillHeight: him];
@@ -803,14 +809,14 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
     while (j < n)
     {
       p = [al objectAtIndex:j];
-      if (TYPEOF(p) == REST && [(Rest *)p isBarsRest]) break;
+      if ([p graphicType] == REST && [(Rest *)p isBarsRest]) break;
       ++j;
       if (ISATIMEDOBJ(p)) break;
     }
     while (j < n)
     {
       p = [al objectAtIndex:j];
-      if (TYPEOF(p) == BARLINE || TYPEOF(p) == REST) b += [p barCount];
+      if ([p graphicType] == BARLINE || [p graphicType] == REST) b += [p barCount];
       ++j; 
     }
   }
@@ -872,7 +878,7 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
 	    for (k = 0; k < n; k++)
 	    {
 		p = [al objectAtIndex:k];
-		if (TYPEOF(p) == RANGE)
+		if ([p graphicType] == RANGE)
 		{
 		    if (r[j] != nil)
 		    {
@@ -948,13 +954,13 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
 	    k = [nl count];
 	    for (n = 0; n < k; n++) {
 		p = [nl objectAtIndex: n];
-		if (TYPEOF(p) == TIMESIG) {
+		if ([p graphicType] == TIMESIG) {
 		    fact[j] = [((TimeSig *)p) myFactor: 0];
 		    bart[j] = [((TimeSig *)p) myBarLength];
 		}
 		else if (ISATIMEDOBJ(p)) {
 		    p->time.factor = fact[j];
-		    if (TYPEOF(p) == REST) 
+		    if ([p graphicType] == REST) 
 			((Rest *)p)->barticks = bart[j];
 		}
 	    }

@@ -13,19 +13,19 @@
 @interface Runner: Graphic
 {
 @public
-  struct
-  {
-    unsigned int onceonly : 1;	/* once only */
-    unsigned int nextpage : 1;	/* start next page */
-    unsigned int horizpos : 2;	/* horizontal place */
-    unsigned int evenpage : 1;	/* even page */
-    unsigned int oddpage  : 1;	/* odd page */
-    unsigned int vertpos  : 1;	/* head or foot*/
-    unsigned int just     : 2;  /* justification */
-  } flags;
-  int length;
-  NSMutableAttributedString *data;	/* the rich text */
-  id client;			/* a System */
+    struct
+    {
+	unsigned int onceonly : 1;	/* once only */
+	unsigned int nextpage : 1;	/* start next page */
+	unsigned int horizpos : 2;	/* horizontal place */
+	unsigned int evenpage : 1;	/* even page */
+	unsigned int oddpage  : 1;	/* odd page */
+	unsigned int vertpos  : 1;	/* head or foot*/
+	unsigned int just     : 2;  /* justification */
+    } flags;
+    id client;			/* a System */
+@private
+    NSMutableAttributedString *richText;	/* the rich text */
 }
 
 + (void)initialize;
@@ -34,7 +34,27 @@
 - (void)dealloc;
 - (void)removeObj;
 - (Runner *) newFrom;
-- renderMe: (NSRect) r : (NSAttributedString *) stream : (NSSize) ps : (Page *) pg;
+
+/*!
+  @brief Renders the given text on the given page of the given paper size.
+ */
+- (void) renderInRect: (NSRect) r text: (NSAttributedString *) textString paperSize: (NSSize) ps onPage: (Page *) pg;
+
+/*!
+  @brief Renders the runner text on the given page of the given paper size.
+ */
+- (void) renderTextInRect: (NSRect) r paperSize: (NSSize) ps onPage: (Page *) pg;
+
+/*!
+  @brief Set text used for the runner.
+ */
+- (void) setRunnerText: (NSAttributedString *) textString;
+
+/*!
+  @brief Returns the text used for the runner.
+ */
+- (NSAttributedString *) runnerText;
+
 - (BOOL) move: (float) dx : (float) dy : (NSPoint) p : sys : (int) alt;
 - drawMode: (int) m;
 - draw;

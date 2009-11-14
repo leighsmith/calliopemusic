@@ -19,6 +19,7 @@
 #define QUARTER (WHOLE/4)
 #define EIGHTH (WHOLE/8)
 
+// TODO this should be removed, it creates unnecessary binding between classes.
 extern NSSize paperSize;
 
 @implementation Ruler
@@ -28,20 +29,21 @@ extern NSSize paperSize;
     return 23.0;
 }
 
-- initWithFrame:(NSRect)frameRect
+// initialise with paperSize also?
+- initWithFrame: (NSRect) frameRect
 {
     [super initWithFrame:frameRect];
-#if (NS_VERSION == 3)
+// #if (NS_VERSION == 3)
     [self setFont:[NSFont systemFontOfSize:8.0]];
-#else
-    [self setFont:[NSFont fontWithName:[NSString stringWithCString:NXSystemFont] size:8.0]];
-#endif
+// #else
+//  [self setFont:[NSFont fontWithName:[NSString stringWithCString:NXSystemFont] size:8.0]];
+// #endif
     startX = [[self class] width];
     return self;
 }
 
 
-- (void)setFont:(NSFont *)aFont
+- (void) setFont: (NSFont *) aFont
 {
     float as, lh;
 

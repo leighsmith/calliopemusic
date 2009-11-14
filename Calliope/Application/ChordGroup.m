@@ -37,7 +37,7 @@
 - init
 {
   [super init];
-  gFlags.type = CHORDGROUP;
+  [self setTypeOfGraphic: CHORDGROUP];
   client = nil;
   return self;
 }
@@ -202,7 +202,7 @@
   while (k--)
   {
     p = [sl objectAtIndex:k];
-    if (TYPEOF(p) == NOTE)
+    if ([p graphicType] == NOTE)
     {
         if ([p myChordGroup] != nil) { [cl release]; return nil; }
       [cl addObject: p];

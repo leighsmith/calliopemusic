@@ -92,7 +92,7 @@ static Rest *proto;
 - init
 {
   [super init];
-  gFlags.type = REST;
+  [self setTypeOfGraphic: REST];
   numbars = 0;
   style = 0;
   barticks = MINIMTICK * 2;
@@ -248,7 +248,7 @@ static Rest *proto;
     y = ny;
     inv = [sys relinknote: self];
     if (inv) y = oy;
-    if (TYPEOF(mystaff) == STAFF)
+    if ([mystaff graphicType] == STAFF)
     {
       if (alt)
       {
@@ -359,7 +359,7 @@ extern float staffthick[3][3];
     y1 = [self yOfPos: staffPosition];
     dx = 0.5 * charFGW(f, c);
     DrawCharacterInFont(x - dx, y1, c, f, m);
-    if (hasledger[time.body] && style == 0 && TYPEOF(mystaff) == STAFF)
+    if (hasledger[time.body] && style == 0 && [mystaff graphicType] == STAFF)
     {
       tp = staffPosition + ledgeroff[time.body];
       if (tp < 0 || tp > 9)

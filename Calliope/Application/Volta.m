@@ -32,7 +32,7 @@ extern float barwidth[3][3];
 - init
 {
   [super init];
-  gFlags.type = VOLTA;
+  [self setTypeOfGraphic: VOLTA];
   mark[0] = '\0';
   pos = -1;
   return self;
@@ -49,7 +49,7 @@ extern float barwidth[3][3];
 {
   StaffObj *p = client;
   Staff *sp = p->mystaff;
-  if (TYPEOF(sp) != STAFF) return NO;
+  if ([sp graphicType] != STAFF) return NO;
   *x = p->x;
   *y = [sp yOfPos: pos];
   return YES;
@@ -108,7 +108,7 @@ extern float barwidth[3][3];
   int np;
   StaffObj *p = client;
   Staff *sp = p->mystaff;
-  if (TYPEOF(sp) != STAFF) return NO;
+  if ([sp graphicType] != STAFF) return NO;
   np = [sp findPos: dy + pt.y];
   if (np == pos) return NO;
   pos = np;
@@ -128,7 +128,7 @@ char bartype[10] = {0, 0, 2, 2, 1, 1, 3, 0, 0, 0};
   int ss;
   StaffObj *p = client;
   Staff *sp = p->mystaff;
-  if (TYPEOF(sp) != STAFF) return nil;
+  if ([sp graphicType] != STAFF) return nil;
   ss = sp->flags.spacing;
   th = barwidth[sp->flags.subtype][sp->gFlags.size];
   y1 = [sp yOfPos: pos];

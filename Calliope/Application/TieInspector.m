@@ -46,7 +46,7 @@
   if ([v startInspection: TIENEW : &b : &sl])
   {
     k = [sl count];
-    while (k--) if ((p = [sl objectAtIndex:k]) && TYPEOF(p) == TIENEW)
+    while (k--) if ((p = [sl objectAtIndex:k]) && [p graphicType] == TIENEW)
     {
       [self setClient: p];
       [p setHanger];

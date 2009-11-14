@@ -37,7 +37,7 @@ static SquareNote *proto;
 - init
 {
   [super init];
-  gFlags.type = SQUARENOTE;
+  [self setTypeOfGraphic: SQUARENOTE];
   gFlags.subtype = 0;
   time.body = 4;
   [self setDottingCode: 0];
@@ -62,7 +62,7 @@ static char timecodes[3] = {4, 4, 5};
 - proto: v : (NSPoint) pt : (Staff *) sp : sys : (Graphic *) g : (int) i
 {
   [super proto: v : pt : sp : sys : g : i];
-  if (TYPEOF(sp) == STAFF)
+  if ([sp graphicType] == STAFF)
   {
     staffPosition = [sp findPos: pt.y];
     y = [sp yOfPos: staffPosition];
@@ -128,7 +128,7 @@ static float squaretick[3] = {1.0, 1.0, 0.5};
   }
   else if (alt == 2)  /* CONTROL-move */
   {
-    if (TYPEOF(mystaff) == STAFF)
+    if ([mystaff graphicType] == STAFF)
     {
       mp = [mystaff findPos: ny];
       if (mp - staffPosition != p1)
@@ -144,7 +144,7 @@ static float squaretick[3] = {1.0, 1.0, 0.5};
     x = nx;
     y = ny;
     inv = [sys relinknote: self];
-    if (TYPEOF(mystaff) == STAFF)
+    if ([mystaff graphicType] == STAFF)
     {
       staffPosition = [mystaff findPos: y];
       y = [mystaff yOfPos: staffPosition];
@@ -255,7 +255,7 @@ static short mywidth[2] = {2, 4};
     y1 = [self yOfPos: dp];
     drawnotedot(sz, x1, y1, 0, 0, 1, [self dottingCode], 0, m);
   }
-  if (TYPEOF(sp) == STAFF)
+  if ([sp graphicType] == STAFF)
   {
     h = 0.5 * w;
     drawledge(x + h, [sp yOfTop], h, sz, staffPosition, sl, ss, m);
@@ -269,7 +269,7 @@ static short mywidth[2] = {2, 4};
   /*int v = */[aDecoder versionForClassName:@"SquareNote"];
   [super initWithCoder:aDecoder];
   [aDecoder decodeValuesOfObjCTypes:"cccc", &shape, &colour, &stemside, &p1];
-  gFlags.type = SQUARENOTE;   /* stupid error in old version */
+  [self setTypeOfGraphic: SQUARENOTE];   /* stupid error in old version */
   return self;
 }
 

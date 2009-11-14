@@ -282,7 +282,7 @@
       while (hk--)
       {
         h = [hl objectAtIndex:hk];
-	if (TYPEOF(h) == TEXTBOX) continue;
+	if ([h graphicType] == TEXTBOX) continue;
 	if (h->hFlags.split)
 	{
 	  r = 0;
@@ -349,7 +349,7 @@
     for (j = k; (j >= a && !b); j--)
     {
       p = [snl objectAtIndex:j];
-      if (TYPEOF(p) == BARLINE)
+      if ([p graphicType] == BARLINE)
       {
         if (endbar[i] == -1)
 	{
@@ -473,7 +473,7 @@
 	for (j = q; j < k; j++)
 	{
 	    p = [snl objectAtIndex:j];
-	    if (TYPEOF(p) == BARLINE)
+	    if ([p graphicType] == BARLINE)
 	    {
 		[sys findSplits: ssp : q : j : 0];
 		break;
@@ -492,7 +492,7 @@
 		[dnl addObject: p];
 		p->mystaff = dsp;
 		p->x += rx;
-		if (TYPEOF(p) == BARLINE) b = YES;
+		if ([p graphicType] == BARLINE) b = YES;
 	    }
 	}
     }

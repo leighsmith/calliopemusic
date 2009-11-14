@@ -81,7 +81,7 @@ char typeEnabled[NUMNOTEGROUPS][4] =
   if ([v startInspection: GROUP : &b : &sl])
   {
     k = [sl count];
-    while (k--) if ((p = [sl objectAtIndex:k]) && TYPEOF(p) == GROUP)
+    while (k--) if ((p = [sl objectAtIndex:k]) && [p graphicType] == GROUP)
     {
       if (p->gFlags.subtype != [[typematrix selectedCell] tag]) [self setNewChoice: p];
       else [self setClient: p];

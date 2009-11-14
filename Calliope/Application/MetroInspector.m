@@ -40,7 +40,7 @@
   if ([v startInspection: METRO : &b : &sl])
   {
     k = [sl count];
-    while (k--) if ((p = [sl objectAtIndex:k]) && TYPEOF(p) == METRO)
+    while (k--) if ((p = [sl objectAtIndex:k]) && [p graphicType] == METRO)
     {
       [self setClient: p];
       [p recalc];

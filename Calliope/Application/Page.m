@@ -12,8 +12,7 @@
 
 @implementation Page
 
-// TODO This is totally bogus and has to be removed.
-extern NSSize paperSize;
+NSSize defaultPaperSize = { 0, 0 };
 
 + (void) initialize
 {
@@ -22,14 +21,23 @@ extern NSSize paperSize;
     }
 }
 
++ (void) setDefaultPaperSize: (NSSize) newDefaultPaperSize
+{
+    defaultPaperSize = newDefaultPaperSize;
+}
+
 - (void) dealloc
 {
     [margin release];
     margin = nil;
+    // TODO need to release those Runners in headfoot.
     [super dealloc];
 }
 
-- initWithPageNumber: (int) n topSystemNumber: (int) newTopSystem bottomSystemNumber: (int) newBottomSystem
+- initWithPageNumber: (int) n 
+     topSystemNumber: (int) newTopSystem 
+  bottomSystemNumber: (int) newBottomSystem
+	   paperSize: (NSSize) newPaperSize
 {
     self = [super init];
     if(self != nil) {
@@ -38,6 +46,7 @@ extern NSSize paperSize;
 	num = n;
 	alignment = 0;
 	format = PGAUTO;
+	paperSize = newPaperSize;
 	margin = [[Margin alloc] init];
     }
     return self;
@@ -60,13 +69,12 @@ extern NSSize paperSize;
     int runnerIndex = 12;
 
     while (runnerIndex--) {
-	newPage->headfoot[runnerIndex] = headfoot[runnerIndex];
-	newPage->hfinfo[runnerIndex] = hfinfo[runnerIndex];
+	newPage->headfoot[runnerIndex] = [headfoot[runnerIndex] retain];
     }
-    [newPage->margin release];
-    newPage->margin = [margin copy];
-    newPage->alignment = alignment;
-    newPage->format = format;
+    newPage->paperSize = paperSize;
+    [newPage setMargin: [margin copy]];
+    [newPage setAlignment: alignment];
+    [newPage setFormat: format];
     return newPage;
 }
 
@@ -176,18 +184,18 @@ extern NSSize paperSize;
 
 - (void) setRunner: (Runner *) newRunner
 {
+    // This should be a parameter to setRunner:atPosition:, so that Runner doesn't hold
+    // where it is located, page should just have a set of NSArrays of various Runners.
     int j = newRunner->flags.horizpos;
     
     if (newRunner->flags.vertpos)
 	j += 3;
     if (newRunner->flags.evenpage) {
-	headfoot[j] = newRunner;
-	hfinfo[j] = 1;
+	headfoot[j] = [newRunner retain];
     }
     if (newRunner->flags.oddpage) {
 	j += 6;
-	headfoot[j] = newRunner;
-	hfinfo[j] = 1;
+	headfoot[j] = [newRunner retain];
     }
 }
 
@@ -234,93 +242,90 @@ static void drawSlants(float x, float y, float hw, float th)
     return self;
 }
 
-
-
-- (void) drawRect: (NSRect) r
+- (void) drawRect: (NSRect) rect
 {
-    {
-	int i, a, b;
+    int i, a, b;
 	
-	a = 0;
-	if ([self pageNumber] & 1) // Check for even/odd pages.
-	    a = 6;
-	b = a + 6;
-	for (i = a; i < b; i++)	{
-	    Runner *p = headfoot[i];
-	    
-	    if (p == nil)
-		continue;
-	    if (p->flags.onceonly && hfinfo[i] == 0) 
-		continue;
-	    if (p->flags.nextpage && hfinfo[i]) 
-		continue;
-	    //   TODO [[CalliopeAppController currentDocument] paperSize];
-	    [p renderMe: r : p->data : paperSize : self];
-	}	
-    }
+    a = 0;
+    if ([self pageNumber] & 1) // Check for even/odd pages.
+	a = 6;
+    b = a + 6;
+    for (i = a; i < b; i++) {
+	Runner *runner = headfoot[i];
+	
+	if (runner == nil)
+	    continue;
+	if (runner->flags.nextpage) 
+	    continue;
+	[runner renderTextInRect: rect paperSize: paperSize onPage: self];
+    }	
 }
 
 //extern int needUpgrade;
 
-- (id)initWithCoder:(NSCoder *)aDecoder
+- (id) initWithCoder: (NSCoder *) aDecoder
 {
-    int i, v;
+    int i;
     float t, b;
     MarginType marginType;
     float marginValues[MaximumMarginTypes];
+    char hfinfo[12];	    // Used to be an ivar, now redundant if headfoot just checks for nil values.
     
-    v = [aDecoder versionForClassName: @"Page"];
-    switch(v) {
-    case 0:
-        [aDecoder decodeValuesOfObjCTypes: "ifffss", &num, &t, &fillheight, &b, &topsys, &botsys];
-        [margin setTopMargin: t];
-        [margin setBottomMargin: b];
-        for (i = 0; i < 12; i++) headfoot[i] = [[aDecoder decodeObject] retain];
-        [aDecoder decodeArrayOfObjCType: "c" count:12 at: hfinfo];
-        //needUpgrade |= 4;
-        format = alignment = 0;
-	break;
-    case 1:
-        [aDecoder decodeValuesOfObjCTypes: "ifss", &num, &fillheight, &topsys, &botsys];
-        for (i = 0; i < 12; i++) 
-	    headfoot[i] = [[aDecoder decodeObject] retain];
-        [aDecoder decodeArrayOfObjCType: "c" count: 12 at: hfinfo];
-        [aDecoder decodeArrayOfObjCType: "f" count: MaximumMarginTypes at: marginValues];
-        format = alignment = 0;
-	break;
-    case 2:
-        [aDecoder decodeValuesOfObjCTypes:"ifsscc", &num, &fillheight, &topsys, &botsys, &format, &alignment];
-        for (i = 0; i < 12; i++) 
-	    headfoot[i] = [[aDecoder decodeObject] retain];
-        [aDecoder decodeArrayOfObjCType: "c" count: 12 at: hfinfo];
-        [aDecoder decodeArrayOfObjCType: "f" count: MaximumMarginTypes at: marginValues];
-
-	break;
-    default:
-	NSLog(@"Unhandled Page version (%d) during decoding.", v);
+    // Initialise with the default paper size since earlier versions did not store this.
+    [self initWithPageNumber: 0 topSystemNumber: 0 bottomSystemNumber: 0 paperSize: defaultPaperSize];
+    if (![aDecoder allowsKeyedCoding]) {
+	int v = [aDecoder versionForClassName: @"Page"];
+	
+	switch(v) {
+	    case 0:
+		[aDecoder decodeValuesOfObjCTypes: "ifffss", &num, &t, &fillheight, &b, &topsys, &botsys];
+		[margin setTopMargin: t];
+		[margin setBottomMargin: b];
+		for (i = 0; i < 12; i++) headfoot[i] = [[aDecoder decodeObject] retain];
+		[aDecoder decodeArrayOfObjCType: "c" count:12 at: hfinfo];
+		//needUpgrade |= 4;
+		format = alignment = 0;
+		break;
+	    case 1:
+		[aDecoder decodeValuesOfObjCTypes: "ifss", &num, &fillheight, &topsys, &botsys];
+		for (i = 0; i < 12; i++) 
+		    headfoot[i] = [[aDecoder decodeObject] retain];
+		[aDecoder decodeArrayOfObjCType: "c" count: 12 at: hfinfo];
+		[aDecoder decodeArrayOfObjCType: "f" count: MaximumMarginTypes at: marginValues];
+		format = alignment = 0;
+		break;
+	    case 2:
+		[aDecoder decodeValuesOfObjCTypes:"ifsscc", &num, &fillheight, &topsys, &botsys, &format, &alignment];
+		for (i = 0; i < 12; i++) 
+		    headfoot[i] = [[aDecoder decodeObject] retain];
+		[aDecoder decodeArrayOfObjCType: "c" count: 12 at: hfinfo];
+		[aDecoder decodeArrayOfObjCType: "f" count: MaximumMarginTypes at: marginValues];
+		
+		break;
+	    default:
+		NSLog(@"Unhandled Page version (%d) during decoding.", v);
+	}
+	
+	if(v != 0) {
+	    for(marginType = MarginLeft; marginType < MaximumMarginTypes; marginType++)
+		[margin setMarginType: marginType toSize: marginValues[marginType]];	
+	}
     }
-
-    if(v != 0) {
-	for(marginType = MarginLeft; marginType < MaximumMarginTypes; marginType++)
-	    [margin setMarginType: marginType toSize: marginValues[marginType]];	
-    }
-
     return self;
 }
 
-
-- (void)encodeWithCoder:(NSCoder *)aCoder
+- (void) encodeWithCoder: (NSCoder *) aCoder
 {
     int i;
     
     [aCoder encodeValuesOfObjCTypes:"ifsscc", &num, &fillheight, &topsys, &botsys, &format, &alignment];
-    for (i = 0; i < 12; i++) [aCoder encodeConditionalObject:headfoot[i]];
-    [aCoder encodeArrayOfObjCType:"c" count:12 at:hfinfo];
+    for (i = 0; i < 12; i++)
+	[aCoder encodeConditionalObject: headfoot[i]];
     [aCoder encodeObject: margin];
 
 }
 
-- (void)encodeWithPropertyListCoder:(OAPropertyListCoder *)aCoder
+- (void) encodeWithPropertyListCoder: (OAPropertyListCoder *) aCoder
 {
     int i;
 //    [super encodeWithPropertyListCoder:(OAPropertyListCoder *)aCoder];
@@ -334,8 +339,6 @@ static void drawSlants(float x, float y, float hw, float th)
     
     for (i = 0; i < 12; i++) 
 	[aCoder setObject: headfoot[i] forKey: [NSString stringWithFormat: @"hf%d", i]];
-    for (i = 0; i < 12; i++) 
-	[aCoder setInteger: hfinfo[i] forKey: [NSString stringWithFormat: @"hfinfo%d", i]];
     [aCoder setObject: margin forKey: @"margins"];
 }
 

@@ -49,7 +49,7 @@ BOOL enablepunct[8] = {YES, YES, YES, YES, NO, NO, NO, NO};
   if ([v startInspection: TIMESIG : &b : &sl])
   {
     k = [sl count];
-    while (k--) if ((p = [sl objectAtIndex:k]) && TYPEOF(p) == TIMESIG)
+    while (k--) if ((p = [sl objectAtIndex:k]) && [p graphicType] == TIMESIG)
     {
       [self setClient: p];
       [p recalc];

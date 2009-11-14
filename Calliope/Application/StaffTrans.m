@@ -86,8 +86,8 @@ extern int noteNameNum(int i);
   while (!f && j < k)
   {
     q = [notes objectAtIndex:j];
-    if (TYPEOF(q) == KEY) f = YES;
-    else if (TYPEOF(q) == NOTE)
+    if ([q graphicType] == KEY) f = YES;
+    else if ([q graphicType] == NOTE)
     {
       hk = [q numberOfNoteHeads];
       while (hk--)
@@ -132,9 +132,9 @@ extern int noteNameNum(int i);
     while (!f && j < k)
     {
 	GNote *q = [notes objectAtIndex: j];
-	if (TYPEOF(q) == CLEF)
+	if ([q graphicType] == CLEF)
 	    f = YES;
-	else if (TYPEOF(q) == NOTE) {
+	else if ([q graphicType] == NOTE) {
 	    hk = [q numberOfNoteHeads];
 	    while (hk--) {
 		h = [q noteHead: hk];

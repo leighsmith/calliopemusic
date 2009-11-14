@@ -45,7 +45,7 @@ static TimeSig *proto;
 - init
 {
   [super init];
-  gFlags.type = TIMESIG;
+  [self setTypeOfGraphic: TIMESIG];
   dot = 0;
   line = 0;
   numer[0] = '\0';
@@ -65,7 +65,7 @@ static TimeSig *proto;
 
 - (int) defaultPos
 {
-  return (TYPEOF(mystaff) == STAFF) ? getLines(mystaff) - 1 : 4;
+  return ([mystaff graphicType] == STAFF) ? getLines(mystaff) - 1 : 4;
 }
 
 
@@ -242,7 +242,7 @@ static short imperfdiv[4] = {4, 2, 6, 4};
     x = nx;
     y = ny;
     inv = [sys relinknote: self];
-    if (TYPEOF(mystaff) == STAFF)
+    if ([mystaff graphicType] == STAFF)
     {
       if (alt)
       {
@@ -271,7 +271,7 @@ static float fontsize[3] = { 16, 12, 8};
 - drawMode: (int) m
 {
   float x1, x2, w;
-  float cy = (TYPEOF(mystaff) == STAFF) ? [mystaff yOfPos: staffPosition] : y;
+  float cy = ([mystaff graphicType] == STAFF) ? [mystaff yOfPos: staffPosition] : y;
   BOOL punct = 1;
   static char linedy[3] = {12, 9, 6};
   int sz = gFlags.size;

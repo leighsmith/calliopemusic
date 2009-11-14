@@ -19,9 +19,44 @@
 #define RIGHTBEARING(p) (RIGHTBOUND(p) - p->x)
 #define MOVE(p, nx) { LEFTBOUND(p) += ((nx) - (p)->x); (p)->x = (nx); }
 
-#define TYPEOF(p) (((Graphic *)(p))->gFlags.type)
 #define SUBTYPEOF(p) (((Graphic *)(p))->gFlags.subtype)
 #define ISINVIS(p)  (((Graphic *) (p))->gFlags.invis == 1)
+
+/* gFlags.type */
+typedef enum {
+    VERSE = 0,
+    BRACKET = 1,
+    BARLINE = 2,
+    TIMESIG = 3,
+    NOTE = 4,
+    REST = 5,
+    CLEF = 6,
+    KEY = 7,
+    RANGE = 8,
+    TABLATURE = 9,
+    TEXTBOX = 10,
+    BLOCK = 11,
+    BEAM = 12,
+    TIE = 13,
+    METRO = 14,
+    ACCENT = 15,
+    TUPLE = 16,
+    NEUME = 17,
+    STAFF = 18,
+    SYSTEM = 19,
+    RUNNER = 20,
+    VOLTA = 21,
+    GROUP = 22,
+    ENCLOSURE = 23,
+    SQUARENOTE = 24,
+    CHORDGROUP = 25,
+    TIENEW = 26,
+    LIGATURE = 27,
+    NEUMENEW = 28,
+    MARGIN = 29,
+    IMAGE = 30,
+    NUMTYPES = 31
+} GraphicType;
 
 extern id CrossCursor;
 
@@ -54,10 +89,14 @@ extern id CrossCursor;
 /*!
   @brief Return an autoreleased version of the named subclass of Graphic.
  */
-+ (Graphic *) graphicOfType: (int) t;
++ (Graphic *) graphicOfType: (GraphicType) t;
 
 + cursor;
-+ getInspector: (int) t;
+
+/*!
+  @brief Returns the inspector to use for the given GraphicType.
+ */
++ getInspector: (GraphicType) t;
 
 // + graphicOfType: (int) t asMemberOfView: (GraphicView *) v atPoint: (NSPoint) pt withSystem: (System *) sys withArgument: (int) arg1 andArgument: (int) arg2;
 + createMember: (GraphicView *) v : (int) t : (NSPoint) pt : (System *) sys : (int) arg1 : (int) arg2;
@@ -65,13 +104,35 @@ extern id CrossCursor;
 /*!
   @result Returns YES if able to create a Graphic within the view using the argument, NO if unable to.
  */
-+ (BOOL) canCreateGraphicOfType: (int) t asMemberOfView: (GraphicView *) v withArgument: (int) arg;
++ (BOOL) canCreateGraphicOfType: (GraphicType) t asMemberOfView: (GraphicView *) v withArgument: (int) arg;
+
+/*!
+  @brief Assigns the graphic type
+ */
+- (void) setTypeOfGraphic: (GraphicType) graphicType;
+
+/*!
+  @brief Return the type code of the graphic subclass.
+ */
+- (GraphicType) graphicType;
+
 + myInspector;
 - myInspector;
 - init;
 - mark;
 - proto: (GraphicView *) v : (NSPoint) pt : (Staff *) sp : (System *) sys : (Graphic *) g : (int) i;
 - recalc;
+
+/*!
+ @brief Assigns the scale of the Staff to the Graphic.
+ */
+- (void) setStaffScale: (float) newStaffScale;
+
+/*!
+ @brief Returns the current scale of the staff.
+ */
+- (float) staffScale;
+
 - reShape;
 - (BOOL) canSplit;
 - (NSMutableArray *) willSplit;

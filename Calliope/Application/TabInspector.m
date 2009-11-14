@@ -169,7 +169,7 @@ int tuneIndex(int n)
     j = [dotmatrix selectedColumn];
     if (i >= 0 && j < 0) j = 0;
     k = [sl count];
-    while (k--) if ((p = [sl objectAtIndex:k]) && TYPEOF(p) == TABLATURE)
+    while (k--) if ((p = [sl objectAtIndex:k]) && [p graphicType] == TABLATURE)
     {
       if (s >= 0)
       {
@@ -218,7 +218,7 @@ int tuneIndex(int n)
   k = [sl count];
   initassay();
   n = 0;
-  while (k--) if ((p = [sl objectAtIndex:k]) && TYPEOF(p) == TABLATURE)
+  while (k--) if ((p = [sl objectAtIndex:k]) && [p graphicType] == TABLATURE)
   {
     ++n;
     assay(0, p->gFlags.subtype);

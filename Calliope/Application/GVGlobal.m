@@ -96,7 +96,7 @@ static void makeLinkage(System *sys)
   while (i--)
   {
     p = [ol objectAtIndex:i];
-    switch(TYPEOF(p))
+    switch([p graphicType])
     {
       case BRACKET:
         if (SUBTYPEOF(p) == LINKAGE) continue;

@@ -91,7 +91,7 @@ static Clef *proto;
 - init
 {
   [super init];
-  gFlags.type = CLEF;
+  [self setTypeOfGraphic: CLEF];
   gFlags.subtype = 0;
   keycentre = 2;
   staffPosition = [self defaultPos];
@@ -192,7 +192,7 @@ static Clef *proto;
     x = nx;
     y = ny;
     inv = [sys relinknote: self];
-    if (TYPEOF(mystaff) == STAFF)
+    if ([mystaff graphicType] == STAFF)
     {
       if (alt)
       {
@@ -229,7 +229,7 @@ static Clef *proto;
   cs = clefbodies[cid];
   sz = gFlags.size;
   f = musicFont[cleffont[cid]][sz];
-  if (TYPEOF(mystaff) == SYSTEM) cy =  y;
+  if ([mystaff graphicType] == SYSTEM) cy =  y;
   else cy = cleforigins[sz][cid] + [mystaff yOfPos: staffPosition];
   DrawCharacterInFont(x, cy, cs, f, m);
   if (ottava)

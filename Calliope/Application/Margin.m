@@ -33,17 +33,22 @@ static float defmarg[MaximumMarginTypes] = {36.0, 36.0, 36.0, 36.0, 72.0, 72.0, 
     
     self = [super init];
     if(self != nil) {
-	gFlags.type = MARGIN; // TODO [self setTypeOfGraphic: MARGIN];
+	[self setTypeOfGraphic: MARGIN];
 	while (i--) 
 	    margin[i] = defmarg[i];
-	staffScale = 0.0;
     }
     return self;
 }
 
 - (NSString *) description
 {
-    return [NSString stringWithFormat: @"%@ staffScale %f ", [super description], staffScale];
+    NSMutableString *marginValues = [NSMutableString stringWithCapacity: MaximumMarginTypes * 10];
+    int marginIndex;
+    
+    for (marginIndex = 0; marginIndex < MaximumMarginTypes; marginIndex++) {
+	[marginValues appendString: [NSString stringWithFormat: @"%.3f ", margin[marginIndex]]];	
+    }
+    return [NSString stringWithFormat: @"%@ staffScale %f (%@)", [super description], staffScale, marginValues];
 }
 
 - copyWithZone: (NSZone *) zone
@@ -53,7 +58,7 @@ static float defmarg[MaximumMarginTypes] = {36.0, 36.0, 36.0, 36.0, 72.0, 72.0, 
 
     while (marginIndex--)
 	newMargin->margin[marginIndex] = margin[marginIndex];
-    newMargin->staffScale = staffScale;
+    newMargin->staffScale = staffScale; // TODO this is at the wrong level of abstraction, the super class needs to copy this.
     newMargin->client = client;
     return newMargin;
 }
@@ -68,16 +73,6 @@ static float defmarg[MaximumMarginTypes] = {36.0, 36.0, 36.0, 36.0, 72.0, 72.0, 
     [self retain];
     [client unlinkobject: self];
     [self release];
-}
-
-- (void) setStaffScale: (float) newStaffScale
-{
-    staffScale = newStaffScale;
-}
-
-- (float) staffScale
-{
-    return staffScale;
 }
 
 - (void) setClient: (id) newClient
@@ -243,7 +238,6 @@ static float defmarg[MaximumMarginTypes] = {36.0, 36.0, 36.0, 36.0, 72.0, 72.0, 
     
     [super encodeWithPropertyListCoder: (OAPropertyListCoder *) aCoder];
     [aCoder setObject: client forKey: @"client"];
-    [aCoder setFloat: staffScale forKey: @"staffScale"];
     [aCoder setInteger: MaximumMarginTypes forKey: @"maximumMarginTypes"];
     for (marginIndex = 0; marginIndex < MaximumMarginTypes; marginIndex++)
 	[aCoder setFloat: margin[marginIndex] forKey: [NSString stringWithFormat:@"margin%d", marginIndex]];

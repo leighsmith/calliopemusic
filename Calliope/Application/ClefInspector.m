@@ -38,9 +38,9 @@
   if ([v startInspection: CLEF : &b : &sl])
   {
     k = [sl count];
-    while (k--) if ((p = [sl objectAtIndex:k]) && TYPEOF(p) == CLEF)
+    while (k--) if ((p = [sl objectAtIndex:k]) && [p graphicType] == CLEF)
     {
-      dotrans = ([transswitch state] && (TYPEOF([p staff]) == STAFF));
+      dotrans = ([transswitch state] && ([[p staff] graphicType] == STAFF));
       if (dotrans)
       {
         tb = p->bounds;

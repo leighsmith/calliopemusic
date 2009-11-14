@@ -76,7 +76,7 @@ static NSTextView *drawText = nil;
 - init
 {
   [super init];
-  gFlags.type = TEXTBOX;
+  [self setTypeOfGraphic: TEXTBOX];
   length = 0;
   richTextData = nil;
   just = 0;
@@ -170,7 +170,7 @@ static NSTextView *drawText = nil;
   switch(i)
   {
       case STAFFHEAD:
-          if (TYPEOF(sp) == SYSTEM) sp = [sys findOnlyStaff: pt.y];
+          if ([sp graphicType] == SYSTEM) sp = [sys findOnlyStaff: pt.y];
           client = sp;
           offset.x = pt.x - 5;/*sb: subtract 5 to compensate for text container inset */
           /* sb: subtract 1/2 fontsize, for better box positioning */

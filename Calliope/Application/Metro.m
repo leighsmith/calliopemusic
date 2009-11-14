@@ -52,7 +52,7 @@ static Metro *proto;
 - init
 {
   [super init];
-  gFlags.type = METRO;
+  [self setTypeOfGraphic: METRO];
   return self;
 }
 
@@ -122,7 +122,7 @@ static Metro *proto;
   int np;
   StaffObj *p = client;
   Staff *sp = p->mystaff;
-  if (TYPEOF(sp) != STAFF) return NO;
+  if ([sp graphicType] != STAFF) return NO;
   np = [sp findPos: pt.y];
   if (np == pos) return NO;
   pos = np;
@@ -147,7 +147,7 @@ static Metro *proto;
     id sp = ((StaffObj *)client)->mystaff;
     int sz = smallersz[gFlags.size];
     
-    if (TYPEOF(sp) != STAFF) 
+    if ([sp graphicType] != STAFF) 
 	return self;
     x = ((StaffObj *)client)->x;
     y = [sp yOfPos: pos];

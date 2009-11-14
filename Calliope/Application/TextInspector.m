@@ -29,7 +29,7 @@ int subfor[4] = {2, 3, 2, 3};
   if ([v startInspection: TEXTBOX : &b : &sl :&num])
   {
     k = [sl count];
-    while (k--) if ((p = [sl objectAtIndex:k]) && TYPEOF(p) == TEXTBOX && SUBTYPEOF(p) != LABEL)
+    while (k--) if ((p = [sl objectAtIndex:k]) && [p graphicType] == TEXTBOX && SUBTYPEOF(p) != LABEL)
     {
       [[v window] endEditingFor:p];
       if ([typematrix selectedRow] >= 0) p->gFlags.subtype = subfor[[typematrix selectedRow]];
@@ -38,7 +38,7 @@ int subfor[4] = {2, 3, 2, 3};
       {
         case STAFFHEAD:
 	  sys = p->client;
-	  if (TYPEOF(sys) == STAFF) sys = ((Staff *) sys)->mysys;
+	  if ([sys graphicType] == STAFF) sys = ((Staff *) sys)->mysys;
 	  sn = [staffform intValue];
 	  sn = (sn <= 0) ? 0 : (sn - 1);
 	  nsp = [sys getStaff: sn];
@@ -46,7 +46,7 @@ int subfor[4] = {2, 3, 2, 3};
 	  break;
         case TITLE:
 	  sp = p->client;
-	  if (TYPEOF(sp) == STAFF) p->client = sp->mysys;
+	  if ([sp graphicType] == STAFF) p->client = sp->mysys;
 	  p->baseline = [[marginform cellAtIndex:0] floatValue] / conv;
 	  break;
       }
@@ -82,7 +82,7 @@ int subfor[4] = {2, 3, 2, 3};
   if ([v startInspection: TEXTBOX : &b : &sl :&num])
   {
     k = [sl count];
-    while (k--) if ((p = [sl objectAtIndex:k]) && TYPEOF(p) == TEXTBOX)
+    while (k--) if ((p = [sl objectAtIndex:k]) && [p graphicType] == TEXTBOX)
     {
 //      [p replaceSelWithCell: v];
     
@@ -102,7 +102,7 @@ int subfor[4] = {2, 3, 2, 3};
   k = [sl count];
   initassay();
   n = 0;
-  while (k--) if ((p = [sl objectAtIndex:k]) && TYPEOF(p) == TEXTBOX && SUBTYPEOF(p) != LABEL)
+  while (k--) if ((p = [sl objectAtIndex:k]) && [p graphicType] == TEXTBOX && SUBTYPEOF(p) != LABEL)
   {
     ++n;
     assay(0, p->gFlags.subtype);

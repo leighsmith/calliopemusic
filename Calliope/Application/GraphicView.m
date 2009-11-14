@@ -372,11 +372,11 @@ static void noteAndHangBB(NSMutableArray *l, NSRect *bbox)
 	while (nh--)
 	{
 	  h = [p objectAtIndex:nh];
-	  if (TYPEOF(h) == BEAM) noteAndHangBB(((Beam *)h)->client, bbox);
+	  if ([h graphicType] == BEAM) noteAndHangBB(((Beam *)h)->client, bbox);
 	}
       }
     }
-    else if (TYPEOF(g) == BEAM) noteAndHangBB(((Beam *)g)->client, bbox);
+    else if ([g graphicType] == BEAM) noteAndHangBB(((Beam *)g)->client, bbox);
   }
   return self;
 }
@@ -496,7 +496,7 @@ extern char *typename[NUMTYPES];
     o = [slist objectAtIndex:i];
     if (ISASTAFFOBJ(o) || !moveFlag)
     {
-// if (k > 1) fprintf(stderr,"  %s offset: %f %f\n", typename[TYPEOF(o)], seloffx[i], seloffy[i]);
+// if (k > 1) fprintf(stderr,"  %s offset: %f %f\n", typename[[o graphicType]], seloffx[i], seloffy[i]);
       s = [self findSys: (float) (seloffy[i] + p.y)];
       m |= [o move: (float) seloffx[i]: (float) seloffy[i] : p : s : alt];
     }
@@ -1242,7 +1242,7 @@ extern struct toolData toolCodes[NUMTOOLS];
 //          [window setEventMask:oldMask];
 		return;
 	    }
-	    if (TYPEOF(g) == SYSTEM)
+	    if ([g graphicType] == SYSTEM)
 	    {
 		/* special treatment for System: fire and forget */
 		[self selectCurSys: (System *)g : command];
@@ -1724,12 +1724,12 @@ static void drawHorz(float x, float y, float w, NSRect r)
   while (k--)
   {
     p = [slist objectAtIndex:k];
-    if (TYPEOF(p) == RUNNER)
+    if ([p graphicType] == RUNNER)
     {
       (p->bounds)  = NSUnionRect(mybb , (p->bounds));
       runs = YES;
     }
-    else if (TYPEOF(p) == MARGIN)
+    else if ([p graphicType] == MARGIN)
     {
         if ([(Margin *) p client] == [syslist objectAtIndex: 0])
         {
@@ -2201,7 +2201,7 @@ extern int needUpgrade;
 	    if (s->gFlags.type == 0)
 	    {
 		NSLog(@"NOTICE: corrected nil type found in unarchived system = %d", k);
-		s->gFlags.type = SYSTEM;
+		[s setTypeOfGraphic: SYSTEM];
 	    }
 	}
 	s = [syslist objectAtIndex:0];

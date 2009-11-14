@@ -38,7 +38,7 @@
   if ([v startInspection: ACCENT : &b : &sl])
   {
     k = [sl count];
-    while (k--) if ((p = [sl objectAtIndex:k]) && TYPEOF(p) == ACCENT)
+    while (k--) if ((p = [sl objectAtIndex:k]) && [p graphicType] == ACCENT)
     {
       p->xoff = p->yoff = 0.0;
       p->gFlags.subtype = [placematrix selectedColumn];
@@ -97,7 +97,7 @@
   if ([v startInspection: ACCENT : &b : &sl])
   {
     k = [sl count];
-    while (k--) if ((p = [sl objectAtIndex:k]) && TYPEOF(p) == ACCENT)
+    while (k--) if ((p = [sl objectAtIndex:k]) && [p graphicType] == ACCENT)
     {
       p->gFlags.subtype = [p getDefault: [nummatrix selectedColumn]];
       p->xoff = 0.0;

@@ -51,7 +51,7 @@ static NeumeNew *proto;
 {
     self = [super init];
     if(self != nil) {
-	gFlags.type = NEUMENEW;
+	[self setTypeOfGraphic: NEUMENEW];
 	nFlags.dot = 0;
 	nFlags.hepisema = 0;
 	nFlags.vepisema = 0;
@@ -106,7 +106,7 @@ static NeumeNew *proto;
     mystaff = n->mystaff;
     bounds = n->bounds;
     gFlags = n->gFlags;
-    gFlags.type = NEUMENEW;
+    [self setTypeOfGraphic: NEUMENEW];
     return self;
 }
 
@@ -146,7 +146,7 @@ static char neumenum[10] = {1, 1, -1, 2, 2, 2, 2, 3, 3, 1};
 - proto: (GraphicView *) v : (NSPoint) pt : (Staff *) sp : (System *) sys : (Graphic *) g : (int) i
 {
   [super proto: v : pt : sp : sys : g : i];
-  if (TYPEOF(sp) == STAFF)
+  if ([sp graphicType] == STAFF)
   {
     staffPosition = [sp findPos: pt.y];
     y = [sp yOfPos: staffPosition];
@@ -327,7 +327,7 @@ extern id lastHit;
   int op;
   if (alt)
   {
-    if (TYPEOF(mystaff) != STAFF) return NO;
+    if ([mystaff graphicType] != STAFF) return NO;
     if (ABS(ny - y) > 2.0) switch(gFlags.selend)
     {
       case 0:
@@ -358,7 +358,7 @@ extern id lastHit;
       x = nx;
       y = ny;
       inv = [sys relinknote: self];
-      if (TYPEOF(mystaff) == STAFF)
+      if ([mystaff graphicType] == STAFF)
       {
         staffPosition = [mystaff findPos: y];
         y = [mystaff yOfPos: staffPosition];
@@ -430,7 +430,7 @@ static void punctadot(float du, int p, float y, float s, NSFont *f, int mode)
   hw = charhalfFGW(f, c);
   DrawCharacterInFont(px, py, c, f, mode);
   ss = getSpacing(mystaff);
-  if (TYPEOF(mystaff) == STAFF)
+  if ([mystaff graphicType] == STAFF)
   {
     drawledge(px + hw, [self yOfPos: 0], hw, 0, ip, [self getLines], ss, mode);
   }
@@ -636,7 +636,7 @@ static void punctadot(float du, int p, float y, float s, NSFont *f, int mode)
     nFlags.quilisma = b4;
     nFlags.molle = b5;
     nFlags.num = b6;
-    gFlags.type = NEUMENEW;  /* owing to mistake in update function */
+    [self setTypeOfGraphic: NEUMENEW];  /* owing to mistake in update function */
     return self;
 }
 

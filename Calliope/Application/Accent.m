@@ -147,7 +147,7 @@ static Accent *proto;
 {
   int i = ACCSIGNS;
   [super init];
-  gFlags.type = ACCENT;
+  [self setTypeOfGraphic: ACCENT];
   while (i--) sign[i] = 0;
   xoff = yoff = 0.0;
   accstick = 0;
@@ -253,7 +253,7 @@ static Accent *proto;
 {
   int top, i, k = ACCSIGNS;
   StaffObj *p = client;
-  top = updir[(TYPEOF(p) == NOTE && [(TimedObj *)p stemIsUp])][gFlags.subtype];
+  top = updir[([p graphicType] == NOTE && [(TimedObj *)p stemIsUp])][gFlags.subtype];
   while (k--)
   {
     i = signs[(int) sign[k]].alter;
@@ -320,7 +320,7 @@ float tyoff[2][5] =
   switch(signs[j].upsign)
   {
     case 1: /* tremolos */
-      if (TYPEOF(p) != NOTE) return self;
+      if ([p graphicType] != NOTE) return self;
       k = signs[j].dnsign;
       sz = p->gFlags.size;
       ss = getSpacing([p staff]);
@@ -388,11 +388,11 @@ float tyoff[2][5] =
       NSLog(@"unattached accent character?\n");
       return self;
   }
-  if (TYPEOF(staff) != STAFF) return self;
+  if ([staff graphicType] != STAFF) return self;
   fr = (xoff != 0.0 || yoff != 0.0);
   x = p->x + xoff;
   dir = 2 * getSpacing(staff);
-  top = updir[(TYPEOF(p) == NOTE && [((TimedObj *)p) stemIsUp])][gFlags.subtype];
+  top = updir[([p graphicType] == NOTE && [((TimedObj *)p) stemIsUp])][gFlags.subtype];
   if (top)
   {
     dir = -dir;
