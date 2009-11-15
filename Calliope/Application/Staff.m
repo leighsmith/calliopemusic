@@ -1171,6 +1171,8 @@ float textoff[2], baselines[2][MAXTEXT];
       case BARLINE:
 	for (j = 0; j < 7; j++) curracc[j] = ks[j];
         break;
+      default:
+	    NSLog(@"getKeyThru: Unexpected graphicType %d\n", [q graphicType]);
     }
     if (q == p) break;
   }

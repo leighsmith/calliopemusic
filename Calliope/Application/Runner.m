@@ -12,11 +12,6 @@
 #import "DrawingFunctions.h"
 #import "TextVarCell.h"
 
-/*
-  Runners are drawn in two ways.  The official mechanism merely handles the
-  markers.  The actual text is prepared by Page and sent here via renderMe:.
-*/
-
 @implementation Runner
 
 #define SIZEBOX 8.0	/* size of the box used to represent a runner */
@@ -24,32 +19,32 @@
 extern int justcode[4];
 extern NSColor * backShade;
 
-NSTextView *myText = nil;	/* also refed to see which Text is VarCells rendered from */
-int runnerStatus = 0;
+NSTextView *myTextView = nil;	/* also refed to see which Text is VarCells rendered from */
+int runnerIsDrawing = NO; // This is used by TextVarCell. We should replace this with updating the status of TextVarCell to control its drawing.
 
 
-+ (void)initialize
++ (void) initialize
 {
     if (self == [Runner class])
     {
 	(void)[Runner setVersion: 2];		/* class version, see read: */
-	if (!myText)
+	if (!myTextView)
 	{
-	    myText = [[NSTextView alloc] init];
-	    [myText setRichText:YES];
-	    [myText setEditable:NO];
-	    [myText setSelectable:YES];
-//      [myText setSelColor:[NSColor whiteColor]];
-	    [myText setTextColor:[NSColor blackColor]];
-	    [myText setBackgroundColor:backShade];
+	    myTextView = [[NSTextView alloc] init];
+	    [myTextView setRichText:YES];
+	    [myTextView setEditable:NO];
+	    [myTextView setSelectable:YES];
+//      [myTextView setSelColor:[NSColor whiteColor]];
+	    [myTextView setTextColor:[NSColor blackColor]];
+	    [myTextView setBackgroundColor:backShade];
 	    
-	    [myText setVerticallyResizable:YES];
-	    [myText setHorizontallyResizable:YES];
+	    [myTextView setVerticallyResizable:YES];
+	    [myTextView setHorizontallyResizable:YES];
 	    
-	    [myText setDrawsBackground:YES];
-	    [myText setUsesFontPanel:YES];
-	    [[myText textContainer] setWidthTracksTextView:NO];
-	    [[myText textContainer] setHeightTracksTextView:NO];
+	    [myTextView setDrawsBackground:YES];
+	    [myTextView setUsesFontPanel:YES];
+	    [[myTextView textContainer] setWidthTracksTextView:NO];
+	    [[myTextView textContainer] setHeightTracksTextView:NO];
 	    
 	}
     }
@@ -93,7 +88,7 @@ int runnerStatus = 0;
   setrunnertables and tidying markers done by delete:
 */
 
-- (void)removeObj
+- (void) removeObj
 {
     id p;
     [self retain];
@@ -104,6 +99,7 @@ int runnerStatus = 0;
     p = [[CalliopeAppController sharedApplicationController] getInspectorForClass: [RunInspector class] loadInspector: 0];
     if (p) {
         id r = [p runner];
+	
         if (self == r) {
             [p orderOut:self];
         }
@@ -132,74 +128,68 @@ seem to change size correctly, hence various transforms.
 
 extern int selMode;
 
-- (void) renderInRect: (NSRect) r text: (NSAttributedString *) stream paperSize: (NSSize) ps onPage: (Page *) pg
+- (void) renderInRect: (NSRect) r text: (NSAttributedString *) textString paperSize: (NSSize) ps onPage: (Page *) pg
 {
-  System *sys = client;
-  NSRect fb, vb, fo;
-  NSSize ms;
-  float f;
-  vb = [sys->view bounds];
-
-  [myText setMaxSize:(vb.size)];
-  [[myText textContainer] setContainerSize:(vb.size)];
-  ms.width = ms.height = 0.0;
-  [myText setMinSize:ms];
-  f = [[CalliopeAppController currentDocument] staffScale];
-  runnerStatus = 1;
-  [[myText textStorage] beginEditing];
-  [[myText textStorage] replaceCharactersInRange:NSMakeRange(0, [[myText string] length]) withAttributedString:stream];
-  [[myText textStorage] endEditing];
-  
-  if ([myText alignment] != justcode[flags.just]) [myText setAlignment:justcode[flags.just]];
-
-  [myText sizeToFit];
-  fb = [myText frame];
-  fo = fb;
-  [myText scaleUnitSquareToSize:NSMakeSize(1.0 / f, 1.0 / f)];
-  fb.size.width /= f;
-  fb.size.height /= f;
-  switch(flags.horizpos)
-  {
-    case 0:
-      fb.origin.x = [pg leftMargin];
-      break;
-    case 1:
-      fb.origin.x = 0.5 * (vb.size.width - fb.size.width);
-      break;
-    case 2:
-      fb.origin.x = vb.size.width - fb.size.width - [pg rightMargin];
-      break;
-  }
-  if (flags.vertpos)
-  {
-    fb.origin.y = vb.size.height - fb.size.height - [pg footerBase];
-  }
-  else
-  {
-    fb.origin.y = [pg headerBase];
-  }
-//  coutrect(fb.origin.x, fb.origin.y, fb.size.width, fb.size.height, 0.0, 5);
-  if (NSIsEmptyRect(r) || !NSIsEmptyRect(NSIntersectionRect(r , fb)))
-  {
-      id graphicView = [CalliopeAppController currentView];
-      [[graphicView window] setAutodisplay:NO]; // don't let addSubview: cause redisplay
-    [myText setFrame:fb];
-
-    if ([myText alignment] != justcode[flags.just]) [myText setAlignment:justcode[flags.just]];
-    [myText setBackgroundColor:backShade];
-    [myText setDrawsBackground:YES];
-
-    [[NSView focusView] addSubview: myText];
-//    [myText display];
-    [myText lockFocus];
-    [myText drawRect:[myText bounds]];
-    [myText unlockFocus];
-    [myText removeFromSuperview];
-    [myText setFrame:fo];
-    [[graphicView window] setAutodisplay:YES];
-  }
-  [myText scaleUnitSquareToSize:NSMakeSize(f, f)];
-  runnerStatus = 0;
+    System *sys = client;
+    NSRect fb, vb, fo;
+    NSSize ms;
+    float f;
+    vb = [sys->view bounds];
+    
+    if (textString == nil)
+	return;
+    [myTextView setMaxSize: (vb.size)];
+    [[myTextView textContainer] setContainerSize: (vb.size)];
+    ms.width = ms.height = 0.0;
+    [myTextView setMinSize: ms];
+    f = [[CalliopeAppController currentDocument] staffScale];
+    runnerIsDrawing = YES;
+    [[myTextView textStorage] beginEditing];
+    [[myTextView textStorage] replaceCharactersInRange: NSMakeRange(0, [[myTextView string] length]) withAttributedString: textString];
+    [[myTextView textStorage] endEditing];
+    
+    if ([myTextView alignment] != justcode[flags.just]) 
+	[myTextView setAlignment:justcode[flags.just]];
+    
+    [myTextView sizeToFit];
+    fb = [myTextView frame];
+    fo = fb;
+    [myTextView scaleUnitSquareToSize:NSMakeSize(1.0 / f, 1.0 / f)];
+    fb.size.width /= f;
+    fb.size.height /= f;
+    switch(flags.horizpos) {
+	case 0:
+	    fb.origin.x = [pg leftMargin];
+	    break;
+	case 1:
+	    fb.origin.x = 0.5 * (vb.size.width - fb.size.width);
+	    break;
+	case 2:
+	    fb.origin.x = vb.size.width - fb.size.width - [pg rightMargin];
+	    break;
+    }
+    fb.origin.y = flags.vertpos ? vb.size.height - fb.size.height - [pg footerBase] : [pg headerBase];
+    //  coutrect(fb.origin.x, fb.origin.y, fb.size.width, fb.size.height, 0.0, 5);
+    if (NSIsEmptyRect(r) || !NSIsEmptyRect(NSIntersectionRect(r , fb))) {
+	id graphicView = [CalliopeAppController currentView];
+	[[graphicView window] setAutodisplay:NO]; // don't let addSubview: cause redisplay
+	[myTextView setFrame:fb];
+	
+	if ([myTextView alignment] != justcode[flags.just]) [myTextView setAlignment:justcode[flags.just]];
+	[myTextView setBackgroundColor:backShade];
+	[myTextView setDrawsBackground:YES];
+	
+	[[NSView focusView] addSubview: myTextView];
+	//    [myTextView display];
+	[myTextView lockFocus];
+	[myTextView drawRect:[myTextView bounds]];
+	[myTextView unlockFocus];
+	[myTextView removeFromSuperview];
+	[myTextView setFrame:fo];
+	[[graphicView window] setAutodisplay:YES];
+    }
+    [myTextView scaleUnitSquareToSize:NSMakeSize(f, f)];
+    runnerIsDrawing = NO;
 }
 
 - (void) renderTextInRect: (NSRect) r paperSize: (NSSize) ps onPage: (Page *) pg

@@ -76,10 +76,11 @@
 @end
 
 
-@implementation TextVarCell:NSTextAttachmentCell
+@implementation TextVarCell: NSTextAttachmentCell
 
-extern NSTextView *myText;
-extern int runnerStatus;
+// TODO Both of these should be replaced with queries on the Runner instance
+extern NSTextView *myTextView;
+extern int runnerIsDrawing;
 //extern NSString *curvartext[NUMVARTYPES];
 
 
@@ -160,11 +161,11 @@ NSString *imfiles[NUMVARTYPES] =
   
     NSSize sz;
     NSFont *f;
-  if (runnerStatus && myText != nil)
+  if (runnerIsDrawing && myTextView != nil)
   {
-//    f = [myText fontOfCell: self];
+//    f = [myTextView fontOfCell: self];
       if (theFont) f = theFont;
-      else f = [myText fontOfCell:self];
+      else f = [myTextView fontOfCell:self];
       sz.width = [f widthOfString:[self getVarString]];
     sz.height = [f pointSize];
   }
@@ -253,7 +254,7 @@ return NO;
     // PSgsave();
     pt = cellFrame.origin;
     pt.y += cellFrame.size.height;
-    if (runnerStatus) {
+    if (runnerIsDrawing) {
 	if (theFont) 
 	    f = theFont;
 	else 
@@ -262,7 +263,7 @@ return NO;
 	DrawTextWithBaselineTies(pt.x, pt.y, [self getVarString], f, 1);
     }
     else {
-	[images[(int)type] compositeToPoint:pt operation:NSCompositeSourceOver];
+	[images[(int)type] compositeToPoint: pt operation: NSCompositeSourceOver];
     }
     // PSgrestore();
 }

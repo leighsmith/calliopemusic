@@ -3,6 +3,8 @@
 
   @class Runner
   @brief Represents the text which runs along the header or footer of each page.
+ 
+  Runners handle the markers and do the drawing. The actual text is prepared by Page and drawn here via renderTextInRect:paperSize:onPage:.
  */
 
 #import "winheaders.h"
