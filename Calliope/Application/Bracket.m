@@ -233,52 +233,52 @@ static void displink(System *sys, int m)
   }
 }
 
-- drawMode: (int) m
+- drawMode: (int) mode
 {
-  Staff *s1, *s2;
-  System *sys;
-  NSFont *f;
-  float x, y1, y2, dy;
-  int sz;
-  if (gFlags.subtype == LINKAGE)
-  {
-    displink(client1, m);
+    Staff *staff1, *staff2;
+    System *sys;
+    NSFont *f;
+    float x, lowestY, highestY, dy;
+    int size;
+    
+    if (gFlags.subtype == LINKAGE) {
+	displink(client1, mode);
+	return self;
+    }
+    staff1 = client1;
+    staff2 = client2;
+    if (staff1->flags.hidden || staff2->flags.hidden)
+	return self;
+    if ([staff1 yOfTop] < [staff2 yOfTop]) {
+	lowestY = [staff1 yOfTop];
+	highestY = [staff2 yOfBottom];
+    }
+    else {
+	lowestY = [staff2 yOfTop];
+	highestY = [staff1 yOfBottom];
+    }
+    // gcc 4.0 doesn't like typeof bit fields so we use the long hand version
+    // size = MAX(staff1->gFlags.size, staff2->gFlags.size);
+    size = staff1->gFlags.size < staff2->gFlags.size ? staff2->gFlags.size : staff1->gFlags.size;
+    sys = staff1->mysys;
+    // TODO This seems backwards, should be a method of Bracket, passing System as a parameter?
+    x = [sys getBracketX: self : size];
+    switch(gFlags.subtype) {
+	case BRACK:
+	    f = musicFont[1][size];
+	    crect(x, lowestY, brackwidth[size], highestY - lowestY, mode);
+	    DrawCharacterInFont(x, lowestY, SF_topbrack, f, mode);
+	    DrawCharacterInFont(x, highestY, SF_botbrack, f, mode);
+	    break;
+	case BRACE:
+	    dy = nature[size];
+	    x += dy;
+	    if (level != 1) 
+		x += dy;
+	    cbrace(x, highestY + dy, x, lowestY - dy, 1.5 * brackwidth[size], mode);
+	    break;
+    }
     return self;
-  }
-  s1 = client1;
-  s2 = client2;
-  if (s1->flags.hidden || s2->flags.hidden) return self;
-  if ([s1 yOfTop] < [s2 yOfTop])
-  {
-    y1 = [s1 yOfTop];
-    y2 = [s2 yOfBottom];
-  }
-  else
-  {
-    y1 = [s2 yOfTop];
-    y2 = [s1 yOfBottom];
-  }
-  // gcc 4.0 doesn't like typeof bit fields so we use the long hand version
-  // sz = MAX(s1->gFlags.size, s2->gFlags.size);
-  sz = s1->gFlags.size < s2->gFlags.size ? s2->gFlags.size : s1->gFlags.size;
-  sys = s1->mysys;
-  x = [sys getBracketX: self : sz];
-  switch(gFlags.subtype)
-  {
-    case BRACK:
-      f = musicFont[1][sz];
-      crect(x, y1, brackwidth[sz], y2 - y1, m);
-      DrawCharacterInFont(x, y1, SF_topbrack, f, m);
-      DrawCharacterInFont(x, y2, SF_botbrack, f, m);
-      break;
-    case BRACE:
-      dy = nature[sz];
-      x += dy;
-      if (level != 1) x += dy;
-      cbrace(x, y2 + dy, x, y1 - dy, 1.5 * brackwidth[sz], m);
-      break;
-  }
-  return self;
 }
 
 

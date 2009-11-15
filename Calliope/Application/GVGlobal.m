@@ -137,6 +137,8 @@ static void makeLinkage(System *sys)
 	((Runner *)t)->client = nsys;
 	[nsys linkobject: t];
 	break;
+      default:
+        NSLog(@"copyObjs: Unexpected graphicType: %d\n", [p graphicType]);
     }
   }
   return self;

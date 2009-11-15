@@ -553,6 +553,8 @@ static void addNote(int v, int k, int ch, MKNote *n)
                             }
                         }
                         break;
+		    default:
+			NSLog(@"play: Unexpected graphicType: %d\n", [p graphicType]);
                 }
                 ++nix;
             }

@@ -751,7 +751,7 @@ void cellipse(float cx, float cy, float rx, float ry, float w, int mode)
 }
 
 
-/* draw a brace.  th is max allowed thickness of the flourish */
+/* draw a brace.  flourishThickness is maximum allowed thickness of the flourish */
 void cbrace(float x0, float y0, float xn, float yn, float flourishThickness, int mode)
 {
     float dx, dy, d, t, u, h, c1x, c1y, c2x, c2y;
@@ -778,36 +778,35 @@ void cbrace(float x0, float y0, float xn, float yn, float flourishThickness, int
     point2 = NSMakePoint(x0 + c2x * dx - c2y * dy, y0 + c2x * dy + c2y * dx);
     point1 = NSMakePoint(x0 + c1x * dx - c1y * dy, y0 + c1x * dy + c1y * dx);
     [bracePath moveToPoint: NSMakePoint(x0, y0)];
-    [bracePath curveToPoint: point1 controlPoint1: point2 controlPoint2: point3];
+    [bracePath curveToPoint: point3 controlPoint1: point1 controlPoint2: point2];
     c1x = 1.0 - 0.1;
     c1y = t - 0.05;
     c2x = 0.5 + 0.05;
     c2y = 0.05;
     point2 = NSMakePoint(x0 + c2x * dx - c2y * dy, y0 + c2x * dy + c2y * dx);
     point1 = NSMakePoint(x0 + c1x * dx - c1y * dy, y0 + c1x * dy + c1y * dx);
-    [bracePath curveToPoint: point2 controlPoint1: point1 controlPoint2: NSMakePoint(xn, yn)];
+    [bracePath curveToPoint: NSMakePoint(xn, yn) controlPoint1: point2 controlPoint2: point1];
     c1x = 1.0 - 0.1;
     c1y = u - 0.05;
     c2x = 0.5 + 0.05;
     c2y = (u - t) + 0.05;
     point2 = NSMakePoint(x0 + c2x * dx - c2y * dy, y0 + c2x * dy + c2y * dx);
     point1 = NSMakePoint(x0 + c1x * dx - c1y * dy, y0 + c1x * dy + c1y * dx);
-    [bracePath curveToPoint: point1 controlPoint1: point2 controlPoint2: point3];
+    [bracePath curveToPoint: point3 controlPoint1: point1 controlPoint2: point2];
     c2x = 0.5 - 0.05;
     c2y = (u - t) + 0.05;
     c1x = 0.1;
     c1y = u - 0.05;
     point2 = NSMakePoint(x0 + c2x * dx - c2y * dy, y0 + c2x * dy + c2y * dx);
     point1 = NSMakePoint(x0 + c1x * dx - c1y * dy, y0 + c1x * dy + c1y * dx);
-    [bracePath curveToPoint: point2 controlPoint1: point1 controlPoint2: NSMakePoint(x0, y0)];
+    [bracePath curveToPoint: NSMakePoint(x0, y0) controlPoint1: point2 controlPoint2: point1];
     [bracePath closePath];
-    if (mode)
-    {
+    if (mode) {
 	[modegray[mode] set];
 	[bracePath fill];
+	// [bracePath stroke];
     }
-    else
-    {
+    else {
 	// NSLog(@"cbrace(%f,...,%d)\n", x0, mode);
 	unionpath(bracePath);
     }
