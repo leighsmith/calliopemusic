@@ -1,3 +1,9 @@
+/*!
+  $Id$
+
+  @class PlayInspector
+  @brief This is responsible for playing the MusicKit score and metronome.
+*/
 #import "PlayInspector.h"
 #import "KeyboardFilter.h"
 #import "CalliopeAppController.h"
@@ -6,7 +12,6 @@
 #import "GVPerform.h"
 #import "GVSelection.h"
 #import "Staff.h"
-#import "SoundEffect.h"
 #import "MultiView.h"
 #import "Channel.h"
 #import "DrawingFunctions.h"
@@ -17,9 +22,6 @@
 #import <AppKit/NSButton.h>
 #import <AppKit/NSPopUpButton.h>
 #import <AppKit/NSSliderCell.h>
-#ifdef WIN32
-#import <SndKit/SndKit.h>
-#endif
 
 @implementation PlayInspector
 
@@ -29,15 +31,10 @@
 extern MKMidi *midi;
 extern KeyboardFilter *kf;
 
+// TODO These should all be ivars.
 int playmode;			/* 0 = internal orchestra, 1 = scorefile, 2 = MIDI-A, 3 = MIDI-B, 4 = MIDI file */
 MKPerformerStatus status;	/* The status of a performance */
-
-#if !defined(WIN32) && !defined(__APPLE__)
-SoundEffect *tickSound = nil;
-#else
 Snd *tickSound = nil;
-#endif
-
 NSTimer *timer, *blinker;
 BOOL canRecord[5] = {NO, NO, YES, YES, NO};
 NSString *midiDev[5] = {nil, nil, @"midi0", @"midi1", nil};
@@ -126,12 +123,7 @@ static void blinkOff(GraphicView *v)
 - (void)awakeFromNib
 {
     [self preset: MM];
-#if !defined(WIN32) && !defined(__APPLE__)
-    tickSound = [[SoundEffect allocWithZone:[self zone]] initFromMainBundle:@"tick"];
-#else
-//    tickSound = [[Snd allocWithZone:[self zone]] initFromMainBundle:@"tick"];
-    tickSound = [[Snd allocWithZone:[self zone]] init];
-#endif
+    tickSound = [[Snd alloc] initFromSoundfile: @"tick"];
     [self setView: 0];
 }
 
@@ -394,30 +386,20 @@ static void blinkOff(GraphicView *v)
 
 - hitMetro: sender
 {
-#if !defined(WIN32) && !defined(__APPLE__)
     if ([metrobutton state]) {
-        [SoundEffect setSoundEnabled: YES];
-        if ([SoundEffect soundEnabled])
-          {
-            [tickSound play];
-            timer = [[NSTimer scheduledTimerWithTimeInterval:60.0 / [self getTempo]
-                                                      target:self
-                                                    selector:@selector(tickTock:)
-                                                    userInfo:self
-                                                     repeats:YES] retain];
-          }
-        else [metrobutton setState:NO];
+	// TODO we can be a lot more intelligent than this, using the MusicKit to play MKSamplePlayerInstrument.
+	[tickSound play];
+	timer = [[NSTimer scheduledTimerWithTimeInterval: 60.0 / [self getTempo]
+			                          target: self
+			                        selector: @selector(tickTock:)
+			                        userInfo: self
+			                         repeats: YES] retain];
     }
-    else
-      {
-        if ([SoundEffect soundEnabled])
-          {
-            [SoundEffect setSoundEnabled: NO];
-            [timer invalidate];
-            [timer release];
-          }
-      }
-#endif
+    else {
+        [tickSound stop];
+        [timer invalidate];
+        [timer release];
+    }
     return self;
 }
 

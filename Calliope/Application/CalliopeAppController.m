@@ -19,11 +19,8 @@
 #import "muxlow.h"
 
 #if defined (WIN32)
+// TODO this is probably unnecessary.
 #import <AppKit/obsoleteNSCStringText.h>
-#elif defined (__APPLE__)
-//#import <AppKit/obsoleteNSCStringText.h>
-#else
-#include <libc.h>
 #endif
 
 #import "MyNSMutableAttributedString.h"
@@ -601,21 +598,15 @@ static void handleMKError(NSString *msg)
             return; //[NSApp terminate:NSApp];
     }
     else {  
-	    /* When we're performing in a separate thread, we can't bring
-	    up a panel because the Application Kit is not thread-safe.
-	    In fact, neither is standard IO. Therefore, we use write() to
-	    stderr here, causing errors to appear on the console.
-	    Note that we assume that the App is not also writing to stderr.
+	/* When we're performing in a separate thread, we can't bring
+	   up a panel because the Application Kit is not thread-safe.
+	   This may no longer be the case, but we use NSLog() since we
+           can nowdays be reasonably assured it is thread safe.
 	    
-	    An alternative would be to use mach messaging to signal the
-	    App thread that there's a panel to be displayed.
-	    */
-	    int fd = stderr->_file;
-	    char *str = "MusicKit Error: ";
-	    write(fd,str,strlen(str));
-	    write(fd,[msg UTF8String],strlen([msg UTF8String]));
-	    str = "\n";
-	    write(fd,str,strlen(str));
+	   An alternative would be to use mach messaging to signal the
+	   App thread that there's a panel to be displayed.
+	 */
+	NSLog(@"MusicKit Error: %@\n", msg);
     }
 }
 

@@ -1,11 +1,8 @@
+/* $Id$ */
 #import "Ruler.h"
-#import "DrawApp.h"
-#import "DrawDocument.h"
-#import <AppKit/NSFont.h>
-#import <AppKit/NSText.h>
-#import <AppKit/psopsOpenStep.h>
+#import "CalliopeAppController.h"
+#import "OpusDocument.h"
 #import <math.h>
-#import "mux.h"
 
 #define LINE_X (15.0)
 #define WHOLE_HT (10.0)
@@ -81,7 +78,7 @@ static float unitlen[4][4] =
   int curPos, last, i, j, n1, n2, u;
   char buf[10];
   float s, x;
-  u = [[NSApp currentDocument] getPreferenceAsInt: UNITS];
+  u = [[CalliopeAppController currentDocument] getPreferenceAsInt: UNITS];
   PSsetgray(NSLightGray);
   NSRectFill(*rects);
   if (lastlp >= rects->origin.x && lastlp < rects->origin.x + rects->size.width) lastlp = -1.0;
@@ -145,7 +142,7 @@ static float unitlen[4][4] =
     int curPos, last, i, j, n1, n2, u;
     float s, y;
     char buf[10];
-  u = [[NSApp currentDocument] getPreferenceAsInt: UNITS];
+  u = [[CalliopeAppController currentDocument] getPreferenceAsInt: UNITS];
   PSsetgray(NSLightGray);
     NSRectFill(*rects);
 
