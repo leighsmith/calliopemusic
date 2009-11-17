@@ -317,4 +317,4 @@ void cdashhjog(float x0, float y, float x1, int a, float nat, float th, int m);
  */ 
 void cenclosure(int i, float px, float py, float qx, float qy, float th, int sz, int m);
 
-#endif MUX_H
+#endif // MUX_H
