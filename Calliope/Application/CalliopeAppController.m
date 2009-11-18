@@ -62,53 +62,42 @@ CalliopeAppController *sharedApplicationController = nil;
  */
 
 /* force a nid to be associated with a particular font */
-static void jamFont(int nid, NSString *name, float size, NSString *fv)
+static BOOL loadFont(int nid, NSString *name, float size, NSString *fv)
 {
-    int err = NO;
     NSFont *f = fontdata[nid] = [[NSFont fontWithName: name size: size] retain];
     
-    if (f != nil)
-    {
-#if 0	
-	/*  the afmDictionary method is no longer implemented so we cannot check the font version. */
-	if (fv)
-	{
-	    NSString *v = [[f afmDictionary] objectForKey:NSAFMVersion];
-	    if (![fv isEqualToString:v])
-	    {
-		NSRunAlertPanel(@"Calliope", @"You need to install a newer version of the Calliope font", @"OK", NULL, NULL, name);
-		err = YES;
-	    }
-	}
-#endif
-    }
-    else
-    {
+    if (f == nil) {
 	NSRunAlertPanel(@"Calliope", @"Font: %@ not installed", @"OK", nil, nil, name);
-	err = YES;
+	return NO;
     }
-    if (err) {
-	NSLog(@"Exiting due to font problems");
-	exit(1);	
-    }
+    return YES;
 }
 
 
-static void initFonts()
+static BOOL initFonts()
 {
     int i;
     
     for (i = 0; i < NUMCALFONTS; i++) 
 	fontdata[i] = nil;
-    jamFont(FONTSON,  @"Sonata",      32.0, nil);
-    jamFont(FONTSSON, @"Sonata",      24.0, nil);
-    jamFont(FONTHSON, @"Sonata",      16.0, nil);
-    jamFont(FONTMUS,  @"Calliope",    32.0, FONT_VERSION);
-    jamFont(FONTSMUS, @"Calliope",    24.0, FONT_VERSION);
-    jamFont(FONTHMUS, @"Calliope",    16.0, FONT_VERSION);
-    jamFont(FONTTEXT, @"Times-Roman", 18.0, nil);
-    jamFont(FONTSTMR, @"Times-Roman", 16.0, nil);
+    if(!loadFont(FONTSON,  @"Sonata",      32.0, nil))
+	return NO;
+    if(!loadFont(FONTSSON, @"Sonata",      24.0, nil))
+	return NO;
+    if(!loadFont(FONTHSON, @"Sonata",      16.0, nil))
+	return NO;
+    if(!loadFont(FONTMUS,  @"Calliope",    32.0, FONT_VERSION))
+	return NO;
+    if(!loadFont(FONTSMUS, @"Calliope",    24.0, FONT_VERSION))
+	return NO;
+    if(!loadFont(FONTHMUS, @"Calliope",    16.0, FONT_VERSION))
+	return NO;
+    if(!loadFont(FONTTEXT, @"Times-Roman", 18.0, nil))
+	return NO;
+    if(!loadFont(FONTSTMR, @"Times-Roman", 16.0, nil))
+	return NO;
     [[NSFontManager sharedFontManager] setSelectedFont: fontdata[FONTTEXT] isMultiple: NO];
+    return YES;
 }
 
 extern void colorInit(int i, NSColor * c);
@@ -123,7 +112,10 @@ extern void colorInit(int i, NSColor * c);
 	colorInit(4, [NSColor darkGrayColor]);
 	colorInit(5, [NSColor darkGrayColor]);
 	colorInit(6, [NSColor lightGrayColor]);
-	initFonts();
+	if(!initFonts()) {
+	    NSLog(@"Exiting due to font problems");
+	    exit(1);	
+	}
 	muxlowInit();
         // TODO this is probably better done by the nib file or from the menu.
         // if (!(a->appdefaults))  [NSBundle loadNibNamed:@"AppDefaults.nib" owner:a];
