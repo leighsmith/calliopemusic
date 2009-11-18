@@ -244,7 +244,8 @@ void lineupDots(GNote *np[], int k)
       }
       bt = [noteHead bodyType];
       t = getdotx(sz, bt, 0, ti->body, b, [p stemIsUp]);
-	if ([noteHead isReverseSideOfStem]) t += halfwidth[sz][bt][ti->body] * offside[[p stemIsUp] ? 1: 0];
+      if ([noteHead isReverseSideOfStem])
+	  t += [p halfWidthOfNoteHead: noteHead] * offside[[p stemIsUp] ? 1 : 0];
       if (t > r) r = t;
     }
   }
@@ -374,7 +375,7 @@ void lineupAccs(NoteHead *ah[], int an, NoteHead *nh[], GNote *note[], int hn)
   for (i = 0; i < hn; i++)
   {
     p = note[i];
-    w = halfwidth[p->gFlags.size][0][p->time.body];
+    w = [p halfWidth];
     lbear[i] = p->x;
     if (!([p stemIsUp]) && [nh[i] isReverseSideOfStem]) lbear[i] -= 3.0 * w; else lbear[i] -= w;
     accx = lbear[i] - accxoff[p->gFlags.size];

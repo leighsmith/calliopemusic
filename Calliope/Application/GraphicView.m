@@ -120,7 +120,8 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
     
     if (!KeyMotionDeltaDefault) {
 	const char *value = [[[NSUserDefaults standardUserDefaults] objectForKey: @"KeyMotionDelta"] UTF8String];
-	if (value) KeyMotionDeltaDefault = atof(value);
+	if (value) 
+	    KeyMotionDeltaDefault = atof(value);
 	KeyMotionDeltaDefault = MAX(KeyMotionDeltaDefault, 1.0);
     }
     if (!registered) {
@@ -172,6 +173,7 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
 	partlist = nil;
 	chanlist = nil;
 	showMargins = NO;
+	staffScale = 1.0;   // just initialise the staffScale to a useful value.
 
 	[self initClassVars];	
     }
@@ -202,7 +204,10 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
 
     // [currentPage release];
     currentPage   = [v->currentPage copy];
+    
+    staffScale = [v staffScale];
 
+    // TODO perhaps [self initClassVars];
     return self;
 }
 
@@ -333,7 +338,7 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
   to find the common special case: any Chords under a Beam and their hangers.
 */
 
-static void noteAndHangBB(NSMutableArray *l, NSRect *bbox)
+static void noteAndHangBB(NSArray *l, NSRect *bbox)
 {
   int nl;
   NSRect b;
@@ -372,11 +377,13 @@ static void noteAndHangBB(NSMutableArray *l, NSRect *bbox)
 	while (nh--)
 	{
 	  h = [p objectAtIndex:nh];
-	  if ([h graphicType] == BEAM) noteAndHangBB(((Beam *)h)->client, bbox);
+	  if ([h graphicType] == BEAM) 
+	      noteAndHangBB([(Beam *)h clients], bbox);
 	}
       }
     }
-    else if ([g graphicType] == BEAM) noteAndHangBB(((Beam *)g)->client, bbox);
+    else if ([g graphicType] == BEAM) 
+	noteAndHangBB([(Beam *)g clients], bbox);
   }
   return self;
 }
@@ -1460,64 +1467,62 @@ static void drawHorz(float x, float y, float w, NSRect r)
 
 - (BOOL) handleControl:(NSEvent *)event 
 {
-  NSPoint pt;
-  Staff *sp;
-  TimedObj *p;
-  Barline *newBarLine;
-  Barline *bl;
-  int tb, td, b = NO, r = YES;
-  int cst;
-  
-//#warning EventConversion: the 'characters' method of NSEvent replaces the '.data.key.charCode' field of NXEvent. Use 'charactersIgnoringModifiers' to get the chars that would have been generated regardless of modifier keys (except shift)
-  switch (cst = *[[event characters] UTF8String])
-  {
-      case 'b': /* 2:   B */
-      [self pressTool: BEAM withArgument: 0];
-      break;
-      case 't': /* 20:   T */
-      [self pressTool: TIENEW withArgument: 0];
-      break;
-      case 'n': /*14:  N */
-      break;
-      case 'm': /*13:  M */
-      [self getInsertionX: &(pt.x) : &sp : &p : &tb : &td];
-      pt.y = [sp yOfCentre];
-      newBarLine = (Barline *) [Graphic graphicOfType: BARLINE];
-      [newBarLine proto: self : pt : sp : sp->mysys : nil : 0];
-      bl = [self lastObject: sp->mysys : [sp myIndex] : BARLINE : YES];
-      if (bl != nil)
-      {
-        newBarLine->flags.staff = bl->flags.staff;
-        newBarLine->flags.bridge = bl->flags.bridge;
-      }
-      b = YES;
-      break;
-      case 'r': /*18:  R */
-      [self getInsertionX: &(pt.x) : &sp : &p : &tb : &td];
-      pt.y = [sp yOfCentre];
-      p = [Graphic graphicOfType: REST];
-      [p proto: self : pt : sp : sp->mysys : nil : 5];
-      p->time.body = tb;
-      [p setDottingCode: 0];
-      p->staffPosition = [((Rest *)p) defaultPos];
-      b = YES;
-      break;
-    default:
-      r = NO;
-      break;
-  }
-  if (b)
-  {
-    [sp linknote: p];
-    lastHit = p;
-    [p reShape];
-    [self dirty];
-    [self deselectAll: self];
-    [self selectObj: p];
-    [self drawSelectionWith: NULL];
-    [[CalliopeAppController sharedApplicationController] inspectApp];
-  }
-  return r;
+    NSPoint pt;
+    Staff *sp;
+    TimedObj *p;
+    Barline *newBarLine;
+    Barline *bl;
+    int tb, td, b = NO, r = YES;
+    int cst;
+    
+    //#warning EventConversion: the 'characters' method of NSEvent replaces the '.data.key.charCode' field of NXEvent. Use 'charactersIgnoringModifiers' to get the chars that would have been generated regardless of modifier keys (except shift)
+    switch (cst = *[[event characters] UTF8String]) {
+	case 'b': /* 2:   B */
+	    [self pressTool: BEAM withArgument: 0];
+	    break;
+	case 't': /* 20:   T */
+	    [self pressTool: TIENEW withArgument: 0];
+	    break;
+	case 'n': /*14:  N */
+	    break;
+	case 'm': /*13:  M */
+	    [self getInsertionX: &(pt.x) : &sp : &p : &tb : &td];
+	    pt.y = [sp yOfCentre];
+	    newBarLine = (Barline *) [Graphic graphicOfType: BARLINE];
+	    [newBarLine proto: self : pt : sp : sp->mysys : nil : 0];
+	    bl = [self lastObject: sp->mysys : [sp myIndex] : BARLINE : YES];
+	    if (bl != nil)
+	    {
+		newBarLine->flags.staff = bl->flags.staff;
+		newBarLine->flags.bridge = bl->flags.bridge;
+	    }
+	    b = YES;
+	    break;
+	case 'r': /*18:  R */
+	    [self getInsertionX: &(pt.x) : &sp : &p : &tb : &td];
+	    pt.y = [sp yOfCentre];
+	    p = [Graphic graphicOfType: REST];
+	    [p proto: self : pt : sp : sp->mysys : nil : 5];
+	    p->time.body = tb;
+	    [p setDottingCode: 0];
+	    p->staffPosition = [((Rest *)p) defaultPos];
+	    b = YES;
+	    break;
+	default:
+	    r = NO;
+	    break;
+    }
+    if (b) {
+	[sp linknote: p];
+	lastHit = p;
+	[p reShape];
+	[self dirty];
+	[self deselectAll: self];
+	[self selectObj: p];
+	[self drawSelectionWith: NULL];
+	[[CalliopeAppController sharedApplicationController] inspectApp];
+    }
+    return r;
 }
 
 
@@ -2046,7 +2051,7 @@ static void drawHorz(float x, float y, float w, NSRect r)
 - updateMarginsWithHeader: (float) hb footer: (float) fb printInfo: pi
 {
     System *s = [syslist objectAtIndex:0];
-    Margin *m = [s checkMargin];
+    Margin *m = [s margin];
     
     if (m) {
 	[m setHeaderBase: hb];
@@ -2082,6 +2087,15 @@ static void drawHorz(float x, float y, float w, NSRect r)
   return nil;
 }
 
+- (void) setStaffScale: (float) newStaffScale
+{
+    staffScale = newStaffScale;
+}
+
+- (float) staffScale
+{
+    return staffScale;
+}
 
 /*
   Upon arousal, check systems for valid view and page, and update to put
@@ -2191,10 +2205,10 @@ extern int needUpgrade;
 	while (k--)
 	{
 	    s = [syslist objectAtIndex:k];
-	    if (s->view == 0)
+	    if ([s pageView] == nil)
 	    {
 		NSLog(@"NOTICE: corrected nil view found in unarchived system = %d\n", k);
-		s->view = self;
+		[s setPageView: self];
 	    }
 	    if ([s page] == 0)
 		[s setPage: [self myPage: s]];
@@ -2205,7 +2219,7 @@ extern int needUpgrade;
 	    }
 	}
 	s = [syslist objectAtIndex:0];
-	if (![s checkMargin])
+	if (![s margin])
 	{
 	    Margin *newMargin = [[Margin alloc] init];
 	    
@@ -2237,6 +2251,8 @@ extern int needUpgrade;
     [aCoder setObject:chanlist forKey:@"chanlist"];
     [aCoder setObject:stylelist forKey:@"stylelist"];
     [aCoder setFloat:currentScale forKey:@"CurrentScale"];
+    // TODO must decide if we should archive this.
+    // [aCoder setFloat: staffScale forKey: @"staffScale"];
 }
 
 #if 0

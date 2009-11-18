@@ -1,3 +1,8 @@
+/*!
+  $Id$
+
+  @class Tuple
+ */
 #import "winheaders.h"
 #import "Hanger.h"
 

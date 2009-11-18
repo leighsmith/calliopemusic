@@ -192,7 +192,7 @@ static NSString *stylescratch;
   }
   if (sys->lindent != currentSystem->lindent)
   {
-    ss = [[CalliopeAppController currentDocument] staffScale];
+    ss = [self staffScale];
     lm = [currentSystem leftMargin];
     [currentSystem shuffleNotes: lm + (currentSystem->lindent / ss) : lm + (sys->lindent / ss)];
   }
@@ -222,7 +222,7 @@ static NSString *stylescratch;
       b = YES;
       if (sys->lindent != st->lindent)
       {
-        ss = [[CalliopeAppController currentDocument] staffScale];
+        ss = [self staffScale];
         lm = [sys leftMargin];
         [sys shuffleNotes: lm + (sys->lindent / ss) : lm + (st->lindent / ss)];
       }
@@ -653,7 +653,7 @@ extern char *typename[NUMTYPES];
   while (i--)
   {
     sys = [syslist objectAtIndex:i];
-    m = [sys checkMargin];
+    m = [sys margin];
     if (m) return m;
   }
   return nil;
@@ -669,7 +669,7 @@ extern char *typename[NUMTYPES];
 	NSLog(@"-newMargins, currentSystem == nil");
 	return self;
     }
-    if ([currentSystem checkMargin])
+    if ([currentSystem margin])
     {
 	NSLog(@"-newMargins, currentSystem failed margin check");
 	return self;
@@ -679,7 +679,6 @@ extern char *typename[NUMTYPES];
 	newMargin = [previousMargin copy];
     else 
 	newMargin = [[Margin alloc] init];
-    [newMargin setStaffScale: [[CalliopeAppController currentDocument] staffScale]];
     [newMargin setClient: currentSystem];
     [currentSystem linkobject: newMargin];
     [self deselectAll: self];
@@ -1186,7 +1185,7 @@ extern char *typename[NUMTYPES];
   r = [[CalliopeAppController currentDocument] paperSize];
   sys = [syslist objectAtIndex:s];
   lox = 0;
-  hix = r.width / [[CalliopeAppController currentDocument] staffScale];
+  hix = r.width / [self staffScale];
   k = [sys numberOfStaves];
   for (i = 0; i < k; i++)
   {
@@ -1688,7 +1687,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
     
   i = (sys == [syslist lastObject]) ? -1 : 1;
   [self selectSystemAsCurrent: [self getSystem: sys offsetBy: i]];
-  m = ([sys checkMargin] != nil);
+  m = ([sys margin] != nil);
   if (m) [self saveSysLeftMargin];
   theLocation = [syslist indexOfObject:sys];
   if (theLocation != NSNotFound) [syslist removeObjectAtIndex: theLocation];
@@ -1803,7 +1802,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
     NSLog(@"Assertion failure in GVCommands");
     return nil;
   }
-  m = ([currentSystem checkMargin] != nil);
+  m = ([currentSystem margin] != nil);
   [self copySys: sender];
   [self deleteThisSystem: currentSystem];
   if (m) [self paginate: self];
@@ -1822,6 +1821,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
   int i, k, n;
   NSMutableArray *pl = [self pasteFromPasteboard];
   System *sys, *ns;
+    
   k = [pl count];
   n = 0;
   sys = currentSystem;
@@ -1831,7 +1831,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
     if ([ns graphicType] == SYSTEM)
     {
       ++n;
-      ns->view = self;
+      [ns setPageView: self];
       [ns setPage: [sys page]];
       [ns closeSystem];
       [self insertSystem: ns afterSystem: sys];
@@ -2162,7 +2162,7 @@ void setSplit(Hanger *h, int u, int f)
             }
             else
             {
-              e = ([h->client sysNum] < [hp->client sysNum]);
+              e = ([[h firstClient] sysNum] < [[hp firstClient] sysNum]);
               if (e)
               {
                 nt = [[nc alloc] init];

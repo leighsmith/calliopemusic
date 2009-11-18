@@ -45,6 +45,16 @@ id CrossCursor = nil;	/* global since subclassers may need it */
 
 #define startTimer(timer) if (!timer) { [NSEvent startPeriodicEventsAfterDelay:0.1 withPeriod:0.1]; timer = YES ; }
 
+/* Returns a drawing mode indexed as [selected][invisible], the drawmode forms a suitable index into modegray[] and noprint[]. 
+   Accessed via +drawingModeIfSelected:IfInvisible: 
+ */
+int drawmode[2][4] =
+{
+    {1, 4, 3, 2},
+    {7, 7, 7, 7}
+};
+
+extern int selMode;
 
 + (Class) classFor: (GraphicType) t
 {
@@ -194,7 +204,7 @@ id CrossCursor = nil;	/* global since subclassers may need it */
       [sys linkobject: g];
       break;
     case 2:
-      // Staff -linknote: expects a StaffObj which is a subclass of Graphic.
+      // TODO Staff -linknote: expects a StaffObj which is a subclass of Graphic.
       [sp linknote: g];
       break;
     case 3:
@@ -379,7 +389,6 @@ id CrossCursor = nil;	/* global since subclassers may need it */
 	[self setTypeOfGraphic: 0];
 	gFlags.subtype = 0;
 	enclosures = nil;
-	staffScale = 1.0;
     }
     return self;
 }
@@ -425,16 +434,6 @@ id CrossCursor = nil;	/* global since subclassers may need it */
 - reShape
 {
   return [self recalc];
-}
-
-- (void) setStaffScale: (float) newStaffScale
-{
-    staffScale = newStaffScale;
-}
-
-- (float) staffScale
-{
-    return staffScale;
 }
 
 /* this reached only if not handled by a subclass */
@@ -808,6 +807,7 @@ id CrossCursor = nil;	/* global since subclassers may need it */
 
 /* this draws the object, and is rarely overridden */
 
+// Should move drawmode array inside Graphic, and then override the draw method in subclasses as needed.
 - draw
 {
   return [self drawMode: drawmode[gFlags.selected][gFlags.invis]];
@@ -842,7 +842,10 @@ id CrossCursor = nil;	/* global since subclassers may need it */
     return nil;
 }
 
-extern int selMode;
++ (int) drawingModeIfSelected: (int) selected ifInvisible: (int) invisible
+{
+    return drawmode[selected][invisible];
+}
 
 - traceBounds
 {
@@ -1092,7 +1095,6 @@ struct oldflags			/* for old Versions */
     struct oldflags f;
     char b1, b2, b3, b4, b5, b6, v;
 
-    [self init];    // do any initialisation of the instance before we modify it with decoded data.
     bounds = [aDecoder decodeRect];
     v = [aDecoder versionForClassName: @"Graphic"];
     if (v == 0) {
@@ -1162,7 +1164,6 @@ struct oldflags			/* for old Versions */
     [aCoder setInteger:gFlags.size forKey:@"size"];
     [aCoder setInteger:gFlags.type forKey:@"type"];
     [aCoder setInteger:gFlags.subtype forKey:@"subtype"];
-    [aCoder setFloat: staffScale forKey: @"staffScale"];
 }
 
 

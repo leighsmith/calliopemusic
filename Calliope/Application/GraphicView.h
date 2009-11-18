@@ -24,13 +24,22 @@
 
 @interface GraphicView: NSView
 {
-    // ivars syslist, pagelist, partlist, chanlist, stylelist, currentScale should be refactored into a model class NotationScore.
-    NSMutableArray *syslist;		/*! @var syslist The NSArray of Systems */
-    NSMutableArray *pagelist;		/*! @var pagelist The NSArray of Pages */
-    NSMutableArray *partlist;		/*! @var partlist The NSArray of Parts */
-    NSMutableArray *chanlist;		/*! @var chanlist The NSArray of Channels */
-    NSMutableArray *stylelist;		/*! @var stylelist NSArray of Systems (templates for styles) */
-    float currentScale;			/*! @var currentScale The scaling factor: 1.0 = no scaling. */
+    // TODO ivars syslist, pagelist, partlist, chanlist, stylelist, currentScale should be refactored into a model class NotationScore.
+    /*! @var syslist The NSArray of Systems */
+    NSMutableArray *syslist;
+    /*! @var pagelist The NSArray of Pages */
+    NSMutableArray *pagelist;
+    /*! @var partlist The NSArray of Parts */
+    NSMutableArray *partlist;
+    /*! @var chanlist The NSArray of Channels */
+    NSMutableArray *chanlist;
+    /*! @var stylelist NSArray of Systems (templates for styles) */
+    NSMutableArray *stylelist;
+    
+    /*! @var currentScale The scaling factor: 1.0 = no scaling. */
+    float currentScale;
+    /*! @var staffScale The scale of the staff this graphic is to be drawn on. */
+    float staffScale;
 
     // These ones still need deciding on which side of the model/view divide they should sit.
     BOOL dirtyflag;
@@ -133,6 +142,17 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
 - (int) getScaleNum;
 - (float) getScaleFactor;
 - (void) setScaleFactor: (float) newScaleFactor;
+
+/*!
+ @brief Assigns the scale of the Staff to the Graphic.
+ */
+- (void) setStaffScale: (float) newStaffScale;
+
+/*!
+ @brief Returns the current scale of the staff.
+ */
+- (float) staffScale;
+
 - (float) rulerScale;
 
 /*!

@@ -163,8 +163,7 @@ static BOOL clearPair(GNote *a, GNote *b)
 
 static float kern0(GNote *p, GNote *q)
 {
-  return halfwidth[p->gFlags.size][0][p->time.body]
-   + halfwidth[q->gFlags.size][0][q->time.body];
+  return [p halfWidth] + [q halfWidth];
 }
 
 
@@ -173,8 +172,7 @@ static float kern0(GNote *p, GNote *q)
 static float kern1(GNote *p, GNote *q)
 {
 // NSLog(@"used kern1 (%d, %d)\n", p->time.body, q->time.body);
-  return 0.7 * halfwidth[p->gFlags.size][0][p->time.body]
-    + 0.7 * halfwidth[q->gFlags.size][0][q->time.body];
+  return 0.7 * [p halfWidth] + 0.7 * [q halfWidth];
 }
 
 
@@ -182,11 +180,11 @@ static float kern1(GNote *p, GNote *q)
  
 static float kern2(GNote *p, GNote *q)
 {
-  float pw = halfwidth[p->gFlags.size][0][p->time.body];
-  float qw = halfwidth[q->gFlags.size][0][q->time.body];
-  float e = pw - qw;
-// NSLog(@"used kern2 (%d, %d)\n", p->time.body, q->time.body);
-  return e + 0.7 * qw;
+    float qw = [q halfWidth];
+    float e = [p halfWidth] - qw;
+    // NSLog(@"used kern2 (%d, %d)\n", p->time.body, q->time.body);
+    
+    return e + 0.7 * qw;
 }
 
 

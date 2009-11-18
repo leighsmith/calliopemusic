@@ -389,10 +389,9 @@ int protoVox;
 
 /* return view self is associated with */
 
-- (GraphicView *) myView
+- (GraphicView *) pageView
 {
-    System *s = [self mySystem];
-    return s->view;
+    return [[self mySystem] pageView];
 }
 
 - (Staff *) staff
@@ -408,7 +407,7 @@ int protoVox;
 /* return index of system on which object appears */
 - (int) sysNum
 {
-    GraphicView *v = [self myView];
+    GraphicView *v = [self pageView];
     
     return [[v allSystems] indexOfObject: [self mySystem]];
 }
@@ -1026,7 +1025,7 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
   {
     case '[':
         if (verses == nil) break;
-        view = [self myView];
+        view = [self pageView];
         [view deselectAll: self];
         if (selver >= 0 && selver < [verses count]) vv = [verses objectAtIndex:selver];
         [view selectObj: vv];
@@ -1442,19 +1441,20 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
 
 - renumberGroups: (int) lev
 {
-  Hanger *h;
-  int i, k = [hangers count];
-  while (k--)
-  {
-    h = [hangers objectAtIndex:k];
-    if (h->gFlags.morphed)
-    {
-      i = h->hFlags.level;
-      if (i > lev) h->hFlags.level = i - 1;
-      h->gFlags.morphed = 0;
+    int k = [hangers count];
+
+    while (k--) {
+	Hanger *h = [hangers objectAtIndex: k];
+
+	if (h->gFlags.morphed) {
+	    int i = [h myLevel];
+
+	    if (i > lev) 
+		[h setLevel: i - 1];
+	    h->gFlags.morphed = 0;
+	}
     }
-  }
-  return self;
+    return self;
 }
 
 

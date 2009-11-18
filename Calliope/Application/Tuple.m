@@ -268,9 +268,9 @@ static float braoffy[2][2] =
       }
     }
  #endif
-    if (hFlags.level)
+    if ([self myLevel])
     {
-      dy = hFlags.level * 4 * nature[sz];
+      dy = [self myLevel] * 4 * nature[sz];
       if (a) dy = -dy;
       py += dy;
       qy += dy;
@@ -319,7 +319,7 @@ static float braoffy[2][2] =
   int bk = 0, k;
   TimedObj *q;
   Beam *b;
-  NSMutableArray *bl = nil;
+  NSArray *bl = nil;
   int lk = [l count];
   k = lk;
   if (k == 0) return nil;
@@ -329,7 +329,7 @@ static float braoffy[2][2] =
     if ([b graphicType] == BEAM)
     {
       client = [[NSMutableArray alloc] init];
-      bl = b->client;
+      bl = [b clients];
       bk = [bl count];
       for (k = 0; k < bk; k++) [(NSMutableArray *)client addObject: [bl objectAtIndex:k]];
     }
@@ -353,11 +353,12 @@ static float braoffy[2][2] =
     }
   }
   k = bk;
-  hFlags.level = [self maxLevel] + 1;
+  [self setLevel: [self maxLevel] + 1];
   while (k--) [[client objectAtIndex:k] linkhanger: self];
   q = [client objectAtIndex:0];
   flags.localiga = 1;
-  if (bl != nil && hFlags.level == 0) flags.formliga = 0;
+  if (bl != nil && [self myLevel] == 0)
+      flags.formliga = 0;
   else if ([q isBeamed]) flags.formliga = 2;
   else
   {
@@ -735,7 +736,7 @@ struct oldflags	/* for old version */
 
   [super initWithCoder: aDecoder];
   v = [aDecoder versionForClassName:@"Tuple"];
-  hFlags.level = 0;
+  [self setLevel: 0]; // TODO perhaps this shouldn't be done here?
   flags.centre = 0;
   vtrim1 = vtrim2 = 0.0;
   if (v == 0)
@@ -814,7 +815,7 @@ struct oldflags	/* for old version */
   {
     [aDecoder decodeValuesOfObjCTypes:"@ffff", &client, &x1, &y1, &x2, &y2];
     [aDecoder decodeValuesOfObjCTypes:"ccccccccccc", &style, &body, &dot, &uneq1, &uneq2, &b1, &b3, &b4, &b5, &b6, &b7];
-    hFlags.level = b1;
+    [self setLevel: b1];
     flags.formliga = b3;
     flags.fixed = b4;
     flags.localiga = b5;

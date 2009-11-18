@@ -1000,7 +1000,7 @@ float textoff[2], baselines[2][MAXTEXT];
   {
     /* check if next line starts with a melisma */
     sys = mysys;
-    sp = [sys->view nextStaff: sys : [self myIndex]];
+    sp = [[sys pageView] nextStaff: sys : [self myIndex]];
     if ([sp startMelisma: v : vn]) x = [self xOfEnd];
   }
   return x;
@@ -1360,12 +1360,12 @@ static void drawbarnum(int n, float x, float y, NSFont *f, int j, int eb, int mo
     case 0:
      break;
     case 1:
-      if ([[s->view prevStaff: s : [self myIndex]] lastBarNoCount]) break;
+      if ([[[s pageView] prevStaff: s : [self myIndex]] lastBarNoCount]) break;
       by = y - ((4 + barbase) * flags.spacing);
       drawbarnum(b, [s leftWhitespace], by, f, JLEFT, eb, mode);
       break;
     case 3:
-      if ([[s->view prevStaff: s : [self myIndex]] lastBarNoCount]) break;
+      if ([[[s pageView] prevStaff: s : [self myIndex]] lastBarNoCount]) break;
       bx = [s leftWhitespace] - ([self brackLevel] * (brackwidth[gFlags.size] + (2 * nature[0])));
       bx -= charFGW(f, '3');
         by = y + fontAscent(f) - (barbase * flags.spacing);
@@ -1374,7 +1374,7 @@ static void drawbarnum(int n, float x, float y, NSFont *f, int j, int eb, int mo
     case 2:
       by = y - ((2.5 + barbase) * flags.spacing);
       m = [doc getPreferenceAsInt: BAREVERY];
-      if ((b % m) == 0 && !([[s->view prevStaff: s : [self myIndex]] lastBarNoCount]))
+      if ((b % m) == 0 && !([[[s pageView] prevStaff: s : [self myIndex]] lastBarNoCount]))
       {
         drawbarnum(b, [self xOfHyphmarg], by, f, JLEFT, eb, mode);
       }
@@ -1444,7 +1444,7 @@ static void drawbarnum(int n, float x, float y, NSFont *f, int j, int eb, int mo
     bx = lm + li;
     th = staffthick[flags.subtype][gFlags.size];
     by = y - 0.5 * th;
-    m = drawmode[0][0];
+    m = [Graphic drawingModeIfSelected: 0 ifInvisible: 0];
     i = flags.nlines;
     while (i--) {
 	cmakeline(bx, by, bx + mysys->width - th, by, m);

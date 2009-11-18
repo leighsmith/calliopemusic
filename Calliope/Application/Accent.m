@@ -183,7 +183,7 @@ static Accent *proto;
 
 - (BOOL) getXY: (float *) x : (float *) y
 {
-  GNote *p = client;
+  GNote *p = [self firstClient];
   *x = xoff + p->x;
   *y = yoff + p->y;
   return YES;
@@ -202,7 +202,7 @@ static Accent *proto;
     if (ISASTAFFOBJ(p))
     {
       t = [self newFrom];
-      t->client = p;
+      [t setClient: p];
       [p linkhanger: t];
       [t recalc];
       [v selectObj: t];
@@ -222,9 +222,9 @@ static Accent *proto;
   k = ACCSIGNS;
   while (k--) sign[k] = proto->sign[k];
   accstick = proto->accstick;
-  client = g;
+  [self setClient: g];
   gFlags.size = g->gFlags.size;
-  [client linkhanger: self];
+  [[self firstClient] linkhanger: self];
   return self;
 }
 
@@ -251,21 +251,23 @@ static Accent *proto;
 
 - (int) hasOttava
 {
-  int top, i, k = ACCSIGNS;
-  StaffObj *p = client;
-  top = updir[([p graphicType] == NOTE && [(TimedObj *)p stemIsUp])][gFlags.subtype];
-  while (k--)
-  {
-    i = signs[(int) sign[k]].alter;
-      if (i == 6) return (top ? NUMACCS + 1 : NUMACCS + 0);
-  }
-  return 0;
+    int top, i, k = ACCSIGNS;
+    StaffObj *p = [self firstClient];
+    
+    top = updir[([p graphicType] == NOTE && [(TimedObj *)p stemIsUp])][gFlags.subtype];
+    while (k--) {
+	i = signs[(int) sign[k]].alter;
+	if (i == 6) 
+	    return (top ? NUMACCS + 1 : NUMACCS + 0);
+    }
+    return 0;
 }
 
 
 - (BOOL) move: (float) dx : (float) dy : (NSPoint) p : sys : (int) alt
 {
-  GNote *q = client;
+  GNote *q = [self firstClient];
+    
   xoff = dx + p.x - q->x;
   yoff = dy + p.y - q->y;
   [self recalc];
@@ -314,7 +316,7 @@ float tyoff[2][5] =
 
 - drawSpecial: (int) j : (int) m
 {
-  TimedObj *p = client;
+  TimedObj *p = [self firstClient];
   int k, sz, sd, pb;
   float x0, y0, x1, y1, th, jmp, dx, bh, ss;
   switch(signs[j].upsign)
@@ -326,7 +328,7 @@ float tyoff[2][5] =
       ss = getSpacing([p staff]);
       bh = 0.5 * nature[sz];
       pb = p->time.body;
-      dx = halfwidth[sz][0][pb];
+      dx = [p halfWidth];
       sd = [p stemIsUp] ? -1 : 1;
       th = bh * sd;
       jmp = 2 * bh * sd;
@@ -380,7 +382,7 @@ float tyoff[2][5] =
   unsigned char ch;
   int i, j, sz, dir, top;
   NSFont *f;
-  StaffObj *p = client;
+  StaffObj *p = [self firstClient];
   Staff *staff = [p staff];
   BOOL fr;
   

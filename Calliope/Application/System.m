@@ -124,6 +124,15 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 // TODO return [[allSystems lastObject] isEqual: self];
 }
 
+- (GraphicView *) pageView
+{
+    return view; // not retained so we don't release it here.
+}
+
+- (void) setPageView: (GraphicView *) newPageView
+{
+    view = newPageView;
+}
 
 /*
   Main vertical formatter.  System becomes vertically compressed. 
@@ -375,14 +384,13 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
     if (cursys == nil) {
 	Margin *margin = [[Margin alloc] init];
 	
-	[margin setStaffScale: staffScale];
 	[margin setClient: self];
 	[self linkobject: margin];
 	[margin release];
 	page = nil;
     }
     else {
-	Margin *currentMargin = [[cursys checkMargin] copy];
+	Margin *currentMargin = [[cursys margin] copy];
 	
 	[currentMargin setClient: self];
 	[self linkobject: currentMargin];
@@ -413,7 +421,6 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
     newSystem->height = height;
     newSystem->headroom = headroom;
     newSystem->style = style;
-    newSystem->staffScale = staffScale; // TODO this is copied at the wrong abstraction level, it needs to be the superclass copy.
     for (staffIndex = 0; staffIndex < [self numberOfStaves]; staffIndex++) {
 	Clef *lastClef;
 	KeySig *lastKeySignature;
@@ -457,7 +464,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
     [sys setTypeOfGraphic: SYSTEM];
     sys->flags = flags;
     sys->flags.nstaves = sn;
-    sys->view = v;
+    [sys setPageView: v];
     [sys setPage: nil];
     sys->lindent = lindent;
     sys->rindent = rindent;
@@ -545,24 +552,24 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
   return self;
 }
 
-
-- (void) setStaffScale: (float) newStaffScale
+- (float) staffScale
 {
-    staffScale = newStaffScale;
+    return [[self pageView] staffScale];
 }
 
 /*  return if self has a margin object */
 
-- checkMargin
+- margin
 {
-  Margin *p;
-  int k = [nonStaffGraphics count];
-  while (k--)
-  {
-    p = [nonStaffGraphics objectAtIndex:k];
-    if ([p graphicType] == MARGIN) return p;
-  }
-  return nil;
+    Margin *p;
+    int k = [nonStaffGraphics count];
+    
+    while (k--) {
+	p = [nonStaffGraphics objectAtIndex: k];
+	if ([p graphicType] == MARGIN) 
+	    return p;
+    }
+    return nil;
 }
 
 
@@ -570,11 +577,14 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 
 - (float) leftMargin
 {
-  Margin *m;
-  if (page) return [page leftMargin];
-  m = [self checkMargin];
-  if (m) return [m leftMargin];
-  return 36.0 / staffScale;
+    Margin *m;
+    
+    if (page) 
+	return [page leftMargin];
+    m = [self margin];
+    if (m) 
+	return [m leftMargin];
+    return 36.0 / [self staffScale];
 }
 
 
@@ -582,9 +592,9 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 {
   Margin *m;
   if (page) return [page rightMargin];
-  m = [self checkMargin];
+  m = [self margin];
   if (m) return [m rightMargin];
-  return 36.0 / staffScale;
+  return 36.0 / [self staffScale];
 }
 
 
@@ -592,9 +602,9 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 {
   Margin *m;
   if (page) return [page headerBase];
-  m = [self checkMargin];
+  m = [self margin];
   if (m) return [m headerBase];
-  return 18.0 / staffScale;
+  return 18.0 / [self staffScale];
 }
 
 
@@ -602,30 +612,30 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 {
   Margin *m;
   if (page) return [page footerBase];
-  m = [self checkMargin];
+  m = [self margin];
   if (m) return [m footerBase];
-  return 18.0 / staffScale;
+  return 18.0 / [self staffScale];
 }
 
 
 - (float) leftIndent
 {
   if (lindent == 0.0) return 0.0;  /* common shortcut */
-  return lindent / staffScale;
+  return lindent / [self staffScale];
 }
 
 
 - (float) leftWhitespace
 {
   if (lindent == 0.0) return [self leftMargin];  /* common shortcut */
-  return [self leftMargin] + (lindent / staffScale);
+  return [self leftMargin] + [self leftIndent];
 }
 
 
 - (float) rightIndent
 {
   if (rindent == 0.0) return 0.0;  /* common shortcut */
-  return rindent / staffScale;
+  return rindent / [self staffScale];
 }
 
 
@@ -638,7 +648,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 - recalc
 {
     //   TODO [[CalliopeAppController currentDocument] paperSize];
-    width = ((paperSize.width - lindent - rindent) / staffScale) - ([self leftMargin] + [self rightMargin]);
+    width = ((paperSize.width - lindent - rindent) / [self staffScale]) - ([self leftMargin] + [self rightMargin]);
     return [self resetSys];
 }
 
@@ -1271,6 +1281,7 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
     [aDecoder decodeValuesOfObjCTypes:"@@@", &staves, &nonStaffGraphics, &style];
     view = [[aDecoder decodeObject] retain];
     page = [[aDecoder decodeObject] retain];
+    [[page margin] setClient: self];
     return self;
   }
   if (v == 12)
@@ -1290,6 +1301,7 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
     if (oldstyle) style = [[NSString stringWithUTF8String:oldstyle] retain]; else style = nil;
     view = [[aDecoder decodeObject] retain];
     page = [[aDecoder decodeObject] retain];
+      [[page margin] setClient: self];
     return self;
   }
   if (v == 11)
@@ -1314,6 +1326,7 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
 	  style = nil;
     view = [[aDecoder decodeObject] retain];
     page = [[aDecoder decodeObject] retain];
+    [[page margin] setClient: self];
     return self;
   }
   if (v == 10)
@@ -1330,6 +1343,8 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
     if (oldstyle) style = [[NSString stringWithUTF8String:oldstyle] retain]; else style = nil;
     view = [[aDecoder decodeObject] retain];
     page = [[aDecoder decodeObject] retain];
+      [[page margin] setClient: self];
+
     return self;
   }
   style = nullPart;
@@ -1346,6 +1361,7 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
     [aDecoder decodeValuesOfObjCTypes:"@@", &staves, &nonStaffGraphics];
     view = [[aDecoder decodeObject] retain];
     page = [[aDecoder decodeObject] retain];
+      [[page margin] setClient: self];
     return self;
   }
   else if (v == 8)
@@ -1481,7 +1497,7 @@ static float shmm[8] =		/* staff height in mm, given rastral number  */
     [aCoder setFloat:height forKey:@"height"];
     [aCoder setFloat:headroom forKey:@"headroom"];
     [aCoder setFloat:oldleft forKey:@"oldleft"];
-
+    
     [aCoder setObject:staves forKey:@"staves"];
     [aCoder setObject:nonStaffGraphics forKey:@"objs"];
     [aCoder setString:style forKey:@"style"];

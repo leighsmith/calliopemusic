@@ -888,7 +888,7 @@ unsigned char hasstem[10] =
   1, 1, 1, 1, 1, 1, 1, 0, 0, 1
 };
 
-unsigned char hasflag[10] = /* a 2 means flags that grow stemlen */
+unsigned char hasflag[10] = /* a 2 means flags that grow stem length */
 {
   2, 2, 2, 1, 1, 0, 0, 0, 0, 0
 };
@@ -922,16 +922,16 @@ unsigned char oflag[2][5] =
   { 238, 236, 237, 231, 229 }
 };
 
-/* these tables use [stemlen<0][size] */
+/* these tables use [stem length < 0][size] */
 
 float noteoffset[3];	/* offset from nominal x */
 float stemleft[2][3];	/* offset from nominal x */
 float stemcentre[2][3];	/* offset from nominal x */
 float stemright[2][3];	/* offset from nominal x */
 
-
-float headwidth[3][NUMHEADS][10];	/* head width: [size][headtype][timecode] */
+// This should be in TimeObj or GNote and accessed via a method, [(TimedObj *)note halfWidthOfNoteHead: (NoteHead *) head].
 float halfwidth[3][NUMHEADS][10];	/* head half: [size][headtype][timecode] */
+
 float stemdx[3][NUMHEADS][2][10][2];	/* [size][headtype][stemtype (only 0/1)][timecode][stemup] */
 float stemdy[3][NUMHEADS][2][10][2];	/* [size][headtype][stemtype (only 0/1)][timecode][stemup] */
 float flagdx[3][NUMHEADS][10][2];	/* [size][headtype][timecode][stemup] */
@@ -956,10 +956,7 @@ void muxlowInit()
   int i, j, size, stype, stemup;
   float hw, dx, w, sdx, sdy, fdx=0.0;
   NSFont *f, *fh;
-//  nullPart = NXUniqueString("unassigned");
-//  nullInstrument = NXUniqueString("Piano");
-//  nullFingerboard = NXUniqueString("Lute in G");
-//  nullProgChange = NXUniqueString("Remote Synthesizer");
+    
   nullPart = @"unassigned";
   nullInstrument = @"Piano";
   nullFingerboard = @"Lute in G";
@@ -989,7 +986,6 @@ void muxlowInit()
       {
         fh = musicFont[headfont[i][j]][size];
 	w = charFGW(fh, headchars[i][j]);
-        headwidth[size][i][j] = w;
 	hw = 0.5 * w;
 	halfwidth[size][i][j] = hw;
 	for (stype = 0; stype <= 1; stype++)
@@ -1177,13 +1173,13 @@ int tickval(int b, int d)
 
 /* calculate stem length */
 
-int getstemlen(int body, int sizeIndex, int style, int su, int p, int s)
+int getstemlen(int body, int sizeIndex, int style, int stemIsUp, int p, int s)
 {
   int r=0;
-  if (!(hasstem[body])) return(su ? -1 : 1);
+  if (!(hasstem[body])) return(stemIsUp ? -1 : 1);
   if (style == 0)
   {
-    if (su)
+    if (stemIsUp)
     {
       if (p > 11) r = s * (p - 4);
       else
@@ -1211,7 +1207,7 @@ int getstemlen(int body, int sizeIndex, int style, int su, int p, int s)
     r = stemlens[1][sizeIndex];
     if (hasflag[body] == 2) r += (3 - body) * s;
   }
-  return( su ? -r : r);
+  return( stemIsUp ? -r : r);
 }
 
 
@@ -1425,10 +1421,10 @@ int modeinvis[5] = {0, 2, 2, 2, 4};
 
 /* shapeID is defined only when bodyType == 6 */
 
-void drawhead(float x, float y, int bodyType, int body, int shapeID, int su, int sizeIndex, int m)
+void drawhead(float x, float y, int bodyType, int body, int shapeID, int stemIsUp, int sizeIndex, int m)
 {
     if (bodyType == 6)
-	DrawCharacterInFont(x, y, shapeheads[shapeID][body][!su], musicFont[shapefont[shapeID]][sizeIndex], m);
+	DrawCharacterInFont(x, y, shapeheads[shapeID][body][!stemIsUp], musicFont[shapefont[shapeID]][sizeIndex], m);
     else if (bodyType == 4) {
 	if (m != 0)
 	    return;

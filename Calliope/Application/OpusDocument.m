@@ -895,11 +895,11 @@ return nil;
 {
     System *newSystem = [[System alloc] initWithStaveCount: numOfStaves onGraphicView: view];
 
-    [newSystem setStaffScale: [self staffScale]];
     [newSystem initsys];  // [newSystem initWithSystem: [view currentSystem]];
     if (numOfStaves > 1) 
 	[newSystem installLink]; // to what?
     [view addSystem: newSystem];
+    [view setStaffScale: [self staffScale]]; // TODO perhaps should be elsewhere.
     [view renumSystems];
     [view doPaginate];
     [view renumPages];
@@ -1221,6 +1221,9 @@ return nil;
         [scrollView initialiseControls]; // Connect up the page up & down buttons.
 	[self zeroScale]; // TODO is this necessary here?
         [view setNeedsDisplay: YES];
+	// Because the archiveView is still pointed to by System, we need to assign both the recovered and the actual view.
+	[view setStaffScale: [self staffScale]];
+	[archiveView setStaffScale: [self staffScale]];
     }
 }
 

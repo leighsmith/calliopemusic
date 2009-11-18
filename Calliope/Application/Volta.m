@@ -47,7 +47,7 @@ extern float barwidth[3][3];
 
 - (BOOL) getXY: (float *) x : (float *) y
 {
-  StaffObj *p = client;
+  StaffObj *p = [self firstClient];
   Staff *sp = p->mystaff;
   if ([sp graphicType] != STAFF) return NO;
   *x = p->x;
@@ -84,7 +84,7 @@ extern float barwidth[3][3];
 - (void)removeObj
 {
     [self retain];
-    [client unlinkhanger: self];
+    [[self firstClient] unlinkhanger: self];
     [endpoint unlinkhanger: self];
     [self release];
 }
@@ -106,7 +106,7 @@ extern float barwidth[3][3];
 - (BOOL) move: (float) dx : (float) dy : (NSPoint) pt : sys : (int) alt
 {
   int np;
-  StaffObj *p = client;
+  StaffObj *p = [self firstClient];
   Staff *sp = p->mystaff;
   if ([sp graphicType] != STAFF) return NO;
   np = [sp findPos: dy + pt.y];
@@ -126,7 +126,7 @@ char bartype[10] = {0, 0, 2, 2, 1, 1, 3, 0, 0, 0};
 {
   float x1, y1, x2, y2, th;
   int ss;
-  StaffObj *p = client;
+  StaffObj *p = [self firstClient];
   Staff *sp = p->mystaff;
   if ([sp graphicType] != STAFF) return nil;
   ss = sp->flags.spacing;

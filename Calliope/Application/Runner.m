@@ -125,16 +125,13 @@ Seems to interfere with alignment. margins need resetting twice too.
  Also frame rect does not
 seem to change size correctly, hence various transforms.
 */
-
-extern int selMode;
-
 - (void) renderInRect: (NSRect) r text: (NSAttributedString *) textString paperSize: (NSSize) ps onPage: (Page *) pg
 {
     System *sys = client;
     NSRect fb, vb, fo;
     NSSize ms;
     float f;
-    vb = [sys->view bounds];
+    vb = [[sys pageView] bounds];
     
     if (textString == nil)
 	return;
@@ -142,7 +139,7 @@ extern int selMode;
     [[myTextView textContainer] setContainerSize: (vb.size)];
     ms.width = ms.height = 0.0;
     [myTextView setMinSize: ms];
-    f = [[CalliopeAppController currentDocument] staffScale];
+    f = [client staffScale];
     runnerIsDrawing = YES;
     [[myTextView textStorage] beginEditing];
     [[myTextView textStorage] replaceCharactersInRange: NSMakeRange(0, [[myTextView string] length]) withAttributedString: textString];

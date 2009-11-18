@@ -195,9 +195,9 @@ static float braoffy[2] =  { 1.0, -1.0 };
     off2.x = braoffx[1][t] * dx;
     off2.y = ([q yAboveBelow: a] - q->y) + braoffy[a] * dy;
   }
-  if (hFlags.level)
+  if ([self myLevel])
   {
-    dy = hFlags.level * nature[sz];
+    dy = [self myLevel] * nature[sz];
     off1.x -= dy;
     off2.x += dy;
     if (a) dy = -dy;
@@ -224,9 +224,9 @@ static float braoffy[2] =  { 1.0, -1.0 };
     off2.x = LEFTBOUND(q) - q->x;
     off2.y = 0;
   }
-  if (hFlags.level)
+  if ([self myLevel])
   {
-    dy = hFlags.level * 4 * nature[gFlags.size];
+    dy = [self myLevel] * 4 * nature[gFlags.size];
     if (!flags.place) dy = -dy;
     off1.y += dy;
     off2.y += dy;
@@ -290,7 +290,7 @@ static float braoffy[2] =  { 1.0, -1.0 };
     q = [l objectAtIndex:k];
       if (ISASTAFFOBJ(q)) [(NSMutableArray *)client addObject: q];
   }
-  hFlags.level = [self maxLevel] + 1;
+  [self setLevel: [self maxLevel] + 1];
   k = bk;
   while (k--) [[client objectAtIndex:k] linkhanger: self];
   return self;
@@ -326,15 +326,15 @@ static float braoffy[2] =  { 1.0, -1.0 };
   client = [[NSMutableArray alloc] init];
   if (t1 != nil)
   {
-    p = t1->client;
+    p = [t1 firstClient];
       [(NSMutableArray *)client addObject: p];
     [p linkhanger: self];
   }
   if (t2 != nil)
   {
-    q = t2->client;
+      q = [t2 firstClient];
       [(NSMutableArray *)client addObject: q];
-    [q linkhanger: self];
+      [q linkhanger: self];
   }
   if (t1 == nil) t1 = t2;
   gFlags.subtype = mapTieSubtype[t1->gFlags.subtype];

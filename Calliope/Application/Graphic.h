@@ -77,8 +77,6 @@ extern id CrossCursor;
 	unsigned int subtype : 5;	/* subtype */
     } gFlags;
 @protected
-    /*! @var staffScale The scale of the staff this graphic is to be drawn on. */
-    float staffScale;
     NSMutableArray *enclosures;			/* the list of enclosures */
 }
 
@@ -123,15 +121,6 @@ extern id CrossCursor;
 - proto: (GraphicView *) v : (NSPoint) pt : (Staff *) sp : (System *) sys : (Graphic *) g : (int) i;
 - recalc;
 
-/*!
- @brief Assigns the scale of the Staff to the Graphic.
- */
-- (void) setStaffScale: (float) newStaffScale;
-
-/*!
- @brief Returns the current scale of the staff.
- */
-- (float) staffScale;
 
 - reShape;
 - (BOOL) canSplit;
@@ -212,6 +201,11 @@ extern id CrossCursor;
 - drawVerses: (NSRect)rect nonSelectedOnly: (BOOL) nso;
  /*sb: this added at this juncture to prevent compiler warnings. Here, returns only self. Intended to be subclassed. */
 - sysInvalid;
+
+/*!
+  @brief Returns the drawing mode given the selected and invisible states.
+ */
++ (int) drawingModeIfSelected: (int) selected ifInvisible: (int) invisible;
 
 @end
 

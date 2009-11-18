@@ -89,7 +89,7 @@ static Metro *proto;
   dot[0] = proto->dot[0];
   ticks = proto->ticks;
   pos = [proto staffPosition];
-  [client linkhanger: self];
+    [[self firstClient] linkhanger: self];
   return self;
 }
 
@@ -106,7 +106,7 @@ static Metro *proto;
     if (ISASTAFFOBJ(p))
     {
       t = [self newFrom];
-      t->client = p;
+      [t setClient: p];
       [p linkhanger: t];
       [t recalc];
       [v selectObj: t];
@@ -120,7 +120,7 @@ static Metro *proto;
 - (BOOL) move: (float) dx : (float) dy : (NSPoint) pt : sys : (int) alt
 {
   int np;
-  StaffObj *p = client;
+  StaffObj *p = [self firstClient];
   Staff *sp = p->mystaff;
   if ([sp graphicType] != STAFF) return NO;
   np = [sp findPos: pt.y];

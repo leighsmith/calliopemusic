@@ -5,15 +5,13 @@
   @brief Represents staff objects which have a time associated with them.
 
   In addition to describing staff objects which have a time associated with
-  them, TimedObj also contains note stem descriptions.
+  them, TimedObj also contains note stem descriptions. Note that the ivars beamed and 
+  stem length (stemlen) are counted as timed information because they are affected by
+  whether there is a figure.
  */
 #import "winheaders.h"
 #import "StaffObj.h"
-
-/*
-  note that beamed and stemlen are counted as timeinfo because they
-  are affected by whether there is a figure.
-*/
+#import "NoteHead.h"
 
 struct oldtimeinfo			/* used for reading ClassVersion 0 */
 {
@@ -49,12 +47,12 @@ struct timeinfo
 - (float) noteEval: (BOOL) f;
 
 /*!
- Increments the note code by the given index and returns the new code. 
+  @brief Increments the note code by the given index and returns the new code. 
  */
 - (int) incrementNoteCodeBy: (int) a;
 
 /*!
- Returns the note code (identifier) of the timed object. 
+  @brief Returns the note code (identifier) of the timed object. 
  */
 - (int) noteCode;
 
@@ -66,57 +64,72 @@ struct timeinfo
 - (float) stemYoff: (int) stype;
 
 /*!
- Assigns the new stem length in points and determines whether the stem is up or down by the sign.
+  @brief Assigns the new stem length in points and determines whether the stem is up or down by the sign.
  */
 - (void) setStemLengthTo: (float) newStemLength;
 
 /*!
- Returns the stem length in points.
+  @brief Returns the stem length in points.
  */
 - (float) stemLength;
 
 /*!
- Returns if the timed object has a stem.
+  @brief Returns if the timed object has a stem.
  */
 - (BOOL) hasNoStem;
 
 /*!
- Returns if the timed object's stem is up (or down).
+  @brief Returns if the timed object's stem is up (or down).
  */
 - (BOOL) stemIsUp;
 
 /*!
-  Assigns that the timed object's stem is up (YES), or down (NO).
+  @brief Assigns that the timed object's stem is up (YES), or down (NO).
  */
 - (void) setStemIsUp: (BOOL) yesOrNo;
 
 /*!
-  Returns if the timed object's stem is fixed or free to be changed up or down.
+  @brief Returns if the timed object's stem is fixed or free to be changed up or down.
  */
 - (BOOL) stemIsFixed;
 
 /*!
-  Assigns if the timed object's stem is fixed or free to be changed up or down.
+  @brief Assigns if the timed object's stem is fixed or free to be changed up or down.
  */
 - (void) setStemIsFixed: (BOOL) yesOrNo;
 
 /*!
- Returns if the timed object is dotted. TODO should be an enum.
+ @brief Returns if the timed object is dotted. TODO should be an enum.
  */
 - (int) dottingCode;
 
 /*!
- Assigns that the timed object is dotted. TODO should be an enum.
+ @brief Assigns that the timed object is dotted. TODO should be an enum.
  */
 - (void) setDottingCode: (int) newDottingCode;
 
+/*!
+  @brief Returns the half width of the note head, dependent on the size and body type of the Timed object.
+ */
+- (float) halfWidthOfNoteHead: (NoteHead *) noteHead;
+
+/*!
+  @brief Returns the half width of the timed object, dependent on the size and body of the Timed object, but not the note type.
+ */
+- (float) halfWidth;
+
 - (BOOL) validAboveBelow: (int) a;
+
+/*!
+  @brief The TimedObj is able to have a beam drawn between itself and another TimedObj instance.
+ */
 - (BOOL) isBeamable;
+
 - (BOOL) isBeamed;
 - (BOOL) hitBeamAt: (float *) x : (float *) y;
 - (BOOL) tupleStarts;
 - (BOOL) tupleEnds;
-- (id)initWithCoder: (NSCoder *) aDecoder;
-- (void)encodeWithCoder: (NSCoder *) aCoder;
+- (id) initWithCoder: (NSCoder *) aDecoder;
+- (void) encodeWithCoder: (NSCoder *) aCoder;
 
 @end

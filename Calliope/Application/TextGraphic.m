@@ -296,7 +296,7 @@ static NSTextView *drawText = nil;
     case 0:
       break;
     case 1:
-      r = [s->view bounds];
+      r = [[s pageView] bounds];
       offset.x = 0.5 * (r.size.width - w);
       break;
     case 2:
@@ -652,8 +652,9 @@ extern int selMode;
 
 - draw
 {
-  if (gFlags.subtype == STAFFHEAD && ((Staff *)client)->flags.hidden) return self;
-  return [self drawMode: drawmode[gFlags.selected][gFlags.invis]];
+  if (gFlags.subtype == STAFFHEAD && ((Staff *)client)->flags.hidden) 
+      return self;
+  return [self drawMode: [Graphic drawingModeIfSelected: gFlags.selected ifInvisible: gFlags.invis]];
 }
 
 

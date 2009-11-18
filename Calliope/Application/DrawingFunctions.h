@@ -139,7 +139,6 @@ extern BOOL dragflag;
 
 extern int currentTool;
 
-extern int drawmode[2][4];	/* drawmode[selected][invis] */
 extern int markmode[2];		/* markmode[selected] */
 
 extern NSFont *musicFont[2][3];

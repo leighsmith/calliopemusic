@@ -184,7 +184,7 @@
   while (k--)
   {
     p = [hl objectAtIndex:k];
-      [(NSMutableArray *)client addObject: p];
+      [client addObject: p];
     [p linkhanger: self];
   }
   hFlags.split &= h->hFlags.split;
@@ -193,55 +193,81 @@
 }
 
 
-/* neeeds to be overridden by hangers without level */
+/* needs to be overridden by Hangers without level */
 
 - (int) myLevel
 {
-  return hFlags.level;
+    return hFlags.level;
 }
 
+- (void) setLevel: (int) newLevel
+{
+    hFlags.level = newLevel;
+}
 
-/* must be called before self is one of the hangers */
+/* must be called before self is one of the Hangers */
 
 - (int) maxLevel
 {
-  int i, m = -1, k = [client count];
-  StaffObj *p;
-  while (k--)
-  {
-    p = [client objectAtIndex:k];
-    i = [p maxGroupLevel];
-    if (i > m) m = i;
-  }
-  return m;
+    int m = -1, k = [client count];
+
+    while (k--) {
+	StaffObj *p = [client objectAtIndex: k];
+	int i = [p maxGroupLevel];
+
+	if (i > m) 
+	    m = i;
+    }
+    return m;
 }
 
+// TODO this should return a (Graphic *)
+- firstClient
+{
+    return [client objectAtIndex: 0];
+}
+
+// - (void) setClient: (Graphic *) newClient
+- (void) setClient: (id) newClient
+{
+    [client addObject: newClient];
+}
+
+- (NSArray *) clients
+{
+    return [NSArray arrayWithArray: client];
+}
 
 /* remove from clients anything not in l */
-
 - closeClients: (NSMutableArray *) l
 {
-  id p;
-  int k = [client count];
-  while (k--)
-  {
-    p = [client objectAtIndex:k];
-      if ([l indexOfObject:p] == NSNotFound) [(NSMutableArray *)client removeObjectAtIndex: k];
-  }
-  return self;
+    int k = [client count];
+
+    while (k--) {
+	id p = [client objectAtIndex: k];
+	
+	if ([l indexOfObject: p] == NSNotFound) 
+	    [client removeObjectAtIndex: k];
+    }
+    return self;
 }
 
-
+// TODO probably should just be merged with sysInvalidList.
 - sysInvalid
 {
-  return [client sysInvalid];
+    return [[self firstClient] sysInvalid];
 }
 
+- (float) staffScale
+{
+    return [[[self firstClient] mySystem] staffScale];
+}
 
 - sysInvalidList
 {
-  int k = [client count];
-  while (k--) [[client objectAtIndex:k] sysInvalid];
+    int k = [client count];
+    while (k--) 
+	[[client objectAtIndex: k] sysInvalid];
   return self;
 }
 
@@ -274,7 +300,7 @@
   k = [enclosures count];
   while (k--) [[enclosures objectAtIndex:k] removeObj];
   [self retain];
-  [client unlinkhanger: self];
+  [[self firstClient] unlinkhanger: self];
   [self release];
 }
 

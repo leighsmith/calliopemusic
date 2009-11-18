@@ -23,9 +23,9 @@
     /*! Offset from accidental? */
     float accidoff;
     /*! Indicates that the accidental is an "editorial" accidental. */
-    char editorial;
+    BOOL editorial;
     /*! is the note head on the wrong side of the stem? TODO should be a BOOL. */
-    char side;
+    BOOL side;
     /*! back reference to the GNote which references the note head. */
     GNote *myNote;
     /*! The body type of the note head, describing it's shape. */

@@ -113,7 +113,7 @@ static void orderXY(float *x, float *y)
 - recalc
 {
   Tie *t = partner;
-  flags.same = ([client sysNum] == [t->client sysNum]);
+  flags.same = ([[self firstClient] sysNum] == [[t firstClient] sysNum]);
   t->flags.same = flags.same;
   bbinit();
   [self drawMode: 0];
@@ -125,7 +125,7 @@ static void orderXY(float *x, float *y)
     [t drawMode: 0];
     t->bounds = getbb();
   }
-  [client sysInvalid];
+  [[self firstClient] sysInvalid];
   return self;
 }
 
@@ -141,7 +141,7 @@ static void orderXY(float *x, float *y)
 - coordsForHandle: (int) h  asX: (float *) x  andY: (float *) y
 {
   Tie *t;
-  StaffObj *p = client;
+  StaffObj *p = [self firstClient];
   if (h == 0)
   {
     *x = p->x + offset.x;
@@ -158,7 +158,7 @@ static void orderXY(float *x, float *y)
     }
     else
     {
-      *x = [p xOfStaffEnd: ([p sysNum] < [t->client sysNum])];
+      *x = [p xOfStaffEnd: ([p sysNum] < [[t firstClient] sysNum])];
       *y = [p headY: headnum] + offset.y;
     } 
   }
@@ -236,10 +236,10 @@ static char defConst[NUMTIES] = {0, 0, 1, 0, 0, 1, 1, 0};
 {
     Tie *t = partner;
     [self retain];
-    [client unlinkhanger: self];
+    [[self firstClient] unlinkhanger: self];
     if (t != nil)
       {
-        [t->client unlinkhanger: t];
+        [[t firstClient] unlinkhanger: t];
         /* I think ok to release here, since we are the only object to have retained it (see archiving code) */
         [t release]; 
       }
@@ -251,7 +251,7 @@ static char defConst[NUMTIES] = {0, 0, 1, 0, 0, 1, 1, 0};
 {
   StaffObj *q;
   float x, y;
-  q = client;
+  q = [self firstClient];
   x = q->x + offset.x;
   y = [q headY: headnum] + offset.y;
   return (TOLFLOATEQ(p.x, x, 4.0) && TOLFLOATEQ(p.y, y, 4.0));
@@ -423,7 +423,7 @@ static char defConst[NUMTIES] = {0, 0, 1, 0, 0, 1, 1, 0};
     }
     else if (!gFlags.selected) return NO;
   }
-  return [self drawMode: drawmode[gFlags.selected][gFlags.invis]];
+  return [self drawMode: [Graphic drawingModeIfSelected: gFlags.selected ifInvisible: gFlags.invis]];
 }
 
 

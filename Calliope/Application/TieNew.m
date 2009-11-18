@@ -322,7 +322,7 @@ static float anyHeadFor(GNote *p, int n)
     float w = 0.0;
 
     if (!([p stemIsUp]) && [noteHead isReverseSideOfStem]) 
-	w = -2.0 * halfwidth[(int)p->gFlags.size][[noteHead bodyType]][p->time.body];
+	w = -2.0 * [p halfWidthOfNoteHead: noteHead];
     if ([noteHead accidentalOffset] < w)
 	w = [noteHead accidentalOffset]; 
     return w;
@@ -455,9 +455,9 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
     con1.x = 0.1;
     con2.x = 0.9;
   }
-  if (hFlags.level)
+  if ([self myLevel])
   {
-    dy = hFlags.level * 2 * nature[sz];
+    dy = [self myLevel] * 2 * nature[sz];
     if (a) dy = -dy;
     off1.y += dy;
     off2.y += dy;
@@ -593,7 +593,7 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
   }
   gFlags.subtype = st;
   head1 = head2 = 0;
-  hFlags.level = [self maxLevel] + 1;
+  [self setLevel: [self maxLevel] + 1];
   k = bk;
   while (k--) [[client objectAtIndex:k] linkhanger: self];
   return self;
@@ -647,7 +647,7 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
   head1 = head2 = 0;
   if (t1 != nil)
   {
-    p = t1->client;
+    p = [t1 firstClient];
       [(NSMutableArray *)client addObject: p];
     [p linkhanger: self];
     head1 = t1->headnum;
@@ -655,7 +655,7 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
   else hFlags.split |= 2;
   if (t2 != nil)
   {
-    q = t2->client;
+    q = [t2 firstClient];
       [(NSMutableArray *)client addObject: q];
     [q linkhanger: self];
     head2 = t2->headnum;

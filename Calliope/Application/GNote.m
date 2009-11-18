@@ -25,7 +25,7 @@
 
 extern unsigned char hasstem[10];
 extern BOOL centhead[NUMHEADS];
-extern unsigned char headchars[NUMHEADS][10];
+//extern unsigned char headchars[NUMHEADS][10];
 extern unsigned char headfont[NUMHEADS][10];
 extern float stemdx[3][NUMHEADS][2][10][2];
 extern float stemdy[3][NUMHEADS][2][10][2];
@@ -122,9 +122,9 @@ unsigned char accifont[NUMHEADS][NUMACCS] =
 
 - (NSString *) description
 {
-    // return [NSString stringWithFormat: @"%@: x = %f, y = %f %@", [super description], x, y, [self describeChordHeads]];
+    return [NSString stringWithFormat: @"%@: x = %f, y = %f %@", [super description], x, y, [self describeChordHeads]];
     // return [NSString stringWithFormat: @"%@: x = %f, y = %f %@", [super description], x, y, headlist];
-    return [NSString stringWithFormat: @"%@: x = %f, y = %f", [super description], x, y];
+    // return [NSString stringWithFormat: @"%@: x = %f, y = %f", [super description], x, y];
 }
 
 
@@ -613,7 +613,8 @@ extern void getNumOct(int pos, int mc, int *num, int *oct);
 - (NSMutableArray *) tiedWith
 {
   TieNew *noteHead;
-  NSMutableArray *noteArray, *r;
+  NSArray *noteArray;
+  NSMutableArray *r;
   GNote *q;
   int nk, k = [hangers count];
     
@@ -623,7 +624,7 @@ extern void getNumOct(int pos, int mc, int *num, int *oct);
     noteHead = [hangers objectAtIndex:k];
     if ([noteHead graphicType] == TIENEW)
     {
-      noteArray = noteHead->client;
+      noteArray = [noteHead clients];
       nk = [noteArray count];
       while (nk--)
       {
@@ -975,7 +976,7 @@ extern int modeinvis[5];
 	    }
 	    shapeID = getShapeID([noteHead staffPosition], ksym, knum, midc);
 	}
-	halfWidth = halfwidth[size][bodyType][time.body];
+	halfWidth = [self halfWidthOfNoteHead: noteHead];
 	nx = x;
 	if (centhead[bodyType])
 	    nx -= halfWidth;
@@ -995,7 +996,6 @@ extern int modeinvis[5];
 - drawMode: (int) drawingMode
 {
     struct timeinfo *t = &time;
-    NSMutableArray *noteArray;
     NoteHead *noteHead = nil, *q;
     int numberOfNotes, body, bodyType = 0, sb, size = gFlags.size, stemType, isBeamed, shapeID = 0;
     int ksym, knum, midc;
@@ -1006,10 +1006,9 @@ extern int modeinvis[5];
 	return [self drawMember: drawingMode];
     stemType = stype[gFlags.subtype];
     isBeamed = [self isBeamed];
-    noteArray = headlist;
-    q = [noteArray lastObject];
+    q = [headlist lastObject];
     body = t->body; // TODO should become: [self noteCode];
-    numberOfNotes = [noteArray count];
+    numberOfNotes = [headlist count];
     stemup = [self stemIsUp];
     if (numberOfNotes == 1) {
 	noteHead = q;
@@ -1018,9 +1017,8 @@ extern int modeinvis[5];
 	    [self getKeyInfo: &ksym : &knum : &midc];
 	    shapeID = getShapeID([noteHead staffPosition], ksym, knum, midc);
 	}
-	halfWidth = halfwidth[size][bodyType][body];
-	// TODO should become: [self stemLength], [self hasNoStem]
-	drawnote(size, halfWidth, x, [noteHead y], body, bodyType, stemType, shapeID, isBeamed, t->stemlen, t->nostem, (showSlash && isGraced == 1), drawingMode);
+	halfWidth = [self halfWidthOfNoteHead: noteHead];
+	drawnote(size, halfWidth, x, [noteHead y], body, bodyType, stemType, shapeID, isBeamed, [self stemLength], [self hasNoStem], (showSlash && isGraced == 1), drawingMode);
 	if ([noteHead accidental] && [noteHead accidentalOffset] < 0.0)
 	    drawacc(x, noteHead, bodyType, size, drawingMode);
 	if (t->dot) // TODO should become: [self isDotted];
@@ -1028,8 +1026,9 @@ extern int modeinvis[5];
     }
     else {
 	int noteIndex = numberOfNotes;
+	
 	while (noteIndex--) {
-	    noteHead = [noteArray objectAtIndex: noteIndex];
+	    noteHead = [headlist objectAtIndex: noteIndex];
 	    bodyType = [noteHead bodyType];
 	    if (bodyType == 6) {
 		if (!gotsinfo) {
@@ -1038,7 +1037,7 @@ extern int modeinvis[5];
 		}
 		shapeID = getShapeID([noteHead staffPosition], ksym, knum, midc);
 	    }
-	    halfWidth = halfwidth[size][bodyType][body];
+	    halfWidth = [self halfWidthOfNoteHead: noteHead];
 	    nx = x;
 	    if (centhead[bodyType]) 
 		nx -= halfWidth;
@@ -1050,18 +1049,18 @@ extern int modeinvis[5];
 	    if (t->dot)   // TODO should become: [self isDotted];
 		drawnotedot(size, x + dotdx, [noteHead y], [noteHead dotOffset], [[noteHead myNote] getSpacing], bodyType, t->dot, 0, drawingMode);
 	}
-	/* Note: noteHead will now be [noteArray objectAt: 0], with valid bodyType, f, halfWidth */
+	/* Note: noteHead will now be [headlist objectAt: 0], with valid bodyType, f, halfWidth */
 	if (hasstem[body] && (!isBeamed || numberOfNotes > 1))	{
 	    dy = [q y] - [noteHead y];
 	    if (isBeamed) 
 		sb = 5;
 	    else {
-		dy += t->stemlen; // TODO should become: [self stemLength]
+		dy += [self stemLength];
 		sb = body;
 	    }
 	    drawstem(x, [noteHead y], sb, dy, size, bodyType, stemType, drawingMode);
 	    if (showSlash && isGraced == 1) 
-		drawgrace(x, [q y], sb, t->stemlen, size, bodyType, stemType, drawingMode); // TODO should become: [self stemLength]
+		drawgrace(x, [q y], sb, [self stemLength], size, bodyType, stemType, drawingMode);
 	}
     }
     [self drawLedgerAt: halfWidth size: size mode: drawingMode];

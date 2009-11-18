@@ -56,9 +56,30 @@
 + myInspector;
 - sysInvalid;
 - (int) myIndex;
+
+/*!
+  @brief Returns the GraphicView this System resides on.
+*/
+- (GraphicView *) pageView;
+
+/*!
+  @brief Assign the page view (GraphicView) instance to the receiving System.
+ 
+  This is typically only used to correct old decoding problems.
+ */
+- (void) setPageView: (GraphicView *) newPageView;
+
 - (BOOL) lastSystem;
+
+/*!
+  @brief Initialise the System instance with the given number of staves, on the given GraphicView page view.
+ 
+  TODO This should take an extra parameter establishing the model on which the System is stored, independent of it's page view (GraphicView).
+  This will happen when GraphicView is split.
+ */
 - initWithStaveCount: (int) n onGraphicView: (GraphicView *) v;
 - initsys;
+
 - mark;
 
 /*!
@@ -85,7 +106,7 @@
 - (float) rightIndent;
 
 - makeNames: (BOOL) full : (GraphicView *) v;
-- checkMargin;
+- margin;
 - recalc;
 - recalcHangers;
 - setHangers;
@@ -148,6 +169,13 @@
   @brief Reorders the staves according to the index map.
  */
 - (void) orderStavesBy: (char *) order;
+
+/*!
+  @brief Returns the current scale of the staff.
+ 
+  This is enquired via the System's current GraphicView.
+ */
+- (float) staffScale;
 
 - lastStaff;
 - (int) whereIs: (Staff *) sp;		/* code for location of staff */

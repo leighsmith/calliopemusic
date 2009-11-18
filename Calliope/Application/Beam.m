@@ -67,7 +67,7 @@ int nbeams;
     self = [super init];
     if (self != nil) {
 	[self setTypeOfGraphic: BEAM];
-	client = nil;
+	[self setClient: nil];
 	flags.broken = 0;
 	flags.taper = 0;
     }
@@ -75,12 +75,13 @@ int nbeams;
 }
 
 
+// should become copy.
 - (Beam *) newFrom
 {
   Beam *t = [[Beam alloc] init];
   t->bounds = bounds;
   t->gFlags = gFlags;
-  t->hFlags.level = hFlags.level;
+  [t setLevel: [self myLevel]]; // TODO this should be done by the superclass copy.
   t->flags = flags;
   return t;
 }
@@ -106,8 +107,8 @@ int nbeams;
 
 - haveSplit: (Beam *) a : (Beam *) b : (float) x0 : (float) x1
 {
-  StaffObj *p = [a->client lastObject];
-  StaffObj *q = [b->client objectAtIndex:0];
+  StaffObj *p = [[a clients] lastObject];
+  StaffObj *q = [b firstClient];
   a->splitp = (q->staffPosition - p->staffPosition) / 2;
   b->splitp = (p->staffPosition - q->staffPosition) / 2;
   return self;

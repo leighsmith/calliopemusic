@@ -687,7 +687,7 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
     if (systemCount < 1)
 	return nil;
     sys = [syslist objectAtIndex:0];
-    if (![sys checkMargin])
+    if (![sys margin])
     {
 	NSLog(@"Cannot paginate: first system has no margins\n");
 	return nil;
@@ -706,7 +706,7 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
 	if (sys->flags.newpage) 
 	    pageNumber = [sys pageNumber];
 	h = [sys myHeight];
-	newMargin = [sys checkMargin];
+	newMargin = [sys margin];
 	if (newMargin)
 	{
 	    if (numberOfSystemsOnPage > 0)

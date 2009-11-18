@@ -38,9 +38,9 @@
 }
 
 
-- (void)dealloc
+- (void) dealloc
 {
-  { [super dealloc]; return; };
+    [super dealloc];
 }
 
 
@@ -194,7 +194,7 @@
 - (BOOL) checkRemoteNotes: (int) a : (float) sy
 {
   Beam *h;
-  NSMutableArray *nl;
+  NSArray *nl;
   TimedObj *n;
   Staff *nsp;
   NoteHead *nh;
@@ -205,7 +205,7 @@
     h = [hangers objectAtIndex:k];
     if ([h graphicType] == BEAM)
     {
-      nl = h->client;
+      nl = [h clients];
       nk = [nl count];
       while (nk--)
       {
@@ -266,6 +266,15 @@
   return NO;
 }
 
+- (float) halfWidthOfNoteHead: (NoteHead *) noteHead
+{
+    return halfwidth[gFlags.size][[noteHead bodyType]][time.body];
+}
+
+- (float) halfWidth
+{
+    return halfwidth[gFlags.size][0][time.body];
+}
 
 /* overridden by beamable subclasses */
 
@@ -284,7 +293,7 @@
   while (hk--)
   {
     h = [hangers objectAtIndex:hk];
-    if ([h graphicType] == TUPLE && self == [h->client objectAtIndex:0]) return YES;
+    if ([h graphicType] == TUPLE && self == [h firstClient]) return YES;
   }
   return NO;
 }
@@ -297,7 +306,8 @@
   while (hk--)
   {
     h = [hangers objectAtIndex:hk];
-    if ([h graphicType] == TUPLE && self == [h->client lastObject]) return YES;
+    if ([h graphicType] == TUPLE && self == [[h clients] lastObject]) 
+	return YES;
   }
   return NO;
 }

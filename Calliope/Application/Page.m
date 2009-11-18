@@ -218,10 +218,10 @@ static void drawSlants(float x, float y, float hw, float th)
     xb = x + hw;
     ya = y;
     yb = y - 3 * th;
-    cslant(xa, ya, xb, yb, th, drawmode[0][0]);
+    cslant(xa, ya, xb, yb, th, [Graphic drawingModeIfSelected: 0 ifInvisible: 0]);
     ya += 1.75 * th;
     yb += 1.75 * th;
-    cslant(xa, ya, xb, yb, th, drawmode[0][0]);
+    cslant(xa, ya, xb, yb, th, [Graphic drawingModeIfSelected: 0 ifInvisible: 0]);
 }
 
 // drawSystemSeparator

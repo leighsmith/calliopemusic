@@ -1098,7 +1098,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
     NSRunAlertPanel(@"System Style", @"No current system", @"OK", nil, nil);
     return nil;
   }
-  p = [[System alloc] initWithStaveCount: [sys numberOfStaves] onGraphicView: sys->view];
+  p = [[System alloc] initWithStaveCount: [sys numberOfStaves] onGraphicView: [sys pageView]];
   [sys copyStyleTo: p];
   p->style =[[n copy] retain];
   [sl addObject: p];

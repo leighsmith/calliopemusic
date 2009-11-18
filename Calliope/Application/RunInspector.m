@@ -134,12 +134,12 @@ extern int justcode[4];
     UPDATE(p->flags.evenpage, i);
     i = [[typematrix cellAtRow:1 column:1] state];
     UPDATE(p->flags.oddpage, i);
-    if (b) [sys->view setRunnerTables];
+    if (b) [[sys pageView] setRunnerTables];
     [p setRunnerText: [[[scroller documentView] textStorage] mutableCopy]];
     /*[[[scroller documentView] RTFDFromRange:NSMakeRange(0, [[[scroller documentView] string] length])] retain]; */
     /* [self close]; */
-    [sys->view dirty];
-    [sys->view setNeedsDisplay:YES];
+    [[sys pageView] dirty];
+    [[sys pageView] setNeedsDisplay:YES];
   }
   return self;
 }

@@ -172,7 +172,7 @@ char defpos[NUMNOTEGROUPS] = {0, 0, 0, 0, 2, 4, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0};
     q = [l objectAtIndex:k];
     if (ISASTAFFOBJ(q)) [(NSMutableArray *)client addObject: q];
   }
-  hFlags.level = [self maxLevel] + 1;
+  [self setLevel: [self maxLevel] + 1];
   k = bk;
   while (k--) [[client objectAtIndex:k] linkhanger: self];
   return self;
@@ -211,13 +211,13 @@ char defpos[NUMNOTEGROUPS] = {0, 0, 0, 0, 2, 4, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0};
   client = [[NSMutableArray alloc] init];
   if (t1 != nil)
   {
-    p = t1->client;
+    p = [t1 firstClient];
     [(NSMutableArray *)client addObject: p];
     [p linkhanger: self];
   }
   if (t2 != nil)
   {
-    q = t2->client;
+    q = [t2 firstClient];
     [(NSMutableArray *)client addObject: q];
     [q linkhanger: self];
   }
@@ -235,7 +235,7 @@ char defpos[NUMNOTEGROUPS] = {0, 0, 0, 0, 2, 4, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0};
   client = [[NSMutableArray alloc] init];
   if (t != nil)
   {
-    p = t->client;
+    p = [t firstClient];
       [(NSMutableArray *)client addObject: p];
     [p linkhanger: self];
     p = t->endpoint;
@@ -472,6 +472,7 @@ float fontsize[3] = { 12, 8, 6};
         case 0:
 	case 1:
           f = musicFont[1][sz];
+	      // Replace with [[self client] staffScale]
             ft = [NSFont fontWithName:@"Times-Italic" size:fontsize[sz] / [[CalliopeAppController currentDocument] staffScale]];
           CAcString(px, py + 0.5 * charFGH(ft, '8'), "coll' 8", ft, m);
           doDashJog(px + nature[sz] + [ft widthOfString:@"coll' 8"], py, qx, (sf == 0), (flags.position == 0), sz, m);

@@ -102,7 +102,8 @@
     baseScale = f = [[CalliopeAppController currentDocument] staffScale];
     bounds.size.width = baseSize.width / f;
     bounds.size.height = baseSize.height / f;
-    q = client = [v isSelTypeCode: TC_STAFFOBJ : &n];
+    q = [v isSelTypeCode: TC_STAFFOBJ : &n];
+    [self setClient: q];
     xoff = pt.x - q->x;
     yoff = pt.y - q->y;
     bounds.origin.x = q->x + xoff;
@@ -162,7 +163,7 @@
 
 - (BOOL) getXY: (float *) x : (float *) y
 {
-  StaffObj *p = client;
+  StaffObj *p = [self firstClient];
   *x = xoff + p->x;
   *y = yoff + p->y;
   return YES;
@@ -205,7 +206,7 @@
     if (ISASTAFFOBJ(p))
     {
       t = [self newFrom];
-      t->client = p;
+      [t setClient: p];
       [p linkhanger: t];
       [t recalc];
       [v selectObj: t];
@@ -226,7 +227,7 @@
 
 - (BOOL) move: (float) dx : (float) dy : (NSPoint) p : sys : (int) alt
 {
-  StaffObj *q = client;
+  StaffObj *q = [self firstClient];
   xoff = dx + p.x - q->x;
   yoff = dy + p.y - q->y;
   [self recalc];

@@ -20,7 +20,6 @@ extern float noteoffset[3];
 extern float stemleft[2][3];
 extern float stemcentre[2][3];
 extern float stemright[2][3];
-extern float headwidth[3][NUMHEADS][10];
 extern float halfwidth[3][NUMHEADS][10];
 
 extern float beamthick[3];

@@ -74,7 +74,7 @@
 /*!
   @brief Returns the parent encompassing GraphicView (TODO eventually the NotationScore).
  */
-- (GraphicView *) myView;
+- (GraphicView *) pageView;
 
 /*!
   @brief Returns the staff this object resides on.

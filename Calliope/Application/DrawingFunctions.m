@@ -109,13 +109,6 @@ float barwidth[3][3] = 		/* barwidth[staff type][size] */
 };
 
 
-/* Returns a suitable index into modegray[] and noprint[] based on [selected][invisible] */
-int drawmode[2][4] =
-{
-    {1, 4, 3, 2},
-    {7, 7, 7, 7}
-};
-
 int markmode[2] = {5, 7};
 
 
@@ -229,6 +222,7 @@ float charFGH(NSFont *f, int ch)
     return myRect.size.height;
 }
 
+// TODO float charFGW(NSFont *f, NSGlyph ch)
 float charFGW(NSFont *f, int ch)
 {
     NSRect myRect;

@@ -48,7 +48,7 @@ static float defmarg[MaximumMarginTypes] = {36.0, 36.0, 36.0, 36.0, 72.0, 72.0, 
     for (marginIndex = 0; marginIndex < MaximumMarginTypes; marginIndex++) {
 	[marginValues appendString: [NSString stringWithFormat: @"%.3f ", margin[marginIndex]]];	
     }
-    return [NSString stringWithFormat: @"%@ staffScale %f (%@)", [super description], staffScale, marginValues];
+    return [NSString stringWithFormat: @"%@ staffScale %f (%@)", [super description], [client staffScale], marginValues];
 }
 
 - copyWithZone: (NSZone *) zone
@@ -58,7 +58,6 @@ static float defmarg[MaximumMarginTypes] = {36.0, 36.0, 36.0, 36.0, 72.0, 72.0, 
 
     while (marginIndex--)
 	newMargin->margin[marginIndex] = margin[marginIndex];
-    newMargin->staffScale = staffScale; // TODO this is at the wrong level of abstraction, the super class needs to copy this.
     newMargin->client = client;
     return newMargin;
 }
@@ -87,7 +86,7 @@ static float defmarg[MaximumMarginTypes] = {36.0, 36.0, 36.0, 36.0, 72.0, 72.0, 
 
 - (float) leftMargin
 {
-    return margin[MarginLeft] / staffScale;
+    return margin[MarginLeft] / [client staffScale];
 }
 
 - (void) setLeftMargin: (float) newLeftMargin
@@ -97,7 +96,7 @@ static float defmarg[MaximumMarginTypes] = {36.0, 36.0, 36.0, 36.0, 72.0, 72.0, 
 
 - (float) rightMargin
 {
-    return margin[MarginRight] / staffScale;
+    return margin[MarginRight] / [client staffScale];
 }
 
 - (void) setRightMargin: (float) newRightMargin
@@ -107,7 +106,7 @@ static float defmarg[MaximumMarginTypes] = {36.0, 36.0, 36.0, 36.0, 72.0, 72.0, 
 
 - (float) headerBase
 {
-    return margin[MarginHeader] / staffScale;
+    return margin[MarginHeader] / [client staffScale];
 }
 
 - (void) setHeaderBase: (float) newHeaderMargin
@@ -117,7 +116,7 @@ static float defmarg[MaximumMarginTypes] = {36.0, 36.0, 36.0, 36.0, 72.0, 72.0, 
 
 - (float) footerBase
 {
-    return margin[MarginFooter] / staffScale;
+    return margin[MarginFooter] / [client staffScale];
 }
 
 - (void) setFooterBase: (float) newFooterMargin
@@ -127,7 +126,7 @@ static float defmarg[MaximumMarginTypes] = {36.0, 36.0, 36.0, 36.0, 72.0, 72.0, 
 
 - (float) topMargin
 {
-    return margin[MarginTop] / staffScale;
+    return margin[MarginTop] / [client staffScale];
 }
 
 - (void) setTopMargin: (float) newTopMargin
@@ -137,7 +136,7 @@ static float defmarg[MaximumMarginTypes] = {36.0, 36.0, 36.0, 36.0, 72.0, 72.0, 
 
 - (float) bottomMargin
 {
-    return margin[MarginBottom] / staffScale;
+    return margin[MarginBottom] / [client staffScale];
 }
 
 - (void) setBottomMargin: (float) newBottomMargin

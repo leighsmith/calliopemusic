@@ -303,7 +303,7 @@ static void sigwidthpix(unsigned char *s, NSFont *f, float *sw, float *w)
     if (p != nil)
     {
       v = [p verseOf: vFlags.num];
-      [[p myView] reDraw: v];
+      [[p pageView] reDraw: v];
       [v recalc];
     }
   }
@@ -494,7 +494,7 @@ static void drawext(float x1, float y, float x2, Staff *sp, int f, int m)
   if (vFlags.hyphen < 3 && ![sp textedBefore: p : vFlags.num])
   {
     sys = sp->mysys;
-    h = [sys->view prevHyphened: sys : [sp myIndex] : vFlags.num : p->voice];
+    h = [[sys pageView] prevHyphened: sys : [sp myIndex] : vFlags.num : p->voice];
     if (h == 1)
     {
       ex = [sp firstTimedBefore: p];
@@ -554,7 +554,7 @@ static void drawext(float x1, float y, float x2, Staff *sp, int f, int m)
 
 - draw
 {
-  return [self drawMode: drawmode[((Graphic *)note)->gFlags.selected][0]];
+  return [self drawMode: [Graphic drawingModeIfSelected: ((Graphic *)note)->gFlags.selected ifInvisible: 0]];
 }
 
 
