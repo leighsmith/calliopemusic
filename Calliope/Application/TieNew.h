@@ -1,8 +1,8 @@
 /*!
   $Id$ 
 
-  @class 
-  @brief
+  @class TieNew
+  @brief Represents Ties between two notes.
 */
 #import "winheaders.h"
 #import "Hanger.h"

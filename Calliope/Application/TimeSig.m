@@ -318,7 +318,7 @@ static float fontsize[3] = { 16, 12, 8};
     static char linedy[3] = {12, 9, 6};
     int sz = gFlags.size;
     NSFont *f = musicFont[1][sz], *ft;
-    unichar firstNumeratorCharacter = [numeratorString characterAtIndex: 0];
+    unichar firstNumeratorCharacter = [numeratorString length] ? [numeratorString characterAtIndex: 0] : 0;
     
     switch(gFlags.subtype)
     {

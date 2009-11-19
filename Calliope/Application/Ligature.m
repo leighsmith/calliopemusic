@@ -82,15 +82,15 @@ static char needtheta[NUMLIGATURES] = {0, 0, 1, 1};
 }
 
 
-- (Ligature *) newFrom
+- copyWithZone: (NSZone *) zone
 {
-  Ligature *t = [[Ligature alloc] init];
-  t->gFlags = gFlags;
-  t->hFlags = hFlags;
-  t->off1 = off1;
-  t->off2 = off2;
-  t->flags = flags;
-  return t;
+    // We know that our super class does not use NSCopyObject().
+    Ligature *t = [super copyWithZone: zone];
+
+    t->off1 = off1;
+    t->off2 = off2;
+    t->flags = flags;
+    return t;
 }
 
 
@@ -119,7 +119,7 @@ static char needtheta[NUMLIGATURES] = {0, 0, 1, 1};
   StaffObj *p;
   if (h == 0)
   {
-    if (hFlags.split & 2)
+    if ([self splitToLeft])
     {
       p = [client lastObject];
       *x = [p xOfStaffEnd: 0];
@@ -134,7 +134,7 @@ static char needtheta[NUMLIGATURES] = {0, 0, 1, 1};
   }
   else if (h == 1)
   {
-    if (hFlags.split & 1)
+    if ([self splitToRight])
     {
       p = [client objectAtIndex:0];
       *x = [p xOfStaffEnd: 1];
@@ -183,13 +183,13 @@ static float braoffy[2] =  { 1.0, -1.0 };
   a = !flags.place;
   dx = noteoffset[sz] * 2.0;
   dy = nature[sz];
-  if (!(hFlags.split & 2))
+  if (!([self splitToLeft]))
   {
     if ([p graphicType] == NOTE) t = ([p stemIsUp] << 1) | a; else t = 1;
     off1.x = braoffx[0][t] * dx;
     off1.y = ([p yAboveBelow: a] - p->y) + braoffy[a] * dy;
   }
-  if (!(hFlags.split & 1))
+  if (!([self splitToRight]))
   {
     if ([q graphicType] == NOTE) t = ([q stemIsUp] << 1) | a; else t = 1;
     off2.x = braoffx[1][t] * dx;
@@ -214,12 +214,12 @@ static float braoffy[2] =  { 1.0, -1.0 };
   float dy;
   StaffObj *p = [client objectAtIndex:0];
   StaffObj *q = [client lastObject];
-  if (!(hFlags.split & 2))
+  if (!([self splitToLeft]))
   {
     off1.x = RIGHTBOUND(p) - p->x;
     off1.y = 0;
   }
-  if (!(hFlags.split & 1))
+  if (!([self splitToRight]))
   {
     off2.x = LEFTBOUND(q) - q->x;
     off2.y = 0;
@@ -352,7 +352,7 @@ static float braoffy[2] =  { 1.0, -1.0 };
   int n;
   [super closeClients: l];
   n = [client count];
-  return (n >= 2 || (hFlags.split && n > 0));
+  return (n >= 2 || (([self splitToLeft] || [self splitToRight]) && n > 0));
 }
 
 
@@ -396,7 +396,7 @@ static float braoffy[2] =  { 1.0, -1.0 };
   StaffObj *p;
   if (gFlags.selend)
   {
-    if (hFlags.split & 1)
+    if ([self splitToRight])
     {
       p = [client objectAtIndex:0];
       off2.x = pt.x - [p xOfStaffEnd: 1];
@@ -416,7 +416,7 @@ static float braoffy[2] =  { 1.0, -1.0 };
   }
   else
   {
-    if (hFlags.split & 2)
+    if ([self splitToLeft])
     {
       p = [client lastObject];
       off1.x = pt.x - [p xOfStaffEnd: 0];
@@ -479,20 +479,20 @@ static float braoffy[2] =  { 1.0, -1.0 };
     case LIGBRACK:
       v = 2.0 * nature[sz];
       if (!flags.place) v = -v;
-      if (!(hFlags.split & 2)) cmakeline(px, py, px, py + v, m);
+      if (!([self splitToLeft])) cmakeline(px, py, px, py + v, m);
       cmakeline(px, py + v, qx, qy + v, m);
-      if (!(hFlags.split & 1)) cmakeline(qx, qy + v, qx, qy, m);
+      if (!([self splitToRight])) cmakeline(qx, qy + v, qx, qy, m);
       cstrokeline(th, m);
       break;
     case LIGCORN:
       h = v = 2.0 * nature[sz];
       if (!flags.place) v = -v;
-      if (!(hFlags.split & 2))
+      if (!([self splitToLeft]))
       {
         cmakeline(px, py, px, py + v, m);
         cmakeline(px, py + v, px + h * cth, (py + v) + h * sth, m);
       }
-      if (!(hFlags.split & 1))
+      if (!([self splitToRight]))
       {
         cmakeline(qx, qy, qx, qy + v, m);
         cmakeline(qx, qy + v, qx - h * cth, (qy + v) - h * sth, m);
@@ -529,7 +529,8 @@ static float braoffy[2] =  { 1.0, -1.0 };
     [aDecoder decodeValuesOfObjCTypes:"iccccc", &UID, &b1, &b2, &b3, &b4, &b5];
     flags.fixed = b1;
     flags.place = b2;
-    hFlags.split = b3;
+      [self setSplitToLeft: (b3 & 2) == 2];
+      [self setSplitToRight: (b3 & 1) == 1];
     flags.dashed = b4;
     flags.ed = b5;
   }

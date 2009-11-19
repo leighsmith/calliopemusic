@@ -2,27 +2,32 @@
   $Id$ 
 
   @class Hanger
-  @brief
+  @brief Abstract class representing a string of StaffObjs. 
+ 
+  Subclasses include a Beam, Tie, Tuplet, Metronome marking, groups of Notes or Chords.  
  */
 #import "winheaders.h"
 #import "Graphic.h"
-//#import "TimedObj.h"
 #import <CalliopePropertyListCoders/OAPropertyListCoders.h>
 
 @class Tie; // Needed for Tie upgrade code.
 
-@interface Hanger:Graphic
+@interface Hanger: Graphic <NSCopying>
 {
+@private
+    struct
+    {
+	unsigned int split : 2;	/* whether split to left b10 or right b01 (or both) */
+	unsigned int level : 8;	/* the level */
+    } hFlags;
 @protected
     NSMutableArray *client; // TODO rename to clients.
 @public
-  int UID;
-  struct
-  {
-    unsigned int split : 2;	/* whether split to left b10 or right b01 (or both) */
-      unsigned int level : 8;	/* the level */ // TODO is now private.
-  } hFlags;
+    int UID;
 }
+
+- init;
+- copyWithZone: (NSZone *) zone;
 
 - (BOOL) hit: (NSPoint) p : (int) i : (int) j;
 - (float) hitDistance: (NSPoint) p : (int) i : (int) j;
@@ -48,8 +53,35 @@
  */
 - (float) staffScale;
 
+/*!
+  @brief Returns YES if this Hanger can be split, either left, or right.
+*/
 - (BOOL) canSplit;
-- newFrom;
+
+/*!
+  @brief Returns YES if the Hanger will be split to the left.
+*/
+- (BOOL) splitToLeft;
+
+/*!
+  @brief Assign if the Hanger will split to the left.
+
+  Note that the splitting is not exclusive, it can be to both left and right.
+*/
+- (void) setSplitToLeft: (BOOL) yesOrNo;
+
+/*!
+  @brief Returns YES if the Hanger will be split to the right.
+*/
+- (BOOL) splitToRight;
+
+/*!
+  @brief Assign if the Hanger will split to the right.
+
+  Note that the splitting is not exclusive, it can be to both left and right.
+*/
+- (void) setSplitToRight: (BOOL) yesOrNo;
+
 - haveSplit: a : b : (float) x0 : (float) x1;
 - haveSplit: a : b;
 - (BOOL) isDangler;

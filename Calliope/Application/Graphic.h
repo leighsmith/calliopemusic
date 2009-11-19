@@ -60,7 +60,7 @@ typedef enum {
 
 extern id CrossCursor;
 
-@interface Graphic : NSObject
+@interface Graphic : NSObject <NSCopying>
 {
 @public
     NSRect bounds;			/* the bounds */
@@ -117,6 +117,9 @@ extern id CrossCursor;
 + myInspector;
 - myInspector;
 - init;
+
+- copyWithZone: (NSZone *) zone;
+
 - mark;
 - proto: (GraphicView *) v : (NSPoint) pt : (Staff *) sp : (System *) sys : (Graphic *) g : (int) i;
 - recalc;
@@ -125,13 +128,13 @@ extern id CrossCursor;
 - reShape;
 - (BOOL) canSplit;
 - (NSMutableArray *) willSplit;
-- (void)removeObj;
+- (void) removeObj;
 - (BOOL) linkPaste: (GraphicView *) v;
 - (BOOL) linkPaste: (GraphicView *) v : (NSMutableArray *) sl;
-- (NSRect)bounds;
-- setBounds:(const NSRect)aRect;
+- (NSRect) bounds;
+- (void) setBounds:(const NSRect)aRect;
 - (BOOL) getHandleBBox: (NSRect *) r;
-- (void)moveBy:(float)x :(float)y;
+- (void) moveBy:(float)x :(float)y;
 - verseWidths: (float *) tb : (float *) ta;
 - (BOOL) performKey: (int) c;
 - (int) keyDownString:(NSString *)cc;
@@ -151,7 +154,7 @@ extern id CrossCursor;
 - (BOOL) hasHanger: h;
 - (BOOL) isClosed: l;
 - (BOOL) hasVoltaBesides: p;
-- moveBy:(const NSPoint)offset;
+- moveBy: (const NSPoint) offset;
 - centerAt: (const NSPoint) p;
 - sizeTo: (const NSSize *) size;
 - (void)setSize:(int)ds;

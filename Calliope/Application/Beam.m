@@ -726,10 +726,11 @@ static int signof(float f)
 
 - (BOOL) isClosed: (NSMutableArray *) l
 {
-  int n;
-  [super closeClients: l];
-  n = [client count];
-  return (n >= 2 || (hFlags.split && n > 0));
+    int n;
+    
+    [super closeClients: l];
+    n = [client count];
+    return (n >= 2 || (([self splitToLeft] || [self splitToRight]) && n > 0));
 }
 
 
@@ -754,12 +755,12 @@ static int signof(float f)
   TimedObj *p;
   if (h == 0)
   {
-    if (hFlags.split & 2) return NO;
+    if ([self splitToLeft]) return NO;
     p = [client objectAtIndex:0];
   }
   else
   {
-    if (hFlags.split & 1) return NO;
+    if ([self splitToRight]) return NO;
     p = [client lastObject];
   }
   return ([p hitBeamAt: x : y]);
@@ -839,17 +840,16 @@ static char nflg[NUMUNDER];
 {
   int i, n, su;
     float xa=0.0, ya=0.0, xb=0.0, yb=0.0, y1, y2, ymax=0.0, th, bsep, bth, ys=0.0;//sb: innited values
+    
   su = [p stemIsUp];
-  if (hFlags.split == 2)
-  {
+  if ([self splitToLeft] && ![self splitToRight]) {
     xa = [p xOfStaffEnd: 0];
     ya = [p yOfPos: p->staffPosition + splitp] + [p stemYoff: 0] + [p stemLength];
     xb = p->x + [p stemXoffRight: 0];
     yb = [p myStemBase] + [p stemYoff: 0] + [p stemLength];
     ys = yb;
   }
-  else if (hFlags.split == 1)
-  {
+  else if ([self splitToRight] && ![self splitToLeft]) {
     xa = p->x + [p stemXoffLeft: 0];
     ya = [p myStemBase] + [p stemYoff: 0] + [p stemLength];
     ys = ya;
@@ -969,11 +969,11 @@ int getHalfCode(TimedObj *r, int a, int k)
   s = toj[k - 1];
   xa = r->x + [r stemXoffLeft: 0];
   xb = s->x + [s stemXoffRight: 0];
-  if (hFlags.split & 2)	/* split to the left */
+  if ([self splitToLeft])	/* split to the left */
   {
     xa -= nature[sz] * 4;
   }
-  if (hFlags.split & 1)	/* split to the right */
+  if ([self splitToRight])	/* split to the right */
   {
     xb += nature[sz] * 4;
   }
@@ -1008,11 +1008,11 @@ int getHalfCode(TimedObj *r, int a, int k)
         xb = r->x + [r stemXoffLeft: 0];
         xa = xb - dx;
       }
-      if ((hFlags.split & 2) && r == p)	/* split to the left */
+      if (([self splitToLeft]) && r == p)	/* split to the left */
       {
         xa -= nature[sz] * 4;
       }
-      if ((hFlags.split & 1) && r == q)	/* split to the right */
+      if (([self splitToRight]) && r == q)	/* split to the right */
       {
         xb += nature[sz] * 4;
       }
@@ -1023,11 +1023,11 @@ int getHalfCode(TimedObj *r, int a, int k)
       s = toj[b];
       xa = r->x + [r stemXoffLeft: 0];
       xb = s->x + [s stemXoffRight: 0];
-      if ((hFlags.split & 2) && r == p)	/* split to the left */
+      if (([self splitToLeft]) && r == p)	/* split to the left */
       {
         xa -= nature[sz] * 4;
       }
-      if ((hFlags.split & 1) && s == q)	/* split to the right */
+      if (([self splitToRight]) && s == q)	/* split to the right */
       {
         xb += nature[sz] * 4;
       }
@@ -1411,7 +1411,8 @@ struct oldflags
     flags.broken = m;
     flags.fixed = n;
     flags.dir = o;
-    hFlags.split = p;
+      [self setSplitToLeft: (p & 2) == 2];
+      [self setSplitToRight: (p & 1) == 1];
   }
   else if (v == 5)
   {
@@ -1422,7 +1423,8 @@ struct oldflags
     flags.broken = m;
     flags.fixed = n;
     flags.dir = o;
-    hFlags.split = p;
+      [self setSplitToLeft: (p & 2) == 2];
+      [self setSplitToRight: (p & 1) == 1];
   }
   else if (v == 6)
   {
@@ -1433,7 +1435,8 @@ struct oldflags
     flags.broken = m;
     flags.fixed = n;
     flags.dir = o;
-    hFlags.split = p;
+      [self setSplitToLeft: (p & 2) == 2];
+      [self setSplitToRight: (p & 1) == 1];
   }
   else if (v == 7)
   {

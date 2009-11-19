@@ -8,38 +8,77 @@
 
 @implementation Hanger
 
-+ (void)initialize
++ (void) initialize
 {
-  if (self == [Hanger class])
-  {
-      [Hanger setVersion: 2];	/* class version, see read: */ /*sb: set to 2 for List conversion */
-  }
-  return;
+    if (self == [Hanger class]) {
+	[Hanger setVersion: 2];	/* class version, see read: */ /*sb: set to 2 for List conversion */
+    }
 }
 
 
 - init
 {
-  [super init];
-  hFlags.level = 0;
-  hFlags.split = 0;
-  UID = 0;
-  return self;
+    self = [super init];
+    if (self != nil) {
+	hFlags.level = 0;
+	hFlags.split = 0;
+	UID = 0;
+	client = nil;
+    }
+    return self;
 }
 
+- copyWithZone: (NSZone *) zone
+{
+    // We know that our super class does not use NSCopyObject().
+    Hanger *newHanger = [super copyWithZone: zone];
+    
+    if([self splitToLeft])
+	[newHanger setSplitToLeft: YES];
+    if([self splitToRight])
+        [newHanger setSplitToRight: YES];
+    [newHanger setLevel: [self myLevel]];
+    newHanger->UID = self->UID;
+    newHanger->client = [client copy];
+    return newHanger;
+}
+
+// This is just to transition from the old non-standard method to the standard copy method.
+- newFrom
+{
+    return [self copy];
+}
 
 - (BOOL) canSplit
 {
-  return NO;
+    return NO; // Perhaps return hFlags.split != 0;
 }
 
-
-- newFrom
+- (BOOL) splitToLeft
 {
-  NSLog(@"Calliope Warning: newFrom reached Hanger\n");
-  return self;
+    return hFlags.split & 2;
 }
 
+- (void) setSplitToLeft: (BOOL) yesOrNo
+{
+    if(yesOrNo)
+	hFlags.split |= 2;
+    else
+	hFlags.split &= 1;
+}
+
+- (BOOL) splitToRight
+{
+    return hFlags.split & 1;
+}
+
+- (void) setSplitToRight: (BOOL) yesOrNo
+{
+    if(yesOrNo)
+	hFlags.split |= 1;
+    else
+	hFlags.split &= 2;
+}
 
 - (BOOL) isDangler
 {
@@ -108,7 +147,7 @@
   }
   for (i = 0; i < 2; i++)
   {
-    t[i] = n = [self newFrom];
+    t[i] = n = [self copy];
     a = l[i];
     n->client = a;
     n->UID = (int) self;
@@ -146,7 +185,7 @@
   }
   for (i = 0; i < 2; i++)
   {
-    t[i] = n = [self newFrom];
+    t[i] = n = [self copy];
     a = l[i];
     n->client = a;
     n->UID = (int) self;

@@ -72,19 +72,19 @@ static NoteGroup *proto;
   return [super sysInvalidList];
 }
 
-- (NoteGroup *) newFrom
+- copyWithZone: (NSZone *) zone
 {
-  int i = 3;
-  NoteGroup *t = [[NoteGroup alloc] init];
-  t->gFlags = gFlags;
-  t->hFlags = hFlags;
-  t->x1 = x1;
-  t->y1 = y1;
-  t->x2 = x2;
-  t->y2 = y2;
-  t->flags = flags;
-  while (i--) t->mark[i] = mark[i];
-  return t;
+    NoteGroup *t = [super copyWithZone: zone];
+    int i = 3; // TODO must ensure this matches the length of mark[].
+    
+    t->x1 = x1;
+    t->y1 = y1;
+    t->x2 = x2;
+    t->y2 = y2;
+    t->flags = flags;
+    while (i--) 
+	t->mark[i] = mark[i];
+    return t;
 }
 
 
@@ -404,191 +404,170 @@ float fontsize[3] = { 12, 8, 6};
 
 - drawMode: (int) m
 {
-  StaffObj *p, *q;
-  Staff *sp;
-  int sz, above, sf, ss;
-  NSFont *f, *ft;
-  float px, py, qx, qy, th;
-  char buff[16];
-  /* assume client sorted by the time we arrive here */
-  sz = gFlags.size;
-  p = [client objectAtIndex:0];
-  q = [client lastObject];
-  if (gFlags.selected && !gFlags.seldrag)
-  {
-    [self coordsForHandle: 0  asX: &px  andY: &py];
-    chandle(px, py, m);
-    [self coordsForHandle: 1  asX: &px  andY: &py];
-    chandle(px, py, m);
-  }
-  px = p->bounds.origin.x + x1;
-  py = p->bounds.origin.y + y1;
-  qx = q->bounds.origin.x + x2;
-  qy = q->bounds.origin.y + y2;
-  sf = hFlags.split;
-  switch(gFlags.subtype)
-  {
-    case 0: /* 8 --- */
-      if (flags.position != 0) py = qy;
-      switch (sf)
-      {
-        case 0:
-	case 1:
-          f = musicFont[1][sz];
-          buff[0] = 165;
-          buff[1] = '\0';
-          CAcString(px, py + 0.5 * charFGH(f, 165), buff, f, m);
-          doDashJog(px + nature[sz] + [f widthOfString: [NSString stringWithUTF8String: buff]], py, qx, (sf == 0), (flags.position == 0), sz, m);
-	  break;
-	case 2:
-	case 3:
-          doDashJog(px, py, qx, (sf == 2), (flags.position == 0), sz, m);
-	  break;
-      }
-      break;
-    case 1: /* 15 --- */
-      if (flags.position != 0) py = qy;
-      switch (sf)
-      {
-        case 0:
-	case 1:
-          f = musicFont[1][sz];
-          buff[0] = 193;
-          buff[1] = 176;
-          buff[2] = '\0';
-          CAcString(px, py + 0.5 * charFGH(f, 165), buff, f, m);
-          doDashJog(px + nature[sz] + [f widthOfString: [NSString stringWithUTF8String: buff]], py, qx, (sf == 0), (flags.position == 0), sz, m);
-          break;
-	case 2:
-	case 3:
-          doDashJog(px, py, qx, (sf == 2), (flags.position == 0), sz, m);
-	  break;
-      }
-      break;
-    case 2: /* coll' 8 */
-      if (flags.position != 0) py = qy;
-      switch (sf)
-      {
-        case 0:
-	case 1:
-          f = musicFont[1][sz];
-	      // Replace with [[self client] staffScale]
-            ft = [NSFont fontWithName:@"Times-Italic" size:fontsize[sz] / [[CalliopeAppController currentDocument] staffScale]];
-          CAcString(px, py + 0.5 * charFGH(ft, '8'), "coll' 8", ft, m);
-          doDashJog(px + nature[sz] + [ft widthOfString:@"coll' 8"], py, qx, (sf == 0), (flags.position == 0), sz, m);
-          break;
-	case 2:
-	case 3:
-          doDashJog(px, py, qx, (sf == 2), (flags.position == 0), sz, m);
-	  break;
-      }
-      break;
-    case 3: /* trill */
-      above = (flags.position == 0);
-      switch (sf)
-      {
-        case 0:
-	case 1:
-          f = musicFont[1][sz];
-          DrawCharacterInFont(px, (above ? py : qy), 96, f, m);
-          cbrack(6, flags.position, px + DrawWidthOfCharacter(f, 96), py, qx, qy, 0, 0, sz, m);
-	  break;
-	case 2:
-	case 3:
-          cbrack(6, flags.position, px, py, qx, qy, 0, 0, sz, m);
-	  break;
-      }
-      break;
-    case 4:  /* arpegg */
-      cbrack(6, flags.position, px, py, qx, qy, 0, 0, sz, m);
-      break;
-    case 5:  /* square bracket */
-      switch (sf)
-      {
-        case 0:
-          cbrack(0, flags.position, px, py, qx, qy, staffthick[0][sz], 0.1, sz, m);
-	  break;
-	case 1:
-          cbrack(9, flags.position, px, py, qx, qy, staffthick[0][sz], 0.1, sz, m);
-	  break;
-	case 2:
-          cbrack(10, flags.position, px, py, qx, qy, staffthick[0][sz], 0.1, sz, m);
-	  break;
-	case 3:
-          cbrack(4, flags.position, px, py, qx, qy, staffthick[0][sz], 0, sz, m);
-	  break;
-      }
-      break;
-    case 6:  /* round bracket */
-      cbrack(1, flags.position, px, py, qx, qy, nature[sz] * 0.5, 0, sz, m);
-      break;
-    case 7:  /* curly bracket */
-      cbrack(2, flags.position, px, py, qx, qy, 2 * nature[sz], 0, sz, m);
-      break;
-    case 8:  /* angle bracket */
-      cbrack(3, flags.position, px, py, qx, qy, staffthick[0][sz], 0.1, sz, m);
-      break;
-    case 9:  /* solid line */
-      cbrack(4, flags.position, px, py, qx, qy, staffthick[0][sz], 0, sz, m);
-      break;
-    case 10:  /* dashed line */
-      cbrack(5, flags.position, px, py, qx, qy, staffthick[0][sz], 2 * nature[sz], sz, m);
-      break;
-    case 11:  /* pedal */
-      cbrack(7, flags.position, px, py, qx, qy, staffthick[0][sz], 2 * nature[sz], sz, m);
-      break;
-    case GROUPCRES:  /* crescendo */
-      if (flags.position == 0)
-      {
-        cmakeline(px, py, qx, py - nature[sz], m);
-        cmakeline(px, py, qx, py + nature[sz], m);
-      }
-      else
-      {
-        cmakeline(px, qy, qx, qy - nature[sz], m);
-        cmakeline(px, qy, qx, qy + nature[sz], m);
-      }
-      cstrokeline(staffthick[0][sz], m);
-      break;
-    case GROUPDECRES:  /* decrescendo */
-      if (flags.position == 0)
-      {
-        cmakeline(px, py - nature[sz], qx, py, m);
-        cmakeline(px, py + nature[sz], qx, py, m);
-      }
-      else
-      {
-        cmakeline(px, qy - nature[sz], qx, qy, m);
-        cmakeline(px, qy + nature[sz], qx, qy, m);
-      }
-      cstrokeline(staffthick[0][sz], m);
-      break;
-    case 14: /* flat bow */
-      cbrack(8, flags.position, px, py, qx, qy, 0.75 * nature[sz], 0, sz, m);
-      break;
-    case 15: /* volta */
-      sp = p->mystaff;
-      th = barwidth[sp->flags.subtype][sp->gFlags.size];
-      ss = sp->flags.spacing;
-      qy = py + 5 * ss;
-      switch(sf)
-      {
-        case 0:
-	case 1:
-          CAcString(px + ss, qy, mark, fontdata[FONTTEXT], m);
-          cmakeline(px, py, qx, py, m);
-          cmakeline(px, py, px, qy, m);
-          if (flags.bit0 && sf != 1) cmakeline(qx, py, qx, qy, m);
-	  break;
-        case 2:
-	case 3:
-          cmakeline(px, py, qx, py, m);
-          if (flags.bit0 && sf != 3) cmakeline(qx, py, qx, qy, m);
-	  break;
-      }
-      cstrokeline(th, m);
-  }
-  return self;
+    StaffObj *p, *q;
+    Staff *sp;
+    int sz, above, ss;
+    NSFont *f, *ft;
+    float px, py, qx, qy, th;
+    char buff[16];
+    BOOL splitLeftOnly = [self splitToLeft] && ![self splitToRight];
+    BOOL noSplits = ![self splitToLeft] && ![self splitToRight];
+    
+    /* assume client sorted by the time we arrive here */
+    sz = gFlags.size;
+    p = [client objectAtIndex:0];
+    q = [client lastObject];
+    if (gFlags.selected && !gFlags.seldrag) {
+	[self coordsForHandle: 0  asX: &px  andY: &py];
+	chandle(px, py, m);
+	[self coordsForHandle: 1  asX: &px  andY: &py];
+	chandle(px, py, m);
+    }
+    px = p->bounds.origin.x + x1;
+    py = p->bounds.origin.y + y1;
+    qx = q->bounds.origin.x + x2;
+    qy = q->bounds.origin.y + y2;
+    switch(gFlags.subtype)
+    {
+	case 0: /* 8 --- */
+	    if (flags.position != 0)
+		py = qy;
+	    if(![self splitToLeft]) {
+		f = musicFont[1][sz];
+		buff[0] = 165;
+		buff[1] = '\0';
+		CAcString(px, py + 0.5 * charFGH(f, 165), buff, f, m);
+		doDashJog(px + nature[sz] + [f widthOfString: [NSString stringWithUTF8String: buff]], py, qx, noSplits, (flags.position == 0), sz, m);		  
+	    }
+	    else {
+		doDashJog(px, py, qx, splitLeftOnly, (flags.position == 0), sz, m);
+	    }
+	    break;
+	case 1: /* 15 --- */
+	    if (flags.position != 0)
+		py = qy;
+	    if(![self splitToLeft]) {
+		f = musicFont[1][sz];
+		buff[0] = 193;
+		buff[1] = 176;
+		buff[2] = '\0';
+		CAcString(px, py + 0.5 * charFGH(f, 165), buff, f, m);
+		doDashJog(px + nature[sz] + [f widthOfString: [NSString stringWithUTF8String: buff]], py, qx, noSplits, (flags.position == 0), sz, m);
+	    }
+	    else {
+		doDashJog(px, py, qx, splitLeftOnly, (flags.position == 0), sz, m);
+	    }
+	    break;
+	case 2: /* coll' 8 */
+	    if (flags.position != 0) 
+		py = qy;
+	    if(![self splitToLeft]) {
+		f = musicFont[1][sz];
+		// Replace with [[self client] staffScale]
+		ft = [NSFont fontWithName:@"Times-Italic" size:fontsize[sz] / [[CalliopeAppController currentDocument] staffScale]];
+		CAcString(px, py + 0.5 * charFGH(ft, '8'), "coll' 8", ft, m);
+		doDashJog(px + nature[sz] + [ft widthOfString:@"coll' 8"], py, qx, noSplits, (flags.position == 0), sz, m);
+	    }
+	    else {
+		doDashJog(px, py, qx, splitLeftOnly, (flags.position == 0), sz, m);
+	    }
+	    break;
+	case 3: /* trill */
+	    above = (flags.position == 0);
+	    if(![self splitToLeft]) {
+		f = musicFont[1][sz];
+		DrawCharacterInFont(px, (above ? py : qy), 96, f, m);
+		cbrack(6, flags.position, px + DrawWidthOfCharacter(f, 96), py, qx, qy, 0, 0, sz, m);
+	    }
+	    else {
+		cbrack(6, flags.position, px, py, qx, qy, 0, 0, sz, m);
+	    }
+	    break;
+	case 4:  /* arpegg */
+	    cbrack(6, flags.position, px, py, qx, qy, 0, 0, sz, m);
+	    break;
+	case 5:  /* square bracket */
+	    if(![self splitToLeft]) {
+		if(![self splitToRight])
+		    cbrack(0, flags.position, px, py, qx, qy, staffthick[0][sz], 0.1, sz, m);
+		else
+		    cbrack(9, flags.position, px, py, qx, qy, staffthick[0][sz], 0.1, sz, m);
+	    } 	   
+	    else {
+		if(![self splitToRight])
+		    cbrack(10, flags.position, px, py, qx, qy, staffthick[0][sz], 0.1, sz, m);
+		else
+		    cbrack(4, flags.position, px, py, qx, qy, staffthick[0][sz], 0, sz, m);		
+	    }
+	    break;
+	case 6:  /* round bracket */
+	    cbrack(1, flags.position, px, py, qx, qy, nature[sz] * 0.5, 0, sz, m);
+	    break;
+	case 7:  /* curly bracket */
+	    cbrack(2, flags.position, px, py, qx, qy, 2 * nature[sz], 0, sz, m);
+	    break;
+	case 8:  /* angle bracket */
+	    cbrack(3, flags.position, px, py, qx, qy, staffthick[0][sz], 0.1, sz, m);
+	    break;
+	case 9:  /* solid line */
+	    cbrack(4, flags.position, px, py, qx, qy, staffthick[0][sz], 0, sz, m);
+	    break;
+	case 10:  /* dashed line */
+	    cbrack(5, flags.position, px, py, qx, qy, staffthick[0][sz], 2 * nature[sz], sz, m);
+	    break;
+	case 11:  /* pedal */
+	    cbrack(7, flags.position, px, py, qx, qy, staffthick[0][sz], 2 * nature[sz], sz, m);
+	    break;
+	case GROUPCRES:  /* crescendo */
+	    if (flags.position == 0)
+	    {
+		cmakeline(px, py, qx, py - nature[sz], m);
+		cmakeline(px, py, qx, py + nature[sz], m);
+	    }
+	    else
+	    {
+		cmakeline(px, qy, qx, qy - nature[sz], m);
+		cmakeline(px, qy, qx, qy + nature[sz], m);
+	    }
+	    cstrokeline(staffthick[0][sz], m);
+	    break;
+	case GROUPDECRES:  /* decrescendo */
+	    if (flags.position == 0)
+	    {
+		cmakeline(px, py - nature[sz], qx, py, m);
+		cmakeline(px, py + nature[sz], qx, py, m);
+	    }
+	    else
+	    {
+		cmakeline(px, qy - nature[sz], qx, qy, m);
+		cmakeline(px, qy + nature[sz], qx, qy, m);
+	    }
+	    cstrokeline(staffthick[0][sz], m);
+	    break;
+	case 14: /* flat bow */
+	    cbrack(8, flags.position, px, py, qx, qy, 0.75 * nature[sz], 0, sz, m);
+	    break;
+	case 15: /* volta */
+	    sp = p->mystaff;
+	    th = barwidth[sp->flags.subtype][sp->gFlags.size];
+	    ss = sp->flags.spacing;
+	    qy = py + 5 * ss;
+	    if(![self splitToLeft]) {
+		CAcString(px + ss, qy, mark, fontdata[FONTTEXT], m);
+		cmakeline(px, py, qx, py, m);
+		cmakeline(px, py, px, qy, m);
+		if (flags.bit0 && ([self splitToLeft] || ![self splitToRight])) 
+		    cmakeline(qx, py, qx, qy, m);
+	    }
+	    else {
+		cmakeline(px, py, qx, py, m);
+		// Check that not splitting both ends.
+		if (flags.bit0 && (![self splitToLeft] || ![self splitToRight]))
+		    cmakeline(qx, py, qx, qy, m);
+	    }
+	    cstrokeline(th, m);
+    }
+    return self;
 }
 
 
@@ -617,7 +596,9 @@ float fontsize[3] = { 12, 8, 6};
     [aDecoder decodeValuesOfObjCTypes:"icccffff", &UID, &b1, &b2, &b3, &x1, &y1, &x2, &y2];
     flags.fixed = b1;
     flags.position = b2;
-    hFlags.split = b3;
+      [self setSplitToLeft: (b3 & 2) == 2];
+      [self setSplitToRight: (b3 & 1) == 1];
+
   }
   else if (v == 3)
   {

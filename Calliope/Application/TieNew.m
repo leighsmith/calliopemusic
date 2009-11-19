@@ -144,19 +144,18 @@ static void orderXY(float *x, float *y)
 }
 
 
-- (TieNew *) newFrom
+- copyWithZone: (NSZone *) zone
 {
-  TieNew *t = [[TieNew alloc] init];
-  t->gFlags = gFlags;
-  t->hFlags = hFlags;
-  t->head1 = head1;
-  t->head2 = head2;
-  t->off1 = off1;
-  t->off2 = off2;
-  t->con1 = con1;
-  t->con2 = con2;
-  t->flags = flags;
-  return t;
+    TieNew *t = [super copyWithZone: zone];
+    
+    t->head1 = head1;
+    t->head2 = head2;
+    t->off1 = off1;
+    t->off2 = off2;
+    t->con1 = con1;
+    t->con2 = con2;
+    t->flags = flags;
+    return t;
 }
 
 
@@ -215,7 +214,7 @@ static void orderXY(float *x, float *y)
   switch (h)
   {
     case 0:
-      if (hFlags.split & 2)
+      if ([self splitToLeft])
       {
         p = [client lastObject];
         *x = [p xOfStaffEnd: 0];
@@ -231,7 +230,7 @@ static void orderXY(float *x, float *y)
       }
       break;
     case 1:
-      if (hFlags.split & 1)
+      if ([self splitToRight])
       {
         p = [client objectAtIndex:0];
         *x = [p xOfStaffEnd: 1];
@@ -652,7 +651,8 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
     [p linkhanger: self];
     head1 = t1->headnum;
   }
-  else hFlags.split |= 2;
+  else 
+      [self setSplitToLeft: YES];
   if (t2 != nil)
   {
     q = [t2 firstClient];
@@ -660,7 +660,8 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
     [q linkhanger: self];
     head2 = t2->headnum;
   }
-  else hFlags.split |= 1;
+  else
+      [self setSplitToRight: YES];
   if (t1 == nil) t1 = t2;
   gFlags.subtype = mapTieSubtype[t1->gFlags.subtype];
   flags.place = t1->flags.place;
@@ -684,7 +685,7 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
   int n;
   [super closeClients: l];
   n = [client count];
-  return (n >= 2 || (hFlags.split && n > 0));
+  return (n >= 2 || (([self splitToLeft] || [self splitToRight]) && n > 0));
 }
 
 - (BOOL) hit: (NSPoint) p
@@ -733,7 +734,7 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
   {
     case 0:
       if (alt) return NO;
-      if (hFlags.split & 2)
+      if ([self splitToLeft])
       {
         p = [client lastObject];
         off1.x = pt.x - [p xOfStaffEnd: 0];
@@ -750,7 +751,7 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
       break;
     case 1:
       if (alt) return NO;
-      if (hFlags.split & 1)
+      if ([self splitToRight])
       {
         p = [client objectAtIndex:0];
         off2.x = pt.x - [p xOfStaffEnd: 1];
@@ -859,7 +860,8 @@ void drawEdmark(float x0, float y0, float x3, float y3, float x1, float y1, floa
     flags.place = r2;
     flags.ed = r4;
     flags.dashed = r5;
-    hFlags.split = r6;
+      [self setSplitToLeft: (r6 & 2) == 2];
+      [self setSplitToRight: (r6 & 1) == 1];
   }
   else if (v == 1)
   {
@@ -868,7 +870,8 @@ void drawEdmark(float x0, float y0, float x3, float y3, float x1, float y1, floa
     flags.place = r2;
     flags.ed = r4;
     flags.dashed = r5;
-    hFlags.split = r6;
+      [self setSplitToLeft: (r6 & 2) == 2];
+      [self setSplitToRight: (r6 & 1) == 1];
   }
   else if (v == 2)
   {
@@ -877,7 +880,8 @@ void drawEdmark(float x0, float y0, float x3, float y3, float x1, float y1, floa
     flags.place = r2;
     flags.ed = r4;
     flags.dashed = r5;
-    hFlags.split = r6;
+      [self setSplitToLeft: (r6 & 2) == 2];
+      [self setSplitToRight: (r6 & 1) == 1];
     flags.flat = r7;
   }
   else if (v == 3)

@@ -393,6 +393,18 @@ extern int selMode;
     return self;
 }
 
+- copyWithZone: (NSZone *) zone
+{
+    Graphic *newGraphic = [[[self class] allocWithZone: zone] init];
+    
+    newGraphic->bounds = bounds;
+    newGraphic->gFlags = gFlags;
+    /* Since the list of enclosures is never assigned externally, I think it's correct that we just shallow copy the enclosures. */
+    newGraphic->enclosures = [enclosures retain];
+    return newGraphic;
+}
+
+
 - proto: (GraphicView *) v : (NSPoint) pt : (Staff *) sp : (System *) sys : (Graphic *) g : (int) i
 {
   return self;
@@ -464,15 +476,14 @@ extern int selMode;
 
 /* structure copying of bounds. */
 
-- (NSRect)bounds
+- (NSRect) bounds
 {
     return bounds;
 }
 
-- setBounds:(const NSRect)aRect
+- (void) setBounds: (const NSRect) aRect
 {
     bounds = aRect;
-    return self;
 }
 
 

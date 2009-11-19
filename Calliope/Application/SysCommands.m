@@ -283,7 +283,7 @@
       {
         h = [hl objectAtIndex:hk];
 	if ([h graphicType] == TEXTBOX) continue;
-	if (h->hFlags.split)
+	if ([h splitToRight] || [h splitToLeft])
 	{
 	  r = 0;
 	  for (m = 0; (m < nums && !r); m++)

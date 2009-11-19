@@ -1501,7 +1501,7 @@ static void drawHorz(float x, float y, float w, NSRect r)
 	case 'r': /*18:  R */
 	    [self getInsertionX: &(pt.x) : &sp : &p : &tb : &td];
 	    pt.y = [sp yOfCentre];
-	    p = [Graphic graphicOfType: REST];
+	    p = (Rest *)[Graphic graphicOfType: REST];
 	    [p proto: self : pt : sp : sp->mysys : nil : 5];
 	    p->time.body = tb;
 	    [p setDottingCode: 0];
@@ -2037,7 +2037,7 @@ static void drawHorz(float x, float y, float w, NSRect r)
             {
               p = [sender draggingLocation];
               p = [self convertPoint:p fromView:nil];
-              [[Graphic graphicOfType: IMAGE] protoFromPasteboard: pboard : self : p];
+              [(ImageGraphic *)[Graphic graphicOfType: IMAGE] protoFromPasteboard: pboard : self : p];
               [self setNeedsDisplay:YES];
             }
       }

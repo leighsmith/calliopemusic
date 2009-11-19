@@ -2093,8 +2093,9 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
 
 void setSplit(Hanger *h, int u, int f)
 {
-  h->UID = u;
-  h->hFlags.split = f;
+    h->UID = u;
+    [h setSplitToLeft: (f & 2) == 2];
+    [h setSplitToRight: (f & 1) == 1];
 }
 
 
