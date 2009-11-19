@@ -32,7 +32,7 @@
   char isGraced;		/* 1 = graced object, 2 = backwards-timed */
   unsigned char voice;		/* voice number */
   NSString *part;		/* part name */
-//@protected
+@protected
   Staff *mystaff;		/* backpointer */
 }
 
@@ -61,8 +61,8 @@
 - (float) boundAboveBelow: (int) a;
 - (float) yAboveBelow: (int) a;
 - (BOOL) validAboveBelow: (int) a;
-- (int) posOfY: (float) y;
-- (float) yOfPos: (int) p;
+- (int) staffPositionOfY: (float) y;
+- (float) yOfStaffPosition: (int) p;
 - (float) yOfTopLine;
 - (float) yOfBottomLine;
 

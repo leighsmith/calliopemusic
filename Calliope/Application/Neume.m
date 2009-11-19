@@ -59,7 +59,7 @@ struct oldflags		/* for old version */
   q->x = x;
   q->y = y;
   q->staffPosition = staffPosition;
-  q->mystaff = mystaff;
+  [q setStaff: mystaff];
   q->gFlags.subtype = 2;
   q->keystr[6] = 1;
   [self release];

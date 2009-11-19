@@ -224,7 +224,7 @@ TODO should be named
     [noteHead setBodyType: gFlags.subtype];
     if ([sp graphicType] == STAFF) {
 	staffPosition = [sp findPos: pt.y];
-	y = [sp yOfPos: staffPosition];
+	y = [sp yOfStaffPosition: staffPosition];
 	[noteHead setStaffPosition: staffPosition];
 	[noteHead setCoordinateY: y];
 	if (![self stemIsFixed]) 
@@ -302,7 +302,7 @@ TODO should be named
   int k, np, dp;
   NoteHead *noteHead;
     
-  np = [self posOfY: y];
+  np = [self staffPositionOfY: y];
   dp = np - staffPosition;
   if (dp == 0) return self;
   staffPosition = np;
@@ -456,7 +456,7 @@ extern unsigned char hasstem[10];
     noteHead = [headlist lastObject];
     sy = [noteHead y];
     if (hasstem[time.body]) sy += [self stemLength];
-    pos = [[noteHead myNote] posOfY: sy];
+    pos = [[noteHead myNote] staffPositionOfY: sy];
   }
   else
   {
@@ -783,12 +783,12 @@ static int getShapeID(int pos, int s, int n, int c)
 - (BOOL) moveHead: (NoteHead *) noteHead : (BOOL) locked : (float) dy : (System *) sys
 {
   float ny = dy + [noteHead y];
-  int np = [[noteHead myNote] posOfY: ny];
+  int np = [[noteHead myNote] staffPositionOfY: ny];
     
   if ([noteHead staffPosition] != np)
   {
     [noteHead setStaffPosition: np];
-      [noteHead setCoordinateY: [self yOfPos: [noteHead staffPosition]]];
+      [noteHead setCoordinateY: [self yOfStaffPosition: [noteHead staffPosition]]];
     return YES;
   }
   return NO;
@@ -809,7 +809,7 @@ static int getShapeID(int pos, int s, int n, int c)
     
   i = gFlags.selend;
   noteHead = [headlist objectAtIndex:i];
-  if ([self posOfY: ny] == [noteHead staffPosition] && ABS(nx - x) < 3.0) return NO;
+  if ([self staffPositionOfY: ny] == [noteHead staffPosition] && ABS(nx - x) < 3.0) return NO;
   ndy = ny - [noteHead y];
   if (alt)
   {

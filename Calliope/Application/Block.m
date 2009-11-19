@@ -119,7 +119,7 @@ static Block *proto;
       a = [mystaff findPos: ny];
       if (a == staffPosition && x == nx) return NO;
       staffPosition = a;
-      y = [mystaff yOfPos: staffPosition];
+      y = [mystaff yOfStaffPosition: staffPosition];
       x = nx;
       m = YES;
     }

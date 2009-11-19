@@ -844,7 +844,7 @@ static char nflg[NUMUNDER];
   su = [p stemIsUp];
   if ([self splitToLeft] && ![self splitToRight]) {
     xa = [p xOfStaffEnd: 0];
-    ya = [p yOfPos: p->staffPosition + splitp] + [p stemYoff: 0] + [p stemLength];
+    ya = [p yOfStaffPosition: p->staffPosition + splitp] + [p stemYoff: 0] + [p stemLength];
     xb = p->x + [p stemXoffRight: 0];
     yb = [p myStemBase] + [p stemYoff: 0] + [p stemLength];
     ys = yb;
@@ -854,7 +854,7 @@ static char nflg[NUMUNDER];
     ya = [p myStemBase] + [p stemYoff: 0] + [p stemLength];
     ys = ya;
     xb = [p xOfStaffEnd: 1];
-    yb = [p yOfPos: p->staffPosition + splitp] + [p stemYoff: 0] + [p stemLength];
+    yb = [p yOfStaffPosition: p->staffPosition + splitp] + [p stemYoff: 0] + [p stemLength];
   }
   th = beamthick[sz];
   bsep = th + beamsep[sz];

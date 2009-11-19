@@ -220,16 +220,16 @@ static float braoffy[2][2] =
     my = q->y + qy;
     if (a)
     {
-      y = [p yOfPos: -1];
+      y = [p yOfStaffPosition: -1];
       if (ly > y) py -= (ly - y);
-      y = [q yOfPos: -1];
+      y = [q yOfStaffPosition: -1];
       if (my > y) qy -= (my - y);
     }
     else
     {
-      y = [p yOfPos: 9];
+      y = [p yOfStaffPosition: 9];
       if (ly < y) py += (y - ly);
-      y = [q yOfPos: 9];
+      y = [q yOfStaffPosition: 9];
       if (my < y) qy += (y - my);
     }
 #if 0

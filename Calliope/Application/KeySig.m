@@ -235,7 +235,7 @@ int keySymValue(char *s)
 - (BOOL) getXY: (float *) fx : (float *) fy
 {
   *fx = x;
-  *fy = [self yOfPos: [self defaultPos] + staffPosition];
+  *fy = [self yOfStaffPosition: [self defaultPos] + staffPosition];
   return YES;
 }
 
@@ -365,12 +365,12 @@ int normkey[4] = {-1, 0, 1, -1};
 	if (mp != staffPosition)
 	{
           staffPosition = mp;
-          y = [mystaff yOfPos: mp + dp];
+          y = [mystaff yOfStaffPosition: mp + dp];
 	}
       }
       else if (inv)
       {
-	y = [mystaff yOfPos: staffPosition + dp];
+	y = [mystaff yOfStaffPosition: staffPosition + dp];
       }
     }
     [self recalc];

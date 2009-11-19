@@ -76,7 +76,7 @@ static TimeSig *proto;
 - (BOOL) getXY: (float *) fx : (float *) fy
 {
     *fx = x;
-    *fy = [self yOfPos: staffPosition];
+    *fy = [self yOfStaffPosition: staffPosition];
     return YES;
 }
 
@@ -292,13 +292,13 @@ static short imperfdiv[4] = {4, 2, 6, 4};
 		if (mp != staffPosition)
 		{
 		    staffPosition = mp;
-		    y = [mystaff yOfPos: mp];
+		    y = [mystaff yOfStaffPosition: mp];
 		}
 	    }
 	    else if (inv)
 	    {
 		staffPosition = [self defaultPos];
-		y = [mystaff yOfPos: staffPosition];
+		y = [mystaff yOfStaffPosition: staffPosition];
 	    }
 	}
 	[self recalc];
@@ -313,7 +313,7 @@ static float fontsize[3] = { 16, 12, 8};
 - drawMode: (int) m
 {
     float x1, x2, w;
-    float cy = ([mystaff graphicType] == STAFF) ? [mystaff yOfPos: staffPosition] : y;
+    float cy = ([mystaff graphicType] == STAFF) ? [mystaff yOfStaffPosition: staffPosition] : y;
     BOOL punct = YES;
     static char linedy[3] = {12, 9, 6};
     int sz = gFlags.size;

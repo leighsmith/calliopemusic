@@ -48,10 +48,10 @@ extern float barwidth[3][3];
 - (BOOL) getXY: (float *) x : (float *) y
 {
   StaffObj *p = [self firstClient];
-  Staff *sp = p->mystaff;
+  Staff *sp = [p staff];
   if ([sp graphicType] != STAFF) return NO;
   *x = p->x;
-  *y = [sp yOfPos: pos];
+  *y = [sp yOfStaffPosition: pos];
   return YES;
 }
 
@@ -107,7 +107,7 @@ extern float barwidth[3][3];
 {
   int np;
   StaffObj *p = [self firstClient];
-  Staff *sp = p->mystaff;
+  Staff *sp = [p staff];
   if ([sp graphicType] != STAFF) return NO;
   np = [sp findPos: dy + pt.y];
   if (np == pos) return NO;
@@ -127,11 +127,11 @@ char bartype[10] = {0, 0, 2, 2, 1, 1, 3, 0, 0, 0};
   float x1, y1, x2, y2, th;
   int ss;
   StaffObj *p = [self firstClient];
-  Staff *sp = p->mystaff;
+  Staff *sp = [p staff];
   if ([sp graphicType] != STAFF) return nil;
   ss = sp->flags.spacing;
   th = barwidth[sp->flags.subtype][sp->gFlags.size];
-  y1 = [sp yOfPos: pos];
+  y1 = [sp yOfStaffPosition: pos];
   y2 = y1 - 5 * ss;
   x1 = p->x;
   x1 = [p hasVoltaBesides: self] ? p->bounds.origin.x + p->bounds.size.width - (0.5 * th): p->x;

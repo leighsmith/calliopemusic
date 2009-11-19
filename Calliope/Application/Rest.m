@@ -212,7 +212,7 @@ static Rest *proto;
 {
     if (style <= 1) *fx = x - 0.5 * charFGW(musicFont[!style][gFlags.size], rests[(int)style][time.body]);
   else *fx = x;
-  *fy = [self yOfPos: staffPosition];
+  *fy = [self yOfStaffPosition: staffPosition];
   return YES;
 }
 
@@ -258,12 +258,12 @@ static Rest *proto;
 	  if (mp < staffPosition) --mp; else ++mp;
 	}
         staffPosition = mp;
-        y = [mystaff yOfPos: mp];
+        y = [mystaff yOfStaffPosition: mp];
       }
       else if (inv)
       {
         staffPosition = [self defaultPos];
-        y = [mystaff yOfPos: staffPosition];
+        y = [mystaff yOfStaffPosition: staffPosition];
       }
     }
     [self recalc];
@@ -311,7 +311,7 @@ extern float staffthick[3][3];
     int numy;
     NSString *numberString;
     
-    sy = [self yOfPos: 0];
+    sy = [self yOfStaffPosition: 0];
     cx = x - (4 * ss);
     y1 = GETYSP(sy, ss, staffPosition);
     wid = (8 * ss);
@@ -341,14 +341,14 @@ extern float staffthick[3][3];
     case 6:
       f = musicFont[1][sz];
       c = 212;
-      y1 = [self yOfPos: staffPosition];
+      y1 = [self yOfStaffPosition: staffPosition];
       dx = 0.5 * charFGW(f, c);
       DrawCharacterInFont(x - dx, y1, c, f, m);
       break;
     case 5:
       f = musicFont[1][sz];
       c = SF_r1;
-      y1 = [self yOfPos: staffPosition];
+      y1 = [self yOfStaffPosition: staffPosition];
       dx = 0.5 * charFGW(f, c);
       DrawCharacterInFont(x - dx, y1, c, f, m);
       break;
@@ -356,7 +356,7 @@ extern float staffthick[3][3];
     case 1:
     f = musicFont[!style][sz];  /* might need to depend on body etc */
         c = rests[(int)style][time.body];
-    y1 = [self yOfPos: staffPosition];
+    y1 = [self yOfStaffPosition: staffPosition];
     dx = 0.5 * charFGW(f, c);
     DrawCharacterInFont(x - dx, y1, c, f, m);
     if (hasledger[time.body] && style == 0 && [mystaff graphicType] == STAFF)
@@ -365,7 +365,7 @@ extern float staffthick[3][3];
       if (tp < 0 || tp > 9)
       {
         lx = ledgedxs[sz];
-	ly = [self yOfPos: tp];
+	ly = [self yOfStaffPosition: tp];
 	sp = mystaff;
 	th = staffthick[sp->flags.subtype][sp->gFlags.size];
         cline(x - dx - lx, ly, x + dx + lx, ly, th, m);
@@ -375,7 +375,7 @@ extern float staffthick[3][3];
     {
         tp = staffPosition + dotoffs[(int)style][time.body];
       if ((tp & 1) == 0) --tp;
-      ly = [self yOfPos: tp];
+      ly = [self yOfStaffPosition: tp];
       th = ([self dottingCode] == 3) ? [self getSpacing] * 2 : 0;
       restdot(sz, charFURX(f, c), x - dx, ly, th, [self dottingCode], style, m);
     }
@@ -387,8 +387,8 @@ extern float staffthick[3][3];
     case 4:
       f = musicFont[1][sz];
       ss = getSpacing(mystaff);
-      y1 = [self yOfPos: staffPosition];
-      ly = [self yOfPos: staffPosition + 2];
+      y1 = [self yOfStaffPosition: staffPosition];
+      ly = [self yOfStaffPosition: staffPosition + 2];
       switch(numbars)
       {
         case 1:
@@ -428,7 +428,7 @@ extern float staffthick[3][3];
           c = rests[0][7];
 	  DrawCharacterInFont(x + 3 * ss, y1, c, f, m);
           c = rests[0][8];
-	  DrawCharacterInFont(x - 0.5 * charFGW(f, c), [self yOfPos: 4], c, f, m);
+	  DrawCharacterInFont(x - 0.5 * charFGW(f, c), [self yOfStaffPosition: 4], c, f, m);
 	  DrawCharacterInFont(x - 4 * ss, y1, c, f, m);
 	  DrawCharacterInFont(x - 4 * ss, ly, c, f, m);
 	  break;
@@ -456,7 +456,7 @@ extern float staffthick[3][3];
   {
     [aDecoder decodeValuesOfObjCTypes:"s", &numbars];
     staffPosition = restoffs[gFlags.subtype & 1][time.body];
-    y = [self yOfPos: staffPosition];
+    y = [self yOfStaffPosition: staffPosition];
   }
   else if (v == 3) [aDecoder decodeValuesOfObjCTypes:"s", &numbars];
   else [aDecoder decodeValuesOfObjCTypes:"cs", &style, &numbars];

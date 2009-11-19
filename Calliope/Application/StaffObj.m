@@ -356,15 +356,15 @@ int protoVox;
 }
 
 
-- (int) posOfY: (float) sy
+- (int) staffPositionOfY: (float) sy
 {
   return [mystaff findPos: sy];
 }
 
 
-- (float) yOfPos: (int) ip
+- (float) yOfStaffPosition: (int) ip
 {
-  return [mystaff yOfPos: ip];
+  return [mystaff yOfStaffPosition: ip];
 }
 
 

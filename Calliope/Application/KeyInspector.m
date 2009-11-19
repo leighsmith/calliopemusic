@@ -75,7 +75,7 @@ NSImage *keyimages[4];
     sk = [sl count];
     while (sk--) if ((p = [sl objectAtIndex:sk]) && [p graphicType] == KEY)
     {
-      dotrans = ([transswitch state] && ([p->mystaff graphicType] == STAFF));
+      dotrans = ([transswitch state] && ([[p staff] graphicType] == STAFF));
       if (dotrans)
       {
         tb = p->bounds;
@@ -92,7 +92,7 @@ NSImage *keyimages[4];
         k = [octavebutton indexOfItemWithTitle:[octavebutton title]];
 	j = 0;
 	if (k == 1) j = -7; else if (k == 2) j = 7;
-        [p->mystaff transKey: p : okn : i : j];
+        [[p staff] transKey: p : okn : i : j];
         b  = NSUnionRect(tb , b);
       }
     }

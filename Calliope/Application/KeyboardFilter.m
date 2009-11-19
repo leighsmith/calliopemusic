@@ -212,10 +212,10 @@ extern void setkeysig(KeySig *p, char *key);
         if (cbase && ([n timeTag] - cbase->stamp < 0.1))
 	{
 	  q = cbase;
-	  sp = q->mystaff;
+	  sp = [q staff];
 	  mc = [sp getKeyThru: q : ks];
 	  posOfNote(mc, ks, [n keyNum], &pos, &acc);
-	  [q newHeadOnStaff: sp atHeight: [sp yOfPos: pos] accidental: acc];
+	  [q newHeadOnStaff: sp atHeight: [sp yOfStaffPosition: pos] accidental: acc];
 	  [v reShapeAndRedraw: q];
 	}
 	else
@@ -223,7 +223,7 @@ extern void setkeysig(KeySig *p, char *key);
 	  [v getInsertionX: &(pt.x) : &sp : &p : &tb : &td];
 	  mc = [sp getKeyThru: p : ks];
 	  posOfNote(mc, ks, [n keyNum], &pos, &acc);
-	  pt.y = [sp yOfPos: pos];
+	  pt.y = [sp yOfStaffPosition: pos];
 	  q = [[[GNote alloc] init] autorelease];
 	  [q proto: v : pt : sp : sp->mysys : nil : 5];
 	  if (acc) setAccidental(q, acc);

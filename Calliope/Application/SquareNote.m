@@ -65,7 +65,7 @@ static char timecodes[3] = {4, 4, 5};
   if ([sp graphicType] == STAFF)
   {
     staffPosition = [sp findPos: pt.y];
-    y = [sp yOfPos: staffPosition];
+    y = [sp yOfStaffPosition: staffPosition];
   }
   gFlags.size = sp->gFlags.size;
   gFlags.subtype = proto->gFlags.subtype;
@@ -147,7 +147,7 @@ static float squaretick[3] = {1.0, 1.0, 0.5};
     if ([mystaff graphicType] == STAFF)
     {
       staffPosition = [mystaff findPos: y];
-      y = [mystaff yOfPos: staffPosition];
+      y = [mystaff yOfStaffPosition: staffPosition];
     }
   }
   if (m)
@@ -220,7 +220,7 @@ static short mywidth[2] = {2, 4};
     case 2:  /* oblique */
       x1 = x;
       y1 = y - ss;
-      y2 = [self yOfPos: staffPosition + p1] - ss;
+      y2 = [self yOfStaffPosition: staffPosition + p1] - ss;
       dy = 2 * ss;
       w = ABS(y1 - y2) + 2 * ss;
       x2 = x1 + w;
@@ -230,8 +230,8 @@ static short mywidth[2] = {2, 4};
         s1 = y - ser;
 	s2 = y + ser;
         cline(x1, s1, x1, s2, lw, m);
-	s1 = [self yOfPos: staffPosition + p1] - ser;
-	s2 = [self yOfPos: staffPosition + p1] + ser;
+	s1 = [self yOfStaffPosition: staffPosition + p1] - ser;
+	s2 = [self yOfStaffPosition: staffPosition + p1] + ser;
         cline(x2, s1, x2, s2, lw, m);
       }
       break;
@@ -252,7 +252,7 @@ static short mywidth[2] = {2, 4};
     if (shape == 2) dp += p1;
     if (!(dp & 1)) dp -= 1;
     x1 = x + w + nature[sz];
-    y1 = [self yOfPos: dp];
+    y1 = [self yOfStaffPosition: dp];
     drawnotedot(sz, x1, y1, 0, 0, 1, [self dottingCode], 0, m);
   }
   if ([sp graphicType] == STAFF)

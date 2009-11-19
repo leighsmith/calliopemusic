@@ -337,7 +337,7 @@ extern float ctimex(float d);
 	*tb = CROTCHET;
 	*td = 0;
     }
-    sp = p->mystaff;
+    sp = [p staff];
     if (*x > [sp xOfEnd])
     {
 	sys = [self nextSystem: sp->mysys didCreate: &newSystem];
@@ -377,12 +377,12 @@ extern float ctimex(float d);
   if (t != nil)
   {
     *x = t->x + ctimex([t noteEval: NO]) * 8;
-    *rsp = t->mystaff;
+    *rsp = [t staff];
   }
   else
   {
     *x = RIGHTBOUND(p) + 4 * nature[p->gFlags.size];
-    *rsp = p->mystaff;
+    *rsp = [p staff];
   }
   return self;
 }

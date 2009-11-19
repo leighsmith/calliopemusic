@@ -100,7 +100,7 @@ static float getTop(StaffObj *p)
   int j;
   j = [p posAboveBelow: 1];
   if (!(j & 1)) --j;
-  return [[p staff] yOfPos: j];
+  return [[p staff] yOfStaffPosition: j];
 }
 
 
@@ -109,7 +109,7 @@ static float getBottom(StaffObj *p)
   int j;
   j = [p posAboveBelow: 0];
   if (!(j & 1)) ++j;
-  return [[p staff] yOfPos: j];
+  return [[p staff] yOfStaffPosition: j];
 }
 
 static Accent *proto;

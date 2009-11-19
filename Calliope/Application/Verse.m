@@ -94,7 +94,7 @@ extern float staffthick[3][3];
   if (data == NULL || *data == '\0')
   {
     p = note;
-    sp = p->mystaff;
+    sp = [p staff];
     if ([sp graphicType] != STAFF) return self;
     bounds.origin.x = p->x - 6;
     bounds.origin.y = [sp yOfTop] + baseline - 12;
@@ -297,9 +297,9 @@ static void sigwidthpix(unsigned char *s, NSFont *f, float *sw, float *w)
   }
   [self reShape];
   [self recalc];
-  if (f && [n->mystaff graphicType] == STAFF)
+  if (f && [[n staff] graphicType] == STAFF)
   {
-    p = [n->mystaff prevVersed: n : vFlags.num];
+    p = [[n staff] prevVersed: n : vFlags.num];
     if (p != nil)
     {
       v = [p verseOf: vFlags.num];
@@ -482,7 +482,7 @@ static void drawext(float x1, float y, float x2, Staff *sp, int f, int m)
   System *sys;
   StaffObj *q;
   StaffObj *p = note;
-  Staff *sp = p->mystaff;
+  Staff *sp = [p staff];
   if ([sp graphicType] != STAFF) return self;
   if (m && p->gFlags.selected && !p->gFlags.seldrag && p->selver == vFlags.num) [self traceBounds];
   if (data == NULL || *data == '\0') return self;

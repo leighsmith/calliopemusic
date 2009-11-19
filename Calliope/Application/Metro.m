@@ -121,7 +121,7 @@ static Metro *proto;
 {
   int np;
   StaffObj *p = [self firstClient];
-  Staff *sp = p->mystaff;
+  Staff *sp = [p staff];
   if ([sp graphicType] != STAFF) return NO;
   np = [sp findPos: pt.y];
   if (np == pos) return NO;
@@ -144,13 +144,13 @@ static Metro *proto;
 {
     float x, y, dx, nx, dy;
     NSFont *f = fontdata[FONTSTMR];
-    id sp = ((StaffObj *)client)->mystaff;
+    id sp = [(StaffObj *) client staff];
     int sz = smallersz[gFlags.size];
     
     if ([sp graphicType] != STAFF) 
 	return self;
     x = ((StaffObj *)client)->x;
-    y = [sp yOfPos: pos];
+    y = [sp yOfStaffPosition: pos];
     dx = charFGW(f, '=');
     DrawCharacterCenteredOnXInFont(x, y, '=', f, m);
     nx = dx * (2.0 + dot[0] * 0.5);

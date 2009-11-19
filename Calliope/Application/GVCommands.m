@@ -614,7 +614,7 @@ extern char *typename[NUMTYPES];
     p = [slist objectAtIndex:k];
     if (ISASTAFFOBJ(p))
     {
-      sp = p->mystaff;
+      sp = [p staff];
       if ([sp graphicType] == STAFF) [sp hideVerse: p->selver];
     }
   }
@@ -797,7 +797,7 @@ static BOOL doToObject(Graphic *p, int c, int a)
     p = [slist objectAtIndex:i];
     if (ISASTAFFOBJ(p))
     {
-      sp = p->mystaff;
+      sp = [p staff];
       if ([sp graphicType] == STAFF && sp->gFlags.morphed == 0)
       {
         sp->gFlags.morphed = 1;
@@ -812,7 +812,7 @@ static BOOL doToObject(Graphic *p, int c, int a)
     p = [slist objectAtIndex:i];
     if (ISASTAFFOBJ(p))
     {
-      sp = p->mystaff;
+      sp = [p staff];
       if ([sp graphicType] == STAFF) sp->gFlags.morphed = 0;
     }
   }
@@ -1032,7 +1032,7 @@ static BOOL doToObject(Graphic *p, int c, int a)
   [self deselectAll: self];
   if (ISASTAFFOBJ(p))
   {
-    sp = p->mystaff;
+    sp = [p staff];
     if ([sp graphicType] == STAFF)
     {
       sys = sp->mysys;

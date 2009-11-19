@@ -210,7 +210,7 @@
       while (nk--)
       {
         n = [nl objectAtIndex:nk];
-	nsp = n->mystaff;
+	nsp = [n staff];
 	if ([nsp graphicType] != STAFF) return NO;
 	if (a)
 	{

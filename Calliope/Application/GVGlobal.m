@@ -59,7 +59,7 @@ static Staff *staffmap[NUMSTAVES]; /* indexed by old staff, points to new staff 
   while (k--)
   {
     p = [enl objectAtIndex:k];
-    p->mystaff = sp;
+    [p setStaff: sp];
     if ([pl partNamed: [p getPart]] == nil)
     {
       [pl addObject: [[opl partNamed: [p getPart]] newFrom]];
@@ -153,9 +153,9 @@ static void addBarsRest(Staff *sp, System *sys, int n)
   a = [sp skipSigIx: [sp indexOfNoteAfter: [sys leftWhitespace]]];
   p = [Rest newBarsRest: n];
   [nl insertObject:p atIndex:a];
-  p->mystaff = sp;
+  [p setStaff: sp];
   p = [[Barline alloc] init];
-  p->mystaff = sp;
+  [p setStaff: sp];
   [nl insertObject:p atIndex:a + 1];
 }
 

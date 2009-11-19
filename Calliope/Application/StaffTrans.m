@@ -106,7 +106,7 @@ extern int noteNameNum(int i);
         if (off)
         {
 	    [h setStaffPosition: [h staffPosition] + off];
-	    [h setCoordinateY: [self yOfPos: [h staffPosition]]];
+	    [h setCoordinateY: [self yOfStaffPosition: [h staffPosition]]];
 	}
       }
       [q resetChord];
@@ -139,7 +139,7 @@ extern int noteNameNum(int i);
 	    while (hk--) {
 		h = [q noteHead: hk];
 		[h setStaffPosition: [h staffPosition] + off];
-		[h setCoordinateY: [self yOfPos: [h staffPosition]]];
+		[h setCoordinateY: [self yOfStaffPosition: [h staffPosition]]];
 	    }
 	    [q resetChord];
 	}

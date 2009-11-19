@@ -139,7 +139,7 @@ static Clef *proto;
 - (BOOL) getXY: (float *) fx : (float *) fy
 {
   *fx = x;
-  *fy = [self yOfPos: staffPosition];
+  *fy = [self yOfStaffPosition: staffPosition];
   return YES;
 }
 
@@ -201,13 +201,13 @@ static Clef *proto;
 	{
 	  am = (mp != staffPosition);
           staffPosition = mp;
-          y = [mystaff yOfPos: mp];
+          y = [mystaff yOfStaffPosition: mp];
 	}
       }
       else if (inv)
       {
         staffPosition = [self defaultPos];
-	y = [mystaff yOfPos: staffPosition];
+	y = [mystaff yOfStaffPosition: staffPosition];
       }
     }
     [self recalc];
@@ -230,7 +230,7 @@ static Clef *proto;
   sz = gFlags.size;
   f = musicFont[cleffont[cid]][sz];
   if ([mystaff graphicType] == SYSTEM) cy =  y;
-  else cy = cleforigins[sz][cid] + [mystaff yOfPos: staffPosition];
+  else cy = cleforigins[sz][cid] + [mystaff yOfStaffPosition: staffPosition];
   DrawCharacterInFont(x, cy, cs, f, m);
   if (ottava)
   {

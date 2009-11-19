@@ -114,13 +114,13 @@ extern void graphicListBBoxEx(NSRect *b, NSMutableArray *l, Graphic *p);
   if (gFlags.subtype == GROUPVOLTA)
   {
     graphicListBBoxExVolta(&b, client);
-    sp = p->mystaff;
+    sp = [p staff];
     d = 0 /* 0.5 * barwidth[sp->flags.subtype][sp->gFlags.size] */;
     x1 = p->bounds.origin.x + p->bounds.size.width - d;
     x1 -= p->bounds.origin.x;
     x2 = (![q hasVoltaBesides: self]) ? q->bounds.origin.x + q->bounds.size.width - d : q->x;
     x2 -= q->bounds.origin.x;
-    sy = [p yOfPos: -6];
+    sy = [p yOfStaffPosition: -6];
     if (b.origin.y < sy) sy = b.origin.y;
     y1 = sy - 2 * nature[gFlags.size] - p->bounds.origin.y;
     y2 = b.origin.y + b.size.height - q->bounds.origin.y;
@@ -548,7 +548,7 @@ float fontsize[3] = { 12, 8, 6};
 	    cbrack(8, flags.position, px, py, qx, qy, 0.75 * nature[sz], 0, sz, m);
 	    break;
 	case 15: /* volta */
-	    sp = p->mystaff;
+	    sp = [p staff];
 	    th = barwidth[sp->flags.subtype][sp->gFlags.size];
 	    ss = sp->flags.spacing;
 	    qy = py + 5 * ss;

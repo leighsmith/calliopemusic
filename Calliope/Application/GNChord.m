@@ -566,7 +566,7 @@ NSLog(@"curx %f: pos[%d] set to: %f\n", curx, [noteHead staffPosition], [noteHea
     if ([headlist count] == MAXHEADS) return NO;
     noteHead = [[NoteHead alloc] init];
     [noteHead setStaffPosition: [sp findPos: ny]];
-    [noteHead setCoordinateY: [sp yOfPos: [noteHead staffPosition]]];
+    [noteHead setCoordinateY: [sp yOfStaffPosition: [noteHead staffPosition]]];
     [noteHead setAccidental: acc];
     [noteHead setNote: self];
     [noteHead setBodyType: gFlags.subtype];

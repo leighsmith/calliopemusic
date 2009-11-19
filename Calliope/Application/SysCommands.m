@@ -399,7 +399,7 @@
             p = [[[snl objectAtIndex:begbar[i]] retain] autorelease];
             [snl removeObjectAtIndex:begbar[i]];
         [dnl insertObject:p atIndex:a];
-        p->mystaff = dsp;
+        [p setStaff: dsp];
 	p->x = destx + (p->x - begx);
         ++a;
       }
@@ -490,7 +490,7 @@
 		p = [[[snl objectAtIndex:q] retain] autorelease];
 		[snl removeObjectAtIndex:q];
 		[dnl addObject: p];
-		p->mystaff = dsp;
+		[p setStaff: dsp];
 		p->x += rx;
 		if ([p graphicType] == BARLINE) b = YES;
 	    }

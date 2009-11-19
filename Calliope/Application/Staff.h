@@ -85,7 +85,7 @@
 - (float) yOfTop;
 - (float) yOfBottom;
 - (float) yOfBottomPos: (int) p;
-- (float) yOfPos: (int) p;
+- (float) yOfStaffPosition: (int) p;
 - (float) xOfHyphmarg;
 - (float) xOfEnd;
 - (int) posOfBottom;

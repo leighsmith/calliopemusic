@@ -811,7 +811,7 @@ float textoff[2], baselines[2][MAXTEXT];
 }
 
 
-- (float) yOfPos: (int) p
+- (float) yOfStaffPosition: (int) p
 {
   return(y + (int) flags.spacing * p);
 }

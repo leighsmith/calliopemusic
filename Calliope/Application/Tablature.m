@@ -158,7 +158,7 @@ static Tablature *findPrevFlag(Tablature *t)
   int i;
   Tablature *u;
   NSMutableArray *nl;
-  Staff *sp = t->mystaff;
+  Staff *sp = [t staff];
   if ([sp graphicType] != STAFF) return nil;
   nl = sp->notes;
   i = [nl indexOfObject:t];

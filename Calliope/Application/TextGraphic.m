@@ -174,19 +174,19 @@ static NSTextView *drawText = nil;
           client = sp;
           offset.x = pt.x - 5;/*sb: subtract 5 to compensate for text container inset */
           /* sb: subtract 1/2 fontsize, for better box positioning */
-          offset.y = [sp yOfPos: [sp findPos: pt.y]] - [sp yOfTop] - floor(fontsize / 2.0);
+          offset.y = [sp yOfStaffPosition: [sp findPos: pt.y]] - [sp yOfTop] - floor(fontsize / 2.0);
           break;
       case TITLE:
           client = sys;
           sp = [client firststaff];
           offset.x = pt.x - 5;/*sb: subtract 5 to compensate for text container inset */
           /* sb: subtract 1/2 fontsize, for better box positioning */
-          offset.y = [sp yOfPos: [sp findPos: pt.y]] - [sp yOfTop] - floor(fontsize / 2.0);
+          offset.y = [sp yOfStaffPosition: [sp findPos: pt.y]] - [sp yOfTop] - floor(fontsize / 2.0);
           break;
       case LABEL:
           p = [v isSelTypeCode: TC_STAFFOBJ : &n];
           if (n != 1) return nil;
-          sp = p->mystaff;
+          sp = [p staff];
           horizpos = 0;
           offset.x = -(0.5 * BOXSIZE) - 3;
           ty = p->bounds.origin.y - (0.5 * BOXSIZE);
@@ -455,12 +455,12 @@ static NSTextView *drawText = nil;
     case STAFFHEAD:
       sp = client;
       if (horizpos == 0) offset.x = nx;
-      offset.y = [sp yOfPos: [sp findPos: ny]] - [sp yOfTop];
+      offset.y = [sp yOfStaffPosition: [sp findPos: ny]] - [sp yOfTop];
       break;
     case TITLE:
       sp = [client firststaff];
       if (horizpos == 0) offset.x = nx;
-      offset.y = [sp yOfPos: [sp findPos: ny]] - [sp yOfTop];
+      offset.y = [sp yOfStaffPosition: [sp findPos: ny]] - [sp yOfTop];
       break;
   }
   [self recalc];

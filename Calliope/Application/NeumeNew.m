@@ -103,7 +103,7 @@ static NeumeNew *proto;
 	v = [vl objectAtIndex:vk];
 	v->note = self;
     }
-    mystaff = n->mystaff;
+    mystaff = [n staff];
     bounds = n->bounds;
     gFlags = n->gFlags;
     [self setTypeOfGraphic: NEUMENEW];
@@ -149,7 +149,7 @@ static char neumenum[10] = {1, 1, -1, 2, 2, 2, 2, 3, 3, 1};
   if ([sp graphicType] == STAFF)
   {
     staffPosition = [sp findPos: pt.y];
-    y = [sp yOfPos: staffPosition];
+    y = [sp yOfStaffPosition: staffPosition];
   }
   gFlags.subtype = i;
   [self setNeume];
@@ -333,7 +333,7 @@ extern id lastHit;
       case 0:
 	op = staffPosition;
         staffPosition = [mystaff findPos: ny];
-        y = [mystaff yOfPos: staffPosition];
+        y = [mystaff yOfStaffPosition: staffPosition];
 	m = (op != staffPosition);
 	p2 += op - staffPosition;
 	p3 += op - staffPosition;
@@ -361,7 +361,7 @@ extern id lastHit;
       if ([mystaff graphicType] == STAFF)
       {
         staffPosition = [mystaff findPos: y];
-        y = [mystaff yOfPos: staffPosition];
+        y = [mystaff yOfStaffPosition: staffPosition];
       }
       else staffPosition = 0;
     }
@@ -384,12 +384,12 @@ extern id lastHit;
   if (ip & 1)
   {
     pos = (hu > 0) ? ip - 2 : ip + 2;
-    return([self yOfPos: pos]);
+    return([self yOfStaffPosition: pos]);
   }
   else
   {
     pos = (hu > 0) ? ip - 1 : ip + 1;
-    hy = [self yOfPos: pos];
+    hy = [self yOfStaffPosition: pos];
     return ((hu > 0) ? hy - HEPIOFF : hy + HEPIOFF);
   }
 }
@@ -432,20 +432,20 @@ static void punctadot(float du, int p, float y, float s, NSFont *f, int mode)
   ss = getSpacing(mystaff);
   if ([mystaff graphicType] == STAFF)
   {
-    drawledge(px + hw, [self yOfPos: 0], hw, 0, ip, [self getLines], ss, mode);
+    drawledge(px + hw, [self yOfStaffPosition: 0], hw, 0, ip, [self getLines], ss, mode);
   }
   if (mu && nFlags.molle & n) DrawCharacterInFont(mu, py, CH_molle, f, mode);
-  if (du && nFlags.dot & n) punctadot(du, ip, [self yOfPos: ip], ss, f, mode);
+  if (du && nFlags.dot & n) punctadot(du, ip, [self yOfStaffPosition: ip], ss, f, mode);
   if (vu && nFlags.vepisema & n)
   {
     if (vu < 0)
     {
-      py = [self yOfPos: ip + 1] + 1;
+      py = [self yOfStaffPosition: ip + 1] + 1;
       cline(px + hw, py, px + hw, py + 5, stemWidth[sz], mode);
     }
     else
     {
-      py = [self  yOfPos: ip - 1] - 1;
+      py = [self  yOfStaffPosition: ip - 1] - 1;
       cline(px + hw, py, px + hw, py - 5, stemWidth[sz], mode);
     }
   }
@@ -492,7 +492,7 @@ static void punctadot(float du, int p, float y, float s, NSFont *f, int mode)
       for (i = 0; i <= nFlags.num; i++)
       {
         ip = staffPosition + i;
-        cy = [self yOfPos: ip];
+        cy = [self yOfStaffPosition: ip];
         [self cpuncta: x1 : cy : CH_punctdia : j : ip : x1 : -1 : 0 : mx : f : sz : mode];
         if (nFlags.hepisema & j) if (hx1) hx2 = x1; else hx1 = hx2 = x1;
         x1 += pw;
@@ -509,7 +509,7 @@ static void punctadot(float du, int p, float y, float s, NSFont *f, int mode)
       ch = (i) ? CH_podatusp : CH_podatus;
       [self cpuncta: cx : cy : ch : 1 : staffPosition : -cx : -1 : -1 : mx : f : sz : mode];
       ip = staffPosition + p2;
-      y1 = [self yOfPos: ip];
+      y1 = [self yOfStaffPosition: ip];
       ch = (i) ? CH_punctsqup : CH_punctsqu;
         if (nFlags.halfSize) {
           [self cpuncta: cx + (fw - fw2) : y1 : ch : 2 : ip : cx : 1 : 1 : mx : f2 : sz : mode];
@@ -525,7 +525,7 @@ static void punctadot(float du, int p, float y, float s, NSFont *f, int mode)
       x0 = cx + stemHWidth[sz];
       cline(x0, cy, x0, cy + stemLength[sz], stemWidth[sz], mode);
       ip = staffPosition + p2;
-      y1 = [self yOfPos: ip];
+      y1 = [self yOfStaffPosition: ip];
       x1 = cx + fw;
       [self cpuncta: cx : cy : CH_punctsqu : 1 : staffPosition : x1 : 1 : 0 : mx : f : sz : mode];
         if (nFlags.halfSize) {
@@ -544,7 +544,7 @@ static void punctadot(float du, int p, float y, float s, NSFont *f, int mode)
     case EPIPHONUS: /* epiphonus */
       [self cpuncta: cx : cy : CH_epiph1 : 1 : staffPosition : -cx : -1 : -1 : mx : f : sz : mode];
       ip = staffPosition + p2;
-      y1 = [self yOfPos: ip];
+      y1 = [self yOfStaffPosition: ip];
       x2 = cx + charFGW(f, CH_epiph1);
       x1 = x2 - stemHWidth[sz];
       cline(x1, cy, x1, y1, stemWidth[sz], mode);
@@ -555,7 +555,7 @@ static void punctadot(float du, int p, float y, float s, NSFont *f, int mode)
       x0 = cx + stemHWidth[sz];
       cline(x0, cy, x0, cy + stemLength[sz], stemWidth[sz], mode);
       ip = staffPosition + p2;
-      y1 = [self yOfPos: ip];
+      y1 = [self yOfStaffPosition: ip];
       x2 = cx + charFGW(f, CH_cepha1);
       x1 = x2 - stemHWidth[sz];
       cline(x1, cy, x1, y1, stemWidth[sz], mode);
@@ -566,14 +566,14 @@ static void punctadot(float du, int p, float y, float s, NSFont *f, int mode)
       cline(x0, cy, x0, cy + stemLength[sz], stemWidth[sz], mode);
       x1 = cx + 2.0 * fw;
       ip = staffPosition + p2;
-      y1 = [self yOfPos: ip];
+      y1 = [self yOfStaffPosition: ip];
       y3 = y1 - ((y1 - cy) / ((p2 - p3 == 1) ? 8.0 : 4.0));
       x0 = porrThick[sz];
       cslant(cx, cy - x0 - 1.0, x1, y3 - x0, (x0 * 2.0) + 1.0, mode);
       y2 = y1;
       cslant(x1, y3 - x0, x1 + fw, y1 - x0, (x0 * 2.0) + 1, mode);
       ip = staffPosition + p3;
-      y1 = [self yOfPos: ip];
+      y1 = [self yOfStaffPosition: ip];
       ch = (p2 - p3 == 1) ? CH_punctsqup : CH_punctsqu;
         if (nFlags.halfSize) {
           [self cpuncta: x1 + (fw-fw2) : y1 : ch : 4 : ip : x1 : 1 : 1 : mx : f2 : sz : mode];
@@ -589,13 +589,13 @@ static void punctadot(float du, int p, float y, float s, NSFont *f, int mode)
       [self cpuncta: cx : cy : CH_punctsqu : 1 : staffPosition : -cx : -1 : 0 : mx : f : sz : mode];
       if (nFlags.hepisema & 1) hx1 = hx2 = cx;
       ip = staffPosition + p2;
-      y1 = [self yOfPos: ip];
+      y1 = [self yOfStaffPosition: ip];
       x1 = cx + fw;
       [self cpuncta: x1 : y1 : CH_punctsqu : 2 : ip : x1 : 1 : 0 : mx : f : sz : mode];
       if (nFlags.hepisema & 2) if (hx1) hx2 = x1; else hx1 = hx2 = x1;
       cline(cx + fw - stemWidth[sz], cy, x1, y1, stemWidth[sz], mode);
       ip = staffPosition + p3;
-      y2 = [self yOfPos: ip];
+      y2 = [self yOfStaffPosition: ip];
       x2 = cx + 2.0 * fw;
         if (nFlags.halfSize) {
           [self cpuncta: x2 : y2 : CH_punctsqu : 4 : ip : x2 : -1 : 0 : mx : f2 : sz : mode];
