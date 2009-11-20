@@ -20,7 +20,7 @@
 #define MOVE(p, nx) { LEFTBOUND(p) += ((nx) - (p)->x); (p)->x = (nx); }
 
 #define SUBTYPEOF(p) (((Graphic *)(p))->gFlags.subtype)
-#define ISINVIS(p)  (((Graphic *) (p))->gFlags.invis == 1)
+//#define ISINVIS(p)  (((Graphic *) (p))->gFlags.invis == 1)
 
 /* gFlags.type */
 typedef enum {
@@ -153,6 +153,12 @@ extern id CrossCursor;
 - (BOOL) isResizable;
 - (BOOL) hasHanger: h;
 - (BOOL) isClosed: l;
+
+/*!
+  @brief Return YES if the graphic is invisible.
+ */
+- (BOOL) isInvisible;
+
 - (BOOL) hasVoltaBesides: p;
 - moveBy: (const NSPoint) offset;
 - centerAt: (const NSPoint) p;

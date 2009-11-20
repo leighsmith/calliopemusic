@@ -1046,6 +1046,10 @@ extern int selMode;
   return self;
 }
 
+- (BOOL) isInvisible
+{
+    return gFlags.invis == 1;
+}
 
 - (BOOL) isResizable
 {

@@ -40,7 +40,7 @@
     NSFont *font;
     float pixlen;
     float baseline;
-    id note;				/* a backpointer */
+    StaffObj *note;				/* a backpointer */
 @private    
     char *data;		/* the string TODO should be a NSString */
 }
@@ -62,6 +62,26 @@
 - (void)encodeWithCoder:(NSCoder *)aCoder;
 
 /*!
+  @brief Returns the Font used to draw the Verse.
+ */
+- (NSFont *) font;
+
+/*!
+  @brief Assigns the Font used to draw the Verse.
+ */
+- (void) setFont: (NSFont *) newFont;
+
+/*!
+  @brief Return the verse number (number of times the verse is sung) of this Verse.
+*/
+- (int) verseNumber;
+
+/*!
+  @brief Assign the verse number, which describes on which repeat of the verse this Verse's text will be sung.
+*/
+- (void) setVerseNumber: (int) verseNumber;
+
+/*!
   @brief Returns the text constituting the verse as an immutable NSString.
  */
 - (NSString *) string;
@@ -71,7 +91,9 @@
  */
 - (void) setString: (NSString *) newText;
 
-/* return whether a string is a blank verse */
+/*! 
+  @brief Return YES if the Verse is a blank string. 
+ */
 - (BOOL) isBlank;
 
 @end

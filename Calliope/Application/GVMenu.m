@@ -55,10 +55,10 @@ extern NSString * DrawPasteType(NSArray *types);
         if (p->gFlags.size > 0) return YES;
 	break;
       case 3:
-        if (ISINVIS(p)) return YES;
+        if ([p isInvisible]) return YES;
 	break;
       case 4:
-        if (!ISINVIS(p)) return YES;
+        if (![p isInvisible]) return YES;
 	break;
       case 5:
         if (ISASTAFFOBJ(p) && !(p->gFlags.locked)) return YES;

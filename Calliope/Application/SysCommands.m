@@ -130,7 +130,7 @@
           for (a = 0; a < vk; a++)
 	  {
 	    v = [vl objectAtIndex:a];
-	    if (!ISINVIS(v))
+	    if (![v isInvisible])
 	    {
 	      r = YES;
 	      v->font = f;
@@ -140,7 +140,7 @@
 	else if (vn < vk)
 	{
 	  v = [vl objectAtIndex:vn];
-	  if (!ISINVIS(v))
+	  if (![v isInvisible])
 	  {
 	    r = YES;
 	    v->font = f;
@@ -184,13 +184,13 @@
           for (a = 0; a < vk; a++)
 	  {
 	    v = [vl objectAtIndex:a];
-	    if (!ISINVIS(v)) votesFor(v->font, 1);
+	    if (![v isInvisible]) votesFor(v->font, 1);
 	  }
 	}
 	else if (vn < vk)
 	{
 	  v = [vl objectAtIndex:vn];
-	  if (!ISINVIS(v)) votesFor(v->font, 1);
+	  if (![v isInvisible]) votesFor(v->font, 1);
 	}
       }
     }

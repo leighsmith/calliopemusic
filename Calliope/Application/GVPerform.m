@@ -326,7 +326,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
             for (j = 0; j < nk; j++)
             {
                 q = [nl objectAtIndex:j];
-                if (ISATIMEDOBJ(q) && !ISINVIS(q) && (!selonly || ((Graphic *)q)->gFlags.selected))
+                if (ISATIMEDOBJ(q) && ![q isInvisible] && (!selonly || ((Graphic *)q)->gFlags.selected))
                 {
                     if (q->stamp < minstamp) minstamp = q->stamp;
                 }
@@ -406,7 +406,8 @@ static void addNote(int v, int k, int ch, MKNote *n)
                     }
                     [player[0].part addNote: an];
                 }
-                if (!ISINVIS(p)) switch ([p graphicType]) {
+                if (![p isInvisible])
+		    switch ([p graphicType])  {
                     case CLEF:
                         mc = [p middleC];
                         break;

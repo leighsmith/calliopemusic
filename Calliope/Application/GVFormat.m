@@ -896,7 +896,7 @@ char autochoice[4] = {PGAUTO, PGTOP, PGBOTTOM, PGTOP};
 		    {
 			NSLog(@"Note %d of staff %d, sys %d has pos %d\n", k, j, i, pos);
 		    }
-		    if (!ISINVIS(p))
+		    if (![p isInvisible])
 		    {
 			if (flag[j])
 			{

@@ -141,7 +141,7 @@ int staffspace[3][3] =
   for (i = 0; i < k; i++)
   {
     p = [notes objectAtIndex:i];
-    if (!ISINVIS(p) && [p validAboveBelow: 1])
+    if (![p isInvisible] && [p validAboveBelow: 1])
     {
       py = [p boundAboveBelow: 1];
       if (py < miny) miny = py;
@@ -195,7 +195,7 @@ float textoff[2], baselines[2][MAXTEXT];
   {
     p = [notes objectAtIndex:i];
     if ([p reCache: y : flags.spacing]) [p recalc];
-    if (ISATIMEDOBJ(p) && !ISINVIS(p))
+    if (ISATIMEDOBJ(p) && ![p isInvisible])
     {
       if ([p validAboveBelow: 0])
       {
@@ -224,7 +224,7 @@ float textoff[2], baselines[2][MAXTEXT];
       for (j = 0; j < vk; j++)
       {
 	v = [p verseOf: j];
-        if (!ISINVIS(v))
+        if (![v isInvisible])
         {
           v->vFlags.line = n;
           ibl = (n < vp);
@@ -342,7 +342,7 @@ float textoff[2], baselines[2][MAXTEXT];
       for (j = 0; j < vk; j++)
       {
 	v = [p verseOf: j];
-        if (!ISINVIS(v))
+        if (![v isInvisible])
         {
           if (n < vp)
           {

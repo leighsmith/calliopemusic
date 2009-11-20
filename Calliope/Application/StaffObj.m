@@ -581,21 +581,20 @@ int protoVox;
 
 - setVerses
 {
-  int i, j, k;
-  Verse *v;
-  k = [verses count];
-  j = -1;
-  for (i = 0; i < k; i++)
-  {
-    v = [verses objectAtIndex:i];
-    v->vFlags.num = i;
-    if (!ISINVIS(v)) ++j;
-    v->vFlags.line = j;
-    v->note = self;
-    [v reShape];
-    [v recalc];
-  } 
-  return self;
+    int i, j = -1, k = [verses count];
+
+    for (i = 0; i < k; i++) {
+	Verse *v = [verses objectAtIndex: i];
+	
+	[v setVerseNumber: i];
+	if (![v isInvisible])
+	    ++j;
+	v->vFlags.line = j;
+	v->note = self;
+	[v reShape];
+	[v recalc];
+    } 
+    return self;
 }
 
 
@@ -653,7 +652,7 @@ int protoVox;
     while (k--)
     {
       v = [verses objectAtIndex:k];
-      if (ISINVIS(v)) continue;
+      if ([v isInvisible]) continue;
       tat = v->pixlen;
       tbt = v->align;
       tat -= tbt;
@@ -909,7 +908,7 @@ int protoVox;
   while (k--)
   {
     q = [verses objectAtIndex:k];
-    if (!ISINVIS(q))
+    if (![q isInvisible])
     {
       if ([q hit: pt])
       {
@@ -1496,7 +1495,7 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
     while (k--)
     {
       v = [verses objectAtIndex:k];
-      if (!ISINVIS(v))
+      if (![v isInvisible])
       {
         [v drawHangers: r nonSelectedOnly: nso];
         [v draw: r nonSelectedOnly: nso];

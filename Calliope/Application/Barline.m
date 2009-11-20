@@ -66,7 +66,7 @@ static Barline *proto;
 - (int) barCount
 {
   if (flags.nocount) return 0;
-  if (ISINVIS(self)) return 0;
+  if ([self isInvisible]) return 0;
   return 1;
 }
 
