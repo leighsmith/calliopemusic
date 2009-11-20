@@ -106,27 +106,27 @@ int tuneIndex(int n)
 - defineTuning: (Tablature *) p
 {
     int d = [definebutton indexOfSelectedItem] - 1;
-  if (d < 0) return self;
-  switch (d)
-  {
-    case 0:
-        if (p->tuning) [p->tuning autorelease];
-        p->tuning = [popSelectionNameFor(tunepopup) retain];
-        break;
-    case 1:
-        if (p->tuning) [p->tuning autorelease];
-        p->tuning = nil;
-        if (p->part) [p->part autorelease];
-        p->part = [popSelectionNameFor(tunepopup) retain];
-      break;
-    case 2:
-        if (p->tuning) [p->tuning autorelease];
-        if (p->part) [p->part autorelease];
-      p->tuning = nil;
-      p->part = nil;
-      break;
-  }
-  return self;
+    
+    if (d < 0) 
+	return self;
+    switch (d)
+    {
+	case 0:
+	    if (p->tuning) [p->tuning autorelease];
+	    p->tuning = [popSelectionNameFor(tunepopup) retain];
+	    break;
+	case 1:
+	    if (p->tuning) [p->tuning autorelease];
+	    p->tuning = nil;
+	    [p setPartName: popSelectionNameFor(tunepopup)];
+	    break;
+	case 2:
+	    if (p->tuning) [p->tuning autorelease];
+	    p->tuning = nil;
+	    [p setPartName: nil];
+	    break;
+    }
+    return self;
 }
 
 
@@ -235,7 +235,7 @@ int tuneIndex(int n)
 //    assay(12, p->time.nostem);
 //    assay(13, p->versepos);
 //    assay(14, getEditorial(p, p->gFlags.selend));
-    assayAsAtom(15, [p getPart]);
+    assayAsAtom(15, [p partName]);
     assayAsAtom(16, [p getInstrument]);
   }
   *num = n;

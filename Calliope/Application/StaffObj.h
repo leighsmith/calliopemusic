@@ -31,9 +31,9 @@
   char selver;			/* selected verse */
   char isGraced;		/* 1 = graced object, 2 = backwards-timed */
   unsigned char voice;		/* voice number */
-  NSString *part;		/* part name */
 @protected
-  Staff *mystaff;		/* backpointer */
+    NSString *part;		/* part name */
+    Staff *mystaff;		/* backpointer */
 }
 
 + (void)initialize;
@@ -90,7 +90,17 @@
 - (int) myIndex;
 - (NSString *) getInstrument;
 - (int) whereInstrument;
-- (NSString *) getPart;
+
+/*!
+  @brief Returns the part name of this StaffObj instance.
+ */
+- (NSString *) partName;
+
+/*!
+  @brief Assigns a new part name.
+ */
+- (void) setPartName: (NSString *) newPartName;
+
 - (int) getChannel;
 - makeName: (int) i;
 - (float) xOfStaffEnd: (BOOL) e;

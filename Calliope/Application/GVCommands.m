@@ -298,7 +298,7 @@ static NSString *stylescratch;
     for (i = 0; i < ns; i++) {
 	Staff *sp = [sys getStaff: i];
 	
-	partscratchpad[i] = sp->part;
+	partscratchpad[i] = [sp partName];
     }
     return self;
 }
@@ -1137,7 +1137,7 @@ extern char *typename[NUMTYPES];
       for (j = 0;j < nn; j++)
       {
         p = [nl objectAtIndex:j];
-        NSLog(@"    %d [%s]: %s x=%f, y=%f, stamp=%f, duration=%f\n", j, [p->part UTF8String], typename[[p graphicType]], p->x, p->y, p->stamp, p->duration);
+        NSLog(@"    %d [%@]: %s x=%f, y=%f, stamp=%f, duration=%f\n", j, [p partName], typename[[p graphicType]], p->x, p->y, p->stamp, p->duration);
         //[NXApp log: buf];
       }
     }
@@ -2053,7 +2053,6 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
     CallPart *cp;
     System *sys;
     Staff *sp;
-    StaffObj *p;
 //  Tablature *t;
     k = [pl count];
     while (k--)
@@ -2077,11 +2076,10 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
 	    sp->part = nullPart; 
 	    al = sp->notes;
 	    k = [al count]; 
-	    while (k--)
-	    {
-		p = [al objectAtIndex:k];
-		if (p->part) [p->part autorelease];
-		p->part = nullPart; 
+	    while (k--) {
+		StaffObj *p = [al objectAtIndex: k];
+		
+		[p setPartName: nullPart]; 
 	    }
 	}
     }

@@ -528,7 +528,7 @@ float textoff[2], baselines[2][MAXTEXT];
 }
 
 
-- (NSString *) getPart
+- (NSString *) partName
 {
   if (part == nil) return nullPart;
   return part;
@@ -544,7 +544,7 @@ float textoff[2], baselines[2][MAXTEXT];
   for (i = 0; i < k; i++)
   {
     p = [notes objectAtIndex:i];
-    if ([pl indexOfPartName: [p getPart]] >= 0) return YES;
+    if ([pl indexOfPartName: [p partName]] >= 0) return YES;
   }
   return NO;
 }
@@ -851,24 +851,23 @@ float textoff[2], baselines[2][MAXTEXT];
 
 - defaultNoteParts
 {
-  int k;
-  StaffObj *p;
-  k = [notes count];
-  while (k--)
-  {
-    p = [notes objectAtIndex:k];
-      if (p->part) [p->part autorelease];
-    p->part = nil;
-    if ([p graphicType] == NOTE) [(GNote *) p setPatch: 0];  //sb: instrument here is from GNote, not CallPart
-    else if ([p graphicType] == TABLATURE) {
-        id q = ((Tablature *)p)->tuning;
-        if (q) {
-            [q release];
-            q = nil;
-        }
+    int k = [notes count];
+    
+    while (k--) {
+	StaffObj *p = [notes objectAtIndex: k];
+	
+	[p setPartName: nil];
+	if ([p graphicType] == NOTE) 
+	    [(GNote *) p setPatch: 0];  //sb: instrument here is from GNote, not CallPart
+	else if ([p graphicType] == TABLATURE) {
+	    id q = ((Tablature *)p)->tuning;
+	    if (q) {
+		[q release];
+		q = nil;
+	    }
+	}
     }
-  }
-  return self;
+    return self;
 }
 
 

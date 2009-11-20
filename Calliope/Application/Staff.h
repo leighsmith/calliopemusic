@@ -92,7 +92,12 @@
 - (int) myIndex;
 - defaultNoteParts;
 - (NSString *) getInstrument;
-- (NSString *) getPart;
+
+/*!
+  @brief Returns the part name of the Staff.
+ */
+- (NSString *) partName;
+
 - (int) getChannel;
 - (BOOL) hasAnyPart: (NSMutableArray *) l;
 - (int) findPos: (float) y;

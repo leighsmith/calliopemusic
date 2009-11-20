@@ -60,9 +60,9 @@ static Staff *staffmap[NUMSTAVES]; /* indexed by old staff, points to new staff 
   {
     p = [enl objectAtIndex:k];
     [p setStaff: sp];
-    if ([pl partNamed: [p getPart]] == nil)
+    if ([pl partNamed: [p partName]] == nil)
     {
-      [pl addObject: [[opl partNamed: [p getPart]] newFrom]];
+      [pl addObject: [[opl partNamed: [p partName]] newFrom]];
     }
   }
   sp->notes = enl;

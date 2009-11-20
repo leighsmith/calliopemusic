@@ -188,8 +188,8 @@
   OpusDocument *d;
   GraphicView *v;
   NSMutableArray *sl, *pl;
-  StaffObj *p;
   NSString *n;
+    
   [partbrowser loadColumnZero];
   [instbrowser loadColumnZero];
   d = [CalliopeAppController currentDocument];
@@ -203,10 +203,14 @@
   mult = 0;
   while (k--)
   {
-    p = [sl objectAtIndex:k];
-    if (!ISASTAFFOBJ(p)) continue;
-    if (n == nil) n = p->part;
-      else if (![n isEqualToString:p->part]) mult = 1;
+      StaffObj *p = [sl objectAtIndex: k];
+      
+      if (!ISASTAFFOBJ(p)) 
+	  continue;
+      if (n == nil) 
+	  n = [p partName];
+      else if (![n isEqualToString: [p partName]])
+	  mult = 1;
   }
   if (n == nil || mult)
   {

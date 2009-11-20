@@ -110,30 +110,30 @@ static int mypartlist = -1;
 
 - defineTuning: (GNote *) p
 {
-  int i, d;
+    int i, d;
+    
     d = [definebutton indexOfSelectedItem] - 1;
-  if (d < 0) return self;
-  switch(d)
-  {
-    case 0:
-        i = popSelectionFor(instbutton) - 1;//sb: was midipopup
-        if (i >= 0) [p setPatch: i + 1];  //sb: FIXME something is very wrong here
-      break;
-    case 1:
-	[p setPatch: 0];
-        i = popSelectionFor(instbutton) - 1;//sb:  was instpopup
-        if (i >= 0) {
-            if (p->part) [p->part autorelease];
-            p->part = [[[[CalliopeAppController sharedApplicationController] getPartlist] partNameForInt: i] retain];
-        }
-      break;
-    case 2:
-        if (p->part) [p->part autorelease];
-        [p setPatch: 0];//sb: this is instrument from 'GNote', not from CallPart
-      p->part = nil;
-      break;
-  }
-  return self;
+    if (d < 0) 
+	return self;
+    switch(d) {
+	case 0:
+	    i = popSelectionFor(instbutton) - 1; //sb: was midipopup
+	    if (i >= 0) 
+		[p setPatch: i + 1];  //sb: FIXME something is very wrong here
+	    break;
+	case 1:
+	    [p setPatch: 0];
+	    i = popSelectionFor(instbutton) - 1;//sb:  was instpopup
+	    if (i >= 0) {
+		[p setPartName: [[[CalliopeAppController sharedApplicationController] getPartlist] partNameForInt: i]];
+	    }
+	    break;
+	case 2:
+	    [p setPartName: nil];
+	    [p setPatch: 0]; //sb: this is instrument from 'GNote', not from CallPart
+	    break;
+    }
+    return self;
 }
 
 
@@ -329,7 +329,7 @@ static void setBodyTypes(GNote *p, int t)
     assay(12, p->time.nostem);
     assay(13, p->versepos);
     assay(14, getEditorial(p, p->gFlags.selend));
-    assayAsAtom(15, [p getPart]);
+    assayAsAtom(15, [p partName]);
     assay(16, [p getPatch]);
     assay(17, [p showSlash]);
   }
@@ -427,7 +427,7 @@ static void setBodyTypes(GNote *p, int t)
   }
   else
   {
-//    selectPopNameFor(instpopup, instbutton, [p getPart]);
+//    selectPopNameFor(instpopup, instbutton, [p partName]);
   }
   return self;
 }

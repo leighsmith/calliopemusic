@@ -435,11 +435,17 @@ int protoVox;
 }
 
 
-- (NSString *) getPart
+- (NSString *) partName
 {
-  if (part == nil) return [mystaff getPart];
-  if (part == nullPart) return [mystaff getPart];
+  if (part == nil) return [mystaff partName];
+  if (part == nullPart) return [mystaff partName];
   return part;
+}
+
+- (void) setPartName: (NSString *) newPartName
+{
+    [part autorelease];
+    part = [newPartName retain];
 }
 
 
@@ -455,7 +461,7 @@ int protoVox;
 {
   TextGraphic *t;
   NSString *s = nil;
-  NSString *n = [self getPart];
+  NSString *n = [self partName];
   CallPart *cp;
   CallInst *ci;
   Staff *sp;
