@@ -304,6 +304,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
     MKPartPerformer *partPerformer;
     PlayInspector *pi = [[CalliopeAppController sharedApplicationController] thePlayInspector];
     struct performer *perf;
+    // TODO p should be declared a Graphic.
     id p, an;
     char curracc[7], keysig[7], keytmp[7];
     
@@ -326,7 +327,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
             for (j = 0; j < nk; j++)
             {
                 q = [nl objectAtIndex:j];
-                if (ISATIMEDOBJ(q) && ![q isInvisible] && (!selonly || ((Graphic *)q)->gFlags.selected))
+                if (ISATIMEDOBJ(q) && ![q isInvisible] && (!selonly || [(Graphic *) q isSelected]))
                 {
                     if (q->stamp < minstamp) minstamp = q->stamp;
                 }
@@ -436,7 +437,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
                         }
                         break;
                     case NOTE:
-                        if (!selonly || (((Graphic *)p)->gFlags.selected))
+                        if (!selonly || [(Graphic *)p isSelected])
                         {
                             v = VOICEID(((StaffObj *)p)->voice, i);
                             ch = [p getChannel];
@@ -484,7 +485,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
                         }
                         break;
                     case TABLATURE:
-                        if (!selonly || (((Graphic *)p)->gFlags.selected))
+                        if (!selonly || [(Graphic *)p isSelected])
                         {
                             tn = DURTIME(((StaffObj *)p)->stamp - minstamp) + t;
                             dur = DURTIME(((StaffObj *)p)->duration);
@@ -523,7 +524,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
                         }
                         break;
                     case REST:
-                        if (!selonly || (((Graphic *)p)->gFlags.selected))
+                        if (!selonly || [(Graphic *)p isSelected])
                         {
                             tn = DURTIME(((StaffObj *)p)->stamp - minstamp) + t;
                             dur = DURTIME(((StaffObj *)p)->duration);
@@ -533,7 +534,7 @@ static void addNote(int v, int k, int ch, MKNote *n)
                         break;
                     case NEUMENEW:
                     case SQUARENOTE:
-                        if (!selonly || (((Graphic *)p)->gFlags.selected))
+                        if (!selonly || [(Graphic *)p isSelected])
                         {
                             x = 0;
                             xt = 0;

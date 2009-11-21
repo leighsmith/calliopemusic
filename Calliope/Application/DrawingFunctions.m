@@ -408,6 +408,9 @@ void DrawCharacterInFont(float x, float y, int ch, NSFont *textFont, int mode)
     if (mode) {
 	char s[2];
 	NSString *encodedString;
+	// TODO hack to manage Sonata having codes in places which clash with Unicode. NSMacOSRoman seems to avoid the conversion.
+	// However we need NSNEXTSTEPStringEncoding if we draw with Calliope. Ultimately we need to recode our character codes to unicode.
+	NSStringEncoding encoding = [[textFont fontName] isEqualToString: @"Sonata"] ? NSMacOSRomanStringEncoding : NSNEXTSTEPStringEncoding;
 	
 	s[0] = ch; s[1] = '\0';
 	NSLog(@"DrawCharacterInFont '%c' (%d), (%f, %f) %@ mode %d", ch, ch, x, y, textFont, mode);
@@ -416,9 +419,9 @@ void DrawCharacterInFont(float x, float y, int ch, NSFont *textFont, int mode)
 	NSLog(@"font bounding rectangle (%f,%f) -> (%f,%f)\n", 
 	      boundingRect.origin.x, boundingRect.origin.y, boundingRect.size.width, boundingRect.size.height);
 
-	// Should be NSSymbolStringEncoding, but certain characters don't convert properly like 0x9a?
-	// NSNEXTSTEPStringEncoding. Ultimately we need to recode to unicode.
-	encodedString = [NSString stringWithCString: s encoding: NSMacOSRomanStringEncoding];
+	// Perhaps should be NSSymbolStringEncoding, but certain characters don't convert properly like 0x9a?
+	// Ultimately we need to recode to unicode.
+	encodedString = [NSString stringWithCString: s encoding: encoding];
 
 	// DrawTextWithBaselineTies(x, y, encodedString, textFont, mode);
 	// TODO that we have to adjust the Sonata font by it's point size is completely beyond me. I have no idea why this is the case.
@@ -484,8 +487,9 @@ void DrawTextWithBaselineTies(float x, float y, NSString *stringToDisplay, NSFon
 //		      withAttributes: [NSDictionary dictionaryWithObjectsAndKeys: 
 	
 	// For debugging.
-#if 0
 	NSLog(@"DrawTextWithBaselineTies(\"%@\", %f, %f) fontPointSize = %f", stringToDisplay, x, y, fontPointSize);
+
+#if 0
 	NSFrameRect(NSMakeRect(x, characterFontOrigin_y, 20, fontPointSize)); // fix width, height matching font
 	NSFrameRect(NSMakeRect(x, characterFontOrigin_y, 3, 3)); // indicate upper corner
 #endif

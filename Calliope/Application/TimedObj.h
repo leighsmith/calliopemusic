@@ -43,6 +43,8 @@ struct timeinfo
 
 - init;
 - (void) dealloc;
+- copyWithZone: (NSZone *) zone;
+
 - (BOOL) performKey: (int) c;
 - (float) noteEval: (BOOL) f;
 
@@ -124,6 +126,11 @@ struct timeinfo
   @brief The TimedObj is able to have a beam drawn between itself and another TimedObj instance.
  */
 - (BOOL) isBeamable;
+
+/*!
+  @brief Returns YES if the TimedObj instance is rhythmically dotted (extended by half duration).
+ */
+- (BOOL) isDotted;
 
 - (BOOL) isBeamed;
 - (BOOL) hitBeamAt: (float *) x : (float *) y;

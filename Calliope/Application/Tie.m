@@ -260,7 +260,7 @@ static char defConst[NUMTIES] = {0, 0, 1, 0, 0, 1, 1, 0};
 
 - (BOOL)selectMe: (NSMutableArray *) sl : (int) d :(int)active
 {
-    if (((Graphic *)partner)->gFlags.selected == active) return NO;
+    if ([(Graphic *) partner isSelected] == active) return NO;
     return [super selectMe: sl : d :active];
 }
 
@@ -417,7 +417,7 @@ static char defConst[NUMTIES] = {0, 0, 1, 0, 0, 1, 1, 0};
 {
   if (flags.same)
   {
-    if (gFlags.selected == ((Tie *)partner)->gFlags.selected)
+    if (gFlags.selected == [(Tie *)partner isSelected])
     {
       if (!flags.master) return NO;
     }

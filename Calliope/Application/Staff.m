@@ -232,7 +232,7 @@ float textoff[2], baselines[2][MAXTEXT];
 	  if ([v isFigure])
 	  {
 	    hasfig = YES;
-	    f = v->font;
+	    f = [v font];
             t = fontAscent(f);
 	    if (ibl)
 	    {
@@ -253,7 +253,7 @@ float textoff[2], baselines[2][MAXTEXT];
 	  }
           else if ([p hasVerseText: j])
           {
-            f = v->font;
+            f = [v font];
               py = fontAscent(f);
             if (py > texta[ibl][jbl]) { texta[ibl][jbl] = py; textau[ibl][jbl] = YES;}
             py = -fontDescent(f);
@@ -1215,7 +1215,7 @@ float textoff[2], baselines[2][MAXTEXT];
   {
     p = [notes objectAtIndex:i];
     [p verseWidths: &vlb : &vrb];
-    if (p->gFlags.selected)
+    if ([p isSelected])
     {
       lb = LEFTBEARING(p);
       if (vlb > lb) lb = vlb;

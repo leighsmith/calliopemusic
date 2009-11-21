@@ -75,15 +75,13 @@ int nbeams;
 }
 
 
-// should become copy.
-- (Beam *) newFrom
+- (Beam *) copyWithZone: (NSZone *) zone
 {
-  Beam *t = [[Beam alloc] init];
-  t->bounds = bounds;
-  t->gFlags = gFlags;
-  [t setLevel: [self myLevel]]; // TODO this should be done by the superclass copy.
-  t->flags = flags;
-  return t;
+    Beam *newBeam = [super copyWithZone: zone];
+
+    newBeam->flags = flags;
+    newBeam->splitp = splitp;
+    return newBeam;
 }
 
 

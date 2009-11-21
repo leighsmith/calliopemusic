@@ -37,18 +37,22 @@
     } vFlags;
     char offset;
     char align;
-    NSFont *font;
     float pixlen;
     float baseline;
-    StaffObj *note;				/* a backpointer */
+    /*! @var note a backpointer to the note the verse is assigned to. */
+    StaffObj *note;
 @private    
-    char *data;		/* the string TODO should be a NSString */
+    /*! @var font The font to draw the text with */
+    NSFont *font;
+    /*! @var data The string TODO should be a NSString */
+    char *data;
 }
 
-+ (void)initialize;
++ (void) initialize;
 - init;
+- copyWithZone: (NSZone *) zone;
+
 - recalc;
-- newFrom;
 - (void) removeObj;
 - (BOOL) isFigure;
 - reShape;

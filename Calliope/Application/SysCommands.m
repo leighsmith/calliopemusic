@@ -133,7 +133,7 @@
 	    if (![v isInvisible])
 	    {
 	      r = YES;
-	      v->font = f;
+		[v setFont: f];
 	    }
 	  }
 	}
@@ -143,7 +143,7 @@
 	  if (![v isInvisible])
 	  {
 	    r = YES;
-	    v->font = f;
+	      [v setFont: f];
 	  }
 	}
       }
@@ -184,13 +184,13 @@
           for (a = 0; a < vk; a++)
 	  {
 	    v = [vl objectAtIndex:a];
-	    if (![v isInvisible]) votesFor(v->font, 1);
+	    if (![v isInvisible]) votesFor([v font], 1);
 	  }
 	}
 	else if (vn < vk)
 	{
 	  v = [vl objectAtIndex:vn];
-	  if (![v isInvisible]) votesFor(v->font, 1);
+	  if (![v isInvisible]) votesFor([v font], 1);
 	}
       }
     }

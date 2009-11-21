@@ -404,6 +404,11 @@ extern int selMode;
     return newGraphic;
 }
 
+// This is just to transition from the old non-standard newFrom method to the standard copy method.
+- newFrom
+{
+    return [self copy];
+}
 
 - proto: (GraphicView *) v : (NSPoint) pt : (Staff *) sp : (System *) sys : (Graphic *) g : (int) i
 {
@@ -748,6 +753,10 @@ extern int selMode;
   return self;
 }
 
+- (BOOL) isSelected
+{
+    return gFlags.selected;
+}
 
 - (BOOL) isDangler
 {
@@ -878,6 +887,24 @@ extern int selMode;
 //  [self bounds].origin.x += floor(offset.x);
 //  [self bounds].origin.y += floor(offset.y);
   return self;
+}
+
+// #define MOVE(p, nx) { LEFTBOUND(p) += ((nx) - (p)->x); (p)->x = (nx); }
+
+
+- (float) leftBound
+{
+    return bounds.origin.x;
+}
+
+- (float) rightBound
+{
+    return [self leftBound] + bounds.size.width;
+}
+
+- (int) subTypeOf
+{
+    return gFlags.subtype;
 }
 
 - centerAt: (const NSPoint) p

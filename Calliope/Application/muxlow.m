@@ -902,7 +902,11 @@ unsigned char numflags[10] =
 /* flags, new and old */
 
 /* m/o flag[upstem/dnstem][body] */
-
+// TODO these are stem flags, ordered up (row 0) or down (row 1), with NSNEXTSTEPStringEncoding values
+// for the Calliope music font. We should move to Unicode encoding (since the font is stored that way).
+// In which case, the codes should become:
+// { 233, 231, 229, 227, 228 },
+// { 226, 224, 225, 220, 214 }
 unsigned char mflag[2][5] =
 {
   { 221, 219, 218, 216, 217 },

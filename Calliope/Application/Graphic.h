@@ -159,6 +159,27 @@ extern id CrossCursor;
  */
 - (BOOL) isInvisible;
 
+/*!
+  @brief Return YES if the graphic has been selected.
+ */
+- (BOOL) isSelected;
+
+/*!
+  @brief Return the x coordinate of the origin of the boundary of the Graphic.
+ */
+- (float) leftBound;
+
+/*!
+  @brief Return the x coordinate of the right most boundary of the Graphic.
+ */
+- (float) rightBound;
+
+/*!
+  @brief Return the subType code of the Graphic.
+ */
+- (int) subTypeOf;
+
+
 - (BOOL) hasVoltaBesides: p;
 - moveBy: (const NSPoint) offset;
 - centerAt: (const NSPoint) p;

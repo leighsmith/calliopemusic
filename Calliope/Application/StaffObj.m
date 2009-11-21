@@ -101,7 +101,7 @@ int protoVox;
   Graphic *q;
   int k;
   float r, b;
-  r = bounds.origin.x + bounds.size.width - x;
+  r = [self rightBound] - x;
   if (enc)
   {
     k = [enclosures count];
@@ -656,8 +656,8 @@ int protoVox;
       tat = v->pixlen;
       tbt = v->align;
       tat -= tbt;
-      tat += charFGW(v->font, HYPHCHAR);
-      if (v->vFlags.hyphen == 1) tat += charFGW(v->font, HYPHCHAR);
+      tat += charFGW([v font], HYPHCHAR);
+      if (v->vFlags.hyphen == 1) tat += charFGW([v font], HYPHCHAR);
       if (v->offset)
       {
         tbt -= v->offset;
@@ -1166,7 +1166,7 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
     if (verses) {
         if ([verses count] > selver && selver >= 0) v = [verses objectAtIndex:selver];
     }
-    if (v != nil) r = v->font;
+    if (v != nil) r = [v font];
     else r = [[CalliopeAppController currentDocument] getPreferenceAsFont: TEXFONT];
     return r;
 }
@@ -1182,18 +1182,19 @@ static char cycleHyphen[7] = {0, 3, 4, 5, 6, 1, 2};
     k = [verses count];
     while (k--)
     {
-      v = [verses objectAtIndex:k];
-      v->font = f;
-      r = YES;
+	v = [verses objectAtIndex:k];
+	[v setFont: f];
+	r = YES;
     }
   }
   else
   {
-    if (selver >= 0 && selver < [verses count]) v = [verses objectAtIndex:selver];
+    if (selver >= 0 && selver < [verses count]) 
+	v = [verses objectAtIndex:selver];
     if (v != nil)
     {
-      v->font = f;
-      r = YES;
+	[v setFont: f];
+	r = YES;
     }
   }
   return r;

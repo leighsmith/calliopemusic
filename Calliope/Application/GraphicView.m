@@ -887,7 +887,7 @@ extern char *typename[NUMTYPES];
 	  while (j--)
 	  {
 	    h = [hl objectAtIndex:j];
-	    if (!(h->gFlags.selected) && CHECKBOX(h)) [self selectObj: h];
+	    if (!([h isSelected]) && CHECKBOX(h)) [self selectObj: h];
 	  }
 	}
         enclosureList = [q enclosures];
@@ -897,10 +897,10 @@ extern char *typename[NUMTYPES];
 	  while (j--)
 	  {
 	    h = [enclosureList objectAtIndex:j];
-	    if (!(h->gFlags.selected) && CHECKBOX(h)) [self selectObj: h];
+	    if (!([h isSelected]) && CHECKBOX(h)) [self selectObj: h];
 	  }
 	}
-        if (!(q->gFlags.selected) && CHECKBOX(q)) [self selectObj: q : 1];
+        if (!([q isSelected]) && CHECKBOX(q)) [self selectObj: q : 1];
       }
     }
     nl = sys->nonStaffGraphics;
@@ -908,7 +908,7 @@ extern char *typename[NUMTYPES];
     while (j--)
     {
       q = [nl objectAtIndex:j];
-      if (!(q->gFlags.selected) && CHECKBOX(q)) [self selectObj: q];
+      if (!([q isSelected]) && CHECKBOX(q)) [self selectObj: q];
     }
     ++systemIndex;
   }
@@ -1257,7 +1257,7 @@ extern struct toolData toolCodes[NUMTOOLS];
 		g = nil;
 		trymove = nil;
 	    }
-	    else if (g->gFlags.selected)
+	    else if ([g isSelected])
 	    {
 		if (g->gFlags.selbit)
 		{

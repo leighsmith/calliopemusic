@@ -12,11 +12,9 @@
 
 + (void)initialize
 {
-  if (self == [TimedObj class])
-  {
-      (void)[TimedObj setVersion: 5];	/* class version, see read: */
-  }
-  return;
+    if (self == [TimedObj class]) {
+	[TimedObj setVersion: 5];	/* class version, see read: */
+    }
 }
 
 
@@ -43,6 +41,13 @@
     [super dealloc];
 }
 
+- copyWithZone: (NSZone *) zone
+{
+    TimedObj *newTimedObj = [super copyWithZone: zone];
+    
+    newTimedObj->time = time;
+    return newTimedObj;
+}
 
 - (BOOL) performKey: (int) c
 {
@@ -178,6 +183,11 @@
     return time.dot;
 }
 
+- (BOOL) isDotted
+{
+    return time.dot != 0;
+}
+
 /*!
  Assigns that the timed object is dotted. TODO should be an enum.
  */
@@ -185,6 +195,7 @@
 {
     time.dot = newDottingCode;
 }
+
 
 /*
   Returns whether the yAboveBelow is to be used.  Do not use stemlengths

@@ -82,6 +82,7 @@ extern float staffthick[3][3];
 - (void) setString: (NSString *) newText
 {
     NSLog(@"todo Verse setString:\n");
+    data = (char *) [newText UTF8String];
 }
 
 - (NSFont *) font
@@ -99,36 +100,35 @@ extern float staffthick[3][3];
 
 - recalc
 {
-  Staff *sp;
-  StaffObj *p;
-  if (data == NULL || *data == '\0')
-  {
-    p = note;
-    sp = [p staff];
-    if ([sp graphicType] != STAFF) return self;
-    bounds.origin.x = p->x - 6;
-    bounds.origin.y = [sp yOfTop] + baseline - 12;
-    bounds.size.width = bounds.size.height = 12;
-    [sp sysInvalid];
-  }
-  else [super recalc];
-  return self;
+    Staff *sp;
+    StaffObj *p;
+    if (data == NULL || *data == '\0')
+    {
+	p = note;
+	sp = [p staff];
+	if ([sp graphicType] != STAFF) return self;
+	bounds.origin.x = p->x - 6;
+	bounds.origin.y = [sp yOfTop] + baseline - 12;
+	bounds.size.width = bounds.size.height = 12;
+	[sp sysInvalid];
+    }
+    else [super recalc];
+    return self;
 }
 
 
 /* for copying verse.  Caller must set the note and alignVerse and recalc */
-// - copyWithZone: (NSZone *)
-- newFrom
+- copyWithZone: (NSZone *) zone
 {
-  Verse *v = [[Verse alloc] init];
-  v->vFlags = vFlags;
-  v->gFlags = gFlags;
-  v->font = font;
-  v->offset = offset;
-  v->baseline = baseline;
-  v->data = malloc(strlen(data) + 1);
-  strcpy(v->data, data);
-  return v;
+    Verse *v = [super copyWithZone: zone];
+    
+    v->vFlags = vFlags;
+    v->font = font;
+    v->offset = offset;
+    v->baseline = baseline;
+    v->data = malloc(strlen(data) + 1);
+    strcpy(v->data, data);
+    return v;
 }
 
 
@@ -396,19 +396,20 @@ static void drawext(float x1, float y, float x2, Staff *sp, int f, int m)
 
 
 /* display a whole line of continuation (hyphen or melisma) */
-
-- drawContinuation: (int) ch : (float) x0 : (float) bl : (Staff *) sp : (int) m
+- drawContinuation: (int) ch atX: (float) x0 atY: (float) bl onStaff: (Staff *) sp inMode: (int) m
 {
-  float x1 = [sp xOfEnd];
-  if (ch == CONTHYPH) drawrepeat(x0, x1, bl, font, 3, m);
-  else if (ch == CONTLINE) drawext(x0, bl, x1, sp, 0, m);
-  return self;
+    float x1 = [sp xOfEnd];
+    
+    if (ch == CONTHYPH) 
+	drawrepeat(x0, x1, bl, font, 3, m);
+    else if (ch == CONTLINE) 
+	drawext(x0, bl, x1, sp, 0, m);
+    return self;
 }
 
 
 /* display a figure below the y-line */
-
-- drawFigure: (NSString *) figureString atX: (float) x atY: (float) y ofStaff: (Staff *) sp inMode: (int) m
+- drawFigure: (NSString *) figureString atX: (float) x atY: (float) y onStaff: (Staff *) sp inMode: (int) m
 {
     float fy, cx, cy, nlead=0.0, centoffy;
     unsigned char c, nc, a=0, ct[3];
@@ -495,15 +496,15 @@ static void drawext(float x1, float y, float x2, Staff *sp, int f, int m)
 
     if ([sp graphicType] != STAFF) 
 	return self;
-    if (m && p->gFlags.selected && !p->gFlags.seldrag && p->selver == [self verseNumber])
+    if (m && [p isSelected] && !p->gFlags.seldrag && p->selver == [self verseNumber])
 	[self traceBounds];
     if (data == NULL || *data == '\0') 
 	return self;
     bl = [sp yOfTop] + baseline;
     if ([self isFigure])
-	return [self drawFigure: [self string] atX: p->x atY: bl ofStaff: sp inMode: m];
+	return [self drawFigure: [self string] atX: p->x atY: bl onStaff: sp inMode: m];
     if ([self isContinuation])
-	return [self drawContinuation: *data : p->x : bl : sp : m];
+	return [self drawContinuation: *data atX: p->x atY: bl onStaff: sp inMode: m];
     cx = [self textLeft: p];
     CAcString(cx, bl, (char *) data, font, m);
     if (vFlags.hyphen < 3 && ![sp textedBefore: p : [self verseNumber]]) {
@@ -565,7 +566,7 @@ static void drawext(float x1, float y, float x2, Staff *sp, int f, int m)
 */
 - draw
 {
-  return [self drawMode: [Graphic drawingModeIfSelected: ((Graphic *)note)->gFlags.selected ifInvisible: 0]];
+  return [self drawMode: [Graphic drawingModeIfSelected: [(Graphic *)note isSelected] ifInvisible: 0]];
 }
 
 

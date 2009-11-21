@@ -1,7 +1,7 @@
 /*!
   $Id$ 
 
-  @class 
+  @class Ligature
   @brief
 */
 #import "winheaders.h"

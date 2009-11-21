@@ -43,12 +43,6 @@
     return newHanger;
 }
 
-// This is just to transition from the old non-standard method to the standard copy method.
-- newFrom
-{
-    return [self copy];
-}
-
 - (BOOL) canSplit
 {
     return NO; // Perhaps return hFlags.split != 0;

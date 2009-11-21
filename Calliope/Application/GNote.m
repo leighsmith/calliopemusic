@@ -1021,8 +1021,8 @@ extern int modeinvis[5];
 	drawnote(size, halfWidth, x, [noteHead y], body, bodyType, stemType, shapeID, isBeamed, [self stemLength], [self hasNoStem], (showSlash && isGraced == 1), drawingMode);
 	if ([noteHead accidental] && [noteHead accidentalOffset] < 0.0)
 	    drawacc(x, noteHead, bodyType, size, drawingMode);
-	if (t->dot) // TODO should become: [self isDotted];
-	    drawnotedot(size, x + dotdx, [noteHead y], [noteHead dotOffset], [[noteHead myNote] getSpacing], bodyType, t->dot, 0, drawingMode);
+	if ([self isDotted])
+	    drawnotedot(size, x + dotdx, [noteHead y], [noteHead dotOffset], [[noteHead myNote] getSpacing], bodyType, [self dottingCode], 0, drawingMode);
     }
     else {
 	int noteIndex = numberOfNotes;
@@ -1046,8 +1046,8 @@ extern int modeinvis[5];
 	    drawhead(nx, [noteHead y], bodyType, body, shapeID, stemup, size, drawingMode);
 	    if ([noteHead accidental] && [noteHead accidentalOffset] < 0.0) 
 		drawacc(x, noteHead, bodyType, size, drawingMode);
-	    if (t->dot)   // TODO should become: [self isDotted];
-		drawnotedot(size, x + dotdx, [noteHead y], [noteHead dotOffset], [[noteHead myNote] getSpacing], bodyType, t->dot, 0, drawingMode);
+	    if ([self isDotted])
+		drawnotedot(size, x + dotdx, [noteHead y], [noteHead dotOffset], [[noteHead myNote] getSpacing], bodyType, [self dottingCode], 0, drawingMode);
 	}
 	/* Note: noteHead will now be [headlist objectAt: 0], with valid bodyType, f, halfWidth */
 	if (hasstem[body] && (!isBeamed || numberOfNotes > 1))	{
