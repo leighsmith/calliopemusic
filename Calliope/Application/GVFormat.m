@@ -158,7 +158,7 @@ extern NSSize paperSize;
     if (q->voice == v) return q;
     r = q;
   }
-  i = [syslist indexOfObject:sp->mysys];
+  i = [syslist indexOfObject:[sp mySystem]];
   while (i--)
   {
     sp = [[syslist objectAtIndex:i] getStaff: sn];
@@ -189,7 +189,7 @@ extern NSSize paperSize;
     if (q->voice ==v) return q;
     r = q;
   }
-  i = [syslist indexOfObject:sp->mysys];
+  i = [syslist indexOfObject:[sp mySystem]];
   k = [syslist count];
   while (i < k - 1)
   {

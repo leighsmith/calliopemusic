@@ -35,19 +35,20 @@
     } flags;
     NSString *part;
     float voffa, voffb;		/* verse offsets */
-    float vhigha;			/* amount of space taken by verses above */
-    float vhighb;			/* amount of space taken by verses below */
+    float vhigha;			/* amount of space taken by verses above Staff */
+    float vhighb;			/* amount of space taken by verses below Staff */
     float barbase;		/* barnumber baseline */
     float topmarg;		/* amount of headroom */
-    float botmarg;		/* use for equidistant spaff spacing */
+    float botmarg;		/* used for equidistant spaff spacing */
     float pref1, pref2;		/* start and end of preface */
     NSMutableArray *notes;			/*! @var notes Array of things on the staff. */
-    System *mysys;			/* backpointer */
 @private
-    float y;			/* position */
+    System *mysys;		/*!< backpointer */
+    float y;			/*!< vertical position on the GraphicView */
 }
 
 + (void) initialize;
+- (void)dealloc;
 
 - sysInvalid;
 
@@ -56,13 +57,22 @@
  */
 - (void) setSystem: (System *) newSystem;
 
+/*!
+  @brief Return the System this Staff instance resides within.
+ */
+- (System *) mySystem;
+
+/*!
+  @brief Return an NSArray of StaffObjs on the this Staff instance.
+ */
+// - (NSArray *) notesOnStaff;
+
 - recalc;
 - mark;
 - (float) getHeadroom;
 - trimVerses;
 - measureStaff;
 - resetStaff: (float) y;
-- (void)dealloc;
 - (Staff *) newFrom;
 - (void)moveBy:(float)x :(float)y;
 - setHangers;

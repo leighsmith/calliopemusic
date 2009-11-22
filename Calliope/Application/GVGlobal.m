@@ -238,7 +238,7 @@ static void addBarsRest(Staff *sp, System *sys, int n)
 	  }
           esp = [sp newFrom];
 	  staffmap[j] = esp;
-	  esp->mysys = esys;
+	  [esp setSystem: esys];
 	  [self copyNotes: sp->notes : esp : epl];
 	  [esys addStaff: esp];
 	  if (barsrest[j]) 
@@ -318,7 +318,7 @@ static void addBarsRest(Staff *sp, System *sys, int n)
 		    }
 		    esp = [sp newFrom];
 		    staffmap[j] = esp;
-		    esp->mysys = esys;
+		    [esp setSystem: esys];
 		    [self copyNotes: sp->notes : esp : epl];
 		    [esys addStaff: esp];
 		    if (barsrest[j]) 

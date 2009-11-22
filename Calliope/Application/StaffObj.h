@@ -17,20 +17,20 @@
 #import "NoteGroup.h"
 
 
-@interface StaffObj: Graphic
+@interface StaffObj: Graphic <NSCopying>
 {
 @public
-  NSMutableArray *hangers;	/* Array of hangers */
-  NSMutableArray *verses;	/* Array of Verse */
-  float x, y;			/* coordinates */
-  float stamp;			/* cache (not archived) */
-  float duration;		/* cache (not archived) */
-  char tag;			/* cache (not archived) TRY NOT TO NEED THIS */
-  char versepos;		/* how many verses above note */
-  char staffPosition;		/* staff position */
-  char selver;			/* selected verse */
-  char isGraced;		/* 1 = graced object, 2 = backwards-timed */
-  unsigned char voice;		/* voice number */
+    NSMutableArray *hangers;	/* Array of hangers */
+    NSMutableArray *verses;	/* Array of Verse */
+    float x, y;			/* coordinates */
+    float stamp;			/* cache (not archived) */
+    float duration;		/* cache (not archived) */
+    char tag;			/* cache (not archived) TRY NOT TO NEED THIS */
+    char versepos;		/* how many verses above note */
+    char staffPosition;		/* staff position */
+    char selver;			/* selected verse */
+    char isGraced;		/* 1 = graced object, 2 = backwards-timed */
+    unsigned char voice;		/* voice number */
 @protected
     NSString *part;		/* part name */
     Staff *mystaff;		/* backpointer */

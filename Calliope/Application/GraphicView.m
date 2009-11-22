@@ -1489,8 +1489,8 @@ static void drawHorz(float x, float y, float w, NSRect r)
 	    [self getInsertionX: &(pt.x) : &sp : &p : &tb : &td];
 	    pt.y = [sp yOfCentre];
 	    newBarLine = (Barline *) [Graphic graphicOfType: BARLINE];
-	    [newBarLine proto: self : pt : sp : sp->mysys : nil : 0];
-	    bl = [self lastObject: sp->mysys : [sp myIndex] : BARLINE : YES];
+	    [newBarLine proto: self : pt : sp : [sp mySystem] : nil : 0];
+	    bl = [self lastObject: [sp mySystem] : [sp myIndex] : BARLINE : YES];
 	    if (bl != nil)
 	    {
 		newBarLine->flags.staff = bl->flags.staff;
@@ -1502,7 +1502,7 @@ static void drawHorz(float x, float y, float w, NSRect r)
 	    [self getInsertionX: &(pt.x) : &sp : &p : &tb : &td];
 	    pt.y = [sp yOfCentre];
 	    p = (Rest *)[Graphic graphicOfType: REST];
-	    [p proto: self : pt : sp : sp->mysys : nil : 5];
+	    [p proto: self : pt : sp : [sp mySystem] : nil : 5];
 	    p->time.body = tb;
 	    [p setDottingCode: 0];
 	    p->staffPosition = [((Rest *)p) defaultPos];

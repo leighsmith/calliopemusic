@@ -283,7 +283,7 @@ static NSTextView *drawText = nil;
       return self;
     case STAFFHEAD:
       sp = client;
-      s = sp->mysys;
+      s = [sp mySystem];
       break;
     case TITLE:
       s = client;
@@ -379,7 +379,7 @@ static NSTextView *drawText = nil;
       [client unlinkhanger: self];
       break;
     case STAFFHEAD:
-      s = ((Staff *)client)->mysys;
+      s = [(Staff *)client mySystem];
       [s unlinkobject: self];
       break;
     case TITLE:

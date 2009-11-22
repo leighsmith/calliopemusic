@@ -213,7 +213,7 @@ static int invismode[8] = {0, 4, 4, 4, 4, 4, 4, 7};
         m = invismode[m];
         break;
       case 1:
-        s1 = [s->mysys nextstaff: s];
+        s1 = [[s mySystem] nextstaff: s];
         if (s1 != nil)
 	{
           y1 = y2;
@@ -224,7 +224,7 @@ static int invismode[8] = {0, 4, 4, 4, 4, 4, 4, 7};
       case 2:
         break;
       case 3:
-        s1 = [s->mysys nextstaff: s];
+        s1 = [[s mySystem] nextstaff: s];
         if (s1 != nil) y2 = [s1 yOfTop];
         break;
     }

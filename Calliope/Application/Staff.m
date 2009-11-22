@@ -96,6 +96,11 @@ int staffspace[3][3] =
     mysys = newSystem; /* backpointer. We don't want to autorelease this, in case there is a loop */
 }
 
+- (System *) mySystem
+{
+    return mysys;
+}
+
 - sysInvalid
 {
   return [mysys sysInvalid];
@@ -407,7 +412,7 @@ float textoff[2], baselines[2][MAXTEXT];
   sp->botmarg = botmarg;
   sp->pref1 = pref1;
   sp->pref2 = pref2;
-  sp->mysys = nil;
+  [sp setSystem: nil];
   sp->notes = nil;
   return sp;
 }

@@ -16,13 +16,11 @@
 
 extern float staffthick[3][3];
 
-+ (void)initialize
++ (void) initialize
 {
-  if (self == [Verse class])
-  {
-      (void)[Verse setVersion: 3];		/* class version, see read: */
-  }
-  return;
+    if (self == [Verse class]) {
+	[Verse setVersion: 3];		/* class version, see read: */
+    }
 }
 
 
@@ -34,7 +32,7 @@ extern float staffthick[3][3];
 	font = [[[NSFontManager sharedFontManager] selectedFont] retain];
 	offset = 0;
 	align = 0;
-	data = NULL;
+	verseString = nil;
 	note = nil;	
     }
     return self;
@@ -43,8 +41,10 @@ extern float staffthick[3][3];
 
 - (void) dealloc
 {
-    if (data)
-	free(data);
+    [verseString release];
+    verseString = nil;
+    [font release];
+    font = nil;
     [super dealloc];
 }
 
@@ -54,35 +54,35 @@ extern float staffthick[3][3];
   return [note sysInvalid];
 }
 
-// TODO kludged for now until we can make data private and then we eventually replace it with an NSString.
 - (NSString *) string
 {
-    if (data == NULL) return @"";
-    return [NSString stringWithUTF8String: data]; 
+    return (verseString == nil) ? @"" : [[verseString retain] autorelease];
 }
 
 - (int) length
 {
-    if (data == NULL) return 0;
-    return strlen(data);
+    if (verseString == nil)
+	return 0;
+    return [verseString length];
 }
 
 /* return whether a string is a blank verse */
 - (BOOL) isBlank
 {
-    unsigned char c;
-    char *test_data = data;
+    int characterIndex;
     
-    if (data == NULL) return YES;
-    while (c = *test_data++) 
-	if (c != ' ') return NO;
+    if (verseString == nil)
+	return YES;
+    for (characterIndex = 0; characterIndex < [verseString length]; characterIndex++) 
+	if ([verseString characterAtIndex: characterIndex] != ' ')
+	    return NO;
     return YES;
 }
 
 - (void) setString: (NSString *) newText
 {
-    NSLog(@"todo Verse setString:\n");
-    data = (char *) [newText UTF8String];
+    [verseString release];
+    verseString = [newText retain];
 }
 
 - (NSFont *) font
@@ -100,19 +100,19 @@ extern float staffthick[3][3];
 
 - recalc
 {
-    Staff *sp;
-    StaffObj *p;
-    if (data == NULL || *data == '\0')
-    {
-	p = note;
-	sp = [p staff];
-	if ([sp graphicType] != STAFF) return self;
+    if (verseString == nil || [verseString length] == 0) {
+	StaffObj *p = note;
+	Staff *sp = [p staff];
+	
+	if ([sp graphicType] != STAFF) 
+	    return self;
 	bounds.origin.x = p->x - 6;
 	bounds.origin.y = [sp yOfTop] + baseline - 12;
 	bounds.size.width = bounds.size.height = 12;
 	[sp sysInvalid];
     }
-    else [super recalc];
+    else 
+	[super recalc];
     return self;
 }
 
@@ -126,8 +126,8 @@ extern float staffthick[3][3];
     v->font = font;
     v->offset = offset;
     v->baseline = baseline;
-    v->data = malloc(strlen(data) + 1);
-    strcpy(v->data, data);
+    // I do a deep copy here to imitate earlier behaviour but it is probably unnecessary.
+    v->verseString = [verseString copy];
     return v;
 }
 
@@ -145,31 +145,36 @@ extern float staffthick[3][3];
 
 - (BOOL) isFigure
 {
-  unsigned char ch;
-  char *p = data;
+    int characterIndex;
   
-  if (p == NULL) return NO;
-  while (ch = *p++) if (!figurechar(ch)) return NO;
-  return YES;
+    if (verseString == nil)
+	return NO;
+    
+    for(characterIndex = 0; characterIndex < [verseString length]; characterIndex++)
+	if (!figurechar([verseString characterAtIndex: characterIndex]))
+	    return NO;
+    return YES;
 }
 
 
 - (BOOL) isContinuation
 {
-  unsigned char ch;
-  char *p = data;
-  if (p == NULL) return NO;
-  ch = *p;
-  return (ch == CONTHYPH || ch == CONTLINE);
+    unichar ch;
+    
+    if (verseString == nil)
+	return NO;
+    ch = [verseString characterAtIndex: 0];
+    return (ch == CONTHYPH || ch == CONTLINE);
 }
 
 
 - (BOOL) getHandleBBox: (NSRect *) r
 {
-  NSRect b = bounds;
-  b = NSInsetRect(b , -3.0 , -3.0);
-  *r  = NSUnionRect(b , *r);
-  return YES;
+    NSRect b = bounds;
+    
+    b = NSInsetRect(b , -3.0 , -3.0);
+    *r  = NSUnionRect(b , *r);
+    return YES;
 }
 
 
@@ -180,20 +185,27 @@ extern float staffthick[3][3];
 
 /* return half significant width (up to first smile if any) and full width */
 
-static void sigwidthpix(unsigned char *s, NSFont *f, float *sw, float *w)
+static void sigwidthpix(NSString *s, NSFont *f, float *sw, float *w)
 {
-  unsigned char c;
-  BOOL sig = YES;
-  float n = 0.0, sn = 0.0, cw;
-  if (s != NULL) while (c = *s++)
-  {
-    if (c == TIECHAR) sig = NO;
-    cw = DrawWidthOfCharacter(f, c);
-    n += cw;
-    if (sig) sn += cw;
-  }
-  *sw = sn * 0.5;
-  *w = n;
+    float n = 0.0, sn = 0.0, cw;
+    
+    if (s != nil) {
+	int characterIndex;
+	BOOL sig = YES;
+	
+	for (characterIndex = 0; characterIndex < [s length]; characterIndex++) {
+	    unichar c = [s characterAtIndex: characterIndex];
+	    
+	    if (c == TIECHAR)
+		sig = NO;
+	    cw = DrawWidthOfCharacter(f, c);
+	    n += cw;
+	    if (sig) 
+		sn += cw;
+	}	
+    }
+    *sw = sn * 0.5;
+    *w = n;
 }
 
 - (int) verseNumber
@@ -216,31 +228,32 @@ static void sigwidthpix(unsigned char *s, NSFont *f, float *sw, float *w)
 
 - alignVerse
 {
-  float vw, hw;
-    char *p;
-    unsigned char c;
-  if (data == NULL)
-  {
-    align = 0;
+    float vw, hw;
+    int characterIndex;
+    
+    if (verseString == nil) {
+	align = 0;
+	return self;
+    }
+    sigwidthpix(verseString, font, &hw, &pixlen);
+    vw = 0.0;
+    for (characterIndex = 0; characterIndex < [verseString length]; characterIndex++) {
+	unichar c = [verseString characterAtIndex: characterIndex];
+
+	if (c == TIECHAR)
+	    break;
+	vw += charFGW(font, c);
+	if (isvowel(c)) 
+	    break;
+    }
+    align = MIN(vw, hw);
     return self;
-  }
-  sigwidthpix((unsigned char *) data, font, &hw, &pixlen);
-  vw = 0.0;
-  p = data;
-  while (c = *p++)
-  {
-    if (c == TIECHAR) break;
-    vw += charFGW(font, c);
-    if (isvowel(c)) break;
-  }
-  align = MIN(vw, hw);
-  return self;
 }
 
 
 - reShape
 {
-  return [self alignVerse];
+    return [self alignVerse];
 }
 
 
@@ -256,7 +269,7 @@ static void sigwidthpix(unsigned char *s, NSFont *f, float *sw, float *w)
 
 - (int) keyDownString: (NSString *) cc
 {
-    int sl;
+    int verseStringLength;
     unichar startingCharacter = [cc characterAtIndex: 0];
     BOOL f = NO;
     
@@ -264,18 +277,19 @@ static void sigwidthpix(unsigned char *s, NSFont *f, float *sw, float *w)
 	/* NSLog(@"cc = %@\n", cc); */
 	if (startingCharacter == 0x80) 
 	    startingCharacter = TIECHAR;
-	sl = (data == NULL) ? -1 : strlen(data);
-	if (startingCharacter == 32 && sl <= 0) {
-	    NSLog(@"Verse -keyDownString: startingCharacter == 32 && sl <= 0");
+	verseStringLength = (verseString == nil) ? -1 : [verseString length];
+	if (startingCharacter == 32 && verseString == nil) {
+	    NSLog(@"Verse -keyDownString: startingCharacter == 32 && verseString == nil");
 	    return 0;
 	}
 	if (startingCharacter == 127) {
-	    if (sl <= 0) {
-		NSLog(@"Verse -keyDownString: sl <= 0");
+	    if (verseStringLength <= 0) {
+		NSLog(@"Verse -keyDownString: verseStringLength <= 0");
 		return 0;
 	    }
-	    data[sl - 1] = '\0';
-	    if (sl == 1) {
+	    [verseString autorelease];
+	    verseString = [verseString substringToIndex: verseStringLength - 1];
+	    if (verseStringLength == 1) {
 		f = YES;
 		/* verse has been cleared */
 		vFlags.hyphen = 0;
@@ -288,17 +302,14 @@ static void sigwidthpix(unsigned char *s, NSFont *f, float *sw, float *w)
 	    vFlags.hyphen = (vFlags.hyphen == 2) ? 0 : 2;
 	else {
 	    f = YES;
-	    if (sl < 0) {
-		data = (char *) malloc(2);
-		data[0] = startingCharacter;
-		data[1] = '\0';
+	    [verseString release];
+	    if (verseStringLength < 0) {
+		verseString = [[NSString stringWithCharacters: &startingCharacter length: 1] retain];
 	    }
 	    else {
-		data = (char *) realloc(data, sl + 2);
-		data[sl] = startingCharacter;
-		data[sl + 1] = '\0';
+		verseString = [[verseString stringByAppendingString: [NSString stringWithCharacters: &startingCharacter length: 1]] retain];
 	    }
-	    if (sl <= 0) {
+	    if (verseStringLength <= 0) {
 		font = [[CalliopeAppController currentDocument] getPreferenceAsFont: ([self isFigure]) ? FIGFONT : TEXFONT];
 	    }
 	    if (startingCharacter == CONTHYPH)
@@ -498,17 +509,17 @@ static void drawext(float x1, float y, float x2, Staff *sp, int f, int m)
 	return self;
     if (m && [p isSelected] && !p->gFlags.seldrag && p->selver == [self verseNumber])
 	[self traceBounds];
-    if (data == NULL || *data == '\0') 
+    if (verseString == nil || [verseString length] == 0) 
 	return self;
     bl = [sp yOfTop] + baseline;
     if ([self isFigure])
 	return [self drawFigure: [self string] atX: p->x atY: bl onStaff: sp inMode: m];
     if ([self isContinuation])
-	return [self drawContinuation: *data atX: p->x atY: bl onStaff: sp inMode: m];
+	return [self drawContinuation: [verseString characterAtIndex: 0] atX: p->x atY: bl onStaff: sp inMode: m];
     cx = [self textLeft: p];
-    CAcString(cx, bl, (char *) data, font, m);
+    DrawTextWithBaselineTies(cx, bl, verseString, font, m);
     if (vFlags.hyphen < 3 && ![sp textedBefore: p : [self verseNumber]]) {
-	System *sys = sp->mysys;
+	System *sys = [sp mySystem];
 
 	h = [[sys pageView] prevHyphened: sys : [sp myIndex] : [self verseNumber] : p->voice];
 	if (h == 1) {
@@ -584,12 +595,14 @@ struct oldflags		/* for old versions */
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
-  short len, flen;
-  float fs;
-  char fn[64];
-  struct oldflags ff;
-  char b1, b2, b3;
-  int v = [aDecoder versionForClassName:@"Verse"];
+    short len, flen;
+    float fs;
+    char fn[64];
+    struct oldflags ff;
+    char *data;
+    char b1, b2, b3;
+    int v = [aDecoder versionForClassName:@"Verse"];
+    
   [super initWithCoder:aDecoder];
   /* NSLog(@"reading Verse v%d\n", v); */
   if (v == 0)
@@ -629,34 +642,38 @@ struct oldflags		/* for old versions */
     vFlags.line = b2;
     vFlags.num = b3;
   }
+  verseString = [[NSString stringWithCString: data encoding: NSNEXTSTEPStringEncoding] retain];
+
   return self;
 }
 
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
-  char b1, b2, b3;
-  [super encodeWithCoder:aCoder];
-  [aCoder encodeValuesOfObjCTypes:"@@ffcc*", &font, &note, &pixlen, &baseline, &offset, &align, &data];
-  b1 = vFlags.hyphen;
-  b2 = vFlags.line;
-  b3 = [self verseNumber];
-  [aCoder encodeValuesOfObjCTypes:"ccc", &b1, &b2, &b3];
+    char b1, b2, b3;
+    const char *stringData = [verseString cStringUsingEncoding: NSNEXTSTEPStringEncoding];
+    
+    [super encodeWithCoder:aCoder];
+    [aCoder encodeValuesOfObjCTypes:"@@ffcc*", &font, &note, &pixlen, &baseline, &offset, &align, &stringData];
+    b1 = vFlags.hyphen;
+    b2 = vFlags.line;
+    b3 = [self verseNumber];
+    [aCoder encodeValuesOfObjCTypes:"ccc", &b1, &b2, &b3];
 }
 
-- (void)encodeWithPropertyListCoder:(OAPropertyListCoder *)aCoder
+- (void) encodeWithPropertyListCoder: (OAPropertyListCoder *)aCoder
 {
-    [super encodeWithPropertyListCoder:(OAPropertyListCoder *)aCoder];
-    [aCoder setObject:font forKey:@"font"];
-    [aCoder setObject:note forKey:@"note"];
-    [aCoder setFloat:pixlen forKey:@"pixlen"];
-    [aCoder setFloat:baseline forKey:@"baseline"];
-    [aCoder setInteger:offset forKey:@"offset"];
-    [aCoder setInteger:align forKey:@"align"];
-    [aCoder setObject:[NSData dataWithBytes:data length:strlen(data)] forKey:@"data"];
-    [aCoder setInteger:vFlags.hyphen forKey:@"hyphen"];
-    [aCoder setInteger:vFlags.line forKey:@"line"];
-    [aCoder setInteger: [self verseNumber] forKey:@"num"];
+    [super encodeWithPropertyListCoder: (OAPropertyListCoder *)aCoder];
+    [aCoder setObject: font forKey: @"font"];
+    [aCoder setObject: note forKey: @"note"];
+    [aCoder setFloat: pixlen forKey: @"pixlen"];
+    [aCoder setFloat: baseline forKey: @"baseline"];
+    [aCoder setInteger: offset forKey: @"offset"];
+    [aCoder setInteger: align forKey: @"align"];
+    [aCoder setObject: verseString forKey: @"verseString"];
+    [aCoder setInteger: vFlags.hyphen forKey: @"hyphen"];
+    [aCoder setInteger: vFlags.line forKey: @"line"];
+    [aCoder setInteger: [self verseNumber] forKey: @"num"];
 }
 
 @end

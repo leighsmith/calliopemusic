@@ -1035,7 +1035,7 @@ static BOOL doToObject(Graphic *p, int c, int a)
     sp = [p staff];
     if ([sp graphicType] == STAFF)
     {
-      sys = sp->mysys;
+      sys = [sp mySystem];
       st = [sys indexOfStaff: sp];
       j = [syslist indexOfObject:sys];
       for (i = j; i < k; i++)
@@ -1867,6 +1867,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
     Page *p1, *p2;
     id p;
     BOOL pag;
+    
     if (currentSystem  == nil)
     {
 	NSLog(@"Assertion failure in GVCommands");
@@ -1883,7 +1884,7 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
     {
 	sp = [nsys getStaff: i];
 	[sys addStaff: sp];
-	sp->mysys = sys;
+	[sp setSystem: sys];
     }
     k = [nsys->nonStaffGraphics count];
     for (i = 0; i < k; i++) 

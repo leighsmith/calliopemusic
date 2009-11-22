@@ -45,7 +45,7 @@
     /*! @var font The font to draw the text with */
     NSFont *font;
     /*! @var data The string TODO should be a NSString */
-    char *data;
+    NSString *verseString;
 }
 
 + (void) initialize;

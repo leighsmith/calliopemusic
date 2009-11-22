@@ -112,7 +112,7 @@ static Bracket *proto;
   else
   {
       unsigned i,j;
-    s = ((Staff *)client1)->mysys;
+    s = [(Staff *) client1 mySystem];
     i = [s indexOfStaff: client1];
     j = [s indexOfStaff: client2];
     if (i == NSNotFound || j == NSNotFound) {
@@ -130,8 +130,10 @@ static Bracket *proto;
  
 - mySystem
 {
-  if (gFlags.subtype == LINKAGE) return client1;
-  else return ((Staff *)client1)->mysys;
+  if (gFlags.subtype == LINKAGE) 
+      return client1;
+  else 
+      return [(Staff *)client1 mySystem];
 }
 
 
@@ -172,7 +174,7 @@ static Bracket *proto;
   if (gFlags.subtype == LINKAGE) return NO;
   s1 = client1;
   s2 = client2;
-  s = [s1->mysys findOnlyStaff: p.y];
+  s = [[s1 mySystem] findOnlyStaff: p.y];
   if (s->gFlags.type != STAFF) return NO;
   if (([s1 yOfTop] < [s2 yOfTop]) == (gFlags.selend & 1))
   {
@@ -260,7 +262,7 @@ static void displink(System *sys, int m)
     // gcc 4.0 doesn't like typeof bit fields so we use the long hand version
     // size = MAX(staff1->gFlags.size, staff2->gFlags.size);
     size = staff1->gFlags.size < staff2->gFlags.size ? staff2->gFlags.size : staff1->gFlags.size;
-    sys = staff1->mysys;
+    sys = [staff1 mySystem];
     // TODO This seems backwards, should be a method of Bracket, passing System as a parameter?
     x = [sys getBracketX: self : size];
     switch(gFlags.subtype) {

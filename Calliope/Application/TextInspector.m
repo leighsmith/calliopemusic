@@ -20,12 +20,12 @@ int subfor[4] = {2, 3, 2, 3};
   TextGraphic *p;
   Staff *sp, *nsp;
   System *sys;
-  float conv;
   NSMutableArray *sl;
   GraphicView *v = [CalliopeAppController currentView];
   int k, num, sn;
-  conv = [[CalliopeAppController sharedApplicationController] pointToCurrentUnitFactor];
+  float conv = [[CalliopeAppController sharedApplicationController] pointToCurrentUnitFactor];
 //  [[[CalliopeAppController sharedApplicationController] pageLayout] convertOldFactor:&conv newFactor:&anon];
+
   if ([v startInspection: TEXTBOX : &b : &sl :&num])
   {
     k = [sl count];
@@ -37,8 +37,10 @@ int subfor[4] = {2, 3, 2, 3};
       if (num == 1) switch(p->gFlags.subtype)
       {
         case STAFFHEAD:
-	  sys = p->client;
-	  if ([sys graphicType] == STAFF) sys = ((Staff *) sys)->mysys;
+	  if ([p->client graphicType] == STAFF)
+	      sys = [(Staff *) p->client mySystem];
+	  else
+	      sys = p->client;
 	  sn = [staffform intValue];
 	  sn = (sn <= 0) ? 0 : (sn - 1);
 	  nsp = [sys getStaff: sn];
@@ -46,7 +48,8 @@ int subfor[4] = {2, 3, 2, 3};
 	  break;
         case TITLE:
 	  sp = p->client;
-	  if ([sp graphicType] == STAFF) p->client = sp->mysys;
+	  if ([sp graphicType] == STAFF) 
+	      p->client = [sp mySystem];
 	  p->baseline = [[marginform cellAtIndex:0] floatValue] / conv;
 	  break;
       }

@@ -340,7 +340,7 @@ extern float ctimex(float d);
     sp = [p staff];
     if (*x > [sp xOfEnd])
     {
-	sys = [self nextSystem: sp->mysys didCreate: &newSystem];
+	sys = [self nextSystem: [sp mySystem] didCreate: &newSystem];
 	if (newSystem) [self simplePaginate: sys afterAddingCount: 1 askIfLoose: NO];
 	sp = [sys sameStaff: sp];
 	if ([sp->notes count] > 0)

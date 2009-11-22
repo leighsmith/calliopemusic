@@ -901,7 +901,9 @@ unsigned char numflags[10] =
 
 /* flags, new and old */
 
-/* m/o flag[upstem/dnstem][body] */
+// TODO Perhaps this should be encapsulated in a Stem class which keeps all the info like offsets, modern and old stem types etc, 
+// and will dish out the appropriate NSAttributedString.
+/* modern/old flag[upstem/dnstem][body] */
 // TODO these are stem flags, ordered up (row 0) or down (row 1), with NSNEXTSTEPStringEncoding values
 // for the Calliope music font. We should move to Unicode encoding (since the font is stored that way).
 // In which case, the codes should become:
@@ -920,6 +922,9 @@ char mflagoff[3][5] =
   {12, 10,  8,  6, 4}
 };
 
+// Unicode equivalents for Calliope music font:
+// { 251, 249, 250, 245, 246 }, 
+// { 244, 242, 243, 241, 239 } 
 unsigned char oflag[2][5] =
 {
   { 244, 242, 243, 239, 240 },
@@ -1333,6 +1338,7 @@ float getdotx(int sizeIndex, int btype, int stype, int body, int beamed, int ste
   int ch;
   NSFont *df, *bf;
   float dw, dx=0.0;
+    
   ch = dotchar[btype];
   df = musicFont[dotfont[btype]][sizeIndex];
   dw = charFGW(df, ch);

@@ -461,29 +461,32 @@
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
-  char b0, b1;
-  int v = [aDecoder versionForClassName:@"Hanger"];
-  [super initWithCoder:aDecoder];
-  client = [[aDecoder decodeObject] retain];
-  if (v == 0)
-  {
-    UID = 0;
-    hFlags.split = 0;
-    hFlags.level = 0;
-  }
-  else if (v == 1)
-  {
-    [aDecoder decodeValuesOfObjCTypes:"icc", &UID, &b0, &b1];
-    hFlags.split = b0;
-    hFlags.level = b1;
-  }
-  else if (v == 2)
-  {
-    [aDecoder decodeValuesOfObjCTypes:"icc", &UID, &b0, &b1];
-    hFlags.split = b0;
-    hFlags.level = b1;
-  }
-  return self;
+    char b0, b1;
+    int v = [aDecoder versionForClassName:@"Hanger"];
+    id decodedClient;
+    
+    [super initWithCoder:aDecoder];
+    decodedClient = [aDecoder decodeObject];
+    if ([decodedClient isKindOfClass: [NSMutableArray class]])
+	client = [decodedClient retain];
+    else
+	client = [[NSMutableArray arrayWithObject: decodedClient] retain];
+    if (v == 0) {
+	UID = 0;
+	hFlags.split = 0;
+	hFlags.level = 0;
+    }
+    else if (v == 1) {
+	[aDecoder decodeValuesOfObjCTypes:"icc", &UID, &b0, &b1];
+	hFlags.split = b0;
+	hFlags.level = b1;
+    }
+    else if (v == 2) {
+	[aDecoder decodeValuesOfObjCTypes:"icc", &UID, &b0, &b1];
+	hFlags.split = b0;
+	hFlags.level = b1;
+    }
+    return self;
 }
 
 

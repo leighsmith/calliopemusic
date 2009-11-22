@@ -27,13 +27,11 @@ int protoVox;
 @implementation StaffObj
 
 
-+ (void)initialize
++ (void) initialize
 {
-  if (self == [StaffObj class])
-  {
-      (void)[StaffObj setVersion: 7]; /* class version, see read: */ /*sb: bumped up to 7 for OS conversion */
-  }
-  return;
+    if (self == [StaffObj class]) {
+	[StaffObj setVersion: 7]; /* class version, see read: */ /*sb: bumped up to 7 for OS conversion */
+    }
 }
 
 - init
@@ -61,16 +59,37 @@ int protoVox;
     [super dealloc];
 }
 
+- copyWithZone: (NSZone *) zone
+{
+    StaffObj *newStaffObj = [super copyWithZone: zone];
+    
+    hangers = [hangers retain];
+    verses = [verses retain];
+    newStaffObj->x = x;
+    newStaffObj->y = y;
+    newStaffObj->stamp = stamp;
+    newStaffObj->duration = duration;
+    newStaffObj->tag = tag;
+    newStaffObj->versepos = versepos;
+    newStaffObj->staffPosition = staffPosition;
+    newStaffObj->selver = selver;
+    newStaffObj->isGraced = isGraced;
+    newStaffObj->voice = voice;
+    [newStaffObj setPartName: [self partName]];
+    [newStaffObj setStaff: [self staff]];
+    
+    return newStaffObj;
+}
 
 - sysInvalid
 {
-  return [mystaff sysInvalid];
+    return [mystaff sysInvalid];
 }
 
 
 - (int) barCount
 {
-  return 0;
+    return 0;
 }
 
 
@@ -380,10 +399,10 @@ int protoVox;
 }
 
 
-/* return system the receiver is associated with */
+/* return the System the receiver is associated with */
 - (System *) mySystem
 {
-    return mystaff->mysys;
+    return [mystaff mySystem];
 }
 
 
