@@ -236,7 +236,7 @@ static void addBarsRest(Staff *sp, System *sys, int n)
 	    esys = [sys newExtraction: v : n];
 	    hassys = YES;
 	  }
-          esp = [sp newFrom];
+          esp = [sp copy];
 	  staffmap[j] = esp;
 	  [esp setSystem: esys];
 	  [self copyNotes: sp->notes : esp : epl];
@@ -316,7 +316,7 @@ static void addBarsRest(Staff *sp, System *sys, int n)
 			esys = [sys newExtraction: v : n];
 			hassys = YES;
 		    }
-		    esp = [sp newFrom];
+		    esp = [sp copy];
 		    staffmap[j] = esp;
 		    [esp setSystem: esys];
 		    [self copyNotes: sp->notes : esp : epl];

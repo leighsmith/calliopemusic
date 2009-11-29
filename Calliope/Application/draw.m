@@ -55,7 +55,7 @@ void PStiedash(float cx, float cy, float dy, float hw, float mh, float ln, float
 */ 
 }
 
-void PStietext(float w, float rh, float hw, float mh, float g, float dr)
+void PStietext(float gap, float maxToMinHeighRatio, float halfWidth, float minHeight, float halfGap, float drop)
 {
     NSLog(@"Called PStietext(), needs implementation\n");
 /*
@@ -64,17 +64,17 @@ void PStietext(float w, float rh, float hw, float mh, float g, float dr)
  /tietext
  {
      gsave
-     currentpoint
-     3 -1 roll add exch 3 -1 roll add exch
-     newpath
-     gsave
-     translate
-     scale
-     0 0 1 5 175 arc
-     1.0 exch scale
-     0 0 1 175 5 arcn
-     fill
-     grestore
+       currentpoint
+       3 -1 roll add exch 3 -1 roll add exch
+       newpath
+       gsave
+         translate
+         scale
+         0 0 1 5 175 arc
+         1.0 exch scale
+         0 0 1 175 5 arcn
+         fill
+       grestore
      grestore
      0 rmoveto
  } bind def

@@ -140,9 +140,6 @@ void initPlayTables()
 }
 
 
-/* given middle-C pos and acctable and note details, return frequency */
-extern void getNumOct(int pos, int mc, int *num, int *oct);
-
 static float transpose(float f, int s)
 {
     int i;
@@ -284,7 +281,9 @@ static void addNote(int v, int k, int ch, MKNote *n)
     return self;
 }
 
-
+// TODO This should be factored into using GVScore's 
+// [self scoreBetweenSystem: sj andSystem: sk onlySelectedGraphics: selonly];
+// then wiring up the MusicKit playing & synthesis appartus.
 - play: (int) sj : (int) sk : (int) selonly : (int) noprogch
 {
     int c, ch, i, j, k, si, n, x, nix, nk, mc, d, m, v, pat, pn, spn, trn;

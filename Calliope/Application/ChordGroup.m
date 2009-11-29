@@ -14,7 +14,7 @@
 #import <AppKit/NSGraphics.h>
 #import <Foundation/NSArray.h>
 
-#define VOICEID(v, s) (v ? NUMSTAVES + v : s)
+//#define VOICEID(v, s) (v ? NUMSTAVES + v : s)
 
 
 /* note groups can have >= 1 staff objects in the group */
@@ -215,11 +215,11 @@
   for (i = 0; i < ck; i++)
   {
     p = [cl objectAtIndex:i];
-    vi = VOICEID(p->voice, [[p staff] myIndex]);
+    vi = [p voiceWithDefault: [[p staff] myIndex]];
     for (j = i + 1; j < ck; j++)
     {
       q = [cl objectAtIndex:j];
-      vj = VOICEID(q->voice, [[q staff] myIndex]);
+      vj = [q voiceWithDefault: [[q staff] myIndex]];
       if (vi == vj) { [cl release]; return nil; }
     }
   }

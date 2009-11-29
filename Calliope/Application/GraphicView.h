@@ -41,11 +41,12 @@
     /*! @var staffScale The scale of the staff this graphic is to be drawn on. */
     float staffScale;
 
-    // These ones still need deciding on which side of the model/view divide they should sit.
+    // This one still needs deciding on which side of the model/view divide it should sit.
     BOOL dirtyflag;
-    NSMutableArray *slist;				/*! @var slist The NSArray of selected Graphics */
 
     // These ivars strictly manage drawing the view and responding to user events on the view.
+    /*! @var slist The NSArray of selected Graphics */
+    NSMutableArray *slist;
     /*! @var delegate The object informed when page numbers have changed. */
     id delegate;
     /*! @var currentPage The current page to be drawn */
@@ -111,7 +112,10 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
 - reShapeAndRedraw: g;
 - cache:(NSRect)rect;
 
-- setupGrabCursor;
+/*!
+  @brief initialise the selection cursor with a given format code (needs documenting).
+ */
+- setupGrabCursor: (int) grabFormat;
 
 /*!
   @brief method to initiate the use of the given tool t.
@@ -132,8 +136,6 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
 
 /* Target/Action methods */
 // TODO should just become pasteboard operations and the saving moved into the OpusDocument.
-- saveEPS: sender;
-- saveTIFF: sender;
 - (void) delete: (id) sender;
 - deselectAll: sender;
 
@@ -211,3 +213,4 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
 - (id) delegate;
 
 @end
+

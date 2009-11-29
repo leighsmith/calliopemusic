@@ -78,7 +78,7 @@
   @brief Loads a file of the type given by aType from the NSData instance data.
   @result Returns YES if it is able to load a Calliope data file of type aType.
  */
-- (BOOL) loadDataRepresentation: (NSData *) data ofType: (NSString *) aType;
+- (BOOL) readFromData: (NSData *) data ofType: (NSString *) aType error: (NSError *) inError;
 
 /* Factory methods */
 
@@ -89,7 +89,7 @@
   @param docType The document type.
   @result Returns an NSData instance containing an XML encoded property list.
  */
-- (NSData *) dataRepresentationOfType: (NSString *) docType;
+- (NSData *) dataOfType: (NSString *) docType error: (NSError **) outError;
 
 /* Public methods */
 
@@ -134,6 +134,10 @@
 - (NSString *) name;
 - setName: (NSString *) name andDirectory:(NSString *)directory;
 - setName: (NSString *) name;
+
+// TODO should just become pasteboard operations.
+- (IBAction) saveEPS: sender;
+- (IBAction) saveTIFF: sender;
 
 // - (BOOL)needsSaving;
 

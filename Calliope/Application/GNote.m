@@ -123,8 +123,6 @@ unsigned char accifont[NUMHEADS][NUMACCS] =
 - (NSString *) description
 {
     return [NSString stringWithFormat: @"%@: x = %f, y = %f %@", [super description], x, y, [self describeChordHeads]];
-    // return [NSString stringWithFormat: @"%@: x = %f, y = %f %@", [super description], x, y, headlist];
-    // return [NSString stringWithFormat: @"%@: x = %f, y = %f", [super description], x, y];
 }
 
 
@@ -140,14 +138,13 @@ unsigned char accifont[NUMHEADS][NUMACCS] =
 // - getX: (float *) fx andY: (float *) fy
 - (BOOL) getXY: (float *) fx : (float *) fy
 {
-  NoteHead *noteHead;
-  float dx = 2.0 * nature[gFlags.size];
-  noteHead = [headlist objectAtIndex: SELHEADIX(gFlags.selend, [headlist count])];
-  if ([noteHead isReverseSideOfStem]) 
-      dx = ([self stemIsUp] ? dx : -dx); else dx = 0.0;
-  *fx = x + dx;
-  *fy = [noteHead y];
-  return YES;
+    float dx = 2.0 * nature[gFlags.size];
+    NoteHead *noteHead = [headlist objectAtIndex: SELHEADIX(gFlags.selend, [headlist count])];
+    
+    dx = [noteHead isReverseSideOfStem] ? ([self stemIsUp] ? dx : -dx) : 0.0;
+    *fx = x + dx;
+    *fy = [noteHead y];
+    return YES;
 }
 
 // - (void) moveByX: (float) dx andY: (float) dy
@@ -582,8 +579,6 @@ extern unsigned char hasstem[10];
 
 
 /* set the accidental keystring, account for hanging accidentals too */
-
-extern void getNumOct(int pos, int mc, int *num, int *oct);
 
 - getKeyString: (int) mc : (char *) ks
 {

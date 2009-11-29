@@ -8,6 +8,7 @@
 #import "GVFormat.h"
 #import "GVSelection.h"
 #import "GVCommands.h"
+#import "GVScore.h"
 #import "PageScrollView.h"
 #import "Page.h"
 #import "System.h"
@@ -289,10 +290,10 @@ static id createWindowFor(GraphicView* view, NSRect *r, NSString *fS)
 
 // used for reading. Uses loadDocument: and loadOldDocument: to load binary files.
 // For applications targeted for Tiger or later systems, you should use the new Tiger API readFromData:ofType:error:.  In this case you can also choose to override -readFromURL:ofType:error: or -readFromFileWrapper:ofType:error: instead.
-- (BOOL) loadDataRepresentation: (NSData *) data ofType: (NSString *) aType
+- (BOOL) readFromData: (NSData *) data ofType: (NSString *) aType error: (NSError *) inError
 {
-    NSLog(@"loadDataRepresentation: Received type %@\n", aType);
-    if([aType isEqualToString: @"CalliopeBinary"]) {
+    NSLog(@"readFromData: Received type %@\n", aType);
+    if([aType isEqualToString: @"Calliope Legacy Binary"]) {
 	if(![self loadDocument: data]) {
 	    // if unable to load the document normally, try the old versionless method.
 	    if(![self loadOldDocument: data])
@@ -830,6 +831,25 @@ return nil;
     return self;
 }
 
+- (void) setNumberOfStaves: (int) numOfStaves
+{
+    System *newSystem = [[System alloc] initWithStaveCount: numOfStaves onGraphicView: view];
+    
+    [newSystem initsys];  // [newSystem initWithSystem: [view currentSystem]];
+    if (numOfStaves > 1) 
+	[newSystem installLink]; // to what?
+    [view addSystem: newSystem];
+    [view setStaffScale: [self staffScale]]; // TODO perhaps should be elsewhere.
+    [view renumSystems];
+    [view doPaginate];
+    [view renumPages];
+    [view setRunnerTables];
+    [view balancePages];
+    [view firstPage: self]; // This was originally newPanel?
+    [view setNeedsDisplay: YES];
+}
+
+
 
 /* Target/Action methods */
 
@@ -891,23 +911,32 @@ return nil;
     [view scaleTo: i];
 }
 
-- (void) setNumberOfStaves: (int) numOfStaves
+- (IBAction) saveEPS: sender
 {
-    System *newSystem = [[System alloc] initWithStaveCount: numOfStaves onGraphicView: view];
-
-    [newSystem initsys];  // [newSystem initWithSystem: [view currentSystem]];
-    if (numOfStaves > 1) 
-	[newSystem installLink]; // to what?
-    [view addSystem: newSystem];
-    [view setStaffScale: [self staffScale]]; // TODO perhaps should be elsewhere.
-    [view renumSystems];
-    [view doPaginate];
-    [view renumPages];
-    [view setRunnerTables];
-    [view balancePages];
-    [view firstPage: self]; // This was originally newPanel?
-    [view setNeedsDisplay: YES];
+    [view deselectAll: view];
+    [view setupGrabCursor: 1];
 }
+
+
+- (IBAction) saveTIFF: sender
+{
+    [view setupGrabCursor: 2];
+}
+
+
+- (IBAction) copyAsEPS: sender
+{
+    [view deselectAll: view];
+    [view setupGrabCursor: 3];
+}
+
+
+- (IBAction) copyAsTIFF: sender
+{
+    [view setupGrabCursor: 4];
+}
+
+
 
 #if 0
 - close:sender
@@ -1170,34 +1199,52 @@ return nil;
 
 // Used for writing
 // For applications targeted for Tiger or later systems, you should use the new Tiger API -dataOfType:error:.  In this case you can also choose to override -writeToURL:ofType:error:, -fileWrapperOfType:error:, or -writeToURL:ofType:forSaveOperation:originalContentsURL:error: instead.
-- (NSData *) dataRepresentationOfType: (NSString *) docType
+- (NSData *) dataOfType: (NSString *) docType error: (NSError **) outError
 {
-    // int version = DOC_VERSION;
-    OAPropertyListArchiver *tsO;
-//    NSArchiver *ts = [[NSArchiver alloc] initForWritingWithMutableData: [NSMutableData data]];
-
     NSLog(@"dataRepresentationOfType: %@", docType);
- 
+
+    if([docType isEqualToString: @"MusicKit Scorefile"]) {
+	MKScore *fullScore = [view musicKitScore];
+	NSMutableData *scorefileData = [[NSMutableData alloc] initWithCapacity: 0];
+	
+	[fullScore writeScorefileStream: scorefileData];
+	return [scorefileData autorelease];
+    }
+    else if ([docType isEqualToString: @"Standard MIDI File"]) {
+	MKScore *fullScore = [view musicKitScore];
+	NSMutableData *scorefileData = [[NSMutableData alloc] initWithCapacity: 0];
+
+	[fullScore writeMidifileStream: scorefileData];
+	return [scorefileData autorelease];
+    }
+    else if ([docType isEqualToString: @"Calliope XML"]) {
+	// int version = DOC_VERSION;
+	OAPropertyListArchiver *tsO = nil;
+	// NSKeyedArchiver *ts = [[NSKeyedArchiver alloc] initForWritingWithMutableData: [NSMutableData data]];
+
 #if 0
-    [(GraphicView *)view deselectAll: self];
-    [ts encodeValueOfObjCType:"i" at:&version];
-    [ts encodeRootObject:printInfo];
-    [ts encodeRootObject:prefInfo];
-    [ts encodeObject: [documentWindow stringWithSavedFrame]];
-    [ts encodeRootObject:view];
-    [ts release];
+	[view deselectAll: self];
+	[ts encodeValueOfObjCType:"i" at:&version];
+	[ts encodeRootObject:printInfo];
+	[ts encodeRootObject:prefInfo];
+	[ts encodeObject: [documentWindow stringWithSavedFrame]];
+	[ts encodeRootObject:view];
+	[ts release];
 #endif
-    
-    /* PROPERTY LIST ENCODING */
-    // TODO save version number.
-    tsO = [OAPropertyListArchiver propertyListWithRootObject: view];
-    // [[tsO description] writeToFile: [filename stringByAppendingPathExtension: @"ppl"] atomically: YES];
-    /* END PROPERTY LIST CODING */
-    //NSLog(@"Description: %@", tsO);
-	    
-    [prefInfo backup]; // TODO huh? shouldn't prefInfo be saved along with the document?
-    
-    return [[tsO description] dataUsingEncoding: NSASCIIStringEncoding];
+	
+	/* PROPERTY LIST ENCODING */
+	// TODO save version number.
+	tsO = [OAPropertyListArchiver propertyListWithRootObject: view];
+	// [[tsO description] writeToFile: [filename stringByAppendingPathExtension: @"ppl"] atomically: YES];
+	/* END PROPERTY LIST CODING */
+	//NSLog(@"Description: %@", tsO);
+	
+	//   [prefInfo backup]; // TODO huh? shouldn't prefInfo be saved along with the document?
+	
+	return [[tsO description] dataUsingEncoding: NSASCIIStringEncoding];	
+    }
+    else
+	return nil;
 }
 
 /* Window delegate methods. */

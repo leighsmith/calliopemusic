@@ -15,9 +15,11 @@
 		D87D0FEA09AE7AF100784ACC /* OAPropertyListArchiver.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD96E80483CDC800A80164 /* OAPropertyListArchiver.h */; };
 		D8B2119109BB5333002825FC /* CallAppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = D8B2118F09BB5333002825FC /* CallAppIcon.icns */; };
 		D8B2119209BB5333002825FC /* CallDocIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = D8B2119009BB5333002825FC /* CallDocIcon.icns */; };
+		D8D62C1810C2C7E500F52C93 /* GVScore.h in Headers */ = {isa = PBXBuildFile; fileRef = D8D62C1710C2C7E500F52C93 /* GVScore.h */; };
 		D8EBF5F210AA057800290469 /* gloria.tiff in Resources */ = {isa = PBXBuildFile; fileRef = D8EBF5F110AA057800290469 /* gloria.tiff */; };
 		D8EBF5F710AA060B00290469 /* GNote.h in Headers */ = {isa = PBXBuildFile; fileRef = D8EBF5F610AA060B00290469 /* GNote.h */; };
 		D8EC241509B9F8B500942A37 /* MusicNotationDocument.nib in Resources */ = {isa = PBXBuildFile; fileRef = D8EC241309B9F8B500942A37 /* MusicNotationDocument.nib */; };
+		D8EEED2310C12F8F00063D20 /* GVScore.m in Sources */ = {isa = PBXBuildFile; fileRef = D8EEED2210C12F8F00063D20 /* GVScore.m */; };
 		D8F2478909AD280C00B96D0D /* NSObject+ErrorHandling.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD96D60483CDC800A80164 /* NSObject+ErrorHandling.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8F2478A09AD280C00B96D0D /* NSMutableString+PropertyListCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD96D80483CDC800A80164 /* NSMutableString+PropertyListCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8F2478B09AD280C00B96D0D /* NSString+PropertyListCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = D8FD96DA0483CDC800A80164 /* NSString+PropertyListCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -939,9 +941,11 @@
 		D8A8F7C50483DD1B00A80164 /* template5.opus */ = {isa = PBXFileReference; lastKnownFileType = file; name = template5.opus; path = Templates/template5.opus; sourceTree = "<group>"; };
 		D8B2118F09BB5333002825FC /* CallAppIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CallAppIcon.icns; path = Images/CallAppIcon.icns; sourceTree = "<group>"; };
 		D8B2119009BB5333002825FC /* CallDocIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CallDocIcon.icns; path = Images/CallDocIcon.icns; sourceTree = "<group>"; };
+		D8D62C1710C2C7E500F52C93 /* GVScore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GVScore.h; sourceTree = "<group>"; };
 		D8EBF5F110AA057800290469 /* gloria.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = gloria.tiff; path = Images/gloria.tiff; sourceTree = "<group>"; };
 		D8EBF5F610AA060B00290469 /* GNote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GNote.h; sourceTree = "<group>"; };
 		D8EC241409B9F8B500942A37 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MusicNotationDocument.nib; sourceTree = "<group>"; };
+		D8EEED2210C12F8F00063D20 /* GVScore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GVScore.m; sourceTree = "<group>"; };
 		D8F2453709AD260300B96D0D /* MKPerformSndMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MKPerformSndMIDI.framework; path = /Library/Frameworks/MKPerformSndMIDI.framework; sourceTree = "<absolute>"; };
 		D8F247B109AD280C00B96D0D /* Info-CalliopePropertyListCoders.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-CalliopePropertyListCoders.plist"; sourceTree = "<group>"; };
 		D8F247B509AD280C00B96D0D /* CalliopePropertyListCoders.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CalliopePropertyListCoders.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1329,7 +1333,6 @@
 				D8FD96B20483CDC800A80164 /* Subprojects */,
 				D8FD970C0483CDC800A80164 /* External Frameworks and Libraries */,
 				D8FD922C0483CDC700A80164 /* Products */,
-				D8F247B109AD280C00B96D0D /* Info-CalliopePropertyListCoders.plist */,
 			);
 			name = Calliope;
 			sourceTree = "<group>";
@@ -1385,6 +1388,7 @@
 				D8FD92730483CDC700A80164 /* GVMenu.m */,
 				D8FD92750483CDC700A80164 /* GVPasteboard.m */,
 				D8FD92770483CDC700A80164 /* GVPerform.m */,
+				D8EEED2210C12F8F00063D20 /* GVScore.m */,
 				D8FD92790483CDC700A80164 /* GVSelection.m */,
 				D8FD927B0483CDC700A80164 /* Hanger.m */,
 				D8FD927D0483CDC700A80164 /* ImageGraphic.m */,
@@ -1497,6 +1501,7 @@
 				D8FD934A0483CDC800A80164 /* GVMenu.h */,
 				D8FD934C0483CDC800A80164 /* GVPasteboard.h */,
 				D8FD934E0483CDC800A80164 /* GVPerform.h */,
+				D8D62C1710C2C7E500F52C93 /* GVScore.h */,
 				D8FD93500483CDC800A80164 /* GVSelection.h */,
 				D8FD93520483CDC800A80164 /* Hanger.h */,
 				D8FD93540483CDC800A80164 /* ImageGraphic.h */,
@@ -1898,6 +1903,7 @@
 			isa = PBXGroup;
 			children = (
 				D8F249FA09AD3F8D00B96D0D /* Info-Calliope.plist */,
+				D8F247B109AD280C00B96D0D /* Info-CalliopePropertyListCoders.plist */,
 				D8A8F7C10483DD1B00A80164 /* template1.opus */,
 				D8A8F7C20483DD1B00A80164 /* template2.opus */,
 				D8A8F7C30483DD1B00A80164 /* template3.opus */,
@@ -2126,6 +2132,7 @@
 				D87D0FE909AE7AE800784ACC /* OAPropertyListCoder.h in Headers */,
 				D87D0FEA09AE7AF100784ACC /* OAPropertyListArchiver.h in Headers */,
 				D8EBF5F710AA060B00290469 /* GNote.h in Headers */,
+				D8D62C1810C2C7E500F52C93 /* GVScore.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2599,6 +2606,7 @@
 				D8F2498309AD3F8D00B96D0D /* BeamInspector.m in Sources */,
 				D8F2498409AD3F8D00B96D0D /* Block.m in Sources */,
 				D8F2498509AD3F8D00B96D0D /* BlockInspector.m in Sources */,
+				D8F252AB09AE669800B96D0D /* Bracket.m in Sources */,
 				D8F2498709AD3F8D00B96D0D /* BrackInspector.m in Sources */,
 				D8F2498809AD3F8D00B96D0D /* CallInst.m in Sources */,
 				D8F2498909AD3F8D00B96D0D /* CalliopeThreeStateButton.m in Sources */,
@@ -2624,6 +2632,7 @@
 				D8F2499F09AD3F8D00B96D0D /* GVMenu.m in Sources */,
 				D8F249A009AD3F8D00B96D0D /* GVPasteboard.m in Sources */,
 				D8F249A109AD3F8D00B96D0D /* GVPerform.m in Sources */,
+				D8EEED2310C12F8F00063D20 /* GVScore.m in Sources */,
 				D8F249A209AD3F8D00B96D0D /* GVSelection.m in Sources */,
 				D8F249A309AD3F8D00B96D0D /* Hanger.m in Sources */,
 				D8F249A409AD3F8D00B96D0D /* ImageGraphic.m in Sources */,
@@ -2693,7 +2702,6 @@
 				D8F249E809AD3F8D00B96D0D /* muxchar.m in Sources */,
 				D8F249E909AD3F8D00B96D0D /* muxCollide.m in Sources */,
 				D8F249EA09AD3F8D00B96D0D /* muxlow.m in Sources */,
-				D8F252AB09AE669800B96D0D /* Bracket.m in Sources */,
 				D87D0FDA09AE6EA900784ACC /* draw.m in Sources */,
 				D87D0FDE09AE751300784ACC /* OAPropertyListArchiver.m in Sources */,
 				D87D0FE809AE7AE500784ACC /* OAPropertyListCoder.m in Sources */,

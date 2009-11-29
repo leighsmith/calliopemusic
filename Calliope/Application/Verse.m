@@ -116,19 +116,24 @@ extern float staffthick[3][3];
     return self;
 }
 
+- (void) setBaseline: (float) newBaseline aboveStaff: (BOOL) yesOrNo
+{   
+    baseline = newBaseline;
+    vFlags.above = yesOrNo;
+}
 
 /* for copying verse.  Caller must set the note and alignVerse and recalc */
 - copyWithZone: (NSZone *) zone
 {
-    Verse *v = [super copyWithZone: zone];
+    Verse *newVerse = [super copyWithZone: zone];
     
-    v->vFlags = vFlags;
-    v->font = font;
-    v->offset = offset;
-    v->baseline = baseline;
+    newVerse->vFlags = vFlags;
+    newVerse->font = font;
+    newVerse->offset = offset;
+    newVerse->baseline = baseline;
     // I do a deep copy here to imitate earlier behaviour but it is probably unnecessary.
-    v->verseString = [verseString copy];
-    return v;
+    newVerse->verseString = [verseString copy];
+    return newVerse;
 }
 
 
@@ -431,15 +436,12 @@ static void drawext(float x1, float y, float x2, Staff *sp, int f, int m)
     ct[1] = ct[2] = '\0';
     nlead = fontAscent(f);
     centoffy = 0.5 * charFGH(f, '3') - charFURY(f, '3');
-    if (vFlags.above)
-    {
+    if (vFlags.above) {
 	y -= figHeight(figureString, nlead) - nlead;
     }
     fy = y;
-    while (c = *s++)
-    {
-	if (c == '1')
-	{
+    while (c = *s++) {
+	if (c == '1') {
 	    ct[0] = c;
 	    if (*s != '\0') ct[1] = *s++;
 	    // TODO we should convert to a full NSString operation.
@@ -447,43 +449,40 @@ static void drawext(float x1, float y, float x2, Staff *sp, int f, int m)
 	    fy += nlead;
 	    ct[1] = ct[2] = '\0';
 	}
-	else if (c == ' ')
-	{
+	else if (c == ' ') {
 	    fy += nlead;
 	}
-	else if (isaccident(c))
-	{
-	    if (c == '!') a = SF_natural;
-	    else if (c == '@') a = SF_flat;
-	    else if (c == '#') a = SF_sharp;
+	else if (isaccident(c))	{
+	    if (c == '!') 
+		a = SF_natural;
+	    else if (c == '@')
+		a = SF_flat;
+	    else if (c == '#')
+		a = SF_sharp;
 	    nc = *s;
 	    cy = fy + centoffy;
-	    if (nc == '3')
-	    {
+	    if (nc == '3') {
 		s++;
 		cx = x;
 		fy += nlead;
 	    }
-	    else if (nc == '\0')
-	    {
+	    else if (nc == '\0') {
 		cx = x;
 		fy += nlead;
 	    }
-	    else cx = x - charFGW(f, *s);
+	    else 
+		cx = x - charFGW(f, *s);
 	    DrawCharacterCenteredOnXInFont(cx, cy + charFCH(sf, a), a, sf, m);
 	}
-	else
-	{
+	else {
 	    DrawCharacterCenteredOnXInFont(x, fy, c, f, m);
 	    /* now look ahead to see if the next char is a + or / */
 	    nc = *s;
-	    if (nc == '+')
-	    {
+	    if (nc == '+') {
 		DrawCharacterInFont(x + charFCW(f, c), fy, nc, f, m);
 		++s;
 	    }
-	    else if (nc == '/')
-	    {
+	    else if (nc == '/') {
 		DrawCharacterCenteredOnXInFont(x, fy, nc, f, m);
 		++s;
 	    }
@@ -601,9 +600,9 @@ struct oldflags		/* for old versions */
     struct oldflags ff;
     char *data;
     char b1, b2, b3;
-    int v = [aDecoder versionForClassName:@"Verse"];
+    int v = [aDecoder versionForClassName: @"Verse"];
     
-  [super initWithCoder:aDecoder];
+  [super initWithCoder: aDecoder];
   /* NSLog(@"reading Verse v%d\n", v); */
   if (v == 0)
   {
@@ -642,9 +641,19 @@ struct oldflags		/* for old versions */
     vFlags.line = b2;
     vFlags.num = b3;
   }
-  verseString = [[NSString stringWithCString: data encoding: NSNEXTSTEPStringEncoding] retain];
+    // If the font was encoded with a flipped view, we need to revert to a positive matrix.
+    if ([font pointSize] < 0) {
+	const CGFloat *matrix = [font matrix];
+	CGFloat newFontMatrix[6];
+	
+	memcpy(newFontMatrix, matrix, 6 * sizeof(float));
+	newFontMatrix[3] = -matrix[3]; // Invert the view.
+	[font autorelease];
+	font = [NSFont fontWithName: [font fontName] matrix: newFontMatrix];
+    }
 
-  return self;
+    verseString = [[NSString stringWithCString: data encoding: NSNEXTSTEPStringEncoding] retain];
+    return self;
 }
 
 

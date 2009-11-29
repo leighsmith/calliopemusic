@@ -15,6 +15,7 @@
 #import "Verse.h"
 #import "Hanger.h"
 #import "NoteGroup.h"
+#import "Metro.h"
 
 
 @interface StaffObj: Graphic <NSCopying>
@@ -88,6 +89,12 @@
 
 - (int) sysNum;
 - (int) myIndex;
+
+/*!
+  @brief Returns the voice identifier, with a default value if the voice has not been assigned.
+ */
+- (int) voiceWithDefault: (int) defaultVoiceId;
+
 - (NSString *) getInstrument;
 - (int) whereInstrument;
 
@@ -122,7 +129,7 @@
 - (int) hasHangers;
 - (BOOL)selectHangers:(id)sl : (int) b;
 - closeHangers: (NSMutableArray *) l;
-- findMetro;
+- (Metro *) findMetro;
 - (BOOL) hasVoltaBesides: (NoteGroup *) p;
 - (BOOL) hasCrossingBeam;
 - (int) hangerAcc;

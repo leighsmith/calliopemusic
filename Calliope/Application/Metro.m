@@ -144,12 +144,13 @@ static Metro *proto;
 {
     float x, y, dx, nx, dy;
     NSFont *f = fontdata[FONTSTMR];
-    id sp = [(StaffObj *) client staff];
+    StaffObj *clientOfMetro = [self firstClient];
+    Staff *sp = [clientOfMetro staff];
     int sz = smallersz[gFlags.size];
     
     if ([sp graphicType] != STAFF) 
 	return self;
-    x = ((StaffObj *)client)->x;
+    x = clientOfMetro->x;
     y = [sp yOfStaffPosition: pos];
     dx = charFGW(f, '=');
     DrawCharacterCenteredOnXInFont(x, y, '=', f, m);

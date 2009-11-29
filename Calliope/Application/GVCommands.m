@@ -48,7 +48,7 @@
 @implementation GraphicView(GVCommands)
 
 #define MINIMTICK 64
-#define VOICEID(v, s) (v ? NUMSTAVES + v : s)
+//#define VOICEID(v, s) (v ? NUMSTAVES + v : s)
 
 int staffFlag;
 BOOL cvFlag;	/* whether in copyverse mode */
@@ -312,7 +312,7 @@ static NSString *stylescratch;
     for (s = 0; s < ns; s++) {
 	Staff *sp = [sys getStaff: s];
 	
-	sp->part = [partscratchpad[s] retain];
+	[sp setPartName: partscratchpad[s]];
 	[sp defaultNoteParts];
     }
     return self;
@@ -517,15 +517,16 @@ extern char *typename[NUMTYPES];
 
 - wantVerse: sender
 {
-    if (cvList != nil) [cvList autorelease];
-  if (slist != nil)
-  {
-    [self setupGrabCursor];
-      cvList = [slist mutableCopy];
-    cvFlag = YES;
-  }
-  else cvFlag = NO;
-  return self;
+    if (cvList != nil) 
+	[cvList autorelease];
+    if (slist != nil)
+    {
+	[self setupGrabCursor: 0];
+	cvList = [slist mutableCopy];
+	cvFlag = YES;
+    }
+    else cvFlag = NO;
+    return self;
 }
 
 
@@ -1130,7 +1131,7 @@ extern char *typename[NUMTYPES];
     for (i = 0; i < ns; i++)
     {
       sp = [sys getStaff: i];
-      NSLog(@"  Staff %d [part=%s, y=%f]:\n", i+1, [sp->part UTF8String], [sp yOfTop]);
+      NSLog(@"  Staff %d [part=%s, y=%f]:\n", i+1, [[sp partName] UTF8String], [sp yOfTop]);
       //[NXApp log: buf];
       nl = sp->notes;
       nn = [nl count];
@@ -2049,15 +2050,13 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
 
 - upgradeParts
 {
-    int nsys, ns, i, j, k/*, n*/;
+    int nsys, ns, i, j, k;
     NSMutableArray *al, *pl = [[CalliopeAppController sharedApplicationController] getPartlist];
     CallPart *cp;
-    System *sys;
-    Staff *sp;
 //  Tablature *t;
+    
     k = [pl count];
-    while (k--)
-    {
+    while (k--) {
 	cp = [pl objectAtIndex:k];
 	if ((int) cp->instrument < 256)
 	{
@@ -2065,16 +2064,14 @@ static BOOL askAboutSys(char *s, System *sys, GraphicView *v)
 	}
     }
     nsys = [syslist count];
-    for (i = 0; i < nsys; i++)
-    {
-	sys = [syslist objectAtIndex:i];
+    for (i = 0; i < nsys; i++) {
+	System *sys = [syslist objectAtIndex: i];
+	
 	ns = [sys numberOfStaves];
-	for (j = 0; j < ns; j++)
-	{
-	    sp = [sys getStaff: j];
-	    if (sp->part)
-		[sp->part autorelease];
-	    sp->part = nullPart; 
+	for (j = 0; j < ns; j++) {
+	    Staff *sp = [sys getStaff: j];
+	    
+	    [sp setPartName: nullPart]; 
 	    al = sp->notes;
 	    k = [al count]; 
 	    while (k--) {

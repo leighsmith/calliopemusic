@@ -27,7 +27,7 @@
 #define NOTEPAD 2 /* smaller so as not to separate ledger lines too much */
 #define AFTERSIG (2 * nature[0])
 #define BARPADAFTER (0.25 * widthfactor)
-#define VOICEID(v, s) (v ? NUMSTAVES + v : s)
+//#define VOICEID(v, s) (v ? NUMSTAVES + v : s)
 static unsigned char hasbars[NUMSTAVES];	/* number of barlines in staff */
 static int voiceused[NUMTHREADS];
 static float spacefactor;			/* optimisation parameter */
@@ -384,7 +384,7 @@ static void insertEvent(StaffObj *p, NSMutableArray *el)
         {
           p->tag = hasbars[i];
 	  p->duration = [p noteEval: YES];
-          th = VOICEID(p->voice, i);
+          th = [p voiceWithDefault: i];
 	  voiceused[th]++;
           if (thread[th] == nil) thread[th] = [[NSMutableArray alloc] init];
           insertEvent(p, thread[th]);
@@ -512,7 +512,7 @@ static void insertEvent(StaffObj *p, NSMutableArray *el)
           if (p->isGraced) hasgrace = 1;
           else
           {
-            th = VOICEID(p->voice, i);
+            th = [p voiceWithDefault: i];
 	    voiceused[th]++;
 	    p->stamp = vt[th];
 	    vt[th] += p->duration;
@@ -542,7 +542,7 @@ static void insertEvent(StaffObj *p, NSMutableArray *el)
 	}
 	else if (ISATIMEDOBJ(p))
 	{
-	  th = VOICEID(p->voice, i);
+	  th = [p voiceWithDefault: i];
 	  if (p->isGraced == 2) p->stamp = vt[th] - p->duration;
           else if (p->isGraced == 1) p->stamp = vt[th] - 1.5;
           vt[th] = p->stamp;
@@ -802,7 +802,7 @@ for (i = 0; i < ns; i++) fprintf(stderr,"s%d (%f) mk%d:  sig(%d,%d) gra(%d,%d) s
         for (j = simstart[i]; j <= simend[i]; j++)
 	{
             if (j >= nk[i]) p = nil; else p = [nl[i] objectAtIndex:j];
- 	  v = VOICEID(p->voice, i);
+ 	  v = [p voiceWithDefault: i];
 	  tmp = vpred[v];
 	  if (tmp > mbx) mbx = tmp;
 	}
@@ -818,7 +818,7 @@ for (i = 0; i < ns; i++) fprintf(stderr,"s%d (%f) mk%d:  sig(%d,%d) gra(%d,%d) s
         for (j = simstart[i]; j <= simend[i]; j++)
 	{
             if (j >= nk[i]) p = nil; else p = [nl[i] objectAtIndex:j];
- 	  v = VOICEID(p->voice, i);
+ 	  v = [p voiceWithDefault: i];
 	  MOVE(p, mbx);
 	  /* set preceding grace notes for v and refine location of preceding change of signature */
 	  tmp = mbx - LEFTBEARING(p) - MINPAD;
@@ -1193,7 +1193,7 @@ static float separate(NSMutableArray *staves, int n, float lmx)
         for (j = simstart[i]; j <= simend[i]; j++)
 	{
           p = [nl[i] objectAtIndex:j];
- 	  v = VOICEID(p->voice, i);
+ 	  v = [p voiceWithDefault: i];
 	  tmp = RIGHTBEARING(p);
 	  vrb[v] = tmp;
 	  if (tmp > ax[i]) ax[i] = tmp;
@@ -1225,7 +1225,7 @@ static float separate(NSMutableArray *staves, int n, float lmx)
         for (j = simstart[i]; j <= simend[i]; j++)
 	{
           p = [nl[i] objectAtIndex:j];
- 	  v = VOICEID(p->voice, i);
+ 	  v = [p voiceWithDefault: i];
 	  vmx = mbx + vcx[v];
 	  MOVE(p, vmx);
 	  /* set preceding grace notes for v and refine location of preceding change of signature */
@@ -1279,7 +1279,7 @@ static void adjrests(NSMutableArray *staves, int n, float lmx)
       p = [nl objectAtIndex:k];
       if (ISATIMEDOBJ(p))
       {
- 	v = VOICEID(p->voice, i);
+ 	v = [p voiceWithDefault: i];
         if ([p graphicType] == REST)
         {
 	  rests[v] = p;

@@ -440,6 +440,11 @@ int protoVox;
 }
 
 
+- (int) voiceWithDefault: (int) defaultVoiceId
+{
+    return voice != 0 ? NUMSTAVES + voice : defaultVoiceId;
+}
+
 - (NSString *) getInstrument
 {
   if (part == nil) return [mystaff getInstrument];
@@ -765,7 +770,7 @@ int protoVox;
 
 /* find first metronome mark */
 
-- findMetro
+- (Metro *) findMetro
 {
   Metro *q;
   int k = [hangers count];

@@ -7,7 +7,6 @@
 
 @implementation TuningView
 
-extern void getNumOct(int pos, int mc, int *num, int *oct);
 extern void posOfNote(int mc, char *ks, int n, int *pos, int *acc);
 
 

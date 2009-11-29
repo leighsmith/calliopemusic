@@ -30,18 +30,19 @@
 @public
     struct
     {
-	unsigned int above : 1;
-	unsigned int hyphen : 3;	/* type of hyphen */
-	unsigned int line : 4;	/* actual line */
-	unsigned int num : 4;	/* verse number */
+	unsigned int above : 1;	    /*!< YES if the Verse is above the Staff */
+	unsigned int hyphen : 3;    /* type of hyphen */
+	unsigned int line : 4;	    /* actual line */
+	unsigned int num : 4;	    /* verse number */
     } vFlags;
     char offset;
     char align;
     float pixlen;
-    float baseline;
     /*! @var note a backpointer to the note the verse is assigned to. */
     StaffObj *note;
 @private    
+    /*! @var baseline Vertical offset from the Staff to draw the Verse. */
+    float baseline;
     /*! @var font The font to draw the text with */
     NSFont *font;
     /*! @var data The string TODO should be a NSString */
@@ -57,6 +58,12 @@
 - (BOOL) isFigure;
 - reShape;
 - alignVerse;
+
+/*!
+  @brief Assign the vertical baseline offset of the Verse from the Staff (either above or below).
+ */
+- (void) setBaseline: (float) newBaseline aboveStaff: (BOOL) yesOrNo;
+
 - (float) textLeft: (StaffObj *) p;
 - (int) keyDownString:(NSString *)cc;
 - (BOOL) hit: (NSPoint) p;

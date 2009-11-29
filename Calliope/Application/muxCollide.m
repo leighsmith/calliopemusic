@@ -11,7 +11,7 @@
   This finds the first collision in a sim and fixes it.
 */
 
-#define VOICEID(v, s) (v ? NUMSTAVES + v : s)
+//#define VOICEID(v, s) (v ? NUMSTAVES + v : s)
 #define MAXNOTES 3
 #define MAXACCS  64
 
@@ -45,7 +45,7 @@ static void doStems(GNote *nn[], int k, int sn, float vcx[])
   for (i = 0; i < k; i++)
   {
     p = nn[i];
-    px = vcx[VOICEID(p->voice,sn)];
+      px = vcx[[p voiceWithDefault: sn]];
     if (hasflag[p->time.body] && !(p->time.nostem))
     {
       psu = [p stemIsUp];
@@ -54,7 +54,7 @@ static void doStems(GNote *nn[], int k, int sn, float vcx[])
       {
 	if (i == j) continue;
 	q = nn[j];
-        if (vcx[VOICEID(q->voice,sn)] >= px)
+        if (vcx[[q voiceWithDefault: sn]] >= px)
 	{
 	  hlk = [q numberOfNoteHeads];
 	  while (hlk--)
@@ -396,7 +396,7 @@ void kernsim(int sn, int s1, int s2, NSMutableArray *nl, float vcx[])
   for (i = s1; i <= s2; i++)
   {
     p = [nl objectAtIndex:i];
-    v = VOICEID(p->voice, sn);
+    v = [p voiceWithDefault: sn];
     vcx[v] = 0.0;
     if ([p graphicType] == NOTE && ![p isInvisible])
     {
@@ -422,8 +422,8 @@ void kernsim(int sn, int s1, int s2, NSMutableArray *nl, float vcx[])
 	if (dp == 0)
 	{
 	  k = checkUnison(n[i], n[j]);
-	  if (k < 0) vcx[VOICEID(n[i]->voice,sn)] = -k;
-	  else vcx[VOICEID(n[j]->voice,sn)] = k;
+	  if (k < 0) vcx[[n[i] voiceWithDefault: sn]] = -k;
+	  else vcx[[n[j] voiceWithDefault: sn]] = k;
 	  doAccidentals(n, nn);
 	  doStems(n, nn, sn, vcx);
 	  return;
@@ -466,8 +466,8 @@ void kernsim(int sn, int s1, int s2, NSMutableArray *nl, float vcx[])
 	    break;
 	}
       }
-      if (k < 0) vcx[VOICEID(na->voice,sn)] = -k;
-      else vcx[VOICEID(nb->voice,sn)] = k;
+      if (k < 0) vcx[[na voiceWithDefault: sn]] = -k;
+      else vcx[[nb voiceWithDefault: sn]] = k;
       if (dnn) lineupDots(dn, dnn);
       doAccidentals(n, nn);
       doStems(n, nn, sn, vcx);

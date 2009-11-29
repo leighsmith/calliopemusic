@@ -291,16 +291,16 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
 }
 
 
-- setupGrabCursor
-{
-  NSPoint p;
-  if (!grabCursor)
-  {
-      p.x = p.y = 7.0;
-      grabCursor = [[NSCursor alloc] initWithImage:[NSImage imageNamed:@"cross.tiff"] hotSpot:p];
-  }
-  [[[self window] contentView] setDocumentCursor:grabCursor];
-  return self;
+- setupGrabCursor: (int) grabFormat
+{    
+    grabflag = grabFormat;
+    if (!grabCursor) {
+	NSPoint p = { 7.0, 7.0 };
+
+	grabCursor = [[NSCursor alloc] initWithImage: [NSImage imageNamed: @"cross.tiff"] hotSpot: p];
+    }
+    [[[self window] contentView] setDocumentCursor: grabCursor];
+    return self;
 }
 
 
@@ -312,7 +312,7 @@ extern NSEvent *periodicEventWithLocationSetToPoint(NSEvent *oldEvent, NSPoint p
 
 - currentSystem
 {
-  return currentSystem;
+    return currentSystem;
 }
 
 
@@ -1667,45 +1667,6 @@ static void drawHorz(float x, float y, float w, NSRect r)
 	    break;
     }
     return s;
-}
-
-
-/*
- * Target/Action methods.
- // TODO all of these should be moved to the OpusDocument
- */
-
-- saveEPS: sender
-{
-  [self deselectAll: self];
-  [self setupGrabCursor];
-  grabflag = 1;
-  return self;
-}
-
-
-- saveTIFF: sender
-{
-  [self setupGrabCursor];
-  grabflag = 2;
-  return self;
-}
-
-
-- copyAsEPS: sender
-{
-  [self deselectAll: self];
-  [self setupGrabCursor];
-  grabflag = 3;
-  return self;
-}
-
-
-- copyAsTIFF: sender
-{
-  [self setupGrabCursor];
-  grabflag = 4;
-  return self;
 }
 
 

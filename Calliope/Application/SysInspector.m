@@ -326,8 +326,7 @@ static BOOL busyFlag = 0;  /* so that inspector is not inspected because of a ca
   if (sys == nil) return self;
   if (popSelectionFor(partbutton) == 0) return self;
   sp = [sys getStaff: [staffmatrix selectedRow]];
-  if (sp->part) [sp->part autorelease];
-  sp->part = [popSelectionNameFor(partbutton) retain];
+  [sp setPartName: popSelectionNameFor(partbutton)];
   [v dirty];
   return self;
 }
@@ -581,8 +580,7 @@ BOOL isClearForm(NSForm *f, int i)
         sp->flags.nlines = [[staffforms cellAtIndex:0] intValue];
       }
           if (popSelectionFor(partbutton) > 0) {
-              if (sp->part) [sp->part autorelease];
-              sp->part = [popSelectionNameFor(partbutton) retain];
+              [sp setPartName: popSelectionNameFor(partbutton)];
           }
       i = [sizematrix selectedColumn];
       if (i >= 0 && sp->gFlags.size != i)
@@ -888,7 +886,7 @@ static NSString *imsclef[4] = {@"st5C", @"st5F", @"st5G", @"st1P"};
     assayAsFloat(8, sp->pref2);
     assayAsFloat(9, sp->voffa);
     assayAsFloat(10, sp->voffb);
-    assayAsAtom(11, sp->part);
+    assayAsAtom(11, [sp partName]);
     assay(12, sp->flags.hasnums);
     assayAsFloat(13, sp->barbase);
   }

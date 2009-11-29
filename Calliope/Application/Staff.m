@@ -351,13 +351,11 @@ float textoff[2], baselines[2][MAXTEXT];
         {
           if (n < vp)
           {
-	    v->baseline = baselines[1][n] - vhigha;
-	    v->vFlags.above = 1;
+	      [v setBaseline: baselines[1][n] - vhigha aboveStaff: YES];
 	  }
 	  else
 	  {
-            v->baseline = textoff[0] + baselines[0][n - vp];
-	    v->vFlags.above = 0;
+	      [v setBaseline: textoff[0] + baselines[0][n - vp] aboveStaff: NO];
 	  }
           ++n;
         }
@@ -396,25 +394,25 @@ float textoff[2], baselines[2][MAXTEXT];
 }
 
 
-- (Staff *) newFrom
+- copyWithZone: (NSZone *) zone
 {
-  Staff *sp = [[Staff alloc] init];
-  sp->bounds = bounds;
-  sp->gFlags = gFlags;
-  sp->flags = flags;
-  sp->part = [part retain];
-  sp->voffa = voffa;
-  sp->voffb = voffb;
-  sp->vhigha = vhigha;
-  sp->voffb = voffb;
-  sp->y = y;
-  sp->topmarg = topmarg;
-  sp->botmarg = botmarg;
-  sp->pref1 = pref1;
-  sp->pref2 = pref2;
-  [sp setSystem: nil];
-  sp->notes = nil;
-  return sp;
+    Staff *sp = [super copyWithZone: zone];
+    
+    sp->flags = flags;
+    [sp setPartName: part];
+    sp->voffa = voffa;
+    sp->voffb = voffb;
+    sp->vhigha = vhigha;
+    sp->vhighb = vhighb;
+    sp->y = y;
+    sp->barbase = barbase;
+    sp->topmarg = topmarg;
+    sp->botmarg = botmarg;
+    sp->pref1 = pref1;
+    sp->pref2 = pref2;
+    sp->notes = [notes retain];
+    [sp setSystem: mysys];
+    return sp;
 }
 
 
@@ -535,10 +533,16 @@ float textoff[2], baselines[2][MAXTEXT];
 
 - (NSString *) partName
 {
-  if (part == nil) return nullPart;
-  return part;
+    if (part == nil)
+	return nullPart;
+    return [[part retain] autorelease];
 }
 
+- (void) setPartName: (NSString *) newPartName
+{
+    [part release];
+    part = [newPartName retain];
+}
 
 - (BOOL) hasAnyPart: (NSMutableArray *) pl
 {
@@ -800,7 +804,7 @@ float textoff[2], baselines[2][MAXTEXT];
 
 - (float) yOfTop
 {
-  return y;
+    return y;
 }
 
 
@@ -1254,19 +1258,28 @@ float textoff[2], baselines[2][MAXTEXT];
     return;
 }
 
+- (BOOL) isInvisible
+{
+    return flags.hidden;
+}
+
+- (void) setInvisible: (BOOL) yesOrNo
+{
+    flags.hidden = yesOrNo;
+}
 
 /* return whether note i is the last visible bar line on the staff */
-
 - (BOOL) isLastBar: (int) i
 {
-  StaffObj *p;
-  int j, k = [notes count];
-  for (j = i + 1; j < k; j++)
-  {
-    p = [notes objectAtIndex:j];
-    if ([p graphicType] == BARLINE && !(p->gFlags.invis)) return NO;
-  }
-  return YES;
+    int j, k = [notes count];
+    
+    for (j = i + 1; j < k; j++) {
+	StaffObj *p = [notes objectAtIndex: j];
+	
+	if ([p graphicType] == BARLINE && !(p->gFlags.invis)) 
+	    return NO;
+    }
+    return YES;
 }
 
 

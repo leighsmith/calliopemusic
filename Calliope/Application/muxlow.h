@@ -55,6 +55,10 @@ float tickNest(NSMutableArray *l, float t);
 int tickval(int b, int d);
 int noteNameNum(int i);
 int noteNameNumRelC(int pos, int mc);
+
+/*!
+ @brief Given Middle-C position and accidental table and note details, returns frequency and octave.
+ */
 void getNumOct(int pos, int mc, int *num, int *oct);
 
 int getSpacing(Staff *s);

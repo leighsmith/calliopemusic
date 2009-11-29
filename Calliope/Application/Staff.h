@@ -20,7 +20,7 @@
   spacing ought to be from float table
 */
 
-@interface Staff: Graphic
+@interface Staff: Graphic <NSCopying>
 {
 @public
     struct
@@ -33,22 +33,23 @@
 	unsigned int hidden : 1;	/* staff is hidden */
 	unsigned int topfixed : 1;	/* topmarg is an exact distance */
     } flags;
-    NSString *part;
     float voffa, voffb;		/* verse offsets */
-    float vhigha;			/* amount of space taken by verses above Staff */
-    float vhighb;			/* amount of space taken by verses below Staff */
+    float vhigha;		/* amount of space taken by verses above Staff */
+    float vhighb;		/* amount of space taken by verses below Staff */
     float barbase;		/* barnumber baseline */
     float topmarg;		/* amount of headroom */
     float botmarg;		/* used for equidistant spaff spacing */
     float pref1, pref2;		/* start and end of preface */
-    NSMutableArray *notes;			/*! @var notes Array of things on the staff. */
+    NSMutableArray *notes;	/*! @var notes Array of things on the staff. */
 @private
-    System *mysys;		/*!< backpointer */
+    NSString *part;		/*!< The part name for this Staff instance. */
+    System *mysys;		/*!< backpointer to the encompassing System. */
     float y;			/*!< vertical position on the GraphicView */
 }
 
 + (void) initialize;
-- (void)dealloc;
+- (void) dealloc;
+- copyWithZone: (NSZone *) zone;
 
 - sysInvalid;
 
@@ -73,7 +74,6 @@
 - trimVerses;
 - measureStaff;
 - resetStaff: (float) y;
-- (Staff *) newFrom;
 - (void)moveBy:(float)x :(float)y;
 - setHangers;
 - recalcHangers;
@@ -107,6 +107,21 @@
   @brief Returns the part name of the Staff.
  */
 - (NSString *) partName;
+
+/*!
+  @brief Assigns the part name of the Staff.
+ */
+- (void) setPartName: (NSString *) newPartName;
+
+/*!
+  @brief Returns if the Staff instance is hidden from view.
+ */
+- (BOOL) isInvisible;
+
+/*!
+  @brief Assigns if the Staff instance is hidden from view.
+ */
+- (void) setInvisible: (BOOL) yesOrNo;
 
 - (int) getChannel;
 - (BOOL) hasAnyPart: (NSMutableArray *) l;

@@ -12,10 +12,10 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1128"/>
-			<integer value="598"/>
-			<integer value="1018"/>
+			<integer value="1356"/>
 			<integer value="789"/>
+			<integer value="1018"/>
+			<integer value="1128"/>
 			<integer value="1075"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
@@ -13232,6 +13232,7 @@
 					<string>1349.ImportedFromIB2</string>
 					<string>1355.IBPluginDependency</string>
 					<string>1355.ImportedFromIB2</string>
+					<string>1356.IBEditorWindowLastContentRect</string>
 					<string>1356.IBPluginDependency</string>
 					<string>1356.ImportedFromIB2</string>
 					<string>1357.IBPluginDependency</string>
@@ -14515,6 +14516,7 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
+					<string>{{309, 715}, {207, 263}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -15102,9 +15104,9 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>{{656, 457}, {595, 549}}</string>
+					<string>{{442, 457}, {595, 549}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{656, 457}, {595, 549}}</string>
+					<string>{{442, 457}, {595, 549}}</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
@@ -15488,7 +15490,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">1609</int>
+			<int key="maxID">1610</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -15989,6 +15991,13 @@
 					<string key="className">GraphicView</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">GVScore.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">GraphicView</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">GVSelection.h</string>
 					</object>
 				</object>
@@ -16003,13 +16012,9 @@
 							<string>delete:</string>
 							<string>deselectAll:</string>
 							<string>draggingExited:</string>
-							<string>saveEPS:</string>
-							<string>saveTIFF:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>id</string>
-							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -16060,11 +16065,15 @@
 							<string>lastPage:</string>
 							<string>nextPage:</string>
 							<string>prevPage:</string>
+							<string>saveEPS:</string>
+							<string>saveTIFF:</string>
 							<string>showStaffSelectionSheet:</string>
 							<string>showTextRuler:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>

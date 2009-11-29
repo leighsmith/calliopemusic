@@ -34,7 +34,7 @@ struct timeinfo
 };
 
 
-@interface TimedObj: StaffObj
+@interface TimedObj: StaffObj <NSCopying>
 {
 @public
   struct timeinfo time;

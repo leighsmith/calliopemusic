@@ -430,7 +430,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 	sp->flags = op->flags;
 	sp->flags.haspref = 0;
 	sp->gFlags.size = op->gFlags.size;
-	sp->part = [op->part retain];
+	[sp setPartName: [op partName]];
 	sp->pref1 = sp->pref2 = 0.0;
 	sp->voffa = op->voffa;
 	sp->voffb = op->voffb;
@@ -503,7 +503,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
     sp->flags = op->flags;
     sp->gFlags.subtype = op->gFlags.subtype;
     sp->gFlags.size = op->gFlags.size;
-    sp->part = [op->part retain];
+    [sp setPartName: [op partName]];
     sp->voffa = op->voffa;
     sp->voffb = op->voffb;
     sp->vhigha = op->vhigha;
@@ -520,21 +520,20 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
 
 - makeNames: (BOOL) full : (GraphicView *) v
 {
-  TextGraphic *t;
-  Staff *sp;
-  int k = [staves count];
-  while (k--)
-  {
-    sp = [staves objectAtIndex:k];
-      if (![sp->part isEqualToString:nullPart])
-    {
-      t = [sp makeName: full];
-      [nonStaffGraphics addObject: t];
-      [t recalc];
-      [v selectObj: t];
+    int k = [staves count];
+    
+    while (k--) {
+	Staff *sp = [staves objectAtIndex: k];
+	
+	if (![[sp partName] isEqualToString: nullPart])	{
+	    TextGraphic *t = [sp makeName: full];
+	    
+	    [nonStaffGraphics addObject: t];
+	    [t recalc];
+	    [v selectObj: t];
+	}
     }
-  }
-  return self;
+    return self;
 }
 
 

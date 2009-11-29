@@ -423,11 +423,11 @@ void DrawCharacterInFont(float x, float y, int ch, NSFont *textFont, int mode)
 	// Ultimately we need to recode to unicode.
 	encodedString = [NSString stringWithCString: s encoding: encoding];
 
-	// DrawTextWithBaselineTies(x, y, encodedString, textFont, mode);
 	// TODO that we have to adjust the Sonata font by it's point size is completely beyond me. I have no idea why this is the case.
 	// the text fonts display fine, but the Sonata font is offset by it's point size. The only thing I can hypothesize is that the
 	// font metrics and origin of a non-text font confuses the drawing of NSAttributeString.
-	DrawTextWithBaselineTies(x, y - [textFont pointSize] * 2, encodedString, textFont, mode);
+	DrawTextWithBaselineTies(x, y, encodedString, textFont, mode);
+	// DrawTextWithBaselineTies(x, y - [textFont pointSize] * 2, encodedString, textFont, mode);
     }
     else 
 	unionCharBB(&boundingBox, x, y, ch, textFont);
@@ -489,12 +489,21 @@ void DrawTextWithBaselineTies(float x, float y, NSString *stringToDisplay, NSFon
 	// For debugging.
 	NSLog(@"DrawTextWithBaselineTies(\"%@\", %f, %f) fontPointSize = %f", stringToDisplay, x, y, fontPointSize);
 
-#if 0
+#if 1
 	NSFrameRect(NSMakeRect(x, characterFontOrigin_y, 20, fontPointSize)); // fix width, height matching font
 	NSFrameRect(NSMakeRect(x, characterFontOrigin_y, 3, 3)); // indicate upper corner
 #endif
 	
 #if 0
+
+	for(characterIndex = 0; characterIndex < [stringToDisplay length]; characterIndex++) {
+	    unichar c = [stringToDisplay characterAtIndex: characterIndex];	    
+	    if (c == TIECHAR) {
+		PStietext(tieCharacterWidth, 1.5, 0.3 * fontPointSize, 0.15 * fontPointSize, 0.5 * tieCharacterWidth, tieCharacterHeight);
+	    }
+	}
+	
+	
 	
 	// unsigned char c, t[256], *p;
 

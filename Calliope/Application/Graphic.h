@@ -82,7 +82,7 @@ extern id CrossCursor;
 
 /* Factory methods */
 
-+ (void)initialize;
++ (void) initialize;
 
 /*!
   @brief Return an autoreleased version of the named subclass of Graphic.
@@ -119,6 +119,11 @@ extern id CrossCursor;
 - init;
 
 - copyWithZone: (NSZone *) zone;
+
+/*!
+  @brief This is a legacy method that just calls copy.
+ */
+- newFrom;
 
 - mark;
 - proto: (GraphicView *) v : (NSPoint) pt : (Staff *) sp : (System *) sys : (Graphic *) g : (int) i;
