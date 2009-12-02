@@ -569,13 +569,13 @@ float textoff[2], baselines[2][MAXTEXT];
   int i, k;
   StaffObj *q;
   
-  float px = p->x;
+  float px = [p x];
   [p setStaff: self];
   k = [notes count];
   for (i = 0; i < k; i++)
   {
     q = [notes objectAtIndex:i];
-    if (q->x > px)
+    if ([q x] > px)
     {
       [notes insertObject:p atIndex:i];
       return p;
@@ -600,7 +600,7 @@ float textoff[2], baselines[2][MAXTEXT];
   for (i = 0; i < k; i++)
   {
     q = [notes objectAtIndex:i];
-      if (a > q->x) {
+      if (a > [q x]) {
           id aNote;
           int theLocation = [notes indexOfObject:p];
           if (theLocation != NSNotFound) {
@@ -611,7 +611,7 @@ float textoff[2], baselines[2][MAXTEXT];
 //          return [self linknote: [notes removeObject: p]];
           return nil;
       }
-    a = q->x;
+    a = [q x];
   }
   return p;
 }
@@ -701,7 +701,7 @@ float textoff[2], baselines[2][MAXTEXT];
   for (i = 0; i < k; i++)
   {
     p = [notes objectAtIndex:i];
-    if (p->x - x > -0.01) return i;
+    if ([p x] - x > -0.01) return i;
   }
   return k;
 }
@@ -714,7 +714,7 @@ float textoff[2], baselines[2][MAXTEXT];
   for (i = 0; i < k; i++)
   {
     p = [notes objectAtIndex:i];
-    if (p->x >= x) return p;
+    if ([p x] >= x) return p;
   }
   return nil;
 }
@@ -1084,7 +1084,7 @@ float textoff[2], baselines[2][MAXTEXT];
   while (i < k)
   {
     q = [notes objectAtIndex:i];
-    if (q->voice == vc && ISATIMEDOBJ(q)) return q->x;
+    if (q->voice == vc && ISATIMEDOBJ(q)) return [q x];
     ++i;
   }
   return [self xOfHyphmarg];
@@ -1124,12 +1124,12 @@ float textoff[2], baselines[2][MAXTEXT];
   int i;
   StaffObj *r, *p;
   int k = [notes count];
-  float x = q->x;
+  float x = [q x];
   r = nil;
   for (i = 0; i < k; i++)
   {
     p = [notes objectAtIndex:i];
-    if (p->x >= x) return r;
+    if ([p x] >= x) return r;
     if (p->gFlags.type == t) r = p;
   }
   return r;
@@ -1233,7 +1233,7 @@ float textoff[2], baselines[2][MAXTEXT];
     }
     rb = RIGHTBEARING(p);
     if (vrb > rb) rb = vrb;
-    px = p->x + rb;
+    px = [p x] + rb;
   }
   return self;
 }
@@ -1411,7 +1411,7 @@ static void drawbarnum(int n, float x, float y, NSFont *f, int j, int eb, int mo
           b += [p barCount];
 	  if (p->flags.nonumber == 2 || (b % m == 0 && p->flags.nonumber != 1 && ![self isLastBar: i]))
           {
-            drawbarnum(b, p->x, by, f, JLEFT, eb, mode);
+            drawbarnum(b, [p x], by, f, JLEFT, eb, mode);
           }
         }
         else if ([p graphicType] == REST) b += [p barCount];

@@ -118,7 +118,7 @@ extern void graphicListBBoxEx(NSRect *b, NSMutableArray *l, Graphic *p);
     d = 0 /* 0.5 * barwidth[sp->flags.subtype][sp->gFlags.size] */;
     x1 = p->bounds.origin.x + p->bounds.size.width - d;
     x1 -= p->bounds.origin.x;
-    x2 = (![q hasVoltaBesides: self]) ? q->bounds.origin.x + q->bounds.size.width - d : q->x;
+    x2 = (![q hasVoltaBesides: self]) ? q->bounds.origin.x + q->bounds.size.width - d : [q x];
     x2 -= q->bounds.origin.x;
     sy = [p yOfStaffPosition: -6];
     if (b.origin.y < sy) sy = b.origin.y;

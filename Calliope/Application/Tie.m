@@ -182,7 +182,7 @@ static void orderXY(float *x, float *y)
 
 - (BOOL) clientOrder: (TimedObj *) p : (TimedObj *) q
 {
-  if (flags.same) return (p->x < q->x);
+  if (flags.same) return ([p x] < [q x]);
   return ([p sysNum] < [q sysNum]);
 }
 
@@ -252,7 +252,7 @@ static char defConst[NUMTIES] = {0, 0, 1, 0, 0, 1, 1, 0};
   StaffObj *q;
   float x, y;
   q = [self firstClient];
-  x = q->x + offset.x;
+  x = [q x] + offset.x;
   y = [q headY: headnum] + offset.y;
   return (TOLFLOATEQ(p.x, x, 4.0) && TOLFLOATEQ(p.y, y, 4.0));
 }
@@ -291,7 +291,7 @@ static char defConst[NUMTIES] = {0, 0, 1, 0, 0, 1, 1, 0};
     int style = gFlags.subtype;
     StaffObj *p = client;
     Tie *t = partner;
-    x[0] = p->x + offset.x;
+    x[0] = [p x] + offset.x;
     y[0] = [p headY: headnum] + offset.y;
     if (t == nil)
     {
@@ -304,7 +304,7 @@ static char defConst[NUMTIES] = {0, 0, 1, 0, 0, 1, 1, 0};
     if (flags.same)
     {
 	p = (StaffObj *)(t->client);
-	x[1] = p->x + t->offset.x;
+	x[1] = [p x] + t->offset.x;
 	y[1] = [p headY: t->headnum] + t->offset.y;
     }
     else

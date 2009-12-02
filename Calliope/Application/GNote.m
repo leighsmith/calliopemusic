@@ -607,40 +607,33 @@ extern unsigned char hasstem[10];
 
 - (NSMutableArray *) tiedWith
 {
-  TieNew *noteHead;
-  NSArray *noteArray;
-  NSMutableArray *r;
-  GNote *q;
-  int nk, k = [hangers count];
+    NSMutableArray *r = nil;
+    int k = [hangers count];
     
-  r = nil;
-  while (k--)
-  {
-    noteHead = [hangers objectAtIndex:k];
-    if ([noteHead graphicType] == TIENEW)
-    {
-      noteArray = [noteHead clients];
-      nk = [noteArray count];
-      while (nk--)
-      {
-        q = [noteArray objectAtIndex:nk];
-	if ([q graphicType] == NOTE && q != self)
-	{
-	  if (q->staffPosition != staffPosition)
-	  {
-              [r autorelease];
-	    return nil;
-	  }
-	  else
-	  {
-	    if (r == nil) r = [[NSMutableArray alloc] init];
-	    [r addObject: q];
-	  }
+    while (k--) {
+	TieNew *noteHead = [hangers objectAtIndex: k];
+	
+	if ([noteHead graphicType] == TIENEW) {
+	    NSArray *noteArray = [noteHead clients];
+	    int nk = [noteArray count];
+	    
+	    while (nk--) {
+		GNote *q = [noteArray objectAtIndex: nk];
+		
+		if ([q graphicType] == NOTE && q != self) {
+		    if (q->staffPosition != staffPosition) {
+			return nil;
+		    }
+		    else {
+			if (r == nil) 
+			    r = [NSMutableArray arrayWithCapacity: 4];
+			[r addObject: q];
+		    }
+		}
+	    }
 	}
-      }
     }
-  }
-  return r;
+    return r;
 }
 
 /* return any accidental on any notehead at pos */

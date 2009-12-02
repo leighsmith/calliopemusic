@@ -266,14 +266,12 @@ static MKNote *newNote(float tn, float f, float dur)
 		       andSystem: (int) endingSystemIndex
 	    onlySelectedGraphics: (BOOL) selectedOnly
 {
-    int c, ch, j, k, systemIndex, x, noteIndex, mc, d, m, v, pat, trn;
+    int c, j, k, systemIndex, noteIndex, mc, d, m;
     int partIndex;
-    float f=0.0, t, xt, tn, qt, dur, lt, fine, minstamp;
+    float f=0.0, t, qt, lt, fine, minstamp;
     NSMutableArray *tl = [[NSMutableArray alloc] init];
     NSArray *channelList = [[CalliopeAppController sharedApplicationController] getChanlist];
     NoteHead *h;
-    Channel *chan;
-    NSString *inst;
     MKScore *newScore;
     MKNote *an;
     MKNote *infoNote; // for the score.
@@ -355,23 +353,24 @@ static MKNote *newNote(float tn, float f, float dur)
 			    break;
 			case NOTE:
 			    if (!selectedOnly || [p isSelected]) {
-				v = [p voiceWithDefault: staffIndex];
-				ch = [p getChannel];
-				pat = [(GNote *) p getPatch];
-				inst = [p getInstrument];
-				trn = [instlist transForInstrument: inst];
-				tn = DURTIME(((StaffObj *)p)->stamp - minstamp) + t;
-				dur = DURTIME(((StaffObj *)p)->duration);
-				if ((channelList = [(GNote *) p tiedWith]) != nil) {
+				int v = [p voiceWithDefault: staffIndex];
+				int ch = [p getChannel];
+				int pat = [(GNote *) p getPatch];
+				NSString *inst = [p getInstrument];
+				int trn = [instlist transForInstrument: inst];
+				float tn = DURTIME(((StaffObj *)p)->stamp - minstamp) + t;
+				float dur = DURTIME(((StaffObj *)p)->duration);
+				NSArray *tiedNotes = [(GNote *) p tiedWith];
+				
+				if (tiedNotes != nil) {
 				    if ((k = [tl indexOfObject: p]) != NSNotFound) {
 					[tl removeObjectAtIndex: k];
-					[channelList autorelease];
 					break;
 				    }
 				    else {
-					k = [channelList count];
+					k = [tiedNotes count];
 					while (k--) {
-					    GNote *q = [channelList objectAtIndex:k];
+					    GNote *q = [tiedNotes objectAtIndex: k];
 					    
 					    if (((StaffObj *)q)->stamp > ((StaffObj *)p)->stamp) {
 						[tl addObject: q];
@@ -399,12 +398,13 @@ static MKNote *newNote(float tn, float f, float dur)
 			    break;
 			case TABLATURE:
 			    if (!selectedOnly || [p isSelected]) {
-				tn = DURTIME(((StaffObj *)p)->stamp - minstamp) + t;
-				dur = DURTIME(((StaffObj *)p)->duration);
-				pat = [(Tablature *) p getPatch];
-				inst = [p getInstrument];
-				v = [p voiceWithDefault: staffIndex];
-				ch = [p getChannel];
+				float tn = DURTIME(((StaffObj *)p)->stamp - minstamp) + t;
+				float dur = DURTIME(((StaffObj *)p)->duration);
+				int pat = [(Tablature *) p getPatch];
+				NSString *inst = [p getInstrument];
+				int v = [p voiceWithDefault: staffIndex];
+				int ch = [p getChannel];
+				
 				k = sp->flags.nlines;
 				while (k--) {
 				    c = ((Tablature *)p)->chord[k];
@@ -435,8 +435,8 @@ static MKNote *newNote(float tn, float f, float dur)
 			    break;
 			case REST:
 			    if (!selectedOnly || [p isSelected]) {
-				tn = DURTIME(((StaffObj *)p)->stamp - minstamp) + t;
-				dur = DURTIME(((StaffObj *)p)->duration);
+				float tn = DURTIME(((StaffObj *)p)->stamp - minstamp) + t;
+				float dur = DURTIME(((StaffObj *)p)->duration);
 				lt = tn + dur;
 				if (lt > fine) 
 				    fine = lt;
@@ -445,15 +445,16 @@ static MKNote *newNote(float tn, float f, float dur)
 			case NEUMENEW:
 			case SQUARENOTE:
 			    if (!selectedOnly || [p isSelected]) {
-				x = 0;
-				xt = 0;
-				ch = [p getChannel];
-				v = [p voiceWithDefault: staffIndex];
+				int x = 0;
+				float xt = 0;
+				int ch = [p getChannel];
+				int v = [p voiceWithDefault: staffIndex];
+				
 				while([(SquareNote *) p getPos: x : &k : &d : &m : &qt]) {
 				    if (d) 
 					qt *= 2;
-				    tn = DURTIME(((StaffObj *)p)->stamp - minstamp) + xt + t;
-				    dur = DURTIME(qt);
+				    float tn = DURTIME(((StaffObj *)p)->stamp - minstamp) + xt + t;
+				    float dur = DURTIME(qt);
 				    an = newNote(tn, getNoteFreq(p, k, (m != 0), mc, curracc, 0), dur);
 				    setInst(an, 52);
 				    [[self partOfScore: newScore forVoice: v noteHead: 0 channel: ch] addNote: an];
@@ -481,6 +482,8 @@ static MKNote *newNote(float tn, float f, float dur)
 	MKPart *part = [parts objectAtIndex: partIndex];
 	MKNote *partInfoNote = [part infoNote];
 	MKNote *controlChangeNote = [[MKNote alloc] init];
+	int midiChannel = [partInfoNote parAsInt: MK_midiChan];
+	Channel *chan = [channelList objectAtIndex: midiChannel];
 	
 	// Determine the output synth & assign appropriately. Parameters which are MIDI specific are ignored.
 	// orchestra

@@ -224,7 +224,7 @@ static void orderXY(float *x, float *y)
       else
       {
         p = [client objectAtIndex:0];
-        *x = p->x + off1.x;
+        *x = [p x] + off1.x;
         [self checkHead1: p];
         *y = [p headY: head1] + off1.y;
       }
@@ -240,7 +240,7 @@ static void orderXY(float *x, float *y)
       else
       {
          p = [client lastObject];
-        *x = p->x + off2.x;
+        *x = [p x] + off2.x;
         [self checkHead2: p];
         *y = [p headY: head2] + off2.y;
       }
@@ -434,7 +434,7 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
       t = flags.place;
       a = tiedir[t];
       off1.x = 0.0;
-      off1.y = ([p boundAboveBelow: a] - p->y) + sluroffy[a] * dy;
+      off1.y = ([p boundAboveBelow: a] - [p y]) + sluroffy[a] * dy;
     }
     if ([q graphicType] == NOTE)
     {
@@ -449,7 +449,7 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
       t = flags.place;
       a = tiedir[t];
       off2.x = 0.0;
-      off2.y = ([q boundAboveBelow: a] - q->y) + sluroffy[a] * dy;
+      off2.y = ([q boundAboveBelow: a] - [q y]) + sluroffy[a] * dy;
     }
     con1.x = 0.1;
     con2.x = 0.9;
@@ -482,7 +482,7 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
     if (a == [p stemIsUp])
     {
       [p hitBeamAt: &ex : &ey];
-      *ox = ex - p->x;
+      *ox = ex - [p x];
       if (p->time.nostem) *oy = sluroffy[a] * dy;
       else *oy = ey - [p headY: h] + sluroffy[a] * dy;
     }
@@ -495,7 +495,7 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
   else
   {
     *ox = 0.0;
-    *oy = ([p boundAboveBelow: a] - p->y) + sluroffy[a] * dy;
+    *oy = ([p boundAboveBelow: a] - [p y]) + sluroffy[a] * dy;
   }
   return self;
 }
@@ -744,7 +744,7 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
       else
       {
         p = [client objectAtIndex:0];
-        off1.x = pt.x - p->x;
+        off1.x = pt.x - [p x];
         [self checkHead1: p];
         off1.y = pt.y - [p headY: head1];
       }
@@ -761,7 +761,7 @@ static char tiedir[8] = {1, 0, 1, 0, 0, 1, 0, 1};
       else
       {
         p = [client lastObject];
-        off2.x = pt.x - p->x;
+        off2.x = pt.x - [p x];
         [self checkHead2: p];
         off2.y = pt.y - [p headY: head2];
       }

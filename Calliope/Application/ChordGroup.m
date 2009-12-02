@@ -162,7 +162,7 @@
     q = [client objectAtIndex:k];
     if (q != p)
     {
-      q->x = p->x;
+      q->x = [p x];
       [q setStemIsUp: [p stemIsUp]];
       [q setStemIsFixed: YES];
       q->gFlags.locked = p->gFlags.locked;
@@ -345,8 +345,8 @@ extern unsigned char hasstem[10];
       dy += sl;
       sb = body;
     }
-    drawstem(p->x, [h y], sb, dy, sz, [h bodyType], st, m);
-    if (p->isGraced == 1) drawgrace(p->x, [q y], sb, sl, sz, [q bodyType], st, m);
+    drawstem([p x], [h y], sb, dy, sz, [h bodyType], st, m);
+    if (p->isGraced == 1) drawgrace([p x], [q y], sb, sl, sz, [q bodyType], st, m);
   }
   return self;
 }

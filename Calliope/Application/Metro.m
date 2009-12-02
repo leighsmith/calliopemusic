@@ -150,7 +150,7 @@ static Metro *proto;
     
     if ([sp graphicType] != STAFF) 
 	return self;
-    x = clientOfMetro->x;
+    x = [clientOfMetro x];
     y = [sp yOfStaffPosition: pos];
     dx = charFGW(f, '=');
     DrawCharacterCenteredOnXInFont(x, y, '=', f, m);

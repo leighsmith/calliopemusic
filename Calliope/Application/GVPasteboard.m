@@ -405,9 +405,9 @@ NSArray *TypesDrawExports(void)
     }
     else
     {
-      if ([type isEqualToString:NSPostScriptPboardType] || [type isEqualToString:NSTIFFPboardType])
+      if ([type isEqualToString: NSPostScriptPboardType] || [type isEqualToString: NSTIFFPboardType])
       {
-        g = [[Graphic graphicOfType: IMAGE] protoFromPasteboard: pboard : self];
+        g = [(ImageGraphic *)[Graphic graphicOfType: IMAGE] protoFromPasteboard: pboard : self];
 	if (g)
 	{
 	  pblist = [[NSMutableArray allocWithZone:[self zone]] initWithCapacity:1];
@@ -549,16 +549,16 @@ extern char *typename[NUMTYPES];
   org = [self isListLeftmost: pblist];
   if (org != nil)
   {
-    x = org->x;
-    y = org->y;
+    x = [org x];
+    y = [org y];
   }
   while (i--)
   {
     g = [pblist objectAtIndex:i];
     if (ISASTAFFOBJ(g))
     {
-      g->x = pt->x + (g->x - x);
-      g->y = pt->y + (g->y - y);
+      g->x = pt->x + ([g x] - x);
+      g->y = pt->y + ([g y] - y);
       [g linkPaste: self];
       [self selectObj: g];
       didstob = YES;

@@ -287,12 +287,12 @@ static void insertEvent(StaffObj *p, NSMutableArray *el)
 {
   int i, k;
   StaffObj *q;
-  float px = p->x;
+  float px = [p x];
   k = [el count];
   for (i = 0; i < k; i++)
   {
     q = [el objectAtIndex:i];
-    if (q->x > px)
+    if ([q x] > px)
     {
       [el insertObject:p atIndex:i];
       return;
@@ -378,7 +378,7 @@ static void insertEvent(StaffObj *p, NSMutableArray *el)
     for (j = 0; j < k; j++)
     {
       p = [nl objectAtIndex:j];
-      if (p->x > lmx)
+      if ([p x] > lmx)
       {
         if (ISATIMEDOBJ(p))
         {
@@ -504,7 +504,7 @@ static void insertEvent(StaffObj *p, NSMutableArray *el)
     for (j = 0; j < k; j++)
     {
       p = [nl objectAtIndex:j];
-      if (p->x  > lmx)
+      if ([p x]  > lmx)
       {
         if (ISATIMEDOBJ(p))
         {
@@ -577,7 +577,7 @@ static void insertEvent(StaffObj *p, NSMutableArray *el)
       {
         p = q;
         q = [nl objectAtIndex:j];
-        if (p->x > lmx && q->x > lmx && HASAVOICE(p) && HASAVOICE(q) && p->stamp > q->stamp  &&!p->isGraced && !q->isGraced)
+        if ([p x] > lmx && [q x] > lmx && HASAVOICE(p) && HASAVOICE(q) && p->stamp > q->stamp  &&!p->isGraced && !q->isGraced)
         {
 	  some = YES;
             [q retain];
@@ -902,7 +902,7 @@ static float stretch(BOOL adj, NSMutableArray *staves, int n, float lmx, float r
       else {
           p = [nl objectAtIndex:i];
 // if (p == nil) NSLog(@"staff %d: note at %d is nil\n", k, i);
-          t = p->x;
+          t = [p x];
 // NSLog(@"staff %d: note at %d has x = %f\n", k, i, t);
           if (sigmargin <= t && t <= zero) zero = t;
       }
@@ -978,7 +978,7 @@ static float stretch(BOOL adj, NSMutableArray *staves, int n, float lmx, float r
         while (i < j)
         {
             if (i >= theCount) p = nil; else p = [nl objectAtIndex:i++];
-            e = t * (p->x - zero) + zero;
+            e = t * ([p x] - zero) + zero;
             MOVE(p, e);
         }
         /* right-justify each ending signature */
@@ -986,7 +986,7 @@ static float stretch(BOOL adj, NSMutableArray *staves, int n, float lmx, float r
         while (j < f)
         {
             if (j >= theCount) p = nil; p = [nl objectAtIndex:j++];
-	  e = p->x + a;
+	  e = [p x] + a;
 	  MOVE(p, e);
         }
       }
@@ -997,7 +997,7 @@ static float stretch(BOOL adj, NSMutableArray *staves, int n, float lmx, float r
         while (i < j)
         {
           p = [nl objectAtIndex:i++];
-	  e = t * (p->x - zero) + zero;
+	  e = t * ([p x] - zero) + zero;
 	  MOVE(p, e);
         }
       }
@@ -1149,7 +1149,7 @@ static float separate(NSMutableArray *staves, int n, float lmx)
 	bx = LEFTBEARING(p);
 	if (sigstart[i] >= 0) bx += widthSigsIx(sigstart[i], sigend[i], nl[i]);
 	[p verseWidths: &btx : &(atx[i])];
-	tmp = p->x + err;
+	tmp = [p x] + err;
         if (tmp - MINPAD - bx < nx[i]) tmp = nx[i] + bx + MINPAD;
         if (btx != 0 && tmp - btx < txt[i]) tmp = txt[i] + btx;
         if (nix[i] >= nk[i] && tmp - btx < txt[i]) tmp = txt[i] + btx;
@@ -1161,7 +1161,7 @@ static float separate(NSMutableArray *staves, int n, float lmx)
       {
           p = [nl[i] objectAtIndex:barstart[i]];//sb: ok
 	MOVE(p, mbx);
-	if (mbx - p->x > err) err = mbx - p->x;
+	if (mbx - [p x] > err) err = mbx - [p x];
 	/* now set preceding change of sig */
 	if (sigstart[i] >= 0) setSigsIx(sigstart[i], sigend[i], nl[i], mbx - LEFTBEARING(p) - MINPAD);
 	if (atx[i] != 0) txt[i] = mbx + atx[i];
@@ -1187,7 +1187,7 @@ static float separate(NSMutableArray *staves, int n, float lmx)
         for (j = simstart[i]; j <= simend[i]; j++)
 	{
           p = [nl[i] objectAtIndex:j];
-	  tmp = p->x;
+	  tmp = [p x];
 	  if (tmp < px) px = tmp;
 	}
         for (j = simstart[i]; j <= simend[i]; j++)

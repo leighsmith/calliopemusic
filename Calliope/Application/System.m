@@ -976,7 +976,7 @@ static float staffheadRoom(NSMutableArray *o, Staff *sp)
     [ms staffRelink: p];
     return NO;
   }
-  sp = [self findOnlyStaff: p->y];
+  sp = [self findOnlyStaff: [p y]];
   inv = (sp != ms);
   if ([ms graphicType] == SYSTEM)
   {

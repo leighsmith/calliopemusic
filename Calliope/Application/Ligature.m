@@ -123,13 +123,13 @@ static char needtheta[NUMLIGATURES] = {0, 0, 1, 1};
     {
       p = [client lastObject];
       *x = [p xOfStaffEnd: 0];
-      *y = off1.y + p->y;
+      *y = off1.y + [p y];
     }
     else
     { 
       p = [client objectAtIndex:0];
-      *x = p->x + off1.x;
-      *y = p->y + off1.y;
+      *x = [p x] + off1.x;
+      *y = [p y] + off1.y;
     }
   }
   else if (h == 1)
@@ -138,13 +138,13 @@ static char needtheta[NUMLIGATURES] = {0, 0, 1, 1};
     {
       p = [client objectAtIndex:0];
       *x = [p xOfStaffEnd: 1];
-      *y = off2.y + p->y;
+      *y = off2.y + [p y];
     }
     else
     {
       p = [client lastObject];
-      *x = p->x + off2.x;
-      *y = p->y + off2.y;
+      *x = [p x] + off2.x;
+      *y = [p y] + off2.y;
     }
   }
   return self;
@@ -153,8 +153,8 @@ static char needtheta[NUMLIGATURES] = {0, 0, 1, 1};
 
 - setHorizontal: (TimedObj *) p : (TimedObj *) q
 {
-  float py = p->y + off1.y;
-  float qy = q->y + off2.y;
+  float py = [p y] + off1.y;
+  float qy = [q y] + off2.y;
   float ey = py - qy;
   if (!flags.place ^ (ey > 0)) off2.y += ey; else off1.y -= ey;
   return self;
@@ -187,13 +187,13 @@ static float braoffy[2] =  { 1.0, -1.0 };
   {
     if ([p graphicType] == NOTE) t = ([p stemIsUp] << 1) | a; else t = 1;
     off1.x = braoffx[0][t] * dx;
-    off1.y = ([p yAboveBelow: a] - p->y) + braoffy[a] * dy;
+    off1.y = ([p yAboveBelow: a] - [p y]) + braoffy[a] * dy;
   }
   if (!([self splitToRight]))
   {
     if ([q graphicType] == NOTE) t = ([q stemIsUp] << 1) | a; else t = 1;
     off2.x = braoffx[1][t] * dx;
-    off2.y = ([q yAboveBelow: a] - q->y) + braoffy[a] * dy;
+    off2.y = ([q yAboveBelow: a] - [q y]) + braoffy[a] * dy;
   }
   if ([self myLevel])
   {
@@ -216,12 +216,12 @@ static float braoffy[2] =  { 1.0, -1.0 };
   StaffObj *q = [client lastObject];
   if (!([self splitToLeft]))
   {
-    off1.x = RIGHTBOUND(p) - p->x;
+    off1.x = RIGHTBOUND(p) - [p x];
     off1.y = 0;
   }
   if (!([self splitToRight]))
   {
-    off2.x = LEFTBOUND(q) - q->x;
+    off2.x = LEFTBOUND(q) - [q x];
     off2.y = 0;
   }
   if ([self myLevel])
@@ -400,18 +400,18 @@ static float braoffy[2] =  { 1.0, -1.0 };
     {
       p = [client objectAtIndex:0];
       off2.x = pt.x - [p xOfStaffEnd: 1];
-      off2.y = pt.y - p->y;
+      off2.y = pt.y - [p y];
     }
     else
     {
       p = [client lastObject];
-      off2.x = pt.x - p->x;
-      off2.y = pt.y - p->y;
+      off2.x = pt.x - [p x];
+      off2.y = pt.y - [p y];
     }
     if (flags.ed)
     {
       p = [client objectAtIndex:0];
-      off1.y = pt.y - p->y;
+      off1.y = pt.y - [p y];
     }
   }
   else
@@ -420,18 +420,18 @@ static float braoffy[2] =  { 1.0, -1.0 };
     {
       p = [client lastObject];
       off1.x = pt.x - [p xOfStaffEnd: 0];
-      off1.y = pt.y - p->y;
+      off1.y = pt.y - [p y];
     }
     else
     {
       p = [client objectAtIndex:0];
-      off1.x = pt.x - p->x;
-      off1.y = pt.y - p->y;
+      off1.x = pt.x - [p x];
+      off1.y = pt.y - [p y];
     }
     if (flags.ed)
     {
       p = [client lastObject];
-      off2.y = pt.y - p->y;
+      off2.y = pt.y - [p y];
     }
   }
   [self setGroup: 0 : 0];

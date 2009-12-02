@@ -835,7 +835,7 @@ static BOOL doToObject(Graphic *p, int c, int a)
   while (i--)
   {
     p = [slist objectAtIndex:i];
-    if (ISASTAFFOBJ(p) && p->x < mx) mx = p->x;
+    if (ISASTAFFOBJ(p) && [p x] < mx) mx = [p x];
   }
   if (mx < MAXFLOAT)
   {
@@ -1138,7 +1138,7 @@ extern char *typename[NUMTYPES];
       for (j = 0;j < nn; j++)
       {
         p = [nl objectAtIndex:j];
-        NSLog(@"    %d [%@]: %s x=%f, y=%f, stamp=%f, duration=%f\n", j, [p partName], typename[[p graphicType]], p->x, p->y, p->stamp, p->duration);
+        NSLog(@"    %d [%@]: %s x=%f, y=%f, stamp=%f, duration=%f\n", j, [p partName], typename[[p graphicType]], [p x], [p y], p->stamp, p->duration);
         //[NXApp log: buf];
       }
     }
@@ -1196,14 +1196,14 @@ extern char *typename[NUMTYPES];
     while (nk--)
     {
       p = [nl objectAtIndex:nk];
-      if (p->x != p->x)
+      if ([p x] != [p x])
       {
-        NSLog(@"deleting NaN-x object of type %d at y = %f, %dth obj on sys %d staff %d (org1)\n", [p graphicType], p->y, nk, s + 1, i + 1);
+        NSLog(@"deleting NaN-x object of type %d at y = %f, %dth obj on sys %d staff %d (org1)\n", [p graphicType], [p y], nk, s + 1, i + 1);
 	[p removeObj];
       }
-      else if (p->x < lox || p->x > hix)
+      else if ([p x] < lox || [p x] > hix)
       {
-        NSLog(@"deleting off screen object of type %d at x = %f, y = %f, %dth obj on sys %d staff %d (org1)\n", [p graphicType], p->x, p->y, nk, s + 1, i + 1);
+        NSLog(@"deleting off screen object of type %d at x = %f, y = %f, %dth obj on sys %d staff %d (org1)\n", [p graphicType], [p x], [p y], nk, s + 1, i + 1);
 	[p removeObj];
       }
     }

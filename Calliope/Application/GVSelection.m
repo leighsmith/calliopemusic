@@ -255,9 +255,9 @@ extern int fontflag;
   while (k--)
   {
     o = [l objectAtIndex:k];
-    if (ISASTAFFOBJ(o) && o->x < minx)
+    if (ISASTAFFOBJ(o) && [o x] < minx)
     {
-      minx = o->x;
+      minx = [o x];
       r = o;
     }
   }
@@ -281,9 +281,9 @@ extern int fontflag;
   while (k--)
   {
     o = [slist objectAtIndex:k];
-    if (ISASTAFFOBJ(o) && o->x > maxx)
+    if (ISASTAFFOBJ(o) && [o x] > maxx)
     {
-      maxx = o->x;
+      maxx = [o x];
       r = o;
     }
   }
@@ -301,9 +301,9 @@ extern int fontflag;
   while (k--)
   {
     o = [slist objectAtIndex:k];
-    if (ISATIMEDOBJ(o) && o->x > maxx)
+    if (ISATIMEDOBJ(o) && [o x] > maxx)
     {
-      maxx = o->x;
+      maxx = [o x];
       r = o;
     }
   }
@@ -327,7 +327,7 @@ extern float ctimex(float d);
     
     if (t != nil)
     {
-	*x = t->x + ctimex([t noteEval: NO]) * 8;
+	*x = [t x] + ctimex([t noteEval: NO]) * 8;
 	*tb = t->time.body;
 	*td = [t dottingCode];
     }
@@ -349,7 +349,7 @@ extern float ctimex(float d);
 	    if (ISATIMEDOBJ(p))
 	    {
 		t = (TimedObj *) p;
-		*x = t->x + ctimex([t noteEval: NO]) * 8;
+		*x = [t x] + ctimex([t noteEval: NO]) * 8;
 		*tb = t->time.body;
 		*td = [t dottingCode];
 	    }
@@ -376,7 +376,7 @@ extern float ctimex(float d);
   if (t == nil && p == nil) return nil;
   if (t != nil)
   {
-    *x = t->x + ctimex([t noteEval: NO]) * 8;
+    *x = [t x] + ctimex([t noteEval: NO]) * 8;
     *rsp = [t staff];
   }
   else

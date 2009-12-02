@@ -94,7 +94,7 @@
     for (i = 0; i < n; i++)
     {
       p = [nl objectAtIndex:i];
-      nx = p->x + dx;
+      nx = [p x] + dx;
       MOVE(p, nx);
     }
   }
@@ -218,9 +218,9 @@
   Hanger *h, *splits[NUMJOINS];
   nl = sp->notes;
   p = [nl objectAtIndex:bix];
-  x0 = p->x;
+  x0 = [p x];
   p = [nl objectAtIndex:eix];
-  x1 = p->x;
+  x1 = [p x];
   nums = 0;
   for (j = bix; j <= eix; j++)
   {
@@ -377,15 +377,15 @@
     a = [dsp skipSigIx: 0];
     destx = [dsp xOfHyphmarg] + 4;
     p = [snl objectAtIndex:begbar[i]];
-    begx = p->x;
+    begx = [p x];
     p = [snl objectAtIndex:endbar[i]];
-    widx = p->x - begx;
+    widx = [p x] - begx;
     /* shuffle destination objects right */
     k = [dnl count];
     for (j = a; j < k; j++)
     {
       p = [dnl objectAtIndex:j];
-      nx = p->x + widx;
+      nx = [p x] + widx;
       MOVE(p, nx);
     }
     /* and insert source objects */
@@ -400,7 +400,7 @@
             [snl removeObjectAtIndex:begbar[i]];
         [dnl insertObject:p atIndex:a];
         [p setStaff: dsp];
-	p->x = destx + (p->x - begx);
+	p->x = destx + ([p x] - begx);
         ++a;
       }
     }
@@ -465,7 +465,7 @@
 	dy = [dsp yOfTop] - [ssp yOfTop];
 	dnl = dsp->notes;
 	if ([dnl count] == 0) rx = [self leftWhitespace];
-	else rx = ((StaffObj *)[dnl lastObject])->x;
+	else rx = [(StaffObj *)[dnl lastObject] x];
 	ssp = [sys getStaff: i];
 	snl = ssp->notes;
 	q = [ssp skipSigIx: 0];

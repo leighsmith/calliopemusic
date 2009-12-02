@@ -183,10 +183,11 @@ static Accent *proto;
 
 - (BOOL) getXY: (float *) x : (float *) y
 {
-  GNote *p = [self firstClient];
-  *x = xoff + p->x;
-  *y = yoff + p->y;
-  return YES;
+    GNote *p = [self firstClient];
+    
+    *x = xoff + [p x];
+    *y = yoff + [p y];
+    return YES;
 }
 
 
@@ -268,8 +269,8 @@ static Accent *proto;
 {
   GNote *q = [self firstClient];
     
-  xoff = dx + p.x - q->x;
-  yoff = dy + p.y - q->y;
+  xoff = dx + p.x - [q x];
+  yoff = dy + p.y - [q y];
   [self recalc];
   return YES;
 }
@@ -332,17 +333,17 @@ float tyoff[2][5] =
       sd = [p stemIsUp] ? -1 : 1;
       th = bh * sd;
       jmp = 2 * bh * sd;
-      x0 = p->x - dx;
+      x0 = [p x] - dx;
       if (hasstem[pb]) x0 += [p stemXoff: 0];
       x1 = x0 + 2.0 * dx;
       if (sd < 0)
       {
-        y0 = p->y - (ss * tyoff[hasstem[pb]][k]);
+        y0 = [p y] - (ss * tyoff[hasstem[pb]][k]);
         y1 = y0 - (2 * bh);
       }
       else
       {
-        y1 = p->y + (ss * tyoff[hasstem[pb]][k]);
+        y1 = [p y] + (ss * tyoff[hasstem[pb]][k]);
         y0 = y1 + (2 * bh);
       }
       while (k--)
@@ -392,7 +393,7 @@ float tyoff[2][5] =
   }
   if ([staff graphicType] != STAFF) return self;
   fr = (xoff != 0.0 || yoff != 0.0);
-  x = p->x + xoff;
+  x = [p x] + xoff;
   dir = 2 * getSpacing(staff);
   top = updir[([p graphicType] == NOTE && [((TimedObj *)p) stemIsUp])][gFlags.subtype];
   if (top)
@@ -408,10 +409,10 @@ float tyoff[2][5] =
     ny = getBottom(p);
     if (sy < ny) sy = ny;
   }
-  ny -= p->y;
+  ny -= [p y];
   sy += dir;
   sz = gFlags.size;
-  y = p->y + ny + dir + yoff;
+  y = [p y] + ny + dir + yoff;
   for (i = 0; i < ACCSIGNS; i++)
   {
     j = sign[i];

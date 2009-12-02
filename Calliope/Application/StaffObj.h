@@ -43,7 +43,22 @@
 - reShape;
 - reDefault;
 - transBounds: (NSRect *) b : (int) t;
+
+/*!
+  @brief Return the x and y coordinates of the receiver.
+ */
 - (BOOL) getXY: (float *) x : (float *) y;
+
+/*!
+  @brief Return the x coordinate of the receiver.
+ */
+- (float) x;
+
+/*!
+  @brief Return the y coordinate of the receiver.
+ */
+- (float) y;
+
 - (float) leftBearing: (BOOL) enc;
 - (float) rightBearing: (BOOL) enc;
 - (void)moveBy:(float)x :(float)y;

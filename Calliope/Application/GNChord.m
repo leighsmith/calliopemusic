@@ -207,7 +207,7 @@ void lineupDots(GNote *np[], int k)
   for (n = 0; n < k; n++)
   {
     p = np[n];
-    x = p->x;
+    x = [p x];
     if (x > mpx) mpx = x;
     sz = p->gFlags.size;
     ti =  &(p->time);
@@ -252,7 +252,7 @@ void lineupDots(GNote *np[], int k)
   for (n = 0; n < k; n++)
   {
     p = np[n];
-      [p setDotOffset: r + (mpx - p->x)];
+      [p setDotOffset: r + (mpx - [p x])];
   }
 }
 
@@ -376,7 +376,7 @@ void lineupAccs(NoteHead *ah[], int an, NoteHead *nh[], GNote *note[], int hn)
   {
     p = note[i];
     w = [p halfWidth];
-    lbear[i] = p->x;
+    lbear[i] = [p x];
     if (!([p stemIsUp]) && [nh[i] isReverseSideOfStem]) lbear[i] -= 3.0 * w; else lbear[i] -= w;
     accx = lbear[i] - accxoff[p->gFlags.size];
     if (accx < minb) minb = accx;
@@ -418,7 +418,7 @@ void lineupAccs(NoteHead *ah[], int an, NoteHead *nh[], GNote *note[], int hn)
       f = musicFont[accifont[(int)[noteHead bodyType]][(int)[noteHead accidental]]][sz];
       w = charFGW(f, accidents[(int)[noteHead bodyType]][(int)[noteHead accidental]]);
       if (w > ncw) ncw = w;
-      [noteHead setAccidentalOffset: (curx - w) - p->x];
+      [noteHead setAccidentalOffset: (curx - w) - [p x]];
 /*
 NSLog(@"curx %f: pos[%d] set to: %f\n", curx, [noteHead staffPosition], [noteHead accidentalOffset]);
 */

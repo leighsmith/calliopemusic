@@ -254,6 +254,15 @@ int protoVox;
   return YES;
 }
 
+- (float) x
+{
+    return x;
+}
+
+- (float) y
+{
+    return y;
+}
 
 - (float) headY: (int) n
 {

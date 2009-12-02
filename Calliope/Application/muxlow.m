@@ -528,15 +528,15 @@ BOOL findEndpoints(NSMutableArray *l, id *n0, id *n1)
     q = [l objectAtIndex:i];
     if (ISASTAFFOBJ(q))
     {
-      if (q->x < minx)
+      if ([q x] < minx)
       {
         *n0 = q;
-	minx = q->x;
+	minx = [q x];
       }
-      if (q->x > maxx)
+      if ([q x] > maxx)
       {
         *n1 = q;
-	maxx = q->x;
+	maxx = [q x];
       }
       ++bk;
     }

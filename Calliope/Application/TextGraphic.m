@@ -191,7 +191,7 @@ static NSTextView *drawText = nil;
           offset.x = -(0.5 * BOXSIZE) - 3;
           ty = p->bounds.origin.y - (0.5 * BOXSIZE);
           if ([sp yOfTop] < ty) ty = [sp yOfTop];
-              offset.y = (ty - 1.5 * BOXSIZE) - p->y;
+              offset.y = (ty - 1.5 * BOXSIZE) - [p y];
           client = p;
           [client linkhanger: self];
           break;
@@ -278,8 +278,8 @@ static NSTextView *drawText = nil;
   switch (gFlags.subtype)
   {
     case LABEL:
-      bounds.origin.x = ((StaffObj *)client)->x + offset.x;
-      bounds.origin.y = ((StaffObj *)client)->y + offset.y;
+      bounds.origin.x = [(StaffObj *)client x] + offset.x;
+      bounds.origin.y = [(StaffObj *)client y] + offset.y;
       return self;
     case STAFFHEAD:
       sp = client;
@@ -342,7 +342,7 @@ static NSTextView *drawText = nil;
   if (gFlags.subtype == LABEL)
   {
     w = bounds.size.width;
-    x = ((StaffObj *)client)->x;
+    x = [(StaffObj *)client x];
     switch(horizpos)
     {
       case 0:
@@ -449,8 +449,8 @@ static NSTextView *drawText = nil;
   switch(gFlags.subtype)
   {
     case LABEL:
-      if (horizpos == 0) offset.x = nx - ((StaffObj *)client)->x;
-      offset.y = ny - ((StaffObj *)client)->y;
+      if (horizpos == 0) offset.x = nx - [(StaffObj *)client x];
+      offset.y = ny - [(StaffObj *)client y];
       break;
     case STAFFHEAD:
       sp = client;

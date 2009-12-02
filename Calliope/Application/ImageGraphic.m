@@ -104,10 +104,10 @@
     bounds.size.height = baseSize.height / f;
     q = [v isSelTypeCode: TC_STAFFOBJ : &n];
     [self setClient: q];
-    xoff = pt.x - q->x;
-    yoff = pt.y - q->y;
-    bounds.origin.x = q->x + xoff;
-    bounds.origin.y = q->y + yoff;
+    xoff = pt.x - [q x];
+    yoff = pt.y - [q y];
+    bounds.origin.x = [q x] + xoff;
+    bounds.origin.y = [q y] + yoff;
     [q linkhanger: self];
   }
   return self;
@@ -145,8 +145,8 @@
 
 - recalc
 {
-  bounds.origin.x = ((StaffObj *)client)->x + xoff;
-  bounds.origin.y = ((StaffObj *)client)->y + yoff;
+  bounds.origin.x = [(StaffObj *)client x] + xoff;
+  bounds.origin.y = [(StaffObj *)client y] + yoff;
   return self;
 }
 
@@ -164,8 +164,8 @@
 - (BOOL) getXY: (float *) x : (float *) y
 {
   StaffObj *p = [self firstClient];
-  *x = xoff + p->x;
-  *y = yoff + p->y;
+  *x = xoff + [p x];
+  *y = yoff + [p y];
   return YES;
 }
 
@@ -228,8 +228,8 @@
 - (BOOL) move: (float) dx : (float) dy : (NSPoint) p : sys : (int) alt
 {
   StaffObj *q = [self firstClient];
-  xoff = dx + p.x - q->x;
-  yoff = dy + p.y - q->y;
+  xoff = dx + p.x - [q x];
+  yoff = dy + p.y - [q y];
   [self recalc];
   return YES;
 }

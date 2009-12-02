@@ -309,7 +309,7 @@ static int signof(float f)
   while (k--)
   {
     r = [client objectAtIndex:k];
-    x = r->x + [r stemXoff: 0];
+    x = [r x] + [r stemXoff: 0];
     y = [r myStemBase];
     if (socks) y += minStemLen(p, r);  /* allow for stocking feet */
     sxx += x * x;
@@ -334,7 +334,7 @@ static int signof(float f)
   {
     r = [client objectAtIndex:k];
     su = [r stemIsUp];
-    x = r->x + [r stemXoff: 0];
+    x = [r x] + [r stemXoff: 0];
     y = m * (x - xc) + yc;
     ry = [r myStemBase] + minStemLen(p, r);
     if (su)
@@ -359,7 +359,7 @@ static int signof(float f)
   while (k--)
   {
     r = [client objectAtIndex:k];
-    x = r->x + [r stemXoff: 0];
+    x = [r x] + [r stemXoff: 0];
     y = m * (x - xc) + yc + uer + der;
 //    [r setStemLengthTo: y - [r myStemBase]];
     ab = (y < [r yMean]);
@@ -383,7 +383,7 @@ static int signof(float f)
   while (k--)
   {
     r = [client objectAtIndex:k];
-    x = r->x + [r stemXoff: 0];
+    x = [r x] + [r stemXoff: 0];
     y = [r myStemBase] + minStemLen(p, r);
 // NSLog(@"note %d minstem %f\n", k, minStemLen(p, r));
     if ([r stemIsUp])
@@ -404,8 +404,8 @@ static int signof(float f)
     }
   }
   if (a == nil || b == nil) return self;
-  x1 = a->x + [a stemXoff: 0];
-  x2 = b->x + [b stemXoff: 0];
+  x1 = [a x] + [a stemXoff: 0];
+  x2 = [b x] + [b stemXoff: 0];
   if (flags.horiz || [self inflexions] > 1) m = 0.0;
   else
   {
@@ -453,8 +453,8 @@ static int signof(float f)
   p = [client objectAtIndex:0];
   if ([p graphicType] == TABLATURE) return self;
   q = [client lastObject];
-  x1 = p->x + [p stemXoffLeft: 0];
-  x2 = q->x + [q stemXoffRight: 0];
+  x1 = [p x] + [p stemXoffLeft: 0];
+  x2 = [q x] + [q stemXoffRight: 0];
   dx = x2 - x1;
   if (dx <= 2.0) return self;
   sz = p->gFlags.size;
@@ -549,8 +549,8 @@ static int signof(float f)
   p = [client objectAtIndex:0];
   if ([p graphicType] == TABLATURE) return self;
   q = [client lastObject];
-  x1 = p->x + [p stemXoff: 0];
-  x2 = q->x + [q stemXoff: 0];
+  x1 = [p x] + [p stemXoff: 0];
+  x2 = [q x] + [q stemXoff: 0];
   dx = x2 - x1;
   if (dx <= 2.0) return self;
   if (flags.horiz) y1 = y2 = y1 + y2;
@@ -564,7 +564,7 @@ static int signof(float f)
   while (k--)
   {
     r = [client objectAtIndex:k];
-    x = r->x + [r stemXoff: 0];
+    x = [r x] + [r stemXoff: 0];
     y = m * (x - x1) + y1;
     ab = (y < [r yMean]);
     ry = [r wantsStemY: ab];
@@ -843,12 +843,12 @@ static char nflg[NUMUNDER];
   if ([self splitToLeft] && ![self splitToRight]) {
     xa = [p xOfStaffEnd: 0];
     ya = [p yOfStaffPosition: p->staffPosition + splitp] + [p stemYoff: 0] + [p stemLength];
-    xb = p->x + [p stemXoffRight: 0];
+    xb = [p x] + [p stemXoffRight: 0];
     yb = [p myStemBase] + [p stemYoff: 0] + [p stemLength];
     ys = yb;
   }
   else if ([self splitToRight] && ![self splitToLeft]) {
-    xa = p->x + [p stemXoffLeft: 0];
+    xa = [p x] + [p stemXoffLeft: 0];
     ya = [p myStemBase] + [p stemYoff: 0] + [p stemLength];
     ys = ya;
     xb = [p xOfStaffEnd: 1];
@@ -875,7 +875,7 @@ static char nflg[NUMUNDER];
   }
   if ([p graphicType] == NOTE)
   {
-    xa = p->x + [p stemXoff: 0];
+    xa = [p x] + [p stemXoff: 0];
     cline(xa, [p myStemBase], xa, ys, stemthicks[sz], dflag);
   }
   return ymax;
@@ -948,9 +948,9 @@ int getHalfCode(TimedObj *r, int a, int k)
   dx = DrawWidthOfCharacter(musicFont[1][sz], SF_stemsp);
   th = beamthick[sz];
   bsep = th + beamsep[sz];
-  x1 = p->x + [p stemXoffLeft: 0];
+  x1 = [p x] + [p stemXoffLeft: 0];
   y1 = [p myStemBase] + [p stemLength];
-  x2 = q->x + [q stemXoffRight: 0];
+  x2 = [q x] + [q stemXoffRight: 0];
   y2 = [q myStemBase] + [q stemLength];
   m = (y2 - y1) / (x2 - x1);
   a = 0;
@@ -960,13 +960,13 @@ int getHalfCode(TimedObj *r, int a, int k)
   {
     --flg[i];
     r = toj[i];
-    x = r->x + [r stemXoff: 0];
+    x = [r x] + [r stemXoff: 0];
     stemy[i] = m * (x - x1) + y1;
   }
   r = toj[0];
   s = toj[k - 1];
-  xa = r->x + [r stemXoffLeft: 0];
-  xb = s->x + [s stemXoffRight: 0];
+  xa = [r x] + [r stemXoffLeft: 0];
+  xb = [s x] + [s stemXoffRight: 0];
   if ([self splitToLeft])	/* split to the left */
   {
     xa -= nature[sz] * 4;
@@ -998,12 +998,12 @@ int getHalfCode(TimedObj *r, int a, int k)
       code = getHalfCode(r, a, k - 1);
       if (code == 1)
       {
-        xa = r->x + [r stemXoffLeft: 0];
+        xa = [r x] + [r stemXoffLeft: 0];
         xb = xa + dx;
       }
       else if (code == 2)
       {
-        xb = r->x + [r stemXoffLeft: 0];
+        xb = [r x] + [r stemXoffLeft: 0];
         xa = xb - dx;
       }
       if (([self splitToLeft]) && r == p)	/* split to the left */
@@ -1019,8 +1019,8 @@ int getHalfCode(TimedObj *r, int a, int k)
     {
       r = toj[a];
       s = toj[b];
-      xa = r->x + [r stemXoffLeft: 0];
-      xb = s->x + [s stemXoffRight: 0];
+      xa = [r x] + [r stemXoffLeft: 0];
+      xb = [s x] + [s stemXoffRight: 0];
       if (([self splitToLeft]) && r == p)	/* split to the left */
       {
         xa -= nature[sz] * 4;
@@ -1086,7 +1086,7 @@ int getHalfCode(TimedObj *r, int a, int k)
       --flg[i];
       if (w) ++acc[i];
       r = toj[i];
-      x = r->x + [r stemXoff: 0];	/* update length in case of */
+      x = [r x] + [r stemXoff: 0];	/* update length in case of */
       y = m * (x - xa) + ya;		/*   opposite sense stems */
       if (sup[i])
       {
@@ -1110,7 +1110,7 @@ int getHalfCode(TimedObj *r, int a, int k)
     r = toj[i];
     if ([r graphicType] == NOTE)
     {
-      x = r->x + [r stemXoff: 0];
+      x = [r x] + [r stemXoff: 0];
       cline(x, [r myStemBase] + [r stemYoff: 0], x, stemy[i], stemthicks[sz], dflag);
     }
   }
@@ -1163,12 +1163,12 @@ int getHalfCode(TimedObj *r, int a, int k)
       code = getHalfCode(r, a, k - 1);
       if (code == 1)
       {
-        xa = r->x;
+        xa = [r x];
         xb = xa + dx;
       }
       else if (code == 2)
       {
-        xb = r->x;
+        xb = [r x];
         xa = xb - dx;
       }
     }
@@ -1176,8 +1176,8 @@ int getHalfCode(TimedObj *r, int a, int k)
     {
       r = toj[a];
       s = toj[b];
-      xa = r->x;
-      xb = s->x;
+      xa = [r x];
+      xb = [s x];
     }
     ya = [r myStemBase] - [r stemLength] - tabstemlens[sz] + lev * bsep;
     crect(xa, ya, xb - xa, th, dflag);
@@ -1193,7 +1193,7 @@ int getHalfCode(TimedObj *r, int a, int k)
   for (i = 0; i < k; i++)
   {
     r = toj[i];
-    x = r->x;
+    x = [r x];
     y = [r myStemBase] - [r stemLength];
     cline(x, y, x, y - tabstemlens[sz], stemthicks[sz], dflag);
     if ([r dottingCode]) restdot(smallersz[sz], 0.0, x, y, 0, [r dottingCode], 0, dflag);
@@ -1215,10 +1215,10 @@ static void drawTremolo(int n, TimedObj *a, TimedObj *b, float ytrem, int sz, in
   bskip = bsep + th;
   at = a->time.body;
   dx = halfwidth[sz][0][at];
-  xa = a->x;
-  xb = b->x;
-  x1 = a->x + [a stemXoffLeft: 0];
-  x2 = b->x + [b stemXoffRight: 0];
+  xa = [a x];
+  xb = [b x];
+  x1 = [a x] + [a stemXoffLeft: 0];
+  x2 = [b x] + [b stemXoffRight: 0];
   if (hasstem[at])
   {
     y1 = [a myStemBase] + [a stemLength];
@@ -1283,12 +1283,12 @@ static void drawTremolo(int n, TimedObj *a, TimedObj *b, float ytrem, int sz, in
 {
   float bsep = beamthick[sz] + beamsep[sz];
   int pup = [p stemIsUp];
-  float x1 = p->x + [p stemXoffLeft: 0];
-  float x2 = q->x + [q stemXoffRight: 0];
+  float x1 = [p x] + [p stemXoffLeft: 0];
+  float x2 = [q x] + [q stemXoffRight: 0];
   float y1 = [p myStemBase] + [p stemLength];
   float y2 = [q myStemBase] + [q stemLength];
   float m = (y2 - y1) / (x2 - x1);
-  float x = p->x - (pup ? 1.0 : 1.5) * bsep;
+  float x = [p x] - (pup ? 1.0 : 1.5) * bsep;
   float y =  y1 - 0.5 * [p stemLength];
   float x3 = x1 + 0.5 * (x2 - x1);
   float y3 = (m * (x3 - x1) + y1) + (pup ? -bsep : bsep);
@@ -1326,7 +1326,7 @@ static void drawTremolo(int n, TimedObj *a, TimedObj *b, float ytrem, int sz, in
 	return self;
     }
     q = [client lastObject];
-    if (TOLFLOATEQ(p->x, q->x, 2.0))
+    if (TOLFLOATEQ([p x], [q x], 2.0))
 	return self;
     if ([p graphicType] == TABLATURE) {
 	return [self drawTabBeams: CROTCHET + 1 + [[CalliopeAppController currentDocument] getPreferenceAsInt: TABCROTCHET] : p : q : sz : m];

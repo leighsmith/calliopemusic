@@ -94,8 +94,9 @@
   float x;
   while (k--)
   {
-    x = ((StaffObj *)[client objectAtIndex:k])->x;
-    if (x < s0 || s1 < x) return YES;
+    x = [(StaffObj *)[client objectAtIndex: k] x];
+    if (x < s0 || s1 < x) 
+	return YES;
   }
   return NO;
 }
@@ -174,7 +175,7 @@
   while (k--)
   {
     p = [client objectAtIndex:k];
-    x = p->x;
+    x = [p x];
     if (s0 <= x && x <= s1) [l[d] addObject: p]; else [l[!d] addObject: p];
   }
   for (i = 0; i < 2; i++)
@@ -379,7 +380,7 @@
       d = c - s;
       while ((d >= 0) && !f)
       {
-        if (((StaffObj *)[l objectAtIndex:d + s])->x < ((StaffObj *)[l objectAtIndex:d])->x)
+        if ([(StaffObj *)[l objectAtIndex:d + s] x] < [(StaffObj *)[l objectAtIndex:d] x])
 	{
             p = [[l objectAtIndex:d] retain];
 	  [l replaceObjectAtIndex:d withObject:[l objectAtIndex:d + s]];

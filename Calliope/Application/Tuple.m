@@ -184,8 +184,8 @@ static float braoffy[2][2] =
     dx = noteoffset[sz] * 2.0;
     dy = nature[sz];
     tt = (pup << 2) | (qup << 1) | a;
-    py = ([p yAboveBelow: a] - p->y) + braoffy[0][a] * dy;
-    qy = ([q yAboveBelow: a] - q->y) + braoffy[1][a] * dy;
+    py = ([p yAboveBelow: a] - [p y]) + braoffy[0][a] * dy;
+    qy = ([q yAboveBelow: a] - [q y]) + braoffy[1][a] * dy;
     if (flags.formliga >= 4)
     {
       px = tupoffx[0][tt] * noteoffset[sz];
@@ -208,16 +208,16 @@ static float braoffy[2][2] =
   vtrim1 = vtrim2 = 0.0;
   if (flags.horiz)
   {
-    ly = p->y + py;
-    my = q->y + qy;
+    ly = [p y] + py;
+    my = [q y] + qy;
     ey = ly - my;
     if (a ^ (ey > 0)) vtrim2 = ey; else vtrim1 = -ey;
   }
   if (off)
   {
     /* now make sure it is above/below staff. */
-    ly = p->y + py;
-    my = q->y + qy;
+    ly = [p y] + py;
+    my = [q y] + qy;
     if (a)
     {
       y = [p yOfStaffPosition: -1];
@@ -415,14 +415,14 @@ static float braoffy[2][2] =
   if (h == 0)
   {
     p = [client objectAtIndex:0];
-    *x = p->x + x1;
-    *y = p->y + y1 + vtrim1;
+    *x = [p x] + x1;
+    *y = [p y] + y1 + vtrim1;
   }
   else if (h == 1)
   {
     p = [client lastObject];
-    *x = p->x + x2;
-    *y = p->y + y2 + vtrim2;
+    *x = [p x] + x2;
+    *y = [p y] + y2 + vtrim2;
   }
   return self;
 }
@@ -463,23 +463,23 @@ static float braoffy[2][2] =
   if (gFlags.selend)
   {
     n = [client lastObject];
-    x2 = p.x - n->x;
-    y2 = p.y - n->y;
+    x2 = p.x - [n x];
+    y2 = p.y - [n y];
     if (flags.horiz)
     {
       n = [client objectAtIndex:0];
-      y1 = p.y - n->y;
+      y1 = p.y - [n y];
     }
   }
   else
   {
     n = [client objectAtIndex:0];
-    x1 = p.x - n->x;
-    y1 = p.y - n->y;
+    x1 = p.x - [n x];
+    y1 = p.y - [n y];
     if (flags.horiz)
     {
       n = [client lastObject];
-      y2 = p.y - n->y;
+      y2 = p.y - [n y];
     }
   }
   [self setTuple: 0 : 0];
@@ -538,7 +538,7 @@ static float centreTime(NSMutableArray *nl)
   {
     p = [nl objectAtIndex:i];
     a += [p noteEval: NO];
-    if (a - s > 0.0) return p->x;
+    if (a - s > 0.0) return [p x];
   }
   return 0.0;
 }
@@ -558,10 +558,10 @@ static float centreTime(NSMutableArray *nl)
     sz = gFlags.size;
     p = [client objectAtIndex:0];
     q = [client lastObject];
-    px = p->x + x1;
-    py = p->y + y1 + vtrim1;
-    qx = q->x + x2;
-    qy = q->y + y2 + vtrim2;
+    px = [p x] + x1;
+    py = [p y] + y1 + vtrim1;
+    qx = [q x] + x2;
+    qy = [q y] + y2 + vtrim2;
     dx = qx - px;
     dy = qy - py;
     if (ABS(dx) < 1.0) return self;

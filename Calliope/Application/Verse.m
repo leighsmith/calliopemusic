@@ -11,7 +11,7 @@
 #import "DrawingFunctions.h"
 #import "muxlow.h"
 
-
+// TODO may need to incorporate VerseRich functionality.
 @implementation Verse
 
 extern float staffthick[3][3];
@@ -106,7 +106,7 @@ extern float staffthick[3][3];
 	
 	if ([sp graphicType] != STAFF) 
 	    return self;
-	bounds.origin.x = p->x - 6;
+	bounds.origin.x = [p x] - 6;
 	bounds.origin.y = [sp yOfTop] + baseline - 12;
 	bounds.size.width = bounds.size.height = 12;
 	[sp sysInvalid];
@@ -407,7 +407,7 @@ static void drawext(float x1, float y, float x2, Staff *sp, int f, int m)
 
 - (float) textLeft: (StaffObj *) p
 {
-  return(p->x + [p verseOrigin] - align + offset);
+  return([p x] + [p verseOrigin] - align + offset);
 }
 
 
@@ -512,9 +512,9 @@ static void drawext(float x1, float y, float x2, Staff *sp, int f, int m)
 	return self;
     bl = [sp yOfTop] + baseline;
     if ([self isFigure])
-	return [self drawFigure: [self string] atX: p->x atY: bl onStaff: sp inMode: m];
+	return [self drawFigure: [self string] atX: [p x] atY: bl onStaff: sp inMode: m];
     if ([self isContinuation])
-	return [self drawContinuation: [verseString characterAtIndex: 0] atX: p->x atY: bl onStaff: sp inMode: m];
+	return [self drawContinuation: [verseString characterAtIndex: 0] atX: [p x] atY: bl onStaff: sp inMode: m];
     cx = [self textLeft: p];
     DrawTextWithBaselineTies(cx, bl, verseString, font, m);
     if (vFlags.hyphen < 3 && ![sp textedBefore: p : [self verseNumber]]) {

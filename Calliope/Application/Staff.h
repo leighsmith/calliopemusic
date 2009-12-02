@@ -33,13 +33,13 @@
 	unsigned int hidden : 1;	/* staff is hidden */
 	unsigned int topfixed : 1;	/* topmarg is an exact distance */
     } flags;
-    float voffa, voffb;		/* verse offsets */
-    float vhigha;		/* amount of space taken by verses above Staff */
-    float vhighb;		/* amount of space taken by verses below Staff */
-    float barbase;		/* barnumber baseline */
-    float topmarg;		/* amount of headroom */
-    float botmarg;		/* used for equidistant spaff spacing */
-    float pref1, pref2;		/* start and end of preface */
+    float voffa, voffb;		/*!< verse offsets */
+    float vhigha;		/*!< amount of space taken by verses above Staff */
+    float vhighb;		/*!< amount of space taken by verses below Staff */
+    float barbase;		/*!< barnumber baseline */
+    float topmarg;		/*!< amount of headroom */
+    float botmarg;		/*!< used for equidistant spaff spacing */
+    float pref1, pref2;		/*!< start and end of preface */
     NSMutableArray *notes;	/*! @var notes Array of things on the staff. */
 @private
     NSString *part;		/*!< The part name for this Staff instance. */
