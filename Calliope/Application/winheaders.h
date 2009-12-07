@@ -12,6 +12,8 @@
 #import <io.h>
 #endif
 
+#import <math.h>
+
 #ifndef MAXINT
 #define MAXINT	((int)0x7fffffff)	/* max pos 32-bit int */
 #endif
